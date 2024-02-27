@@ -1,0 +1,45 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34616.47
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KotiCRM.Server", "KotiCRM.Server\KotiCRM.Server.csproj", "{5C5E9ACC-6A20-4060-861E-C60D9D4F8685}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KotiCRM.Repository", "KotiCRM.Repository\KotiCRM.Repository.csproj", "{7F059145-D0B3-4FA5-8C59-CD9691E6B035}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KotiCRM.Services", "KotiCRM.Services\KotiCRM.Services.csproj", "{07B27134-ED2F-4C35-8B03-1DAF67F875AF}"
+EndProject
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "koticrm.reactui", "KotiCRM.ReactUI\koticrm.reactui.esproj", "{430281E2-55C2-483A-BEFF-C1C57198DC8B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5C5E9ACC-6A20-4060-861E-C60D9D4F8685}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5C5E9ACC-6A20-4060-861E-C60D9D4F8685}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5C5E9ACC-6A20-4060-861E-C60D9D4F8685}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5C5E9ACC-6A20-4060-861E-C60D9D4F8685}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7F059145-D0B3-4FA5-8C59-CD9691E6B035}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F059145-D0B3-4FA5-8C59-CD9691E6B035}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F059145-D0B3-4FA5-8C59-CD9691E6B035}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F059145-D0B3-4FA5-8C59-CD9691E6B035}.Release|Any CPU.Build.0 = Release|Any CPU
+		{07B27134-ED2F-4C35-8B03-1DAF67F875AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{07B27134-ED2F-4C35-8B03-1DAF67F875AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{07B27134-ED2F-4C35-8B03-1DAF67F875AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{07B27134-ED2F-4C35-8B03-1DAF67F875AF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{430281E2-55C2-483A-BEFF-C1C57198DC8B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{430281E2-55C2-483A-BEFF-C1C57198DC8B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{430281E2-55C2-483A-BEFF-C1C57198DC8B}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{430281E2-55C2-483A-BEFF-C1C57198DC8B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{430281E2-55C2-483A-BEFF-C1C57198DC8B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{430281E2-55C2-483A-BEFF-C1C57198DC8B}.Release|Any CPU.Deploy.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {22C9ADDA-FBC1-4B54-BE2A-A83917BB69D5}
+	EndGlobalSection
+EndGlobal

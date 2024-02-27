@@ -1,0 +1,6 @@
+@KotiCRM.Server_HostAddress = http://localhost:5263
+
+GET {{KotiCRM.Server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

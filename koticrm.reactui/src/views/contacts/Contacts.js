@@ -117,8 +117,10 @@ const Contacts = () => {
                 <CTableBody>
                   <CTableRow>
                     <CTableHeaderCell>
-                      <BsFiletypeDocx  className='doc'/>
-                      <CButton  className='link' color="link">Learner Settings Page-February 2024.docx</CButton>
+                      <BsFiletypeDocx className="doc" />
+                      <CButton className="link" color="link">
+                        Learner Settings Page-February 2024.docx
+                      </CButton>
                     </CTableHeaderCell>
                     <CTableDataCell>Gourav Rai</CTableDataCell>
                     <CTableDataCell>22/02/2024 06:50PM</CTableDataCell>
@@ -126,8 +128,10 @@ const Contacts = () => {
                   </CTableRow>
                   <CTableRow>
                     <CTableHeaderCell>
-                      <MdOutlinePictureAsPdf  className='pdf'/>
-                      <CButton className='link' color="link">Learner Settings Page-February 2024.pdf</CButton>
+                      <MdOutlinePictureAsPdf className="pdf" />
+                      <CButton className="link" color="link">
+                        Learner Settings Page-February 2024.pdf
+                      </CButton>
                     </CTableHeaderCell>
                     <CTableDataCell>Gourav Rai</CTableDataCell>
                     <CTableDataCell>22/02/2024 06:50PM</CTableDataCell>
@@ -166,7 +170,7 @@ const Contacts = () => {
             </CCardHeader>
             <CCardBody>
               <CCol xs={8}>
-                <div class="Note">
+                <div className="Note">
                   <ul>
                     <li>
                       <span>
@@ -203,7 +207,7 @@ const Contacts = () => {
                           placeholder="Add a note"
                         ></CFormTextarea>
 
-                        <div class="text-end ">
+                        <div className="text-end ">
                           <TiAttachmentOutline />
 
                           <CButton component="input" type="button" color="light" value="Cancel" />

@@ -45,10 +45,10 @@ const AccountDetails = () => {
       </CCol>
       <CCol>
         <CRow xs={12}>
-          <ul class="nav nav-tabs" id="myTab" role="tablist">
-            <li class="nav-item" role="presentation">
+          <ul className="nav nav-tabs" id="myTab" role="tablist">
+            <li className="nav-item" role="presentation">
               <button
-                class="nav-link active"
+                className="nav-link active"
                 id="home-tab"
                 data-bs-toggle="tab"
                 data-bs-target="#home"
@@ -60,9 +60,9 @@ const AccountDetails = () => {
                 Account Detail
               </button>
             </li>
-            <li class="nav-item" role="presentation">
+            <li className="nav-item" role="presentation">
               <button
-                class="nav-link"
+                className="nav-link"
                 id="profile-tab"
                 data-bs-toggle="tab"
                 data-bs-target="#profile"
@@ -74,9 +74,9 @@ const AccountDetails = () => {
                 Contacts
               </button>
             </li>
-            <li class="nav-item" role="presentation">
+            <li className="nav-item" role="presentation">
               <button
-                class="nav-link"
+                className="nav-link"
                 id="contact-tab"
                 data-bs-toggle="tab"
                 data-bs-target="#contact"
@@ -88,9 +88,9 @@ const AccountDetails = () => {
                 Notes 2
               </button>
             </li>
-            <li class="nav-item" role="presentation">
+            <li className="nav-item" role="presentation">
               <button
-                class="nav-link"
+                className="nav-link"
                 id="contact-tab"
                 data-bs-toggle="tab"
                 data-bs-target="#contact"

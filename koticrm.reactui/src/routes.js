@@ -7,7 +7,6 @@ const AccountList = React.lazy(() => import('./views/accountsList/AccountList'))
 const AccountDetails = React.lazy(() => import('./views/accountDetails/AccountDetails'))
 const Contacts = React.lazy(() => import('./views/contacts/Contacts'))
 
-
 // Base
 const Accordion = React.lazy(() => import('./views/base/accordion/Accordion'))
 const Breadcrumbs = React.lazy(() => import('./views/base/breadcrumbs/Breadcrumbs'))
@@ -102,7 +101,6 @@ const routes = [
   { path: '/accountsList', name: 'Account List', element: AccountList },
   { path: '/accountDetails', name: 'Account Details', element: AccountDetails },
   { path: '/contacts', name: 'Contacts', element: Contacts },
-
 ]
 
 export default routes

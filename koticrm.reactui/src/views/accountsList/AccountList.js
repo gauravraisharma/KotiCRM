@@ -21,7 +21,7 @@ import {
 import { DocsExample } from 'src/components'
 import { FaEdit } from 'react-icons/fa'
 import { MdDelete } from 'react-icons/md'
-import { LuView } from "react-icons/lu";
+import { LuView } from 'react-icons/lu'
 
 const AccountList = () => {
   // Sample data for accounts
@@ -126,7 +126,7 @@ const AccountList = () => {
                   <CTableDataCell>Thornton</CTableDataCell>
                   <CTableDataCell>9944466622</CTableDataCell>
                   <CTableDataCell>
-                    <FaEdit style={{ color: 'green' }} /> <LuView  style={{ color: 'blue' }} />{' '}
+                    <FaEdit style={{ color: 'green' }} /> <LuView style={{ color: 'blue' }} />{' '}
                     <MdDelete style={{ color: 'red' }} />{' '}
                   </CTableDataCell>
                 </CTableRow>
