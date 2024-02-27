@@ -23,6 +23,7 @@ import { BsFiletypeDocx } from 'react-icons/bs'
 import { IoPersonCircleOutline } from 'react-icons/io5'
 import { MdOutlinePictureAsPdf } from 'react-icons/md'
 import { TiAttachmentOutline } from 'react-icons/ti'
+import '../../css/style.css'
 
 const Contacts = () => {
   return (
@@ -116,8 +117,8 @@ const Contacts = () => {
                 <CTableBody>
                   <CTableRow>
                     <CTableHeaderCell>
-                      <BsFiletypeDocx />
-                      <CButton color="link">Learner Settings Page-February 2024.docx</CButton>
+                      <BsFiletypeDocx  className='doc'/>
+                      <CButton  className='link' color="link">Learner Settings Page-February 2024.docx</CButton>
                     </CTableHeaderCell>
                     <CTableDataCell>Gourav Rai</CTableDataCell>
                     <CTableDataCell>22/02/2024 06:50PM</CTableDataCell>
@@ -125,8 +126,8 @@ const Contacts = () => {
                   </CTableRow>
                   <CTableRow>
                     <CTableHeaderCell>
-                      <MdOutlinePictureAsPdf />
-                      <CButton color="link">Learner Settings Page-February 2024.pdf</CButton>
+                      <MdOutlinePictureAsPdf  className='pdf'/>
+                      <CButton className='link' color="link">Learner Settings Page-February 2024.pdf</CButton>
                     </CTableHeaderCell>
                     <CTableDataCell>Gourav Rai</CTableDataCell>
                     <CTableDataCell>22/02/2024 06:50PM</CTableDataCell>

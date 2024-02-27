@@ -1,14 +1,8 @@
 import React from 'react'
-import {
-  CRow,
-  CCol,
-  CCard,
-  CCardHeader,
-  CButton,
-} from '@coreui/react'
+import { CRow, CCol, CCard, CCardHeader, CButton } from '@coreui/react'
 import { FaAngleLeft } from 'react-icons/fa6'
 import { FaChevronRight } from 'react-icons/fa'
-import "../../css/style.css"
+import '../../css/style.css'
 
 const AccountDetails = () => {
   return (
@@ -109,15 +103,14 @@ const AccountDetails = () => {
               </button>
             </li>
           </ul>
-          
         </CRow>
 
         <CRow>
           <CCol xs={6}>
-            <h5 style={{ padding: 10 }}>Account information</h5>
+            <div className="headings">Account information</div>
             <ul>
               <li>
-                <span  className="title">Account owner - </span>
+                <span className="title">Account owner - </span>
                 <span className="info">Gourav Rai</span>
               </li>
               <li>
@@ -145,9 +138,7 @@ const AccountDetails = () => {
                 <span className="info">Gourav rai</span>
               </li>
             </ul>
-            <h5 className="title" style={{ padding: 10 }}>
-              Address information
-            </h5>
+            <div className="headings">Address information</div>
 
             <ul>
               <li>
@@ -173,18 +164,15 @@ const AccountDetails = () => {
                 <span className="info">United States</span>
               </li>
             </ul>
-
-            <h5 className="title" style={{ padding: 10 }}>
-              Discription information
-            </h5>
+            <div className="headings">Discription information</div>
 
             <ul>
-                <li>
-              
-                <span>Description</span>
-              
-                King is a multinational electronics contract manufacturing company with its
-                headquarters in Baltimore,United States
+              <li>
+                <span className="title">Description</span>
+                <span className="info">
+                  King is a multinational electronics contract manufacturing company with its
+                  headquarters in Baltimore,United States
+                </span>
               </li>
             </ul>
           </CCol>
@@ -227,9 +215,8 @@ const AccountDetails = () => {
                 <span className="info">-</span>
               </li>
               <li>
-               <span className="title">Modified By</span> 
-                <span className="info">Gourav Rai
-                </span>
+                <span className="title">Modified By</span>
+                <span className="info">Gourav Rai</span>
               </li>
             </ul>
 
