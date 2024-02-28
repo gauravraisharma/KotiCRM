@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -9,10 +11,11 @@ namespace KotiCRM.Repository.Models
 {
     public class Module
     {
-         public int Id {  get; set; }
+        [Key]
+        public int Id {  get; set; }
 
+        [Column(TypeName = "varchar(200)")]
         public string Name {  get; set; }
-        public string ParentModule {  get; set; }
         public bool Isactive { get; set; }
         public bool Isdelete { get; set; }
         public string CreatedBy { get; set; }

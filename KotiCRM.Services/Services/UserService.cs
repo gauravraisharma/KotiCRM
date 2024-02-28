@@ -1,5 +1,6 @@
-﻿using KotiCRM.Repository.DAL;
+﻿using KotiCRM.Repository.IRepository;
 using KotiCRM.Repository.Models;
+using KotiCRM.Services.IServices;
 using System;
 using System.Collections.Generic;
 using System.Linq;

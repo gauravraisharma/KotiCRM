@@ -5,11 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KotiCRM.Repository.DAL
+namespace KotiCRM.Services.IServices
 {
-    public interface IUserRepository
+    public interface IUserService
     {
         Task<DbResponse> CreateUser(ApplicationUser user);
-
     }
 }
