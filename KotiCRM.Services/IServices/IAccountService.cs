@@ -1,6 +1,4 @@
-﻿
-
-using KotiCRM.Repository.Models;
+﻿using KotiCRM.Repository.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,14 +9,13 @@ namespace KotiCRM.Services.IServices
 {
     public interface IAccountService
     {
-        Task<LoginStatus> UserLogin(UserLoginModel userModel);
-        Task<ResponseStatus> CreateApplicationUser(ApplicationUserModel userModel);
-        Task<ResponseStatus> UpdateApplicationUser(UpdateApplicationUserModel userModel);
-        ResponseStatus GetRoleName(string roleId);
-        Task<ResponseStatus> CreateNewRole(string roleName);
-        DDListResponse GetUserTypeListDD();
-        IEnumerable<ResponseApplicationUserModel> GetUserList(int companyId);
-        ResponseStatus DeleteUser(string userId);
-        UserDataResponse GetUserDataById(string userId);
+        Task<Account> CreateAccount(Account account);
+        Task<IEnumerable<Account>> GetAccountList();
+        Task<Account> GetAccountDetails(int id);
+        Task<DbResponse> DeleteAccount(int id);
+        Task<Account> UpdateAccount(int id, Account account);
+
+
+
     }
 }

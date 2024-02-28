@@ -1,83 +1,47 @@
-﻿
+﻿using KotiCRM.Repository.IRepository;
 using KotiCRM.Repository.Models;
 using KotiCRM.Services.IServices;
-using Microsoft.Extensions.Configuration;
-using KotiCRM.Repository.IRepository;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace KotiCRM.Services.Services { 
+namespace KotiCRM.Services.Services
+{
     public class AccountService : IAccountService
     {
         private readonly IAccountRepository _accountRepository;
-        private readonly IConfiguration _config;
 
-        public AccountService(IAccountRepository accountRepository, IConfiguration config)
+        public AccountService(IAccountRepository accountRepository)
         {
             _accountRepository = accountRepository;
-            _config = config;
         }
 
-        public async Task<ResponseStatus> CreateApplicationUser(ApplicationUserModel userModel)
+        public async Task<Account> CreateAccount(Account account)
         {
-            var response = await _accountRepository.CreateApplicationUser(userModel);
-           if(response.Status == "SUCCEED")
-            try
-            {
-                var emailSubject = _config["NewUserRegisterEmailSubject"];
-                var emailTemplate = _config["NewUserRegisterEmailTemplate"];
-             
-                Dictionary<string, string> messageVariable = new Dictionary<string, string> {
-                      { "@@username", userModel.UserName },
-                      { "@@password", userModel.Password },
-                    };
-
-              //  MailOperations.SendEmailAsync(new List<string> { userModel.Email } , emailSubject, emailTemplate, _config, null, messageVariable);
-            }
-            catch (Exception e)
-            {
-
-            }
+            var response = await _accountRepository.CreateAccount(account);
             return response;
         }
-          public Task<ResponseStatus> UpdateApplicationUser(UpdateApplicationUserModel userModel)
+
+        public async Task<DbResponse> DeleteAccount(int id)
         {
-            return _accountRepository.UpdateApplicationUser(userModel);  
+            return await _accountRepository.DeleteAccount(id);
         }
 
-        public Task<ResponseStatus> CreateNewRole(string roleName)
+        public async Task<Account> GetAccountDetails(int id)
         {
-           return _accountRepository.CreateNewRole(roleName);
+            return await _accountRepository.GetAccountDetails(id);
         }
 
-      
-        public ResponseStatus GetRoleName(string roleId)
+        public async Task<IEnumerable<Account>> GetAccountList()
         {
-            return _accountRepository.GetRoleName(roleId);
+            return await _accountRepository.GetAccountList();
         }
 
-        public IEnumerable<ResponseApplicationUserModel> GetUserList(int companyId)
+        public async Task<Account> UpdateAccount(int id, Account account)
         {
-            return _accountRepository.GetUserList(companyId);
+            return await _accountRepository.UpdateAccount(id, account);
         }
-
-        public DDListResponse GetUserTypeListDD()
-        {
-            return _accountRepository.GetUserTypeListDD();
-        }
-
-        public Task<LoginStatus> UserLogin(UserLoginModel userModel)
-        {
-            return _accountRepository.UserLogin(userModel);
-        }
-        public ResponseStatus DeleteUser(string userId)
-        {
-            return _accountRepository.DeleteUser(userId);
-        }
-        
-        public UserDataResponse GetUserDataById(string userId)
-        {
-            return _accountRepository.GetUserDataById(userId);
-        }
-        
-       
     }
 }

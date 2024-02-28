@@ -1,8 +1,6 @@
 ﻿using KotiCRM.Repository.Data;
 using KotiCRM.Repository.IRepository;
 using KotiCRM.Repository.Models;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -12,28 +10,43 @@ using System.Threading.Tasks;
 
 namespace KotiCRM.Repository.Repository
 {
-    public class AccountRepository : IAccountRepository
+    public class ContactRepository : IContactRepository
     {
         private readonly KotiCRMDbContext _context;
 
-        public AccountRepository(KotiCRMDbContext context)
+        public ContactRepository(KotiCRMDbContext context)
         {
             _context = context;
         }
-
-        public async Task<Account> CreateAccount(Account account)
+        public async Task<Contact> CreateContact(Contact contact)
         {
-            _context.Accounts.Add(account);
+            _context.Contacts.Add(contact);
             await _context.SaveChangesAsync();
-            return account;
+            return contact;
         }
 
-        public async Task<DbResponse> DeleteAccount(int id)
+        public async Task<Contact> GetContactDetails(int id)
         {
-            var account = await _context.Accounts.FindAsync(id);
-            if (account != null)
+            var contact = await _context.Contacts.FindAsync(id);
+
+            if (contact == null)
             {
-                _context.Accounts.Remove(account);
+                return null;
+            }
+            return contact;
+        }
+
+        public async Task<IEnumerable<Contact>> GetContactList()
+        {
+            return await _context.Contacts.ToListAsync();
+        }
+
+        public async Task<DbResponse> DeleteContact(int id)
+        {
+            var contact = await _context.Contacts.FindAsync(id);
+            if (contact != null)
+            {
+                _context.Contacts.Remove(contact);
                 await _context.SaveChangesAsync();
             }
 
@@ -55,28 +68,11 @@ namespace KotiCRM.Repository.Repository
 
 
         }
-
-        public async Task<Account> GetAccountDetails(int id)
+        public async Task<Contact> UpdateContact(int id, Contact contact)
         {
-            var account = await _context.Accounts.FindAsync(id);
-
-            if (account == null)
+            if (id == contact.Id)
             {
-                return null;
-            }
-            return account;
-        }
-
-        public async Task<IEnumerable<Account>> GetAccountList()
-        {
-            return await _context.Accounts.ToListAsync();
-        }
-
-        public async Task<Account> UpdateAccount(int id, Account account)
-        {
-            if (id == account.Id)
-            {
-                _context.Entry(account).State = EntityState.Modified;
+                _context.Entry(contact).State = EntityState.Modified;
             }
             try
             {
@@ -86,7 +82,7 @@ namespace KotiCRM.Repository.Repository
             {
                 throw;
             }
-            return account;
+            return contact;
         }
     }
 }

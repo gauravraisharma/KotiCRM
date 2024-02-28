@@ -11,8 +11,12 @@ namespace KotiCRM.Services
         {
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IUserRepository, UserRepository>();
+            services.AddTransient<IUserAccountService, UserAccountService>();
+            services.AddTransient<IUserAccountRepository, UserAccountRepository>();
             services.AddTransient<IAccountService, AccountService>();
             services.AddTransient<IAccountRepository, AccountRepository>();
+            services.AddTransient<IContactService, ContactService>();
+            services.AddTransient<IContactRepository, ContactRepository>();
         }
     }
 }

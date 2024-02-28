@@ -17,6 +17,9 @@ namespace KotiCRM.Repository.Data
         }
         public DbSet<Permissions> Permissions { get; set; }
         public DbSet<Module> Modules { get; set; }
+        public DbSet<Account> Accounts { get; set; }
+        public DbSet<Contact> Contacts { get; set; }
+        public DbSet<Industry> Industry { get; set; }
 
        
     }
