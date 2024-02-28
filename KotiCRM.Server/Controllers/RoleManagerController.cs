@@ -1,6 +1,6 @@
-﻿using KotiCRM.Repository.DAL;
+﻿
 using KotiCRM.Repository.Models;
-using KotiCRM.Services.Services;
+using KotiCRM.Services.IServices;
 using Microsoft.AspNetCore.Mvc;
 
 namespace KotiCRM.Server.Controllers
