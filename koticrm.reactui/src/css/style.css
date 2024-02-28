@@ -2,6 +2,7 @@
   color: rgb(132, 129, 129);
   padding: 10px;
   margin:10px;
+  font-size: larger;
   }
   .ul li span title{
  text-decoration: none;
@@ -15,6 +16,7 @@
   .info{
     color: black;
     margin-left: 10px;
+    font-size: larger;
   }
   .link{
     text-decoration: none;
@@ -26,4 +28,22 @@
   .pdf{
     color:rgb(146, 32, 32);
     font-size: 25px;
+  }
+  ul li {
+    list-style: none;
+  }
+  .right{
+    margin-top: 60px;
+    
+  }
+  .person{
+    color: rgb(88, 129, 224);
+    font-size: 30px;
+  }
+  .linking{
+    color: rgb(88, 129, 224);
+  }
+  .textarea{
+    margin-top: 20px;
+    padding-top: 10px;
   }

@@ -18,7 +18,7 @@ import {
   CDropdownItem,
   CDropdownToggle,
 } from '@coreui/react'
-import { DocsExample } from 'src/components'
+
 import { FaEdit } from 'react-icons/fa'
 import { MdDelete } from 'react-icons/md'
 import { LuView } from 'react-icons/lu'

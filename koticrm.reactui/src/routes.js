@@ -5,7 +5,6 @@ const Colors = React.lazy(() => import('./views/theme/colors/Colors'))
 const Typography = React.lazy(() => import('./views/theme/typography/Typography'))
 const AccountList = React.lazy(() => import('./views/accountsList/AccountList'))
 const AccountDetails = React.lazy(() => import('./views/accountDetails/AccountDetails'))
-const Contacts = React.lazy(() => import('./views/contacts/Contacts'))
 
 // Base
 const Accordion = React.lazy(() => import('./views/base/accordion/Accordion'))
@@ -100,7 +99,6 @@ const routes = [
   { path: '/widgets', name: 'Widgets', element: Widgets },
   { path: '/accountsList', name: 'Account List', element: AccountList },
   { path: '/accountDetails', name: 'Account Details', element: AccountDetails },
-  { path: '/contacts', name: 'Contacts', element: Contacts },
 ]
 
 export default routes
