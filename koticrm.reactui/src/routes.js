@@ -1,10 +1,15 @@
 import React from 'react'
+// import NewAccount from '../src/views/accountsList/NewAccount';
 
 const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'))
 const Colors = React.lazy(() => import('./views/theme/colors/Colors'))
 const Typography = React.lazy(() => import('./views/theme/typography/Typography'))
 const AccountList = React.lazy(() => import('./views/accountsList/AccountList'))
 const AccountDetails = React.lazy(() => import('./views/accountDetails/AccountDetails'))
+const NewAccount = React.lazy(() => import('./views/account/NewAccount'))
+
+
+
 
 // Base
 const Accordion = React.lazy(() => import('./views/base/accordion/Accordion'))
@@ -99,6 +104,9 @@ const routes = [
   { path: '/widgets', name: 'Widgets', element: Widgets },
   { path: '/accountsList', name: 'Account List', element: AccountList },
   { path: '/accountDetails', name: 'Account Details', element: AccountDetails },
+  { path: '/account', name: 'Account', element: NewAccount },
+
+
 ]
 
 export default routes
