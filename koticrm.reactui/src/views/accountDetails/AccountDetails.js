@@ -515,7 +515,15 @@ const AccountDetails = () => {
                     <CRow>
                       <CCol xs={6}>Invoices</CCol>
                       <CCol xs={6}>
-                        <div className="text-end"></div>
+                        <div className="text-end">
+                          <CButton
+                            component="input"
+                            type="button"
+                            color="primary"
+                            value="New"
+                            variant="outline"
+                          />
+                        </div>
                       </CCol>
                     </CRow>
                   </CCardHeader>
@@ -523,27 +531,18 @@ const AccountDetails = () => {
                     <CTable>
                       <CTableHead>
                         <CTableRow>
-                          <CTableHeaderCell scope="col">Contact Name</CTableHeaderCell>
-                          <CTableHeaderCell scope="col">Email</CTableHeaderCell>
-                          <CTableHeaderCell scope="col">Phone</CTableHeaderCell>
-                          <CTableHeaderCell scope="col">Mobile</CTableHeaderCell>
-                          <CTableHeaderCell scope="col">Fax</CTableHeaderCell>
+                          <CTableHeaderCell scope="col">Subject</CTableHeaderCell>
+                          <CTableHeaderCell scope="col">Status</CTableHeaderCell>
+                          <CTableHeaderCell scope="col">Invoice Date</CTableHeaderCell>
+                          <CTableHeaderCell scope="col">Due Date</CTableHeaderCell>
                         </CTableRow>
                       </CTableHead>
                       <CTableBody>
                         <CTableRow>
-                          <CTableHeaderCell>Sakshi Gupta</CTableHeaderCell>
-                          <CTableDataCell>@sakshigupta.com</CTableDataCell>
-                          <CTableDataCell>3456788765</CTableDataCell>
-                          <CTableDataCell>9988335677</CTableDataCell>
-                          <CTableDataCell>--</CTableDataCell>
-                        </CTableRow>
-                        <CTableRow>
-                          <CTableHeaderCell>Rakesh Choudhary</CTableHeaderCell>
-                          <CTableDataCell>@rakesh.com</CTableDataCell>
-                          <CTableDataCell>8634567678</CTableDataCell>
-                          <CTableDataCell>9944466622</CTableDataCell>
-                          <CTableDataCell>--</CTableDataCell>
+                          <CTableHeaderCell>Feb Month</CTableHeaderCell>
+                          <CTableDataCell>Created</CTableDataCell>
+                          <CTableDataCell>27/02/2024</CTableDataCell>
+                          <CTableDataCell>29/02/2024</CTableDataCell>
                         </CTableRow>
                       </CTableBody>
                     </CTable>

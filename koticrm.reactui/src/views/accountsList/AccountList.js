@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {
   CCard,
   CCardBody,
@@ -22,39 +22,33 @@ import {
 import { FaEdit } from 'react-icons/fa'
 import { MdDelete } from 'react-icons/md'
 import { LuView } from 'react-icons/lu'
+import { useNavigate } from 'react-router-dom';
+import  NewAccount from '../account/NewAccount';
+
+ 
+
 
 const AccountList = () => {
-  // Sample data for accounts
-  //   const [accounts, setAccounts] = useState([
-  //     { id: 1, name: 'Account 1', owner: 'Owner 1', phone: '123-456-7890', country: 'USA' },
-  //     { id: 2, name: 'Account 2', owner: 'Owner 2', phone: '234-567-8901', country: 'Canada' },
-  // Add more sample accounts as needed
-  //   ]);
+  // const navigate = useNavigate();
+  const [state,setState]=useState(false)
 
-  //   const [searchField, setSearchField] = useState('');
-  //   const [searchBy, setSearchBy] = useState('Name');
+  const handleCreateNew =()=>{
+    alert('hello')
+    // navigate('/NewAccount');
+    setState(true);
+    
 
-  //   const handleChange = (event) => {
-  //     setSearchField(event.target.value);
-  // };
-  // const handleSearchByChange = (event) => {
-  //     setSearchBy(event.target.value);
-  // };
+  }
 
-  // const filteredAccounts = accounts.filter(account => {
-  //     if (searchBy === 'Name') {
-  //         return account.name.toLowerCase().includes(searchField.toLowerCase());
-  //     } else if (searchBy === 'Owner') {
-  //         return account.owner.toLowerCase().includes(searchField.toLowerCase());
-  //     } else if (searchBy === 'Phone') {
-  //         return account.phone.includes(searchField);
-  //     } else if (searchBy === 'Country') {
-  //         return account.country.toLowerCase().includes(searchField.toLowerCase());
-  //     }
-  //     return true;
-  // });
+   const backToAccountList =()=>{
+    alert('account')
+    setState(false);
+   }
+
 
   return (
+    <>
+    {state ? <NewAccount backToAccountList={backToAccountList}/> : 
     <CRow>
       <CCol xs={12}>
         <CCard className="mb-4">
@@ -92,12 +86,11 @@ const AccountList = () => {
                     type="button"
                     color="primary"
                     value="Create New Account"
+                    onClick={handleCreateNew}
                   />
                 </div>
               </CCol>
             </CRow>
-
-            {/* <DocsExample href="components/table"> */}
             <CTable>
               <CTableHead>
                 <CTableRow>
@@ -132,11 +125,12 @@ const AccountList = () => {
                 </CTableRow>
               </CTableBody>
             </CTable>
-            {/* </DocsExample> */}
           </CCardBody>
         </CCard>
       </CCol>
     </CRow>
+}
+    </>
   )
 }
 
