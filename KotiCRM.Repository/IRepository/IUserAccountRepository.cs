@@ -17,6 +17,7 @@ namespace KotiCRM.Repository.IRepository
         DDListResponse GetUserTypeListDD();
         IEnumerable<ResponseApplicationUserModel> GetUserList();
         ResponseStatus DeleteUser(string userId);
+        Task<ModulePermissionResponse> GetModulePermission(string userId);
 
         UserDataResponse GetUserDataById(string userId);
     }

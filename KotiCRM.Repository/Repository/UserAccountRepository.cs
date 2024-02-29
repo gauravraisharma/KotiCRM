@@ -561,6 +561,77 @@ namespace KotiCRM.Repository.Repository
 
 
         }
+        
+        public async Task<ModulePermissionResponse> GetModulePermission(string userId)
+        {
+            try
+            {
+                if (_context == null)
+                {
+                    return new ModulePermissionResponse
+                    {
+                        Status = "FAILED",
+                        Message = "Db Context is null"
+                    };
+                }
+
+                var userFound = await  _userManager.FindByIdAsync(userId);
+                if (userFound == null || userFound.IsDeleted)
+                {
+                    return new ModulePermissionResponse
+                    {
+                        Status = "FAILED",
+                        Message = "User Not found"
+                    };
+                }
+
+                var roleassigned = await _userManager.GetRolesAsync(userFound);
+
+                if (roleassigned.Count == 0)
+                {
+                    return new ModulePermissionResponse
+                    {
+                        Status = "FAILED",
+                        Message = "User role assigned to user"
+                    };
+
+                }
+
+                var role = await _roleManager.FindByNameAsync(roleassigned[0]);
+                var roleid = role.Id;
+
+                var ModulePermissionList = (from Permissions in _context.Permissions
+                                  join Module in _context.Modules on Permissions.ModuleID equals Module.Id
+                                  where Permissions.RoleID == roleid
+                                  select new ModulePermission
+                                  {
+                                      ModuleId = Module.Id,
+                                      ModuleName = Module.Name,
+                                      IsAdd = Permissions.Add,
+                                      IsEdit = Permissions.Edit,
+                                      IsView = Permissions.View,
+                                      IsDelete = Permissions.Delete,
+                                  }
+                              ).ToList();
+                return new ModulePermissionResponse
+                {
+                    Status = "SUCCEED",
+                    Message = "User Module with permission get successfully ",
+                    ModulePermissions=ModulePermissionList
+                };
+
+            }
+            catch (Exception ex)
+            {
+                return new ModulePermissionResponse
+                {
+                    Status = "FAILED",
+                    Message = "Something went wrong"
+                };
+            }
+
+
+        }
         public UserDataResponse GetUserDataById(string userId)
         {
             try

@@ -73,6 +73,10 @@ namespace KotiCRM.Services.Services
         {
             return _accountRepository.DeleteUser(userId);
         }
+        public Task<ModulePermissionResponse> GetModulePermission(string userId)
+        {
+            return _accountRepository.GetModulePermission(userId);
+        }
 
         public UserDataResponse GetUserDataById(string userId)
         {

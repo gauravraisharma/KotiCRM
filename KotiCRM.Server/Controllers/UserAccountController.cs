@@ -162,6 +162,18 @@ namespace KotiCRM.Server.Controllers
             }
             return Ok(dbResponse);
         }
+        
+        [AllowAnonymous]
+        [HttpGet("GetModulePermission/{userId}")]
+        public async Task<ActionResult> GetModulePermission(string userId)
+        {
+            var dbResponse = await _accountService.GetModulePermission(userId);
+            if (dbResponse.Status == "FAILED")
+            {
+                return BadRequest();
+            }
+            return Ok(dbResponse);
+        }
 
 
     }
