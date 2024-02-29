@@ -9,8 +9,6 @@ namespace KotiCRM.Services
     {
         public static void AddInfrastructure(this IServiceCollection services)
         {
-            services.AddTransient<IUserService, UserService>();
-            services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<IUserAccountService, UserAccountService>();
             services.AddTransient<IUserAccountRepository, UserAccountRepository>();
             services.AddTransient<IAccountService, AccountService>();

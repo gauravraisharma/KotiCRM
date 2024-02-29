@@ -17,7 +17,7 @@ namespace KotiCRM.Services.IServices
         ResponseStatus GetRoleName(string roleId);
         Task<ResponseStatus> CreateNewRole(string roleName);
         DDListResponse GetUserTypeListDD();
-        IEnumerable<ResponseApplicationUserModel> GetUserList(int companyId);
+        IEnumerable<ResponseApplicationUserModel> GetUserList();
         ResponseStatus DeleteUser(string userId);
         UserDataResponse GetUserDataById(string userId);
     }

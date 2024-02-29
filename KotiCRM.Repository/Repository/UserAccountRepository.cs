@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace KotiCRM.Repository.Repository
 {
-    public class UserAccountRepository:IUserAccountRepository
+    public class UserAccountRepository : IUserAccountRepository
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<ApplicationRole> _roleManager;
@@ -233,7 +233,7 @@ namespace KotiCRM.Repository.Repository
             }
         }
 
-        private async Task<string> GenerateToken(ApplicationUser user,bool rememberMe)
+        private async Task<string> GenerateToken(ApplicationUser user, bool rememberMe)
         {
             try
             {
@@ -241,28 +241,33 @@ namespace KotiCRM.Repository.Repository
                 var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
 
-             
+
 
                 //Find UserRole 
                 var userRoles = await _userManager.GetRolesAsync(user);
                 var permissions = (from permission in _context.Permissions
                                    join role in _context.Roles on permission.RoleID equals role.Id
+                                   join Modules in _context.Modules on permission.ModuleID equals Modules.Id
                                    where userRoles.Contains(role.Name)
-                                   select permission).ToList();
-
+                                   select new
+                                   {
+                                       ModuleName = Modules.Name,
+                                       ADD = permission.Add,
+                                       EDIT = permission.Edit,
+                                       DELETE = permission.Delete,
+                                       VIEW = permission.View
+                                   }).ToList();
                 var claims = new List<Claim>
                                 {
                                     new Claim(ClaimTypes.NameIdentifier, user.Id),
                                     new Claim(ClaimTypes.Name, user.UserName)
                                 };
 
-                //var authClaims = new List<Claim> { new Claim(ClaimTypes.Name, user.UserName) };
-
 
                 // Add permissions to claims
                 foreach (var permission in permissions)
                 {
-                    claims.Add(new Claim($"Permission:{permission.ModuleID}", $"Add:{permission.Add}, Edit:{permission.Edit}, View:{permission.View}, Delete:{permission.Delete}"));
+                    claims.Add(new Claim($"Permission.{permission.ModuleName}", $"Add:{permission.ADD}, Edit:{permission.EDIT}, View:{permission.VIEW}, Delete:{permission.DELETE}"));
                 }
 
                 var token = new JwtSecurityToken(claims: claims, expires: (rememberMe) ? DateTime.Now.AddDays(30) : DateTime.Now.AddHours(12), signingCredentials: credentials);
@@ -300,9 +305,9 @@ namespace KotiCRM.Repository.Repository
                 if (signInResult.Succeeded)
                 {
                     var userRoles = await _userManager.GetRolesAsync(user);
-                    
 
-                    
+
+
                     var token = await GenerateToken(user, userModel.RememberMe);
 
                     return new LoginStatus
@@ -358,17 +363,17 @@ namespace KotiCRM.Repository.Repository
                     };
                 }
 
-                ApplicationRole role=new ApplicationRole
+                ApplicationRole role = new ApplicationRole
                 {
-                    Name= roleName,
+                    Name = roleName,
                     CreatedOn = DateTime.UtcNow,
                     Isactive = true,
                     IsDefault = true,
                     Isdelete = false,
-                    ModifiedBy="1",
+                    ModifiedBy = "1",
                     ModifiedOn = DateTime.UtcNow,
-                    CreatedBy="1"
-                    
+                    CreatedBy = "1"
+
                 };
                 var result = await _roleManager.CreateAsync(role);
                 if (result.Succeeded)
@@ -402,7 +407,7 @@ namespace KotiCRM.Repository.Repository
                 _context.Dispose();
             }
         }
-        
+
         public DDListResponse GetUserTypeListDD()
         {
             try
@@ -482,7 +487,7 @@ namespace KotiCRM.Repository.Repository
 
         }
 
-        public IEnumerable<ResponseApplicationUserModel> GetUserList(int companyId)
+        public IEnumerable<ResponseApplicationUserModel> GetUserList()
         {
 
             if (_context == null)
@@ -605,6 +610,6 @@ namespace KotiCRM.Repository.Repository
 
 
         }
-      
+
     }
 }
