@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,61 +16,121 @@ namespace KotiCRM.Repository.Repository
     public class AccountRepository : IAccountRepository
     {
         private readonly KotiCRMDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public AccountRepository(KotiCRMDbContext context)
+        public AccountRepository(KotiCRMDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
-        public async Task<Account> CreateAccount(Account account)
+        public async Task<ReturnTask> CreateAccount(Account account)
         {
-            _context.Accounts.Add(account);
-            await _context.SaveChangesAsync();
-            return account;
-        }
-
-        public async Task<DbResponse> DeleteAccount(int id)
-        {
-            var account = await _context.Accounts.FindAsync(id);
-            if (account != null)
+            try
             {
-                _context.Accounts.Remove(account);
-                await _context.SaveChangesAsync();
-            }
+                var ownerFound = await _userManager.FindByIdAsync(account.OwnerId.ToString());
+                var userRoles = await _userManager.GetRolesAsync(ownerFound);
 
-            else
-            {
-                return new DbResponse()
+                if (ownerFound == null)
                 {
-                    Status = "Error",
-                    Message = "Cannot Delete the account"
+                    return null;
+                }
+                // Check if the user has the required role and permission
+                var userHasPermission = (from permission in _context.Permissions
+                                         join role in _context.Roles on permission.RoleID equals role.Id
+                                         where userRoles.Contains(role.Name)
+                                         select permission)
+                                             .Any(permission => permission.Add);
+                if (!userHasPermission)
+                {
+                    throw new UnauthorizedAccessException("Owner does not have the required permission.");
+                }
+                _context.Accounts.Add(account);
+                await _context.SaveChangesAsync();
+                return new ReturnTask()
+                {
+                    Succeed = true,
+                    Message = "Account added successfully"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ReturnTask()
+                {
+                    Succeed = false,
+                    Message = ex.Message
 
                 };
             }
-            return new DbResponse()
+        }
+
+
+        public async Task<ReturnTask> DeleteAccount(int id)
+        {
+            try
             {
-                Status = "Success",
-                Message = "Account Deleted successfully"
+                var account = await _context.Accounts.FindAsync(id);
+                if (account != null)
+                {
+                    _context.Accounts.Remove(account);
+                    await _context.SaveChangesAsync();
 
-            };
+                    return new ReturnTask()
+                    {
+                        Succeed = true,
+                        Message = "Account deleted successfully"
+                    };
+                }
+                else
+                {
+                    // Account not found
+                    return new ReturnTask()
+                    {
+                        Succeed = false,
+                        Message = "Account not found"
+                    };
+                }
+            }
+            catch (Exception ex)
+            {
+                return new ReturnTask()
+                {
+                    Succeed =  false,
+                    Message = ex.Message
 
-
+                };
+            }
         }
 
         public async Task<Account> GetAccountDetails(int id)
         {
-            var account = await _context.Accounts.FindAsync(id);
-
-            if (account == null)
+            try
             {
-                return null;
+                var account = await _context.Accounts.FindAsync(id);
+
+                if (account == null)
+                {
+                    throw new Exception($"Contact with ID {id} was not found.");
+                }
+                return account;
             }
-            return account;
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message, ex);
+            }
         }
 
         public async Task<IEnumerable<Account>> GetAccountList()
         {
-            return await _context.Accounts.ToListAsync();
+            try
+            {
+                return await _context.Accounts.ToListAsync();
+            }
+            catch(Exception ex) 
+            {
+                throw new Exception(ex.Message, ex);
+
+            }
         }
 
         public async Task<Account> UpdateAccount(int id, Account account)
@@ -82,9 +143,9 @@ namespace KotiCRM.Repository.Repository
             {
                 await _context.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException)
+            catch (DbUpdateConcurrencyException ex)
             {
-                throw;
+                throw new Exception("Concurrency conflict occurred. The entity has been modified or deleted by another user.", ex);
             }
             return account;
         }

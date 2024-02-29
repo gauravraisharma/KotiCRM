@@ -9,6 +9,6 @@ namespace KotiCRM.Services.IServices
 {
     public interface IUserService
     {
-        Task<DbResponse> CreateUser(ApplicationUser user);
+        Task<ReturnTask> CreateUser(ApplicationUser user);
     }
 }

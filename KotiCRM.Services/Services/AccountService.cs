@@ -18,13 +18,13 @@ namespace KotiCRM.Services.Services
             _accountRepository = accountRepository;
         }
 
-        public async Task<Account> CreateAccount(Account account)
+        public async Task<ReturnTask> CreateAccount(Account account)
         {
             var response = await _accountRepository.CreateAccount(account);
             return response;
         }
 
-        public async Task<DbResponse> DeleteAccount(int id)
+        public async Task<ReturnTask> DeleteAccount(int id)
         {
             return await _accountRepository.DeleteAccount(id);
         }

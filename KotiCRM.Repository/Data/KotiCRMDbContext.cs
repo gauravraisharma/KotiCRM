@@ -20,7 +20,11 @@ namespace KotiCRM.Repository.Data
         public DbSet<Account> Accounts { get; set; }
         public DbSet<Contact> Contacts { get; set; }
         public DbSet<Industry> Industry { get; set; }
+        public DbSet<Invoice> Invoices { get; set; }
+        public DbSet<Attachment> Attachments { get; set; }
+        public DbSet<InvoiceItem> InvoiceItems { get; set; }
+        public DbSet<Note> Notes { get; set; }
 
-       
+
     }
 }

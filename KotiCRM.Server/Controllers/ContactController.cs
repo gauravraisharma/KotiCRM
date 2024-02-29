@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace KotiCRM.Server.Controllers
 {
+    [ApiController]
     public class ContactController : Controller
     {
         private readonly IContactService _contactService;

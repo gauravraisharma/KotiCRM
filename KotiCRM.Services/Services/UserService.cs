@@ -18,7 +18,7 @@ namespace KotiCRM.Services.Services
             _userRepository = userRepository;
         }
 
-        public async Task<DbResponse> CreateUser(ApplicationUser user)
+        public async Task<ReturnTask> CreateUser(ApplicationUser user)
         {
             var response = await _userRepository.CreateUser(user);
             return response;

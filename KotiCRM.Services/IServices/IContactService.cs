@@ -9,10 +9,10 @@ namespace KotiCRM.Services.IServices
 {
     public interface IContactService
     {
-        Task<Contact> CreateContact(Contact contact);
+        Task<ReturnTask> CreateContact(Contact contact);
         Task<IEnumerable<Contact>> GetContactList();
         Task<Contact> GetContactDetails(int id);
-        Task<DbResponse> DeleteContact(int id);
+        Task<ReturnTask> DeleteContact(int id);
         Task<Contact> UpdateContact(int id, Contact contact);
     }
 }

@@ -21,7 +21,15 @@ namespace KotiCRM.Repository.Repository
 
         public async Task<IEnumerable<Industry>> GetIndustryList()
         {
-            return await _context.Industry.ToListAsync();
+            try
+            {
+                return await _context.Industry.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message, ex);
+
+            }
         }
     }
 }

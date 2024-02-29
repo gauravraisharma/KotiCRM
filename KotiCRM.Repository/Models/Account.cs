@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace KotiCRM.Repository.Models
@@ -22,14 +23,14 @@ namespace KotiCRM.Repository.Models
 
         [Column(TypeName = "nvarchar(200)")]
         public string AnnualRevenue { get; set; }
-        public StatusAccount Status { get; set; }
+        public AccountStatus Status { get; set; }
         [StringLength(20)]
         public string Phone { get; set; }
         [StringLength(20)]
         public string Fax { get; set; }
         [Column(TypeName = "nvarchar(450)")]
         public string WebSite { get; set; }
-        public TypeAccount Type { get; set; }
+        public AccountType Type { get; set; }
 
         [Column(TypeName = "nvarchar(100)")]
         public string BillingStreet { get; set; }

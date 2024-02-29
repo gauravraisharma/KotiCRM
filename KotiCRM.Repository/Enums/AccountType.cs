@@ -6,10 +6,12 @@ using System.Threading.Tasks;
 
 namespace KotiCRM.Repository.Enums
 {
-    public enum StatusAccount
+    public enum AccountType
     {
-        Running,
-        Closed,
-        OnHold
+        Private,
+        Public,
+        Partnership,
+        LLP,
+        Government
     }
 }

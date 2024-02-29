@@ -6,11 +6,10 @@ using System.Threading.Tasks;
 
 namespace KotiCRM.Repository.Enums
 {
-    public enum StatusInvoice
+    public enum AccountStatus
     {
-        Created,
-        Approved,
-        Delivered,
-        Cancelled
+        Running,
+        Closed,
+        OnHold
     }
 }

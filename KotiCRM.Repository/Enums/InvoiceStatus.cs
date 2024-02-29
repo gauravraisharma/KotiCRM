@@ -6,12 +6,11 @@ using System.Threading.Tasks;
 
 namespace KotiCRM.Repository.Enums
 {
-    public enum TypeAccount
+    public enum InvoiceStatus
     {
-        Private,
-        Public,
-        Partnership,
-        LLP,
-        Government
+        Created,
+        Approved,
+        Delivered,
+        Cancelled
     }
 }

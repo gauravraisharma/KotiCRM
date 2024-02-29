@@ -9,7 +9,7 @@ namespace KotiCRM.Repository.IRepository
 {
     public interface IUserRepository
     {
-        Task<DbResponse> CreateUser(ApplicationUser user);
+        Task<ReturnTask> CreateUser(ApplicationUser user);
 
     }
 }

@@ -26,18 +26,18 @@ namespace KotiCRM.Repository.Repository
             _config = config;
         }
 
-        public async Task<DbResponse> CreateUser(ApplicationUser user)
+        public async Task<ReturnTask> CreateUser(ApplicationUser user)
         {
             var result = await _userManager.CreateAsync(user, "Password123!");
             if (result.Succeeded)
             {
                 //_context.Users.Add(user);
                 //await _context.SaveChangesAsync();
-                return new DbResponse { Status = "SUCCESS", Message = "User added successfully!" };
+                return new ReturnTask { Succeed = true, Message = "User added successfully!" };
             }
             else
             {
-                return new DbResponse { Status = "ERROR", Message = "User not added, please try again!" };
+                return new ReturnTask { Succeed = false, Message = "User not added, please try again!" };
             }
 
         }

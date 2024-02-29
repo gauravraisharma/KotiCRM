@@ -18,53 +18,94 @@ namespace KotiCRM.Repository.Repository
         {
             _context = context;
         }
-        public async Task<Contact> CreateContact(Contact contact)
+        public async Task<ReturnTask> CreateContact(Contact contact)
         {
-            _context.Contacts.Add(contact);
-            await _context.SaveChangesAsync();
-            return contact;
+            try
+            {
+                _context.Contacts.Add(contact);
+                await _context.SaveChangesAsync();
+                return new ReturnTask()
+                {
+                    Succeed = true,
+                    Message = "Contact added successfully"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ReturnTask()
+                {
+                    Succeed = false,
+                    Message = ex.Message
+
+                };
+            }
         }
 
         public async Task<Contact> GetContactDetails(int id)
         {
-            var contact = await _context.Contacts.FindAsync(id);
+            try
+            {
+                var contact = await _context.Contacts.FindAsync(id);
 
             if (contact == null)
             {
-                return null;
+                    throw new Exception($"Contact with ID {id} was not found.");
+                }
+                return contact;
             }
-            return contact;
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message, ex);
+            }
         }
 
         public async Task<IEnumerable<Contact>> GetContactList()
         {
-            return await _context.Contacts.ToListAsync();
+            try
+            {
+                return await _context.Contacts.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message, ex);
+
+            }
         }
 
-        public async Task<DbResponse> DeleteContact(int id)
+        public async Task<ReturnTask> DeleteContact(int id)
         {
-            var contact = await _context.Contacts.FindAsync(id);
-            if (contact != null)
+            try
             {
-                _context.Contacts.Remove(contact);
-                await _context.SaveChangesAsync();
-            }
-
-            else
-            {
-                return new DbResponse()
+                var contact = await _context.Contacts.FindAsync(id);
+                if (contact != null)
                 {
-                    Status = "Error",
-                    Message = "Cannot Delete the account"
+                    _context.Contacts.Remove(contact);
+                    await _context.SaveChangesAsync();
+                    return new ReturnTask()
+                    {
+                        Succeed = true,
+                        Message = "Contact deleted successfully"
+                    };
+                }
+                else
+                {
+                // Contact not found
+                    return new ReturnTask()
+                    {
+                     Succeed = false,
+                     Message = "Contact not found"
+                    };
+                }
+            }
+            catch (Exception ex)
+            {
+                return new ReturnTask()
+                {
+                    Succeed = false,
+                    Message = ex.Message
 
                 };
             }
-            return new DbResponse()
-            {
-                Status = "Success",
-                Message = "Account Deleted successfully"
-
-            };
 
 
         }
@@ -78,9 +119,9 @@ namespace KotiCRM.Repository.Repository
             {
                 await _context.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException)
+            catch (DbUpdateConcurrencyException ex)
             {
-                throw;
+                throw new Exception("Concurrency conflict occurred. The entity has been modified or deleted by another user.", ex);
             }
             return contact;
         }
