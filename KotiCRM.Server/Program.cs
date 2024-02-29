@@ -25,8 +25,8 @@ builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
 
-JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
-JwtSecurityTokenHandler.DefaultOutboundClaimTypeMap.Clear();
+
+
 //JWT toket setup 
 builder.Services.AddAuthentication(auth =>
 {

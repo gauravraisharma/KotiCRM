@@ -1,11 +1,13 @@
 ﻿using KotiCRM.Repository.Models;
 using KotiCRM.Services.IServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace KotiCRM.Server.Controllers
 {
     [ApiController]
+    [Authorize(AuthenticationSchemes = "Bearer")]
     public class AccountController : Controller
     {
         private readonly IAccountService _accountService;

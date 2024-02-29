@@ -8,8 +8,8 @@ namespace KotiCRM.Repository.Enums
 {
     public enum AccountStatus
     {
-        Running,
-        Closed,
-        OnHold
+        Running=1,
+        Closed=2,
+        OnHold=3
     }
 }

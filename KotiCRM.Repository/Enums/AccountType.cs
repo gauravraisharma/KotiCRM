@@ -8,10 +8,10 @@ namespace KotiCRM.Repository.Enums
 {
     public enum AccountType
     {
-        Private,
-        Public,
-        Partnership,
-        LLP,
-        Government
+        Private=1,
+        Public=2,
+        Partnership=3,
+        LLP=4,
+        Government=5
     }
 }

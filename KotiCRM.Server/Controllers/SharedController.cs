@@ -1,11 +1,13 @@
 ﻿using KotiCRM.Repository.Enums;
 using KotiCRM.Repository.Models;
 using KotiCRM.Services.IServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace KotiCRM.Server.Controllers
 {
     [ApiController]
+    [Authorize(AuthenticationSchemes = "Bearer")]
     public class SharedController : Controller
     {
         private readonly ISharedService _sharedService;
@@ -14,6 +16,7 @@ namespace KotiCRM.Server.Controllers
             _sharedService = sharedService;
         }
         [HttpGet]
+
         [Route("GetIndustryList")]
         public async Task<IEnumerable<Industry>> GetIndustryList()
         {
@@ -24,24 +27,29 @@ namespace KotiCRM.Server.Controllers
         [Route("InvoiceStatus")]
         public IActionResult GetInvoiceStatus()
         {
-            var enumValues = Enum.GetNames(typeof(InvoiceStatus));
-            return Ok(enumValues);
+
+            var enumValues = Enum.GetValues(typeof(InvoiceStatus)).Cast<InvoiceStatus>();
+            var enumList = enumValues.Select(e => new { Value =(int) e, Name = e.ToString() }).ToList();
+            return Ok(enumList);
         }
 
         [HttpGet]
         [Route("AccountStatus")]
         public IActionResult GetAccountStatus()
         {
-            var enumValues = Enum.GetNames(typeof(AccountStatus));
-            return Ok(enumValues);
+            var enumValues = Enum.GetValues(typeof(AccountStatus)).Cast<AccountStatus>();
+            var enumList = enumValues.Select(e => new { Value = (int)e, Name = e.ToString() }).ToList();
+            return Ok(enumList);
+           
         }
 
         [HttpGet]
         [Route("AccountType")]
         public IActionResult GetAccountType()
         {
-            var enumValues = Enum.GetNames(typeof(AccountType));
-            return Ok(enumValues);
+            var enumValues = Enum.GetValues(typeof(AccountType)).Cast<AccountType>();
+            var enumList = enumValues.Select(e => new { Value = (int)e, Name = e.ToString() }).ToList();
+            return Ok(enumList);
         }
     }
 }

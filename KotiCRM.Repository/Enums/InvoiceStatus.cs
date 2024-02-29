@@ -8,9 +8,9 @@ namespace KotiCRM.Repository.Enums
 {
     public enum InvoiceStatus
     {
-        Created,
-        Approved,
-        Delivered,
-        Cancelled
+        Created=1,
+        Approved=2,
+        Delivered=3,
+        Cancelled=4
     }
 }

@@ -46,7 +46,7 @@ namespace KotiCRM.Server.Controllers
         }
 
         //It will create the application user
-        [Authorize(Policy = Policies.Accounts_Add)]
+        [Authorize(Roles = "Administrator")]
         [HttpPost("CreateApplicationUser")]
         public async Task<IActionResult> CreateApplicationUser(ApplicationUserModel userModel)
         {
@@ -70,7 +70,7 @@ namespace KotiCRM.Server.Controllers
         }
 
         //It will update the application user
-        [Authorize(Policy = Policies.Accounts_Edit)]
+        [Authorize(Roles = "Administrator")]
         [HttpPost("updateApplicationUser")]
         public async Task<IActionResult> UpdateApplicationUser(UpdateApplicationUserModel userModel)
         {
@@ -95,7 +95,7 @@ namespace KotiCRM.Server.Controllers
 
 
         //It will create the application Role
-        [Authorize(Policy = Policies.Accounts_Add)]
+        [Authorize(Roles = "Administrator")]
         [HttpGet("CreateNewRole/{roleName}")]
         public async Task<IActionResult> CreateNewRole(string roleName)
         {
@@ -133,7 +133,7 @@ namespace KotiCRM.Server.Controllers
         }
 
 
-        [Authorize(Policy = Policies.Accounts)]
+        [Authorize(Roles = "Administrator")]
         //This method is used to get List of Roles
         [HttpGet("GetUserList")]
         public ActionResult GetUserList()
@@ -143,6 +143,7 @@ namespace KotiCRM.Server.Controllers
             return Ok(dbResponse);
         }
 
+        [Authorize(Roles = "Administrator")]
         [HttpGet("getUserDataById/{userId}")]
         public ActionResult GetUserDataById(string userId)
         {
@@ -151,7 +152,7 @@ namespace KotiCRM.Server.Controllers
             return Ok(dbResponse);
         }
 
-        [Authorize(Policy = Policies.Accounts_Delete)]
+        [Authorize(Roles = "Administrator")]
         [HttpGet("DeleteUser/{userId}")]
         public ActionResult DeleteUser(string userId)
         {
@@ -162,8 +163,8 @@ namespace KotiCRM.Server.Controllers
             }
             return Ok(dbResponse);
         }
-        
-        [AllowAnonymous]
+
+        [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpGet("GetModulePermission/{userId}")]
         public async Task<ActionResult> GetModulePermission(string userId)
         {

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace KotiCRM.Server.Authentication
 {
@@ -12,6 +13,10 @@ namespace KotiCRM.Server.Authentication
                 c.Value.Contains(requirement.Permission)))
             {
                 context.Succeed(requirement);
+            }
+            else
+            {
+                context.Fail();
             }
             return Task.CompletedTask;
         }
