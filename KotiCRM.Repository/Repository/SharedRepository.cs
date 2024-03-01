@@ -31,5 +31,29 @@ namespace KotiCRM.Repository.Repository
 
             }
         }
+        
+        
+        public List<DropDownModel> GetAccountOwner()
+        {
+            try
+            {
+
+                var result = (from users in _context.Users
+                              join userRoles in _context.UserRoles on users.Id equals userRoles.UserId
+                              join Permissions in _context.Permissions on userRoles.RoleId equals Permissions.RoleID
+                              where Permissions.ModuleID==1 && Permissions.Add && Permissions.Edit && Permissions.Delete && Permissions.View 
+                              select new DropDownModel
+                              {
+                                  id = users.Id,
+                                  Label=users.FirstName+' '+users.LastName
+                              }).ToList();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message, ex);
+
+            }
+        }
     }
 }
