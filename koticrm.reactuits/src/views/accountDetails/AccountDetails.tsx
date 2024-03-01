@@ -28,7 +28,7 @@ import { TiAttachmentOutline } from "react-icons/ti";
 import "../../css/style.css";
 
 const AccountDetails = ({ data }) => {
-  const { id } = useParams();
+  // const { id } = useParams();
 
   const selectedItem = data.find((item) => item.id === parseInt(id));
 
@@ -74,7 +74,7 @@ const AccountDetails = ({ data }) => {
         </CCard>
       </CCol>
       <CCol>
-        <CRow xs={12}>
+        <CRow>
           <ul className="nav nav-tabs" id="myTab" role="tablist">
             <li className="nav-item" role="presentation">
               <button
