@@ -310,13 +310,31 @@ namespace KotiCRM.Repository.Repository
 
                     var token = await GenerateToken(user, userModel.RememberMe);
 
+                    var role = await _roleManager.FindByNameAsync(userRoles[0]);
+                    var roleid = role.Id;
+                    var ModulePermissionList = (from Permissions in _context.Permissions
+                                                join Module in _context.Modules on Permissions.ModuleID equals Module.Id
+                                                where Permissions.RoleID == roleid
+                                                select new ModulePermission
+                                                {
+                                                    ModuleId = Module.Id,
+                                                    ModuleName = Module.Name,
+                                                    IsAdd = Permissions.Add,
+                                                    IsEdit = Permissions.Edit,
+                                                    IsView = Permissions.View,
+                                                    IsDelete = Permissions.Delete,
+                                                }
+                              ).ToList();
+
+
                     return new LoginStatus
                     {
                         Status = "SUCCEED",
                         Message = "Login Successfully",
                         Token = token,
                         UserType = userRoles[0],
-                        UserId = user.Id
+                        UserId = user.Id,
+                        ModulePermission=ModulePermissionList
                     };
 
                 }

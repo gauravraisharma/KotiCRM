@@ -9,6 +9,7 @@ namespace KotiCRM.Repository.Models
         public string? Token { get; set; }
         public string? UserType { get; set; }
         public string? UserId { get; set; }
+        public List<ModulePermission>? ModulePermission { get; set; }
     }
     public class ResponseStatus
     {
