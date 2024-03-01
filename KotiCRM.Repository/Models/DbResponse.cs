@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace KotiCRM.Repository.Models
 {
-    public class ReturnTask
+    public class DbResponse
     {
         public bool Succeed { get; set; }
 
@@ -14,19 +14,19 @@ namespace KotiCRM.Repository.Models
 
         public string ErrorCode { get; set; }
 
-        public ReturnTask() { }
+        public DbResponse() { }
 
-        public ReturnTask(bool succeed) : this()
+        public DbResponse(bool succeed) : this()
         {
             Succeed = succeed;
         }
 
-        public ReturnTask(bool succeed, string message) : this(succeed)
+        public DbResponse(bool succeed, string message) : this(succeed)
         {
             Message = message;
         }
 
-        public ReturnTask(bool succeed, string message, string errorCode) : this(succeed, message)
+        public DbResponse(bool succeed, string message, string errorCode) : this(succeed, message)
         {
             ErrorCode = errorCode;
         }

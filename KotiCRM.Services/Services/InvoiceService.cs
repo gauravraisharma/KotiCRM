@@ -18,12 +18,12 @@ namespace KotiCRM.Services.Services
             _invoiceRepository = invoiceRepository;
         }
 
-        public async Task<ReturnTask> CreateInvoice(Invoice invoice)
+        public async Task<DbResponse> CreateInvoice(Invoice invoice)
         {
             return await _invoiceRepository.CreateInvoice(invoice);
         }
 
-        public async Task<ReturnTask> DeleteInvoice(int id)
+        public async Task<DbResponse> DeleteInvoice(int id)
         {
             return await _invoiceRepository.DeleteInvoice(id);
         }

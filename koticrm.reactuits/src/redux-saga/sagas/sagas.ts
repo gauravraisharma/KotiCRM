@@ -1,18 +1,17 @@
 import { call, put, takeEvery } from 'redux-saga/effects';
 import { GET_SUCCESS, GET_ACCOUNTS_FETCH } from '../action';
 import AccountService from '../../services/AccountService';
-import { AxiosResponse } from 'axios';
-import { account } from '../../models/account/Account';
+import { Account } from '../../models/account/Account';
 
 
 
-function* accountFetch(): IterableIterator<ReturnType<typeof AccountService.GetAccountsList>> {
+async function* accountFetch(){
   try {
-      const response: AxiosResponse<account[]> = yield call(AccountService.GetAccountsList);
-    if (response.status !== 200) {
-      throw new Error('Failed to fetch accounts');
-    }
-    return response.data;
+      const response = await call(AccountService.GetAccountsList);
+    // if (response.status !== 200) {
+    //   throw new Error('Failed to fetch accounts');
+    // }
+    return response;
   } catch (error) {
     console.error('Error fetching accounts:', error);
     throw error;
@@ -21,7 +20,7 @@ function* accountFetch(): IterableIterator<ReturnType<typeof AccountService.GetA
 
 function* workGetAccountFetch() {
   try {
-    const accounts: account[] = yield call(accountFetch);
+    const accounts: Account[] = yield call(accountFetch);
     yield put({ type: GET_SUCCESS, accounts });
   } catch (error) {
     // Handle error if needed

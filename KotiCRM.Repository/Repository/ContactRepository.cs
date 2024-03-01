@@ -18,13 +18,13 @@ namespace KotiCRM.Repository.Repository
         {
             _context = context;
         }
-        public async Task<ReturnTask> CreateContact(Contact contact)
+        public async Task<DbResponse> CreateContact(Contact contact)
         {
             try
             {
                 _context.Contacts.Add(contact);
                 await _context.SaveChangesAsync();
-                return new ReturnTask()
+                return new DbResponse()
                 {
                     Succeed = true,
                     Message = "Contact added successfully"
@@ -32,7 +32,7 @@ namespace KotiCRM.Repository.Repository
             }
             catch (Exception ex)
             {
-                return new ReturnTask()
+                return new DbResponse()
                 {
                     Succeed = false,
                     Message = ex.Message
@@ -72,7 +72,7 @@ namespace KotiCRM.Repository.Repository
             }
         }
 
-        public async Task<ReturnTask> DeleteContact(int id)
+        public async Task<DbResponse> DeleteContact(int id)
         {
             try
             {
@@ -81,7 +81,7 @@ namespace KotiCRM.Repository.Repository
                 {
                     _context.Contacts.Remove(contact);
                     await _context.SaveChangesAsync();
-                    return new ReturnTask()
+                    return new DbResponse()
                     {
                         Succeed = true,
                         Message = "Contact deleted successfully"
@@ -90,7 +90,7 @@ namespace KotiCRM.Repository.Repository
                 else
                 {
                 // Contact not found
-                    return new ReturnTask()
+                    return new DbResponse()
                     {
                      Succeed = false,
                      Message = "Contact not found"
@@ -99,7 +99,7 @@ namespace KotiCRM.Repository.Repository
             }
             catch (Exception ex)
             {
-                return new ReturnTask()
+                return new DbResponse()
                 {
                     Succeed = false,
                     Message = ex.Message

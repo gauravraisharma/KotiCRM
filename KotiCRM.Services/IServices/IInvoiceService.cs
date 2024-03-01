@@ -9,10 +9,10 @@ namespace KotiCRM.Services.IServices
 {
     public interface IInvoiceService
     {
-        Task<ReturnTask> CreateInvoice(Invoice invoice);
+        Task<DbResponse> CreateInvoice(Invoice invoice);
         Task<IEnumerable<Invoice>> GetInvoiceList();
         Task<Invoice> GetInvoiceDetails(int id);
-        Task<ReturnTask> DeleteInvoice(int id);
+        Task<DbResponse> DeleteInvoice(int id);
         Task<Invoice> UpdateInvoice(int id, Invoice invoice);
     }
 }

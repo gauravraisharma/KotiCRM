@@ -1,10 +1,12 @@
 import { Action } from 'redux';
 import {GET_SUCCESS} from '../action'
-interface Action {
-    type: string;
-    accounts?: any; 
-  }
-const reducer = (state = {accounts : []}, action : Action) =>{
+
+const initialState = {
+    reducer: {
+        accounts: [] 
+    }
+     };
+const reducer = (state = initialState, action : any) =>{
     debugger
     switch (action.type){
         case GET_SUCCESS: 

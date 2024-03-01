@@ -17,21 +17,21 @@ import {
   CDropdownItem,
   CDropdownToggle,
 } from '@coreui/react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector  } from 'react-redux';
 import { getAccounts } from '../../redux-saga/action';
 import { FaEdit } from 'react-icons/fa';
 import { MdDelete } from 'react-icons/md';
 import { LuView } from 'react-icons/lu';
 import { Link } from 'react-router-dom';
 import NewAccount from '../account/NewAccount';
-// import React, { useState } from 'react';
+import { Account } from '../../models/account/Account';
 
 interface AccountItem {
-    id: number;
-    name: string;
-    owner: string;
-    phone: string;
-    country: string;
+  id: string;
+  name: string;
+  owner: string;
+  phone: string;
+  country: string;
 }
 
 
@@ -68,17 +68,20 @@ const filteredAccounts = accounts.filter(account => {
 
   const [state, setState] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [rowData, setRowData] = useState<AccountItem | null>(null);
+  const [rowData, setRowData] = useState<Account | null>(null);
 
-  // const dispatch = useDispatch();
-  // const accounts: AccountItem[] = useSelector((state: any) => state.reducer.accounts);
+  const dispatch = useDispatch();
+  const account = useSelector((state : any) => {
+    console.log('State: ', state);
+    return state.reducer.accounts;
+  });
 
-  const handleEditClick = (data: AccountItem) => {
+  const handleEditClick = (data: Account) => {
     setRowData(data);
     setIsModalOpen(true);
   };
 
-  const handleDeleteClick = (id: string) => {
+  const handleDeleteClick = (id: number) => {
     // Handle delete click logic
   };
 
@@ -90,9 +93,9 @@ const filteredAccounts = accounts.filter(account => {
     setState(false);
   };
 
-  // useEffect(() => {
-  //   dispatch(getAccounts());
-  // }, [dispatch]);
+  useEffect(() => {
+    dispatch(getAccounts());
+  }, [dispatch]);
 
   return (
     <>
@@ -106,7 +109,7 @@ const filteredAccounts = accounts.filter(account => {
                 <strong>Accounts</strong> <small>List</small>
               </CCardHeader>
               <CCardBody>
-                {/* {accounts.map((item) => (
+                {account.map((item: Account) => (
                   <CRow key={item.id}>
                     <CCol xs={6}>
                       <div className="input-group">
@@ -168,13 +171,13 @@ const filteredAccounts = accounts.filter(account => {
                     </CTableRow>
                   </CTableHead>
                   <CTableBody>
-                    {filteredAccounts.map((account) => (
-                      <CTableRow key={account.id}>
-                        <CTableHeaderCell scope="row">{account.id}</CTableHeaderCell>
-                        <CTableDataCell>{account.name}</CTableDataCell>
-                        <CTableDataCell>{account.owner}</CTableDataCell>
-                        <CTableDataCell>{account.phone}</CTableDataCell>
-                        <CTableDataCell>{account.country}</CTableDataCell>
+                    {account.map((item : Account) => (
+                      <CTableRow key={item.id}>
+                        <CTableHeaderCell scope="row">{item.id}</CTableHeaderCell>
+                        <CTableDataCell>{item.industryId}</CTableDataCell>
+                        <CTableDataCell>{item.billingCity}</CTableDataCell>
+                        <CTableDataCell>{item.billingState}</CTableDataCell>
+                        <CTableDataCell>{item.country}</CTableDataCell>
                         <CTableDataCell>
                           <FaEdit
                             style={{ color: 'green' }}
@@ -182,7 +185,7 @@ const filteredAccounts = accounts.filter(account => {
                           />
                           <LuView
                             style={{ color: 'blue' }}
-                            onClick={() => handleDeleteClick(account.id)}
+                            onClick={() => handleDeleteClick(item?.id)}
                           />
                           <Link to={`/details/${account.id}`}>View Details</Link>
                           <MdDelete style={{ color: 'red' }} />
