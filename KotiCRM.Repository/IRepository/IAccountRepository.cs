@@ -9,10 +9,10 @@ namespace KotiCRM.Repository.IRepository
 {
     public interface IAccountRepository
     {
-        Task<ReturnTask> CreateAccount(Account account);
+        Task<DbResponse> CreateAccount(Account account);
         Task<IEnumerable<Account>> GetAccountList();
         Task<Account> GetAccountDetails(int id);
-        Task<ReturnTask> DeleteAccount(int id);
+        Task<DbResponse> DeleteAccount(int id);
         Task<Account> UpdateAccount(int id, Account account);
     }
 }

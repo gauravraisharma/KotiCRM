@@ -24,7 +24,7 @@ namespace KotiCRM.Repository.Repository
             _userManager = userManager;
         }
 
-        public async Task<ReturnTask> CreateAccount(Account account)
+        public async Task<DbResponse> CreateAccount(Account account)
         {
             try
             {
@@ -48,7 +48,7 @@ namespace KotiCRM.Repository.Repository
                 }
                 _context.Accounts.Add(account);
                 await _context.SaveChangesAsync();
-                return new ReturnTask()
+                return new DbResponse()
                 {
                     Succeed = true,
                     Message = "Account added successfully"
@@ -56,7 +56,7 @@ namespace KotiCRM.Repository.Repository
             }
             catch (Exception ex)
             {
-                return new ReturnTask()
+                return new DbResponse()
                 {
                     Succeed = false,
                     Message = ex.Message
@@ -66,7 +66,7 @@ namespace KotiCRM.Repository.Repository
         }
 
 
-        public async Task<ReturnTask> DeleteAccount(int id)
+        public async Task<DbResponse> DeleteAccount(int id)
         {
             try
             {
@@ -76,7 +76,7 @@ namespace KotiCRM.Repository.Repository
                     _context.Accounts.Remove(account);
                     await _context.SaveChangesAsync();
 
-                    return new ReturnTask()
+                    return new DbResponse()
                     {
                         Succeed = true,
                         Message = "Account deleted successfully"
@@ -85,7 +85,7 @@ namespace KotiCRM.Repository.Repository
                 else
                 {
                     // Account not found
-                    return new ReturnTask()
+                    return new DbResponse()
                     {
                         Succeed = false,
                         Message = "Account not found"
@@ -94,7 +94,7 @@ namespace KotiCRM.Repository.Repository
             }
             catch (Exception ex)
             {
-                return new ReturnTask()
+                return new DbResponse()
                 {
                     Succeed =  false,
                     Message = ex.Message

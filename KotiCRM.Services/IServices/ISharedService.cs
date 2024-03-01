@@ -10,5 +10,6 @@ namespace KotiCRM.Services.IServices
     public interface ISharedService
     {
         Task<IEnumerable<Industry>> GetIndustryList();
+        List<DropDownModel> GetAccountOwner();
     }
 }

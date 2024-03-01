@@ -1,18 +1,29 @@
-import axiosInstance from "../api/axiosInterceptor";
+import agent from "../api/agent";
 import { Account } from "../models/account/Account";
 
 
 export default class AccountService {
 	static async GetAccountsList(): Promise<Account[]> {
 	  try {
-		const response : Account[] = await axiosInstance.get(`Account/GetAccountList`);
-		if (response.status !== 200) {
-		  throw new Error('Failed to fetch accounts');
+		const response  = await agent.Account.get();
+		console.log(response)
+		return response;
 		}
-		return response.data as Account[];
-	  } catch (error) {
+	  catch (error) {
 		console.error('Error fetching accounts:', error);
 		throw error; 
 	  }
 	}
+
+	static async GetAccountDetails(id:number): Promise<Account> {
+		try {
+		  const response  = await agent.Account.getById(id);
+		  console.log(response)
+		  return response;
+		  }
+		catch (error) {
+		  console.error('Error fetching accounts:', error);
+		  throw error; 
+		}
+	  }
 }

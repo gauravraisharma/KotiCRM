@@ -17,12 +17,12 @@ namespace KotiCRM.Services.Services
         {
             _noteRepository = noteRepository;
         }
-        public async Task<ReturnTask> CreateNote(Note note)
+        public async Task<DbResponse> CreateNote(Note note)
         {
             return await _noteRepository.CreateNote(note);
         }
 
-        public async Task<ReturnTask> DeleteNote(int id)
+        public async Task<DbResponse> DeleteNote(int id)
         {
             return await _noteRepository.DeleteNote(id);  
         }

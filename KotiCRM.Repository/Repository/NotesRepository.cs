@@ -19,13 +19,13 @@ namespace KotiCRM.Repository.Repository
             _context = context;
         }
 
-        public async Task<ReturnTask> CreateNote(Note note)
+        public async Task<DbResponse> CreateNote(Note note)
         {
             try
             {
                 _context.Notes.Add(note);
                 await _context.SaveChangesAsync();
-                return new ReturnTask()
+                return new DbResponse()
                 {
                     Succeed = true,
                     Message = "Note added successfully"
@@ -33,7 +33,7 @@ namespace KotiCRM.Repository.Repository
             }
             catch (Exception ex)
             {
-                return new ReturnTask()
+                return new DbResponse()
                 {
                     Succeed = false,
                     Message = ex.Message
@@ -73,7 +73,7 @@ namespace KotiCRM.Repository.Repository
             }
         }
 
-        public async Task<ReturnTask> DeleteNote(int id)
+        public async Task<DbResponse> DeleteNote(int id)
         {
             try
             {
@@ -82,7 +82,7 @@ namespace KotiCRM.Repository.Repository
                 {
                     _context.Notes.Remove(note);
                     await _context.SaveChangesAsync();
-                    return new ReturnTask()
+                    return new DbResponse()
                     {
                         Succeed = true,
                         Message = "Note deleted successfully"
@@ -91,7 +91,7 @@ namespace KotiCRM.Repository.Repository
                 else
                 {
                     // note not found
-                    return new ReturnTask()
+                    return new DbResponse()
                     {
                         Succeed = false,
                         Message = "Note not found"
@@ -100,7 +100,7 @@ namespace KotiCRM.Repository.Repository
             }
             catch (Exception ex)
             {
-                return new ReturnTask()
+                return new DbResponse()
                 {
                     Succeed = false,
                     Message = ex.Message

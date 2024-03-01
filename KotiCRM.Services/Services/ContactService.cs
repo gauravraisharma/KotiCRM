@@ -18,13 +18,13 @@ namespace KotiCRM.Services.Services
             _contactRepository = contactRepository;
         }
 
-        public async Task<ReturnTask> CreateContact(Contact contact)
+        public async Task<DbResponse> CreateContact(Contact contact)
         {
             var response = await _contactRepository.CreateContact(contact);
             return response;
         }
 
-        public async Task<ReturnTask> DeleteContact(int id)
+        public async Task<DbResponse> DeleteContact(int id)
         {
             return await _contactRepository.DeleteContact(id);
         }

@@ -21,5 +21,9 @@ namespace KotiCRM.Services.Services
         {
             return await _sharedRepository.GetIndustryList();
         }
+        public List<DropDownModel> GetAccountOwner()
+        {
+            return  _sharedRepository.GetAccountOwner();
+        }
     }
 }

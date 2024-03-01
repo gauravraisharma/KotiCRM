@@ -10,5 +10,6 @@ namespace KotiCRM.Repository.IRepository
     public interface ISharedRepository
     {
         Task<IEnumerable<Industry>> GetIndustryList();
+        List<DropDownModel> GetAccountOwner();
     }
 }

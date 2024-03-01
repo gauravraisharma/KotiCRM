@@ -23,6 +23,14 @@ namespace KotiCRM.Server.Controllers
         {
             return await _sharedService.GetIndustryList();
         }
+        
+        
+        [HttpGet]
+        [Route("GetAccountOwner")]
+        public List<DropDownModel> GetAccountOwner()
+        {
+            return  _sharedService.GetAccountOwner();
+        }
 
         [HttpGet]
         [Route("InvoiceStatus")]

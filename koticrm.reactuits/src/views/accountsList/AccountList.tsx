@@ -175,7 +175,7 @@ const AccountList: React.FC = () => {
                           />
                           <LuView
                             style={{ color: 'blue' }}
-                            onClick={() => handleDeleteClick(account.id)}
+                            onClick={() => handleDeleteClick(item?.id)}
                           />
                           <Link to={`/details/${account.id}`}>View Details</Link>
                           <MdDelete style={{ color: 'red' }} />

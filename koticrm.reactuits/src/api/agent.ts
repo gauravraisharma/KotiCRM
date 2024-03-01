@@ -15,28 +15,28 @@ const requests = {
 }
 
 const Account = {
-    get: () => requests.get<Account>(`/Account/GetAccountList`),
+    get: () => requests.get<Account[]>(`/Account/GetAccountList`),
     create: (account : Account) => requests.post<Account>(`/Account/CreateAccount`, account),
     update: (id : number,account: Account) => requests.post<Account>(`/Account/UpdateAccount/${id}`, account),
     getById: (id : number) => requests.get<Account>(`/Account/GetAccountDetails/${id}`),
     delete: (id : number) => requests.del<Account>(`/Account/DeleteAccount/${id}`)  
 }
 const Contact = {
-    get: () => requests.get<Contact>(`/Contact/GetContactList`),
+    get: () => requests.get<Contact[]>(`/Contact/GetContactList`),
     create: (contact : Contact) => requests.post<Account>(`/Contact/CreateContact`, contact),
     update: (id : number,contact: Contact) => requests.post<Account>(`/Contact/UpdateContact/${id}`, contact),
     getById: (id : number) => requests.get<Contact>(`/Contact/GetContactDetails/${id}`),
     delete: (id : number) => requests.del<Contact>(`/Contact/DeleteContact/${id}`)  
 }
 const Invoice = {
-    get: () => requests.get<Invoice>(`/Invoice/GetInvoiceList`),
+    get: () => requests.get<Invoice[]>(`/Invoice/GetInvoiceList`),
     create: (invoice : Invoice) => requests.post<Invoice>(`/Invoice/CreateInvoice`, invoice),
     update: (id : number,invoice: Invoice) => requests.post<Invoice>(`/Invoice/UpdateInvoice/${id}`, invoice),
     getById: (id : number) => requests.get<Invoice>(`/Invoice/GetInvoiceDetails/${id}`),
     delete: (id : number) => requests.del<Invoice>(`/Invoice/DeleteInvoice/${id}`)  
 }
 const Notes = {
-    get: () => requests.get<Note>(`/Notes/GetNoteList`),
+    get: () => requests.get<Note[]>(`/Notes/GetNoteList`),
     create: (note : Note) => requests.post<Note>(`/Notes/CreateNote`, note),
     update: (id : number,note: Note) => requests.post<Note>(`/Notes/UpdateNote/${id}`, note),
     getById: (id : number) => requests.get<Note>(`/Notes/GetNoteDetails/${id}`),
