@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace KotiCRM.Server.Controllers
 {
     [ApiController]
+    [Route("api/[controller]")]
     [Authorize(AuthenticationSchemes = "Bearer")]
     public class SharedController : Controller
     {

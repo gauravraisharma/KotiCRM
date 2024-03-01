@@ -17,6 +17,10 @@ namespace KotiCRM.Services
             services.AddTransient<IContactRepository, ContactRepository>();
             services.AddTransient<ISharedService, SharedService>();
             services.AddTransient<ISharedRepository, SharedRepository>();
+            services.AddTransient<IInvoiceService, InvoiceService>();
+            services.AddTransient<IInvoiceRepository, InvoiceRepository>();
+            services.AddTransient<INotesService, NotesService>();
+            services.AddTransient<INotesRepository, NotesRepository>();
         }
     }
 }

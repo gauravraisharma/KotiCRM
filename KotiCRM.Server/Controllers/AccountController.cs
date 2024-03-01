@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 namespace KotiCRM.Server.Controllers
 {
     [ApiController]
+    [Route("api/[controller]")]
     [Authorize(AuthenticationSchemes = "Bearer")]
     public class AccountController : Controller
     {

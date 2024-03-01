@@ -5,8 +5,19 @@ import { createRoot } from 'react-dom/client'
 import App from './App'
 import reportWebVitals from './reportWebVitals'
 import { Provider } from 'react-redux'
-import store from './store'
+// import store from './store'
+import { combineReducers, legacy_createStore as createStore, applyMiddleware } from 'redux'
+import createSagaMiddleware from 'redux-saga'
+import reducer from './redux-saga/reducer'
+import mySaga from './redux-saga/sagas'
 
+const sagaMiddelware = createSagaMiddleware();
+
+const rootReducer = combineReducers({
+  reducer: reducer
+});
+const store = createStore(rootReducer, applyMiddleware(sagaMiddelware))
+sagaMiddelware.run(mySaga);
 createRoot(document.getElementById('root')).render(
   <Provider store={store}>
     <App />

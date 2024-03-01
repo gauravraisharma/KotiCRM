@@ -38,6 +38,7 @@ namespace KotiCRM.Repository.Repository
                 // Check if the user has the required role and permission
                 var userHasPermission = (from permission in _context.Permissions
                                          join role in _context.Roles on permission.RoleID equals role.Id
+                                         join modules in _context.Modules on permission.ModuleID equals modules.Id
                                          where userRoles.Contains(role.Name)
                                          select permission)
                                              .Any(permission => permission.Add);

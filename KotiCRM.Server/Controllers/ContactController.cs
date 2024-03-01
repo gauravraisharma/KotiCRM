@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace KotiCRM.Server.Controllers
 {
     [ApiController]
+    [Route("api/[controller]")]
     [Authorize(AuthenticationSchemes = "Bearer")]
     public class ContactController : Controller
     {
@@ -31,7 +32,7 @@ namespace KotiCRM.Server.Controllers
 
         [HttpPost]
         [Route("CreateContact")]
-        public async Task<ActionResult<Account>> CreateContact(Contact contact)
+        public async Task<ActionResult<Contact>> CreateContact(Contact contact)
         {
             return Ok(await _contactService.CreateContact(contact));
         }
