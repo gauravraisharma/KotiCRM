@@ -1,4 +1,3 @@
-import React from "react";
 import {
   CRow,
   CCol,
@@ -26,15 +25,20 @@ import { IoPersonCircleOutline } from "react-icons/io5";
 import { MdOutlinePictureAsPdf } from "react-icons/md";
 import { TiAttachmentOutline } from "react-icons/ti";
 import "../../css/style.css";
+import { Account } from "../../models/account/Account";
+import { dummyAccounts } from "../../constants";
 
-const AccountDetails = ({ data }) => {
-  // const { id } = useParams();
+const AccountDetails = () => {
+  // const { id } = useParams();      {data}
 
-  const selectedItem = data.find((item) => item.id === parseInt(id));
+  // const selectedItem = data.find((item) => item.id === parseInt(id));
 
-  if (!selectedItem) {
-    return <div>Item not found</div>;
-  }
+  // if (!selectedItem) {
+  //   return <div>Item not found</div>;
+  // }
+
+  const selectedItem: Account = dummyAccounts[0];
+
   return (
     <CRow>
       <CCol xs={12}>
@@ -158,16 +162,14 @@ const AccountDetails = ({ data }) => {
                 <CCol xs={6}>
                   <div className="headings">Account information</div>
                   <ul>
-                    <li>Account Owner: {selectedItem.accountOwner}</li>
-                    <li>Account type: {selectedItem.accountType}</li>
-                    <li>Industry: {selectedItem.industry}</li>
+                    <li>Account Owner: {selectedItem.ownerId}</li>
+                    <li>Account type: {selectedItem.country}</li>
+                    <li>Industry: {selectedItem.industryId}</li>
                     <li>Annual Revenue: {selectedItem.annualRevenue}</li>
                     <li>Billing Street: {selectedItem.billingStreet}</li>
                     <li>Billing City: {selectedItem.billingCity}</li>
                     <li>Billing State: {selectedItem.billingState}</li>
                     <li>Billing Code: {selectedItem.billingCode}</li>
-                    <li>Billing Country: {selectedItem.billingCountry}</li>
-                    <li> Discription: {selectedItem.discription}</li>
                   </ul>
                 </CCol>
               </CRow>
@@ -406,7 +408,7 @@ const AccountDetails = ({ data }) => {
                 </CCard>
               </CCol>
             </div>
-            
+
             <div
               className="tab-pane fade"
               id="invoices"

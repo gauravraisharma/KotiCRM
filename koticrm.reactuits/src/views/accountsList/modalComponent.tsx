@@ -1,16 +1,9 @@
 import { Formik, Form, Field } from 'formik';
 import React from 'react';
-
-interface RowData {
-  id: string;
-  name: string;
-  owner: string;
-  phone: string;
-  country: string;
-}
+import { Account } from '../../models/account/Account';
 
 interface ModalProps {
-  rowData: RowData;
+  rowData: Account;
   closeModal: () => void;
   backToAccountList: () => void;
 }
@@ -30,8 +23,6 @@ const ModalComponent: React.FC<ModalProps> = ({ rowData, closeModal, backToAccou
         <Formik
           initialValues={{
             id: rowData.id,
-            name: rowData.name,
-            owner: rowData.owner,
             phone: rowData.phone,
             country: rowData.country,
           }}
@@ -54,6 +45,7 @@ const ModalComponent: React.FC<ModalProps> = ({ rowData, closeModal, backToAccou
             </Form>
           )}
         </Formik>
+        <button onClick={handleSave}>Save</button>
       </div>
     </div>
   );

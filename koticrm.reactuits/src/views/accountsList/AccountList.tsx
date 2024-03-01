@@ -17,69 +17,58 @@ import {
   CDropdownItem,
   CDropdownToggle,
 } from '@coreui/react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { getAccounts } from '../../redux-saga/action';
 import { FaEdit } from 'react-icons/fa';
 import { MdDelete } from 'react-icons/md';
 import { LuView } from 'react-icons/lu';
 import { Link } from 'react-router-dom';
 import NewAccount from '../account/NewAccount';
-// import React, { useState } from 'react';
-
-interface AccountItem {
-    id: number;
-    name: string;
-    owner: string;
-    phone: string;
-    country: string;
-}
-
+import { Account } from '../../models/account/Account';
+import { dummyAccounts } from '../../constants';
+import ModalComponent from './modalComponent';
 
 const AccountList: React.FC = () => {
 
-  const [accounts, setAccounts] = useState<Account[]>([
-    { id: 1, name: 'Account 1', owner: 'Owner 1', phone: '123-456-7890', country: 'USA' },
-    { id: 2, name: 'Account 2', owner: 'Owner 2', phone: '234-567-8901', country: 'Canada' },
+  const [accounts, setAccounts] = useState<Account[]>([]);
+  const [searchField, setSearchField] = useState<string>('');
+  const [searchBy, setSearchBy] = useState<string>('Name');
 
-]);
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchField(event.target.value);
+  };
+  const handleSearchByChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSearchBy(event.target.value);
+  };
 
-const [searchField, setSearchField] = useState<string>('');
-const [searchBy, setSearchBy] = useState<string>('Name');
-
-const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-  setSearchField(event.target.value);
-};
-const handleSearchByChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-  setSearchBy(event.target.value);
-};
-
-const filteredAccounts = accounts.filter(account => {
-  if (searchBy === 'Name') {
-      return account.name.toLowerCase().includes(searchField.toLowerCase());
-  } else if (searchBy === 'Owner') {
-      return account.owner.toLowerCase().includes(searchField.toLowerCase());
-  } else if (searchBy === 'Phone') {
+  const filteredAccounts = accounts.filter(account => {
+    // if (searchBy === 'Name') {
+    //   return account.ownerId.toLowerCase().includes(searchField.toLowerCase());
+    // } else 
+    // if (searchBy === 'Owner') {
+    //   return account.owner.toLowerCase().includes(searchField.toLowerCase());
+    // } else 
+    if (searchBy === 'Phone') {
       return account.phone.includes(searchField);
-  } else if (searchBy === 'Country') {
+    } else if (searchBy === 'Country') {
       return account.country.toLowerCase().includes(searchField.toLowerCase());
-  }
-  return true;
-});
+    }
+    return true;
+  });
 
   const [state, setState] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [rowData, setRowData] = useState<AccountItem | null>(null);
+  const [rowData, setRowData] = useState<Account | null>(null);
 
-  // const dispatch = useDispatch();
-  // const accounts: AccountItem[] = useSelector((state: any) => state.reducer.accounts);
+  const dispatch = useDispatch();
 
-  const handleEditClick = (data: AccountItem) => {
+  const handleEditClick = (data: Account) => {
     setRowData(data);
     setIsModalOpen(true);
   };
 
-  const handleDeleteClick = (id: string) => {
-    // Handle delete click logic
+  const handleDeleteClick = (id: number) => {
+    console.log(id);
   };
 
   const handleCreateNew = () => {
@@ -90,9 +79,13 @@ const filteredAccounts = accounts.filter(account => {
     setState(false);
   };
 
-  // useEffect(() => {
-  //   dispatch(getAccounts());
-  // }, [dispatch]);
+  useEffect(() => {
+    dispatch(getAccounts());
+  }, [dispatch]);
+
+  useEffect(() => {
+    setAccounts(dummyAccounts);
+  }, []);
 
   return (
     <>
@@ -106,7 +99,7 @@ const filteredAccounts = accounts.filter(account => {
                 <strong>Accounts</strong> <small>List</small>
               </CCardHeader>
               <CCardBody>
-                {/* {accounts.map((item) => (
+                {accounts.map((item) => (
                   <CRow key={item.id}>
                     <CCol xs={6}>
                       <div className="input-group">
@@ -131,21 +124,21 @@ const filteredAccounts = accounts.filter(account => {
                       <br />
                     </CCol>
                   </CRow>
-                ))} */}
+                ))}
                 <div>
-                <select value={searchBy} onChange={handleSearchByChange}>
+                  <select value={searchBy} onChange={handleSearchByChange}>
                     <option value="Name">Name</option>
                     <option value="Owner">Owner</option>
                     <option value="Phone">Phone</option>
                     <option value="Country">Country</option>
-                </select>
-                <input
+                  </select>
+                  <input
                     type="text"
                     placeholder="Search..."
                     value={searchField}
                     onChange={handleChange}
-                />
-            </div>
+                  />
+                </div>
                 <CCol xs={6}>
                   <div className="text-end">
                     <CButton
@@ -171,8 +164,8 @@ const filteredAccounts = accounts.filter(account => {
                     {filteredAccounts.map((account) => (
                       <CTableRow key={account.id}>
                         <CTableHeaderCell scope="row">{account.id}</CTableHeaderCell>
-                        <CTableDataCell>{account.name}</CTableDataCell>
-                        <CTableDataCell>{account.owner}</CTableDataCell>
+                        <CTableDataCell>{account.annualRevenue}</CTableDataCell>
+                        <CTableDataCell>{account.billingCity}</CTableDataCell>
                         <CTableDataCell>{account.phone}</CTableDataCell>
                         <CTableDataCell>{account.country}</CTableDataCell>
                         <CTableDataCell>
@@ -191,10 +184,10 @@ const filteredAccounts = accounts.filter(account => {
                     ))}
                   </CTableBody>
                 </CTable>
-{/* 
-                {isModalOpen && (
-                  <ModalComponent rowData={rowData} closeModal={() => setIsModalOpen(false)} />
-                )} */}
+
+                {isModalOpen && rowData && (
+                  <ModalComponent rowData={rowData} closeModal={() => setIsModalOpen(false)} backToAccountList={backToAccountList} />
+                )}
               </CCardBody>
             </CCard>
           </CCol>
