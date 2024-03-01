@@ -1,3 +1,4 @@
+import React from "react";
 import {
   CRow,
   CCol,
@@ -17,12 +18,23 @@ import {
   CDropdownItem,
   CForm,
   CFormTextarea,
-} from '@coreui/react'
-import '../../css/style.css'
-import CIcon from '@coreui/icons-react'
-import { cilAddressBook, cilChevronLeft, cilChevronRight, cilFile, cilPaperclip, cilPrint } from '@coreui/icons'
+} from "@coreui/react";
+import { BsFiletypeDocx } from "react-icons/bs";
+import { FaAngleLeft } from "react-icons/fa6";
+import { FaChevronRight } from "react-icons/fa";
+import { IoPersonCircleOutline } from "react-icons/io5";
+import { MdOutlinePictureAsPdf } from "react-icons/md";
+import { TiAttachmentOutline } from "react-icons/ti";
+import "../../css/style.css";
 
-const AccountDetails = () => {
+const AccountDetails = ({ data }) => {
+  const { id } = useParams();
+
+  const selectedItem = data.find((item) => item.id === parseInt(id));
+
+  if (!selectedItem) {
+    return <div>Item not found</div>;
+  }
   return (
     <CRow>
       <CCol xs={12}>
@@ -53,10 +65,8 @@ const AccountDetails = () => {
                     color="light"
                     value="..."
                   />
-                  {/* <FaAngleLeft /> */}
-                  <CIcon icon={cilChevronLeft} title='Angle left' />
-                  {/* <FaChevronRight /> */}
-                  <CIcon icon={cilChevronRight} title='Angle right' />
+                  <FaAngleLeft />
+                  <FaChevronRight />
                 </div>
               </CCol>
             </CRow>
@@ -64,7 +74,7 @@ const AccountDetails = () => {
         </CCard>
       </CCol>
       <CCol>
-        <CRow>
+        <CRow xs={12}>
           <ul className="nav nav-tabs" id="myTab" role="tablist">
             <li className="nav-item" role="presentation">
               <button
@@ -148,143 +158,21 @@ const AccountDetails = () => {
                 <CCol xs={6}>
                   <div className="headings">Account information</div>
                   <ul>
-                    <li>
-                      <span className="title">Account owner - </span>
-                      <span className="info">Gourav Rai</span>
-                    </li>
-                    <li>
-                      <span className="title">Account Site </span>
-                      <span className="info">-</span>
-                    </li>
-                    <li>
-                      <span className="title"> Account Number </span>
-
-                      <span className="info">0</span>
-                    </li>
-                    <li>
-                      <span className="title"> Account Type </span>
-
-                      <span className="info">Vendor</span>
-                    </li>
-                    <li>
-                      <span className="title"> Annual Revenue </span>
-
-                      <span className="info">$850,000,00</span>
-                    </li>
-                    <li>
-                      <span className="title"> Created By </span>
-
-                      <span className="info">Gourav rai</span>
-                    </li>
-                  </ul>
-                  <div className="headings">Address information</div>
-
-                  <ul>
-                    <li>
-                      <span className="title"> Billing street</span>
-                      <span className="info">228 Runamuck PI#2808</span>
-                    </li>
-
-                    <li>
-                      <span className="title">Billing City </span>
-                      <span className="info">Baltimore</span>
-                    </li>
-                    <li>
-                      <span className="title">Billing State </span>
-
-                      <span className="info">MD</span>
-                    </li>
-                    <li>
-                      <span className="title"> Billing Code </span>
-                      <span className="info">21224</span>
-                    </li>
-                    <li>
-                      <span className="title"> Billing Country </span>
-                      <span className="info">United States</span>
-                    </li>
-                  </ul>
-                  <div className="headings">Discription information</div>
-
-                  <ul>
-                    <li>
-                      <span className="title">Description</span>
-                      <span className="info">
-                        King is a multinational electronics contract manufacturing company with its
-                        headquarters in Baltimore,United States
-                      </span>
-                    </li>
-                  </ul>
-                </CCol>
-                <CCol className="right" xs={6}>
-                  <ul>
-                    <li>
-                      <span className="title"> Rating </span>
-                      <span className="info">-</span>
-                    </li>
-
-                    <li>
-                      <span className="title">Phone</span>
-                      <span className="info">555-555-5555</span>
-                    </li>
-                    <li>
-                      <span className="title"> Fax </span>
-                      <span className="info">-</span>
-                    </li>
-                    <li>
-                      <span className="title">Website </span>
-                      <span className="info">https://Kingmanufacturing.com</span>
-                    </li>
-                    <li>
-                      <span className="title">Ownership</span>
-                      <span className="info">Partnershil</span>
-                    </li>
-                    <CButton
-                      style={{ margin: 4 }}
-                      component="input"
-                      type="button"
-                      color="secondary"
-                      value="Locate Map"
-                    />
-                    <li>
-                      <span className="title">Employees</span>
-                      <span className="info">445</span>
-                    </li>
-                    <li>
-                      <span className="title"> SIC code </span>
-                      <span className="info">-</span>
-                    </li>
-                    <li>
-                      <span className="title">Modified By</span>
-                      <span className="info">Gourav Rai</span>
-                    </li>
-                  </ul>
-
-                  <ul>
-                    <li>
-                      <span className="title"> Shipping Street </span>
-                      <span className="info">-</span>
-                    </li>
-
-                    <li>
-                      <span className="title"> Shipping City </span>
-                      <span className="info">-</span>
-                    </li>
-                    <li>
-                      <span className="title">Shipping State </span>
-                      <span className="info">-</span>
-                    </li>
-                    <li>
-                      <span className="title">Shipping Code</span>
-                      <span className="info">-</span>
-                    </li>
-                    <li>
-                      <span className="title"> Shipping Country </span>
-                      <span className="info">-</span>
-                    </li>
+                    <li>Account Owner: {selectedItem.accountOwner}</li>
+                    <li>Account type: {selectedItem.accountType}</li>
+                    <li>Industry: {selectedItem.industry}</li>
+                    <li>Annual Revenue: {selectedItem.annualRevenue}</li>
+                    <li>Billing Street: {selectedItem.billingStreet}</li>
+                    <li>Billing City: {selectedItem.billingCity}</li>
+                    <li>Billing State: {selectedItem.billingState}</li>
+                    <li>Billing Code: {selectedItem.billingCode}</li>
+                    <li>Billing Country: {selectedItem.billingCountry}</li>
+                    <li> Discription: {selectedItem.discription}</li>
                   </ul>
                 </CCol>
               </CRow>
             </div>
+
             <div
               className="tab-pane fade"
               id="contacts"
@@ -310,14 +198,17 @@ const AccountDetails = () => {
                     </CRow>
                   </CCardHeader>
                   <CCardBody>
-                    {/* <DocsExample href="components/table"> */}
                     <CTable>
                       <CTableHead>
                         <CTableRow>
-                          <CTableHeaderCell scope="col">Contact Name</CTableHeaderCell>
+                          <CTableHeaderCell scope="col">
+                            Contact Name
+                          </CTableHeaderCell>
                           <CTableHeaderCell scope="col">Email</CTableHeaderCell>
                           <CTableHeaderCell scope="col">Phone</CTableHeaderCell>
-                          <CTableHeaderCell scope="col">Mobile</CTableHeaderCell>
+                          <CTableHeaderCell scope="col">
+                            Mobile
+                          </CTableHeaderCell>
                           <CTableHeaderCell scope="col">Fax</CTableHeaderCell>
                         </CTableRow>
                       </CTableHead>
@@ -338,12 +229,17 @@ const AccountDetails = () => {
                         </CTableRow>
                       </CTableBody>
                     </CTable>
-                    {/* </DocsExample> */}
                   </CCardBody>
                 </CCard>
               </CCol>
             </div>
-            <div className="tab-pane fade" id="notes" role="tabpanel" aria-labelledby="notes-tab">
+
+            <div
+              className="tab-pane fade"
+              id="notes"
+              role="tabpanel"
+              aria-labelledby="notes-tab"
+            >
               <CCol xs={12}>
                 <CCard className="mb-4">
                   <CCardHeader>
@@ -372,33 +268,33 @@ const AccountDetails = () => {
                         <ul>
                           <li>
                             <span className="person">
-                              {/* <IoPersonCircleOutline /> */}
-                              <CIcon icon={cilAddressBook} title='profile' />
+                              <IoPersonCircleOutline />
                             </span>
                             <span className="content">dsadsadsa</span>
                             <br></br>
                             <span>Account -</span>
-                            <span className="linking">King (Sample)</span>.<span>Add Note</span>
+                            <span className="linking">King (Sample)</span>.
+                            <span>Add Note</span>
                           </li>
                           <li>
                             <span className="person">
-                              {/* <IoPersonCircleOutline /> */}
-                              <CIcon icon={cilAddressBook} title='profile' />
+                              <IoPersonCircleOutline />
                             </span>
                             <span className="content">dsadsadsa</span>
                             <br></br>
                             <span>Account -</span>
-                            <span className="linking">King (Sample)</span>.<span>Add Note</span>
+                            <span className="linking">King (Sample)</span>.
+                            <span>Add Note</span>
                           </li>
                           <li>
                             <span className="person">
-                              {/* <IoPersonCircleOutline /> */}
-                              <CIcon icon={cilAddressBook} title='profile' />
+                              <IoPersonCircleOutline />
                             </span>
                             <span className="content">dsadsadsa</span>
                             <br></br>
                             <span>Account -</span>
-                            <span className="linking">King (Sample)</span>.<span>Add Note</span>
+                            <span className="linking">King (Sample)</span>.
+                            <span>Add Note</span>
                           </li>
 
                           <CRow>
@@ -410,17 +306,17 @@ const AccountDetails = () => {
                               ></CFormTextarea>
 
                               <div className="text-end ">
-                                {/* <TiAttachmentOutline /> */}
-                                <CIcon icon={cilPaperclip} title='attachment' />
+                                <TiAttachmentOutline />
+
                                 <CButton
-                                  style={{ margin: '5px' }}
+                                  style={{ margin: "5px" }}
                                   component="input"
                                   type="button"
                                   color="light"
                                   value="Cancel"
                                 />
                                 <CButton
-                                  style={{ margin: '5px' }}
+                                  style={{ margin: "5px" }}
                                   component="input"
                                   type="button"
                                   color="primary"
@@ -436,6 +332,7 @@ const AccountDetails = () => {
                 </CCard>
               </CCol>
             </div>
+
             <div
               className="tab-pane fade"
               id="attachments"
@@ -468,17 +365,22 @@ const AccountDetails = () => {
                     <CTable>
                       <CTableHead>
                         <CTableRow>
-                          <CTableHeaderCell scope="col">File Name</CTableHeaderCell>
-                          <CTableHeaderCell scope="col">Attached By</CTableHeaderCell>
-                          <CTableHeaderCell scope="col">Date Added</CTableHeaderCell>
+                          <CTableHeaderCell scope="col">
+                            File Name
+                          </CTableHeaderCell>
+                          <CTableHeaderCell scope="col">
+                            Attached By
+                          </CTableHeaderCell>
+                          <CTableHeaderCell scope="col">
+                            Date Added
+                          </CTableHeaderCell>
                           <CTableHeaderCell scope="col">Size</CTableHeaderCell>
                         </CTableRow>
                       </CTableHead>
                       <CTableBody>
                         <CTableRow>
                           <CTableHeaderCell>
-                            {/* <BsFiletypeDocx className="doc" /> */}
-                            <CIcon icon={cilFile} title="Download file" />
+                            <BsFiletypeDocx className="doc" />
                             <CButton className="link" color="link">
                               Learner Settings Page-February 2024.docx
                             </CButton>
@@ -489,8 +391,7 @@ const AccountDetails = () => {
                         </CTableRow>
                         <CTableRow>
                           <CTableHeaderCell>
-                            {/* <MdOutlinePictureAsPdf className="pdf" /> */}
-                            <CIcon icon={cilPrint} title='pdf' />
+                            <MdOutlinePictureAsPdf className="pdf" />
                             <CButton className="link" color="link">
                               Learner Settings Page-February 2024.pdf
                             </CButton>
@@ -505,6 +406,7 @@ const AccountDetails = () => {
                 </CCard>
               </CCol>
             </div>
+            
             <div
               className="tab-pane fade"
               id="invoices"
@@ -533,10 +435,18 @@ const AccountDetails = () => {
                     <CTable>
                       <CTableHead>
                         <CTableRow>
-                          <CTableHeaderCell scope="col">Subject</CTableHeaderCell>
-                          <CTableHeaderCell scope="col">Status</CTableHeaderCell>
-                          <CTableHeaderCell scope="col">Invoice Date</CTableHeaderCell>
-                          <CTableHeaderCell scope="col">Due Date</CTableHeaderCell>
+                          <CTableHeaderCell scope="col">
+                            Subject
+                          </CTableHeaderCell>
+                          <CTableHeaderCell scope="col">
+                            Status
+                          </CTableHeaderCell>
+                          <CTableHeaderCell scope="col">
+                            Invoice Date
+                          </CTableHeaderCell>
+                          <CTableHeaderCell scope="col">
+                            Due Date
+                          </CTableHeaderCell>
                         </CTableRow>
                       </CTableHead>
                       <CTableBody>
@@ -556,7 +466,7 @@ const AccountDetails = () => {
         </CRow>
       </CCol>
     </CRow>
-  )
-}
+  );
+};
 
-export default AccountDetails
+export default AccountDetails;

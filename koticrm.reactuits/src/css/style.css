@@ -47,3 +47,30 @@
     margin-top: 20px;
     padding-top: 10px;
   }
+  #cancel{
+    margin:5px;
+    padding-left:10px;
+    justify-content: center;
+    align-items: center;
+    padding-right: 10px;
+  }
+  #save{
+    padding-left:10px;
+    justify-content: center;
+    align-items: center;
+   padding-right: 10px;
+  }
+  #leftForm {
+    font-size: 15px;
+    margin:20px;
+  }
+  #rightForm{
+    margin:20px;
+  }
+  .col-sm-3{
+    color:rgb(143, 137, 137);
+  }
+  .col-sm-9{
+    color:rgb(143, 137, 137);
+    padding: 10px;
+  }
