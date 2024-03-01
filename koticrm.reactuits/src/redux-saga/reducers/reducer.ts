@@ -1,11 +1,10 @@
 import { Action } from 'redux';
 import {GET_SUCCESS} from '../action'
-interface GetSuccessAction extends Action {
-    type: typeof GET_SUCCESS; // Ensure type safety by using typeof
-    accounts: any[]; // Define the type of the accounts property
-}
-
-const reducer = (state = {accounts : []}, action:GetSuccessAction) =>{
+interface Action {
+    type: string;
+    accounts?: any; 
+  }
+const reducer = (state = {accounts : []}, action : Action) =>{
     debugger
     switch (action.type){
         case GET_SUCCESS: 
