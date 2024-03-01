@@ -1,5 +1,9 @@
 import {GET_SUCCESS} from '../action'
-const reducer = (state = {accounts : []}, action) =>{
+interface Action {
+    type: string;
+    accounts?: any; 
+  }
+const reducer = (state = {accounts : []}, action : Action) =>{
     debugger
     switch (action.type){
         case GET_SUCCESS: 
