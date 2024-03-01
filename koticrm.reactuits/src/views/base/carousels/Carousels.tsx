@@ -10,9 +10,9 @@ import {
   CRow,
 } from '@coreui/react'
 
-import AngularImg from 'src/assets/images/angular.jpg'
-import ReactImg from 'src/assets/images/react.jpg'
-import VueImg from 'src/assets/images/vue.jpg'
+import AngularImg from '../../../../src/assets/images/angular.jpg'
+import ReactImg from '../../../..src/assets/images/react.jpg'
+import VueImg from '../../../..src/assets/images/vue.jpg'
 import { DocsExample } from '../../../components'
 
 const slidesLight = [
