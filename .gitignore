@@ -11,3 +11,5 @@
 /KotiCRM.Services/obj
 /UpgradeLog.htm
 /koticrm.reactui/obj/Debug
+/koticrm.reactuits/.vscode
+/koticrm.reactuits/node_modules
