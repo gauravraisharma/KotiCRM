@@ -4,6 +4,7 @@ import axiosInstance from './axiosInterceptor';
 import { Contact } from '../models/contact/Contact';
 import { Invoice } from '../models/invoice/Invoice';
 import { Note } from '../models/notes/notes';
+import { UserLogin } from '../models/userAccount/login';
 
 const responseBody = <T>(response: AxiosResponse<T>) => response.data;
 
@@ -12,6 +13,11 @@ const requests = {
     post: <T>(url: string, body: {}) => axiosInstance.post<T>(url, body).then(responseBody),
     put: <T>(url: string, body: {}) => axiosInstance.put<T>(url, body).then(responseBody),
     del: <T>(url: string) => axiosInstance.delete<T>(url).then(responseBody),
+}
+
+const Login = {
+    loginUser : (userLogin: UserLogin) => requests.post<UserLogin>(`/UserAccount/LoginUser`, userLogin)
+
 }
 
 const Account = {
@@ -45,6 +51,7 @@ const Notes = {
 
 
 const agent = {
+    Login,
     Account,
     Contact,
     Invoice,

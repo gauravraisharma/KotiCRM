@@ -5,6 +5,7 @@ export interface LoginResponse {
   token: string;
   userType: string;
   userId: string;
+  modulePermission : modulePermission[]
 }
 export interface ResponseStatus {
   status: string;

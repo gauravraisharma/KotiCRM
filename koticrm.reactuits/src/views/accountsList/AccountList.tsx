@@ -27,12 +27,29 @@ import NewAccount from '../account/NewAccount';
 import { Account } from '../../models/account/Account';
 import { dummyAccounts } from '../../constants';
 import ModalComponent from './modalComponent';
+import { useSelector } from 'react-redux';
+
+interface AccountItem {
+  id: number;
+  name: string;
+  owner: string;
+  phone: string;
+  country: string;
+}
+
 
 const AccountList: React.FC = () => {
 
-  const [accounts, setAccounts] = useState<Account[]>([]);
-  const [searchField, setSearchField] = useState<string>('');
-  const [searchBy, setSearchBy] = useState<string>('Name');
+  // const [accounts, setAccounts] = useState<Account[]>([]);
+
+  const accounts :AccountItem[] = [
+    { id: 1, name: 'Account 1', owner: 'Owner 1', phone: '123-456-7890', country: 'USA' },
+    { id: 2, name: 'Account 2', owner: 'Owner 2', phone: '234-567-8901', country: 'Canada' },
+
+];
+
+const [searchField, setSearchField] = useState<string>('');
+const [searchBy, setSearchBy] = useState<string>('Name');
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchField(event.target.value);
@@ -56,12 +73,29 @@ const AccountList: React.FC = () => {
     return true;
   });
 
-  const [state, setState] = useState<boolean>(false);
+
+  const [stateData, setStateData] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [rowData, setRowData] = useState<Account | null>(null);
 
   const dispatch = useDispatch();
-
+  const account = useSelector((state: any) => {
+    console.log('State: ', state);
+    return state.reducer.accounts;
+  });
+console.log(account)
+  // const filteredAccounts = account.filter((account:Account) => {
+  //   if (searchBy === 'Name') {
+  //       return account.billingCity.toLowerCase().includes(searchField.toLowerCase());
+  //   } else if (searchBy === 'Owner') {
+  //       return account.billingCode.toLowerCase().includes(searchField.toLowerCase());
+  //   } else if (searchBy === 'Phone') {
+  //       return account.phone.includes(searchField);
+  //   } else if (searchBy === 'Country') {
+  //       return account.country.toLowerCase().includes(searchField.toLowerCase());
+  //   }
+  //   return true;
+  // });
   const handleEditClick = (data: Account) => {
     setRowData(data);
     setIsModalOpen(true);
@@ -72,24 +106,21 @@ const AccountList: React.FC = () => {
   };
 
   const handleCreateNew = () => {
-    setState(true);
+    setStateData(true);
   };
 
   const backToAccountList = () => {
-    setState(false);
+    setStateData(false);
   };
 
   useEffect(() => {
     dispatch(getAccounts());
   }, [dispatch]);
 
-  useEffect(() => {
-    setAccounts(dummyAccounts);
-  }, []);
 
   return (
     <>
-      {state ? (
+      {stateData ? (
         <NewAccount backToAccountList={backToAccountList} />
       ) : (
         <CRow>
@@ -161,13 +192,13 @@ const AccountList: React.FC = () => {
                     </CTableRow>
                   </CTableHead>
                   <CTableBody>
-                    {filteredAccounts.map((account) => (
-                      <CTableRow key={account.id}>
-                        <CTableHeaderCell scope="row">{account.id}</CTableHeaderCell>
-                        <CTableDataCell>{account.annualRevenue}</CTableDataCell>
-                        <CTableDataCell>{account.billingCity}</CTableDataCell>
-                        <CTableDataCell>{account.phone}</CTableDataCell>
-                        <CTableDataCell>{account.country}</CTableDataCell>
+                    {/*{account.map((item : AccountItem) => (
+                      <CTableRow key={item.id}>
+                        <CTableHeaderCell scope="row">{item.id}</CTableHeaderCell>
+                         <CTableDataCell>{item.industryId}</CTableDataCell>
+                        <CTableDataCell>{item.billingCity}</CTableDataCell>
+                        <CTableDataCell>{item.billingState}</CTableDataCell> 
+                        <CTableDataCell>{item.country}</CTableDataCell>
                         <CTableDataCell>
                           <FaEdit
                             style={{ color: 'green' }}
@@ -181,7 +212,7 @@ const AccountList: React.FC = () => {
                           <MdDelete style={{ color: 'red' }} />
                         </CTableDataCell>
                       </CTableRow>
-                    ))}
+                    ))}*/}
                   </CTableBody>
                 </CTable>
 

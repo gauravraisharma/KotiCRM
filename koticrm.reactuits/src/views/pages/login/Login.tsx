@@ -1,23 +1,57 @@
-import { Link } from 'react-router-dom'
-import {
-  CButton,
-  CCard,
-  CCardBody,
-  CCardGroup,
-  CCol,
-  CContainer,
-  CForm,
-  CFormInput,
-  CInputGroup,
-  CInputGroupText,
-  CRow,
-} from '@coreui/react'
+import { Link, useNavigate } from 'react-router-dom'
+import {CButton,CCard,CCardBody,CCardGroup,CCol,CContainer,CForm,CFormCheck,CFormInput,CInputGroup,CInputGroupText,CRow,} from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import { cilLockLocked, cilUser } from '@coreui/icons'
+import { useDispatch } from 'react-redux';
+import { useState } from 'react';
+import {  loginRequest } from '../../../redux-saga/action';
+import { UserLogin } from '../../../models/userAccount/login';
+import { useAuth } from '../../../utils/Auth';
+import { ToastContainer, toast } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
+import { useSelector } from 'react-redux';
+
+
+
 
 const Login = () => {
+  const dispatch = useDispatch();
+  const auth = useAuth()
+  const loggedIn = useSelector((state: any) =>   state.reducer.loggedIn);
+
+  const navigate = useNavigate()
+  const [user, setUser] = useState({
+    userName: '', password: '', rememberMe : false
+  })
+  const handleChange = (e:any) => {
+    setUser({ ...user, [e.target.name]: e.target.value })
+  }
+
+
+  const handleLoginClick = () => {
+
+    const userLogin : UserLogin = {
+      userName: user.userName,  
+      password: user.password,
+      rememberMe : user.rememberMe
+    };
+    dispatch(loginRequest(userLogin));
+
+    auth?.login(userLogin)
+
+    debugger
+    if(loggedIn){
+      navigate('/dashboard')
+    }
+    else{
+      toast.error('Invalid Credentials')
+    }
+  };
+
+
   return (
     <div className="bg-light min-vh-100 d-flex flex-row align-items-center">
+      <ToastContainer />
       <CContainer>
         <CRow className="justify-content-center">
           <CCol md={8}>
@@ -31,21 +65,31 @@ const Login = () => {
                       <CInputGroupText>
                         <CIcon icon={cilUser} />
                       </CInputGroupText>
-                      <CFormInput placeholder="Username" autoComplete="username" />
+                      <CFormInput placeholder="Username" autoComplete="username"  name="userName" 
+                      onChange={handleChange}
+                      />
                     </CInputGroup>
                     <CInputGroup className="mb-4">
                       <CInputGroupText>
                         <CIcon icon={cilLockLocked} />
                       </CInputGroupText>
-                      <CFormInput
-                        type="password"
-                        placeholder="Password"
-                        autoComplete="current-password"
+                      <CFormInput type="password" placeholder="Password" autoComplete="current-password" name="password"
+                      onChange={handleChange}
+                      />
+                    </CInputGroup>
+                    <CInputGroup className="mb-4">
+                    <CFormCheck
+                      type="checkbox"
+                      id="rememberMe"
+                      label="Remember Me"
+                      name="rememberMe"
+                      checked={user.rememberMe} 
+                      onChange={(e) => setUser({ ...user, rememberMe: e.target.checked })}
                       />
                     </CInputGroup>
                     <CRow>
                       <CCol xs={6}>
-                        <CButton color="primary" className="px-4">
+                        <CButton color="primary" className="px-4" onClick={handleLoginClick}>
                           Login
                         </CButton>
                       </CCol>

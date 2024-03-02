@@ -4,6 +4,7 @@ import './scss/style.scss'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import { appRoutes } from './routes';
+import { AuthProvider } from './utils/Auth';
 
 const loading = (
   <div className="pt-3 text-center">
@@ -14,6 +15,7 @@ const loading = (
 function App() {
   return (
     <HashRouter>
+      <AuthProvider>
       <Suspense fallback={loading}>
         <Routes>
           {appRoutes.map((route, index) => (
@@ -21,6 +23,7 @@ function App() {
           ))}
         </Routes>
       </Suspense>
+      </AuthProvider>
     </HashRouter>
   );
 }
