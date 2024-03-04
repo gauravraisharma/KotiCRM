@@ -16,8 +16,7 @@ import { useSelector } from 'react-redux';
 
 const Login = () => {
   const dispatch = useDispatch();
-  const auth = useAuth()
-  const loggedIn = useSelector((state: any) =>   state.reducer.loggedIn);
+   const auth = useAuth()
 
   const navigate = useNavigate()
   const [user, setUser] = useState({
@@ -37,15 +36,16 @@ const Login = () => {
     };
     dispatch(loginRequest(userLogin));
 
-    auth?.login(userLogin)
+   auth?.login(userLogin)
 
     debugger
-    if(loggedIn){
-      navigate('/dashboard')
-    }
-    else{
-      toast.error('Invalid Credentials')
-    }
+    // const isLoggedIn = useSelector((state: any) => state.reducer.loggedIn);
+    // if(isLoggedIn){
+      navigate('/dashboard', { replace: true })
+    // }
+    // else{
+      // toast.error('Invalid Credentials')
+    //}
   };
 
 

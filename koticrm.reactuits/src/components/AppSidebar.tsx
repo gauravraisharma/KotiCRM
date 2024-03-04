@@ -17,10 +17,21 @@ import navigation from '../_nav'
 import { RootState } from '../models/commonModels/CommonModels'
 import { Link } from 'react-router-dom'
 
+const allowedItems = ['Dashboard'];
 const AppSidebar = () => {
   const dispatch = useDispatch()
   const unfoldable = useSelector((state:RootState) => state.sidebarUnfoldable)
   const sidebarShow = useSelector((state:RootState) => state.sidebarShow)
+  const modulePermissions = useSelector((state:any) => state.reducer.modulePermission); 
+
+  console.log(modulePermissions)
+  const filteredNavItems = navigation.filter((item) => {
+    // Check if corresponding permission object exists in `modulePermissions`
+    return allowedItems.includes(item.moduleName) || (
+      modulePermissions.some((permission:any) => permission.moduleName === item.moduleName && permission.isAdd)
+    );
+  });
+  console.log(filteredNavItems)
 
   return (
     <CSidebar
@@ -39,7 +50,7 @@ const AppSidebar = () => {
       </Link>
       <CSidebarNav>
         <SimpleBar>
-          <AppSidebarNav items={navigation} />
+          <AppSidebarNav items={filteredNavItems} />
         </SimpleBar>
       </CSidebarNav>
       <CSidebarToggler

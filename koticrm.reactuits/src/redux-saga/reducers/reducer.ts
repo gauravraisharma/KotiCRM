@@ -3,20 +3,21 @@ import {GET_ACCOUNT_SUCCESS,LOGIN_SUCCESS} from '../action'
 const initialState = {
     reducer: {
         token: null,
+        modulePermission:null,
         loggedIn:false,
         accounts: []
     }
 };
 
 const reducer = (state = {initialState}, action: any ) => {
-
     debugger
     switch (action.type){
         case LOGIN_SUCCESS:
             localStorage.setItem('accessToken', action.payload.token);
             return {
                 ...state,
-                token: action.payload.token, 
+                token: action.payload.token,
+                modulePermission : action.payload.modulePermission, 
                 loggedIn : true,
             };
         case GET_ACCOUNT_SUCCESS: 

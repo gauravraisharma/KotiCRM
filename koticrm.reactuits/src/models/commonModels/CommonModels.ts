@@ -22,6 +22,7 @@ export interface NavItem {
     text: string;
   };
   items?: NavItem[];
+  moduleName : string;
 }
 
 export interface DocsCalloutProps {

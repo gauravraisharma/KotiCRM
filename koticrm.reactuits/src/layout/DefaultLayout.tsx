@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router';
-import { AppContent, AppSidebar, AppFooter, AppHeader } from '../components/index'
+import {  AppSidebar, AppFooter, AppHeader, AppContent } from '../components/index'
 import { useSelector } from 'react-redux';
 import { useEffect } from 'react';
 
@@ -13,7 +13,7 @@ const DefaultLayout = () => {
     if (!loggedIn) {
       navigate('/login');
     }
-  }, [loggedIn, navigate]);
+  }, [loggedIn]);
   return (
     <div>
       <AppSidebar />

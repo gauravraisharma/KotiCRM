@@ -15,7 +15,9 @@ namespace KotiCRM.Repository.Models
         [Key]
         public int Id { get; set; }
         [Required]
-        public int OwnerId { get; set; }
+        [Column(TypeName = "nvarchar(100)")]
+
+        public string OwnerId { get; set; }
 
         [ForeignKey("Industry")]
         [Required]

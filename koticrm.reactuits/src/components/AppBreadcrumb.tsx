@@ -1,7 +1,7 @@
-import React, { memo } from 'react'
+import  { memo } from 'react'
 import { useLocation } from 'react-router-dom'
 
-import routes from '../routes'
+import  routes from '../routes';
 
 import { CBreadcrumb, CBreadcrumbItem } from '@coreui/react'
 import { Route } from '../models/commonModels/CommonModels';
