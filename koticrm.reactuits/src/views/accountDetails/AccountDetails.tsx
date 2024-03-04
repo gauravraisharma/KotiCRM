@@ -27,17 +27,20 @@ import { TiAttachmentOutline } from "react-icons/ti";
 import "../../css/style.css";
 import { Account } from "../../models/account/Account";
 import { dummyAccounts } from "../../constants";
+import { useParams } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { getAccountByIdRequest } from "../../redux-saga/action";
+import { useSelector } from "react-redux";
 
 const AccountDetails = () => {
-  // const { id } = useParams();      {data}
+  const data = useParams()
+  const dispatch = useDispatch(); 
+  const accountId = data.accountId?.split('=')[1];
 
-  // const selectedItem = data.find((item) => item.id === parseInt(id));
 
-  // if (!selectedItem) {
-  //   return <div>Item not found</div>;
-  // }
-
-  const selectedItem: Account = dummyAccounts[0];
+  dispatch(getAccountByIdRequest(accountId));
+  const account = useSelector((state: any) =>  state.reducer.account)
+console.log(account)
 
   return (
     <CRow>
@@ -162,14 +165,14 @@ const AccountDetails = () => {
                 <CCol xs={6}>
                   <div className="headings">Account information</div>
                   <ul>
-                    <li>Account Owner: {selectedItem.ownerId}</li>
-                    <li>Account type: {selectedItem.country}</li>
-                    <li>Industry: {selectedItem.industryId}</li>
-                    <li>Annual Revenue: {selectedItem.annualRevenue}</li>
-                    <li>Billing Street: {selectedItem.billingStreet}</li>
-                    <li>Billing City: {selectedItem.billingCity}</li>
-                    <li>Billing State: {selectedItem.billingState}</li>
-                    <li>Billing Code: {selectedItem.billingCode}</li>
+                    <li>Account Owner: {account?.ownerId}</li>
+                    <li>Account type: {account?.country}</li>
+                    <li>Industry: {account?.industryId}</li>
+                    <li>Annual Revenue: {account?.annualRevenue}</li>
+                    <li>Billing Street: {account?.billingStreet}</li>
+                    <li>Billing City: {account?.billingCity}</li>
+                    <li>Billing State: {account?.billingState}</li>
+                    <li>Billing Code: {account?.billingCode}</li>
                   </ul>
                 </CCol>
               </CRow>

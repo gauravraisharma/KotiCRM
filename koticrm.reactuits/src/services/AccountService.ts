@@ -15,10 +15,23 @@ export default class AccountService {
 	  }
 	}
 
-	static async GetAccountDetails(id:number): Promise<Account> {
+	static async CreateAccount(account: any): Promise<Account> {
 		try {
-		  const response  = await agent.Account.getById(id);
+		  debugger
+		  const response  = await agent.Account.create(account.payload);
 		  console.log(response)
+		  
+		  return response;
+		  }
+		catch (error) {
+		  console.error('Error logging in :', error);
+		  throw error; 
+		}
+	  }
+
+	static async GetAccountDetails(id:any): Promise<Account> {
+		try {
+		  const response  = await agent.Account.getById(id.payload);
 		  return response;
 		  }
 		catch (error) {

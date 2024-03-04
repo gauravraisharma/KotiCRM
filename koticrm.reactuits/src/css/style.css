@@ -74,3 +74,7 @@
     color:rgb(143, 137, 137);
     padding: 10px;
   }
+  .form-error{
+    margin-top: 3px;
+	color: rgb(255,0,0);
+}

@@ -125,7 +125,7 @@ const routes: Route[] = [
   { path: '/notifications/toasts', name: 'Toasts', element: Toasts },
   { path: '/widgets', name: 'Widgets', element: Widgets },
   { path: '/accountsList', name: 'Account List', element: AccountList },
-  { path: '/accountDetails', name: 'Account Details', element: AccountDetails },
+  { path: '/accountDetails/:accountId', name: 'Account Details', element: AccountDetails },
   { path: '/account', name: 'Account', element: NewAccount },
   { path: '/contacts/createContact', name: 'CreateContact', element: CreateContact },
 ]

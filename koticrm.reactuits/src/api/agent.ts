@@ -5,6 +5,7 @@ import { Contact } from '../models/contact/Contact';
 import { Invoice } from '../models/invoice/Invoice';
 import { Note } from '../models/notes/notes';
 import { UserLogin } from '../models/userAccount/login';
+import { SharedModel } from '../models/commonModels/SharedModels';
 
 const responseBody = <T>(response: AxiosResponse<T>) => response.data;
 
@@ -49,13 +50,23 @@ const Notes = {
     delete: (id : number) => requests.del<Note>(`/Notes/DeleteNote/${id}`)  
 }
 
+const SharedData = {
+    getIndustry: () => requests.get<SharedModel[]>(`/Shared/GetIndustryList`),
+    getAccountOwner: () => requests.get<SharedModel[]>(`/Shared/GetAccountOwner`),
+    getInvoiceStatus: () => requests.get<SharedModel[]>(`/Shared/InvoiceStatus`),
+    getAccountStatus: () => requests.get<SharedModel[]>(`/Shared/AccountStatus`),
+    getAccountType: () => requests.get<SharedModel[]>(`/Shared/AccountType`),
+
+}
+
 
 const agent = {
     Login,
     Account,
     Contact,
     Invoice,
-    Notes
+    Notes,
+    SharedData
 }
 
 export default agent;

@@ -35,14 +35,6 @@ const _nav:NavItem[] = [
     moduleName : 'Accounts'
 
   },
-  
-  {
-    component: CNavItem,
-    name: 'Accounts',
-    to: '/accountDetails',
-    icon: <CIcon icon={cilBook} customClassName="nav-icon" />,
-    moduleName: 'Accounts' 
-  },
   {
     component: CNavItem,
     name: 'Contacts',

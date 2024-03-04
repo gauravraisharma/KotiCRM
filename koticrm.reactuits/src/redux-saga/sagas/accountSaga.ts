@@ -1,5 +1,5 @@
 import { call, put } from 'redux-saga/effects';
-import { GET_ACCOUNT_SUCCESS } from '../action';
+import { CREATE_ACCOUNT_SUCCESS, GET_ACCOUNT_DETAIL_SUCCESS, GET_ACCOUNT_SUCCESS } from '../action';
 import AccountService from '../../services/AccountService';
 import { Account } from '../../models/account/Account';
 
@@ -19,7 +19,7 @@ import { Account } from '../../models/account/Account';
   }
 }
 
-function* workGetAccountFetch() {
+export function* workGetAccountFetch() {
   try {
     const accounts: Account[] = yield call(accountFetch);
     yield put({ type: GET_ACCOUNT_SUCCESS, accounts });
@@ -27,4 +27,49 @@ function* workGetAccountFetch() {
     // Handle error if needed
   }
 }
-export default workGetAccountFetch;
+
+function* createAccount(action: { payload: Account }) : Generator<any>{
+  try {
+    debugger
+    const { payload } = action;
+
+      const response = yield call(AccountService.CreateAccount,payload );
+      return response;
+  } catch (error) {
+    console.error('Error fetching accounts:', error);
+    throw error;
+  }
+}
+
+export function* workCreateAccount(action:any) {
+  try {
+    const account: Account = yield call(createAccount, { payload: action });
+    yield put({ type: CREATE_ACCOUNT_SUCCESS, account });
+  } catch (error) {
+    // Handle error if needed
+  }
+}
+
+function* getAccountById(action: { payload: any }) : Generator<any>{
+  try {
+    debugger
+    const { payload } = action;
+
+      const response = yield call(AccountService.GetAccountDetails,payload );
+      return response as Account;
+  } catch (error) {
+    console.error('Error fetching accounts:', error);
+    throw error;
+  }
+}
+
+export function* workGetAccountByIdFetch(action:any) {
+  try {
+    const account: Account = yield call(getAccountById, { payload: action });
+    yield put({ type: GET_ACCOUNT_DETAIL_SUCCESS, account });
+  } catch (error) {
+    // Handle error if needed
+  }
+}
+
+

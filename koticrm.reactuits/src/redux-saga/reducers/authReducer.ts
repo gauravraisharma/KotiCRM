@@ -1,39 +1,29 @@
-interface User {
-  // Define the structure of your user object here
-}
+import { createSlice } from '@reduxjs/toolkit';
 
-interface AuthState {
-  user: User | null;
-  error: string | null;
-}
-
-interface Action {
-  type: string;
-  payload?: User | string;
-}
-
-const initialState: AuthState = {
-  user: null,
-  error: null,
+const initialState = {
+  token: null,
+  modulePermission : null,
+  loggedIn : false
 };
 
-const authReducer = (state: AuthState = initialState, action: Action): AuthState => {
-  switch (action.type) {
-    case "LOGIN_SUCCESS":
-      return {
-        ...state,
-        user: action.payload as User,
-        error: null,
-      };
-    case "LOGIN_FAILURE":
-      return {
-        ...state,
-        user: null,
-        error: action.payload as string,
-      };
-    default:
-      return state;
-  }
-};
+const authSlice = createSlice({
+  
+  name: 'auth',
+  initialState,
+  reducers: {
+    loginSuccess(state, action) {
+      localStorage.setItem('accessToken', action.payload.token);
+      state.token =  action.payload.token
+      state.modulePermission = action.payload.modulePermission ;
+      state.loggedIn = true
+    },
+    logout(state) {
+      state.token = null;
+      state.modulePermission = null;
+      state.loggedIn = false;
+    },
+  },
+});
 
-export default authReducer;
+export const { loginSuccess, logout } = authSlice.actions;
+export default authSlice.reducer;

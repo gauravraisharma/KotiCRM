@@ -22,31 +22,31 @@ import { getAccounts } from '../../redux-saga/action';
 import { FaEdit } from 'react-icons/fa';
 import { MdDelete } from 'react-icons/md';
 import { LuView } from 'react-icons/lu';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import NewAccount from '../account/NewAccount';
 import { Account } from '../../models/account/Account';
 import { dummyAccounts } from '../../constants';
 import ModalComponent from './modalComponent';
 import { useSelector } from 'react-redux';
 
-interface AccountItem {
-  id: number;
-  name: string;
-  owner: string;
-  phone: string;
-  country: string;
-}
+// interface AccountItem {
+//   id: number;
+//   name: string;
+//   owner: string;
+//   phone: string;
+//   country: string;
+// }
 
 
 const AccountList: React.FC = () => {
 
   // const [accounts, setAccounts] = useState<Account[]>([]);
 
-  const accounts :AccountItem[] = [
-    { id: 1, name: 'Account 1', owner: 'Owner 1', phone: '123-456-7890', country: 'USA' },
-    { id: 2, name: 'Account 2', owner: 'Owner 2', phone: '234-567-8901', country: 'Canada' },
+//   const accounts :AccountItem[] = [
+//     { id: 1, name: 'Account 1', owner: 'Owner 1', phone: '123-456-7890', country: 'USA' },
+//     { id: 2, name: 'Account 2', owner: 'Owner 2', phone: '234-567-8901', country: 'Canada' },
 
-];
+// ];
 
 const [searchField, setSearchField] = useState<string>('');
 const [searchBy, setSearchBy] = useState<string>('Name');
@@ -57,21 +57,25 @@ const [searchBy, setSearchBy] = useState<string>('Name');
   const handleSearchByChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSearchBy(event.target.value);
   };
-
-  const filteredAccounts = accounts.filter(account => {
-    // if (searchBy === 'Name') {
-    //   return account.ownerId.toLowerCase().includes(searchField.toLowerCase());
-    // } else 
-    // if (searchBy === 'Owner') {
-    //   return account.owner.toLowerCase().includes(searchField.toLowerCase());
-    // } else 
-    if (searchBy === 'Phone') {
-      return account.phone.includes(searchField);
-    } else if (searchBy === 'Country') {
-      return account.country.toLowerCase().includes(searchField.toLowerCase());
-    }
-    return true;
+  const accounts = useSelector((state: any) => {
+    console.log('State: ', state);
+    return state.reducer.accounts;
   });
+console.log(accounts)
+  // const filteredAccounts = accounts.filter(account: => {
+  //   // if (searchBy === 'Name') {
+  //   //   return account.ownerId.toLowerCase().includes(searchField.toLowerCase());
+  //   // } else 
+  //   // if (searchBy === 'Owner') {
+  //   //   return account.owner.toLowerCase().includes(searchField.toLowerCase());
+  //   // } else 
+  //   if (searchBy === 'Phone') {
+  //     return account.phone.includes(searchField);
+  //   } else if (searchBy === 'Country') {
+  //     return account.country.toLowerCase().includes(searchField.toLowerCase());
+  //   }
+  //   return true;
+  // });
 
 
   const [stateData, setStateData] = useState<boolean>(false);
@@ -79,11 +83,7 @@ const [searchBy, setSearchBy] = useState<string>('Name');
   const [rowData, setRowData] = useState<Account | null>(null);
 
   const dispatch = useDispatch();
-  const account = useSelector((state: any) => {
-    console.log('State: ', state);
-    return state.reducer.accounts;
-  });
-console.log(account)
+
   // const filteredAccounts = account.filter((account:Account) => {
   //   if (searchBy === 'Name') {
   //       return account.billingCity.toLowerCase().includes(searchField.toLowerCase());
@@ -117,11 +117,17 @@ console.log(account)
     dispatch(getAccounts());
   }, [dispatch]);
 
+  const navigate = useNavigate()
+  const showItems =(id:any)=>{
+  
+    debugger
+    navigate(`/accountDetails/accountId=${id}`)
+  }
 
   return (
     <>
       {stateData ? (
-        <NewAccount backToAccountList={backToAccountList} />
+        <NewAccount/>
       ) : (
         <CRow>
           <CCol xs={12}>
@@ -130,8 +136,8 @@ console.log(account)
                 <strong>Accounts</strong> <small>List</small>
               </CCardHeader>
               <CCardBody>
-                {accounts.map((item) => (
-                  <CRow key={item.id}>
+                {accounts?.map((account:Account) => (
+                  <CRow key={account.ownerId}>
                     <CCol xs={6}>
                       <div className="input-group">
                         <CDropdown>
@@ -156,7 +162,7 @@ console.log(account)
                     </CCol>
                   </CRow>
                 ))}
-                <div>
+                {/* <div>
                   <select value={searchBy} onChange={handleSearchByChange}>
                     <option value="Name">Name</option>
                     <option value="Owner">Owner</option>
@@ -169,7 +175,7 @@ console.log(account)
                     value={searchField}
                     onChange={handleChange}
                   />
-                </div>
+                </div> */}
                 <CCol xs={6}>
                   <div className="text-end">
                     <CButton
@@ -187,32 +193,30 @@ console.log(account)
                       <CTableHeaderCell scope="col">Name</CTableHeaderCell>
                       <CTableHeaderCell scope="col">Owner</CTableHeaderCell>
                       <CTableHeaderCell scope="col">Phone</CTableHeaderCell>
+                      <CTableHeaderCell scope="col">State</CTableHeaderCell>
                       <CTableHeaderCell scope="col">Country</CTableHeaderCell>
                       <CTableHeaderCell scope="col">Actions</CTableHeaderCell>
                     </CTableRow>
                   </CTableHead>
                   <CTableBody>
-                    {/*{account.map((item : AccountItem) => (
-                      <CTableRow key={item.id}>
-                        <CTableHeaderCell scope="row">{item.id}</CTableHeaderCell>
-                         <CTableDataCell>{item.industryId}</CTableDataCell>
-                        <CTableDataCell>{item.billingCity}</CTableDataCell>
-                        <CTableDataCell>{item.billingState}</CTableDataCell> 
-                        <CTableDataCell>{item.country}</CTableDataCell>
+                    {accounts?.map((account : any) => (
+                      <CTableRow key={account.id}>
+                        <CTableHeaderCell scope="row">{account.id}</CTableHeaderCell>
+                         <CTableDataCell>{account.ownerId}</CTableDataCell>
+                        <CTableDataCell>{account.phone}</CTableDataCell>
+                        <CTableDataCell>{account.billingState}</CTableDataCell> 
+                        <CTableDataCell>{account.country}</CTableDataCell>
                         <CTableDataCell>
                           <FaEdit
                             style={{ color: 'green' }}
-                            onClick={() => handleEditClick(account)}
+                            onClick={() => handleEditClick(accounts)}
                           />
-                          <LuView
-                            style={{ color: 'blue' }}
-                            onClick={() => handleDeleteClick(item?.id)}
-                          />
-                          <Link to={`/details/${account.id}`}>View Details</Link>
+                          <LuView style={{ color: 'blue' }}
+                            onClick={()=>showItems(account?.id)}></LuView>
                           <MdDelete style={{ color: 'red' }} />
                         </CTableDataCell>
                       </CTableRow>
-                    ))}*/}
+                    ))}
                   </CTableBody>
                 </CTable>
 

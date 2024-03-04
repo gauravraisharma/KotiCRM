@@ -8,7 +8,7 @@ const sagaMiddelware = createSagaMiddleware();
   
   const rootReducer = combineReducers({
     reducer: reducer
-  });
+    });
   
   const store = createStore(  rootReducer, applyMiddleware(sagaMiddelware));
   sagaMiddelware.run(mySaga);

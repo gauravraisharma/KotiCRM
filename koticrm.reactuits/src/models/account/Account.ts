@@ -1,6 +1,5 @@
 export interface Account {
-    id: number;
-    ownerId: number;
+    ownerId: string;
     industryId : number;
     annualRevenue: string;
     billingCity: string;
@@ -16,7 +15,8 @@ export interface Account {
     modifiedBy: string;
     modifiedOn: string;
     phone: string;
-    status: string;
-    type: string;
+    status: number;
+    type: number;
     website: string; 
+    description:string;
   }
