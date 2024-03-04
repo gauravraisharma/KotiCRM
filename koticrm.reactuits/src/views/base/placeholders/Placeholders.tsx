@@ -12,7 +12,7 @@ import {
   CRow,
 } from '@coreui/react'
 
-import ReactImg from 'src/assets/images/react.jpg'
+import ReactImg from '../../src/assets/images/react.jpg'
 import { DocsExample } from '../../../components'
 
 const Placeholders = () => {

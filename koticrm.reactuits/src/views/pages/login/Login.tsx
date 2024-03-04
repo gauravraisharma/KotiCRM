@@ -34,18 +34,7 @@ const Login = () => {
       password: user.password,
       rememberMe : user.rememberMe
     };
-    dispatch(loginRequest(userLogin));
-
-   auth?.login(userLogin)
-
-    debugger
-    // const isLoggedIn = useSelector((state: any) => state.reducer.loggedIn);
-    // if(isLoggedIn){
-      navigate('/dashboard', { replace: true })
-    // }
-    // else{
-      // toast.error('Invalid Credentials')
-    //}
+      dispatch(loginRequest(userLogin, navigate, toast));
   };
 
 

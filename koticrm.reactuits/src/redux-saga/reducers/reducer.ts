@@ -10,16 +10,24 @@ const initialState = {
 };
 
 const reducer = (state = {initialState}, action: any ) => {
-    debugger
     switch (action.type){
         case LOGIN_SUCCESS:
-            localStorage.setItem('accessToken', action.payload.token);
+            if (action.payload != null && action.payload != undefined && action.payload.status == 'SUCCEED') {
+                localStorage.setItem('accessToken', action.payload.tokenStatus);
+                return {
+                    ...state,
+                    token: action.payload.token,
+                    modulePermission: action.payload.modulePermission,
+                    loggedIn: true,
+                };
+            }
             return {
                 ...state,
-                token: action.payload.token,
-                modulePermission : action.payload.modulePermission, 
-                loggedIn : true,
+                token: null,
+                modulePermission:null,
+                loggedIn: false,
             };
+            
         case GET_ACCOUNT_SUCCESS: 
             return {...state,
                   accounts: action.accounts,

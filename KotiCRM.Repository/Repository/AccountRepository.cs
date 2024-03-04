@@ -33,7 +33,12 @@ namespace KotiCRM.Repository.Repository
 
                 if (ownerFound == null)
                 {
-                    return null;
+                    return new DbResponse()
+                    {
+                        Succeed = false,
+                        Message = "Account owner not found"
+
+                    };
                 }
                 // Check if the user has the required role and permission
                 var userHasPermission = (from permission in _context.Permissions
@@ -44,7 +49,12 @@ namespace KotiCRM.Repository.Repository
                                              .Any(permission => permission.Add);
                 if (!userHasPermission)
                 {
-                    throw new UnauthorizedAccessException("Owner does not have the required permission.");
+                    return new DbResponse()
+                    {
+                        Succeed = false,
+                        Message = "Owner does not have the required permission."
+
+                    };
                 }
                 _context.Accounts.Add(account);
                 await _context.SaveChangesAsync();
@@ -117,7 +127,7 @@ namespace KotiCRM.Repository.Repository
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message, ex);
+                return null;
             }
         }
 

@@ -26,10 +26,14 @@ const AppSidebar = () => {
 
   console.log(modulePermissions)
   const filteredNavItems = navigation.filter((item) => {
-    // Check if corresponding permission object exists in `modulePermissions`
-    return allowedItems.includes(item.moduleName) || (
-      modulePermissions.some((permission:any) => permission.moduleName === item.moduleName && permission.isAdd)
-    );
+      // Check if corresponding permission object exists in `modulePermissions`
+      if (modulePermissions != null && modulePermissions != undefined) {
+          return allowedItems.includes(item.moduleName) || (
+              modulePermissions.some((permission: any) => permission.moduleName === item.moduleName && permission.isAdd)
+          );
+      } else {
+          return null;
+      }
   });
   console.log(filteredNavItems)
 

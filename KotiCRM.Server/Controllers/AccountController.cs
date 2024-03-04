@@ -1,4 +1,5 @@
-﻿using KotiCRM.Repository.Models;
+﻿using Azure;
+using KotiCRM.Repository.Models;
 using KotiCRM.Services.IServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -28,20 +29,31 @@ namespace KotiCRM.Server.Controllers
         [HttpGet("GetAccountDetails/{id}")]
         public async Task<ActionResult<Account>> GetAccountDetails(int id)
         {
-            return Ok(await _accountService.GetAccountDetails(id));
+
+            var response = await _accountService.GetAccountDetails(id);
+                if(response == null){
+                return BadRequest();
+            }
+            return Ok(response);
         }
 
         [HttpPost]
         [Route("CreateAccount")]
         public async Task<ActionResult<Account>> CreateAccount(Account account)
         {
-            return Ok(await _accountService.CreateAccount(account));
+            var response = await _accountService.CreateAccount(account);
+            if (response == null || !response.Succeed)
+            {
+                return StatusCode(500,response.Message);
+            }
+            return Ok(response);
         }
 
         [HttpPut("UpdateAccount/{id}")]
         public async Task<IActionResult> UpdateAccount(int id, Account account)
         {
             return Ok(await _accountService.UpdateAccount(id, account));
+
         }
 
 
