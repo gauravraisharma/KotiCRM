@@ -12,19 +12,20 @@ import {
   cilUser,
 } from '@coreui/icons'
 import CIcon from '@coreui/icons-react'
-
+import { logout } from '../../redux-saga/action';
 import avatar8 from './../../assets/images/avatars/8.jpg'
 import { useNavigate } from 'react-router-dom'
-import { useAuth } from '../../utils/AuthProvider'
+//import { useAuth } from '../../utils/AuthProvider'
+import { useDispatch } from 'react-redux'
 
 const AppHeaderDropdown = () => {
   const navigate = useNavigate();
-  const auth = useAuth();
-
+   // const auth = useAuth();
+    const dispatch = useDispatch();
   const handleLogout=()=>{
-    debugger
     localStorage.removeItem('accessToken')  
-    auth?.logout()
+     // auth?.logout()
+    dispatch(logout());
     navigate('/login')
   }
   return (
@@ -33,20 +34,11 @@ const AppHeaderDropdown = () => {
         <CAvatar src={avatar8} size="md" />
       </CDropdownToggle>
       <CDropdownMenu className="pt-0">
-        {/* <CDropdownHeader className="bg-light fw-semibold py-2">Profile</CDropdownHeader> */}
-        {/* <CDropdownItem href="#">
-          <CIcon icon={cilEnvelopeOpen} className="me-2" />
-          Messages
-          <CBadge color="success" className="ms-2">
-            42
-          </CBadge>
-        </CDropdownItem> */}
-        {/* <CDropdownHeader className="bg-light fw-semibold py-2">Settings</CDropdownHeader> */}
-        <CDropdownItem href="#">
+              <CDropdownItem href="javascript:;">
           <CIcon icon={cilUser} className="me-2" />
           Profile
         </CDropdownItem>
-        <CDropdownItem href="#">
+        <CDropdownItem href="javascript:;">
           <CIcon icon={cilSettings} className="me-2" />
           Settings
         </CDropdownItem>

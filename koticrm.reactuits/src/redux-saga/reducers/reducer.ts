@@ -8,7 +8,9 @@ import {
     GET_ACCOUNT_TYPE_SUCCESS,
     GET_CONTACTS_SUCCESS,
     GET_INDUSTRY_SUCCESS,
-    GET_INVOICE_STATUS_SUCCESS
+    GET_INVOICE_STATUS_SUCCESS,
+    LOGOUT,
+    SIDEBAR_TOGGLE
 } from "../../constants/reduxConstants";
 
 const initialState = {
@@ -23,7 +25,8 @@ const initialState = {
     industry: [],
     accountStatus: [],
     accountType: [],
-    invoiceStatus: []
+    invoiceStatus: [],
+    sidebarToggle:true
 };
 
 const reducer = (state = initialState, action: any) => {
@@ -45,6 +48,17 @@ const reducer = (state = initialState, action: any) => {
                 loggedIn: false,
             };
 
+        case LOGOUT:
+            return {
+                ...initialState
+            }
+
+        case SIDEBAR_TOGGLE:
+            return {
+                ...state,
+                sidebarToggle: action.sidebarShow
+
+            }
         case GET_ACCOUNT_SUCCESS:
             return {
                 ...state,
@@ -100,7 +114,6 @@ const reducer = (state = initialState, action: any) => {
             }
 
         default:
-            console.error("No action matched");
             return state;
     }
 };

@@ -16,17 +16,19 @@ import { cilBell, cilMenu } from '@coreui/icons'
 import { AppBreadcrumb } from './index'
 import { AppHeaderDropdown } from './header/index'
 import { logo } from '../assets/brand/logo'
-import { RootState } from '../models/commonModels/CommonModels'
+import { SIDEBAR_TOGGLE } from '../constants/reduxConstants'
 
 const AppHeader = () => {
   const dispatch = useDispatch()
-  const sidebarShow = useSelector((state: RootState) => state.sidebarShow)
+    const sidebarShow = useSelector((state: any) => state.reducer.sidebarToggle)
   return (
     <CHeader position="sticky" className="mb-4">
       <CContainer fluid>
         <CHeaderToggler
-          className="ps-1"
-          onClick={() => dispatch({ type: 'set', sidebarShow: !sidebarShow })}
+                  className="ps-1"
+                  onClick={() => {
+                      dispatch({ type: SIDEBAR_TOGGLE, sidebarShow: !sidebarShow })
+                  }}
         >
           <CIcon icon={cilMenu} size="lg" />
         </CHeaderToggler>

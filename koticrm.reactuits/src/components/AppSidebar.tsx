@@ -6,7 +6,7 @@ import CIcon from '@coreui/icons-react'
 
 import { AppSidebarNav } from './AppSidebarNav'
 
-import { logoNegative } from '../assets/brand/logo-negative'
+import logoNegative  from '../assets/brand/logo-blue.png'
 import { sygnet } from '../assets/brand/sygnet'
 
 import SimpleBar from 'simplebar-react'
@@ -16,15 +16,15 @@ import 'simplebar-react/dist/simplebar.min.css'
 import navigation from '../_nav'
 import { RootState } from '../models/commonModels/CommonModels'
 import { Link } from 'react-router-dom'
+import { SIDEBAR_TOGGLE } from '../constants/reduxConstants'
 
 const allowedItems = ['Dashboard'];
 const AppSidebar = () => {
   const dispatch = useDispatch()
   const unfoldable = useSelector((state:RootState) => state.sidebarUnfoldable)
-  const sidebarShow = useSelector((state:RootState) => state.sidebarShow)
+    const sidebarShow = useSelector((state: any) => state.reducer.sidebarToggle)
   const modulePermissions = useSelector((state:any) => state.reducer.modulePermission); 
 
-  console.log(modulePermissions)
   const filteredNavItems = navigation.filter((item) => {
       // Check if corresponding permission object exists in `modulePermissions`
       if (modulePermissions != null && modulePermissions != undefined) {
@@ -35,21 +35,20 @@ const AppSidebar = () => {
           return null;
       }
   });
-  console.log(filteredNavItems)
-
-  return (
+  
+    return (
+     
     <CSidebar
       position="fixed"
       unfoldable={unfoldable}
       visible={sidebarShow}
       onVisibleChange={(visible) => {
-        dispatch({ type: 'set', sidebarShow: visible })
+          dispatch({ type: SIDEBAR_TOGGLE, sidebarShow: visible })
       }}
-    >
+        >
       <Link to="/">
-        <CSidebarBrand className="d-none d-md-flex">
-          <CIcon className="sidebar-brand-full" icon={logoNegative} height={35} />
-          <CIcon className="sidebar-brand-narrow" icon={sygnet} height={35} />
+                <CSidebarBrand className="d-none d-md-flex">
+                    <img src={logoNegative} alt="Logo"  style={{ height: '40px', width: 'auto' }} />
         </CSidebarBrand>
       </Link>
       <CSidebarNav>
