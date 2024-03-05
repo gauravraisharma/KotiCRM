@@ -1,5 +1,6 @@
 import { lazy } from 'react';
 import { Route } from './models/commonModels/CommonModels';
+// import DeleteConfirmationModal from './views/accountsList/DeleteConfirmation';
 
 // App routing
 
@@ -128,6 +129,9 @@ const routes: Route[] = [
   { path: '/accountDetails/:accountId', name: 'Account Details', element: AccountDetails },
   { path: '/account', name: 'Account', element: NewAccount },
   { path: '/contacts/createContact', name: 'CreateContact', element: CreateContact },
+  { path: '/newAccount', name: 'NewAccount', element: NewAccount },
+  // { path: '/deleteConfirmation', name: 'DeleteConfirmation', element: DeleteConfirmationModal},
+
 ]
 
 export default routes

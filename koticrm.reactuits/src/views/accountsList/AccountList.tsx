@@ -25,91 +25,55 @@ import { LuView } from 'react-icons/lu';
 import { Link, useNavigate } from 'react-router-dom';
 import NewAccount from '../account/NewAccount';
 import { Account } from '../../models/account/Account';
-import { dummyAccounts } from '../../constants';
-import ModalComponent from './modalComponent';
 import { useSelector } from 'react-redux';
+import DeleteConfirmationModal from "./DeleteConfirmation";
 
-// interface AccountItem {
-//   id: number;
-//   name: string;
-//   owner: string;
-//   phone: string;
-//   country: string;
-// }
 
 
 const AccountList: React.FC = () => {
 
-  // const [accounts, setAccounts] = useState<Account[]>([]);
+  const accounts = useSelector((state: any) =>  state.reducer.accounts);
 
-//   const accounts :AccountItem[] = [
-//     { id: 1, name: 'Account 1', owner: 'Owner 1', phone: '123-456-7890', country: 'USA' },
-//     { id: 2, name: 'Account 2', owner: 'Owner 2', phone: '234-567-8901', country: 'Canada' },
-
-// ];
-
-const [searchField, setSearchField] = useState<string>('');
-const [searchBy, setSearchBy] = useState<string>('Name');
-
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchField(event.target.value);
-  };
-  const handleSearchByChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setSearchBy(event.target.value);
-  };
-  const accounts = useSelector((state: any) => {
-    console.log('State: ', state);
-    return state.reducer.accounts;
-  });
-console.log(accounts)
-  // const filteredAccounts = accounts.filter(account: => {
-  //   // if (searchBy === 'Name') {
-  //   //   return account.ownerId.toLowerCase().includes(searchField.toLowerCase());
-  //   // } else 
-  //   // if (searchBy === 'Owner') {
-  //   //   return account.owner.toLowerCase().includes(searchField.toLowerCase());
-  //   // } else 
-  //   if (searchBy === 'Phone') {
-  //     return account.phone.includes(searchField);
-  //   } else if (searchBy === 'Country') {
-  //     return account.country.toLowerCase().includes(searchField.toLowerCase());
-  //   }
-  //   return true;
-  // });
-
-
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+  const [searchField, setSearchField] = useState<string>("");
+  const [searchBy, setSearchBy] = useState<string>("Name");
   const [stateData, setStateData] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [rowData, setRowData] = useState<Account | null>(null);
 
+
   const dispatch = useDispatch();
 
-  // const filteredAccounts = account.filter((account:Account) => {
-  //   if (searchBy === 'Name') {
-  //       return account.billingCity.toLowerCase().includes(searchField.toLowerCase());
-  //   } else if (searchBy === 'Owner') {
-  //       return account.billingCode.toLowerCase().includes(searchField.toLowerCase());
-  //   } else if (searchBy === 'Phone') {
-  //       return account.phone.includes(searchField);
-  //   } else if (searchBy === 'Country') {
-  //       return account.country.toLowerCase().includes(searchField.toLowerCase());
-  //   }
-  //   return true;
-  // });
   const handleEditClick = (data: Account) => {
     setRowData(data);
     setIsModalOpen(true);
   };
 
-  const handleDeleteClick = (id: number) => {
-    console.log(id);
+  // const handleDeleteClick = (e:any, id:number) => {
+  //   setIsDeleteModalOpen(true);
+  // };
+
+  const handleDeleteClick = () => {
+    setShowDeleteConfirmation(true);
   };
+
+  const confirmDelete = () => {
+    // onDelete(); delete API call
+    setShowDeleteConfirmation(false);
+  };
+
+  const cancelDelete = () => {
+    setShowDeleteConfirmation(false);
+  };
+
 
   const handleCreateNew = () => {
     setStateData(true);
+  
   };
 
   const backToAccountList = () => {
+    debugger
     setStateData(false);
   };
 
@@ -127,17 +91,18 @@ console.log(accounts)
   return (
     <>
       {stateData ? (
-        <NewAccount/>
-      ) : (
+      <NewAccount onBackToListButtonClickHandler={backToAccountList} />   
+         ) : (
+          <>
+           <DeleteConfirmationModal isOpen={showDeleteConfirmation} onCancel={cancelDelete} onConfirm={confirmDelete} />
         <CRow>
           <CCol xs={12}>
             <CCard className="mb-4">
               <CCardHeader>
                 <strong>Accounts</strong> <small>List</small>
               </CCardHeader>
-              <CCardBody>
-                {accounts?.map((account:Account) => (
-                  <CRow key={account.ownerId}>
+              <CCardBody>   
+                  <CRow >
                     <CCol xs={6}>
                       <div className="input-group">
                         <CDropdown>
@@ -147,8 +112,6 @@ console.log(accounts)
                           <CDropdownMenu>
                             <CDropdownItem href="#">Account Name</CDropdownItem>
                             <CDropdownItem href="#">Phone</CDropdownItem>
-                            <CDropdownItem href="#">Website</CDropdownItem>
-                            <CDropdownItem href="#">Account Owner</CDropdownItem>
                           </CDropdownMenu>
                         </CDropdown>
                         <input
@@ -160,8 +123,6 @@ console.log(accounts)
                       </div>
                       <br />
                     </CCol>
-                  </CRow>
-                ))}
                 {/* <div>
                   <select value={searchBy} onChange={handleSearchByChange}>
                     <option value="Name">Name</option>
@@ -177,29 +138,31 @@ console.log(accounts)
                   />
                 </div> */}
                 <CCol xs={6}>
-                  <div className="text-end">
-                    <CButton
-                      component="input"
-                      type="button"
-                      color="primary"
-                      value="Create New Account"
-                      onClick={handleCreateNew}
-                    />
-                  </div>
+                <div className="text-end">
+                        <CButton
+                          component="input"
+                          type="button"
+                          color="primary"
+                          value="Create New Account"
+                          onClick={handleCreateNew}
+                        />
+                      </div>
                 </CCol>
+                </CRow>
+
                 <CTable>
                   <CTableHead>
                     <CTableRow>
-                      <CTableHeaderCell scope="col">Name</CTableHeaderCell>
+                    <CTableHeaderCell scope="col">Account Name</CTableHeaderCell>
                       <CTableHeaderCell scope="col">Owner</CTableHeaderCell>
                       <CTableHeaderCell scope="col">Phone</CTableHeaderCell>
-                      <CTableHeaderCell scope="col">State</CTableHeaderCell>
+                      <CTableHeaderCell scope="col">Website</CTableHeaderCell>
                       <CTableHeaderCell scope="col">Country</CTableHeaderCell>
                       <CTableHeaderCell scope="col">Actions</CTableHeaderCell>
                     </CTableRow>
                   </CTableHead>
                   <CTableBody>
-                    {accounts?.map((account : any) => (
+                    {accounts?.map((account : Account) => (
                       <CTableRow key={account.id}>
                         <CTableHeaderCell scope="row">{account.id}</CTableHeaderCell>
                          <CTableDataCell>{account.ownerId}</CTableDataCell>
@@ -213,20 +176,26 @@ console.log(accounts)
                           />
                           <LuView style={{ color: 'blue' }}
                             onClick={()=>showItems(account?.id)}></LuView>
-                          <MdDelete style={{ color: 'red' }} />
+                          <MdDelete style={{ color: "red" }} onClick={handleDeleteClick} />
                         </CTableDataCell>
                       </CTableRow>
                     ))}
                   </CTableBody>
                 </CTable>
 
-                {isModalOpen && rowData && (
-                  <ModalComponent rowData={rowData} closeModal={() => setIsModalOpen(false)} backToAccountList={backToAccountList} />
-                )}
+                {/* {isModalOpen && rowData && (
+                  <OpenAccountModal
+                    rowData={rowData}
+                    closeModal={() => setIsModalOpen(false)}
+                    backToAccountList={backToAccountList}
+                  />
+                )} */}
+
               </CCardBody>
             </CCard>
           </CCol>
         </CRow>
+        </>
       )}
     </>
   );

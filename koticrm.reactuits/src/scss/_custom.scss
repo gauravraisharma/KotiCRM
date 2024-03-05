@@ -1,1 +1,27 @@
 // Here you can add other styles
+.backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+    width: 100%;
+    height: -webkit-fill-available;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.delete-confirmation-modal{
+    width: 40%;
+    position: absolute;
+    top: 25%;
+    left: 30%;
+}
+
+.confirmation-buttons {
+    display: flex;
+    justify-content: end;
+}
+.deleteMessage{
+    color:rgb(193, 74, 74);
+    font-size: 50px;
+    text-align: center;
+}

@@ -30,7 +30,7 @@ const reducer = (state = initialState, action: any) => {
     switch (action.type) {
         case LOGIN_SUCCESS:
             if (action.payload != null && action.payload != undefined && action.payload.status == 'SUCCEED') {
-                localStorage.setItem('accessToken', action.payload.tokenStatus);
+                localStorage.setItem('accessToken', action.payload.token);
                 return {
                     ...state,
                     token: action.payload.token,
