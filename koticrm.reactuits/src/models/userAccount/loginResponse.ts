@@ -1,12 +1,12 @@
-
 export interface LoginResponse {
   status: string;
   message: string;
   token: string;
   userType: string;
   userId: string;
-  modulePermission : modulePermission[]
+  modulePermission: modulePermission[]
 }
+
 export interface ResponseStatus {
   status: string;
   message: string;
@@ -19,5 +19,4 @@ export interface modulePermission {
   IsEdit: boolean;
   IsDelete: boolean;
   IsAdd: boolean;
-
 }

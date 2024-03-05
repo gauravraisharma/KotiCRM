@@ -2,22 +2,23 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   token: null,
-  modulePermission : null,
-  loggedIn : false
+  modulePermission: null,
+  loggedIn: false
 };
 
 const authSlice = createSlice({
-  
+
   name: 'auth',
   initialState,
   reducers: {
     loginSuccess(state, action) {
       localStorage.setItem('accessToken', action.payload.token);
-      state.token =  action.payload.token
-      state.modulePermission = action.payload.modulePermission ;
+      state.token = action.payload.token
+      state.modulePermission = action.payload.modulePermission;
       state.loggedIn = true
     },
     logout(state) {
+      localStorage.clear();
       state.token = null;
       state.modulePermission = null;
       state.loggedIn = false;

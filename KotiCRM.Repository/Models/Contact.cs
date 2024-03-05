@@ -12,7 +12,7 @@ namespace KotiCRM.Repository.Models
     {
         [Key]
         public int Id { get; set; }
-        [Required]
+        [Required(ErrorMessage ="Owner Id Is required")]
         public int OwnerId { get; set; }
         [Column(TypeName = "nvarchar(450)")]
         public string FirstName { get; set; }
@@ -20,7 +20,7 @@ namespace KotiCRM.Repository.Models
         public string LastName { get; set; }
 
         [ForeignKey("Account")]
-        [Required]
+        [Required(ErrorMessage = "Account ID Is required")]
         public int AccountID { get; set; }
         [EmailAddress]
         public string Email { get; set; }
@@ -37,7 +37,7 @@ namespace KotiCRM.Repository.Models
         public DateTime? DateOfBirth { get; set; }
         [StringLength(20)]
         public string HomePhone { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Skype Id Is required")]
         public string SkypeID { get; set; }
         
         public string LinkedinURL { get; set; }
