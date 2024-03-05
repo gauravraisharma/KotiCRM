@@ -15,7 +15,9 @@ import {
   GET_CONTACT_DETAIL_FETCH,
   CREATE_CONTACT_REQUEST,
   GET_INDUSTRY_FETCH,
-  GET_INVOICE_STATUS_FETCH
+  GET_INVOICE_STATUS_FETCH,
+    LOGOUT,
+    SIDEBAR_TOGGLE
 } from "../constants/reduxConstants";
 
 // Login action methods
@@ -29,6 +31,17 @@ export const loginRequest = (userLogin: UserLogin, navigate: any, toast: any) =>
 export const loginSuccess = (response: LoginResponse) => ({
   type: LOGIN_SUCCESS,
   payload: response,
+});
+
+export const logout = () => ({
+    type: LOGOUT
+});
+
+
+//Application Setting
+export const sidebarToggle = (sidebarShow: boolean) => ({
+    type: SIDEBAR_TOGGLE,
+    sidebarShow: sidebarShow
 });
 
 // Account action methods

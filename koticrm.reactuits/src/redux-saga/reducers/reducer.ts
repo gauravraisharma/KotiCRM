@@ -6,9 +6,11 @@ import {
     GET_ACCOUNT_OWNER_SUCCESS,
     GET_ACCOUNT_STATUS_SUCCESS,
     GET_ACCOUNT_TYPE_SUCCESS,
+    GET_CONTACTS_SUCCESS,
     GET_INDUSTRY_SUCCESS,
     GET_INVOICE_STATUS_SUCCESS,
-    GET_CONTACTS_SUCCESS
+    LOGOUT,
+    SIDEBAR_TOGGLE
 } from "../../constants/reduxConstants";
 
 const initialState = {
@@ -47,6 +49,17 @@ const reducer = (state = initialState, action: any) => {
                 loggedIn: false,
             };
 
+        case LOGOUT:
+            return {
+                ...initialState
+            }
+
+        case SIDEBAR_TOGGLE:
+            return {
+                ...state,
+                sidebarToggle: action.sidebarShow
+
+            }
         case GET_ACCOUNT_SUCCESS:
             return {
                 ...state,

@@ -1,13 +1,7 @@
-import { useNavigate } from 'react-router';
 import {  AppSidebar, AppFooter, AppHeader, AppContent } from '../components/index'
-import { useSelector } from 'react-redux';
 
 const DefaultLayout = () => {
-  //const loggedIn = useSelector((state: any) => {
-  //  console.log('State: ', state);
-  //  return state.reducer.loggedIn;
-  //});
-
+  
   return (
     <div>
       <AppSidebar />
