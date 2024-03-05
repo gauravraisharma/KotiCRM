@@ -19,9 +19,12 @@ const Page500 = lazy(() => import('./views/pages/page500/Page500'))
 const Dashboard = lazy(() => import('./views/dashboard/Dashboard'))
 const Colors = lazy(() => import('./views/theme/colors/Colors'))
 const Typography = lazy(() => import('./views/theme/typography/Typography'))
+// Account routes
 const AccountList = lazy(() => import('./views/accountsList/AccountList'))
 const AccountDetails = lazy(() => import('./views/accountDetails/AccountDetails'))
 const NewAccount = lazy(() => import('./views/account/NewAccount'))
+// Contact routes
+const Contacts = lazy(() => import('./views/contacts/Contacts'))
 const CreateContact = lazy(() => import('./views/contacts/createContact'))
 
 
@@ -128,6 +131,8 @@ const routes: Route[] = [
   { path: '/accountsList', name: 'Account List', element: AccountList },
   { path: '/accountDetails/:accountId', name: 'Account Details', element: AccountDetails },
   { path: '/account', name: 'Account', element: NewAccount },
+
+  { path: '/contacts', name: 'Contacts', element: Contacts },
   { path: '/contacts/createContact', name: 'CreateContact', element: CreateContact },
   { path: '/newAccount', name: 'NewAccount', element: NewAccount },
   // { path: '/deleteConfirmation', name: 'DeleteConfirmation', element: DeleteConfirmationModal},

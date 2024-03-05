@@ -23,8 +23,22 @@ import { IoPersonCircleOutline } from 'react-icons/io5'
 import { MdOutlinePictureAsPdf } from 'react-icons/md'
 import { TiAttachmentOutline } from 'react-icons/ti'
 import '../../css/style.css'
+import { useDispatch, useSelector } from 'react-redux'
+import { getContacts } from '../../redux-saga/action'
+import { useEffect, useState } from 'react'
 
 const Contacts = () => {
+  // const [contacts, setContacts] = useState([]);
+  const dispatch = useDispatch();
+  const fetchedContacts = useSelector((state: any) => state.reducer.contacts);
+
+  useEffect(() => {
+    dispatch(getContacts());
+  }, [dispatch]);
+
+  console.log("Contact on component:");
+  console.log(fetchedContacts);
+
   return (
     <CRow>
       <CCol xs={12}>
@@ -58,7 +72,16 @@ const Contacts = () => {
                 </CTableRow>
               </CTableHead>
               <CTableBody>
-                <CTableRow>
+                {fetchedContacts?.map((contact, index:number) => (
+                  <CTableRow key={index}>
+                    <CTableHeaderCell>{contact.firstName}</CTableHeaderCell>
+                    <CTableDataCell>{contact.email}</CTableDataCell>
+                    <CTableDataCell>{contact.phone}</CTableDataCell>
+                    <CTableDataCell>{contact.mobile}</CTableDataCell>
+                    <CTableDataCell>{contact.fax}</CTableDataCell>
+                  </CTableRow>
+                ))}
+                {/* <CTableRow>
                   <CTableHeaderCell>Sakshi Gupta</CTableHeaderCell>
                   <CTableDataCell>@sakshigupta.com</CTableDataCell>
                   <CTableDataCell>3456788765</CTableDataCell>
@@ -71,7 +94,7 @@ const Contacts = () => {
                   <CTableDataCell>8634567678</CTableDataCell>
                   <CTableDataCell>9944466622</CTableDataCell>
                   <CTableDataCell>--</CTableDataCell>
-                </CTableRow>
+                </CTableRow> */}
               </CTableBody>
             </CTable>
             {/* </DocsExample> */}

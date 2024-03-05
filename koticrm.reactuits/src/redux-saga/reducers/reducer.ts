@@ -6,24 +6,26 @@ import {
     GET_ACCOUNT_OWNER_SUCCESS,
     GET_ACCOUNT_STATUS_SUCCESS,
     GET_ACCOUNT_TYPE_SUCCESS,
-    GET_CONTACTS_SUCCESS,
     GET_INDUSTRY_SUCCESS,
-    GET_INVOICE_STATUS_SUCCESS
+    GET_INVOICE_STATUS_SUCCESS,
+    GET_CONTACTS_SUCCESS
 } from "../../constants/reduxConstants";
 
 const initialState = {
-    token: null,
-    modulePermission: [],
-    loggedIn: false,
-    accounts: [],
-    response: null,
-    account: null,
-    accountOwner: [],
-    contacts: [],
-    industry: [],
-    accountStatus: [],
-    accountType: [],
-    invoiceStatus: []
+    reducer: {
+        token: null,
+        modulePermission: [],
+        loggedIn: false,
+        accounts: [],
+        response: null,
+        account: null,
+        accountOwner: [],
+        contacts: [],
+        industry: [],
+        accountStatus: [],
+        accountType: [],
+        invoiceStatus: []
+    }
 };
 
 const reducer = (state = initialState, action: any) => {
@@ -80,11 +82,11 @@ const reducer = (state = initialState, action: any) => {
                 ...state,
                 accountType: action.accountType,
             }
-
+            
         case GET_CONTACTS_SUCCESS:
             return {
                 ...state,
-                contacts: action.contact,
+                contacts: action.contacts,
             }
 
         case GET_INDUSTRY_SUCCESS:
@@ -100,7 +102,8 @@ const reducer = (state = initialState, action: any) => {
             }
 
         default:
-            console.error("No action matched");
+            // console.error("No action matched");
+            console.error("Unhandled action type:", action.type);
             return state;
     }
 };
