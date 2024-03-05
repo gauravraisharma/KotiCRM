@@ -40,7 +40,6 @@ const AccountList: React.FC = () => {
   const [stateData, setStateData] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [rowData, setRowData] = useState<Account | null>(null);
-  // const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
 
 
   const dispatch = useDispatch();
@@ -94,6 +93,8 @@ const AccountList: React.FC = () => {
       {stateData ? (
       <NewAccount onBackToListButtonClickHandler={backToAccountList} />   
          ) : (
+          <>
+           <DeleteConfirmationModal isOpen={showDeleteConfirmation} onCancel={cancelDelete} onConfirm={confirmDelete} />
         <CRow>
           <CCol xs={12}>
             <CCard className="mb-4">
@@ -156,6 +157,7 @@ const AccountList: React.FC = () => {
                       <CTableHeaderCell scope="col">Owner</CTableHeaderCell>
                       <CTableHeaderCell scope="col">Phone</CTableHeaderCell>
                       <CTableHeaderCell scope="col">Website</CTableHeaderCell>
+                      <CTableHeaderCell scope="col">Country</CTableHeaderCell>
                       <CTableHeaderCell scope="col">Actions</CTableHeaderCell>
                     </CTableRow>
                   </CTableHead>
@@ -181,18 +183,19 @@ const AccountList: React.FC = () => {
                   </CTableBody>
                 </CTable>
 
-                {isModalOpen && rowData && (
+                {/* {isModalOpen && rowData && (
                   <OpenAccountModal
                     rowData={rowData}
                     closeModal={() => setIsModalOpen(false)}
                     backToAccountList={backToAccountList}
                   />
-                )}
+                )} */}
 
               </CCardBody>
             </CCard>
           </CCol>
         </CRow>
+        </>
       )}
     </>
   );

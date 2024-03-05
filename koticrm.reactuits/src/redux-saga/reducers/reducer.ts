@@ -18,10 +18,11 @@ const initialState = {
 };
 
 const reducer = (state = {initialState}, action: any ) => {
+    debugger
     switch (action.type){
         case LOGIN_SUCCESS:
             if (action.payload != null && action.payload != undefined && action.payload.status == 'SUCCEED') {
-                localStorage.setItem('accessToken', action.payload.tokenStatus);
+                localStorage.setItem('accessToken', action.payload.token);
                 return {
                     ...state,
                     token: action.payload.token,
@@ -42,7 +43,7 @@ const reducer = (state = {initialState}, action: any ) => {
                 }
         case CREATE_ACCOUNT_SUCCESS: 
             return {...state,
-                  response: action.response,
+                  response: action.account,
                 }
         case GET_ACCOUNT_DETAIL_SUCCESS: 
             return {...state,
