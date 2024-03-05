@@ -2,7 +2,7 @@ import { call, put } from 'redux-saga/effects';
 // import { CREATE_NOTES_SUCCESS, GET_ACCOUNT_DETAIL_SUCCESS, GET_NOTES_SUCCESS } from '../action';
 import NotesService from '../../services/NotesService';
 import { Note } from '../../models/notes/notes';
-import { CREATE_NOTES_SUCCESS, GET_NOTES_SUCCESS } from '../action';
+import { CREATE_NOTES_SUCCESS, GET_NOTES_SUCCESS } from '../../constants/reduxConstants';
 
 
 

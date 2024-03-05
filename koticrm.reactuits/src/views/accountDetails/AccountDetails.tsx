@@ -26,7 +26,6 @@ import {  useState } from 'react';
 import { TiAttachmentOutline } from "react-icons/ti";
 import "../../css/style.css";
 import { Note } from "../../models/notes/notes";
-import { useParams } from "react-router-dom";
 
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -297,7 +296,7 @@ const AccountDetails = () => {
                     <CRow>
                       <CCol xs={8}>
                         <ul>
-                          {notesData.map((note:Note) => (
+                          {notesData?.map((note:Note) => (
                             <li key={note.id}>
                             
                               <span className="person">
