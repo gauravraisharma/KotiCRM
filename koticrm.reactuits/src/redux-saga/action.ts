@@ -1,4 +1,5 @@
 import { Account } from "../models/account/Account";
+import { Note } from "../models/notes/notes";
 import { CreateContact } from "../models/contact/CreateContact";
 import { UserLogin } from "../models/userAccount/login";
 import { LoginResponse } from "../models/userAccount/loginResponse";
@@ -19,7 +20,9 @@ import {
     LOGOUT,
     SIDEBAR_TOGGLE,
     DELETE_ACCOUNT_REQUEST,
-    UPDATE_ACCOUNT_REQUEST
+    UPDATE_ACCOUNT_REQUEST,
+    CREATE_NOTES_REQUEST,
+    GET_NOTES_FETCH
 } from "../constants/reduxConstants";
 
 // Login action methods
@@ -55,6 +58,10 @@ export const createAccountRequest = (account: Account) => ({
   type: CREATE_ACCOUNT_REQUEST,
   payload: account,
 });
+
+
+
+
 
 export const getAccountByIdRequest = (id: any) => ({
   type: GET_ACCOUNT_DETAIL_FETCH,
@@ -105,3 +112,12 @@ export const getIndustry = () => ({
 export const getInvoiceStatus = () => ({
   type: GET_INVOICE_STATUS_FETCH
 })
+
+export const getNotes = () => ({
+    type: GET_NOTES_FETCH
+})
+
+export const createNotesRequest = (notes: Note) => ({
+    type: CREATE_NOTES_REQUEST,
+    payload: notes,
+});

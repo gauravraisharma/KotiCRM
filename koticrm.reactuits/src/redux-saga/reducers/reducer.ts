@@ -12,7 +12,8 @@ import {
     LOGOUT,
     SIDEBAR_TOGGLE,
     DELETE_ACCOUNT_SUCCESS,
-    UPDATE_ACCOUNT_SUCCESS
+    UPDATE_ACCOUNT_SUCCESS,
+    GET_NOTES_SUCCESS
 } from "../../constants/reduxConstants";
 
 const initialState = {
@@ -31,7 +32,7 @@ const initialState = {
         deleteResponse: null,
         updateAccount: null,
         contacts: [],
-
+        notes: [] ,
     }
 };
 
@@ -121,11 +122,12 @@ const reducer = (state = initialState, action: any) => {
                 contacts: action.contacts,
             }
 
-        case GET_INDUSTRY_SUCCESS:
+        case GET_NOTES_SUCCESS:
             return {
                 ...state,
-                industry: action.industry,
-            }
+                notes: action.notes,
+            } 
+
 
         case GET_INVOICE_STATUS_SUCCESS:
             return {

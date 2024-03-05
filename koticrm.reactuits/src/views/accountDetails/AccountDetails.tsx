@@ -22,12 +22,16 @@ import { BsFiletypeDocx } from "react-icons/bs";
 
 import { IoPersonCircleOutline } from "react-icons/io5";
 import { MdOutlinePictureAsPdf } from "react-icons/md";
+import {  useState } from 'react';
 import { TiAttachmentOutline } from "react-icons/ti";
 import "../../css/style.css";
+import { Note } from "../../models/notes/notes";
+import { useParams } from "react-router-dom";
 
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { getAccountByIdRequest } from "../../redux-saga/action";
+// import { }
 import { useSelector } from "react-redux";
 
 const AccountDetails = () => {
@@ -37,9 +41,34 @@ const AccountDetails = () => {
   const accountId = data.accountId?.split('=')[1];
 
 
+  const [noteText, setNoteText] = useState('');
+
+  const notesData = useSelector((state: any) => state.note);
+  console.log(notesData);
+
   dispatch(getAccountByIdRequest(accountId));
-  const account = useSelector((state: any) =>  state.reducer.account)
-console.log(account)
+  const account = useSelector((state: any) => state.reducer.account);
+  console.log(account);
+
+  const handleSaveNote = () => {
+   
+    console.log('Note saved:', noteText);
+    setNoteText(''); // Clear the textarea after saving
+  };
+
+  const handleDeleteNote = () => {
+
+    console.log('Note deleted:', noteText);
+    setNoteText(''); // Clear the textarea after deleting
+  };
+
+  const handleAttachment = () => {
+    
+    console.log('Attachment clicked');
+
+  };
+
+
 
   return (
     <CRow>
@@ -268,40 +297,23 @@ console.log(account)
                     <CRow>
                       <CCol xs={8}>
                         <ul>
-                          <li>
-                            <span className="person">
-                              <IoPersonCircleOutline />
-                            </span>
-                            <span className="content">dsadsadsa</span>
-                            <br></br>
-                            <span>Account -</span>
-                            <span className="linking">King (Sample)</span>.
-                            <span>Add Note</span>
-                          </li>
-                          <li>
-                            <span className="person">
-                              <IoPersonCircleOutline />
-                            </span>
-                            <span className="content">dsadsadsa</span>
-                            <br></br>
-                            <span>Account -</span>
-                            <span className="linking">King (Sample)</span>.
-                            <span>Add Note</span>
-                          </li>
-                          <li>
-                            <span className="person">
-                              <IoPersonCircleOutline />
-                            </span>
-                            <span className="content">dsadsadsa</span>
-                            <br></br>
-                            <span>Account -</span>
-                            <span className="linking">King (Sample)</span>.
-                            <span>Add Note</span>
-                          </li>
+                          {notesData.map((note:Note) => (
+                            <li key={note.id}>
+                            
+                              <span className="person">
+                                <IoPersonCircleOutline />
+                              </span>
+                              <span className="content">{note.accountId}</span>
+                              <br></br>
+                              <span>Account</span>
+                              <span className="linking">King (Sample)</span>.
+                              <span>Add Note</span>
+                            </li>
+                          ))}
 
                           <CRow>
                             <CForm>
-                              <CFormTextarea
+                              {/* <CFormTextarea
                                 className="textarea"
                                 rows={3}
                                 placeholder="Add a note"
@@ -324,9 +336,39 @@ console.log(account)
                                   color="primary"
                                   value="Save"
                                 />
+                              </div> */}
+                              <textarea
+                                className="textarea"
+                                rows={3}
+                                placeholder="Add a note"
+                                value={noteText}
+                                onChange={(e) => setNoteText(e.target.value)}
+                              ></textarea>
+
+                              <div className="text-end">
+                                <TiAttachmentOutline
+                                  onClick={handleAttachment}
+                                />
+
+                                <button
+                                  style={{ margin: "5px" }}
+                                  type="button"
+                                  onClick={handleDeleteNote}
+                                >
+                                  Delete
+                                </button>
+
+                                <button
+                                  style={{ margin: "5px" }}
+                                  type="button"
+                                  onClick={handleSaveNote}
+                                >
+                                  Save
+                                </button>
                               </div>
                             </CForm>
                           </CRow>
+                          
                         </ul>
                       </CCol>
                     </CRow>
