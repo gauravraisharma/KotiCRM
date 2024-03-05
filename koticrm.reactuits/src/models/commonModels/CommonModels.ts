@@ -2,7 +2,9 @@ import { ComponentType, LazyExoticComponent } from "react";
 
 export interface Route {
   path: string;
-  name: string;
+    name: string;
+    isAuth: boolean;
+    modulePermission?: string;
   element: LazyExoticComponent<ComponentType<any>> | null;
 }
 

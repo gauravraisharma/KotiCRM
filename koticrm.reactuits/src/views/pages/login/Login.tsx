@@ -6,10 +6,9 @@ import { useDispatch } from 'react-redux';
 import { useState } from 'react';
 import {  loginRequest } from '../../../redux-saga/action';
 import { UserLogin } from '../../../models/userAccount/login';
-import { useAuth } from '../../../utils/Auth';
+import { useAuth } from '../../../utils/AuthProvider';
 import { ToastContainer, toast } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
-import { useSelector } from 'react-redux';
 
 
 
