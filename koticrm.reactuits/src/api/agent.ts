@@ -10,7 +10,7 @@ import { SharedModel } from '../models/commonModels/SharedModels';
 const responseBody = <T>(response: AxiosResponse<T>) => response.data;
 
 const requests = {
-    get: <T>(url: string) => axiosInstance.get<T>(url).then(responseBody),
+    get:  <T>(url: string) => axiosInstance.get<T>(url).then(responseBody),
     post: <T>(url: string, body: {}) => axiosInstance.post<T>(url, body).then(responseBody),
     put: <T>(url: string, body: {}) => axiosInstance.put<T>(url, body).then(responseBody),
     del: <T>(url: string) => axiosInstance.delete<T>(url).then(responseBody),
@@ -28,6 +28,9 @@ const Account = {
     getById: (id : number) => requests.get<Account>(`/Account/GetAccountDetails/${id}`),
     delete: (id : number) => requests.del<Account>(`/Account/DeleteAccount/${id}`)  
 }
+  
+  
+
 const Contact = {
     get: () => requests.get<Contact[]>(`/Contact/GetContactList`),
     create: (contact : Contact) => requests.post<Account>(`/Contact/CreateContact`, contact),

@@ -74,6 +74,38 @@
     color:rgb(143, 137, 137);
     padding: 10px;
   }
+  .card {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 20px;
+    margin: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    /* text-align: center; */
+  }
+  .form-group {
+    margin-bottom: 20px;
+  }
+  .col-form-label {
+    font-size: larger;
+    padding: 5px;
+  }
+  .btn {
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin:5px;
+  }
+  .btn-secondary {
+    background-color: #6c757d;
+    color: #fff;
+    border: none;
+  }
+  .error {
+    color: #dc3545;
+    font-size: 0.875rem; /* 14px */
+    margin-top: 4px;
+  }
+  
   .form-error{
     margin-top: 3px;
 	color: rgb(255,0,0);

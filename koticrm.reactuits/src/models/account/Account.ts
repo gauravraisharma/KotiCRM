@@ -1,4 +1,5 @@
 export interface Account {
+  id:number;
     ownerId: string;
     industryId : number;
     annualRevenue: string;
