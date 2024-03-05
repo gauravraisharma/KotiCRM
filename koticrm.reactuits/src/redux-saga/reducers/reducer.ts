@@ -10,7 +10,9 @@ import {
     GET_INDUSTRY_SUCCESS,
     GET_INVOICE_STATUS_SUCCESS,
     LOGOUT,
-    SIDEBAR_TOGGLE
+    SIDEBAR_TOGGLE,
+    DELETE_ACCOUNT_SUCCESS,
+    UPDATE_ACCOUNT_SUCCESS
 } from "../../constants/reduxConstants";
 
 const initialState = {
@@ -19,14 +21,17 @@ const initialState = {
         modulePermission: [],
         loggedIn: false,
         accounts: [],
-        response: null,
-        account: null,
-        accountOwner: [],
+        response:null, 
+        account:null,
+        accountOwner :[],
+        industry:[],
+        accountStatus :[],
+        accountType :[],
+        invoiceStatus : [],
+        deleteResponse: null,
+        updateAccount: null,
         contacts: [],
-        industry: [],
-        accountStatus: [],
-        accountType: [],
-        invoiceStatus: []
+
     }
 };
 
@@ -76,15 +81,29 @@ const reducer = (state = initialState, action: any) => {
             return {
                 ...state,
                 account: action.account,
+                }
+
+        case DELETE_ACCOUNT_SUCCESS:
+            return {...state,
+            deleteResponse : action.response 
+        }
+        case UPDATE_ACCOUNT_SUCCESS:
+            return{
+                ...state,
+                updateAccount : action.account
             }
 
-        case GET_ACCOUNT_OWNER_SUCCESS:
+        case GET_ACCOUNT_OWNER_SUCCESS: 
             return {
                 ...state,
-                accountOwner: action.accountOwners,
-            }
 
-        case GET_ACCOUNT_STATUS_SUCCESS:
+                accountOwner: action.accountOwners,
+                }
+        case GET_INDUSTRY_SUCCESS: 
+            return {...state,
+                industry: action.industry,
+                }
+        case GET_ACCOUNT_STATUS_SUCCESS: 
             return {
                 ...state,
                 accountStatus: action.accountStatus,

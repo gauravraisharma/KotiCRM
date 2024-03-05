@@ -22,11 +22,14 @@ import { getAccounts } from '../../redux-saga/action';
 import { FaEdit } from 'react-icons/fa';
 import { MdDelete } from 'react-icons/md';
 import { LuView } from 'react-icons/lu';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import NewAccount from '../account/NewAccount';
 import { Account } from '../../models/account/Account';
 import { useSelector } from 'react-redux';
 import DeleteConfirmationModal from "./DeleteConfirmation";
+import { ToastContainer } from 'react-toastify';
+import EditPage from './EditAccountModal';
+
 
 
 
@@ -35,30 +38,28 @@ const AccountList: React.FC = () => {
   const accounts = useSelector((state: any) =>  state.reducer.accounts);
 
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
-  const [searchField, setSearchField] = useState<string>("");
-  const [searchBy, setSearchBy] = useState<string>("Name");
+  const [accountId, setAccountId] = useState<number>();
   const [stateData, setStateData] = useState<boolean>(false);
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [rowData, setRowData] = useState<Account | null>(null);
+  const [openEditModal, setOpenEditModal] = useState<boolean>(false);
+  const [accountData, setAccountData] = useState<Account | null>(null);
 
 
   const dispatch = useDispatch();
 
-  const handleEditClick = (data: Account) => {
-    setRowData(data);
-    setIsModalOpen(true);
+  const handleEditClick = (data: any) => {
+    setAccountData(data);
+    setOpenEditModal(true);
+  };
+  const closeEditModal = () => {
+    setOpenEditModal(false);
   };
 
-  // const handleDeleteClick = (e:any, id:number) => {
-  //   setIsDeleteModalOpen(true);
-  // };
-
-  const handleDeleteClick = () => {
+  const handleDeleteClick = (id:any) => {
+    setAccountId(id);
     setShowDeleteConfirmation(true);
   };
 
   const confirmDelete = () => {
-    // onDelete(); delete API call
     setShowDeleteConfirmation(false);
   };
 
@@ -75,11 +76,26 @@ const AccountList: React.FC = () => {
   const backToAccountList = () => {
     debugger
     setStateData(false);
+    setOpenEditModal(false);
   };
+
+  const deleteResponse = useSelector((state:any)=> state.reducer.deleteResponse)
+ 
+
+
+  // if(deleteResponse?.succeed == true){
+  //   debugger
+  //   toast.success(deleteResponse?.message);
+  // }
+  // else{
+  //   toast.error(deleteResponse?.message)
+  // }
 
   useEffect(() => {
     dispatch(getAccounts());
-  }, [dispatch]);
+  }, [dispatch,deleteResponse,backToAccountList]);
+
+
 
   const navigate = useNavigate()
   const showItems =(id:any)=>{
@@ -90,16 +106,20 @@ const AccountList: React.FC = () => {
 
   return (
     <>
+    <ToastContainer/>
       {stateData ? (
       <NewAccount onBackToListButtonClickHandler={backToAccountList} />   
          ) : (
           <>
-           <DeleteConfirmationModal isOpen={showDeleteConfirmation} onCancel={cancelDelete} onConfirm={confirmDelete} />
+           <DeleteConfirmationModal isOpen={showDeleteConfirmation} onCancel={cancelDelete} onConfirm={confirmDelete} id = {accountId} />
+           {openEditModal ? (
+            <EditPage  closeModal={closeEditModal} accountData={accountData} onBackToListButtonClickHandler={backToAccountList}/>
+           ): (
         <CRow>
           <CCol xs={12}>
             <CCard className="mb-4">
               <CCardHeader>
-                <strong>Accounts</strong> <small>List</small>
+                <strong>Accounts</strong>
               </CCardHeader>
               <CCardBody>   
                   <CRow >
@@ -167,16 +187,16 @@ const AccountList: React.FC = () => {
                         <CTableHeaderCell scope="row">{account.id}</CTableHeaderCell>
                          <CTableDataCell>{account.ownerId}</CTableDataCell>
                         <CTableDataCell>{account.phone}</CTableDataCell>
-                        <CTableDataCell>{account.billingState}</CTableDataCell> 
+                        <CTableDataCell>{account.webSite}</CTableDataCell> 
                         <CTableDataCell>{account.country}</CTableDataCell>
                         <CTableDataCell>
                           <FaEdit
                             style={{ color: 'green' }}
-                            onClick={() => handleEditClick(accounts)}
+                            onClick={() => handleEditClick(account)}
                           />
                           <LuView style={{ color: 'blue' }}
                             onClick={()=>showItems(account?.id)}></LuView>
-                          <MdDelete style={{ color: "red" }} onClick={handleDeleteClick} />
+                          <MdDelete style={{ color: "red" }} onClick={()=>handleDeleteClick(account.id)} />
                         </CTableDataCell>
                       </CTableRow>
                     ))}
@@ -195,6 +215,7 @@ const AccountList: React.FC = () => {
             </CCard>
           </CCol>
         </CRow>
+           )}
         </>
       )}
     </>

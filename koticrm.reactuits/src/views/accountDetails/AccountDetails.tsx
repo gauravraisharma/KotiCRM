@@ -19,20 +19,19 @@ import {
   CFormTextarea,
 } from "@coreui/react";
 import { BsFiletypeDocx } from "react-icons/bs";
-import { FaAngleLeft } from "react-icons/fa6";
-import { FaChevronRight } from "react-icons/fa";
+
 import { IoPersonCircleOutline } from "react-icons/io5";
 import { MdOutlinePictureAsPdf } from "react-icons/md";
 import { TiAttachmentOutline } from "react-icons/ti";
 import "../../css/style.css";
-import { Account } from "../../models/account/Account";
-import { dummyAccounts } from "../../constants";
-import { useParams } from "react-router-dom";
+
+import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { getAccountByIdRequest } from "../../redux-saga/action";
 import { useSelector } from "react-redux";
 
 const AccountDetails = () => {
+  const navigate = useNavigate();
   const data = useParams()
   const dispatch = useDispatch(); 
   const accountId = data.accountId?.split('=')[1];
@@ -48,10 +47,10 @@ console.log(account)
         <CCard className="mb-4">
           <CCardHeader>
             <CRow>
-              <CCol xs={6}>Account Name</CCol>
+              <CCol xs={6}><strong>Account Detail</strong></CCol>
               <CCol xs={6}>
                 <div className="text-end">
-                  <CButton
+                  {/* <CButton
                     style={{ margin: 4 }}
                     component="input"
                     type="button"
@@ -64,16 +63,14 @@ console.log(account)
                     type="button"
                     color="light"
                     value="Edit"
-                  />
-                  <CButton
-                    style={{ margin: 4 }}
-                    component="input"
-                    type="button"
-                    color="light"
-                    value="..."
-                  />
-                  <FaAngleLeft />
-                  <FaChevronRight />
+                  /> */}
+                      <CButton
+                      component="input"
+                      type="button"
+                      color="primary"
+                      value="Back To Accounts"
+                      onClick={()=>navigate('/accountsList')}
+                    />
                 </div>
               </CCol>
             </CRow>

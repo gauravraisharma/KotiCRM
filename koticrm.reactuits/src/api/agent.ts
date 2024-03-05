@@ -1,4 +1,4 @@
-import axios, { AxiosError, AxiosResponse } from 'axios';
+import { AxiosResponse } from 'axios';
 import { Account } from '../models/account/Account';
 import axiosInstance from './axiosInterceptor';
 import { Contact } from '../models/contact/Contact';
@@ -24,7 +24,7 @@ const Login = {
 const Account = {
     get: () => requests.get<Account[]>(`/Account/GetAccountList`),
     create: (account : Account) => requests.post<Account>(`/Account/CreateAccount`, account),
-    update: (id : number,account: Account) => requests.post<Account>(`/Account/UpdateAccount/${id}`, account),
+    update: (id : number,account: Account) => requests.put<Account>(`/Account/UpdateAccount/${id}`, account),
     getById: (id : number) => requests.get<Account>(`/Account/GetAccountDetails/${id}`),
     delete: (id : number) => requests.del<Account>(`/Account/DeleteAccount/${id}`)  
 }
@@ -34,21 +34,21 @@ const Account = {
 const Contact = {
     get: () => requests.get<Contact[]>(`/Contact/GetContactList`),
     create: (contact : Contact) => requests.post<Account>(`/Contact/CreateContact`, contact),
-    update: (id : number,contact: Contact) => requests.post<Account>(`/Contact/UpdateContact/${id}`, contact),
+    update: (id : number,contact: Contact) => requests.put<Contact>(`/Contact/UpdateContact/${id}`, contact),
     getById: (id : number) => requests.get<Contact>(`/Contact/GetContactDetails/${id}`),
     delete: (id : number) => requests.del<Contact>(`/Contact/DeleteContact/${id}`)  
 }
 const Invoice = {
     get: () => requests.get<Invoice[]>(`/Invoice/GetInvoiceList`),
     create: (invoice : Invoice) => requests.post<Invoice>(`/Invoice/CreateInvoice`, invoice),
-    update: (id : number,invoice: Invoice) => requests.post<Invoice>(`/Invoice/UpdateInvoice/${id}`, invoice),
+    update: (id : number,invoice: Invoice) => requests.put<Invoice>(`/Invoice/UpdateInvoice/${id}`, invoice),
     getById: (id : number) => requests.get<Invoice>(`/Invoice/GetInvoiceDetails/${id}`),
     delete: (id : number) => requests.del<Invoice>(`/Invoice/DeleteInvoice/${id}`)  
 }
 const Notes = {
     get: () => requests.get<Note[]>(`/Notes/GetNoteList`),
     create: (note : Note) => requests.post<Note>(`/Notes/CreateNote`, note),
-    update: (id : number,note: Note) => requests.post<Note>(`/Notes/UpdateNote/${id}`, note),
+    update: (id : number,note: Note) => requests.put<Note>(`/Notes/UpdateNote/${id}`, note),
     getById: (id : number) => requests.get<Note>(`/Notes/GetNoteDetails/${id}`),
     delete: (id : number) => requests.del<Note>(`/Notes/DeleteNote/${id}`)  
 }

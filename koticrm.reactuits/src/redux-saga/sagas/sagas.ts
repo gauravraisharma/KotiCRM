@@ -1,5 +1,5 @@
 import { takeEvery } from 'redux-saga/effects';
-import { workCreateAccount, workGetAccountByIdFetch, workGetAccountFetch } from './accountSaga';
+import { workCreateAccount, workGetAccountByIdFetch, workGetAccountFetch, workDeleteAccount, workUpdateAccount } from './accountSaga';
 import { workGetContactsFetch } from './contactSaga';
 import workerLoginRequest from './loginSaga';
 import {
@@ -20,7 +20,9 @@ import {
   GET_CONTACTS_FETCH,
   GET_INDUSTRY_FETCH,
   GET_INVOICE_STATUS_FETCH,
-  LOGIN_REQUEST
+    LOGIN_REQUEST,
+    UPDATE_ACCOUNT_REQUEST,
+    DELETE_ACCOUNT_REQUEST
 } from '../../constants/reduxConstants';
 
 export default function* mySaga() {
@@ -34,4 +36,8 @@ export default function* mySaga() {
   yield takeEvery(GET_ACCOUNT_TYPE_FETCH, workGetAccountTypeFetch)
   yield takeEvery(GET_INVOICE_STATUS_FETCH, workGetInvoiceStatusFetch)
   yield takeEvery(GET_CONTACTS_FETCH, workGetContactsFetch);
+
+  yield takeEvery(DELETE_ACCOUNT_REQUEST, workDeleteAccount)
+  yield takeEvery(UPDATE_ACCOUNT_REQUEST, workUpdateAccount)
 }
+

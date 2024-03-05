@@ -5,7 +5,9 @@ import { call, put } from 'redux-saga/effects';
 import {
   CREATE_ACCOUNT_SUCCESS,
   GET_ACCOUNT_DETAIL_SUCCESS,
-  GET_ACCOUNT_SUCCESS
+    GET_ACCOUNT_SUCCESS,
+    UPDATE_ACCOUNT_SUCCESS,
+    DELETE_ACCOUNT_SUCCESS
 } from '../../constants/reduxConstants';
 
 function* accountFetch(): Generator<any> {
@@ -71,3 +73,50 @@ export function* workGetAccountByIdFetch(action: any) {
     // Handle error if needed
   }
 }
+
+function* updateAccount(action: {payload: { account: any, id: any }}) : Generator<any>{
+  try {
+    debugger
+    const { account, id } = action.payload;
+
+      const response = yield call(AccountService.UpdateAccount,account, id );
+      return response;
+  } catch (error) {
+    console.error('Error fetching accounts:', error);
+    throw error;
+  }
+}
+
+export function* workUpdateAccount(action: any) {
+  try {
+    const updatedAccount: Account = yield call(updateAccount, {payload : action.payload} );
+    yield put({ type: UPDATE_ACCOUNT_SUCCESS, updatedAccount });
+  } catch (error) {
+    // Handle error if needed
+  }
+}
+
+
+
+function* deleteAccount(action: { payload: any }) : Generator<any>{
+  try {
+    debugger
+    const { payload } = action;
+
+      const response = yield call(AccountService.DeleteAccount,payload );
+      return response;
+  } catch (error) {
+    console.error('Error fetching accounts:', error);
+    throw error;
+  }
+}
+
+export function* workDeleteAccount(action:any) {
+  try {
+    const response: Account = yield call(deleteAccount, { payload: action });
+    yield put({ type: DELETE_ACCOUNT_SUCCESS, response });
+  } catch (error) {
+    // Handle error if needed
+  }
+}
+

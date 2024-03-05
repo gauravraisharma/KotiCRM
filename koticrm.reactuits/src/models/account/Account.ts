@@ -18,6 +18,6 @@ export interface Account {
     phone: string;
     status: number;
     type: number;
-    website: string; 
+    webSite: string; 
     description:string;
   }

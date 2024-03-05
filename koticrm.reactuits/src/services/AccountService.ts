@@ -39,4 +39,31 @@ export default class AccountService {
 		  throw error; 
 		}
 	  }
+
+	  static async UpdateAccount(account: any, id: any): Promise<Account> {
+		try {
+		  debugger
+		  const response  = await agent.Account.update(id,account);
+		  console.log(response)
+		  
+		  return response;
+		  }
+		catch (error) {
+		  console.error('Error updating account :', error);
+		  throw error; 
+		}
+	  }
+
+	  static async DeleteAccount(id: any): Promise<Account> {
+		try {
+		  debugger
+		  const response  = await agent.Account.delete(id.payload);
+		  console.log(response)  
+		  return response;
+		  }
+		catch (error) {
+		  console.error('Error deleting account :', error);
+		  throw error; 
+		}
+	  }
 }

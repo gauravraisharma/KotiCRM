@@ -17,7 +17,9 @@ import {
   GET_INDUSTRY_FETCH,
   GET_INVOICE_STATUS_FETCH,
     LOGOUT,
-    SIDEBAR_TOGGLE
+    SIDEBAR_TOGGLE,
+    DELETE_ACCOUNT_REQUEST,
+    UPDATE_ACCOUNT_REQUEST
 } from "../constants/reduxConstants";
 
 // Login action methods
@@ -54,10 +56,20 @@ export const createAccountRequest = (account: Account) => ({
   payload: account,
 });
 
-export const getAccountByIdRequest = (id: number) => ({
+export const getAccountByIdRequest = (id: any) => ({
   type: GET_ACCOUNT_DETAIL_FETCH,
   payload: id,
 });
+export const deleteAccountRequest = (id: any) => ({
+  type: DELETE_ACCOUNT_REQUEST,
+  payload: id,
+});
+
+export const updateAccountRequest = (account: Account,id: any) => ({
+  type: UPDATE_ACCOUNT_REQUEST,
+  payload: {account, id},
+});
+
 
 export const getAccountOwner = () => ({
   type: GET_ACCOUNT_OWNER_FETCH
