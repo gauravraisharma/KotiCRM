@@ -15,7 +15,7 @@ import CIcon from '@coreui/icons-react'
 
 import avatar8 from './../../assets/images/avatars/8.jpg'
 import { useNavigate } from 'react-router-dom'
-import { useAuth } from '../../utils/Auth'
+import { useAuth } from '../../utils/AuthProvider'
 
 const AppHeaderDropdown = () => {
   const navigate = useNavigate();

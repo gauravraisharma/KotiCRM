@@ -4,7 +4,8 @@ import './scss/style.scss'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import { appRoutes } from './routes';
-import { AuthProvider } from './utils/Auth';
+import { AuthProvider } from './utils/AuthProvider';
+import AuthenticatedRoute from './utils/AuthenticatedRoute';
 
 const loading = (
   <div className="pt-3 text-center">
@@ -17,10 +18,21 @@ function App() {
     <HashRouter>
       <AuthProvider>
       <Suspense fallback={loading}>
-        <Routes>
-          {appRoutes.map((route, index) => (
-            (route.element && <Route key={index} path={route.path} element={<route.element />} />)
-          ))}
+                  <Routes>
+
+                      {appRoutes.map((route, index) => {
+                              return (<Route
+                                  key={index} 
+                                  path={route.path}
+                                  element={<AuthenticatedRoute isAuth={route.isAuth} />}>
+                               <Route
+                                   key={index} 
+                                   path={route.path}
+                                   element={<route.element />} />
+                              </Route>
+                              )
+                          
+          })}
         </Routes>
       </Suspense>
       </AuthProvider>
