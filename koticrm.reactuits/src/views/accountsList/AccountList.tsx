@@ -18,7 +18,6 @@ import {
   CDropdownToggle,
 } from '@coreui/react';
 import { useDispatch } from 'react-redux';
-import { getAccounts } from '../../redux-saga/action';
 import { FaEdit } from 'react-icons/fa';
 import { MdDelete } from 'react-icons/md';
 import { LuView } from 'react-icons/lu';
@@ -29,13 +28,13 @@ import { useSelector } from 'react-redux';
 import DeleteConfirmationModal from "./DeleteConfirmation";
 import { ToastContainer } from 'react-toastify';
 import EditPage from './EditAccountModal';
+import {  getAccountOwner, getAccountStatus, getAccountType, getAccounts, getIndustry , getNotes} from "../../redux-saga/action";
 
 
 
 
 const AccountList: React.FC = () => {
 
-  const accounts = useSelector((state: any) =>  state.reducer.accounts);
 
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [accountId, setAccountId] = useState<number>();
@@ -72,6 +71,10 @@ const AccountList: React.FC = () => {
     setStateData(true);
   
   };
+  const closeCreateModal = () =>{
+    setStateData(false);
+
+  }
 
   const backToAccountList = () => {
     debugger
@@ -79,23 +82,26 @@ const AccountList: React.FC = () => {
     setOpenEditModal(false);
   };
 
+  const accounts = useSelector((state: any) =>  state.reducer.accounts);
   const deleteResponse = useSelector((state:any)=> state.reducer.deleteResponse)
- 
+    const accountOwner = useSelector((state: any) => state.reducer.accountOwner);
 
 
-  // if(deleteResponse?.succeed == true){
-  //   debugger
-  //   toast.success(deleteResponse?.message);
-  // }
-  // else{
-  //   toast.error(deleteResponse?.message)
-  // }
-
-  useEffect(() => {
-    dispatch(getAccounts());
-  }, [dispatch,deleteResponse,backToAccountList]);
+    function getOwnerName(ownerId: string): string {
+      const owner = accountOwner?.find((owner: any) => owner.id === ownerId);
+      return owner ? owner.label : ''; 
+    }
 
 
+    useEffect(() => {
+      dispatch(getAccounts());
+      dispatch(getAccountOwner());
+      dispatch(getAccountStatus());
+      dispatch(getAccountType());
+      dispatch(getIndustry());
+      dispatch(getNotes());
+
+    }, [dispatch]);
 
   const navigate = useNavigate()
   const showItems =(id:any)=>{
@@ -108,7 +114,7 @@ const AccountList: React.FC = () => {
     <>
     <ToastContainer/>
       {stateData ? (
-      <NewAccount onBackToListButtonClickHandler={backToAccountList} />   
+      <NewAccount closeModal= {closeCreateModal} onBackToListButtonClickHandler={backToAccountList} />   
          ) : (
           <>
            <DeleteConfirmationModal isOpen={showDeleteConfirmation} onCancel={cancelDelete} onConfirm={confirmDelete} id = {accountId} />
@@ -119,44 +125,12 @@ const AccountList: React.FC = () => {
           <CCol xs={12}>
             <CCard className="mb-4">
               <CCardHeader>
+              <CRow >
+              <CCol xs={6} className="d-flex align-items-center">
+                <h5 >
                 <strong>Accounts</strong>
-              </CCardHeader>
-              <CCardBody>   
-                  <CRow >
-                    <CCol xs={6}>
-                      <div className="input-group">
-                        <CDropdown>
-                          <CDropdownToggle style={{ marginRight: 6 }} color="light">
-                            Select
-                          </CDropdownToggle>
-                          <CDropdownMenu>
-                            <CDropdownItem href="#">Account Name</CDropdownItem>
-                            <CDropdownItem href="#">Phone</CDropdownItem>
-                          </CDropdownMenu>
-                        </CDropdown>
-                        <input
-                          type="text"
-                          className="form-control"
-                          placeholder="Search for..."
-                          aria-label="Search for..."
-                        />
-                      </div>
-                      <br />
-                    </CCol>
-                {/* <div>
-                  <select value={searchBy} onChange={handleSearchByChange}>
-                    <option value="Name">Name</option>
-                    <option value="Owner">Owner</option>
-                    <option value="Phone">Phone</option>
-                    <option value="Country">Country</option>
-                  </select>
-                  <input
-                    type="text"
-                    placeholder="Search..."
-                    value={searchField}
-                    onChange={handleChange}
-                  />
-                </div> */}
+                </h5>
+                </CCol>
                 <CCol xs={6}>
                 <div className="text-end">
                         <CButton
@@ -167,9 +141,10 @@ const AccountList: React.FC = () => {
                           onClick={handleCreateNew}
                         />
                       </div>
-                </CCol>
-                </CRow>
-
+                      </CCol>
+                      </CRow>
+              </CCardHeader>
+              <CCardBody>   
                 <CTable>
                   <CTableHead>
                     <CTableRow>
@@ -184,17 +159,17 @@ const AccountList: React.FC = () => {
                   <CTableBody>
                     {accounts?.map((account : Account) => (
                       <CTableRow key={account.id}>
-                        <CTableHeaderCell scope="row">{account.id}</CTableHeaderCell>
-                         <CTableDataCell>{account.ownerId}</CTableDataCell>
+                        <CTableHeaderCell scope="row">{account.accountName}</CTableHeaderCell>
+                         <CTableDataCell>{getOwnerName(account.ownerId)}</CTableDataCell>
                         <CTableDataCell>{account.phone}</CTableDataCell>
                         <CTableDataCell>{account.webSite}</CTableDataCell> 
                         <CTableDataCell>{account.country}</CTableDataCell>
                         <CTableDataCell>
                           <FaEdit
-                            style={{ color: 'green' }}
+                            style={{ color: 'green', marginRight: "8px" }}
                             onClick={() => handleEditClick(account)}
                           />
-                          <LuView style={{ color: 'blue' }}
+                          <LuView style={{ color: 'blue', marginRight: "8px" }}
                             onClick={()=>showItems(account?.id)}></LuView>
                           <MdDelete style={{ color: "red" }} onClick={()=>handleDeleteClick(account.id)} />
                         </CTableDataCell>

@@ -16,8 +16,11 @@ namespace KotiCRM.Repository.Models
         public int Id { get; set; }
         [Required]
         [Column(TypeName = "nvarchar(100)")]
-
         public string OwnerId { get; set; }
+
+        [Required]
+        [Column(TypeName = "nvarchar(100)")]
+        public string AccountName { get; set; }
 
         [ForeignKey("Industry")]
         [Required]

@@ -24,9 +24,10 @@ import {
     UPDATE_ACCOUNT_REQUEST,
     DELETE_ACCOUNT_REQUEST,
     GET_NOTES_FETCH,
+    CREATE_NOTES_REQUEST,
    
 } from '../../constants/reduxConstants';
-import { workGetNotesFetch } from './notesSaga';
+import { workCreateNote, workGetNotesFetch } from './notesSaga';
 
 export default function* mySaga() {
   yield takeEvery(GET_ACCOUNTS_FETCH, workGetAccountFetch);
@@ -38,13 +39,10 @@ export default function* mySaga() {
   yield takeEvery(GET_ACCOUNT_STATUS_FETCH, workGetAccountStatusFetch)
   yield takeEvery(GET_ACCOUNT_TYPE_FETCH, workGetAccountTypeFetch)
   yield takeEvery(GET_INVOICE_STATUS_FETCH, workGetInvoiceStatusFetch)
-    yield takeEvery(GET_CONTACTS_FETCH, workGetContactsFetch);
-    yield takeEvery(GET_NOTES_FETCH, workGetNotesFetch)
-  
-
-
-
-  yield takeEvery(DELETE_ACCOUNT_REQUEST, workDeleteAccount)
-  yield takeEvery(UPDATE_ACCOUNT_REQUEST, workUpdateAccount)
+  yield takeEvery(GET_CONTACTS_FETCH, workGetContactsFetch);
+  yield takeEvery(GET_NOTES_FETCH, workGetNotesFetch);
+  yield takeEvery(CREATE_NOTES_REQUEST, workCreateNote);
+  yield takeEvery(DELETE_ACCOUNT_REQUEST, workDeleteAccount);
+  yield takeEvery(UPDATE_ACCOUNT_REQUEST, workUpdateAccount);
 }
 

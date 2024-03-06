@@ -8,7 +8,7 @@ import { useSelector } from "react-redux";
 import { Account } from "../../models/account/Account";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { CButton, CCardHeader } from "@coreui/react";
+import { CButton, CCard, CCardBody, CCardHeader } from "@coreui/react";
 import { FaSearch } from "react-icons/fa";
 
 
@@ -17,6 +17,7 @@ const initialValues = {
   industry: "",
   type: "",
   status: "",
+  accountName : "",
   annualRevenue: "",
   phone: "",
   fax: "",
@@ -33,8 +34,11 @@ const validationSchema = Yup.object().shape({
   industry: Yup.string().required("Required (Industry)"),
   type: Yup.string().required("Required (Type)"),
   status: Yup.string().required("Required (Status)"),
+  accountName : Yup.string().required("Required(Account Name)"),
   annualRevenue: Yup.string().required("Required (Annual Revenue)"),
-  phone: Yup.string().required("Required (Phone)").matches(/^[0-9]+$/, 'Phone number must be a number').max(10, 'Phone number must be at most 10 digits'),
+  phone: Yup.string().required("Required (Phone)").matches(/^[0-9]+$/, 'Phone number must be a number')
+  .min(10, "Phone number must be at least 10 digits")
+ .max(13, 'Phone number must be at most 13 digits with with country calling code'),
   fax: Yup.string().required("Required (fax)").matches(/^\d{10}$/, 'Fax number must be exactly 10 digits'),
   website: Yup.string().required("Required (Website)").url("Website must be a valid URL"),
   billingStreet: Yup.string().required("Required (Billing Street)"),
@@ -49,14 +53,16 @@ const validationSchema = Yup.object().shape({
 
 interface NewAccountProps {
   onBackToListButtonClickHandler: () => void;
+  closeModal: () => void;
+
 }
 
-const MyForm: React.FC<NewAccountProps> = (props) => {
+const MyForm: React.FC<NewAccountProps> = ({closeModal,onBackToListButtonClickHandler}) => {
 
   const dispatch = useDispatch();
 
   const [account, setAccount] = useState({
-    accountOwner: '', industry: 0, type: 0, status: 0, annualRevenue: '', phone: '', fax: '',
+    accountOwner: '', industry: 0, type: 0, status: 0, accountName : '', annualRevenue: '', phone: '', fax: '',
     website: '', billingStreet: '', billingCity: '', billingState: '', billingCode: '', country: '', description: ''
   })
   const handleChangeData = (e: any) => {
@@ -74,6 +80,7 @@ const MyForm: React.FC<NewAccountProps> = (props) => {
       industryId: parseInt(account.industry.toString(), 10),
       type: parseInt(account.type.toString(), 10),
       status: parseInt(account.status.toString(), 10),
+      accountName : account.accountName,
       annualRevenue: account.annualRevenue,
       phone: account.phone,
       fax: account.fax,
@@ -92,6 +99,7 @@ const MyForm: React.FC<NewAccountProps> = (props) => {
       isdelete: false,
     };
     dispatch(createAccountRequest(accountDetail));
+    closeModal();
     
   };
   const response = useSelector((state: any) => state.reducer.response)
@@ -102,16 +110,6 @@ const MyForm: React.FC<NewAccountProps> = (props) => {
   else {
     toast.error(response?.message)
   }
-
-
-
-
-  useEffect(() => {
-    dispatch(getAccountOwner());
-    dispatch(getAccountStatus());
-    dispatch(getAccountType());
-    dispatch(getIndustry());
-  }, [dispatch]);
 
   const accountOwner = useSelector((state: any) => state.reducer.accountOwner);
   const industry = useSelector((state: any) => state.reducer.industry);
@@ -130,8 +128,9 @@ const MyForm: React.FC<NewAccountProps> = (props) => {
 
     <div>
       <ToastContainer />
-      <CCardHeader>
-        <div className="d-flex justify-content-between align-items-center mb-3">
+      <CCard>
+      <CCardHeader className="mb-3">
+        <div className="d-flex justify-content-between align-items-center">
           <div>
             <h5 className="mb-0">Create Account</h5>
           </div>
@@ -141,20 +140,18 @@ const MyForm: React.FC<NewAccountProps> = (props) => {
               type="button"
               color="primary"
               value="Back To Accounts"
-              onClick={props.onBackToListButtonClickHandler}
+              onClick={onBackToListButtonClickHandler}
             />
           </div>
         </div>
       </CCardHeader>
+      <CCardBody>
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
         onSubmit={handleCreateAccountClick}
       >
         {({ handleChange }) => (
-          <div className="card">
-            <div className="card-body">
-
               <Form >
               <div className="row">
               <div className="col-md-6">
@@ -224,6 +221,17 @@ const MyForm: React.FC<NewAccountProps> = (props) => {
                     <ErrorMessage name="status" component="div" className="error form-error" />
                   </div>
                 </div>
+                <div className="form-group row">
+                  <label htmlFor="accountName" className="col-sm-4 col-form-label">Account Name</label>
+                  <div className="col-sm-6">
+                    <Field type="text" className="form-control" name="accountName" onChange={(e: any) => { handleChangeData(e); handleChange(e) }} />
+                    <ErrorMessage
+                      name="accountName"
+                      component="div"
+                      className="error form-error"
+                    />
+                  </div>
+                  </div>
 
                 <div className="form-group row">
                   <label htmlFor="annualRevenue" className="col-sm-4 col-form-label">Annual Revenue</label>
@@ -330,10 +338,10 @@ const MyForm: React.FC<NewAccountProps> = (props) => {
                   <button type="submit" className="btn btn-primary" onClick={(e: any) => handleSubmit}>Submit</button>
                 </div>
               </Form>
-            </div>
-          </div>
         )}
       </Formik>
+      </CCardBody>
+      </CCard>
     </div>
   );
 };

@@ -27,12 +27,12 @@ namespace KotiCRM.Services.Services
             return await _noteRepository.DeleteNote(id);  
         }
 
-        public async Task<Note> GetNoteDetails(int id)
+        public async Task<ResponseNoteModel> GetNoteDetails(int id)
         {
             return await _noteRepository.GetNoteDetails(id);
         }
 
-        public async Task<IEnumerable<Note>> GetNoteList()
+        public async Task<IEnumerable<ResponseNoteModel>> GetNoteList()
         {
             return await _noteRepository.GetNoteList();
         }

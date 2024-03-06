@@ -37,13 +37,14 @@
     
   }
   .person{
-    color: rgb(88, 129, 224);
-    font-size: 30px;
+    color: rgb(210, 200, 200);
+    font-size: 33px;
+    margin-right: 10px;
   }
   .linking{
     color: rgb(88, 129, 224);
   }
-  .textarea{
+  .textarea{  
     margin-top: 20px;
     padding-top: 10px;
   }
@@ -77,7 +78,7 @@
   .card {
     border: 1px solid #ccc;
     border-radius: 5px;
-    padding: 20px;
+    /* padding: 20px; */
     margin: 20px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     /* text-align: center; */
@@ -86,8 +87,8 @@
     margin-bottom: 20px;
   }
   .col-form-label {
-    font-size: larger;
-    padding: 5px;
+    font-size: 16px;
+    /* padding: 5px; */
   }
   .btn {
     padding: 8px 16px;
@@ -111,3 +112,18 @@
 	color: rgb(255,0,0);
   font-weight: 600;
 }
+
+.account-list li {
+  margin-bottom: 20px;
+}
+.account-list li p {
+  font-weight: 500;
+  margin-top: 4px;
+}
+.nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active {
+  color:  #0d6efd;
+}
+.nav-tabs .nav-link {
+  color:rgba(0, 0, 0);
+}
+

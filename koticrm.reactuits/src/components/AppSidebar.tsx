@@ -47,7 +47,7 @@ const AppSidebar = () => {
       }}
         >
       <Link to="/">
-                <CSidebarBrand className="d-none d-md-flex">
+                <CSidebarBrand className="d-none d-md-flex py-3">
                     <img src={logoNegative} alt="Logo"  style={{ height: '40px', width: 'auto' }} />
         </CSidebarBrand>
       </Link>

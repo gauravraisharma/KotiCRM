@@ -3,6 +3,7 @@ export interface Account {
     ownerId: string;
     industryId : number;
     annualRevenue: string;
+    accountName :string;
     billingCity: string;
     billingCode: string;
     billingState: string;

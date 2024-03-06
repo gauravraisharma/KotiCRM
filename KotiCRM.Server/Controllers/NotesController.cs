@@ -17,13 +17,13 @@ namespace KotiCRM.Server.Controllers
         }
         [HttpGet]
         [Route("GetNoteList")]
-        public async Task<IEnumerable<Note>> GetnoteList()
+        public async Task<IEnumerable<ResponseNoteModel>> GetnoteList()
         {
             return await _noteService.GetNoteList();
         }
 
         [HttpGet("GetNoteDetails/{id}")]
-        public async Task<ActionResult<Note>> GetNoteDetails(int id)
+        public async Task<ActionResult<ResponseNoteModel>> GetNoteDetails(int id)
         {
             return Ok(await _noteService.GetNoteDetails(id));
         }

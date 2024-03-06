@@ -1,5 +1,5 @@
 import { call, put, select } from 'redux-saga/effects';
-import { loginSuccess, LOGIN_SUCCESS, loginRequest, LOGIN_REQUEST } from '../action';
+import { loginSuccess } from '../action';
 import LoginService from '../../services/LoginService';
 import { UserLogin } from '../../models/userAccount/login';
 import { LoginResponse } from '../../models/userAccount/loginResponse';

@@ -18,7 +18,8 @@ namespace KotiCRM.Repository.Models
         [Required]
         public int AccountID { get; set; }
         [Required]
-        public int OwnerID { get; set; }
+        [Column(TypeName = "nvarchar(100)")]
+        public string OwnerID { get; set; }
         [Required]
         public string Subject { get; set; }
         public DateTime InvoiceDate { get; set; }

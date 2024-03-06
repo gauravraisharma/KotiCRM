@@ -15,23 +15,20 @@ import {
   CDropdown,
   CDropdownToggle,
   CDropdownItem,
-  CForm,
-  CFormTextarea,
+
 } from "@coreui/react";
 import { BsFiletypeDocx } from "react-icons/bs";
 
-import { IoPersonCircleOutline } from "react-icons/io5";
 import { MdOutlinePictureAsPdf } from "react-icons/md";
-import {  useState } from 'react';
-import { TiAttachmentOutline } from "react-icons/ti";
+import {  useEffect, useState } from 'react';
 import "../../css/style.css";
-import { Note } from "../../models/notes/notes";
 
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { getAccountByIdRequest } from "../../redux-saga/action";
 // import { }
 import { useSelector } from "react-redux";
+import Notes from "../../components/Notes";
 
 const AccountDetails = () => {
   const navigate = useNavigate();
@@ -39,35 +36,26 @@ const AccountDetails = () => {
   const dispatch = useDispatch(); 
   const accountId = data.accountId?.split('=')[1];
 
-
-  const [noteText, setNoteText] = useState('');
-
-  const notesData = useSelector((state: any) => state.note);
-  console.log(notesData);
-
-  dispatch(getAccountByIdRequest(accountId));
+const[notesCount, setNotesCount] = useState();
   const account = useSelector((state: any) => state.reducer.account);
-  console.log(account);
 
-  const handleSaveNote = () => {
-   
-    console.log('Note saved:', noteText);
-    setNoteText(''); // Clear the textarea after saving
-  };
+  const accountOwner = useSelector((state: any) => state.reducer.accountOwner);
+  const industry = useSelector((state: any) => state.reducer.industry);
 
-  const handleDeleteNote = () => {
+  const industryName = account && industry
+  ? industry.find((industry: any) => industry.id === account.industryId)?.name
+  : null;
+  const ownerName =account && accountOwner
+  ? accountOwner?.find((owner :any)=> owner.id == account.ownerId)?.label
+  :null
 
-    console.log('Note deleted:', noteText);
-    setNoteText(''); // Clear the textarea after deleting
-  };
+  const getNotesCount=(noteCount:any)=>{
+    setNotesCount(noteCount)
+  }
 
-  const handleAttachment = () => {
-    
-    console.log('Attachment clicked');
-
-  };
-
-
+  useEffect(()=>{
+    dispatch(getAccountByIdRequest(accountId));
+  },[dispatch])
 
   return (
     <CRow>
@@ -75,7 +63,11 @@ const AccountDetails = () => {
         <CCard className="mb-4">
           <CCardHeader>
             <CRow>
-              <CCol xs={6}><strong>Account Detail</strong></CCol>
+              <CCol xs={6}  className="d-flex align-items-center">
+                <h5>
+                <strong>Account Detail</strong>
+                </h5>
+                </CCol>
               <CCol xs={6}>
                 <div className="text-end">
                   {/* <CButton
@@ -103,10 +95,7 @@ const AccountDetails = () => {
               </CCol>
             </CRow>
           </CCardHeader>
-        </CCard>
-      </CCol>
-      <CCol>
-        <CRow>
+          <CCardBody>
           <ul className="nav nav-tabs" id="myTab" role="tablist">
             <li className="nav-item" role="presentation">
               <button
@@ -147,7 +136,7 @@ const AccountDetails = () => {
                 aria-controls="notes"
                 aria-selected="false"
               >
-                Notes 2
+                Notes ({notesCount})
               </button>
             </li>
             <li className="nav-item" role="presentation">
@@ -186,21 +175,38 @@ const AccountDetails = () => {
               role="tabpanel"
               aria-labelledby="home-tab"
             >
-              <CRow>
-                <CCol xs={6}>
+              
                   <div className="headings">Account information</div>
-                  <ul>
-                    <li>Account Owner: {account?.ownerId}</li>
-                    <li>Account type: {account?.country}</li>
-                    <li>Industry: {account?.industryId}</li>
-                    <li>Annual Revenue: {account?.annualRevenue}</li>
-                    <li>Billing Street: {account?.billingStreet}</li>
-                    <li>Billing City: {account?.billingCity}</li>
-                    <li>Billing State: {account?.billingState}</li>
-                    <li>Billing Code: {account?.billingCode}</li>
+                  <ul className="account-list">
+                  <CRow>
+                    <CCol xs={3}>                 
+                    <li>Account Owner: <p>{ownerName}</p></li>
+                  </CCol>
+                  
+                  <CCol xs={3}>        
+                    <li>Account type: <p>{account?.country}</p></li>
+                  </CCol>
+                  <CCol xs={3}>   
+                    <li>Industry: <p>{industryName}</p></li>
+                  </CCol>
+                  <CCol xs={3}>    
+                    <li>Annual Revenue: <p>{account?.annualRevenue}</p></li>
+                  </CCol>
+                  <CCol xs={3}>   
+                    <li>Billing Street: <p>{account?.billingStreet}</p></li>
+                  </CCol>
+                  <CCol xs={3}>  
+                    <li>Billing City: <p>{account?.billingCity}</p></li>
+                  </CCol>
+                  <CCol xs={3}>  
+                    <li>Billing State: <p>{account?.billingState}</p></li>
+                  </CCol>
+                  <CCol xs={3}>  
+                    <li>Billing Code: <p>{account?.billingCode}</p></li>
+                  </CCol>
+                  </CRow>
+                  
                   </ul>
-                </CCol>
-              </CRow>
             </div>
 
             <div
@@ -212,8 +218,8 @@ const AccountDetails = () => {
               <CCol xs={12}>
                 <CCard className="mb-4">
                   <CCardHeader>
-                    <CRow>
-                      <CCol xs={6}>Contacts</CCol>
+                    <CRow className="align-items-center">
+                      <CCol xs={6} >Contacts</CCol>
                       <CCol xs={6}>
                         <div className="text-end">
                           <CButton
@@ -273,8 +279,8 @@ const AccountDetails = () => {
               <CCol xs={12}>
                 <CCard className="mb-4">
                   <CCardHeader>
-                    <CRow>
-                      <CCol xs={6}>Notes</CCol>
+                    <CRow className="align-items-center">
+                      <CCol xs={6}  >Notes</CCol>
                       <CCol xs={6}>
                         <div className="text-end">
                           <CDropdown>
@@ -293,84 +299,7 @@ const AccountDetails = () => {
                     </CRow>
                   </CCardHeader>
                   <CCardBody>
-                    <CRow>
-                      <CCol xs={8}>
-                        <ul>
-                          {notesData?.map((note:Note) => (
-                            <li key={note.id}>
-                            
-                              <span className="person">
-                                <IoPersonCircleOutline />
-                              </span>
-                              <span className="content">{note.accountId}</span>
-                              <br></br>
-                              <span>Account</span>
-                              <span className="linking">King (Sample)</span>.
-                              <span>Add Note</span>
-                            </li>
-                          ))}
-
-                          <CRow>
-                            <CForm>
-                              {/* <CFormTextarea
-                                className="textarea"
-                                rows={3}
-                                placeholder="Add a note"
-                              ></CFormTextarea>
-
-                              <div className="text-end ">
-                                <TiAttachmentOutline />
-
-                                <CButton
-                                  style={{ margin: "5px" }}
-                                  component="input"
-                                  type="button"
-                                  color="light"
-                                  value="Cancel"
-                                />
-                                <CButton
-                                  style={{ margin: "5px" }}
-                                  component="input"
-                                  type="button"
-                                  color="primary"
-                                  value="Save"
-                                />
-                              </div> */}
-                              <textarea
-                                className="textarea"
-                                rows={3}
-                                placeholder="Add a note"
-                                value={noteText}
-                                onChange={(e) => setNoteText(e.target.value)}
-                              ></textarea>
-
-                              <div className="text-end">
-                                <TiAttachmentOutline
-                                  onClick={handleAttachment}
-                                />
-
-                                <button
-                                  style={{ margin: "5px" }}
-                                  type="button"
-                                  onClick={handleDeleteNote}
-                                >
-                                  Delete
-                                </button>
-
-                                <button
-                                  style={{ margin: "5px" }}
-                                  type="button"
-                                  onClick={handleSaveNote}
-                                >
-                                  Save
-                                </button>
-                              </div>
-                            </CForm>
-                          </CRow>
-                          
-                        </ul>
-                      </CCol>
-                    </CRow>
+                 <Notes getNotesCount={getNotesCount} accountId = {account?.id} accountName = {account?.accountName}/>
                   </CCardBody>
                 </CCard>
               </CCol>
@@ -385,8 +314,8 @@ const AccountDetails = () => {
               <CCol xs={12}>
                 <CCard className="mb-4">
                   <CCardHeader>
-                    <CRow>
-                      <CCol xs={6}>Attachments</CCol>
+                    <CRow className="align-items-center">
+                      <CCol xs={6} >Attachments</CCol>
                       <CCol xs={6}>
                         <div className="text-end">
                           <CDropdown>
@@ -459,7 +388,7 @@ const AccountDetails = () => {
               <CCol xs={12}>
                 <CCard className="mb-4">
                   <CCardHeader>
-                    <CRow>
+                    <CRow className="align-items-center">
                       <CCol xs={6}>Invoices</CCol>
                       <CCol xs={6}>
                         <div className="text-end">
@@ -506,7 +435,8 @@ const AccountDetails = () => {
               </CCol>
             </div>
           </div>
-        </CRow>
+          </CCardBody>
+        </CCard>
       </CCol>
     </CRow>
   );

@@ -3,16 +3,17 @@ import { call, put } from 'redux-saga/effects';
 import NotesService from '../../services/NotesService';
 import { Note } from '../../models/notes/notes';
 import { CREATE_NOTES_SUCCESS, GET_NOTES_SUCCESS } from '../../constants/reduxConstants';
+import { toast } from 'react-toastify';
 
 
 
  function* notesFetch() : Generator<any>{
   try {
     debugger
-      const response = yield call(NotesService.GetNotesList);
-    // if (response.status !== 200) {
-    //   throw new Error('Failed to fetch accounts');
-    // }
+      const response :any= yield call(NotesService.GetNotesList);
+    //  if (response.status !== true) {
+    //   toast.error('Failed to fetch notes')
+    //  }
     return response;
   } catch (error) {
     console.error('Error fetching notes:', error);
@@ -34,7 +35,7 @@ function* createNote(action: { payload: Note }) : Generator<any>{
     debugger
     const { payload } = action;
 
-      const response = yield call(NotesService.CreateNotes,payload );
+      const response = yield call(NotesService.CreateNote,payload );
       return response;
   } catch (error) {
     console.error('Error fetching accounts:', error);
@@ -51,26 +52,26 @@ export function* workCreateNote(action:any) {
   }
 }
 
-function* getNotesById(action: { payload: any }) : Generator<any>{
-  try {
-    debugger
-    const { payload } = action;
+// function* getNotesById(action: { payload: any }) : Generator<any>{
+//   try {
+//     debugger
+//     const { payload } = action;
 
-      const response = yield call(NotesService.CreateNotes,payload );
-      return response as Note;
-  } catch (error) {
-    console.error('Error fetching notes:', error);
-    throw error;
-  }
-}
+//       const response = yield call(NotesService.CreateNotes,payload );
+//       return response as Note;
+//   } catch (error) {
+//     console.error('Error fetching notes:', error);
+//     throw error;
+//   }
+// }
 
-export function* workGetNotesByIdFetch(action:any) {
-  try {
-    const notes: Note = yield call(getNotesById, { payload: action });
-    yield put({ type: GET_NOTES_SUCCESS, notes });
-  } catch (error) {
-    // Handle error if needed
-  }
-}
+// export function* workGetNotesByIdFetch(action:any) {
+//   try {
+//     const notes: Note = yield call(getNotesById, { payload: action });
+//     yield put({ type: GET_NOTES_SUCCESS, notes });
+//   } catch (error) {
+//     // Handle error if needed
+//   }
+//}
 
 

@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import * as Yup from "yup";
 import { Formik, Form, Field, ErrorMessage, useFormik } from "formik";
-import Modal from './OpenAccountModal'; // Import your modal component
 import { Account } from '../../models/account/Account';
-import { CButton, CCardHeader } from '@coreui/react';
-import { getAccountOwner, getAccountStatus, getAccountType, getIndustry, updateAccountRequest } from '../../redux-saga/action';
+import { CButton, CCard, CCardBody, CCardHeader } from '@coreui/react';
+import { updateAccountRequest } from '../../redux-saga/action';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 
@@ -22,6 +21,7 @@ const initialValues = {
 	type: "",
 	status: "",
 	annualRevenue: "",
+	accountName: "",
 	phone: "",
 	fax: "",
 	website: "",
@@ -35,27 +35,59 @@ const initialValues = {
 const EditPage: React.FC<EditModalProps> = ({ closeModal, accountData, onBackToListButtonClickHandler }) => {
 	console.log(accountData)
 	const dispatch = useDispatch();
-	
+	const [touchedFields, setTouchedFields] = useState({
+		accountOwner: false,
+		industry: false,
+		type: false,
+		status: false,
+		accountName: false,
+		annualRevenue: false,
+		phone: false,
+		fax: false,
+		website: false,
+		billingStreet: false,
+		billingCity: false,
+		billingState: false,
+		billingCode: false,
+		country: false,
+		description: false
 
+	});
+
+	const handleInputChange = (fieldName: any) => {
+		setTouchedFields((prevFields) => ({
+			...prevFields,
+			[fieldName]: true, // Mark the field as touched
+		}));
+	};
 
 	const validationSchema = Yup.object().shape({
-		// phone: Yup.string().matches(/^[0-9]+$/, 'Phone number must be a number').max(10, 'Phone number must be at most 10 digits'),
-		// fax: Yup.string().matches(/^\d{10}$/, 'Fax number must be exactly 10 digits'),
-		// website: Yup.string().url("Website must be a valid URL"),
-		// billingStreet: Yup.string().required(" (Billing Street)"),
-		// billingCity: Yup.string().required(" (Billing City)"),
-		// billingState: Yup.string().required(" (Billing State)"),
-		// billingCode: Yup.string().matches(/^\d+$/, "Billing Code must be a number")
-		// .min(4, "Billing Code must be at least 4 digit")
-		// .max(10, "Billing Code can have maximum 10 digits"),
-		// country: Yup.string().required(" (Coutry)"),
-		// description: Yup.string().required(" (Description)"),
-	})
+		accountOwner: touchedFields.accountOwner ? Yup.string().required("Required(Account Owner)") : Yup.string(),
+		industry: touchedFields.industry ? Yup.string().required("Required (Industry)") : Yup.string(),
+		type: touchedFields.type ? Yup.string().required("Required (Type)") : Yup.string(),
+		status: touchedFields.status ? Yup.string().required("Required (Status)") : Yup.string(),
+		accountName: touchedFields.accountName ? Yup.string().required("Required(Account Name)") : Yup.string(),
+		annualRevenue: touchedFields.annualRevenue ? Yup.string().required("Required (Annual Revenue)") : Yup.string(),
+		phone: touchedFields.phone ?  Yup.string().required("Required (Phone)").matches(/^[0-9]+$/, 'Phone number must be a number')
+			.min(10, "Phone number must be at least 10 digits")
+			.max(13, 'Phone number must be at most 13 digits with with country calling code') : Yup.string(),
+		fax: touchedFields.fax ? Yup.string().required("Required (fax)").matches(/^\d{10}$/, 'Fax number must be exactly 10 digits')  : Yup.string(),
+		website: touchedFields.website ? Yup.string().required("Required (Website)").url("Website must be a valid URL")  : Yup.string(),
+		billingStreet: touchedFields.billingStreet ?  Yup.string().required("Required (Billing Street)")  : Yup.string(),
+		billingCity: touchedFields.billingCity ? Yup.string().required("Required (Billing City)")  : Yup.string(),
+		billingState: touchedFields.billingState ?  Yup.string().required("Required (Billing State)")  : Yup.string(),
+		billingCode:  touchedFields.billingCode ? Yup.string().required("Required (Billing Code)").matches(/^\d+$/, "Billing Code must be a number")
+			.min(4, "Billing Code must be at least 4 digit")
+			.max(10, "Billing Code can have maximum 10 digits")  : Yup.string(),
+		country: touchedFields.country ? Yup.string().required("Required (Country)")  : Yup.string(),
+		description: touchedFields.description ? Yup.string().required("Required (Description)")  : Yup.string(),
+	});
+
 
 
 	const [updateAccount, setUpdateAccount] = useState({
 		accountOwner: accountData.ownerId, industry: accountData.industryId, type: accountData.type, status: accountData.status,
-		annualRevenue: accountData.annualRevenue, phone: accountData.phone, fax: accountData.fax,
+		accountName: accountData.accountName, annualRevenue: accountData.annualRevenue, phone: accountData.phone, fax: accountData.fax,
 		website: accountData.webSite, billingStreet: accountData.billingStreet, billingCity: accountData.billingCity,
 		billingState: accountData.billingState, billingCode: accountData.billingCode, country: accountData.country,
 		description: accountData.description
@@ -75,6 +107,7 @@ const EditPage: React.FC<EditModalProps> = ({ closeModal, accountData, onBackToL
 			industryId: parseInt(updateAccount.industry.toString(), 10),
 			type: parseInt(updateAccount.type.toString(), 10),
 			status: parseInt(updateAccount.status.toString(), 10),
+			accountName: updateAccount.accountName,
 			annualRevenue: updateAccount.annualRevenue,
 			phone: updateAccount.phone,
 			fax: updateAccount.fax,
@@ -96,13 +129,6 @@ const EditPage: React.FC<EditModalProps> = ({ closeModal, accountData, onBackToL
 		closeModal();
 	};
 
-	useEffect(() => {
-		dispatch(getAccountOwner());
-		dispatch(getAccountStatus());
-		dispatch(getAccountType());
-		dispatch(getIndustry());
-
-	}, [dispatch]);
 
 	const accountOwner = useSelector((state: any) => state.reducer.accountOwner);
 	const industry = useSelector((state: any) => state.reducer.industry);
@@ -120,31 +146,32 @@ const EditPage: React.FC<EditModalProps> = ({ closeModal, accountData, onBackToL
 
 	return (
 		<div>
-			<CCardHeader>
-				<div className="d-flex justify-content-between align-items-center mb-3">
-					<div>
-						<h5 className="mb-0">Update Account</h5>
+			<CCard>
+				<CCardHeader className="mb-3">
+					<div className="d-flex justify-content-between align-items-center">
+						<div>
+							<h5 className="mb-0"><strong>Update Account</strong></h5>
+						</div>
+						<div className="text-end">
+							<CButton
+								component="input"
+								type="button"
+								color="primary"
+								value="Back To Accounts"
+								onClick={onBackToListButtonClickHandler}
+							/>
+						</div>
 					</div>
-					<div className="text-end">
-						<CButton
-							component="input"
-							type="button"
-							color="primary"
-							value="Back To Accounts"
-							onClick={onBackToListButtonClickHandler}
-						/>
-					</div>
-				</div>
-			</CCardHeader>
-			<Formik
-				initialValues={initialValues}
-				validationSchema={validationSchema}
-				onSubmit={handleEditClick}
-			>
+				</CCardHeader>
+				<CCardBody>
+					<Formik
+						initialValues={initialValues}
+						validationSchema={validationSchema}
+						onSubmit={handleEditClick}
 
-				{({ handleChange }) => (
-					<div className="card">
-						<div className="card-body">
+					>
+
+						{({ handleChange }) => (
 
 							<Form >
 								<div className="row">
@@ -152,7 +179,8 @@ const EditPage: React.FC<EditModalProps> = ({ closeModal, accountData, onBackToL
 										<div className="form-group row">
 											<label htmlFor="accountOwner" className="col-sm-4 col-form-label">Account Owner</label>
 											<div className="col-sm-6">
-												<Field as="select" name="accountOwner" className="form-control form-select" onChange={(e: any) => { handleChangeData(e); handleChange(e) }}
+												<Field as="select" name="accountOwner" className="form-control form-select"
+													onChange={(e: any) => { handleChangeData(e); handleChange(e); handleInputChange('accountOwner'); }}
 													value={updateAccount.accountOwner}
 												>
 													<option value="">Select Account Owner</option>
@@ -169,7 +197,8 @@ const EditPage: React.FC<EditModalProps> = ({ closeModal, accountData, onBackToL
 										<div className="form-group row">
 											<label htmlFor="industry" className="col-sm-4 col-form-label">Industry</label>
 											<div className="col-sm-6">
-												<Field as="select" name="industry" className="form-control form-select" onChange={(e: any) => { handleChangeData(e); handleChange(e) }}
+												<Field as="select" name="industry" className="form-control form-select"
+													onChange={(e: any) => { handleChangeData(e); handleChange(e); handleInputChange('industry'); }}
 													value={updateAccount.industry}
 												>
 													<option value="">Select Industry</option>
@@ -186,7 +215,8 @@ const EditPage: React.FC<EditModalProps> = ({ closeModal, accountData, onBackToL
 										<div className="form-group row">
 											<label htmlFor="type" className="col-sm-4 col-form-label">Type</label>
 											<div className="col-sm-6">
-												<Field as="select" name="type" className="form-control form-select" onChange={(e: any) => { handleChangeData(e); handleChange(e) }}
+												<Field as="select" name="type" className="form-control form-select"
+													onChange={(e: any) => { handleChangeData(e); handleChange(e); handleInputChange('type'); }}
 													value={updateAccount.type}>
 													<option value="">Select Type</option>
 													{accountType?.map((type: any) => (
@@ -202,7 +232,8 @@ const EditPage: React.FC<EditModalProps> = ({ closeModal, accountData, onBackToL
 										<div className="form-group row">
 											<label htmlFor="status" className="col-sm-4 col-form-label">Status</label>
 											<div className="col-sm-6">
-												<Field as="select" name="status" className="form-control form-select" onChange={(e: any) => { handleChangeData(e); handleChange(e) }}
+												<Field as="select" name="status" className="form-control form-select"
+													onChange={(e: any) => { handleChangeData(e); handleChange(e); handleInputChange('status'); }}
 													value={updateAccount.status}>
 													<option value="">Select Status</option>
 													{accountStatus?.map((status: any) => (
@@ -212,6 +243,19 @@ const EditPage: React.FC<EditModalProps> = ({ closeModal, accountData, onBackToL
 													))}
 												</Field>
 												<ErrorMessage name="status" component="div" className="error form-error" />
+											</div>
+										</div>
+										<div className="form-group row">
+											<label htmlFor="accountName" className="col-sm-4 col-form-label">Account Name</label>
+											<div className="col-sm-6">
+												<Field type="text" value={updateAccount.accountName}
+													className="form-control" name="accountName"
+													onChange={(e: any) => { handleInputChange('accountName'); handleChangeData(e); handleChange(e) }} />
+												<ErrorMessage
+													name="accountName"
+													component="div"
+													className="error form-error"
+												/>
 											</div>
 										</div>
 
@@ -317,14 +361,13 @@ const EditPage: React.FC<EditModalProps> = ({ closeModal, accountData, onBackToL
 								</div>
 								<div>
 									<button className="btn btn-primary" onClick={() => handleSubmit}>Update</button>
-									<button className="btn btn-secondary" onClick={closeModal}>Close</button>
 								</div>
 							</Form>
-						</div>
-					</div>
-				)}
-			</Formik>
 
+						)}
+					</Formik>
+				</CCardBody>
+			</CCard>
 		</div>
 	);
 };
