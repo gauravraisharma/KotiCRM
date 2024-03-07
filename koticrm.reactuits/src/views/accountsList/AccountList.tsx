@@ -28,7 +28,7 @@ import { useSelector } from 'react-redux';
 import DeleteConfirmationModal from "./DeleteConfirmation";
 import { ToastContainer } from 'react-toastify';
 import EditPage from './EditAccountModal';
-import { getAccountOwner, getAccountStatus, getAccountType, getAccounts, getIndustry, getNotes } from "../../redux-saga/action";
+import {  getAccountOwner, getAccountStatus, getAccountType, getAccounts, getContacts, getIndustry , getInvoice, getInvoiceStatus, getNotes} from "../../redux-saga/action";
 
 
 
@@ -85,6 +85,8 @@ const AccountList: React.FC = () => {
     const accounts = useSelector((state: any) => state.reducer.accounts);
     const deleteResponse = useSelector((state: any) => state.reducer.deleteResponse)
     const accountOwner = useSelector((state: any) => state.reducer.accountOwner);
+    const createresponse = useSelector((state: any) => state.reducer.createAccountResponse)
+    const updateResponse = useSelector((state: any) => state.reducer.updateAccountResponse)
 
 
     function getOwnerName(ownerId: string): string {
@@ -94,19 +96,28 @@ const AccountList: React.FC = () => {
 
 
     useEffect(() => {
-        dispatch(getAccounts());
-        dispatch(getAccountOwner());
-        dispatch(getAccountStatus());
-        dispatch(getAccountType());
-        dispatch(getIndustry());
-        dispatch(getNotes());
+      dispatch(getAccounts());
+      dispatch(getAccountOwner());
+      dispatch(getAccountStatus());
+      dispatch(getAccountType());
+      dispatch(getIndustry());
+      dispatch(getNotes());
+      dispatch(getInvoiceStatus());
+      dispatch(getContacts());
+      dispatch(getInvoice());
 
     }, [dispatch]);
 
-    const navigate = useNavigate()
-    const showItems = (id: any) => {
-        navigate(`/accountDetails/accountId=${id}`)
-    }
+    useEffect(()=>{
+      dispatch(getAccounts())
+    },[deleteResponse, createresponse, updateResponse])
+
+  const navigate = useNavigate()
+  const showItems =(id:any)=>{
+  
+    debugger
+    navigate(`/accountDetails/accountId=${id}`)
+  }
 
     return (
         <>

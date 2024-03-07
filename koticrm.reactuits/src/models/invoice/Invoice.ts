@@ -3,11 +3,11 @@ export interface Invoice {
     accountId: number;
     ownerId: number;
     subject: string;
-    invoiceDate: Date;
-    dueDate: Date;
+    invoiceDate: string;
+    dueDate: string;
     contactId: number;
     purchaseOrder: string | null;
-    status: string;
+    status: number;
     billingStreet: string | null;
     billingCity: string | null;
     billingState: string | null;

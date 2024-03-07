@@ -22,11 +22,17 @@ import {
   UPDATE_ACCOUNT_REQUEST,
   CREATE_NOTES_REQUEST,
   GET_NOTES_FETCH,
-  UPDATE_CONTACT_REQUEST
+  UPDATE_CONTACT_REQUEST,
+    GET_INVOICE_FETCH,
+    CREATE_INVOICE_REQUEST,
+    GET_INVOICE_DETAIL_FETCH,
+    DELETE_INVOICE_REQUEST,
+    UPDATE_INVOICE_REQUEST
 } from "../constants/reduxConstants";
 import { Contact } from "../models/contact/Contact";
+import { Invoice } from "../models/invoice/Invoice";
 
-// Login action methods
+// Login
 export const loginRequest = (userLogin: UserLogin, navigate: any, toast: any) => ({
   type: LOGIN_REQUEST,
   payload: userLogin,
@@ -50,7 +56,7 @@ export const sidebarToggle = (sidebarShow: boolean) => ({
   sidebarShow: sidebarShow
 });
 
-// Account action methods
+// Account
 export const getAccounts = () => ({
   type: GET_ACCOUNTS_FETCH
 })
@@ -105,20 +111,45 @@ export const updateContact = (contact: Contact, id: any) => ({
   type: UPDATE_CONTACT_REQUEST,
   payload: { contact, id },
 });
-
+//industry
 export const getIndustry = () => ({
   type: GET_INDUSTRY_FETCH
 })
 
-export const getInvoiceStatus = () => ({
-  type: GET_INVOICE_STATUS_FETCH
-})
-
+//notes
 export const getNotes = () => ({
   type: GET_NOTES_FETCH
 })
 
 export const createNotesRequest = (notes: Note) => ({
-  type: CREATE_NOTES_REQUEST,
-  payload: notes,
+    type: CREATE_NOTES_REQUEST,
+    payload: notes,
+});
+//invoice
+
+export const getInvoiceStatus = () => ({
+  type: GET_INVOICE_STATUS_FETCH
+})
+
+export const getInvoice = () => ({
+  type: GET_INVOICE_FETCH
+})
+
+export const createInvoiceRequest = (invoice: Invoice) => ({
+  type: CREATE_INVOICE_REQUEST,
+  payload: invoice,
+});
+
+export const getInvoiceByIdRequest = (id: any) => ({
+  type: GET_INVOICE_DETAIL_FETCH,
+  payload: id,
+});
+export const deleteInvoiceRequest = (id: any) => ({
+  type: DELETE_INVOICE_REQUEST,
+  payload: id,
+});
+
+export const updateInvoiceRequest = (invoice: Invoice,id: any) => ({
+  type: UPDATE_INVOICE_REQUEST,
+  payload: {invoice, id},
 });

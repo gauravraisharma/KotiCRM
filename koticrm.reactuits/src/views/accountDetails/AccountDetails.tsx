@@ -29,6 +29,7 @@ import { getAccountByIdRequest } from "../../redux-saga/action";
 // import { }
 import { useSelector } from "react-redux";
 import Notes from "../../components/Notes";
+import InvoiceComponent from "../../components/invoice/Invoice";
 
 const AccountDetails = () => {
     const navigate = useNavigate();
@@ -36,8 +37,10 @@ const AccountDetails = () => {
     const dispatch = useDispatch();
     const accountId = data.accountId?.split('=')[1];
 
-    const [notesCount, setNotesCount] = useState();
-    const account = useSelector((state: any) => state.reducer.account);
+const[notesCount, setNotesCount] = useState();
+const[invoicesCount, setInvoicesCount] = useState();
+
+  const account = useSelector((state: any) => state.reducer.account);
 
     const accountOwner = useSelector((state: any) => state.reducer.accountOwner);
     const industry = useSelector((state: any) => state.reducer.industry);
@@ -53,9 +56,13 @@ const AccountDetails = () => {
         setNotesCount(noteCount)
     }
 
-    useEffect(() => {
-        dispatch(getAccountByIdRequest(accountId));
-    }, [dispatch])
+  const getInvoiceCount=(invoiceCount :any)=>{
+    setInvoicesCount(invoiceCount)
+  }
+
+  useEffect(()=>{
+    dispatch(getAccountByIdRequest(accountId));
+  },[dispatch])
 
     return (
         <CRow>
@@ -84,130 +91,130 @@ const AccountDetails = () => {
                     color="light"
                     value="Edit"
                   /> */}
-                                    <CButton
-                                        component="input"
-                                        type="button"
-                                        color="primary"
-                                        value="Back To Accounts"
-                                        onClick={() => navigate('/accountsList')}
-                                    />
-                                </div>
-                            </CCol>
-                        </CRow>
-                    </CCardHeader>
-                    <CCardBody>
-                        <ul className="nav nav-tabs" id="myTab" role="tablist">
-                            <li className="nav-item" role="presentation">
-                                <button
-                                    className="nav-link active"
-                                    id="home-tab"
-                                    data-bs-toggle="tab"
-                                    data-bs-target="#home"
-                                    type="button"
-                                    role="tab"
-                                    aria-controls="home"
-                                    aria-selected="true"
-                                >
-                                    Account Detail
-                                </button>
-                            </li>
-                            <li className="nav-item" role="presentation">
-                                <button
-                                    className="nav-link"
-                                    id="contacts-tab"
-                                    data-bs-toggle="tab"
-                                    data-bs-target="#contacts"
-                                    type="button"
-                                    role="tab"
-                                    aria-controls="contacts"
-                                    aria-selected="false"
-                                >
-                                    Contacts
-                                </button>
-                            </li>
-                            <li className="nav-item" role="presentation">
-                                <button
-                                    className="nav-link"
-                                    id="notes-tab"
-                                    data-bs-toggle="tab"
-                                    data-bs-target="#notes"
-                                    type="button"
-                                    role="tab"
-                                    aria-controls="notes"
-                                    aria-selected="false"
-                                >
-                                    Notes ({notesCount})
-                                </button>
-                            </li>
-                            <li className="nav-item" role="presentation">
-                                <button
-                                    className="nav-link"
-                                    id="attachments-tab"
-                                    data-bs-toggle="tab"
-                                    data-bs-target="#attachments"
-                                    type="button"
-                                    role="tab"
-                                    aria-controls="attachments"
-                                    aria-selected="false"
-                                >
-                                    Attachments 5
-                                </button>
-                            </li>
-                            <li className="nav-item" role="presentation">
-                                <button
-                                    className="nav-link"
-                                    id="invoices-tab"
-                                    data-bs-toggle="tab"
-                                    data-bs-target="#invoices"
-                                    type="button"
-                                    role="tab"
-                                    aria-controls="invoices"
-                                    aria-selected="false"
-                                >
-                                    Invoices
-                                </button>
-                            </li>
-                        </ul>
-                        <div className="tab-content" id="accountdetail">
-                            <div
-                                className="tab-pane fade show active"
-                                id="home"
-                                role="tabpanel"
-                                aria-labelledby="home-tab"
-                            >
-
-                                <div className="headings">Account information</div>
-                                <ul className="account-list">
-                                    <CRow>
-                                        <CCol xs={3}>
-                                            <li>Account Owner: <p>{ownerName}</p></li>
-                                        </CCol>
-
-                                        <CCol xs={3}>
-                                            <li>Account type: <p>{account?.country}</p></li>
-                                        </CCol>
-                                        <CCol xs={3}>
-                                            <li>Industry: <p>{industryName}</p></li>
-                                        </CCol>
-                                        <CCol xs={3}>
-                                            <li>Annual Revenue: <p>{account?.annualRevenue}</p></li>
-                                        </CCol>
-                                        <CCol xs={3}>
-                                            <li>Billing Street: <p>{account?.billingStreet}</p></li>
-                                        </CCol>
-                                        <CCol xs={3}>
-                                            <li>Billing City: <p>{account?.billingCity}</p></li>
-                                        </CCol>
-                                        <CCol xs={3}>
-                                            <li>Billing State: <p>{account?.billingState}</p></li>
-                                        </CCol>
-                                        <CCol xs={3}>
-                                            <li>Billing Code: <p>{account?.billingCode}</p></li>
-                                        </CCol>
-                                    </CRow>
-
-                                </ul>
-                            </div>
+                      <CButton
+                      component="input"
+                      type="button"
+                      color="primary"
+                      value="Back To Accounts"
+                      onClick={()=>navigate('/accountsList')}
+                    />
+                </div>
+              </CCol>
+            </CRow>
+          </CCardHeader>
+          <CCardBody>
+          <ul className="nav nav-tabs" id="myTab" role="tablist">
+            <li className="nav-item" role="presentation">
+              <button
+                className="nav-link active"
+                id="home-tab"
+                data-bs-toggle="tab"
+                data-bs-target="#home"
+                type="button"
+                role="tab"
+                aria-controls="home"
+                aria-selected="true"
+              >
+                Account Detail
+              </button>
+            </li>
+            <li className="nav-item" role="presentation">
+              <button
+                className="nav-link"
+                id="contacts-tab"
+                data-bs-toggle="tab"
+                data-bs-target="#contacts"
+                type="button"
+                role="tab"
+                aria-controls="contacts"
+                aria-selected="false"
+              >
+                Contacts
+              </button>
+            </li>
+            <li className="nav-item" role="presentation">
+              <button
+                className="nav-link"
+                id="notes-tab"
+                data-bs-toggle="tab"
+                data-bs-target="#notes"
+                type="button"
+                role="tab"
+                aria-controls="notes"
+                aria-selected="false"
+              >
+                Notes ({notesCount})
+              </button>
+            </li>
+            <li className="nav-item" role="presentation">
+              <button
+                className="nav-link"
+                id="attachments-tab"
+                data-bs-toggle="tab"
+                data-bs-target="#attachments"
+                type="button"
+                role="tab"
+                aria-controls="attachments"
+                aria-selected="false"
+              >
+                Attachments 5
+              </button>
+            </li>
+            <li className="nav-item" role="presentation">
+              <button
+                className="nav-link"
+                id="invoices-tab"
+                data-bs-toggle="tab"
+                data-bs-target="#invoices"
+                type="button"
+                role="tab"
+                aria-controls="invoices"
+                aria-selected="false"
+              >
+                Invoices ({invoicesCount})
+              </button>
+            </li>
+          </ul>
+          <div className="tab-content" id="accountdetail">
+            <div
+              className="tab-pane fade show active"
+              id="home"
+              role="tabpanel"
+              aria-labelledby="home-tab"
+            >
+              
+                  <div className="headings">Account information</div>
+                  <ul className="account-list">
+                  <CRow>
+                    <CCol xs={3}>                 
+                    <li>Account Owner: <p>{ownerName}</p></li>
+                  </CCol>
+                  
+                  <CCol xs={3}>        
+                    <li>Account type: <p>{account?.country}</p></li>
+                  </CCol>
+                  <CCol xs={3}>   
+                    <li>Industry: <p>{industryName}</p></li>
+                  </CCol>
+                  <CCol xs={3}>    
+                    <li>Annual Revenue: <p>{account?.annualRevenue}</p></li>
+                  </CCol>
+                  <CCol xs={3}>   
+                    <li>Billing Street: <p>{account?.billingStreet}</p></li>
+                  </CCol>
+                  <CCol xs={3}>  
+                    <li>Billing City: <p>{account?.billingCity}</p></li>
+                  </CCol>
+                  <CCol xs={3}>  
+                    <li>Billing State: <p>{account?.billingState}</p></li>
+                  </CCol>
+                  <CCol xs={3}>  
+                    <li>Billing Code: <p>{account?.billingCode}</p></li>
+                  </CCol>
+                  </CRow>
+                  
+                  </ul>
+            </div>
 
                             <div
                                 className="tab-pane fade"
@@ -379,67 +386,24 @@ const AccountDetails = () => {
                                 </CCol>
                             </div>
 
-                            <div
-                                className="tab-pane fade"
-                                id="invoices"
-                                role="tabpanel"
-                                aria-labelledby="invoices-tab"
-                            >
-                                <CCol xs={12}>
-                                    <CCard className="mb-4">
-                                        <CCardHeader>
-                                            <CRow className="align-items-center">
-                                                <CCol xs={6}>Invoices</CCol>
-                                                <CCol xs={6}>
-                                                    <div className="text-end">
-                                                        <CButton
-                                                            component="input"
-                                                            type="button"
-                                                            color="primary"
-                                                            value="New"
-                                                            variant="outline"
-                                                        />
-                                                    </div>
-                                                </CCol>
-                                            </CRow>
-                                        </CCardHeader>
-                                        <CCardBody>
-                                            <CTable>
-                                                <CTableHead>
-                                                    <CTableRow>
-                                                        <CTableHeaderCell scope="col">
-                                                            Subject
-                                                        </CTableHeaderCell>
-                                                        <CTableHeaderCell scope="col">
-                                                            Status
-                                                        </CTableHeaderCell>
-                                                        <CTableHeaderCell scope="col">
-                                                            Invoice Date
-                                                        </CTableHeaderCell>
-                                                        <CTableHeaderCell scope="col">
-                                                            Due Date
-                                                        </CTableHeaderCell>
-                                                    </CTableRow>
-                                                </CTableHead>
-                                                <CTableBody>
-                                                    <CTableRow>
-                                                        <CTableHeaderCell>Feb Month</CTableHeaderCell>
-                                                        <CTableDataCell>Created</CTableDataCell>
-                                                        <CTableDataCell>27/02/2024</CTableDataCell>
-                                                        <CTableDataCell>29/02/2024</CTableDataCell>
-                                                    </CTableRow>
-                                                </CTableBody>
-                                            </CTable>
-                                        </CCardBody>
-                                    </CCard>
-                                </CCol>
-                            </div>
-                        </div>
-                    </CCardBody>
-                </CCard>
-            </CCol>
-        </CRow>
-    );
+            <div
+              className="tab-pane fade"
+              id="invoices"
+              role="tabpanel"
+              aria-labelledby="invoices-tab"
+            >
+              <CCol xs={12}>
+
+                  <InvoiceComponent accountId = {account?.id} ownerId = {account?.ownerId} getInvoiceCount={getInvoiceCount}  />
+                 
+              </CCol>
+            </div>
+          </div>
+          </CCardBody>
+        </CCard>
+      </CCol>
+    </CRow>
+  );
 };
 
 export default AccountDetails;

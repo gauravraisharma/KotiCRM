@@ -61,27 +61,27 @@ const EditPage: React.FC<EditModalProps> = ({ closeModal, accountData, onBackToL
         }));
     };
 
-    const validationSchema = Yup.object().shape({
-        accountOwner: touchedFields.accountOwner ? Yup.string().required("Required(Account Owner)") : Yup.string(),
-        industry: touchedFields.industry ? Yup.string().required("Required (Industry)") : Yup.string(),
-        type: touchedFields.type ? Yup.string().required("Required (Type)") : Yup.string(),
-        status: touchedFields.status ? Yup.string().required("Required (Status)") : Yup.string(),
-        accountName: touchedFields.accountName ? Yup.string().required("Required(Account Name)") : Yup.string(),
-        annualRevenue: touchedFields.annualRevenue ? Yup.string().required("Required (Annual Revenue)") : Yup.string(),
-        phone: touchedFields.phone ? Yup.string().required("Required (Phone)").matches(/^[0-9]+$/, 'Phone number must be a number')
-            .min(10, "Phone number must be at least 10 digits")
-            .max(13, 'Phone number must be at most 13 digits with with country calling code') : Yup.string(),
-        fax: touchedFields.fax ? Yup.string().required("Required (fax)").matches(/^\d{10}$/, 'Fax number must be exactly 10 digits') : Yup.string(),
-        website: touchedFields.website ? Yup.string().required("Required (Website)").url("Website must be a valid URL") : Yup.string(),
-        billingStreet: touchedFields.billingStreet ? Yup.string().required("Required (Billing Street)") : Yup.string(),
-        billingCity: touchedFields.billingCity ? Yup.string().required("Required (Billing City)") : Yup.string(),
-        billingState: touchedFields.billingState ? Yup.string().required("Required (Billing State)") : Yup.string(),
-        billingCode: touchedFields.billingCode ? Yup.string().required("Required (Billing Code)").matches(/^\d+$/, "Billing Code must be a number")
-            .min(4, "Billing Code must be at least 4 digit")
-            .max(10, "Billing Code can have maximum 10 digits") : Yup.string(),
-        country: touchedFields.country ? Yup.string().required("Required (Country)") : Yup.string(),
-        description: touchedFields.description ? Yup.string().required("Required (Description)") : Yup.string(),
-    });
+	const validationSchema = Yup.object().shape({
+		accountOwner: touchedFields.accountOwner ? Yup.string().required("Required(Account Owner)") : Yup.string(),
+		industry: touchedFields.industry ? Yup.string().required("Required (Industry)") : Yup.string(),
+		type: touchedFields.type ? Yup.string().required("Required (Type)") : Yup.string(),
+		status: touchedFields.status ? Yup.string().required("Required (Status)") : Yup.string(),
+		accountName: touchedFields.accountName ? Yup.string().required("Required(Account Name)") : Yup.string(),
+		annualRevenue: touchedFields.annualRevenue ? Yup.string().required("Required (Annual Revenue)") : Yup.string(),
+		phone: touchedFields.phone ? Yup.string().required("Required (Phone)").matches(/^[0-9]+$/, 'Phone number must be a number')
+			.min(10, "Phone number must be at least 10 digits")
+			.max(13, 'Phone number must be at most 13 digits with with country calling code') : Yup.string(),
+		fax: touchedFields.fax ? Yup.string().required("Required (fax)").matches(/^\d{10}$/, 'Fax number must be exactly 10 digits') : Yup.string(),
+		website: touchedFields.website ? Yup.string().required("Required (Website)").url("Website must be a valid URL") : Yup.string(),
+		billingStreet: touchedFields.billingStreet ? Yup.string().required("Required (Billing Street)") : Yup.string(),
+		billingCity: touchedFields.billingCity ? Yup.string().required("Required (Billing City)") : Yup.string(),
+		billingState: touchedFields.billingState ? Yup.string().required("Required (Billing State)") : Yup.string(),
+		billingCode: touchedFields.billingCode ? Yup.string().required("Required (Billing Code)").matches(/^\d+$/, "Billing Code must be a number")
+			.min(4, "Billing Code must be at least 4 digit")
+			.max(10, "Billing Code can have maximum 10 digits") : Yup.string(),
+		country: touchedFields.country ? Yup.string().required("Required (Country)") : Yup.string(),
+		description: touchedFields.description ? Yup.string().required("Required (Description)") : Yup.string(),
+	});
 
 
 
@@ -131,9 +131,9 @@ const EditPage: React.FC<EditModalProps> = ({ closeModal, accountData, onBackToL
 
 
     const accountOwner = useSelector((state: any) => state.reducer.accountOwner);
-    const industry = useSelector((state: any) => state.reducer.industry);
-    const accountStatus = useSelector((state: any) => state.reducer.accountStatus);
-    const accountType = useSelector((state: any) => state.reducer.accountType);
+	const industry = useSelector((state: any) => state.reducer.industry);
+	const accountStatus = useSelector((state: any) => state.reducer.accountStatus);
+	const accountType = useSelector((state: any) => state.reducer.accountType);
 
     const { handleSubmit } = useFormik({
         enableReinitialize: true,

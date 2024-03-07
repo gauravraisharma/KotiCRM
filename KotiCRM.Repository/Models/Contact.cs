@@ -13,7 +13,8 @@ namespace KotiCRM.Repository.Models
         [Key]
         public int Id { get; set; }
         [Required(ErrorMessage ="Owner Id Is required")]
-        public int OwnerId { get; set; }
+        [Column(TypeName = "nvarchar(200)")]
+        public string OwnerId { get; set; }
         [Column(TypeName = "nvarchar(450)")]
         public string FirstName { get; set; }
         [Column(TypeName = "nvarchar(450)")]

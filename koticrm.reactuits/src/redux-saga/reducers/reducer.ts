@@ -15,6 +15,11 @@ import {
     UPDATE_ACCOUNT_SUCCESS,
     GET_NOTES_SUCCESS,
     CREATE_NOTES_SUCCESS,
+    GET_INVOICE_SUCCESS,
+    GET_INVOICE_DETAIL_SUCCESS,
+    CREATE_INVOICE_SUCCESS,
+    UPDATE_INVOICE_SUCCESS,
+    DELETE_INVOICE_SUCCESS,
     GET_CONTACT_DETAIL_SUCCESS,
     CREATE_CONTACT_SUCCESS,
     UPDATE_CONTACT_SUCCESS
@@ -27,23 +32,30 @@ const initialState = {
         userId: null,
         loggedIn: false,
         accounts: [],
-        response: null,
-        account: null,
-        accountOwner: [],
-        industry: [],
-        accountStatus: [],
-        accountType: [],
-        invoiceStatus: [],
+        createAccountResponse:null, 
+        account:null,
+        accountOwner :[],
+        industry:[],
+        accountStatus :[],
+        accountType :[],
+        invoiceStatus : [],
         deleteResponse: null,
-        updateAccount: null,
+        updateAccountResponse: null,
         contacts: [],
+        notes: [] ,
+        noteResponse:null,
+        invoices:[],
+        invoice:null,
+        createInvoiceResponse:null,
+        updateInvoiceResposne:null,
+        deleteInvoiceResponse:null,
         contact: null,
-        notes: [],
     }
 };
 
 const reducer = (state = initialState, action: any) => {
     switch (action.type) {
+        //login
         case LOGIN_SUCCESS:
             if (action.payload != null && action.payload != undefined && action.payload.status == 'SUCCEED') {
                 localStorage.setItem('accessToken', action.payload.token);
@@ -71,7 +83,7 @@ const reducer = (state = initialState, action: any) => {
             return {
                 ...state,
                 sidebarToggle: action.sidebarShow
-
+        //account
             }
         case GET_ACCOUNT_SUCCESS:
             return {
@@ -82,7 +94,7 @@ const reducer = (state = initialState, action: any) => {
         case CREATE_ACCOUNT_SUCCESS:
             return {
                 ...state,
-                response: action.response,
+                createAccountResponse: action.account,
             }
 
         case GET_ACCOUNT_DETAIL_SUCCESS:
@@ -100,7 +112,7 @@ const reducer = (state = initialState, action: any) => {
         case UPDATE_ACCOUNT_SUCCESS:
             return {
                 ...state,
-                updateAccount: action.account
+                updateAccountResponse : action.updatedAccount
             }
 
         case GET_ACCOUNT_OWNER_SUCCESS:
@@ -108,13 +120,12 @@ const reducer = (state = initialState, action: any) => {
                 ...state,
 
                 accountOwner: action.accountOwners,
-            }
-        case GET_INDUSTRY_SUCCESS:
-            return {
-                ...state,
+                }
+        case GET_INDUSTRY_SUCCESS: 
+            return {...state,
                 industry: action.industry,
-            }
-        case GET_ACCOUNT_STATUS_SUCCESS:
+                }
+        case GET_ACCOUNT_STATUS_SUCCESS: 
             return {
                 ...state,
                 accountStatus: action.accountStatus,
@@ -125,7 +136,13 @@ const reducer = (state = initialState, action: any) => {
                 ...state,
                 accountType: action.accountType,
             }
+        //industry
+        case GET_INDUSTRY_SUCCESS: 
+            return {...state,
+                industry: action.industry,
+                }
 
+        //contact    
         case GET_CONTACTS_SUCCESS:
             return {
                 ...state,
@@ -159,14 +176,39 @@ const reducer = (state = initialState, action: any) => {
         case CREATE_NOTES_SUCCESS:
             return {
                 ...state,
-                notes: action.response,
-            }
+                noteResponse: action.notes,
+            }    
 
-
+        //invoice
         case GET_INVOICE_STATUS_SUCCESS:
             return {
                 ...state,
                 invoiceStatus: action.invoiceStatus,
+            }
+        case GET_INVOICE_SUCCESS:
+            return{
+                ...state,
+                invoices : action.invoices
+            }
+        case GET_INVOICE_DETAIL_SUCCESS:
+            return{
+                ...state,
+                invoice: action.invoice
+            }
+        case CREATE_INVOICE_SUCCESS:
+            return{
+                ...state,
+                createInvoiceResponse: action.invoice
+            }
+        case UPDATE_INVOICE_SUCCESS:
+            return{
+                ...state,
+                updateInvoiceResposne : action.updatedInvoice
+            }
+        case DELETE_INVOICE_SUCCESS:
+            return{
+                ...state,
+                deleteInvoiceResponse : action.response
             }
 
         default:

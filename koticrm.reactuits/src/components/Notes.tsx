@@ -16,12 +16,11 @@ interface NoteProps {
 
 const Notes: React.FC<NoteProps> = ({ getNotesCount, accountId, accountName }) => {
 
-    const dispatch = useDispatch();
-    const notes = useSelector((state: any) => state.reducer.notes);
+	const dispatch = useDispatch();
+	const notes = useSelector((state: any) => state.reducer.notes);
+	const noteResponse = useSelector((state:any)=> state.reducer.noteResponse)
 
-
-    const userId = useSelector((state: any) => state.reducer.userId);
-    console.log(userId)
+	const userId = useSelector((state: any) => state.reducer.userId);
 
     const [noteDescription, setNoteDescription] = useState('')
 
@@ -40,52 +39,53 @@ const Notes: React.FC<NoteProps> = ({ getNotesCount, accountId, accountName }) =
         setNoteDescription('');
     }
 
-    const handleCancelClick = () => {
-        setNoteDescription('');
-    }
-    const filteredNotes = notes?.filter((note: any) => {
-        return note.accountID == accountId
-    })
-    const noteCount = filteredNotes?.length;
-    useEffect(() => {
-        dispatch(getNotes());
-        getNotesCount(noteCount)
-    })
+	const handleCancelClick = () => {
+		setNoteDescription('');
+	}
+	const filteredNotes = notes?.filter((note: any) => {
+		return note.accountID == accountId
+	})
+	const noteCount = filteredNotes?.length;
+	
+	useEffect(() => {
+		dispatch(getNotes());
+	},[noteResponse])
 
-    // const midpoint = Math.ceil(notes.length / 2);
-    // const firstHalf = notes.slice(0, midpoint);
-    // const secondHalf = notes.slice(midpoint);
+	useEffect(()=>{
+		getNotesCount(noteCount)
+	})
 
-
-    console.log(filteredNotes)
-    return (
-        <div>
-            <CRow>
-                <CCol xs={12} sm={8}>
-                    <ul>
-                        {filteredNotes?.map((note: Note) => (
-                            <li key={note.id}>
-                                <div className="mb-4">
-                                    <div >
-                                        <span className="person">
-                                            <IoPersonCircleOutline />
-                                        </span >
-                                        <span>{note.description}
-                                        </span>
-                                    </div>
-                                    <div className="mt-2 mx-5">
-                                        <span >Account - <span className="linking">{accountName} </span></span>
-                                        <span className=" mx-1">.</span>
-                                        <span className="mx-2">Add Note</span>
-                                        <BsClockFill color="#3c4b64" className="mx-1" />
-                                        <span className="mx-1 ">{note.firstName}  {note.lastName}</span>
-                                    </div>
-                                </div>
-                            </li>
-                        ))}
-                    </ul>
-                </CCol>
-                {/* <CCol xs={12} sm={6}>
+	// const midpoint = Math.ceil(notes.length / 2);
+	// const firstHalf = notes.slice(0, midpoint);
+	// const secondHalf = notes.slice(midpoint);
+	return (
+		<div>
+			<CRow>
+				<CCol xs={12} sm={8}>
+					<ul>
+						{filteredNotes?.map((note: Note) => (
+							<li key={note.id}>
+								<div className="mb-4">
+									<div >
+										<span className="person">
+											<IoPersonCircleOutline />
+										</span >
+										<span>{note.description}
+										</span>
+									</div>
+									<div className="mt-2 mx-5">
+										<span >Account - <span className="linking">{accountName} </span></span>
+										<span className=" mx-1">.</span>
+										<span className="mx-2">Add Note</span>
+										<BsClockFill color="#3c4b64" className="mx-1" />
+										<span className="mx-1 ">{note.firstName}  {note.lastName}</span>
+									</div>
+								</div>
+							</li>
+						))}
+					</ul>
+				</CCol>
+				{/* <CCol xs={12} sm={6}>
 					<ul>
 						{secondHalf.map((note: Note) => (
 							<li key={note.id}>

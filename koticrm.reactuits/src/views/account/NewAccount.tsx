@@ -3,13 +3,12 @@ import { Formik, Form, Field, ErrorMessage, useFormik } from "formik";
 import * as Yup from "yup";
 import "../../css/style.css";
 import { useDispatch } from "react-redux";
-import { createAccountRequest, getAccountOwner, getAccountStatus, getAccountType, getAccounts, getIndustry } from "../../redux-saga/action";
+import { createAccountRequest } from "../../redux-saga/action";
 import { useSelector } from "react-redux";
 import { Account } from "../../models/account/Account";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { CButton, CCard, CCardBody, CCardHeader } from "@coreui/react";
-import { FaSearch } from "react-icons/fa";
 
 
 const initialValues = {
@@ -73,44 +72,35 @@ const MyForm: React.FC<NewAccountProps> = ({ closeModal, onBackToListButtonClick
     const currentDate: Date = new Date();
     const formattedDateTime: string = currentDate.toISOString().slice(0, -1);
 
-    const handleCreateAccountClick = () => {
-        debugger
-        const accountDetail: Account = {
-            id: 0,
-            ownerId: account.accountOwner,
-            industryId: parseInt(account.industry.toString(), 10),
-            type: parseInt(account.type.toString(), 10),
-            status: parseInt(account.status.toString(), 10),
-            accountName: account.accountName,
-            annualRevenue: account.annualRevenue,
-            phone: account.phone,
-            fax: account.fax,
-            webSite: account.website,
-            billingStreet: account.billingStreet,
-            billingCity: account.billingCity,
-            billingState: account.billingState,
-            billingCode: account.billingCode,
-            country: account.country,
-            description: account.description,
-            createdBy: account.accountOwner,
-            createdOn: formattedDateTime,
-            modifiedBy: account.accountOwner,
-            modifiedOn: formattedDateTime,
-            isactive: true,
-            isdelete: false,
-        };
-        dispatch(createAccountRequest(accountDetail));
-        closeModal();
-
+  const handleCreateAccountClick = () => {
+    debugger
+    const accountDetail: Account = {
+      id: 0,
+      ownerId: account.accountOwner,
+      industryId: parseInt(account.industry.toString(), 10),
+      type: parseInt(account.type.toString(), 10),
+      status: parseInt(account.status.toString(), 10),
+      accountName : account.accountName,
+      annualRevenue: account.annualRevenue,
+      phone: account.phone,
+      fax: account.fax,
+      webSite: account.website,
+      billingStreet: account.billingStreet,
+      billingCity: account.billingCity,
+      billingState: account.billingState,
+      billingCode: account.billingCode,
+      country: account.country,
+      description: account.description,
+      createdBy: account.accountOwner,
+      createdOn: formattedDateTime,
+      modifiedBy: account.accountOwner,
+      modifiedOn: formattedDateTime,
+      isactive: true,
+      isdelete: false,
     };
-    const response = useSelector((state: any) => state.reducer.response)
-    if (response?.succeed == true) {
-        debugger
-        toast.success(response?.message);
-    }
-    else {
-        toast.error(response?.message)
-    }
+    dispatch(createAccountRequest(accountDetail)); 
+    closeModal();   
+  };
 
     const accountOwner = useSelector((state: any) => state.reducer.accountOwner);
     const industry = useSelector((state: any) => state.reducer.industry);
@@ -118,10 +108,10 @@ const MyForm: React.FC<NewAccountProps> = ({ closeModal, onBackToListButtonClick
     const accountType = useSelector((state: any) => state.reducer.accountType);
 
     const { handleSubmit } = useFormik({
-        enableReinitialize: true,
-        initialValues: initialValues,
-        validationSchema: validationSchema,
-        onSubmit: handleCreateAccountClick
+      enableReinitialize: true,
+      initialValues: initialValues,
+      validationSchema: validationSchema,
+      onSubmit: handleCreateAccountClick
     })
 
 
