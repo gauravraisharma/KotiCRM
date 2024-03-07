@@ -1,11 +1,11 @@
-import { CButton, CCard, CCardBody, CCardHeader, CCol, CFormInput, CFormLabel, CFormSelect, CFormTextarea, CRow } from '@coreui/react';
+import { CCard, CCardBody, CCardHeader, CCol, CRow } from '@coreui/react';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
 import { useEffect, useState } from 'react';
 import * as Yup from "yup";
 import { Contact, ContactClass } from '../../models/contact/Contact';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { createContact } from '../../redux-saga/action';
+import { useDispatch, useSelector } from 'react-redux';
+import { createContact, getContactById, updateContact } from '../../redux-saga/action';
 
 const owners = [
   { ownerId: 1, ownerName: "Bob" },
@@ -19,11 +19,13 @@ const owners = [
 //   { accountID: 3, accountName: "Dom" },
 // ]
 
-const CreateContact = () => {
-  const { id } = useParams<{ id: string }>();
+const CreateOrEditContact = () => {
+  const { contactId } = useParams<{ contactId: string }>();
   const [contact, setContact] = useState<Contact>(new ContactClass());
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const fetchedContact = useSelector((state: any) => state.reducer.contact);
+  console.log(contact);
 
   const validationSchema = Yup.object().shape({
     ownerId: Yup.number().required('Owner ID is required'),
@@ -33,28 +35,37 @@ const CreateContact = () => {
     email: Yup.string().email('Invalid email').required('Email is required')
   });
 
-  const handleFormSubmit = async (contact: Contact, { setStatus }: { setStatus: Function }) => {
+  const handleFormSubmit = async (contact: Contact, { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }) => {
     try {
       if (!contact.id) {
         console.log("Create new contact:", contact);
         dispatch(createContact(contact));
-        navigate('/contacts');
       } else {
         console.log("Edit existing contact", contact);
+        dispatch(updateContact(contact, contact.id));
       }
+      navigate('/contacts');
     } catch (error) {
       console.log(error);
     } finally {
-      setStatus({ isSubmitting: false });
+      setSubmitting(false);
     }
   };
 
-  // useEffect(() => {
-  //     if (id) {
-  //       // Load contact from store
-  //       loadActivity(id).then(contact => setActivity(new ContactClass(contact)));
-  //     }
-  // }, [id, loadActivity]);
+  useEffect(() => {
+    if (contactId) {
+      dispatch(getContactById(+contactId));
+    } else {
+      setContact(new ContactClass());
+    }
+  }, [dispatch, contactId]);
+
+  useEffect(() => {
+    if (fetchedContact) {
+      console.log("Fetched contact");
+      setContact(fetchedContact);
+    }
+  }, [fetchedContact]);
 
   return (
     <CCard>
@@ -66,7 +77,7 @@ const CreateContact = () => {
           initialValues={contact}
           enableReinitialize
           validationSchema={validationSchema}
-          onSubmit={(values, { setStatus }) => handleFormSubmit(values, { setStatus })}
+          onSubmit={handleFormSubmit}
         >
           {({ handleSubmit, isValid, isSubmitting, dirty }) => (
             <Form onSubmit={handleSubmit} autoComplete='off'>
@@ -295,4 +306,4 @@ const CreateContact = () => {
   );
 };
 
-export default CreateContact;
+export default CreateOrEditContact;

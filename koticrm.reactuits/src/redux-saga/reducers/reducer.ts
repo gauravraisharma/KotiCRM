@@ -14,9 +14,10 @@ import {
     DELETE_ACCOUNT_SUCCESS,
     UPDATE_ACCOUNT_SUCCESS,
     GET_NOTES_SUCCESS,
-    CREATE_NOTES_SUCCESS
+    CREATE_NOTES_SUCCESS,
     GET_CONTACT_DETAIL_SUCCESS,
-    CREATE_CONTACT_SUCCESS
+    CREATE_CONTACT_SUCCESS,
+    UPDATE_CONTACT_SUCCESS
 } from "../../constants/reduxConstants";
 
 const initialState = {
@@ -95,6 +96,7 @@ const reducer = (state = initialState, action: any) => {
                 ...state,
                 deleteResponse: action.response
             }
+
         case UPDATE_ACCOUNT_SUCCESS:
             return {
                 ...state,
@@ -139,7 +141,14 @@ const reducer = (state = initialState, action: any) => {
         case CREATE_CONTACT_SUCCESS:
             return {
                 ...state,
-                response: action.response,
+                contact: action.createdContact,
+                contacts: [...state.reducer.contacts, action.createdContact]
+            }
+
+        case UPDATE_CONTACT_SUCCESS:
+            return {
+                ...state,
+                contact: action.updatedContact,
             }
 
         case GET_NOTES_SUCCESS:

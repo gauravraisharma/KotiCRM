@@ -97,7 +97,7 @@ const Contacts = () => {
                     <CTableDataCell>{contact.phone}</CTableDataCell>
                     <CTableDataCell>{contact.ownerId}</CTableDataCell>
                     <CTableDataCell>
-                      <Link to={'/contacts/editContact'}>
+                      <Link to={`/contacts/editContact/${contact.id}`}>
                         <CIcon icon={cilPen} size='lg' title='Edit' className='mx-1' />
                       </Link>
                       {/* <CIcon icon={cilPen} size='lg' title='Edit' onClick={() => handleEditClick(contact)/> */}

@@ -21,7 +21,8 @@ import {
   DELETE_ACCOUNT_REQUEST,
   UPDATE_ACCOUNT_REQUEST,
   CREATE_NOTES_REQUEST,
-  GET_NOTES_FETCH
+  GET_NOTES_FETCH,
+  UPDATE_CONTACT_REQUEST
 } from "../constants/reduxConstants";
 import { Contact } from "../models/contact/Contact";
 
@@ -98,6 +99,11 @@ export const getContactById = (id: number) => ({
 export const createContact = (contact: Contact) => ({
   type: CREATE_CONTACT_REQUEST,
   payload: contact
+});
+
+export const updateContact = (contact: Contact, id: any) => ({
+  type: UPDATE_CONTACT_REQUEST,
+  payload: { contact, id },
 });
 
 export const getIndustry = () => ({

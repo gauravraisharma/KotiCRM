@@ -26,7 +26,7 @@ const NewAccount = lazy(() => import('./views/account/NewAccount'))
 // Contact routes
 const Contacts = lazy(() => import('./views/contacts/Contacts'))
 const contactDetails = lazy(() => import('./views/contacts/ContactDetails'))
-const CreateContact = lazy(() => import('./views/contacts/CreateContact'))
+const CreateContact = lazy(() => import('./views/contacts/CreateOrEditContact'))
 
 
 // Base
@@ -136,6 +136,7 @@ const routes: Route[] = [
     { path: '/contacts', name: 'Contacts', element: Contacts, isAuth: true, modulePermission: 'Contacts' },
     { path: '/contacts/:contactId', name: 'contactDetails', element: contactDetails, isAuth: true, modulePermission: 'Contacts' },
     { path: '/contacts/createContact', name: 'CreateContact', element: CreateContact, isAuth: true, modulePermission: 'Contacts' },
+    { path: '/contacts/editContact/:contactId', name: 'CreateContact', element: CreateContact, isAuth: true, modulePermission: 'Contacts' },
     { path: '/newAccount', name: 'NewAccount', element: NewAccount, isAuth: true, modulePermission: 'Accounts' },
 ]
 

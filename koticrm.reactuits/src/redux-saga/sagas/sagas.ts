@@ -9,7 +9,8 @@ import {
 import {
     workCreateContact,
     workGetContactByIdFetch,
-    workGetContactsFetch
+    workGetContactsFetch,
+    workUpdateContact
 } from './contactSaga';
 import workerLoginRequest from './loginSaga';
 import {
@@ -37,6 +38,7 @@ import {
     CREATE_NOTES_REQUEST,
     GET_CONTACT_DETAIL_FETCH,
     CREATE_CONTACT_REQUEST,
+    UPDATE_CONTACT_REQUEST,
 
 } from '../../constants/reduxConstants';
 import { workCreateNote, workGetNotesFetch } from './notesSaga';
@@ -59,4 +61,5 @@ export default function* mySaga() {
     yield takeEvery(GET_CONTACTS_FETCH, workGetContactsFetch);
     yield takeEvery(GET_CONTACT_DETAIL_FETCH, workGetContactByIdFetch);
     yield takeEvery(CREATE_CONTACT_REQUEST, workCreateContact);
+    yield takeEvery(UPDATE_CONTACT_REQUEST, workUpdateContact);
 }
