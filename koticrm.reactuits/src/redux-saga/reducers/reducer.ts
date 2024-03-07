@@ -14,6 +14,7 @@ import {
     DELETE_ACCOUNT_SUCCESS,
     UPDATE_ACCOUNT_SUCCESS,
     GET_NOTES_SUCCESS,
+    CREATE_NOTES_SUCCESS
     GET_CONTACT_DETAIL_SUCCESS,
     CREATE_CONTACT_SUCCESS
 } from "../../constants/reduxConstants";
@@ -22,6 +23,7 @@ const initialState = {
     reducer: {
         token: null,
         modulePermission: [],
+        userId: null,
         loggedIn: false,
         accounts: [],
         response: null,
@@ -48,6 +50,7 @@ const reducer = (state = initialState, action: any) => {
                     ...state,
                     token: action.payload.token,
                     modulePermission: action.payload.modulePermission,
+                    userId: action.payload.userId,
                     loggedIn: true,
                 };
             }
@@ -143,6 +146,11 @@ const reducer = (state = initialState, action: any) => {
             return {
                 ...state,
                 notes: action.notes,
+            }
+        case CREATE_NOTES_SUCCESS:
+            return {
+                ...state,
+                notes: action.response,
             }
 
 

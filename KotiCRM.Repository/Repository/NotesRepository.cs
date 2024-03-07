@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Azure.Core.HttpHeader;
 
 namespace KotiCRM.Repository.Repository
 {
@@ -42,7 +43,7 @@ namespace KotiCRM.Repository.Repository
             }
         }
 
-        public async Task<Note> GetNoteDetails(int id)
+        public async Task<ResponseNoteModel> GetNoteDetails(int id)
         {
             try
             {
@@ -52,7 +53,28 @@ namespace KotiCRM.Repository.Repository
                 {
                     throw new Exception($"Note with ID {id} was not found.");
                 }
-                return note;
+
+                var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == note.UserID);
+
+                if (user != null)
+                {
+                    var responseNote = new ResponseNoteModel
+                    {
+                        ID = note.ID,
+                        AccountID = note.AccountID,
+                        UserID = note.UserID,
+                        DateOfNote = note.DateOfNote,
+                        Description = note.Description,
+                        FirstName = user.FirstName,
+                        LastName = user.LastName
+                    };
+
+                    return responseNote;
+                }
+                else
+                {
+                    throw new Exception($"User with ID {note.UserID} was not found.");
+                }
             }
             catch (Exception ex)
             {
@@ -60,18 +82,45 @@ namespace KotiCRM.Repository.Repository
             }
         }
 
-        public async Task<IEnumerable<Note>> GetNoteList()
+
+        public async Task<IEnumerable<ResponseNoteModel>> GetNoteList()
         {
             try
             {
-                return await _context.Notes.ToListAsync();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message, ex);
 
-            }
-        }
+                var notes = await _context.Notes.ToListAsync();
+                var responseNotes = new List<ResponseNoteModel>();
+
+                        foreach (var note in notes)
+                        {
+                            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == note.UserID);
+
+                            if (user != null)
+                            {
+                                var responseNote = new ResponseNoteModel
+                                {
+                                    ID = note.ID,
+                                    AccountID = note.AccountID,
+                                    UserID = note.UserID,
+                                    DateOfNote = note.DateOfNote,
+                                    Description = note.Description,
+                                    FirstName = user.FirstName,
+                                    LastName = user.LastName
+                                };
+
+                                responseNotes.Add(responseNote);
+                            }
+                        }
+
+                        return responseNotes;
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception(ex.Message, ex);
+                    }
+                }
+
+ 
 
         public async Task<DbResponse> DeleteNote(int id)
         {

@@ -2,7 +2,8 @@ export interface Note {
     id: number;
     accountId: number;
     userId: number;
-    dateOfNote: Date;
+    dateOfNote: string;
     description: string;
-  }
-  
+    firstName: string;
+    lastName: string
+}

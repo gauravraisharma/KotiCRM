@@ -10,8 +10,8 @@ namespace KotiCRM.Repository.IRepository
     public interface INotesRepository
     {
         Task<DbResponse> CreateNote(Note note);
-        Task<IEnumerable<Note>> GetNoteList();
-        Task<Note> GetNoteDetails(int id);
+        Task<IEnumerable<ResponseNoteModel>> GetNoteList();
+        Task<ResponseNoteModel> GetNoteDetails(int id);
         Task<DbResponse> DeleteNote(int id);
         Task<Note> UpdateNote(int id, Note note);
     }

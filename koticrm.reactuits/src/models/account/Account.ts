@@ -1,8 +1,9 @@
 export interface Account {
-  id:number;
+    id: number;
     ownerId: string;
-    industryId : number;
+    industryId: number;
     annualRevenue: string;
+    accountName: string;
     billingCity: string;
     billingCode: string;
     billingState: string;
@@ -18,6 +19,6 @@ export interface Account {
     phone: string;
     status: number;
     type: number;
-    webSite: string; 
-    description:string;
-  }
+    webSite: string;
+    description: string;
+}
