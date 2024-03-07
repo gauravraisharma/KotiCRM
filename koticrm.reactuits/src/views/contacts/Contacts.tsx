@@ -11,21 +11,25 @@ import {
   CTableHeaderCell,
   CTableRow,
   CButton,
-  CDropdown,
-  CDropdownMenu,
-  CDropdownItem,
-  CDropdownToggle,
-  CForm,
-  CFormTextarea,
+  CLink,
 } from '@coreui/react'
-import { BsFiletypeDocx } from 'react-icons/bs'
-import { IoPersonCircleOutline } from 'react-icons/io5'
-import { MdOutlinePictureAsPdf } from 'react-icons/md'
-import { TiAttachmentOutline } from 'react-icons/ti'
 import '../../css/style.css'
 import { useDispatch, useSelector } from 'react-redux'
 import { getContacts } from '../../redux-saga/action'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
+import { Contact } from '../../models/contact/Contact'
+import { Link } from 'react-router-dom'
+import CIcon from '@coreui/icons-react'
+import { cilFace, cilHamburgerMenu, cilPen } from '@coreui/icons'
+
+const tableHeader = [
+  "Contact Name",
+  "Account Name",
+  "Email",
+  "Phone",
+  "Contact Owner",
+  "Actions",
+]
 
 const Contacts = () => {
   // const [contacts, setContacts] = useState([]);
@@ -45,9 +49,9 @@ const Contacts = () => {
         <CCard className="mb-4">
           <CCardHeader>
             <CRow>
-              <CCol xs={6}>Contacts</CCol>
-              <CCol xs={6}>
-                <div className="text-end">
+              <CCol xs={6}><h1>Contacts</h1></CCol>
+              <CCol xs={6} className='text-end'>
+                  <Link to={`/contacts/createContact`}>
                   <CButton
                     component="input"
                     type="button"
@@ -55,7 +59,7 @@ const Contacts = () => {
                     value="New"
                     variant="outline"
                   />
-                </div>
+                  </Link>
               </CCol>
             </CRow>
           </CCardHeader>
@@ -64,23 +68,48 @@ const Contacts = () => {
             <CTable>
               <CTableHead>
                 <CTableRow>
-                  <CTableHeaderCell scope="col">Contact Name</CTableHeaderCell>
+                  {tableHeader.map((header, index)=>(
+                    <CTableHeaderCell key={index} scope='col'>
+                      {header} <span><CIcon icon={cilHamburgerMenu} title='hamburger' className='me-1' size='lg' /></span>
+                      </CTableHeaderCell>
+                  ))}
+                  {/* <CTableHeaderCell scope="col">Contact Name</CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Account Name</CTableHeaderCell>
                   <CTableHeaderCell scope="col">Email</CTableHeaderCell>
                   <CTableHeaderCell scope="col">Phone</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Mobile</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Fax</CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Contact Owner</CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Actions</CTableHeaderCell> */}
                 </CTableRow>
               </CTableHead>
               <CTableBody>
-                {fetchedContacts?.map((contact, index:number) => (
+                {fetchedContacts ? fetchedContacts?.map((contact: Contact, index: number) => (
                   <CTableRow key={index}>
-                    <CTableHeaderCell>{contact.firstName}</CTableHeaderCell>
+                    {/* <CTableDataCell>
+                      <Link to="/contacts/contactDetails">
+                        <CLink>
+                          {contact.firstName}
+                        </CLink>
+                      </Link>
+                    </CTableDataCell> */}
+                    <CTableDataCell>{`${contact.firstName} ${contact.lastName}`}</CTableDataCell>
+                    <CTableDataCell>{contact.accountID}</CTableDataCell>
                     <CTableDataCell>{contact.email}</CTableDataCell>
                     <CTableDataCell>{contact.phone}</CTableDataCell>
-                    <CTableDataCell>{contact.mobile}</CTableDataCell>
-                    <CTableDataCell>{contact.fax}</CTableDataCell>
+                    <CTableDataCell>{contact.ownerId}</CTableDataCell>
+                    <CTableDataCell>
+                      <Link to={'/contacts/editContact'}>
+                        <CIcon icon={cilPen} size='lg' title='Edit' className='mx-1' />
+                      </Link>
+                      {/* <CIcon icon={cilPen} size='lg' title='Edit' onClick={() => handleEditClick(contact)/> */}
+                      <Link to={`/contacts/${contact.id}`}>
+                        <CIcon icon={cilFace} size='lg' title='View' className='mx-1' />
+                      </Link>
+                      {/* <LuView style={{ color: 'blue' }}
+                            onClick={()=>showItems(account?.id)}></LuView> */}
+                      {/* <MdDelete style={{ color: "red" }} onClick={()=>handleDeleteClick(account.id)} /> */}
+                    </CTableDataCell>
                   </CTableRow>
-                ))}
+                )) : <div>No contact available</div>}
                 {/* <CTableRow>
                   <CTableHeaderCell>Sakshi Gupta</CTableHeaderCell>
                   <CTableDataCell>@sakshigupta.com</CTableDataCell>
@@ -101,149 +130,6 @@ const Contacts = () => {
           </CCardBody>
         </CCard>
       </CCol>
-
-      <div>
-        <CCol xs={12}>
-          <CCard className="mb-4">
-            <CCardHeader>
-              <CRow>
-                <CCol xs={6}>Attachments</CCol>
-                <CCol xs={6}>
-                  <div className="text-end">
-                    <CDropdown>
-                      <CDropdownToggle color="primary" variant="outline">
-                        Attach
-                      </CDropdownToggle>
-                      <CDropdownMenu>
-                        <CDropdownItem href="#">Name</CDropdownItem>
-                        <CDropdownItem href="#">Owner</CDropdownItem>
-                        <CDropdownItem href="#">Phone</CDropdownItem>
-                        <CDropdownItem href="#">Country</CDropdownItem>
-                      </CDropdownMenu>
-                    </CDropdown>
-                  </div>
-                </CCol>
-              </CRow>
-            </CCardHeader>
-            <CCardBody>
-              {/* <DocsExample href="components/table"> */}
-              <CTable>
-                <CTableHead>
-                  <CTableRow>
-                    <CTableHeaderCell scope="col">File Name</CTableHeaderCell>
-                    <CTableHeaderCell scope="col">Attached By</CTableHeaderCell>
-                    <CTableHeaderCell scope="col">Date Added</CTableHeaderCell>
-                    <CTableHeaderCell scope="col">Size</CTableHeaderCell>
-                  </CTableRow>
-                </CTableHead>
-                <CTableBody>
-                  <CTableRow>
-                    <CTableHeaderCell>
-                      <BsFiletypeDocx className="doc" />
-                      <CButton className="link" color="link">
-                        Learner Settings Page-February 2024.docx
-                      </CButton>
-                    </CTableHeaderCell>
-                    <CTableDataCell>Gourav Rai</CTableDataCell>
-                    <CTableDataCell>22/02/2024 06:50PM</CTableDataCell>
-                    <CTableDataCell>38kb</CTableDataCell>
-                  </CTableRow>
-                  <CTableRow>
-                    <CTableHeaderCell>
-                      <MdOutlinePictureAsPdf className="pdf" />
-                      <CButton className="link" color="link">
-                        Learner Settings Page-February 2024.pdf
-                      </CButton>
-                    </CTableHeaderCell>
-                    <CTableDataCell>Gourav Rai</CTableDataCell>
-                    <CTableDataCell>22/02/2024 06:50PM</CTableDataCell>
-                    <CTableDataCell>35kb</CTableDataCell>
-                  </CTableRow>
-                </CTableBody>
-              </CTable>
-              {/* </DocsExample> */}
-            </CCardBody>
-          </CCard>
-        </CCol>
-      </div>
-
-      <div>
-        <CCol xs={12}>
-          <CCard className="mb-4">
-            <CCardHeader>
-              <CRow>
-                <CCol xs={6}>Notes</CCol>
-                <CCol xs={6}>
-                  <div className="text-end">
-                    <CDropdown>
-                      <CDropdownToggle color="primary" variant="outline">
-                        Recent Last
-                      </CDropdownToggle>
-                      <CDropdownMenu>
-                        <CDropdownItem href="#">Name</CDropdownItem>
-                        <CDropdownItem href="#">Owner</CDropdownItem>
-                        <CDropdownItem href="#">Phone</CDropdownItem>
-                        <CDropdownItem href="#">Country</CDropdownItem>
-                      </CDropdownMenu>
-                    </CDropdown>
-                  </div>
-                </CCol>
-              </CRow>
-            </CCardHeader>
-            <CCardBody>
-              <CCol xs={8}>
-                <div className="Note">
-                  <ul>
-                    <li>
-                      <span>
-                        <IoPersonCircleOutline />
-                      </span>
-                      <span>dsadsadsa</span>
-                      <br></br>
-                      <span>Account -</span>
-                      <span>King (Sample)</span>.<span>Add Note</span>
-                    </li>
-                    <li>
-                      <span>
-                        <IoPersonCircleOutline />
-                      </span>
-                      <span>dsadsadsa</span>
-                      <br></br>
-                      <span>Account -</span>
-                      <span>King (Sample)</span>.<span>Add Note</span>
-                    </li>
-                    <li>
-                      <span>
-                        <IoPersonCircleOutline />
-                      </span>
-                      <span>dsadsadsa</span>
-                      <br></br>
-                      <span>Account -</span>
-                      <span>King (Sample)</span>.<span>Add Note</span>
-                    </li>
-                    <li>
-                      <CForm>
-                        <CFormTextarea
-                          label="Example textarea"
-                          rows={3}
-                          placeholder="Add a note"
-                        ></CFormTextarea>
-
-                        <div className="text-end ">
-                          <TiAttachmentOutline />
-
-                          <CButton component="input" type="button" color="light" value="Cancel" />
-                          <CButton component="input" type="button" color="primary" value="Save" />
-                        </div>
-                      </CForm>
-                    </li>
-                  </ul>
-                </div>
-              </CCol>
-            </CCardBody>
-          </CCard>
-        </CCol>
-      </div>
     </CRow>
   )
 }

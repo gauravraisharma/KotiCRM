@@ -93,14 +93,12 @@ const AccountList: React.FC = () => {
 
   useEffect(() => {
     dispatch(getAccounts());
-  }, [dispatch,deleteResponse,backToAccountList]);
+  }, [dispatch]);
 
 
 
   const navigate = useNavigate()
   const showItems =(id:any)=>{
-  
-    debugger
     navigate(`/accountDetails/accountId=${id}`)
   }
 

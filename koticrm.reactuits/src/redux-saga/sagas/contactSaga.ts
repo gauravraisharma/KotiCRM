@@ -1,7 +1,8 @@
 import { call, put } from 'redux-saga/effects';
 
 import {
-    GET_CONTACTS_SUCCESS
+    CREATE_CONTACT_SUCCESS,
+    GET_CONTACTS_SUCCESS, GET_CONTACT_DETAIL_SUCCESS
 } from '../../constants/reduxConstants';
 
 import ContactService from '../../services/ContactService';
@@ -31,43 +32,44 @@ export function* workGetContactsFetch() {
     }
 }
 
-// function* getContactById(action: { payload: any }): Generator<any> {
-//   try {
-//     const { payload } = action;
-//     const response = yield call(ContactService.GetContactsDetails, payload);
-//     return response as Account;
-//   } catch (error) {
-//     console.error('Error fetching accounts:', error);
-//     throw error;
-//   }
-// }
+function* getContactById(action: { payload: any }): Generator<any> {
+    try {
+        const { payload } = action;
+        const response = yield call(ContactService.GetContactDetails, payload);
+        console.log("Contact detail on saga:");
+        console.log(response);
+        return response as Contact;
+    } catch (error) {
+        console.error('Error fetching accounts:', error);
+        throw error;
+    }
+}
 
-// export function* workGetAccountByIdFetch(action: any) {
-//   try {
-//     const account: Account = yield call(getAccountById, { payload: action });
-//     yield put({ type: GET_ACCOUNT_DETAIL_SUCCESS, account });
-//   } catch (error) {
-//     // Handle error if needed
-//   }
-// }
+export function* workGetContactByIdFetch(action: any) {
+    try {
+        const contact: Contact = yield call(getContactById, { payload: action });
+        yield put({ type: GET_CONTACT_DETAIL_SUCCESS, contact });
+    } catch (error) {
+        console.log(error);
+    }
+}
 
-// function* createAccount(action: { payload: Account }): Generator<any> {
-//   try {
-//     const { payload } = action;
+function* createContact(action: { payload: Contact }): Generator<any> {
+    try {
+        const { payload } = action;
+        const response = yield call(ContactService.CreateContact, payload);
+        return response;
+    } catch (error) {
+        console.error('Error creating contact in saga:', error);
+        throw error;
+    }
+}
 
-//     const response = yield call(AccountService.CreateAccount, payload);
-//     return response;
-//   } catch (error) {
-//     console.error('Error fetching accounts:', error);
-//     throw error;
-//   }
-// }
-
-// export function* workCreateAccount(action: any) {
-//   try {
-//     const account: Account = yield call(createAccount, { payload: action });
-//     yield put({ type: CREATE_ACCOUNT_SUCCESS, account });
-//   } catch (error) {
-//     // Handle error if needed
-//   }
-// }
+export function* workCreateContact(action: any) {
+    try {
+        const contact: Contact = yield call(createContact, { payload: action });
+        yield put({ type: CREATE_CONTACT_SUCCESS, contact });
+    } catch (error) {
+        console.log(error);
+    }
+}

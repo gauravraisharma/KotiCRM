@@ -16,27 +16,26 @@ export default class ContactService {
         }
     }
 
-    // static async GetContactDetails(id: any): Promise<Contact> {
-    //     try {
-    //         const response = await agent.Contact.getById(id.payload);
-    //         return response;
-    //     }
-    //     catch (error) {
-    //         console.error('Error fetching accounts:', error);
-    //         throw error;
-    //     }
-    // }
+    static async GetContactDetails(id: any): Promise<Contact> {
+        try {
+            const response = await agent.Contact.getById(id.payload);
+            return response;
+        }
+        catch (error) {
+            console.error('Error fetching contacts:', error);
+            throw error;
+        }
+    }
 
-    // static async CreateContact(contact: any): Promise<Contact> {
-    //     try {
-    //         const response = await agent.Contact.create(contact.payload);
-    //         console.log(response)
+    static async CreateContact(contact: any): Promise<Contact> {
+        try {
+            const response = await agent.Contact.create(contact.payload);
 
-    //         return response;
-    //     }
-    //     catch (error) {
-    //         console.error('Error logging in :', error);
-    //         throw error;
-    //     }
-    // }
+            return response;
+        }
+        catch (error) {
+            console.error('Error creating contact in :', error);
+            throw error;
+        }
+    }
 }

@@ -13,7 +13,9 @@ import {
     SIDEBAR_TOGGLE,
     DELETE_ACCOUNT_SUCCESS,
     UPDATE_ACCOUNT_SUCCESS,
-    GET_NOTES_SUCCESS
+    GET_NOTES_SUCCESS,
+    GET_CONTACT_DETAIL_SUCCESS,
+    CREATE_CONTACT_SUCCESS
 } from "../../constants/reduxConstants";
 
 const initialState = {
@@ -22,17 +24,18 @@ const initialState = {
         modulePermission: [],
         loggedIn: false,
         accounts: [],
-        response:null, 
-        account:null,
-        accountOwner :[],
-        industry:[],
-        accountStatus :[],
-        accountType :[],
-        invoiceStatus : [],
+        response: null,
+        account: null,
+        accountOwner: [],
+        industry: [],
+        accountStatus: [],
+        accountType: [],
+        invoiceStatus: [],
         deleteResponse: null,
         updateAccount: null,
         contacts: [],
-        notes: [] ,
+        contact: null,
+        notes: [],
     }
 };
 
@@ -82,29 +85,31 @@ const reducer = (state = initialState, action: any) => {
             return {
                 ...state,
                 account: action.account,
-                }
-
-        case DELETE_ACCOUNT_SUCCESS:
-            return {...state,
-            deleteResponse : action.response 
-        }
-        case UPDATE_ACCOUNT_SUCCESS:
-            return{
-                ...state,
-                updateAccount : action.account
             }
 
-        case GET_ACCOUNT_OWNER_SUCCESS: 
+        case DELETE_ACCOUNT_SUCCESS:
+            return {
+                ...state,
+                deleteResponse: action.response
+            }
+        case UPDATE_ACCOUNT_SUCCESS:
+            return {
+                ...state,
+                updateAccount: action.account
+            }
+
+        case GET_ACCOUNT_OWNER_SUCCESS:
             return {
                 ...state,
 
                 accountOwner: action.accountOwners,
-                }
-        case GET_INDUSTRY_SUCCESS: 
-            return {...state,
+            }
+        case GET_INDUSTRY_SUCCESS:
+            return {
+                ...state,
                 industry: action.industry,
-                }
-        case GET_ACCOUNT_STATUS_SUCCESS: 
+            }
+        case GET_ACCOUNT_STATUS_SUCCESS:
             return {
                 ...state,
                 accountStatus: action.accountStatus,
@@ -115,18 +120,30 @@ const reducer = (state = initialState, action: any) => {
                 ...state,
                 accountType: action.accountType,
             }
-            
+
         case GET_CONTACTS_SUCCESS:
             return {
                 ...state,
                 contacts: action.contacts,
             }
 
+        case GET_CONTACT_DETAIL_SUCCESS:
+            return {
+                ...state,
+                contact: action.contact,
+            }
+
+        case CREATE_CONTACT_SUCCESS:
+            return {
+                ...state,
+                response: action.response,
+            }
+
         case GET_NOTES_SUCCESS:
             return {
                 ...state,
                 notes: action.notes,
-            } 
+            }
 
 
         case GET_INVOICE_STATUS_SUCCESS:

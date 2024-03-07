@@ -1,6 +1,5 @@
 import { Account } from "../models/account/Account";
 import { Note } from "../models/notes/notes";
-import { CreateContact } from "../models/contact/CreateContact";
 import { UserLogin } from "../models/userAccount/login";
 import { LoginResponse } from "../models/userAccount/loginResponse";
 import {
@@ -17,13 +16,14 @@ import {
   CREATE_CONTACT_REQUEST,
   GET_INDUSTRY_FETCH,
   GET_INVOICE_STATUS_FETCH,
-    LOGOUT,
-    SIDEBAR_TOGGLE,
-    DELETE_ACCOUNT_REQUEST,
-    UPDATE_ACCOUNT_REQUEST,
-    CREATE_NOTES_REQUEST,
-    GET_NOTES_FETCH
+  LOGOUT,
+  SIDEBAR_TOGGLE,
+  DELETE_ACCOUNT_REQUEST,
+  UPDATE_ACCOUNT_REQUEST,
+  CREATE_NOTES_REQUEST,
+  GET_NOTES_FETCH
 } from "../constants/reduxConstants";
+import { Contact } from "../models/contact/Contact";
 
 // Login action methods
 export const loginRequest = (userLogin: UserLogin, navigate: any, toast: any) => ({
@@ -39,14 +39,14 @@ export const loginSuccess = (response: LoginResponse) => ({
 });
 
 export const logout = () => ({
-    type: LOGOUT
+  type: LOGOUT
 });
 
 
 //Application Setting
 export const sidebarToggle = (sidebarShow: boolean) => ({
-    type: SIDEBAR_TOGGLE,
-    sidebarShow: sidebarShow
+  type: SIDEBAR_TOGGLE,
+  sidebarShow: sidebarShow
 });
 
 // Account action methods
@@ -59,10 +59,6 @@ export const createAccountRequest = (account: Account) => ({
   payload: account,
 });
 
-
-
-
-
 export const getAccountByIdRequest = (id: any) => ({
   type: GET_ACCOUNT_DETAIL_FETCH,
   payload: id,
@@ -72,11 +68,10 @@ export const deleteAccountRequest = (id: any) => ({
   payload: id,
 });
 
-export const updateAccountRequest = (account: Account,id: any) => ({
+export const updateAccountRequest = (account: Account, id: any) => ({
   type: UPDATE_ACCOUNT_REQUEST,
-  payload: {account, id},
+  payload: { account, id },
 });
-
 
 export const getAccountOwner = () => ({
   type: GET_ACCOUNT_OWNER_FETCH
@@ -100,9 +95,9 @@ export const getContactById = (id: number) => ({
   payload: id
 })
 
-export const createContact = (createContact: CreateContact) => ({
+export const createContact = (contact: Contact) => ({
   type: CREATE_CONTACT_REQUEST,
-  payload: createContact
+  payload: contact
 });
 
 export const getIndustry = () => ({
@@ -114,10 +109,10 @@ export const getInvoiceStatus = () => ({
 })
 
 export const getNotes = () => ({
-    type: GET_NOTES_FETCH
+  type: GET_NOTES_FETCH
 })
 
 export const createNotesRequest = (notes: Note) => ({
-    type: CREATE_NOTES_REQUEST,
-    payload: notes,
+  type: CREATE_NOTES_REQUEST,
+  payload: notes,
 });

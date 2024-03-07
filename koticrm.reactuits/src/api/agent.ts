@@ -33,7 +33,7 @@ const Account = {
 
 const Contact = {
     get: () => requests.get<Contact[]>(`/Contact/GetContactList`),
-    create: (contact : Contact) => requests.post<Account>(`/Contact/CreateContact`, contact),
+    create: (contact : Contact) => requests.post<Contact>(`/Contact/CreateContact`, contact),
     update: (id : number,contact: Contact) => requests.put<Contact>(`/Contact/UpdateContact/${id}`, contact),
     getById: (id : number) => requests.get<Contact>(`/Contact/GetContactDetails/${id}`),
     delete: (id : number) => requests.del<Contact>(`/Contact/DeleteContact/${id}`)  
