@@ -1,17 +1,46 @@
 import { CCard, CCardBody, CCardHeader, CCol, CRow } from '@coreui/react';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
-import { useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import * as Yup from "yup";
 import { Contact, ContactClass } from '../../models/contact/Contact';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { createContact, getContactById, updateContact } from '../../redux-saga/action';
+import SearchDropdown from '../base/select/SearchDropdown';
+
+import Countries from '../../constants/country-state/countries+states.json';
+import { Country, State } from '../../models/Country-State/CountryState';
+
+// const owners = [
+//   { ownerId: 1, ownerName: "Bob" },
+//   { ownerId: 2, ownerName: "Tom" },
+//   { ownerId: 3, ownerName: "Dom" },
+// ]
+
 
 const owners = [
-  { ownerId: 1, ownerName: "Bob" },
-  { ownerId: 2, ownerName: "Tom" },
-  { ownerId: 3, ownerName: "Dom" },
-]
+  { id: '1', firstName: 'John', lastName: 'Doe', email: 'john@example.com', logo: 'path_to_logo1' },
+  { id: '2', firstName: 'Jane', lastName: 'Smith', email: 'rony@test1.com', logo: 'path_to_logo2' },
+  { id: '3', firstName: 'Billy', lastName: 'Butcher', email: 'billy@example.com', logo: 'path_to_logo2' },
+  { id: '4', firstName: 'John', lastName: 'Doe', email: 'john@example.com', logo: 'path_to_logo1' },
+  { id: '5', firstName: 'Jane', lastName: 'Smith', email: 'jane@example.com', logo: 'path_to_logo2' },
+  { id: '6', firstName: 'Billy', lastName: 'Butcher', email: 'billy@example.com', logo: 'path_to_logo2' },
+  { id: '7', firstName: 'John', lastName: 'Doe', email: 'john@example.com', logo: 'path_to_logo1' },
+  { id: '8', firstName: 'Jane', lastName: 'Smith', email: 'jane@example.com', logo: 'path_to_logo2' },
+  { id: '9', firstName: 'Billy', lastName: 'Butcher', email: 'billy@example.com', logo: 'path_to_logo2' },
+  { id: '10', firstName: 'John', lastName: 'Doe', email: 'john@example.com', logo: 'path_to_logo1' },
+  { id: '11', firstName: 'John', lastName: 'Doe', email: 'john@example.com', logo: 'path_to_logo1' },
+  { id: '12', firstName: 'Jane', lastName: 'Smith', email: 'rony@test.com', logo: 'path_to_logo2' },
+  { id: '13', firstName: 'Billy', lastName: 'Butcher', email: 'billy@example.com', logo: 'path_to_logo2' },
+  { id: '14', firstName: 'John', lastName: 'Doe', email: 'john@example.com', logo: 'path_to_logo1' },
+  { id: '15', firstName: 'Jane', lastName: 'Smith', email: 'jane@example.com', logo: 'path_to_logo2' },
+  { id: '16', firstName: 'Billy', lastName: 'Butcher', email: 'billy@example.com', logo: 'path_to_logo2' },
+  { id: '17', firstName: 'John', lastName: 'Doe', email: 'john@example.com', logo: 'path_to_logo1' },
+  { id: '18', firstName: 'Jane', lastName: 'Smith', email: 'jane@example.com', logo: 'path_to_logo2' },
+  { id: '19', firstName: 'Billy', lastName: 'Butcher', email: 'billy@example.com', logo: 'path_to_logo2' },
+  { id: '20', firstName: 'John', lastName: 'Doe', email: 'john@example.com', logo: 'path_to_logo1' },
+  // Add more options as needed
+];
 
 // const accounts = [
 //   { accountID: 1, accountName: "Bob" },
@@ -27,16 +56,44 @@ const CreateOrEditContact = () => {
   const fetchedContact = useSelector((state: any) => state.reducer.contact);
   console.log(contact);
 
+  // Country-State
+  const countries: Country[] = Countries;
+  const [selectedCountry, setSelectedCountry] = useState<string>("");
+  const [selectedState, setSelectedState] = useState<string>("");
+  const [states, setStates] = useState<State[]>([]);
+
+  const handleCountryChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    const selectedCountry = e.target.value;
+    setSelectedCountry(selectedCountry);
+
+    const selectedCountryObject = countries.find(country => country.name === selectedCountry);
+
+    console.log(selectedCountry);
+
+    if (selectedCountryObject) {
+      setStates(selectedCountryObject.states);
+    } else {
+      setStates([]);
+    }
+  }
+
+  const handleStateChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    const selectedState = e.target.value;
+    setSelectedState(selectedState);
+  }
+
   const validationSchema = Yup.object().shape({
     ownerId: Yup.number().required('Owner ID is required'),
-    firstName: Yup.string().required('First Name is required'),
-    lastName: Yup.string().required('Last Name is required'),
-    accountID: Yup.number().required('Account ID is required'),
-    email: Yup.string().email('Invalid email').required('Email is required')
+    // firstName: Yup.string().required('First Name is required'),
+    // lastName: Yup.string().required('Last Name is required'),
+    // accountID: Yup.number().required('Account ID is required'),
+    // email: Yup.string().email('Invalid email').required('Email is required')
   });
 
   const handleFormSubmit = async (contact: Contact, { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }) => {
     try {
+      contact.country = selectedCountry;
+      contact.state = selectedState;
       if (!contact.id) {
         console.log("Create new contact:", contact);
         dispatch(createContact(contact));
@@ -86,12 +143,14 @@ const CreateOrEditContact = () => {
                   <label htmlFor="ownerId" className="col-form-label">Contact Owner</label>
                 </CCol>
                 <CCol sm={8}>
-                  <Field as="select" name="ownerId" className="form-select">
+                  {/* <Field as="select" name="ownerId" className="form-select">
                     <option value="">Select owner</option>
                     {owners.map((owner) => (
                       <option key={owner.ownerId} value={owner.ownerId}>{owner.ownerName}</option>
                     ))}
-                  </Field>
+                  </Field> */}
+                  {/* <SearchableDropdown name="ownerId" options={owners} /> */}
+                  <SearchDropdown name="ownerId" options={owners} />
                   <ErrorMessage name="ownerId" component="div" className="invalid-feedback" />
                 </CCol>
               </CRow>
@@ -273,20 +332,30 @@ const CreateOrEditContact = () => {
                   </CRow>
                   <CRow className="mb-3">
                     <CCol sm={4}>
-                      <label htmlFor="state" className="col-form-label">State</label>
+                      <label htmlFor="country" className="col-form-label">Country</label>
                     </CCol>
                     <CCol sm={8}>
-                      <Field type="text" id="state" name="state" className="form-control" placeholder="Enter your state" />
-                      <ErrorMessage name="state" component="div" className="invalid-feedback" />
+                      <Field as="select" id="country" name='country' className="form-control" onChange={handleCountryChange}>
+                        <option value="">{selectedCountry ? selectedCountry : "Select Country"}</option>
+                        {countries.map((country, index) => (
+                          <option key={index} value={country.name}>{country.name}</option>
+                        ))}
+                      </Field>
+                      <ErrorMessage name="country" component="div" className="invalid-feedback" />
                     </CCol>
                   </CRow>
                   <CRow className="mb-3">
                     <CCol sm={4}>
-                      <label htmlFor="country" className="col-form-label">Country</label>
+                      <label htmlFor="state" className="col-form-label">State</label>
                     </CCol>
                     <CCol sm={8}>
-                      <Field type="text" id="country" name="country" className="form-control" placeholder="Enter your country" />
-                      <ErrorMessage name="country" component="div" className="invalid-feedback" />
+                      <Field as="select" id="state" name="state" className="form-control" onChange={handleStateChange}>
+                        <option value="">{selectedState ? selectedState : "Select State"}</option>
+                        {states.map(state => (
+                          <option key={state.id} value={state.name}>{state.name}</option>
+                        ))}
+                      </Field>
+                      <ErrorMessage name="state" component="div" className="invalid-feedback" />
                     </CCol>
                   </CRow>
                   <CRow className="mb-3">
