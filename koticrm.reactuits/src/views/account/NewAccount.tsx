@@ -73,7 +73,6 @@ const MyForm: React.FC<NewAccountProps> = ({ closeModal, onBackToListButtonClick
     const formattedDateTime: string = currentDate.toISOString().slice(0, -1);
 
   const handleCreateAccountClick = () => {
-    debugger
     const accountDetail: Account = {
       id: 0,
       ownerId: account.accountOwner,

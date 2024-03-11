@@ -76,7 +76,6 @@ export function* workGetInvoiceByIdFetch(action: any) {
 
 function* updateInvoice(action: {payload: { invoice: any, id: any }}) : Generator<any>{
   try {
-    debugger
     const { invoice, id } = action.payload;
 
       const response = yield call(InvoiceService.UpdateInvoice,invoice, id );
@@ -100,7 +99,6 @@ export function* workUpdateInvoice(action: any) {
 
 function* deleteInvoice(action: { payload: any }) : Generator<any>{
   try {
-    debugger
     const { payload } = action;
 
       const response = yield call(InvoiceService.DeleteInvoice,payload );

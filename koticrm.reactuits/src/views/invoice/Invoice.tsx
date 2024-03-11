@@ -2,7 +2,7 @@ import { CButton, CCard, CCardBody, CCardHeader, CCol, CRow, CTable, CTableBody,
 import { useEffect, useState } from 'react'
 import NewInvoice from './NewInvoice'
 import { useDispatch } from 'react-redux';
-import { getAccountOwner, getAccounts, getInvoice, getInvoiceStatus, getNotes } from '../../redux-saga/action';
+import { getAccountOwner, getAccounts, getInvoice, getInvoiceOwner, getInvoiceStatus, getNotes } from '../../redux-saga/action';
 import { useSelector } from 'react-redux';
 import { Invoice } from '../../models/invoice/Invoice';
 
@@ -23,11 +23,9 @@ const InvoiceComponent: React.FC<InvoiceProps> = ({ accountId, ownerId, getInvoi
 
 
 	const handleCreateNewInvoice = () => {
-		debugger
 		setShowCreateInvoice(true);
 	};
 	const backToInvoiceList = () => {
-		debugger
 		setShowCreateInvoice(false);
 		setShowEditInvoice(false);
 	};
@@ -71,7 +69,9 @@ const InvoiceComponent: React.FC<InvoiceProps> = ({ accountId, ownerId, getInvoi
 		dispatch(getInvoiceStatus());
 		dispatch(getInvoice());
 		dispatch(getNotes())
-		dispatch(getAccounts())
+		dispatch(getAccounts());
+		dispatch(getAccountOwner())
+		dispatch(getInvoiceOwner())
 	},[dispatch])
 	return (
 		<div>

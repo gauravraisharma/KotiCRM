@@ -17,7 +17,6 @@ export default class InvoiceService {
 
 	static async CreateInvoice(invoice: any): Promise<Invoice> {
 		try {
-		  debugger
 		  const response  = await agent.Invoice.create(invoice.payload);
 		  console.log(response)
 		  
@@ -42,7 +41,6 @@ export default class InvoiceService {
 
 	  static async UpdateInvoice(invoice: any, id: any): Promise<Invoice> {
 		try {
-		  debugger
 		  const response  = await agent.Invoice.update(id,invoice);
 		  console.log(response)
 		  
@@ -56,7 +54,6 @@ export default class InvoiceService {
 
 	  static async DeleteInvoice(id: any): Promise<Invoice> {
 		try {
-		  debugger
 		  const response  = await agent.Invoice.delete(id.payload);
 		  console.log(response)  
 		  return response;

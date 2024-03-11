@@ -11,5 +11,7 @@ namespace KotiCRM.Services.IServices
     {
         Task<IEnumerable<Industry>> GetIndustryList();
         List<DropDownModel> GetAccountOwner();
+        List<DropDownModel> GetInvoiceOwner();
+
     }
 }

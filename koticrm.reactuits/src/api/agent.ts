@@ -5,7 +5,7 @@ import { Contact } from '../models/contact/Contact';
 import { Invoice } from '../models/invoice/Invoice';
 import { Note } from '../models/notes/notes';
 import { UserLogin } from '../models/userAccount/login';
-import { SharedModel } from '../models/commonModels/SharedModels';
+import { SharedModel, SharedOwnerModel } from '../models/commonModels/SharedModels';
 
 const responseBody = <T>(response: AxiosResponse<T>) => response.data;
 
@@ -55,10 +55,11 @@ const Notes = {
 
 const SharedData = {
     getIndustry: () => requests.get<SharedModel[]>(`/Shared/GetIndustryList`),
-    getAccountOwner: () => requests.get<SharedModel[]>(`/Shared/GetAccountOwner`),
+    getAccountOwner: () => requests.get<SharedOwnerModel[]>(`/Shared/GetAccountOwner`),
     getInvoiceStatus: () => requests.get<SharedModel[]>(`/Shared/InvoiceStatus`),
     getAccountStatus: () => requests.get<SharedModel[]>(`/Shared/AccountStatus`),
     getAccountType: () => requests.get<SharedModel[]>(`/Shared/AccountType`),
+    getInvoiceOwner : ()=> requests.get<SharedOwnerModel[]>(`/Shared/GetInvoiceOwner`)
 
 }
 

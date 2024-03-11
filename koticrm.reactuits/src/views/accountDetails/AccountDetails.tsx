@@ -29,7 +29,7 @@ import { getAccountByIdRequest } from "../../redux-saga/action";
 // import { }
 import { useSelector } from "react-redux";
 import Notes from "../../components/Notes";
-import InvoiceComponent from "../../components/invoice/Invoice";
+import InvoiceComponent from "../invoice/Invoice";
 import Contacts from "../contacts/Contacts";
 
 const AccountDetails = () => {
@@ -78,20 +78,6 @@ const AccountDetails = () => {
               </CCol>
               <CCol xs={6}>
                 <div className="text-end">
-                  {/* <CButton
-                    style={{ margin: 4 }}
-                    component="input"
-                    type="button"
-                    color="primary"
-                    value="Send Email"
-                  />
-                  <CButton
-                    style={{ margin: 4 }}
-                    component="input"
-                    type="button"
-                    color="light"
-                    value="Edit"
-                  /> */}
                   <CButton
                     component="input"
                     type="button"

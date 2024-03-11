@@ -76,7 +76,6 @@ export function* workGetAccountByIdFetch(action: any) {
 
 function* updateAccount(action: {payload: { account: any, id: any }}) : Generator<any>{
   try {
-    debugger
     const { account, id } = action.payload;
 
       const response = yield call(AccountService.UpdateAccount,account, id );
@@ -100,7 +99,6 @@ export function* workUpdateAccount(action: any) {
 
 function* deleteAccount(action: { payload: any }) : Generator<any>{
   try {
-    debugger
     const { payload } = action;
 
       const response = yield call(AccountService.DeleteAccount,payload );

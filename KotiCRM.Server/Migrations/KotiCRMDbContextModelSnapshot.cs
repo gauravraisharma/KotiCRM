@@ -280,6 +280,56 @@ namespace KotiCRM.Server.Migrations
                     b.ToTable("Attachments");
                 });
 
+            modelBuilder.Entity("KotiCRM.Repository.Models.Bank", b =>
+                {
+                    b.Property<int>("BankId")
+                        .HasColumnType("int")
+                        .HasColumnName("BankID");
+
+                    b.Property<string>("Branch")
+                        .HasMaxLength(100)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<string>("Ifsc")
+                        .HasMaxLength(100)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(100)")
+                        .HasColumnName("IFSC");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(255)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<int?>("OrganizationId")
+                        .HasColumnType("int")
+                        .HasColumnName("OrganizationID");
+
+                    b.HasKey("BankId");
+
+                    b.ToTable("Bank", (string)null);
+                });
+
+            modelBuilder.Entity("KotiCRM.Repository.Models.Company", b =>
+                {
+                    b.Property<int>("CompanyId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CompanyId"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(50)");
+
+                    b.HasKey("CompanyId");
+
+                    b.ToTable("Company", (string)null);
+                });
+
             modelBuilder.Entity("KotiCRM.Repository.Models.Contact", b =>
                 {
                     b.Property<int>("Id")
@@ -383,6 +433,357 @@ namespace KotiCRM.Server.Migrations
                     b.ToTable("Contacts");
                 });
 
+            modelBuilder.Entity("KotiCRM.Repository.Models.DefaultColumn", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ColumnName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Entity")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("IsEditable")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("OrgId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("DefaultColumns");
+                });
+
+            modelBuilder.Entity("KotiCRM.Repository.Models.Department", b =>
+                {
+                    b.Property<int>("DepartmentId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(100)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<int?>("OrganizationId")
+                        .HasColumnType("int")
+                        .HasColumnName("OrganizationID");
+
+                    b.HasKey("DepartmentId")
+                        .HasName("PK_Table_1");
+
+                    b.HasIndex("OrganizationId");
+
+                    b.ToTable("Department", (string)null);
+                });
+
+            modelBuilder.Entity("KotiCRM.Repository.Models.Designation", b =>
+                {
+                    b.Property<int>("DesignationId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(100)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<int?>("OrganizationId")
+                        .HasColumnType("int")
+                        .HasColumnName("OrganizationID");
+
+                    b.HasKey("DesignationId");
+
+                    b.HasIndex("OrganizationId");
+
+                    b.ToTable("Designation", (string)null);
+                });
+
+            modelBuilder.Entity("KotiCRM.Repository.Models.Employee", b =>
+                {
+                    b.Property<string>("EmployeeId")
+                        .HasMaxLength(50)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<string>("AdharCardNumber")
+                        .HasMaxLength(50)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<string>("BankAccountNumber")
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(20)");
+
+                    b.Property<int?>("BankId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("BloodGroup")
+                        .HasMaxLength(50)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<int>("CompanyId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(1);
+
+                    b.Property<string>("ContactNumber1")
+                        .HasMaxLength(50)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<string>("ContactNumber2")
+                        .HasMaxLength(50)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<string>("CorrespondenceAddress")
+                        .HasMaxLength(255)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<DateOnly?>("DateOfBirth")
+                        .HasColumnType("date");
+
+                    b.Property<int?>("DepartmentId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("DesignationId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("EmpCode")
+                        .HasMaxLength(50)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<string>("FatherName")
+                        .HasMaxLength(100)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<string>("Id")
+                        .HasMaxLength(50)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<string>("Ifsccode")
+                        .HasMaxLength(50)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("IFSCCode");
+
+                    b.Property<DateOnly?>("JoiningDate")
+                        .HasColumnType("date");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(100)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<string>("OfficialEmailId")
+                        .HasMaxLength(100)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<string>("OfficialEmailPassword")
+                        .HasMaxLength(50)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<int?>("OrganizationId")
+                        .HasColumnType("int")
+                        .HasColumnName("OrganizationID");
+
+                    b.Property<string>("PanNumber")
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(20)");
+
+                    b.Property<string>("Password")
+                        .HasMaxLength(10)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(10)");
+
+                    b.Property<string>("PermanentAddress")
+                        .HasMaxLength(255)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("PersonalEmailId")
+                        .HasMaxLength(100)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<DateOnly?>("RelievingDate")
+                        .HasColumnType("date");
+
+                    b.Property<int>("RoleId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(1);
+
+                    b.Property<int?>("ShiftId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SkypeId")
+                        .HasMaxLength(100)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<int?>("Status")
+                        .HasColumnType("int");
+
+                    b.HasKey("EmployeeId");
+
+                    b.HasIndex("BankId");
+
+                    b.HasIndex("CompanyId");
+
+                    b.HasIndex("DepartmentId");
+
+                    b.HasIndex("DesignationId");
+
+                    b.HasIndex("OrganizationId");
+
+                    b.HasIndex("RoleId");
+
+                    b.HasIndex("ShiftId");
+
+                    b.ToTable("Employee", (string)null);
+                });
+
+            modelBuilder.Entity("KotiCRM.Repository.Models.EmployeeAppraisal", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("ID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime?>("AppraisalDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<int?>("CurrentDesignation")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("CurrentSalary")
+                        .HasColumnType("int");
+
+                    b.Property<string>("EmpCode")
+                        .HasMaxLength(50)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<int?>("NewDesignation")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("NewSalary")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("EmployeeAppraisals");
+                });
+
+            modelBuilder.Entity("KotiCRM.Repository.Models.EmployeeLeaf", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int")
+                        .HasColumnName("ID");
+
+                    b.Property<string>("ApprovedByEmpCode")
+                        .HasMaxLength(50)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("EmpCode")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<string>("EmpCodeAppliedByName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<DateOnly?>("FromDate")
+                        .HasColumnType("date");
+
+                    b.Property<string>("RejectedByEmpCode")
+                        .HasMaxLength(50)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<int?>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<DateOnly?>("ToDate")
+                        .HasColumnType("date");
+
+                    b.Property<int>("TypeOfLeave")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("EmployeeLeaves");
+                });
+
+            modelBuilder.Entity("KotiCRM.Repository.Models.EmployeeRole", b =>
+                {
+                    b.Property<int>("RoleId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(255)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(50)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(50)");
+
+                    b.HasKey("RoleId");
+
+                    b.ToTable("EmployeeRoles");
+                });
+
+            modelBuilder.Entity("KotiCRM.Repository.Models.ImportHistory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("EmpCode")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<DateOnly>("ImportedDataDate")
+                        .HasColumnType("date");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ImportHistory", (string)null);
+                });
+
             modelBuilder.Entity("KotiCRM.Repository.Models.Industry", b =>
                 {
                     b.Property<int>("Id")
@@ -436,6 +837,9 @@ namespace KotiCRM.Server.Migrations
 
                     b.Property<int>("ContactID")
                         .HasColumnType("int");
+
+                    b.Property<string>("DealName")
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -518,6 +922,178 @@ namespace KotiCRM.Server.Migrations
                     b.ToTable("InvoiceItems");
                 });
 
+            modelBuilder.Entity("KotiCRM.Repository.Models.LeaveApplication", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int")
+                        .HasColumnName("ID");
+
+                    b.Property<string>("EmpCodeAppliedBy")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<string>("EmpCodeAppliedByName")
+                        .HasMaxLength(50)
+                        .HasColumnType("nchar(50)")
+                        .IsFixedLength();
+
+                    b.Property<string>("EmpCodeAppliedTo")
+                        .HasMaxLength(50)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<string>("EmpCodeAppliedToName")
+                        .HasMaxLength(50)
+                        .HasColumnType("nchar(50)")
+                        .IsFixedLength();
+
+                    b.Property<int?>("EmployeeLeaves")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("FkEmployeeLeavesId")
+                        .HasColumnType("int")
+                        .HasColumnName("FkEmployeeLeavesID");
+
+                    b.Property<int>("TypeOfLeave")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("LeaveApplication", (string)null);
+                });
+
+            modelBuilder.Entity("KotiCRM.Repository.Models.LeaveNotification", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int")
+                        .HasColumnName("ID");
+
+                    b.Property<string>("AdminNotificationDescription")
+                        .HasColumnType("text");
+
+                    b.Property<string>("AppliedDate")
+                        .IsRequired()
+                        .HasMaxLength(15)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(15)");
+
+                    b.Property<string>("AppliedTime")
+                        .IsRequired()
+                        .HasMaxLength(15)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(15)");
+
+                    b.Property<string>("ApplierNotificationDescription")
+                        .HasColumnType("text");
+
+                    b.Property<int?>("IsManager")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ManagerNotificationDescription")
+                        .HasColumnType("text");
+
+                    b.Property<string>("SentByEmpCode")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<string>("SentByName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<string>("SentToEmpCode")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<string>("SentToName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<int>("Viewed")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("LeaveNotifications");
+                });
+
+            modelBuilder.Entity("KotiCRM.Repository.Models.LeaveSetting", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int")
+                        .HasColumnName("ID");
+
+                    b.Property<int>("NumberOfLeaves")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TypeOfLeave")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Year")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("LeaveSettings");
+                });
+
+            modelBuilder.Entity("KotiCRM.Repository.Models.LeaveType", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int")
+                        .HasColumnName("ID");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("LeaveTypes");
+                });
+
+            modelBuilder.Entity("KotiCRM.Repository.Models.LiveUpdate", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateOnly>("DateOfEntry")
+                        .HasColumnType("date");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(10)");
+
+                    b.HasKey("Id")
+                        .HasName("PK__LiveUpda__3214EC0756D54FC0");
+
+                    b.ToTable("LiveUpdates");
+                });
+
             modelBuilder.Entity("KotiCRM.Repository.Models.Module", b =>
                 {
                     b.Property<int>("Id")
@@ -582,6 +1158,40 @@ namespace KotiCRM.Server.Migrations
                     b.ToTable("Notes");
                 });
 
+            modelBuilder.Entity("KotiCRM.Repository.Models.Organization", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int")
+                        .HasColumnName("ID");
+
+                    b.Property<string>("Currency")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<bool?>("IncludeLogofToIdle")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("OrgName")
+                        .HasMaxLength(100)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<bool?>("Shifts")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("TimeZone")
+                        .HasMaxLength(255)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(255)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Organization", (string)null);
+                });
+
             modelBuilder.Entity("KotiCRM.Repository.Models.Permissions", b =>
                 {
                     b.Property<int>("PermissionId")
@@ -612,6 +1222,661 @@ namespace KotiCRM.Server.Migrations
                     b.HasKey("PermissionId");
 
                     b.ToTable("Permissions");
+                });
+
+            modelBuilder.Entity("KotiCRM.Repository.Models.ProcessedFile", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("ID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Filename")
+                        .HasMaxLength(200)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<int?>("Status")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ProcessedFile", (string)null);
+                });
+
+            modelBuilder.Entity("KotiCRM.Repository.Models.Project", b =>
+                {
+                    b.Property<int>("ProjectId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProjectId"));
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(500)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(500)");
+
+                    b.Property<DateOnly?>("EndDate")
+                        .HasColumnType("date");
+
+                    b.Property<decimal?>("EstimatedBudget")
+                        .HasColumnType("numeric(18, 0)");
+
+                    b.Property<int?>("EstimatedHours")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(100)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<int?>("OrganizationId")
+                        .HasColumnType("int")
+                        .HasColumnName("OrganizationID");
+
+                    b.Property<DateOnly?>("StartDate")
+                        .HasColumnType("date");
+
+                    b.Property<int?>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("TimeSheetInterval")
+                        .HasColumnType("int");
+
+                    b.HasKey("ProjectId");
+
+                    b.ToTable("Projects");
+                });
+
+            modelBuilder.Entity("KotiCRM.Repository.Models.ProjectStatus", b =>
+                {
+                    b.Property<int?>("OrganizationId")
+                        .HasColumnType("int")
+                        .HasColumnName("OrganizationID");
+
+                    b.Property<int>("StatusId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("StatusID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StatusId"));
+
+                    b.Property<string>("StatusType")
+                        .HasMaxLength(50)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(50)");
+
+                    b.ToTable("ProjectStatus", (string)null);
+                });
+
+            modelBuilder.Entity("KotiCRM.Repository.Models.ProjectTeam", b =>
+                {
+                    b.Property<int>("MemeberId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("MemeberID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MemeberId"));
+
+                    b.Property<string>("EmpCode")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<int?>("HourlyRate")
+                        .HasColumnType("int");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsManager")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("ProjectId")
+                        .HasColumnType("int")
+                        .HasColumnName("ProjectID");
+
+                    b.HasKey("MemeberId")
+                        .HasName("PK__ProjectT__560EC19CBC304D1C");
+
+                    b.HasIndex("ProjectId");
+
+                    b.ToTable("ProjectTeam", (string)null);
+                });
+
+            modelBuilder.Entity("KotiCRM.Repository.Models.ProjectTimesheetInterval", b =>
+                {
+                    b.Property<int?>("OrganizationId")
+                        .HasColumnType("int")
+                        .HasColumnName("OrganizationID");
+
+                    b.Property<int>("TimesheetIntervalId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("TimesheetIntervalID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TimesheetIntervalId"));
+
+                    b.Property<string>("TimesheetType")
+                        .HasMaxLength(50)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(50)");
+
+                    b.ToTable("ProjectTimesheetInterval", (string)null);
+                });
+
+            modelBuilder.Entity("KotiCRM.Repository.Models.ReaderDatum1", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("ID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("EmployeeId")
+                        .HasMaxLength(50)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<DateTime?>("ReadingData")
+                        .HasColumnType("datetime");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ReaderData", (string)null);
+                });
+
+            modelBuilder.Entity("KotiCRM.Repository.Models.Readerdatum", b =>
+                {
+                    b.Property<string>("Empid")
+                        .HasMaxLength(8)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(8)")
+                        .HasColumnName("empid");
+
+                    b.Property<string>("Empname")
+                        .HasMaxLength(50)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("empname");
+
+                    b.Property<string>("HalfDays")
+                        .HasMaxLength(10)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(10)");
+
+                    b.Property<DateTime?>("Hours")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("ShortLeaves")
+                        .HasMaxLength(10)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(10)");
+
+                    b.Property<string>("_20200201")
+                        .HasMaxLength(40)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(40)")
+                        .HasColumnName("2020-02-01");
+
+                    b.Property<string>("_20200202")
+                        .HasMaxLength(40)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(40)")
+                        .HasColumnName("2020-02-02");
+
+                    b.Property<string>("_20200203")
+                        .HasMaxLength(40)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(40)")
+                        .HasColumnName("2020-02-03");
+
+                    b.Property<string>("_20200204")
+                        .HasMaxLength(40)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(40)")
+                        .HasColumnName("2020-02-04");
+
+                    b.Property<string>("_20200205")
+                        .HasMaxLength(40)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(40)")
+                        .HasColumnName("2020-02-05");
+
+                    b.Property<string>("_20200206")
+                        .HasMaxLength(40)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(40)")
+                        .HasColumnName("2020-02-06");
+
+                    b.Property<string>("_20200207")
+                        .HasMaxLength(40)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(40)")
+                        .HasColumnName("2020-02-07");
+
+                    b.Property<string>("_20200208")
+                        .HasMaxLength(40)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(40)")
+                        .HasColumnName("2020-02-08");
+
+                    b.Property<string>("_20200209")
+                        .HasMaxLength(40)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(40)")
+                        .HasColumnName("2020-02-09");
+
+                    b.Property<string>("_20200210")
+                        .HasMaxLength(40)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(40)")
+                        .HasColumnName("2020-02-10");
+
+                    b.Property<string>("_20200211")
+                        .HasMaxLength(40)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(40)")
+                        .HasColumnName("2020-02-11");
+
+                    b.Property<string>("_20200212")
+                        .HasMaxLength(40)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(40)")
+                        .HasColumnName("2020-02-12");
+
+                    b.Property<string>("_20200213")
+                        .HasMaxLength(40)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(40)")
+                        .HasColumnName("2020-02-13");
+
+                    b.Property<string>("_20200214")
+                        .HasMaxLength(40)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(40)")
+                        .HasColumnName("2020-02-14");
+
+                    b.Property<string>("_20200215")
+                        .HasMaxLength(40)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(40)")
+                        .HasColumnName("2020-02-15");
+
+                    b.Property<string>("_20200216")
+                        .HasMaxLength(40)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(40)")
+                        .HasColumnName("2020-02-16");
+
+                    b.Property<string>("_20200217")
+                        .HasMaxLength(40)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(40)")
+                        .HasColumnName("2020-02-17");
+
+                    b.Property<string>("_20200218")
+                        .HasMaxLength(40)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(40)")
+                        .HasColumnName("2020-02-18");
+
+                    b.Property<string>("_20200219")
+                        .HasMaxLength(40)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(40)")
+                        .HasColumnName("2020-02-19");
+
+                    b.Property<string>("_20200220")
+                        .HasMaxLength(40)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(40)")
+                        .HasColumnName("2020-02-20");
+
+                    b.Property<string>("_20200221")
+                        .HasMaxLength(40)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(40)")
+                        .HasColumnName("2020-02-21");
+
+                    b.Property<string>("_20200222")
+                        .HasMaxLength(40)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(40)")
+                        .HasColumnName("2020-02-22");
+
+                    b.Property<string>("_20200223")
+                        .HasMaxLength(40)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(40)")
+                        .HasColumnName("2020-02-23");
+
+                    b.Property<string>("_20200224")
+                        .HasMaxLength(40)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(40)")
+                        .HasColumnName("2020-02-24");
+
+                    b.Property<string>("_20200225")
+                        .HasMaxLength(40)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(40)")
+                        .HasColumnName("2020-02-25");
+
+                    b.Property<string>("_20200226")
+                        .HasMaxLength(40)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(40)")
+                        .HasColumnName("2020-02-26");
+
+                    b.Property<string>("_20200227")
+                        .HasMaxLength(40)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(40)")
+                        .HasColumnName("2020-02-27");
+
+                    b.Property<string>("_20200228")
+                        .HasMaxLength(40)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(40)")
+                        .HasColumnName("2020-02-28");
+
+                    b.Property<string>("_20200229")
+                        .HasMaxLength(40)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(40)")
+                        .HasColumnName("2020-02-29");
+
+                    b.ToTable("_readerdata", (string)null);
+                });
+
+            modelBuilder.Entity("KotiCRM.Repository.Models.ScreenShot", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasColumnName("ID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTime?>("DateOfScreenshot")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getutcdate())");
+
+                    b.Property<string>("EmpCode")
+                        .HasMaxLength(50)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<byte[]>("ImageData")
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("ImageName")
+                        .HasMaxLength(100)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<int?>("IsIdleTime")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("KeyStrokes")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ManualTime")
+                        .HasMaxLength(10)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(10)");
+
+                    b.Property<int?>("MouseStrokes")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("OrganizationId")
+                        .HasColumnType("int")
+                        .HasColumnName("OrganizationID");
+
+                    b.Property<int?>("TaskId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("WindowTitles")
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ScreenShots");
+                });
+
+            modelBuilder.Entity("KotiCRM.Repository.Models.Shift", b =>
+                {
+                    b.Property<int>("ShiftId")
+                        .HasColumnType("int");
+
+                    b.Property<TimeOnly?>("EndTime")
+                        .HasColumnType("time");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(100)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<int?>("OrganizationId")
+                        .HasColumnType("int")
+                        .HasColumnName("OrganizationID");
+
+                    b.Property<TimeOnly?>("StartTime")
+                        .HasColumnType("time");
+
+                    b.HasKey("ShiftId");
+
+                    b.ToTable("Shift", (string)null);
+                });
+
+            modelBuilder.Entity("KotiCRM.Repository.Models.Task", b =>
+                {
+                    b.Property<int>("TaskId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TaskId"));
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(200)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<int?>("ProjectId")
+                        .HasColumnType("int");
+
+                    b.Property<bool?>("Status")
+                        .HasColumnType("bit");
+
+                    b.HasKey("TaskId");
+
+                    b.HasIndex("ProjectId");
+
+                    b.ToTable("Tasks");
+                });
+
+            modelBuilder.Entity("KotiCRM.Repository.Models.TaskMember", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("ID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("EmpCode")
+                        .HasMaxLength(50)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<bool?>("IsManager")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("TaskId")
+                        .HasColumnType("int")
+                        .HasColumnName("TaskID");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TaskMembers");
+                });
+
+            modelBuilder.Entity("KotiCRM.Repository.Models.TimeLog", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasColumnName("ID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("EmpCode")
+                        .HasMaxLength(50)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<DateTime?>("LoginTime")
+                        .HasColumnType("datetime");
+
+                    b.Property<DateTime?>("LogoutTime")
+                        .HasColumnType("datetime");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TimeLog", (string)null);
+                });
+
+            modelBuilder.Entity("KotiCRM.Repository.Models.Timesheet", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("ID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<decimal?>("BudgetConsumed")
+                        .HasColumnType("numeric(18, 0)");
+
+                    b.Property<string>("EmpCode")
+                        .HasMaxLength(50)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<int?>("HoursConsumed")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ProjectId")
+                        .HasColumnType("int")
+                        .HasColumnName("ProjectID");
+
+                    b.Property<int?>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<DateOnly?>("TimesheetEndDate")
+                        .HasColumnType("date");
+
+                    b.Property<int?>("TimesheetInterval")
+                        .HasColumnType("int");
+
+                    b.Property<DateOnly?>("TimesheetStartDate")
+                        .HasColumnType("date");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Timesheets");
+                });
+
+            modelBuilder.Entity("KotiCRM.Repository.Models.UserLeave", b =>
+                {
+                    b.Property<int>("LeaveId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("LeaveId"));
+
+                    b.Property<string>("EmployeeId")
+                        .HasMaxLength(50)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<DateOnly?>("EndLeave")
+                        .HasColumnType("date");
+
+                    b.Property<bool?>("IsApproved")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LeaveApproval")
+                        .HasMaxLength(200)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<int?>("LeaveType")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ReasonForLeave")
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(max)");
+
+                    b.Property<DateOnly?>("StartLeave")
+                        .HasColumnType("date");
+
+                    b.HasKey("LeaveId");
+
+                    b.HasIndex("EmployeeId");
+
+                    b.ToTable("UserLeave", (string)null);
+                });
+
+            modelBuilder.Entity("KotiCRM.Repository.Models.WorkLog", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<double>("ActualWork")
+                        .HasColumnType("float");
+
+                    b.Property<DateOnly>("Date")
+                        .HasColumnType("date");
+
+                    b.Property<string>("EmployeeCode")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<double>("HoursIdle")
+                        .HasColumnType("float");
+
+                    b.Property<double>("HoursWorked")
+                        .HasColumnType("float");
+
+                    b.Property<int>("ImportHistoryId")
+                        .HasColumnType("int");
+
+                    b.Property<double>("ManualTime")
+                        .HasColumnType("float");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("WorkLog", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -720,6 +1985,111 @@ namespace KotiCRM.Server.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("KotiCRM.Repository.Models.Department", b =>
+                {
+                    b.HasOne("KotiCRM.Repository.Models.Organization", "Organization")
+                        .WithMany("Departments")
+                        .HasForeignKey("OrganizationId")
+                        .HasConstraintName("FK_Department_Organization");
+
+                    b.Navigation("Organization");
+                });
+
+            modelBuilder.Entity("KotiCRM.Repository.Models.Designation", b =>
+                {
+                    b.HasOne("KotiCRM.Repository.Models.Organization", "Organization")
+                        .WithMany("Designations")
+                        .HasForeignKey("OrganizationId")
+                        .HasConstraintName("FK_Designation_Organization");
+
+                    b.Navigation("Organization");
+                });
+
+            modelBuilder.Entity("KotiCRM.Repository.Models.Employee", b =>
+                {
+                    b.HasOne("KotiCRM.Repository.Models.Bank", "Bank")
+                        .WithMany("Employees")
+                        .HasForeignKey("BankId")
+                        .HasConstraintName("FK_Employee_Bank");
+
+                    b.HasOne("KotiCRM.Repository.Models.Company", "Company")
+                        .WithMany("Employees")
+                        .HasForeignKey("CompanyId")
+                        .IsRequired()
+                        .HasConstraintName("FK_Employee_Company");
+
+                    b.HasOne("KotiCRM.Repository.Models.Department", "Department")
+                        .WithMany("Employees")
+                        .HasForeignKey("DepartmentId")
+                        .HasConstraintName("FK_Employee_Department");
+
+                    b.HasOne("KotiCRM.Repository.Models.Designation", "Designation")
+                        .WithMany("Employees")
+                        .HasForeignKey("DesignationId")
+                        .HasConstraintName("FK_Employee_Designation");
+
+                    b.HasOne("KotiCRM.Repository.Models.Organization", "Organization")
+                        .WithMany("Employees")
+                        .HasForeignKey("OrganizationId")
+                        .HasConstraintName("FK_Employee_Organization");
+
+                    b.HasOne("KotiCRM.Repository.Models.EmployeeRole", "Role")
+                        .WithMany("Employees")
+                        .HasForeignKey("RoleId")
+                        .IsRequired()
+                        .HasConstraintName("FK_Employee_EmployeeRoles");
+
+                    b.HasOne("KotiCRM.Repository.Models.Shift", "Shift")
+                        .WithMany("Employees")
+                        .HasForeignKey("ShiftId")
+                        .HasConstraintName("FK_Employee_Shift");
+
+                    b.Navigation("Bank");
+
+                    b.Navigation("Company");
+
+                    b.Navigation("Department");
+
+                    b.Navigation("Designation");
+
+                    b.Navigation("Organization");
+
+                    b.Navigation("Role");
+
+                    b.Navigation("Shift");
+                });
+
+            modelBuilder.Entity("KotiCRM.Repository.Models.ProjectTeam", b =>
+                {
+                    b.HasOne("KotiCRM.Repository.Models.Project", "Project")
+                        .WithMany("ProjectTeams")
+                        .HasForeignKey("ProjectId")
+                        .IsRequired()
+                        .HasConstraintName("FK__ProjectTe__Proje__1A9EF37A");
+
+                    b.Navigation("Project");
+                });
+
+            modelBuilder.Entity("KotiCRM.Repository.Models.Task", b =>
+                {
+                    b.HasOne("KotiCRM.Repository.Models.Project", "Project")
+                        .WithMany("Tasks")
+                        .HasForeignKey("ProjectId")
+                        .HasConstraintName("FK_Tasks_Projects");
+
+                    b.Navigation("Project");
+                });
+
+            modelBuilder.Entity("KotiCRM.Repository.Models.UserLeave", b =>
+                {
+                    b.HasOne("KotiCRM.Repository.Models.Employee", "Employee")
+                        .WithMany("UserLeaves")
+                        .HasForeignKey("EmployeeId")
+                        .HasConstraintName("FK_UserLeave_Employee");
+
+                    b.Navigation("Employee");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("KotiCRM.Repository.Models.ApplicationRole", null)
@@ -769,6 +2139,57 @@ namespace KotiCRM.Server.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("KotiCRM.Repository.Models.Bank", b =>
+                {
+                    b.Navigation("Employees");
+                });
+
+            modelBuilder.Entity("KotiCRM.Repository.Models.Company", b =>
+                {
+                    b.Navigation("Employees");
+                });
+
+            modelBuilder.Entity("KotiCRM.Repository.Models.Department", b =>
+                {
+                    b.Navigation("Employees");
+                });
+
+            modelBuilder.Entity("KotiCRM.Repository.Models.Designation", b =>
+                {
+                    b.Navigation("Employees");
+                });
+
+            modelBuilder.Entity("KotiCRM.Repository.Models.Employee", b =>
+                {
+                    b.Navigation("UserLeaves");
+                });
+
+            modelBuilder.Entity("KotiCRM.Repository.Models.EmployeeRole", b =>
+                {
+                    b.Navigation("Employees");
+                });
+
+            modelBuilder.Entity("KotiCRM.Repository.Models.Organization", b =>
+                {
+                    b.Navigation("Departments");
+
+                    b.Navigation("Designations");
+
+                    b.Navigation("Employees");
+                });
+
+            modelBuilder.Entity("KotiCRM.Repository.Models.Project", b =>
+                {
+                    b.Navigation("ProjectTeams");
+
+                    b.Navigation("Tasks");
+                });
+
+            modelBuilder.Entity("KotiCRM.Repository.Models.Shift", b =>
+                {
+                    b.Navigation("Employees");
                 });
 #pragma warning restore 612, 618
         }

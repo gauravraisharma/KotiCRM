@@ -28,6 +28,9 @@ namespace KotiCRM.Repository.Models
         [Required]
         public int ContactID { get; set; }
         [Column(TypeName = "nvarchar(200)")]
+        public string? DealName { get; set; }
+        [Column(TypeName = "nvarchar(200)")]
+
         public string PurchaseOrder { get; set; }
         public InvoiceStatus Status { get; set; }
         [Column(TypeName = "nvarchar(100)")]

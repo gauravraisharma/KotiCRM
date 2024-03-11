@@ -17,7 +17,6 @@ export default class AccountService {
 
 	static async CreateAccount(account: any): Promise<Account> {
 		try {
-		  debugger
 		  const response  = await agent.Account.create(account.payload);
 		  console.log(response)
 		  
@@ -42,7 +41,6 @@ export default class AccountService {
 
 	  static async UpdateAccount(account: any, id: any): Promise<Account> {
 		try {
-		  debugger
 		  const response  = await agent.Account.update(id,account);
 		  console.log(response)
 		  
@@ -56,7 +54,6 @@ export default class AccountService {
 
 	  static async DeleteAccount(id: any): Promise<Account> {
 		try {
-		  debugger
 		  const response  = await agent.Account.delete(id.payload);
 		  console.log(response)  
 		  return response;

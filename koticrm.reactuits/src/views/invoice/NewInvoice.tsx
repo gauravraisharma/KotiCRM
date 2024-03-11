@@ -1,4 +1,4 @@
-import { CButton, CCard, CCardBody, CCardHeader, CFormTextarea, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow } from "@coreui/react";
+import { CButton, CCard, CCardBody, CCardHeader, CTable, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow } from "@coreui/react";
 import { Formik, Form, Field, ErrorMessage, useFormik } from "formik";
 
 import { useState } from "react";
@@ -12,6 +12,7 @@ import Select from 'react-select';
 import DatePicker from "react-datepicker"
 
 import 'react-datepicker/dist/react-datepicker.css';
+import SearchDropdown from "../base/select/SearchDropdown";
 
 
 
@@ -76,6 +77,8 @@ const NewInvoice: React.FC<newInvoiceProps> = ({ closeModal, onBackToListButtonC
 
 	const contacts = useSelector((state: any) => state.reducer.contacts)
 	const invoiceStatus = useSelector((state: any) => state.reducer.invoiceStatus);
+	const invoiceOwner = useSelector((state: any) => state.reducer.invoiceOwner);
+	const accountOwner = useSelector((state:any)=> state.reducer.accountOwner)
 
 	const accountNames = useSelector((state: any) => state.reducer.accounts)
 	console.log(accountNames)
@@ -130,13 +133,11 @@ const NewInvoice: React.FC<newInvoiceProps> = ({ closeModal, onBackToListButtonC
 	};
 
 	const handleChangeData = (e: any) => {
-		debugger
 		setInvoice({ ...invoice, [e.target.name]: e.target.value })
 
 	}
 
 	const handleCreateInvoiceClick = () => {
-		debugger
 		const invoiceDetails: Invoice = {
 			id: 0,
 			accountId: accountId,
@@ -162,6 +163,12 @@ const NewInvoice: React.FC<newInvoiceProps> = ({ closeModal, onBackToListButtonC
 		dispatch(createInvoiceRequest(invoiceDetails));
 		closeModal();
 	}
+
+	const getAccountOwner=(ownerId :any)=>{
+		const owner = accountOwner?.find((owner: any) => owner.id === ownerId);
+		return owner ? owner.label : '';
+	}
+
 	const { handleSubmit } = useFormik({
 		enableReinitialize: true,
 		initialValues: initialValues,
@@ -206,23 +213,13 @@ const NewInvoice: React.FC<newInvoiceProps> = ({ closeModal, onBackToListButtonC
 										<div className="form-group row">
 											<label htmlFor="invoiceOwner" className="col-sm-4 col-form-label">Invoice Owner</label>
 											<div className="col-sm-6">
-												{/* <Field as="select" className="form-control form-select" name="contacts"
-													onChange={(e: any) => { handleChangeData(e); handleChange(e) }} >
-													<option value="">Select Contact</option>
-													{contacts?.map((contact: any) => (
-														<option key={contact.id} value={contact.id}>
-															{contact.firstName} {contact.lastName}
-														</option>
-													))}
-												</Field> */}
-
 												<Select
-													options={accountNames?.map((invoice: any) => ({
+													options={invoiceOwner?.map((invoice: any) => ({
 														key: invoice.id,
 														value: invoice.firstName,
 														label: (
 															<>
-																<div style={{ fontSize: "15px" }}>{`${invoice.firstName} ${invoice.lastName}`}</div>
+																<div style={{ fontSize: "15px" }}>{`${invoice.label}`}</div>
 																<div style={{ fontSize: "12px" }}>{invoice.email}</div>
 															</>
 														)
@@ -285,7 +282,7 @@ const NewInvoice: React.FC<newInvoiceProps> = ({ closeModal, onBackToListButtonC
 										</div>
 
 										<div className="form-group row">
-											<label htmlFor="accountName" className="col-sm-4 col-form-label">Account Names</label>
+											<label htmlFor="accountName" className="col-sm-4 col-form-label">Account Name</label>
 											<div className="col-sm-6">
 												<Select
 													name="accountName"
@@ -295,7 +292,7 @@ const NewInvoice: React.FC<newInvoiceProps> = ({ closeModal, onBackToListButtonC
 														label: (
 															<>
 																<div style={{ fontSize: "15px" }}>{`${name.accountName}`}</div>
-																<div style={{ fontSize: "12px" }}>{name.phone}</div>
+																<div style={{ fontSize: "12px" }}>{getAccountOwner(name.ownerId)}</div>
 															</>
 														)
 													}))}
@@ -315,17 +312,8 @@ const NewInvoice: React.FC<newInvoiceProps> = ({ closeModal, onBackToListButtonC
 										<div className="form-group row">
 											<label htmlFor="contacts" className="col-sm-4 col-form-label">Contacts</label>
 											<div className="col-sm-6">
-												{/* <Field as="select" className="form-control form-select" name="contacts"
-													onChange={(e: any) => { handleChangeData(e); handleChange(e) }} >
-													<option value="">Select Contact</option>
-													{contacts?.map((contact: any) => (
-														<option key={contact.id} value={contact.id}>
-															{contact.firstName} {contact.lastName}
-														</option>
-													))}
-												</Field> */}
 
-												<Select
+												{/* <Select
 													options={contacts?.map((contact: any) => ({
 														key: contact.id,
 														value: contact.firstName,
@@ -342,12 +330,13 @@ const NewInvoice: React.FC<newInvoiceProps> = ({ closeModal, onBackToListButtonC
 													onChange={(selectedOption: any) => handleDropdownChange(selectedOption)}
 													placeholder="Select contact..."
 
-												/>
-												{/* <ErrorMessage
+												/> */}
+												<SearchDropdown name="contacts" options={contacts} />
+												<ErrorMessage
 													name="contacts"
 													component="div"
 													className="error form-error"
-												/> */}
+												/>
 											</div>
 										</div>
 
@@ -521,71 +510,71 @@ const NewInvoice: React.FC<newInvoiceProps> = ({ closeModal, onBackToListButtonC
 														<CTableHeaderCell>Total</CTableHeaderCell>
 													</CTableRow>
 												</CTableHead>
-													{rows.map((row, index) => (
-														<CTableRow key={index}>
-															<CTableDataCell>{row.sNo}</CTableDataCell>
-															<CTableDataCell>
-																<input
-																	type="text"
-																	className="form-control"
-																	value={row.productName}
-																	onChange={(e) => {
-																		const updatedRows = [...rows];
-																		updatedRows[index].productName = e.target.value;
-																		setRows(updatedRows);
-																	}}
-																/>
-															</CTableDataCell>
-															<CTableDataCell>
-																<input
-																	type="text"
-																	className="form-control"
-																	value={row.quantity}
-																	onChange={(e) => {
-																		const updatedRows = [...rows];
-																		updatedRows[index].quantity = e.target.value;
-																		setRows(updatedRows);
-																	}}
-																/>
-															</CTableDataCell>
-															<CTableDataCell>
-																<input
-																	type="text"
-																	className="form-control"
-																	value={row.discount}
-																	onChange={(e) => {
-																		const updatedRows = [...rows];
-																		updatedRows[index].discount = e.target.value;
-																		setRows(updatedRows);
-																	}}
-																/>
-															</CTableDataCell>
-															<CTableDataCell>
-																<input
-																	type="text"
-																	className="form-control"
-																	value={row.amount}
-																	onChange={(e) => {
-																		const updatedRows = [...rows];
-																		updatedRows[index].amount = e.target.value;
-																		setRows(updatedRows);
-																	}}
-																/>
-															</CTableDataCell>
-															<CTableDataCell>
-																<input
-																	type="text"
-																	className="form-control"
-																	value={row.total}
-																	onChange={(e) => {
-																		const updatedRows = [...rows];
-																		updatedRows[index].total = e.target.value;
-																		setRows(updatedRows);
-																	}}
-																/>
-															</CTableDataCell>
-														</CTableRow>
-													))}
+												{rows.map((row, index) => (
+													<CTableRow key={index}>
+														<CTableDataCell>{row.sNo}</CTableDataCell>
+														<CTableDataCell>
+															<input
+																type="text"
+																className="form-control"
+																value={row.productName}
+																onChange={(e) => {
+																	const updatedRows = [...rows];
+																	updatedRows[index].productName = e.target.value;
+																	setRows(updatedRows);
+																}}
+															/>
+														</CTableDataCell>
+														<CTableDataCell>
+															<input
+																type="text"
+																className="form-control"
+																value={row.quantity}
+																onChange={(e) => {
+																	const updatedRows = [...rows];
+																	updatedRows[index].quantity = e.target.value;
+																	setRows(updatedRows);
+																}}
+															/>
+														</CTableDataCell>
+														<CTableDataCell>
+															<input
+																type="text"
+																className="form-control"
+																value={row.discount}
+																onChange={(e) => {
+																	const updatedRows = [...rows];
+																	updatedRows[index].discount = e.target.value;
+																	setRows(updatedRows);
+																}}
+															/>
+														</CTableDataCell>
+														<CTableDataCell>
+															<input
+																type="text"
+																className="form-control"
+																value={row.amount}
+																onChange={(e) => {
+																	const updatedRows = [...rows];
+																	updatedRows[index].amount = e.target.value;
+																	setRows(updatedRows);
+																}}
+															/>
+														</CTableDataCell>
+														<CTableDataCell>
+															<input
+																type="text"
+																className="form-control"
+																value={row.total}
+																onChange={(e) => {
+																	const updatedRows = [...rows];
+																	updatedRows[index].total = e.target.value;
+																	setRows(updatedRows);
+																}}
+															/>
+														</CTableDataCell>
+													</CTableRow>
+												))}
 											</CTable>
 										</CCardBody>
 									</CCard>

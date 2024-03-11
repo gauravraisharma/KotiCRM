@@ -1,4 +1,5 @@
 ﻿using KotiCRM.Repository.Data;
+using KotiCRM.Repository.Enums;
 using KotiCRM.Repository.IRepository;
 using KotiCRM.Repository.Models;
 using Microsoft.EntityFrameworkCore;
@@ -41,11 +42,35 @@ namespace KotiCRM.Repository.Repository
                 var result = (from users in _context.Users
                               join userRoles in _context.UserRoles on users.Id equals userRoles.UserId
                               join Permissions in _context.Permissions on userRoles.RoleId equals Permissions.RoleID
-                              where Permissions.ModuleID==1 && Permissions.Add && Permissions.Edit && Permissions.Delete && Permissions.View 
+                              where Permissions.ModuleID== (int)Modules.Accounts && Permissions.Add && Permissions.Edit && Permissions.Delete && Permissions.View 
                               select new DropDownModel
                               {
-                                  id = users.Id,
-                                  Label=users.FirstName+' '+users.LastName
+                                  Id = users.Id,
+                                  Label=users.FirstName+' '+users.LastName,
+                                  Email = users.Email
+                              }).ToList();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message, ex);
+
+            }
+        }
+        public List<DropDownModel> GetInvoiceOwner()
+        {
+            try
+            {
+
+                var result = (from users in _context.Users
+                              join userRoles in _context.UserRoles on users.Id equals userRoles.UserId
+                              join Permissions in _context.Permissions on userRoles.RoleId equals Permissions.RoleID
+                              where Permissions.ModuleID == (int)Modules.Invoices && Permissions.Add && Permissions.Edit && Permissions.Delete && Permissions.View
+                              select new DropDownModel
+                              {
+                                  Id = users.Id,
+                                  Label = users.FirstName + ' ' + users.LastName,
+                                  Email = users.Email
                               }).ToList();
                 return result;
             }

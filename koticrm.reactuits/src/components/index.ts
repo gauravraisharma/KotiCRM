@@ -7,8 +7,8 @@ import AppSidebar from './AppSidebar'
 import DocsCallout from './DocsCallout'
 import DocsLink from './DocsLink'
 import DocsExample from './DocsExample'
-import Invoice from './invoice/Invoice'
-import NewInvoice from './invoice/NewInvoice'
+import Invoice from '../views/invoice/Invoice'
+import NewInvoice from '../views/invoice/NewInvoice'
 
 export {
   AppBreadcrumb,

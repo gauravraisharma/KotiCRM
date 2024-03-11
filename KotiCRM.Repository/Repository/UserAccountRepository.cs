@@ -441,7 +441,7 @@ namespace KotiCRM.Repository.Repository
                 var result = (from role in _context.Roles
                               select new DropDownModel
                               {
-                                  id = role.Id,
+                                  Id = role.Id,
                                   Label = role.Name
                               }
                               ).ToList();

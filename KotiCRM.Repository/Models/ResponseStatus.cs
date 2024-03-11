@@ -28,8 +28,9 @@ namespace KotiCRM.Repository.Models
     }
     public class DropDownModel
     {
-        public dynamic id { get; set; }
+        public dynamic Id { get; set; }
         public string Label { get; set; }
+        public string Email { get; set; }
     }
 
     public class ResponseApplicationUserModel

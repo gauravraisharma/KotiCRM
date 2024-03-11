@@ -22,7 +22,8 @@ import {
     DELETE_INVOICE_SUCCESS,
     GET_CONTACT_DETAIL_SUCCESS,
     CREATE_CONTACT_SUCCESS,
-    UPDATE_CONTACT_SUCCESS
+    UPDATE_CONTACT_SUCCESS,
+    GET_INVOICE_OWNER_SUCCESS
 } from "../../constants/reduxConstants";
 
 const initialState = {
@@ -50,6 +51,7 @@ const initialState = {
         updateInvoiceResposne:null,
         deleteInvoiceResponse:null,
         contact: null,
+        invoiceOwner:[]
     }
 };
 
@@ -210,6 +212,11 @@ const reducer = (state = initialState, action: any) => {
                 ...state,
                 deleteInvoiceResponse : action.response
             }
+        case GET_INVOICE_OWNER_SUCCESS:
+            return {
+                ...state,
+                invoiceOwner: action.invoiceOwners,
+                }
 
         default:
             // console.error("No action matched");

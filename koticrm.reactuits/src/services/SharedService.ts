@@ -1,11 +1,22 @@
 import agent from "../api/agent";
-import { SharedModel } from "../models/commonModels/SharedModels";
+import { SharedModel, SharedOwnerModel } from "../models/commonModels/SharedModels";
 
 
 export default class SharedService {
-	static async GetAccountOwnerList(): Promise<SharedModel[]> {
+	static async GetAccountOwnerList(): Promise<SharedOwnerModel[]> {
 	  try {
 		const response  = await agent.SharedData.getAccountOwner();
+		return response;
+		}
+	  catch (error) {
+		console.error('Error fetching accounts:', error);
+		throw error; 
+	  }
+	}
+
+  static async GetInvoiceOwnerList(): Promise<SharedOwnerModel[]> {
+	  try {
+		const response  = await agent.SharedData.getInvoiceOwner();
 		return response;
 		}
 	  catch (error) {

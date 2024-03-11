@@ -100,7 +100,6 @@ const EditPage: React.FC<EditModalProps> = ({ closeModal, accountData, onBackToL
     const formattedDateTime: string = currentDate.toISOString().slice(0, -1);
 
     const handleEditClick = () => {
-        debugger
         const accountDetail: Account = {
             id: accountData.id,
             ownerId: updateAccount.accountOwner,

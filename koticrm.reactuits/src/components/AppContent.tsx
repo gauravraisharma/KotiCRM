@@ -11,16 +11,16 @@ const AppContent = () => {
     <CContainer lg>
       <Suspense fallback={<CSpinner color="primary" />}>
         <Routes>
-                  {routes.map((route, index) => {
-            
-                      return (<Route key={index} path={route.path} element={<PermissionAuth modulePermission={route.modulePermission} isAuth={route.isAuth} />}>
-                  <Route
-                         key={index} 
-                          path={route.path}
-                          element={<route.element />} />
-                  </Route>
-                  )
-              
+          {routes.map((route, index) => {
+
+            return (<Route key={index} path={route.path} element={<PermissionAuth modulePermission={route.modulePermission} isAuth={route.isAuth} />}>
+              <Route
+                key={index}
+                path={route.path}
+                element={<route.element />} />
+            </Route>
+            )
+
           })}
           <Route path="/" element={<Navigate to="dashboard" replace />} />
         </Routes>

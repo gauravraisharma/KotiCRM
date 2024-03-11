@@ -28,7 +28,6 @@ export function* workGetNotesFetch() {
 
 function* createNote(action: { payload: Note }): Generator<any> {
     try {
-        debugger
         const { payload } = action;
 
         const response = yield call(NotesService.CreateNote, payload);

@@ -27,7 +27,8 @@ import {
     CREATE_INVOICE_REQUEST,
     GET_INVOICE_DETAIL_FETCH,
     DELETE_INVOICE_REQUEST,
-    UPDATE_INVOICE_REQUEST
+    UPDATE_INVOICE_REQUEST,
+    GET_INVOICE_OWNER_FETCH
 } from "../constants/reduxConstants";
 import { Contact } from "../models/contact/Contact";
 import { Invoice } from "../models/invoice/Invoice";
@@ -153,3 +154,7 @@ export const updateInvoiceRequest = (invoice: Invoice,id: any) => ({
   type: UPDATE_INVOICE_REQUEST,
   payload: {invoice, id},
 });
+
+export const getInvoiceOwner = () => ({
+  type: GET_INVOICE_OWNER_FETCH
+})

@@ -7,6 +7,7 @@ import {
   GET_ACCOUNT_STATUS_SUCCESS,
   GET_ACCOUNT_TYPE_SUCCESS,
   GET_INDUSTRY_SUCCESS,
+  GET_INVOICE_OWNER_SUCCESS,
   GET_INVOICE_STATUS_SUCCESS
 } from '../../constants/reduxConstants';
 
@@ -30,6 +31,27 @@ export function* workGetAccountOwnerFetch() {
     // Handle error if needed
   }
 }
+
+function* invoicOwnerFetch(): Generator<any> {
+  try {
+    const response = yield call(SharedService.GetInvoiceOwnerList);
+    return response;
+  } catch (error) {
+    console.error('Error fetching account owners:', error);
+    throw error;
+  }
+}
+
+
+export function* workGetInvoiceOwnerFetch() {
+  try {
+    const invoiceOwners: SharedModel[] = yield call(invoicOwnerFetch);
+    yield put({ type: GET_INVOICE_OWNER_SUCCESS, invoiceOwners });
+  } catch (error) {
+    // Handle error if needed
+  }
+}
+
 
 function* industryFetch(): Generator<any> {
   try {

@@ -18,6 +18,7 @@ import {
     workGetAccountStatusFetch,
     workGetAccountTypeFetch,
     workGetIndustryFetch,
+    workGetInvoiceOwnerFetch,
     workGetInvoiceStatusFetch
 } from './sharedSaga';
 
@@ -45,6 +46,7 @@ import {
     GET_CONTACT_DETAIL_FETCH,
     CREATE_CONTACT_REQUEST,
     UPDATE_CONTACT_REQUEST,
+    GET_INVOICE_OWNER_FETCH,
 
 } from '../../constants/reduxConstants';
 import { workCreateNote, workGetNotesFetch } from './notesSaga';
@@ -71,6 +73,7 @@ export default function* mySaga() {
   yield takeEvery(CREATE_INVOICE_REQUEST, workCreateInvoice);
   yield takeEvery(UPDATE_INVOICE_REQUEST, workUpdateInvoice);
   yield takeEvery(DELETE_INVOICE_REQUEST, workDeleteInvoice);
+  yield takeEvery(GET_INVOICE_OWNER_FETCH, workGetInvoiceOwnerFetch);
   //contact
     yield takeEvery(GET_CONTACTS_FETCH, workGetContactsFetch);
     yield takeEvery(GET_CONTACT_DETAIL_FETCH, workGetContactByIdFetch);
