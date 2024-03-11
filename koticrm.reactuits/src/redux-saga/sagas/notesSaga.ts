@@ -3,13 +3,9 @@ import { call, put } from 'redux-saga/effects';
 import NotesService from '../../services/NotesService';
 import { Note } from '../../models/notes/notes';
 import { CREATE_NOTES_SUCCESS, GET_NOTES_SUCCESS } from '../../constants/reduxConstants';
-import { toast } from 'react-toastify';
-
-
 
 function* notesFetch(): Generator<any> {
     try {
-        debugger
         const response: any = yield call(NotesService.GetNotesList);
         //  if (response.status !== true) {
         //   toast.error('Failed to fetch notes')

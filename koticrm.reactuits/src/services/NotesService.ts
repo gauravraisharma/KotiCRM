@@ -4,7 +4,6 @@ import { Note } from "../models/notes/notes";
 
 export default class NotesService {
     static async GetNotesList(): Promise<Note[]> {
-        debugger
         try {
             const response = await agent.Notes.get();
             return response;
@@ -17,7 +16,6 @@ export default class NotesService {
 
     static async CreateNote(notes: any): Promise<Note> {
         try {
-            debugger
             const response = await agent.Notes.create(notes.payload);
             return response;
         }

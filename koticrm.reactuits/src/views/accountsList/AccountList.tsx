@@ -28,7 +28,7 @@ import { useSelector } from 'react-redux';
 import DeleteConfirmationModal from "./DeleteConfirmation";
 import { ToastContainer } from 'react-toastify';
 import EditPage from './EditAccountModal';
-import {  getAccountOwner, getAccountStatus, getAccountType, getAccounts, getContacts, getIndustry , getInvoice, getInvoiceStatus, getNotes} from "../../redux-saga/action";
+import { getAccountOwner, getAccountStatus, getAccountType, getAccounts, getContacts, getIndustry, getInvoice, getInvoiceStatus, getNotes } from "../../redux-saga/action";
 
 
 
@@ -77,7 +77,6 @@ const AccountList: React.FC = () => {
     }
 
     const backToAccountList = () => {
-        debugger
         setStateData(false);
         setOpenEditModal(false);
     };
@@ -96,25 +95,23 @@ const AccountList: React.FC = () => {
 
 
     useEffect(() => {
-      dispatch(getAccounts());
-      dispatch(getAccountOwner());
-      dispatch(getAccountStatus());
-      dispatch(getAccountType());
-      dispatch(getIndustry());
-      dispatch(getNotes());
-      dispatch(getContacts());
+        dispatch(getAccounts());
+        dispatch(getAccountOwner());
+        dispatch(getAccountStatus());
+        dispatch(getAccountType());
+        dispatch(getIndustry());
+        dispatch(getNotes());
+        dispatch(getContacts());
     }, [dispatch]);
 
-    useEffect(()=>{
-      dispatch(getAccounts())
-    },[deleteResponse, createresponse, updateResponse])
+    useEffect(() => {
+        dispatch(getAccounts())
+    }, [deleteResponse, createresponse, updateResponse])
 
-  const navigate = useNavigate()
-  const showItems =(id:any)=>{
-  
-    debugger
-    navigate(`/accountDetails/accountId=${id}`)
-  }
+    const navigate = useNavigate()
+    const showItems = (id: any) => {
+        navigate(`/accountDetails/accountId=${id}`)
+    }
 
     return (
         <>
