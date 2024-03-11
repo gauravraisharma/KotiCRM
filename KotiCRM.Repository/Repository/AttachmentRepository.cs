@@ -1,31 +1,51 @@
 ﻿using KotiCRM.Repository.Data;
+using KotiCRM.Repository.DTOs;
 using KotiCRM.Repository.IRepository;
 using KotiCRM.Repository.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
-namespace KotiCRM.Repository.Repository
+namespace KotiCRM.Repository.Repository;
+
+public class AttachmentRepository : IAttachmentRepository
 {
-    public class AttachmentRepository : IAttachmentRepository
+    private readonly KotiCRMDbContext _context;
+
+    public AttachmentRepository(KotiCRMDbContext context)
     {
-        private readonly KotiCRMDbContext _context;
+        _context = context;
+    }
 
-        public AttachmentRepository(KotiCRMDbContext context)
+    public async Task<DbResponse> CreateAttachment(Attachment attachment)
+    {
+        try
         {
-            _context = context;
+            _context.Attachments.Add(attachment);
+            await _context.SaveChangesAsync();
+            return new DbResponse()
+            {
+                Succeed = true,
+                Message = "Contact added successfully"
+            };
         }
-
-        public Task<DbResponse> CreateAttachment(Attachment attachment)
+        catch (Exception ex)
         {
-            throw new NotImplementedException();
+            return new DbResponse()
+            {
+                Succeed = false,
+                Message = ex.Message
+            };
         }
+    }
 
-        public Task<IEnumerable<Attachment>> GetAttachmentList()
+    public async Task<IEnumerable<Attachment>> GetAttachmentList()
+    {
+        try
         {
-            throw new NotImplementedException();
+            return await _context.Attachments.ToListAsync();
+        }
+        catch (Exception ex)
+        {
+            throw new Exception(ex.Message, ex);
         }
     }
 }

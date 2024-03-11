@@ -9,18 +9,23 @@ namespace KotiCRM.Services
     {
         public static void AddInfrastructure(this IServiceCollection services)
         {
-            services.AddTransient<IUserAccountService, UserAccountService>();
-            services.AddTransient<IUserAccountRepository, UserAccountRepository>();
-            services.AddTransient<IAccountService, AccountService>();
+            // Add dependency for repositories
             services.AddTransient<IAccountRepository, AccountRepository>();
-            services.AddTransient<IContactService, ContactService>();
+            services.AddTransient<IAttachmentRepository, AttachmentRepository>();
             services.AddTransient<IContactRepository, ContactRepository>();
-            services.AddTransient<ISharedService, SharedService>();
-            services.AddTransient<ISharedRepository, SharedRepository>();
-            services.AddTransient<IInvoiceService, InvoiceService>();
             services.AddTransient<IInvoiceRepository, InvoiceRepository>();
-            services.AddTransient<INotesService, NotesService>();
             services.AddTransient<INotesRepository, NotesRepository>();
+            services.AddTransient<ISharedRepository, SharedRepository>();
+            services.AddTransient<IUserAccountRepository, UserAccountRepository>();
+
+            // Add dependency for services
+            services.AddTransient<IAccountService, AccountService>();
+            services.AddTransient<IAttachmentService, AttachmentService>();
+            services.AddTransient<IContactService, ContactService>();
+            services.AddTransient<IInvoiceService, InvoiceService>();
+            services.AddTransient<INotesService, NotesService>();
+            services.AddTransient<ISharedService, SharedService>();
+            services.AddTransient<IUserAccountService, UserAccountService>();
         }
     }
 }

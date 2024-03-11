@@ -1,30 +1,34 @@
 ﻿using KotiCRM.Repository.IRepository;
 using KotiCRM.Repository.Models;
+using KotiCRM.Repository.DTOs;
 using KotiCRM.Services.IServices;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace KotiCRM.Services.Services
+namespace KotiCRM.Services.Services;
+
+public class AttachmentService : IAttachmentService
 {
-    public class AttachmentService : IAttachmentService
+    private readonly IAttachmentRepository _attachmentRepository;
+    public AttachmentService(IAttachmentRepository attachmentRepository)
     {
-        private readonly IAttachmentRepository _attachmentRepository;
-        public AttachmentService(IAttachmentRepository attachmentRepository)
-        {
-            _attachmentRepository = attachmentRepository;
-        }
+        _attachmentRepository = attachmentRepository;
+    }
 
-        public async Task<DbResponse> CreateAttachment(Attachment attachment)
+    public async Task<DbResponse> CreateAttachment(CreateAttachmentDTO createAttachmentDTO)
+    {
+        if (createAttachmentDTO.File == null)
         {
-          return  await _attachmentRepository.CreateAttachment(attachment);
+            throw new ArgumentNullException(nameof(createAttachmentDTO.File));
         }
+        Attachment attachment = new Attachment() {
+            UserID = createAttachmentDTO.UserID,
+            DateAdded = createAttachmentDTO.DateAdded,
+            SizeMb = createAttachmentDTO.File.Length,
+        };
+        return await _attachmentRepository.CreateAttachment(attachment);
+    }
 
-        public async Task<IEnumerable<Attachment>> GetAttachmentList()
-        {
-           return await _attachmentRepository.GetAttachmentList();
-        }
+    public async Task<IEnumerable<Attachment>> GetAttachmentList()
+    {
+        return await _attachmentRepository.GetAttachmentList();
     }
 }

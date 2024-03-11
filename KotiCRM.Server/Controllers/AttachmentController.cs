@@ -1,6 +1,6 @@
-﻿using KotiCRM.Repository.Models;
+﻿using KotiCRM.Repository.DTOs;
+using KotiCRM.Repository.Models;
 using KotiCRM.Services.IServices;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace KotiCRM.Server.Controllers
@@ -26,12 +26,12 @@ namespace KotiCRM.Server.Controllers
 
         [HttpPost]
         [Route("CreateAttachment")]
-        public async Task<ActionResult<Attachment>> CreateAttachment([FromForm] Attachment attachment)
+        public async Task<ActionResult<Attachment>> CreateAttachment([FromForm] CreateAttachmentDTO createAttachmentDTO)
         {
-            var response = await _attachmentService.CreateAttachment(attachment);
+            var response = await _attachmentService.CreateAttachment(createAttachmentDTO);
             if (response == null || !response.Succeed)
             {
-                return StatusCode(500, response.Message);
+                return StatusCode(500, response?.Message);
             }
             return Ok(response);
         }

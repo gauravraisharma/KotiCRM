@@ -1,15 +1,10 @@
-﻿using KotiCRM.Repository.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using KotiCRM.Repository.DTOs;
+using KotiCRM.Repository.Models;
 
-namespace KotiCRM.Services.IServices
+namespace KotiCRM.Services.IServices;
+
+public interface IAttachmentService
 {
-    public interface IAttachmentService
-    {
-        Task<DbResponse> CreateAttachment(Attachment attachment);
-        Task<IEnumerable<Attachment>> GetAttachmentList();
-    }
+    Task<DbResponse> CreateAttachment(CreateAttachmentDTO createAttachmentDTO);
+    Task<IEnumerable<Attachment>> GetAttachmentList();
 }

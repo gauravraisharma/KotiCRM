@@ -31,6 +31,7 @@ import { useSelector } from "react-redux";
 import Notes from "../../components/Notes";
 import InvoiceComponent from "../invoice/Invoice";
 import Contacts from "../contacts/Contacts";
+import Attachments from "../attachments/Attachments";
 
 const AccountDetails = () => {
   const navigate = useNavigate();
@@ -253,72 +254,7 @@ const AccountDetails = () => {
                 role="tabpanel"
                 aria-labelledby="attachments-tab"
               >
-                <CCol xs={12}>
-                  <CCard className="mb-4">
-                    <CCardHeader>
-                      <CRow className="align-items-center">
-                        <CCol xs={6} >Attachments</CCol>
-                        <CCol xs={6}>
-                          <div className="text-end">
-                            <CDropdown>
-                              <CDropdownToggle color="primary" variant="outline">
-                                Attach
-                              </CDropdownToggle>
-                              <CDropdownMenu>
-                                <CDropdownItem href="#">Name</CDropdownItem>
-                                <CDropdownItem href="#">Owner</CDropdownItem>
-                                <CDropdownItem href="#">Phone</CDropdownItem>
-                                <CDropdownItem href="#">Country</CDropdownItem>
-                              </CDropdownMenu>
-                            </CDropdown>
-                          </div>
-                        </CCol>
-                      </CRow>
-                    </CCardHeader>
-                    <CCardBody>
-                      <CTable>
-                        <CTableHead>
-                          <CTableRow>
-                            <CTableHeaderCell scope="col">
-                              File Name
-                            </CTableHeaderCell>
-                            <CTableHeaderCell scope="col">
-                              Attached By
-                            </CTableHeaderCell>
-                            <CTableHeaderCell scope="col">
-                              Date Added
-                            </CTableHeaderCell>
-                            <CTableHeaderCell scope="col">Size</CTableHeaderCell>
-                          </CTableRow>
-                        </CTableHead>
-                        <CTableBody>
-                          <CTableRow>
-                            <CTableHeaderCell>
-                              <BsFiletypeDocx className="doc" />
-                              <CButton className="link" color="link">
-                                Learner Settings Page-February 2024.docx
-                              </CButton>
-                            </CTableHeaderCell>
-                            <CTableDataCell>Gourav Rai</CTableDataCell>
-                            <CTableDataCell>22/02/2024 06:50PM</CTableDataCell>
-                            <CTableDataCell>38kb</CTableDataCell>
-                          </CTableRow>
-                          <CTableRow>
-                            <CTableHeaderCell>
-                              <MdOutlinePictureAsPdf className="pdf" />
-                              <CButton className="link" color="link">
-                                Learner Settings Page-February 2024.pdf
-                              </CButton>
-                            </CTableHeaderCell>
-                            <CTableDataCell>Gourav Rai</CTableDataCell>
-                            <CTableDataCell>22/02/2024 06:50PM</CTableDataCell>
-                            <CTableDataCell>35kb</CTableDataCell>
-                          </CTableRow>
-                        </CTableBody>
-                      </CTable>
-                    </CCardBody>
-                  </CCard>
-                </CCol>
+                <Attachments />
               </div>
 
               <div
