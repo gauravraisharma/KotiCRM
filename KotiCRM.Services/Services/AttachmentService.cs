@@ -2,6 +2,7 @@
 using KotiCRM.Repository.Models;
 using KotiCRM.Repository.DTOs;
 using KotiCRM.Services.IServices;
+using System.Reflection;
 
 namespace KotiCRM.Services.Services;
 
@@ -19,10 +20,28 @@ public class AttachmentService : IAttachmentService
         {
             throw new ArgumentNullException(nameof(createAttachmentDTO.File));
         }
-        Attachment attachment = new Attachment() {
+
+        string appDirectory = Directory.GetCurrentDirectory();
+        string contentDirectory = Path.Combine(appDirectory, "Contents");
+        if (!Directory.Exists(contentDirectory))
+        {
+            Directory.CreateDirectory(contentDirectory);
+        }
+
+        string fileName = createAttachmentDTO.File.FileName.Split('.')[0];
+        string extension = Path.GetExtension(createAttachmentDTO.File.FileName);
+        string uploadedFileName = fileName + DateTime.Now.Ticks.ToString() + extension;
+        string path = Path.Combine(contentDirectory, uploadedFileName);
+        using (var stream = new FileStream(path, FileMode.CreateNew))
+        {
+            await createAttachmentDTO.File.CopyToAsync(stream);
+        }
+        Attachment attachment = new Attachment()
+        {
             UserID = createAttachmentDTO.UserID,
             DateAdded = createAttachmentDTO.DateAdded,
-            SizeMb = createAttachmentDTO.File.Length,
+            SizeMb = ((decimal)createAttachmentDTO.File.Length / (1024 * 1024)).ToString(),
+            FileName = uploadedFileName,
         };
         return await _attachmentRepository.CreateAttachment(attachment);
     }
