@@ -102,10 +102,7 @@ const AccountList: React.FC = () => {
       dispatch(getAccountType());
       dispatch(getIndustry());
       dispatch(getNotes());
-      dispatch(getInvoiceStatus());
       dispatch(getContacts());
-      dispatch(getInvoice());
-
     }, [dispatch]);
 
     useEffect(()=>{

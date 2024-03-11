@@ -10,6 +10,7 @@ import {
   cilGroup,
   cilApplications,
   cilSettings,
+  cilMoney,
 } from '@coreui/icons'
 import { CNavItem } from '@coreui/react'
 import { NavItem } from './models/commonModels/CommonModels'
@@ -41,6 +42,14 @@ const _nav:NavItem[] = [
     to: '/contacts',
     icon: <CIcon icon={cilContact} customClassName="nav-icon" />,
     moduleName : 'Contacts'
+
+  },
+  {
+    component: CNavItem,
+    name: 'Invoices',
+    to: '/invoices',
+    icon: <CIcon icon={cilMoney} customClassName="nav-icon" />,
+    moduleName : 'Invoices'
 
   },
   {

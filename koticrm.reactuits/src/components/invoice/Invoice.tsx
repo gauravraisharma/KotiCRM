@@ -2,7 +2,7 @@ import { CButton, CCard, CCardBody, CCardHeader, CCol, CRow, CTable, CTableBody,
 import { useEffect, useState } from 'react'
 import NewInvoice from './NewInvoice'
 import { useDispatch } from 'react-redux';
-import { getInvoice } from '../../redux-saga/action';
+import { getAccountOwner, getAccounts, getInvoice, getInvoiceStatus, getNotes } from '../../redux-saga/action';
 import { useSelector } from 'react-redux';
 import { Invoice } from '../../models/invoice/Invoice';
 
@@ -10,6 +10,7 @@ interface InvoiceProps {
 	getInvoiceCount: (data: string) => void;
 	accountId: any;
 	ownerId: any;
+
 }
 const InvoiceComponent: React.FC<InvoiceProps> = ({ accountId, ownerId, getInvoiceCount }) => {
 	const dispatch = useDispatch();
@@ -51,19 +52,27 @@ const InvoiceComponent: React.FC<InvoiceProps> = ({ accountId, ownerId, getInvoi
 		return `${day}/${month < 10 ? '0' : ''}${month}/${year}`;
 	}
 
-	useEffect(() => {
-		dispatch(getInvoice())
-	}, [invoiceResponse])
+	// useEffect(() => {
+	// 	dispatch(getInvoice())
+	// }, [invoiceResponse])
 
 
 	const filteredInvoices = invoices?.filter((invoice: any) => {
 		return invoice.accountID == accountId
 	})
 	const invoiceCount = filteredInvoices?.length;
-	
+
+	console.log(filteredInvoices)
+
+	// useEffect(() => {
+	// 	getInvoiceCount(invoiceCount)
+	// })
 	useEffect(()=>{
-		getInvoiceCount(invoiceCount)
-	})
+		dispatch(getInvoiceStatus());
+		dispatch(getInvoice());
+		dispatch(getNotes())
+		dispatch(getAccounts())
+	},[dispatch])
 	return (
 		<div>
 			{showCreateInvoice ? (
@@ -108,7 +117,7 @@ const InvoiceComponent: React.FC<InvoiceProps> = ({ accountId, ownerId, getInvoi
 									</CTableRow>
 								</CTableHead>
 								<CTableBody>
-									{filteredInvoices?.map((invoice: Invoice) => (
+									{invoices?.map((invoice: Invoice) => (
 										<CTableRow>
 											<CTableHeaderCell>{invoice.subject}</CTableHeaderCell>
 											<CTableDataCell>{getInvoiceStatusValue(invoice.status)}</CTableDataCell>

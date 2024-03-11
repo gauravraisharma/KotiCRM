@@ -64,7 +64,7 @@ namespace KotiCRM.Repository.Repository
         {
             try
             {
-                return await _context.Invoices.ToListAsync();
+                return await _context.Invoices.OrderByDescending(invoice=> invoice.DueDate).ToListAsync();
             }
             catch (Exception ex)
             {

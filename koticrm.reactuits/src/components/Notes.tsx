@@ -7,37 +7,38 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { createNotesRequest, getNotes } from "../redux-saga/action";
 import { BsClockFill } from "react-icons/bs";
+import TimeDisplay from "./TimeDisplay";
 
 interface NoteProps {
-    getNotesCount: (data: string) => void;
-    accountId: any;
-    accountName: string;
+	getNotesCount: (data: string) => void;
+	accountId: any;
+	accountName: string;
 }
 
 const Notes: React.FC<NoteProps> = ({ getNotesCount, accountId, accountName }) => {
 
 	const dispatch = useDispatch();
 	const notes = useSelector((state: any) => state.reducer.notes);
-	const noteResponse = useSelector((state:any)=> state.reducer.noteResponse)
+	const noteResponse = useSelector((state: any) => state.reducer.noteResponse)
 
 	const userId = useSelector((state: any) => state.reducer.userId);
 
-    const [noteDescription, setNoteDescription] = useState('')
+	const [noteDescription, setNoteDescription] = useState('')
 
 
-    const currentDate: Date = new Date();
-    const formattedDateTime: string = currentDate.toISOString().slice(0, -1);
-    const handleNoteSave = () => {
-        const notes: any = {
-            id: 0,
-            accountId: accountId,
-            userId: userId,
-            dateOfNote: formattedDateTime,
-            description: noteDescription
-        }
-        dispatch(createNotesRequest(notes));
-        setNoteDescription('');
-    }
+	const currentDate: Date = new Date();
+	const formattedDateTime: string = currentDate.toISOString().slice(0, -1);
+	const handleNoteSave = () => {
+		const notes: any = {
+			id: 0,
+			accountId: accountId,
+			userId: userId,
+			dateOfNote: formattedDateTime,
+			description: noteDescription
+		}
+		dispatch(createNotesRequest(notes));
+		setNoteDescription('');
+	}
 
 	const handleCancelClick = () => {
 		setNoteDescription('');
@@ -46,18 +47,15 @@ const Notes: React.FC<NoteProps> = ({ getNotesCount, accountId, accountName }) =
 		return note.accountID == accountId
 	})
 	const noteCount = filteredNotes?.length;
-	
+
+	console.log(filteredNotes)
 	useEffect(() => {
 		dispatch(getNotes());
-	},[noteResponse])
+	}, [noteResponse])
 
-	useEffect(()=>{
+	useEffect(() => {
 		getNotesCount(noteCount)
 	})
-
-	// const midpoint = Math.ceil(notes.length / 2);
-	// const firstHalf = notes.slice(0, midpoint);
-	// const secondHalf = notes.slice(midpoint);
 	return (
 		<div>
 			<CRow>
@@ -73,11 +71,13 @@ const Notes: React.FC<NoteProps> = ({ getNotesCount, accountId, accountName }) =
 										<span>{note.description}
 										</span>
 									</div>
-									<div className="mt-2 mx-5">
+									<div className="mt-2 mx-5 d-flex align-items-center">
 										<span >Account - <span className="linking">{accountName} </span></span>
 										<span className=" mx-1">.</span>
 										<span className="mx-2">Add Note</span>
 										<BsClockFill color="#3c4b64" className="mx-1" />
+										<TimeDisplay createdAt={note.dateOfNote} />
+										<span className="mx-1" >by</span>
 										<span className="mx-1 ">{note.firstName}  {note.lastName}</span>
 									</div>
 								</div>
@@ -85,63 +85,45 @@ const Notes: React.FC<NoteProps> = ({ getNotesCount, accountId, accountName }) =
 						))}
 					</ul>
 				</CCol>
-				{/* <CCol xs={12} sm={6}>
-					<ul>
-						{secondHalf.map((note: Note) => (
-							<li key={note.id}>
-								<span className="person">
-									<IoPersonCircleOutline />
-								</span>
-								<span>{note.description}</span>
-								<br />
-								<span >Account - <span className="linking">{accountName} </span></span>
-								<span className="mx-1 ">.</span>
-								<span className="mx-3 ">Add Note</span>
-								<BsClockFill color="#3c4b64"/>
-								<span className="mx-1 ">{note.firstName}  {note.lastName}</span>
-							</li>
-						))}
-					</ul>
-				</CCol> */}
-            </CRow>
-            <CRow>
-                <CCol xs={8}>
-                    <CForm>
-                        <CFormTextarea
-                            className="textarea"
-                            rows={3}
-                            placeholder="Add a note"
-                            name="noteDescription"
-                            value={noteDescription}
-                            onChange={(e: any) => setNoteDescription(e.target.value)}
-                        ></CFormTextarea>
+			</CRow>
+			<CRow>
+				<CCol xs={8}>
+					<CForm>
+						<CFormTextarea
+							className="textarea"
+							rows={3}
+							placeholder="Add a note"
+							name="noteDescription"
+							value={noteDescription}
+							onChange={(e: any) => setNoteDescription(e.target.value)}
+						></CFormTextarea>
 
-                        <div className="text-end ">
-                            <TiAttachmentOutline />
+						<div className="text-end ">
+							<TiAttachmentOutline />
 
-                            <CButton
-                                style={{ margin: "5px" }}
-                                component="input"
-                                type="button"
-                                color="light"
-                                value="Cancel"
-                                onClick={handleCancelClick}
+							<CButton
+								style={{ margin: "5px" }}
+								component="input"
+								type="button"
+								color="light"
+								value="Cancel"
+								onClick={handleCancelClick}
 
-                            />
-                            <CButton
-                                style={{ margin: "5px" }}
-                                component="input"
-                                type="button"
-                                color="primary"
-                                value="Save"
-                                onClick={handleNoteSave}
-                            />
-                        </div>
-                    </CForm>
-                </CCol>
-            </CRow>
-        </div>
-    )
+							/>
+							<CButton
+								style={{ margin: "5px" }}
+								component="input"
+								type="button"
+								color="primary"
+								value="Save"
+								onClick={handleNoteSave}
+							/>
+						</div>
+					</CForm>
+				</CCol>
+			</CRow>
+		</div>
+	)
 }
 
 export default Notes

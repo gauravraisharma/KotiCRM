@@ -314,7 +314,7 @@ const MyForm: React.FC<NewAccountProps> = ({ closeModal, onBackToListButtonClick
                                         <div className="form-group row">
                                             <label htmlFor="description" className="col-sm-4   col-form-label">Description</label>
                                             <div className="col-sm-6">
-                                                <Field type="text" name="description" className="form-control" onChange={(e: any) => { handleChangeData(e); handleChange(e) }} />
+                                                <Field as="textarea" name="description" className="form-control" onChange={(e: any) => { handleChangeData(e); handleChange(e) }} />
                                                 <ErrorMessage
                                                     name="description"
                                                     component="div"

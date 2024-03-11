@@ -349,7 +349,7 @@ const EditPage: React.FC<EditModalProps> = ({ closeModal, accountData, onBackToL
                                         <div className="form-group row">
                                             <label htmlFor="description" className="col-sm-4 col-form-label">Description</label>
                                             <div className="col-sm-6">
-                                                <Field type='text' name="description" value={updateAccount.description} className="form-control" onChange={(e: any) => { handleChangeData(e); handleChange(e) }} />
+                                                <Field as="textarea" name="description" value={updateAccount.description} className="form-control" onChange={(e: any) => { handleChangeData(e); handleChange(e) }} />
                                                 <ErrorMessage
                                                     name="description"
                                                     component="div"

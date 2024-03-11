@@ -28,6 +28,10 @@ const Contacts = lazy(() => import('./views/contacts/Contacts'))
 const contactDetails = lazy(() => import('./views/contacts/ContactDetails'))
 const CreateContact = lazy(() => import('./views/contacts/CreateOrEditContact'))
 
+//Invoices Routes
+const Invoices = lazy(() => import('./components/invoice/Invoice'))
+const CreateInvoice = lazy(() => import('./components/invoice/NewInvoice'))
+
 
 // Base
 const Accordion = lazy(() => import('./views/base/accordion/Accordion'))
@@ -138,6 +142,9 @@ const routes: Route[] = [
     { path: '/contacts/createContact', name: 'CreateContact', element: CreateContact, isAuth: true, modulePermission: 'Contacts' },
     { path: '/contacts/editContact/:contactId', name: 'CreateContact', element: CreateContact, isAuth: true, modulePermission: 'Contacts' },
     { path: '/newAccount', name: 'NewAccount', element: NewAccount, isAuth: true, modulePermission: 'Accounts' },
+    { path: '/invoices', name: 'Invoices', element: Invoices, isAuth: true, modulePermission: 'Invoices' },
+    { path: '/invoices/createInvoice', name: 'CreateInvoice', element: CreateInvoice, isAuth: true, modulePermission: 'Invoices' },
+
 ]
 
 export default routes

@@ -2,12 +2,10 @@ import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 
 import { CSidebar, CSidebarBrand, CSidebarNav, CSidebarToggler } from '@coreui/react'
-import CIcon from '@coreui/icons-react'
 
 import { AppSidebarNav } from './AppSidebarNav'
 
 import logoNegative from '../assets/brand/logo-blue.png'
-import { sygnet } from '../assets/brand/sygnet'
 
 import SimpleBar from 'simplebar-react'
 import 'simplebar-react/dist/simplebar.min.css'
