@@ -1,4 +1,4 @@
-﻿using KotiCRM.Repository.DTOs;
+﻿using KotiCRM.Repository.DTOs.Attachment;
 using KotiCRM.Repository.Models;
 using KotiCRM.Services.IServices;
 using Microsoft.AspNetCore.Mvc;
@@ -19,7 +19,7 @@ namespace KotiCRM.Server.Controllers
 
         [HttpGet]
         [Route("GetAttachmentList")]
-        public async Task<IEnumerable<Attachment>> GetAttachmentList()
+        public async Task<IEnumerable<AttachmentDTO>> GetAttachmentList()
         {
             return await _attachmentService.GetAttachmentList();
         }

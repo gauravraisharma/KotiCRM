@@ -63,7 +63,7 @@ namespace KotiCRM.Repository.Data
 
         public virtual DbSet<ProjectTimesheetInterval> ProjectTimesheetIntervals { get; set; }
 
-        public virtual DbSet<ReaderData> ReaderData{ get; set; }
+        public virtual DbSet<ReaderData> ReaderData { get; set; }
 
         public virtual DbSet<Readerdatum> Readerdata { get; set; }
 
@@ -85,6 +85,17 @@ namespace KotiCRM.Repository.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Attachment>(entity =>
+            {
+                entity.HasKey(e => e.ID);
+
+                entity.Property(e => e.ID).HasColumnName("AttachmentID");
+                entity.Property(e => e.UserID).IsRequired();
+                entity.Property(e => e.SizeMb).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.FileName).HasMaxLength(250).IsRequired();
+                entity.Property(e => e.FileExtension).HasMaxLength(50).IsRequired();
+            });
+
             modelBuilder.Entity<Bank>(entity =>
             {
                 entity.ToTable("Bank");

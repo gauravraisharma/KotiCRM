@@ -1,8 +1,7 @@
 ﻿using KotiCRM.Repository.IRepository;
 using KotiCRM.Repository.Models;
-using KotiCRM.Repository.DTOs;
 using KotiCRM.Services.IServices;
-using System.Reflection;
+using KotiCRM.Repository.DTOs.Attachment;
 
 namespace KotiCRM.Services.Services;
 
@@ -40,14 +39,26 @@ public class AttachmentService : IAttachmentService
         {
             UserID = createAttachmentDTO.UserID,
             DateAdded = createAttachmentDTO.DateAdded,
-            SizeMb = ((decimal)createAttachmentDTO.File.Length / (1024 * 1024)).ToString(),
+            SizeMb = (decimal)createAttachmentDTO.File.Length / (1024 * 1024),
             FileName = uploadedFileName,
+            FileExtension = extension,
         };
         return await _attachmentRepository.CreateAttachment(attachment);
     }
 
-    public async Task<IEnumerable<Attachment>> GetAttachmentList()
+    public async Task<IEnumerable<AttachmentDTO>> GetAttachmentList()
     {
-        return await _attachmentRepository.GetAttachmentList();
+        var attachments = await _attachmentRepository.GetAttachmentList();
+        List<AttachmentDTO> attachmentDTOs = attachments.Select(attachment => new AttachmentDTO()
+        {
+            ID = attachment.ID,
+            UserID = attachment.UserID,
+            DateAdded = attachment.DateAdded,
+            SizeMb = attachment.SizeMb,
+            FileName = attachment.FileName,
+            FileExtension = attachment.FileExtension
+        }).ToList();
+
+        return attachmentDTOs;
     }
 }

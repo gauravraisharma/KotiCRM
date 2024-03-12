@@ -24,7 +24,7 @@ public class AttachmentRepository : IAttachmentRepository
             return new DbResponse()
             {
                 Succeed = true,
-                Message = "Contact added successfully"
+                Message = "Attachment added successfully"
             };
         }
         catch (Exception ex)
