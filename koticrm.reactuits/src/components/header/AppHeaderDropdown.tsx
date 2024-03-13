@@ -17,6 +17,7 @@ import avatar8 from './../../assets/images/avatars/8.jpg'
 import { useNavigate } from 'react-router-dom'
 //import { useAuth } from '../../utils/AuthProvider'
 import { useDispatch } from 'react-redux'
+import { Link } from "react-router-dom";
 
 const AppHeaderDropdown = () => {
   const navigate = useNavigate();
@@ -38,9 +39,11 @@ const AppHeaderDropdown = () => {
           <CIcon icon={cilUser} className="me-2" />
           Profile
         </CDropdownItem>
-        <CDropdownItem href="javascript:;">
+        <CDropdownItem >
           <CIcon icon={cilSettings} className="me-2" />
+          <Link style={{textDecoration:'none',color:'black'}} to={`/settings`}>
           Settings
+          </Link>
         </CDropdownItem>
         <CDropdownDivider />
         <CDropdownItem onClick={handleLogout}>

@@ -155,8 +155,8 @@ const EditPage: React.FC<EditModalProps> = ({ closeModal, accountData, onBackToL
                             <CButton
                                 component="input"
                                 type="button"
-                                color="primary"
-                                value="Back To Accounts"
+                                color="secondary"
+                                value="Back To Account"
                                 onClick={onBackToListButtonClickHandler}
                             />
                         </div>

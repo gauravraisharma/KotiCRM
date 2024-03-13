@@ -119,6 +119,9 @@
   font-weight: 600;
 }
 
+/* .form-control {
+  border: 1px solid red;
+} */
 .account-list li {
   margin-bottom: 20px;
 }

@@ -12,14 +12,10 @@ import {
     CTableHeaderCell,
     CTableRow,
     CButton,
-    CDropdown,
-    CDropdownMenu,
-    CDropdownItem,
-    CDropdownToggle,
 } from '@coreui/react';
 import { useDispatch } from 'react-redux';
 import { FaEdit } from 'react-icons/fa';
-import { MdDelete } from 'react-icons/md';
+import { AiOutlineDelete } from "react-icons/ai";
 import { LuView } from 'react-icons/lu';
 import { useNavigate } from 'react-router-dom';
 import NewAccount from '../account/NewAccount';
@@ -162,19 +158,19 @@ const AccountList: React.FC = () => {
                                             <CTableBody>
                                                 {accounts?.map((account: Account) => (
                                                     <CTableRow key={account.id}>
-                                                        <CTableHeaderCell scope="row">{account.accountName}</CTableHeaderCell>
+                                                        <CTableDataCell>{account.accountName}</CTableDataCell>
                                                         <CTableDataCell>{getOwnerName(account.ownerId)}</CTableDataCell>
                                                         <CTableDataCell>{account.phone}</CTableDataCell>
                                                         <CTableDataCell>{account.webSite}</CTableDataCell>
                                                         <CTableDataCell>{account.country}</CTableDataCell>
                                                         <CTableDataCell>
                                                             <FaEdit
-                                                                style={{ color: 'green', marginRight: "8px" }}
+                                                                style={{ color: 'green', marginRight: "10px",fontSize:"20px"}}
                                                                 onClick={() => handleEditClick(account)}
                                                             />
-                                                            <LuView style={{ color: 'blue', marginRight: "8px" }}
+                                                            <LuView style={{ color: 'darkblue', marginRight: "10px",fontSize:"20px" }}
                                                                 onClick={() => showItems(account?.id)}></LuView>
-                                                            <MdDelete style={{ color: "red" }} onClick={() => handleDeleteClick(account.id)} />
+                                                            <AiOutlineDelete style={{ color: "red", marginRight: "10px",fontSize:"20px" }} onClick={() => handleDeleteClick(account.id)} />
                                                         </CTableDataCell>
                                                     </CTableRow>
                                                 ))}

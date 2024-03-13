@@ -1,7 +1,5 @@
 import { lazy } from 'react';
 import { Route } from './models/commonModels/CommonModels';
-// import DeleteConfirmationModal from './views/accountsList/DeleteConfirmation';
-
 // App routing
 
 // Containers
@@ -13,8 +11,9 @@ const Page404 = lazy(() => import('./views/pages/page404/Page404'))
 const Page500 = lazy(() => import('./views/pages/page500/Page500'))
 
 
+//settings
 
-
+const Settings = lazy(() => import('./views/settings/Settings'))
 
 const Dashboard = lazy(() => import('./views/dashboard/Dashboard'))
 const Colors = lazy(() => import('./views/theme/colors/Colors'))
@@ -144,6 +143,8 @@ const routes: Route[] = [
     { path: '/newAccount', name: 'NewAccount', element: NewAccount, isAuth: true, modulePermission: 'Accounts' },
     { path: '/invoices', name: 'Invoices', element: Invoices, isAuth: true, modulePermission: 'Invoices' },
     { path: '/invoices/createInvoice', name: 'CreateInvoice', element: CreateInvoice, isAuth: true, modulePermission: 'Invoices' },
+    { path: '/settings', name: 'Settings', element: Settings, isAuth: true },
+
 
 ]
 

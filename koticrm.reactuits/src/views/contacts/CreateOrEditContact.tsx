@@ -11,11 +11,6 @@ import SearchDropdown from '../base/select/SearchDropdown';
 import Countries from '../../constants/country-state/countries+states.json';
 import { Country, State } from '../../models/Country-State/CountryState';
 
-// const owners = [
-//   { ownerId: 1, ownerName: "Bob" },
-//   { ownerId: 2, ownerName: "Tom" },
-//   { ownerId: 3, ownerName: "Dom" },
-// ]
 
 
 const owners = [
@@ -41,12 +36,6 @@ const owners = [
   { id: '20', firstName: 'John', lastName: 'Doe', email: 'john@example.com', logo: 'path_to_logo1' },
   // Add more options as needed
 ];
-
-// const accounts = [
-//   { accountID: 1, accountName: "Bob" },
-//   { accountID: 2, accountName: "Tom" },
-//   { accountID: 3, accountName: "Dom" },
-// ]
 
 const CreateOrEditContact = () => {
   const { contactId } = useParams<{ contactId: string }>();
@@ -84,10 +73,31 @@ const CreateOrEditContact = () => {
 
   const validationSchema = Yup.object().shape({
     ownerId: Yup.number().required('Owner ID is required'),
-    // firstName: Yup.string().required('First Name is required'),
-    // lastName: Yup.string().required('Last Name is required'),
-    // accountID: Yup.number().required('Account ID is required'),
-    // email: Yup.string().email('Invalid email').required('Email is required')
+    firstName: Yup.string().required('First Name is required'),
+    lastName: Yup.string().required('Last Name is required'),
+    accountID: Yup.number().required('Account ID is required'),
+    email: Yup.string().email('Invalid email').required('Email is required'),
+    phone: Yup.string().required('phone is required'),
+    mobile: Yup.string().required('mobile is required'),
+    department: Yup.string().required('Email is required'),
+    homePhone: Yup.string().required('HomePhone is required'),
+    linkedinURL: Yup.string().required('linkedinURL is required'),
+    secondaryEmail: Yup.string().required('SecondaryEmail is required'),
+    city: Yup.string().required('City is required'),
+    // zip: Yup.string().required('Zip is required'),
+    description: Yup.string().required('Description is required'),
+    otherPhone: Yup.string().required('OtherPhone is required'),
+    title: Yup.string().required('Title is required'),
+    // dateOfBirth: Yup.string().required('Date of Birth is required'),
+    skypeId: Yup.string().required('SkypeId is required'),
+    twitterUrl: Yup.string().required('Twitter Url is required'),
+    mailingStreet: Yup.string().required('Mailing Street Url is required'),
+    country: Yup.string().required('Country Url is required'),
+    state: Yup.string().required('State Url is required'),
+
+
+
+
   });
 
   const handleFormSubmit = async (contact: Contact, { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }) => {
@@ -126,9 +136,23 @@ const CreateOrEditContact = () => {
 
   return (
     <CCard>
-      <CCardHeader>
-        <h5 className="mb-0">Create Contact</h5>
-      </CCardHeader>
+    
+      <CCardHeader className="mb-3">
+                    <div className="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h5 className="mb-0">Create Account</h5>
+                        </div>
+                        <div className="text-end">
+                            {/* <CButton
+                                component="input"
+                                type="button"
+                                color="primary"
+                                value="Back To Accounts"
+                                onClick={onBackToListButtonClickHandler}
+                            /> */}
+                        </div>
+                    </div>
+                </CCardHeader>
       <CCardBody>
         <Formik
           initialValues={contact}
@@ -138,24 +162,28 @@ const CreateOrEditContact = () => {
         >
           {({ handleSubmit, isValid, isSubmitting, dirty }) => (
             <Form onSubmit={handleSubmit} autoComplete='off'>
-              <CRow className="mb-3">
+              {/* <CRow className="mb-3">
                 <CCol sm={4}>
                   <label htmlFor="ownerId" className="col-form-label">Contact Owner</label>
                 </CCol>
                 <CCol sm={8}>
-                  {/* <Field as="select" name="ownerId" className="form-select">
-                    <option value="">Select owner</option>
-                    {owners.map((owner) => (
-                      <option key={owner.ownerId} value={owner.ownerId}>{owner.ownerName}</option>
-                    ))}
-                  </Field> */}
-                  {/* <SearchableDropdown name="ownerId" options={owners} /> */}
+                  
+                  <SearchDropdown name="ownerId" options={owners} />
+                  <ErrorMessage name="ownerId" component="div" className="invalid-feedback" />
+                </CCol>
+              </CRow> */}
+              <CRow className='justify-content-between'>
+                <CCol xs={6}>
+                <CRow className="mb-3">
+                <CCol sm={4}>
+                  <label htmlFor="ownerId" className="col-form-label">Contact Owner</label>
+                </CCol>
+                <CCol sm={8}>
+                  
                   <SearchDropdown name="ownerId" options={owners} />
                   <ErrorMessage name="ownerId" component="div" className="invalid-feedback" />
                 </CCol>
               </CRow>
-              <CRow className='justify-content-between'>
-                <CCol xs={6}>
                   <CRow className="mb-3">
                     <CCol sm={4}>
                       <label htmlFor="firstName" className="col-form-label">First Name</label>

@@ -20,7 +20,7 @@ import {
 import { BsFiletypeDocx } from "react-icons/bs";
 
 import { MdOutlinePictureAsPdf } from "react-icons/md";
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 import "../../css/style.css";
 
 import { useNavigate, useParams } from "react-router-dom";
@@ -64,7 +64,7 @@ const AccountDetails = () => {
 
   useEffect(() => {
     dispatch(getAccountByIdRequest(accountId));
-  }, [dispatch])
+  }, [dispatch]);
 
   return (
     <CRow>
@@ -82,9 +82,9 @@ const AccountDetails = () => {
                   <CButton
                     component="input"
                     type="button"
-                    color="primary"
-                    value="Back To Accounts"
-                    onClick={() => navigate('/accountsList')}
+                    color="secondary"
+                    value="Back To Account"
+                    onClick={() => navigate("/accountsList")}
                   />
                 </div>
               </CCol>
@@ -175,32 +175,47 @@ const AccountDetails = () => {
                 <ul className="account-list">
                   <CRow>
                     <CCol xs={3}>
-                      <li>Account Owner: <p>{ownerName}</p></li>
+                      <li>
+                        Account Owner: <p>{ownerName}</p>
+                      </li>
                     </CCol>
 
                     <CCol xs={3}>
-                      <li>Account type: <p>{account?.country}</p></li>
+                      <li>
+                        Account type: <p>{account?.country}</p>
+                      </li>
                     </CCol>
                     <CCol xs={3}>
-                      <li>Industry: <p>{industryName}</p></li>
+                      <li>
+                        Industry: <p>{industryName}</p>
+                      </li>
                     </CCol>
                     <CCol xs={3}>
-                      <li>Annual Revenue: <p>{account?.annualRevenue}</p></li>
+                      <li>
+                        Annual Revenue: <p>{account?.annualRevenue}</p>
+                      </li>
                     </CCol>
                     <CCol xs={3}>
-                      <li>Billing Street: <p>{account?.billingStreet}</p></li>
+                      <li>
+                        Billing Street: <p>{account?.billingStreet}</p>
+                      </li>
                     </CCol>
                     <CCol xs={3}>
-                      <li>Billing City: <p>{account?.billingCity}</p></li>
+                      <li>
+                        Billing City: <p>{account?.billingCity}</p>
+                      </li>
                     </CCol>
                     <CCol xs={3}>
-                      <li>Billing State: <p>{account?.billingState}</p></li>
+                      <li>
+                        Billing State: <p>{account?.billingState}</p>
+                      </li>
                     </CCol>
                     <CCol xs={3}>
-                      <li>Billing Code: <p>{account?.billingCode}</p></li>
+                      <li>
+                        Billing Code: <p>{account?.billingCode}</p>
+                      </li>
                     </CCol>
                   </CRow>
-
                 </ul>
               </div>
 
@@ -223,11 +238,14 @@ const AccountDetails = () => {
                   <CCard className="mb-4">
                     <CCardHeader>
                       <CRow className="align-items-center">
-                        <CCol xs={6}  >Notes</CCol>
+                        <CCol xs={6}>Notes</CCol>
                         <CCol xs={6}>
                           <div className="text-end">
                             <CDropdown>
-                              <CDropdownToggle color="primary" variant="outline">
+                              <CDropdownToggle
+                                color="primary"
+                                variant="outline"
+                              >
                                 Recent Last
                               </CDropdownToggle>
                               <CDropdownMenu>
@@ -242,7 +260,11 @@ const AccountDetails = () => {
                       </CRow>
                     </CCardHeader>
                     <CCardBody>
-                      <Notes getNotesCount={getNotesCount} accountId={account?.id} accountName={account?.accountName} />
+                      <Notes
+                        getNotesCount={getNotesCount}
+                        accountId={account?.id}
+                        accountName={account?.accountName}
+                      />
                     </CCardBody>
                   </CCard>
                 </CCol>

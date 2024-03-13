@@ -9,6 +9,7 @@ export interface Account {
     billingState: string;
     billingStreet: string;
     country: string;
+    currency:string;
     createdBy: string;
     createdOn: string;
     fax: string;

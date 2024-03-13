@@ -56,3 +56,7 @@ export interface Country {
     emojiU: string;
     states: State[];
 }
+// export interface Currency{
+    
+
+// }

@@ -327,13 +327,41 @@ namespace KotiCRM.Repository.Repository
                               ).ToList();
 
 
+                    //var timeZone = (from organisation in _context.Organizations
+                    //                join permission in _context.Permissions on organisation.Id equals permission
+                    //                where organisation.Id == user.Id
+                    //                select new
+                    //                {
+                    //                    TimeZone = organisation.TimeZone
+                    //                }).ToList();
+
+                    var timeZone = (from organization in _context.Organizations
+                                    join users in _context.Users on organization.Id equals users.OrganizationId
+                                    //join permissions in _context.Permissions on user.permiss
+                                    select new  LoginStatus
+                                    {
+                                        TimeZone = organization.TimeZone
+                                    }).FirstOrDefault();
+
+                    if (timeZone == null)
+                    {
+                        return new LoginStatus
+                        {
+                            Status = "FAILED",
+                            Message = "Timezone not found for the logged-in user's organization."
+                        };
+                    }
+
+
                     return new LoginStatus
                     {
                         Status = "SUCCEED",
                         Message = "Login Successfully",
                         Token = token,
                         UserType = userRoles[0],
+                        TimeZone= timeZone.TimeZone,
                         UserId = user.Id,
+
                         ModulePermission=ModulePermissionList
                     };
 
