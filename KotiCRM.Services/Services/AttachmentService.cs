@@ -38,7 +38,7 @@ public class AttachmentService : IAttachmentService
         Attachment attachment = new Attachment()
         {
             UserID = createAttachmentDTO.UserID,
-            DateAdded = createAttachmentDTO.DateAdded,
+            DateAdded = DateTime.Now,
             SizeMb = (decimal)createAttachmentDTO.File.Length / (1024 * 1024),
             FileName = uploadedFileName,
             FileExtension = extension,

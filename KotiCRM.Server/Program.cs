@@ -1,31 +1,26 @@
-
 using KotiCRM.Repository.Data;
 using KotiCRM.Repository.Models;
 using KotiCRM.Server.Authentication;
 using KotiCRM.Services;
-using KotiCRM.Services.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
-using KotiCRM.Server.Authentication;
-using System.IdentityModel.Tokens.Jwt;
+using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+});
 
 builder.Services.AddEndpointsApiExplorer();
-
-
 
 //JWT toket setup 
 builder.Services.AddAuthentication(auth =>
@@ -46,10 +41,8 @@ builder.Services.AddAuthentication(auth =>
 
 });
 
-
-
-
-builder.Services.AddSwaggerGen(opt => {
+builder.Services.AddSwaggerGen(opt =>
+{
     opt.SwaggerDoc("v1", new OpenApiInfo { Title = "MyAPI", Version = "v1" });
     opt.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
@@ -77,8 +70,6 @@ builder.Services.AddSwaggerGen(opt => {
     });
 });
 
-
-
 builder.Services.AddSingleton<IAuthorizationHandler, ModuleAuthorizationHandler>();
 
 builder.Services.AddAuthorization(options =>
@@ -98,8 +89,6 @@ builder.Services.AddCors(p => p.AddPolicy("defaultCorsPolicy", builder =>
 })
 );
 
-
-
 builder.Services.AddInfrastructure();
 
 // Database context setup
@@ -108,15 +97,10 @@ builder.Services.AddDbContext<KotiCRMDbContext>(options => options.UseSqlServer(
 //Identity confirguration 
 builder.Services.AddIdentity<ApplicationUser, ApplicationRole>().AddEntityFrameworkStores<KotiCRMDbContext>().AddDefaultTokenProviders();
 
-
-
 var app = builder.Build();
 
 app.UseDefaultFiles();
 app.UseStaticFiles();
-
-
-
 
 app.UseCors("defaultCorsPolicy");
 app.UseAuthentication();

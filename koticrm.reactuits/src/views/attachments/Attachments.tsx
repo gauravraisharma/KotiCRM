@@ -1,11 +1,22 @@
 import { CButton, CCard, CCardBody, CCardHeader, CCol, CDropdown, CDropdownItem, CDropdownMenu, CDropdownToggle, CRow, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow } from "@coreui/react";
-import { useState } from "react";
-import { BsFiletypeDocx } from "react-icons/bs";
+import { useEffect, useState } from "react";
+import { BsFiletypeDocx, BsFiletypePdf } from "react-icons/bs";
 import { MdOutlinePictureAsPdf } from "react-icons/md";
 import CreateOrUpdateAttachment from "./CreateOrUpdateAttachment";
+import { useDispatch, useSelector } from "react-redux";
+import { getAttachments } from "../../redux-saga/action";
 
 const Attachments = () => {
+    const dispatch = useDispatch();
+    const fetchedAttachments = useSelector((state: any) => state.reducer.attachments);
     const [isModalVisible, setIsModalVisible] = useState(false);
+
+    useEffect(() => {
+        dispatch(getAttachments());
+    }, [dispatch]);
+
+    console.log(fetchedAttachments);
+
 
     const handleModalOpen = () => {
         setIsModalVisible(true);
@@ -52,30 +63,28 @@ const Attachments = () => {
                         <CTable>
                             <CTableHead>
                                 <CTableRow>
-                                    <CTableHeaderCell scope="col">
-                                        File Name
-                                    </CTableHeaderCell>
-                                    <CTableHeaderCell scope="col">
-                                        Attached By
-                                    </CTableHeaderCell>
-                                    <CTableHeaderCell scope="col">
-                                        Date Added
-                                    </CTableHeaderCell>
+                                    <CTableHeaderCell scope="col">File Name</CTableHeaderCell>
+                                    <CTableHeaderCell scope="col">Attached By</CTableHeaderCell>
+                                    <CTableHeaderCell scope="col">Date Added</CTableHeaderCell>
                                     <CTableHeaderCell scope="col">Size</CTableHeaderCell>
                                 </CTableRow>
                             </CTableHead>
                             <CTableBody>
-                                <CTableRow>
-                                    <CTableHeaderCell>
-                                        <BsFiletypeDocx className="doc" />
-                                        <CButton className="link" color="link">
-                                            Learner Settings Page-February 2024.docx
-                                        </CButton>
-                                    </CTableHeaderCell>
-                                    <CTableDataCell>Gourav Rai</CTableDataCell>
-                                    <CTableDataCell>22/02/2024 06:50PM</CTableDataCell>
-                                    <CTableDataCell>38kb</CTableDataCell>
-                                </CTableRow>
+                                {fetchedAttachments ? fetchedAttachments.map(attachment => (
+                                    <CTableRow>
+                                        <CTableHeaderCell>
+                                            {attachment.fileExtension === ".pdf" ?
+                                                <BsFiletypePdf className="pdf" /> :
+                                                <BsFiletypeDocx className="doc" />}
+                                            <CButton className="link" color="link">
+                                                {attachment.fileName}
+                                            </CButton>
+                                        </CTableHeaderCell>
+                                        <CTableDataCell>{attachment.userID}</CTableDataCell>
+                                        <CTableDataCell>{attachment.dateAdded}</CTableDataCell>
+                                        <CTableDataCell>{attachment.sizeMb} MB</CTableDataCell>
+                                    </CTableRow>
+                                )) : <div>No Attachment Available</div>}
                                 <CTableRow>
                                     <CTableHeaderCell>
                                         <MdOutlinePictureAsPdf className="pdf" />

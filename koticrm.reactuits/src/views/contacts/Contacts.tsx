@@ -11,7 +11,6 @@ import {
   CTableHeaderCell,
   CTableRow,
   CButton,
-  CLink,
 } from '@coreui/react'
 import '../../css/style.css'
 import { useDispatch, useSelector } from 'react-redux'

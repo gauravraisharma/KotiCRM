@@ -23,7 +23,9 @@ import {
     GET_CONTACT_DETAIL_SUCCESS,
     CREATE_CONTACT_SUCCESS,
     UPDATE_CONTACT_SUCCESS,
-    GET_INVOICE_OWNER_SUCCESS
+    GET_INVOICE_OWNER_SUCCESS,
+    GET_ATTACHMENTS_SUCCESS,
+    CREATE_ATTACHMENT_SUCCESS
 } from "../../constants/reduxConstants";
 
 const initialState = {
@@ -33,25 +35,27 @@ const initialState = {
         userId: null,
         loggedIn: false,
         accounts: [],
-        createAccountResponse:null, 
-        account:null,
-        accountOwner :[],
-        industry:[],
-        accountStatus :[],
-        accountType :[],
-        invoiceStatus : [],
+        createAccountResponse: null,
+        account: null,
+        accountOwner: [],
+        industry: [],
+        accountStatus: [],
+        accountType: [],
+        invoiceStatus: [],
         deleteResponse: null,
         updateAccountResponse: null,
         contacts: [],
-        notes: [] ,
-        noteResponse:null,
-        invoices:[],
-        invoice:null,
-        createInvoiceResponse:null,
-        updateInvoiceResposne:null,
-        deleteInvoiceResponse:null,
+        attachments: [],
+        attachment: null,
+        notes: [],
+        noteResponse: null,
+        invoices: [],
+        invoice: null,
+        createInvoiceResponse: null,
+        updateInvoiceResposne: null,
+        deleteInvoiceResponse: null,
         contact: null,
-        invoiceOwner:[]
+        invoiceOwner: []
     }
 };
 
@@ -85,7 +89,7 @@ const reducer = (state = initialState, action: any) => {
             return {
                 ...state,
                 sidebarToggle: action.sidebarShow
-        //account
+                //account
             }
         case GET_ACCOUNT_SUCCESS:
             return {
@@ -114,7 +118,7 @@ const reducer = (state = initialState, action: any) => {
         case UPDATE_ACCOUNT_SUCCESS:
             return {
                 ...state,
-                updateAccountResponse : action.updatedAccount
+                updateAccountResponse: action.updatedAccount
             }
 
         case GET_ACCOUNT_OWNER_SUCCESS:
@@ -122,12 +126,8 @@ const reducer = (state = initialState, action: any) => {
                 ...state,
 
                 accountOwner: action.accountOwners,
-                }
-        case GET_INDUSTRY_SUCCESS: 
-            return {...state,
-                industry: action.industry,
-                }
-        case GET_ACCOUNT_STATUS_SUCCESS: 
+            }
+        case GET_ACCOUNT_STATUS_SUCCESS:
             return {
                 ...state,
                 accountStatus: action.accountStatus,
@@ -139,10 +139,25 @@ const reducer = (state = initialState, action: any) => {
                 accountType: action.accountType,
             }
         //industry
-        case GET_INDUSTRY_SUCCESS: 
-            return {...state,
+        case GET_INDUSTRY_SUCCESS:
+            return {
+                ...state,
                 industry: action.industry,
-                }
+            }
+
+        // Attachment
+        case GET_ATTACHMENTS_SUCCESS:
+            return {
+                ...state,
+                attachments: action.attachments
+            }
+        
+        case CREATE_ATTACHMENT_SUCCESS:
+            return {
+                ...state,
+                attachment: action.createdAttachment,
+                attachments:[...state.reducer.attachments, action.createdAttachment]
+            }
 
         //contact    
         case GET_CONTACTS_SUCCESS:
@@ -179,7 +194,7 @@ const reducer = (state = initialState, action: any) => {
             return {
                 ...state,
                 noteResponse: action.notes,
-            }    
+            }
 
         //invoice
         case GET_INVOICE_STATUS_SUCCESS:
@@ -188,35 +203,35 @@ const reducer = (state = initialState, action: any) => {
                 invoiceStatus: action.invoiceStatus,
             }
         case GET_INVOICE_SUCCESS:
-            return{
+            return {
                 ...state,
-                invoices : action.invoices
+                invoices: action.invoices
             }
         case GET_INVOICE_DETAIL_SUCCESS:
-            return{
+            return {
                 ...state,
                 invoice: action.invoice
             }
         case CREATE_INVOICE_SUCCESS:
-            return{
+            return {
                 ...state,
                 createInvoiceResponse: action.invoice
             }
         case UPDATE_INVOICE_SUCCESS:
-            return{
+            return {
                 ...state,
-                updateInvoiceResposne : action.updatedInvoice
+                updateInvoiceResposne: action.updatedInvoice
             }
         case DELETE_INVOICE_SUCCESS:
-            return{
+            return {
                 ...state,
-                deleteInvoiceResponse : action.response
+                deleteInvoiceResponse: action.response
             }
         case GET_INVOICE_OWNER_SUCCESS:
             return {
                 ...state,
                 invoiceOwner: action.invoiceOwners,
-                }
+            }
 
         default:
             // console.error("No action matched");

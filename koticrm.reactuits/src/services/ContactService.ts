@@ -1,8 +1,9 @@
+import { PayloadAction } from "@reduxjs/toolkit";
 import agent from "../api/agent";
 import { Contact } from "../models/contact/Contact";
 
 
-export default class ContactService {
+class ContactService {
     static async GetContactsList(): Promise<Contact[]> {
         try {
             const response = await agent.Contact.get();
@@ -16,7 +17,7 @@ export default class ContactService {
         }
     }
 
-    static async GetContactDetails(id: any): Promise<Contact> {
+    static async GetContactDetails(id: PayloadAction<number>): Promise<Contact> {
         try {
             const response = await agent.Contact.getById(id.payload);
             console.log("Contact details in service");
@@ -29,9 +30,9 @@ export default class ContactService {
         }
     }
 
-    static async CreateContact(contact: any): Promise<Contact> {
+    static async CreateContact(contact: Contact): Promise<Contact> {
         try {
-            const response = await agent.Contact.create(contact.payload);
+            const response = await agent.Contact.create(contact);
 
             return response;
         }
@@ -41,7 +42,7 @@ export default class ContactService {
         }
     }
 
-    static async UpdateContact(contact: any, id: any): Promise<Contact> {
+    static async UpdateContact(contact: Contact, id: number): Promise<Contact> {
         try {
             const response = await agent.Contact.update(id, contact);
             console.log("Update response in contact service");
@@ -54,3 +55,5 @@ export default class ContactService {
         }
     }
 }
+
+export default ContactService;

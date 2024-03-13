@@ -28,10 +28,13 @@ import {
     GET_INVOICE_DETAIL_FETCH,
     DELETE_INVOICE_REQUEST,
     UPDATE_INVOICE_REQUEST,
-    GET_INVOICE_OWNER_FETCH
+    GET_INVOICE_OWNER_FETCH,
+    GET_ATTACHMENTS_FETCH,
+    CREATE_ATTACHMENT_REQUEST
 } from "../constants/reduxConstants";
 import { Contact } from "../models/contact/Contact";
 import { Invoice } from "../models/invoice/Invoice";
+import { CreateAttachment } from "../models/attachment/Attachment";
 
 // Login
 export const loginRequest = (userLogin: UserLogin, navigate: any, toast: any) => ({
@@ -92,6 +95,16 @@ export const getAccountStatus = () => ({
 export const getAccountType = () => ({
   type: GET_ACCOUNT_TYPE_FETCH
 })
+
+// Contact action methods
+export const getAttachments=()=>({
+  type: GET_ATTACHMENTS_FETCH
+});
+
+export const createAttachment=(createAttachment: CreateAttachment)=>({
+  type: CREATE_ATTACHMENT_REQUEST,
+  payload: createAttachment
+});
 
 // Contact action methods
 export const getContacts = () => ({
