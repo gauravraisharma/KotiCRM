@@ -9,6 +9,10 @@ export interface SharedOwnerModel {
     email: string
 }
 
+export interface OrganizationBankModel{
+    organizationModel : OrganizationModel;
+    bankModel : BankModel[],
+}
 export interface OrganizationModel{
     id :number;
     orgName : string,
@@ -23,6 +27,14 @@ export interface OrganizationModel{
     billingCode:string,
     billingCountry:string
 }
+export interface BankModel {
+    bankId: number;
+    name: string | null;
+    branch: string | null;
+    ifsc: string | null;
+    organizationId: number | null;
+}
+
 
 
 export interface DbResponse {

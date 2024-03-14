@@ -5,7 +5,8 @@ import { useDispatch } from 'react-redux';
 import { getAccountOwner, getAccounts, getInvoice, getInvoiceByIdRequest, getInvoiceOwner, getInvoiceStatus, getNotes } from '../../redux-saga/action';
 import { useSelector } from 'react-redux';
 
-import { MdDelete, MdPictureAsPdf } from 'react-icons/md';
+import { MdDelete, MdPictureAsPdf, MdPreview } from 'react-icons/md';
+import InvoiceTemplate from '../../pdf-template/InvoiceTemplate';
 
 interface InvoiceProps {
 	getInvoiceCount: (data: string) => void;
@@ -16,6 +17,8 @@ interface InvoiceProps {
 const InvoiceComponent: React.FC<InvoiceProps> = ({ accountId, ownerId, getInvoiceCount }) => {
 	const dispatch = useDispatch();
 	const [showCreateInvoice, setShowCreateInvoice] = useState(false)
+  const [openPreviewModal, setOpenPreviewModal] = useState<boolean>(false);
+	const [invoiceId, setInvoiceId] = useState();
 
 	const invoices = useSelector((state: any) => state.reducer.invoices)
 
@@ -29,6 +32,21 @@ const InvoiceComponent: React.FC<InvoiceProps> = ({ accountId, ownerId, getInvoi
 	const closeCreateModal = () => {
 		setShowCreateInvoice(false);
 	}
+
+
+	const closeInvoicePdfModal=()=>
+	{
+		setOpenPreviewModal(false)
+	}
+	const generateInvoicePDF =(invoiceId : any)=>{
+		setOpenPreviewModal(true)
+		setInvoiceId(invoiceId)
+	}
+
+
+	const backToInvoicesListFromPdf = () => {
+    setOpenPreviewModal(false)
+  };
 
 	const invoiceStatus = useSelector((state: any) => state.reducer.invoiceStatus);
 	const invoiceResponse = useSelector((state: any) => state.reducer.createInvoiceResponse);
@@ -59,9 +77,7 @@ const InvoiceComponent: React.FC<InvoiceProps> = ({ accountId, ownerId, getInvoi
 
 	console.log(filteredInvoices)
 
-	const generateInvoicePDF =(invoiceId : any)=>{
-		dispatch(getInvoiceByIdRequest(invoiceId))
-	}
+
 
 	const invoiceDetails = useSelector((state:any)=> state.reducer.invoice)
 	console.log(invoiceDetails)
@@ -84,6 +100,10 @@ const InvoiceComponent: React.FC<InvoiceProps> = ({ accountId, ownerId, getInvoi
 					ownerId={ownerId} />
 			) : (
 				<>
+				{openPreviewModal ? 
+				(
+					<InvoiceTemplate  invoiceId= {invoiceId} closeInvoicePdfModal= {closeInvoicePdfModal} onBackToListButtonClickHandler={backToInvoicesListFromPdf} />
+				) : (
 					<CCard className="mb-4">
 						<CCardHeader>
 							<CRow className="align-items-center">
@@ -131,7 +151,8 @@ const InvoiceComponent: React.FC<InvoiceProps> = ({ accountId, ownerId, getInvoi
 											<CTableDataCell>{getDates(invoiceModel.invoice?.invoiceDate)}</CTableDataCell>
 											<CTableDataCell>{getDates(invoiceModel.invoice?.dueDate)}</CTableDataCell>
 											<CTableDataCell>
-											<MdPictureAsPdf size={21} style={{ color: "rgb(30, 30, 115)", marginRight:"7px" }}  onClick={()=>generateInvoicePDF(invoiceModel.invoice?.id)}/>
+											<MdPreview size={21} style={{ color: "rgb(30, 30, 115)", marginRight:"7px" }}  onClick={()=>generateInvoicePDF(invoiceModel.invoice?.id)}/>
+										
                               <MdDelete size={21} style={{ color: "red" }} />
                             </CTableDataCell>
 										</CTableRow>
@@ -141,6 +162,7 @@ const InvoiceComponent: React.FC<InvoiceProps> = ({ accountId, ownerId, getInvoi
 							</CTable>
 						</CCardBody>
 					</CCard>
+				)}
 				</>
 			)}
 		</div>

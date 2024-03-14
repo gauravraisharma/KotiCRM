@@ -1,85 +1,197 @@
 import { useSelector } from "react-redux"
-import {
-    Document,
-    Page,
-    Text,
-    View,
-    StyleSheet,
-    Image,
-    Font,
-  } from "@React-pdf/renderer";
+import './invoiceTemplate.css'
+import { useEffect, useRef } from "react";
+import { useDispatch } from "react-redux";
+import { getAccountByIdRequest, getInvoiceByIdRequest, getOrganization } from "../redux-saga/action";
+import { CButton, CCard, CCardHeader } from "@coreui/react";
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 
-  const styles = StyleSheet.create({
-    page: {
-      backgroundColor: "#FFF",
-      padding: 30,
-    },
-    header: {
-      fontSize: 24,
-      textAlign: "center",
-      marginBottom: 30,
-    },
-    sender: {
-      marginBottom: 20,
-    },
-    recipient: {
-      marginBottom: 30,
-    },
-    addressLine: {
-      fontSize: 12,
-      marginBottom: 2,
-    },
-    itemsTable: {
-      display: "flex", 
-      width: "100%",
-      borderStyle: "solid",
-      borderWidth: 1,
-      borderRightWidth: 0,
-      borderBottomWidth: 0,
-    },
-    tableRow: {
-      margin: "auto",
-      flexDirection: "row",
-    },
-    tableColHeader: {
-      width: "25%",
-      borderStyle: "solid",
-      borderWidth: 1,
-      borderLeftWidth: 0,
-      borderTopWidth: 0,
-      backgroundColor: "#F0F0F0",
-    },
-    tableCol: {
-      width: "25%",
-      borderStyle: "solid",
-      borderWidth: 1,
-      borderLeftWidth: 0,
-      borderTopWidth: 0,
-    },
-    tableCell: {
-      fontSize: 12,
-      textAlign: "center",
-      padding: 5,
-    },
-    total: {
-      marginTop: 20,
-      textAlign: "right",
-    },
-    totalLabel: {
-      fontSize: 14,
-      fontWeight: "bold",
-    },
-    totalValue: {
-      fontSize: 14,
-    },
-  });
-const InvoiceTemplate = () => {
-    const invoiceDetails = useSelector((state:any)=> state.reducer.invoice)
-    console.log(invoiceDetails)
+  
+interface InvoicePdfTemplateProps {
+    closeInvoicePdfModal :()=> void;
+    invoiceId :any;
+    onBackToListButtonClickHandler: () => void;
+  }
+  
+const InvoiceTemplate :React.FC<InvoicePdfTemplateProps>  = ({
+    invoiceId,
+    onBackToListButtonClickHandler
+}) => {
+
+    const dispatch = useDispatch()
+    function getDateTime(date:any){
+        const formattedDate = new Date(date).toLocaleDateString('en-US', {
+              year: 'numeric',
+              month: 'long',
+              day: '2-digit',
+          });
+        return formattedDate;
+      }
+
+      const invoiceDetails = useSelector((state:any)=> state.reducer.invoice)
+      const organization = useSelector((state:any)=> state.reducer.organization)
+      const accountDetails = useSelector((state:any)=> state.reducer.account)
+      const totalAmount = invoiceDetails?.invoiceItems.reduce((total:any, item:any) => total + item.total, 0);
+
+
+    const activeOrg = organization?.filter((org: any) => org.organizationResponse?.isActive === true);
+    const orgName = activeOrg ? activeOrg[0]?.organizationResponse?.orgName : '';   
+
+    const handleDownloadPDF = () => {
+        debugger
+        const input: any = document.getElementById('invoice-pdf');
+    
+        html2canvas(input).then((canvas:any) => {
+          const imgData = canvas.toDataURL('image/png');
+          const pdf = new jsPDF();
+          const imgHeight = (canvas.height * 210) / canvas.width;
+          pdf.addImage(imgData, 0, 0, 210, imgHeight);
+          pdf.save(`${invoiceDetails?.invoice.subject}.pdf`);
+        });
+      };
+
+    useEffect(()=>{
+        dispatch(getInvoiceByIdRequest(invoiceId))
+        dispatch(getOrganization())
+        dispatch(getAccountByIdRequest(invoiceDetails?.invoice.accountID))
+    }, [dispatch])
   return (
-    <div>
-      
+    <CCard>
+        <CCardHeader className="mb-3">   
+            <div className="text-end">
+            <CButton
+            className="mx-3"
+            component="input"
+                type="button"
+                color="primary"
+              value= "Download PDF"
+              onClick={handleDownloadPDF}>
+            </CButton>
+              <CButton
+                component="input"
+                type="button"
+                color="secondary"
+                value="Cancel"
+                onClick={onBackToListButtonClickHandler}
+              />
+          </div>
+        </CCardHeader>
+        <div id="invoice-pdf">
+    <div style={{ fontFamily: 'Arial, sans-serif', maxWidth: '800px', margin: '30px auto' }}>
+    <div style={{ textAlign: 'center', marginBottom: '20px' }}>
+
+      <h2 style={{ fontSize: '20px', fontWeight: 'bold', marginTop: '10px' }}>{orgName}</h2>
+      <div style={{ fontSize: '20px', margin: '20px 0 20px 0' }}>
+        <i>Invoice for <strong>{invoiceDetails?.invoice.subject}</strong>  against <strong>{ invoiceDetails?.invoice.fromBillingStreet} </strong>Purchase order no. <strong><u>{invoiceDetails?.invoice.purchaseOrder}</u></strong></i> </div>
+      <div className='div-box'>
+        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+          <tr>
+            <th className='table-header'>
+              <p style={{ fontSize: '13px', margin: '10px 0' }}>Invoice # : {invoiceDetails?.invoice.id}</p>
+            </th>
+            <th className='table-header'>
+              <p style={{ fontSize: '13px', margin: '10px 0' }}>Invoice Date: {getDateTime(invoiceDetails?.invoice.invoiceDate)}</p>
+            </th>
+            <th className='table-header'>
+              <p style={{ fontSize: '13px', margin: '10px 0' }}>Due Date: {getDateTime(invoiceDetails?.invoice.dueDate)}</p>
+            </th>
+            <th className='table-header'>
+              <p style={{ fontSize: '13px', margin: '10px 0' }}>Total Amount: AUD<p>($) {totalAmount}</p></p>
+              
+            </th>
+          </tr>
+          {/* </thead> */}
+        </table>
+      </div>
     </div>
+
+
+    <div className="div-box" style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '30px' }}>
+      <div style={{ width: '45%', padding: '10px' }}>
+        <p style={{ fontSize: '18px', fontWeight: 'bold', marginBottom: '10px', }}>From :</p>
+        <p style={{ fontSize: '14px', margin: '5px 0' }}>{invoiceDetails?.invoice.fromBillingStreet} {invoiceDetails?.invoice.fromBillingCity}</p>
+        <p style={{ fontSize: '14px', margin: '5px 0' }}>{invoiceDetails?.invoice.fromBillingState}</p>
+        <p style={{ fontSize: '14px', margin: '5px 0' }}> {invoiceDetails?.invoice.fromBillingCode}</p>
+        <p style={{ fontSize: '14px', margin: '5px 0' }}> {invoiceDetails?.invoice.fromBillingCountry}</p>
+      </div>
+      <div className="vertical-line"></div>
+      <div style={{ width: '45%' }}>
+        <p style={{ fontSize: '18px', fontWeight: 'bold', marginBottom: '10px',marginTop: '10px' }}>To :</p>
+        <p style={{ fontSize: '14px', margin: '5px 0' }}>{invoiceDetails?.invoice.toBillingStreet} {invoiceDetails?.invoice.toBillingCity}</p>
+        <p style={{ fontSize: '14px', margin: '5px 0' }}> {invoiceDetails?.invoice.toBillingState}</p>
+        <p style={{ fontSize: '14px', margin: '5px 0' }}>{invoiceDetails?.invoice.toBillingCode}</p>
+        <p style={{ fontSize: '14px', margin: '5px 0' }}> {invoiceDetails?.invoice.toBillingCountry}</p>
+      </div>
+    </div>
+
+    <div className="invoice-items" style={{ marginBottom: '20px' }}>
+      <h3   >Invoice Items</h3>
+      <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+        <thead>
+          <tr style={{ background: 'rgb(176, 172, 172) '}}>
+            <th style={{ border: '1px solid #ccc', padding: '12px 8px', textAlign: 'left', fontSize:'14px' }}>Item #</th>
+            <th style={{ border: '1px solid #ccc', padding: '12px 8px', textAlign: 'left',fontSize:'14px' }}>Product Name</th>
+            <th style={{ border: '1px solid #ccc', padding: '12px 8px', textAlign: 'left',fontSize:'14px' }}>Description</th>
+            <th style={{ border: '1px solid #ccc', padding: '12px 8px', textAlign: 'left', fontSize:'14px' }}>Quantity</th>
+            <th style={{ border: '1px solid #ccc', padding: '12px 8px', textAlign: 'left', fontSize:'14px' }}>Amount</th>
+            <th style={{ border: '1px solid #ccc', padding: '12px 8px', textAlign: 'left', fontSize:'14px' }}>Discount</th>
+            <th style={{ border: '1px solid #ccc', padding: '12px 8px', textAlign: 'left', fontSize:'14px' }}>Tax</th>
+            <th style={{ border: '1px solid #ccc', padding: '12px 8px', textAlign: 'left', fontSize:'14px' }}>Amount to Pay ($)</th>
+          </tr>
+        </thead>
+        <tbody>
+          {invoiceDetails?.invoiceItems.map((item:any, index:any) => (
+            <tr key={item.id} style={{ background: index % 2 === 0 ? '#f9f9f9' : '#fff' }}>
+              <td style={{ border: '1px solid #ccc', padding: '12px 8px',fontSize:'14px' }}>{item.sno}</td>
+              <td style={{ border: '1px solid #ccc', padding: '12px 8px', fontSize:'14px' }}>{item.productName}</td>
+              <td style={{ border: '1px solid #ccc', padding: '12px 8px', fontSize:'14px' }}>{item.description}</td>
+              <td style={{ border: '1px solid #ccc', padding: '12px 8px', fontSize:'14px' }}>{item.quantity}</td>
+              <td style={{ border: '1px solid #ccc', padding: '12px 8px', fontSize:'14px' }}>{item.amount}</td>
+              <td style={{ border: '1px solid #ccc', padding: '12px 8px', fontSize:'14px' }}>{item.discount}</td>
+              <td style={{ border: '1px solid #ccc', padding: '12px 8px',fontSize:'14px' }}>{item.tax}</td>
+              <td style={{ border: '1px solid #ccc', padding: '12px 8px', fontSize:'14px' }}>{item.total}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <div style={{fontSize:'14px' , marginTop: '10px' ,whiteSpace: 'nowrap' , display:'flex' , justifyContent: 'flex-end', marginRight:'90px'}}>Total Amount To Pay : &nbsp;&nbsp; <strong>{totalAmount}</strong></div>
+
+    </div>
+
+<div style={{ marginBottom: '20px' }}>
+    <h3>Bank Details</h3>
+        <div className="bank-details">
+            <div >
+            <p><strong>Name of the Bank</strong></p>
+            <p><strong>Branch</strong></p>
+            <p><strong>IFSC CODE</strong></p>
+
+            <p><strong>Account Name</strong></p>
+            <p><strong>Account Number</strong></p>
+            <p><strong>Bank Address</strong></p>
+            </div>
+            <div style={{marginLeft: '7%'}}>
+            <p>: &nbsp;  &nbsp; {activeOrg[0]?.banks[0]?.name}</p>
+            <p>: &nbsp;  &nbsp; {activeOrg[0]?.banks[0]?.branch}</p>
+            <p>: &nbsp;  &nbsp; {activeOrg[0]?.banks[0]?.ifsc}</p>
+
+            <p>:  &nbsp;  &nbsp; {accountDetails?.accountName}</p>
+            <p> : &nbsp; &nbsp; {accountDetails?.phone}</p>
+            <p> : &nbsp; &nbsp; {accountDetails?.billingStreet} {accountDetails?.billingCity}, {accountDetails?.billingState} - {accountDetails?.billingCode} {accountDetails?.country}</p>
+            </div>
+        </div>
+        </div>
+    <div className="invoice-footer" style={{ fontSize: '16px', fontWeight: 'bold', }}>
+      <p style={{ margin: '5px 0', borderTop: '1px solid rgb(182, 178, 178) ', paddingTop: '20px' }}>Terms & Conditions: {invoiceDetails?.invoice.termsAndConditions}</p>
+      <p className='link-footer'><u>In case of any questions on Invoice, please contact info@techbitsolution.com</u></p>
+
+      <p className='link-footer' style={{marginTop:'20px'}}>{getDateTime(invoiceDetails?.invoice.invoiceDate)}</p>
+      {/* Add other footer details */}
+    </div>
+  </div>
+  </div>
+  </CCard>
   )
 }
 

@@ -90,15 +90,17 @@ const NewInvoice: React.FC<newInvoiceProps> = ({ closeModal, onBackToListButtonC
   };
 
 	const organizationDetail = useSelector((state: any) => state.reducer.organization)
-	const techbitOrganization = organizationDetail?.find((org: any) => org.isActive === true);
+
+	
+			const techbitOrganization = organizationDetail?.filter((org: any) => org.organizationResponse?.isActive === true);
 	var grandTotalValue = 0
 
 	const [invoice, setInvoice] = useState({
 		subject: '', dueDate: new Date(), dealName: '', purchaseOrder: '', status: 0,
 
-		fromBillingStreet: techbitOrganization?.billingStreet, fromBillingCity: techbitOrganization?.billingCity,
-		fromBillingState: techbitOrganization?.billingState, fromBillingCode: techbitOrganization?.billingCode,
-		fromBillingCountry: techbitOrganization?.billingCountry,
+		fromBillingStreet:techbitOrganization[0]?.organizationResponse?.billingStreet, fromBillingCity: techbitOrganization[0]?.organizationResponse?.billingCity,
+		fromBillingState: techbitOrganization[0]?.organizationResponse?.billingState, fromBillingCode: techbitOrganization[0]?.organizationResponse?.billingCode,
+		fromBillingCountry: techbitOrganization[0]?.organizationResponse?.billingCountry,
 
 		toBillingStreet: '',
 		toBillingCity: '',

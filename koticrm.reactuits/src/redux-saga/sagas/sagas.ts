@@ -20,7 +20,6 @@ import {
     workGetIndustryFetch,
     workGetInvoiceOwnerFetch,
     workGetInvoiceStatusFetch,
-    workGetOrganizationFetch
 } from './sharedSaga';
 
 import {
@@ -63,6 +62,7 @@ import {
 import { workCreateNote, workGetNotesFetch } from './notesSaga';
 import { workCreateInvoice, workDeleteInvoice, workGetInvoiceByIdFetch, workGetInvoiceFetch, workUpdateInvoice } from './invoiceSaga';
 import { workCreateAttachment, workGetAttachmentsFetch } from './attachmentSaga';
+import { workGetOrganizationFetch } from './organizationSaga';
 
 export default function* mySaga() {
   //account

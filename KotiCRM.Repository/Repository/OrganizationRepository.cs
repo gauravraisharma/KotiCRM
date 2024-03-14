@@ -1,5 +1,4 @@
 ﻿using KotiCRM.Repository.Data;
-using KotiCRM.Repository.DTOs.Organization;
 using KotiCRM.Repository.IRepository;
 using KotiCRM.Repository.Models;
 using Microsoft.EntityFrameworkCore;
@@ -20,16 +19,42 @@ namespace KotiCRM.Repository.Repository
             _context = context;
         }
 
-        public async Task<IEnumerable<Organization>> GetOrganizationList()
+
+        public async Task<IEnumerable<OrganizationBankResponse>> GetOrganizationList()
         {
             try
             {
-                var organizations = await _context.Organizations.ToListAsync();
-                return organizations;
+                {
+                    var organizations = await _context.Organizations.ToListAsync();
+                    var banks = await _context.Banks.ToListAsync();
+                    var organizationDto = organizations.Select(organization => new OrganizationBankResponse
+                    {
+                        OrganizationResponse = new OrganizationResponse()
+                        {
+                            Id = organization.Id,
+                            OrgName = organization.OrgName,
+                            IsActive = organization.IsActive,
+                            TimeZone = organization.TimeZone,
+                            Shifts = organization.Shifts,
+                            IncludeLogofToIdle = organization.IncludeLogofToIdle,
+                            Currency = organization.Currency,
+                            BillingStreet = organization.BillingStreet,
+                            BillingCity = organization.BillingCity,
+                            BillingState = organization.BillingState,
+                            BillingCode = organization.BillingCode,
+                            BillingCountry = organization.BillingCountry
+                        },
+                        Banks = banks.Where(bank => bank.OrganizationId == organization.Id).ToList()
+                    });
+
+                    return organizationDto;
+
+                }
             }
             catch (Exception ex)
             {
                 throw new Exception(ex.Message, ex);
+
             }
         }
 

@@ -1,0 +1,48 @@
+.div-box{
+    width: 100%;
+    border : 1px solid rgb(182, 178, 178);
+    
+  }
+  
+  .vertical-line {
+    border-left: 1px solid rgb(182, 178, 178);
+    height: auto;
+  }
+  table td tr {
+    border : 1px solid rgb(182, 178, 178) 
+  }
+  .table-header{
+     vertical-align: 'top';
+      border : 1px solid rgb(182, 178, 178)
+  }
+  .theader-invoice-item{
+    border: '1px solid #ccc';
+     padding: '12px 8px';
+      text-align: 'left'
+  }
+  .link-footer{
+    font-size: 13px;
+  }
+
+h3 {
+    font-size: 20px;
+    margin: 20px 0 20px 0;
+    border-bottom:  1px solid rgb(182, 178, 178);
+    font-weight: bold
+}
+
+.bank-details {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: row;
+
+}
+.bank-details p {
+    display: flex;
+    justify-content: space-between ;
+    margin: 15px 0;
+    font-size: 14px;
+}
+.bank-details strong {
+    width: 150px; /* Adjust the width as needed */
+}

@@ -15,26 +15,9 @@ namespace KotiCRM.Services.Services
             _organizationRepository = organizationRepository;
         }
 
-        public async Task<IEnumerable<OrganizationDTO>> GetOrganizationList()
+         public async Task<IEnumerable<OrganizationBankResponse>> GetOrganizationList()
         {
-            var organizations = await _organizationRepository.GetOrganizationList();
-            List<OrganizationDTO> organizationDTOs = organizations.Select(organization => new OrganizationDTO()
-            {
-                Id = organization.Id,
-                OrgName = organization.OrgName,
-                IsActive = organization.IsActive,
-                TimeZone = organization.TimeZone,
-                Shifts = organization.Shifts,
-                IncludeLogofToIdle = organization.IncludeLogofToIdle,
-                Currency = organization.Currency,
-                BillingStreet = organization.BillingStreet,
-                BillingCity = organization.BillingCity,
-                BillingState = organization.BillingState,
-                BillingCode = organization.BillingCode,
-                BillingCountry = organization.BillingCountry
-            }).ToList();
-
-            return organizationDTOs;
+            return await _organizationRepository.GetOrganizationList();
         }
 
         public async Task<OrganizationDTO> GetOrganization(int id)

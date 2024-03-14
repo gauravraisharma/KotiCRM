@@ -6,7 +6,7 @@ import { Invoice, InvoiceCreationModel } from '../models/invoice/Invoice';
 import { Note } from '../models/notes/notes';
 import { UserLogin } from '../models/userAccount/login';
 import { Attachment, CreateAttachment } from '../models/attachment/Attachment';
-import { OrganizationModel, SharedModel, SharedOwnerModel, DbResponse } from '../models/commonModels/SharedModels';
+import { OrganizationModel, SharedModel, SharedOwnerModel, DbResponse, OrganizationBankModel } from '../models/commonModels/SharedModels';
 
 const responseBody = <T>(response: AxiosResponse<T>) => response.data;
 
@@ -70,7 +70,7 @@ const SharedData = {
 
 }
 const Organization ={
-    getOrganization : ()=> requests.get<OrganizationModel[]>(`/Shared/GetOrganizationList`)
+    getOrganization: () => requests.get<OrganizationBankModel[]>(`/Organization/GetOrganizationList`)
     // updateOrganization: (id : number,organization: ) => requests.put<OrganizationModel>(`/Attachment/UpdateOrganization/${id}`, organization),
 
     

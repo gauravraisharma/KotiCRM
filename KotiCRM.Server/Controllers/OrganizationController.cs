@@ -20,7 +20,7 @@ namespace KotiCRM.Server.Controllers
 
         [HttpGet]
         [Route("GetOrganizationList")]
-        public async Task<IEnumerable<OrganizationDTO>> GetOrganizationList()
+        public async Task<IEnumerable<OrganizationBankResponse>> GetOrganizationList()
         {
             return await _organizationService.GetOrganizationList();
         }
