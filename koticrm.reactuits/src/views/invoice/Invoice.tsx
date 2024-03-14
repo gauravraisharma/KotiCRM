@@ -95,7 +95,7 @@ const InvoiceComponent: React.FC<InvoiceProps> = ({ accountId, ownerId, getInvoi
 											type="button"
 											color="primary"
 											value="New"
-											variant="outline"
+											// variant="outline"
 											onClick={handleCreateNewInvoice}
 										/>
 									</div>
@@ -126,7 +126,7 @@ const InvoiceComponent: React.FC<InvoiceProps> = ({ accountId, ownerId, getInvoi
 								<CTableBody>
 									{invoices?.map((invoiceModel: any) => (
 										<CTableRow key={invoiceModel.invoice?.id}>
-											<CTableHeaderCell>{invoiceModel.invoice?.subject}</CTableHeaderCell>
+											<CTableDataCell>{invoiceModel.invoice?.subject}</CTableDataCell>
 											<CTableDataCell>{getInvoiceStatusValue(invoiceModel.invoice?.status)}</CTableDataCell>
 											<CTableDataCell>{getDates(invoiceModel.invoice?.invoiceDate)}</CTableDataCell>
 											<CTableDataCell>{getDates(invoiceModel.invoice?.dueDate)}</CTableDataCell>

@@ -327,21 +327,9 @@ namespace KotiCRM.Repository.Repository
                               ).ToList();
 
 
-                    //var timeZone = (from organisation in _context.Organizations
-                    //                join permission in _context.Permissions on organisation.Id equals permission
-                    //                where organisation.Id == user.Id
-                    //                select new
-                    //                {
-                    //                    TimeZone = organisation.TimeZone
-                    //                }).ToList();
-
                     var timeZone = (from organization in _context.Organizations
-                                    join users in _context.Users on organization.Id equals users.OrganizationId
-                                    //join permissions in _context.Permissions on user.permiss
-                                    select new  LoginStatus
-                                    {
-                                        TimeZone = organization.TimeZone
-                                    }).FirstOrDefault();
+                                     join users in _context.Users on organization.Id equals users.OrganizationId
+                                     select organization.TimeZone).FirstOrDefault();
 
                     if (timeZone == null)
                     {
@@ -359,7 +347,7 @@ namespace KotiCRM.Repository.Repository
                         Message = "Login Successfully",
                         Token = token,
                         UserType = userRoles[0],
-                        TimeZone= timeZone.TimeZone,
+                        TimeZone= timeZone,
                         UserId = user.Id,
 
                         ModulePermission=ModulePermissionList

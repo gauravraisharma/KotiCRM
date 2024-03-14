@@ -11,25 +11,10 @@ import TimezoneSelect from "react-timezone-select";
 
 import "../../css/style.css";
 
-// interface TimeZoneOption {
-//   label: string;
-//   value: string;
-// }
 
-// const timeZones: TimeZoneOption[] = [
-//   { label: "UTC", value: "UTC" },
-//   { label: "America/New_York", value: "America/New_York" },
-//   { label: "America/Los_Angeles", value: "America/Los_Angeles" },
-//   // Add more timezones as needed
-// ];
 
 const Settings: React.FC = () => {
-  // const [selectedTimeZoneUser, setSelectedTimeZoneUser] =
-  //   useState<string>("UTC");
 
-  // const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-  //   setSelectedTimeZoneUser(event.target.value);
-  // };
   const [selectedTimezone, setSelectedTimezone] = useState(
     Intl.DateTimeFormat().resolvedOptions().timeZone
   );
@@ -37,6 +22,11 @@ const Settings: React.FC = () => {
   const handleTimezone = (selectedItem: any) => {
     setSelectedTimezone(selectedItem.value);
   };
+
+  const saveSettings = () => {
+    // dispatch(saveTimezone(selectedTimezone));
+  };
+
 
   return (
     <CRow>
@@ -61,20 +51,7 @@ const Settings: React.FC = () => {
                 />
               </div>
 
-              {/* <div className="time">
-                  <label htmlFor="timezone">Select Timezone:</label>
-                  <select
-                    id="timezone"
-                    value={selectedTimeZoneUser}
-                    onChange={handleChange}
-                  >
-                    {timeZones.map((tz) => (
-                      <option key={tz.value} value={tz.value}>
-                        {tz.label}
-                      </option>
-                    ))}
-                  </select>
-              </div> */}
+          
             </CRow>
 
             <div className="text-right">
@@ -83,6 +60,7 @@ const Settings: React.FC = () => {
                 type="button"
                 color="primary"
                 value="Save"
+                onClick={saveSettings}
               />
               <CButton
                 component="input"

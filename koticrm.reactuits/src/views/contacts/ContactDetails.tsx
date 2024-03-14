@@ -24,7 +24,7 @@ const ContactDetails = () => {
                 <CCardHeader>
                     <CRow>
                         <CCol xs={12}>
-                            <h1>Contact Details</h1>
+                            <h5>Contact Details</h5>
                         </CCol>
                     </CRow>
                 </CCardHeader>
