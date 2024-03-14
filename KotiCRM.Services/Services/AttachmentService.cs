@@ -39,7 +39,7 @@ public class AttachmentService : IAttachmentService
         {
             UserID = createAttachmentDTO.UserID,
             DateAdded = DateTime.Now,
-            SizeMb = (decimal)createAttachmentDTO.File.Length / (1024 * 1024),
+            FileSize = createAttachmentDTO.File.Length,
             FileName = uploadedFileName,
             FileExtension = extension,
         };
@@ -54,7 +54,7 @@ public class AttachmentService : IAttachmentService
             ID = attachment.ID,
             UserID = attachment.UserID,
             DateAdded = attachment.DateAdded,
-            SizeMb = attachment.SizeMb,
+            FileSize = attachment.FileSize,
             FileName = attachment.FileName,
             FileExtension = attachment.FileExtension
         }).ToList();

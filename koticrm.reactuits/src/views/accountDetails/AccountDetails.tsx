@@ -268,7 +268,10 @@ const AccountDetails = () => {
                 role="tabpanel"
                 aria-labelledby="attachments-tab"
               >
-                <Attachments />
+                <Attachments
+                accountId={account?.id}
+                accountName={account?.accountName}
+                />
               </div>
 
               <div

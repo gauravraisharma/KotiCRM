@@ -91,7 +91,7 @@ namespace KotiCRM.Repository.Data
 
                 entity.Property(e => e.ID).HasColumnName("AttachmentID");
                 entity.Property(e => e.UserID).IsRequired();
-                entity.Property(e => e.SizeMb).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.FileSize).HasColumnType("decimal(18, 2)");
                 entity.Property(e => e.FileName).HasMaxLength(250).IsRequired();
                 entity.Property(e => e.FileExtension).HasMaxLength(50).IsRequired();
             });

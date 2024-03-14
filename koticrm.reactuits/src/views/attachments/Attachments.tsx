@@ -2,14 +2,31 @@ import { CButton, CCard, CCardBody, CCardHeader, CCol, CDropdown, CDropdownItem,
 import { useEffect, useState } from "react";
 import { BsFiletypeDocx, BsFiletypePdf } from "react-icons/bs";
 import { MdOutlinePictureAsPdf } from "react-icons/md";
-import CreateOrUpdateAttachment from "./CreateOrUpdateAttachment";
 import { useDispatch, useSelector } from "react-redux";
 import { getAttachments } from "../../redux-saga/action";
+import CreateNewAttachment from "./CreateNewAttachment";
+import { getFileSizeAndLabel } from "../../utils/Shared/FileSizeAndLable";
+import { getDateTime } from "../../utils/Shared/FormatDate";
 
-const Attachments = () => {
+interface Props {
+    accountId: string,
+    accountName: string
+}
+
+const Attachments = ({ accountId, accountName }: Props) => {
     const dispatch = useDispatch();
     const fetchedAttachments = useSelector((state: any) => state.reducer.attachments);
     const [isModalVisible, setIsModalVisible] = useState(false);
+    const accountOwner = useSelector((state: any) => state.reducer.accountOwner);
+
+    if (accountId) {
+        const filteredAttachments = fetchedAttachments.filter(attachment => attachment.accountID === accountId);
+    }
+
+    function getOwnerName(ownerId: string): string {
+        const owner = accountOwner?.find((owner: any) => owner.id === ownerId);
+        return owner ? owner.label : '';
+    }
 
     useEffect(() => {
         dispatch(getAttachments());
@@ -29,7 +46,7 @@ const Attachments = () => {
     return (
         <CRow>
             <CCol xs={12}>
-                <CreateOrUpdateAttachment
+                <CreateNewAttachment
                     isVisible={isModalVisible}
                     handleClose={handleModalClose}
                 />
@@ -80,9 +97,9 @@ const Attachments = () => {
                                                 {attachment.fileName}
                                             </CButton>
                                         </CTableHeaderCell>
-                                        <CTableDataCell>{attachment.userID}</CTableDataCell>
-                                        <CTableDataCell>{attachment.dateAdded}</CTableDataCell>
-                                        <CTableDataCell>{attachment.sizeMb} MB</CTableDataCell>
+                                        <CTableDataCell>{getOwnerName(attachment.userID)}</CTableDataCell>
+                                        <CTableDataCell>{getDateTime(attachment.dateAdded)}</CTableDataCell>
+                                        <CTableDataCell>{getFileSizeAndLabel(attachment.fileSize)}</CTableDataCell>
                                     </CTableRow>
                                 )) : <div>No Attachment Available</div>}
                                 <CTableRow>

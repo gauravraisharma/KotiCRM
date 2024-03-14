@@ -2,7 +2,7 @@ export interface Attachment {
     id: number;
     userID: string;
     dateAdded: string;
-    sizeMb: number;
+    fileSize: number;
     fileName: string;
     fileExtension: string;
 }
@@ -13,6 +13,6 @@ export interface CreateAttachment {
 }
 
 export class CreateAttachmentClass implements CreateAttachment {
-    userID: string = '';
+    userID: string = '3';
     file: File | null = null;
 }

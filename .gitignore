@@ -14,3 +14,4 @@
 /koticrm.reactuits/.vscode
 /koticrm.reactuits/node_modules
 /koticrm.reactuits/obj/Debug
+/koticrm.reactuits/package-lock.json
