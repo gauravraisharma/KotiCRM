@@ -24,6 +24,7 @@ import {
     CREATE_CONTACT_SUCCESS,
     UPDATE_CONTACT_SUCCESS,
     GET_INVOICE_OWNER_SUCCESS,
+    GET_ORGANIZATION_SUCCESS,
     GET_ATTACHMENTS_SUCCESS,
     CREATE_ATTACHMENT_SUCCESS
 } from "../../constants/reduxConstants";
@@ -35,13 +36,14 @@ const initialState = {
         userId: null,
         loggedIn: false,
         accounts: [],
-        createAccountResponse: null,
-        account: null,
-        accountOwner: [],
-        industry: [],
-        accountStatus: [],
-        accountType: [],
-        invoiceStatus: [],
+        createAccountResponse:null, 
+        account:null,
+        accountOwner :[],
+        industry:[],
+        organization:[],
+        accountStatus :[],
+        accountType :[],
+        invoiceStatus : [],
         deleteResponse: null,
         updateAccountResponse: null,
         contacts: [],
@@ -145,6 +147,12 @@ const reducer = (state = initialState, action: any) => {
                 industry: action.industry,
             }
 
+        //organization
+        case GET_ORGANIZATION_SUCCESS: 
+            return {...state,
+                organization: action.organization,
+                }
+
         // Attachment
         case GET_ATTACHMENTS_SUCCESS:
             return {
@@ -215,7 +223,7 @@ const reducer = (state = initialState, action: any) => {
         case CREATE_INVOICE_SUCCESS:
             return {
                 ...state,
-                createInvoiceResponse: action.invoice
+                createInvoiceResponse: action.invoiceModel
             }
         case UPDATE_INVOICE_SUCCESS:
             return {

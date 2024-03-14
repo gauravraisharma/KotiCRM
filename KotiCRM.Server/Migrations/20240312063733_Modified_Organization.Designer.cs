@@ -4,6 +4,7 @@ using KotiCRM.Repository.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace KotiCRM.Server.Migrations
 {
     [DbContext(typeof(KotiCRMDbContext))]
-    partial class KotiCRMDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240312063733_Modified_Organization")]
+    partial class Modified_Organization
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -220,9 +223,6 @@ namespace KotiCRM.Server.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<int>("OrganizationId")
-                        .HasColumnType("int");
-
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
 
@@ -259,26 +259,20 @@ namespace KotiCRM.Server.Migrations
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("AttachmentID");
+                        .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
                     b.Property<DateTime>("DateAdded")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("FileExtension")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
                     b.Property<string>("FileName")
                         .IsRequired()
-                        .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)");
+                        .HasColumnType("nvarchar(200)");
 
-                    b.Property<decimal>("SizeMb")
-                        .HasColumnType("decimal(18, 2)");
+                    b.Property<string>("SizeMb")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("UserID")
                         .IsRequired()
@@ -821,49 +815,49 @@ namespace KotiCRM.Server.Migrations
                     b.Property<int>("AccountID")
                         .HasColumnType("int");
 
+                    b.Property<decimal>("Adjustments")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<string>("BillingCity")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("BillingCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("BillingCountry")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("BillingState")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("BillingStreet")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(100)");
+
                     b.Property<int>("ContactID")
                         .HasColumnType("int");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("DealName")
                         .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<decimal>("Discount")
+                        .HasColumnType("decimal(18, 2)");
 
                     b.Property<DateTime>("DueDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("FromBillingCity")
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("FromBillingCode")
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("FromBillingCountry")
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("FromBillingState")
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("FromBillingStreet")
-                        .HasColumnType("nvarchar(100)");
+                    b.Property<decimal>("GrandTotal")
+                        .HasColumnType("decimal(18, 2)");
 
                     b.Property<DateTime>("InvoiceDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("Isdelete")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("ModifiedBy")
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<DateTime>("ModifiedOn")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("OwnerID")
@@ -871,32 +865,22 @@ namespace KotiCRM.Server.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("PurchaseOrder")
+                        .IsRequired()
                         .HasColumnType("nvarchar(200)");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
+
+                    b.Property<decimal>("SubTotal")
+                        .HasColumnType("decimal(18, 2)");
 
                     b.Property<string>("Subject")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TermsAndConditions")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ToBillingCity")
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("ToBillingCode")
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("ToBillingCountry")
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("ToBillingState")
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("ToBillingStreet")
-                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("ID");
 
@@ -913,9 +897,6 @@ namespace KotiCRM.Server.Migrations
 
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(18, 2)");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Discount")
                         .HasColumnType("decimal(18, 2)");

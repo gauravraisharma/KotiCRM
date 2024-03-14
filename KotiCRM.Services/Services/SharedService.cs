@@ -29,5 +29,10 @@ namespace KotiCRM.Services.Services
         {
             return _sharedRepository.GetInvoiceOwner();
         }
+
+        public async Task<IEnumerable<Organization>> GetOrganizationList()
+        {
+            return await _sharedRepository.GetOrganizationList();
+        }
     }
 }

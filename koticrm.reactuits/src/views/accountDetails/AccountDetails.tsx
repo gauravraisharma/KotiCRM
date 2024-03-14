@@ -5,19 +5,12 @@ import {
   CCardHeader,
   CButton,
   CCardBody,
-  CTable,
-  CTableHead,
-  CTableRow,
-  CTableHeaderCell,
-  CTableBody,
-  CTableDataCell,
   CDropdownMenu,
   CDropdown,
   CDropdownToggle,
   CDropdownItem,
 
 } from "@coreui/react";
-import { BsFiletypeDocx } from "react-icons/bs";
 
 import { MdOutlinePictureAsPdf } from "react-icons/md";
 import { useEffect, useState } from "react";
@@ -26,7 +19,6 @@ import "../../css/style.css";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { getAccountByIdRequest } from "../../redux-saga/action";
-// import { }
 import { useSelector } from "react-redux";
 import Notes from "../../components/Notes";
 import InvoiceComponent from "../invoice/Invoice";

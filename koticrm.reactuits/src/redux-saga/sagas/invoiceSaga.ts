@@ -8,7 +8,7 @@ import {
     DELETE_INVOICE_SUCCESS
 } from '../../constants/reduxConstants';
 import InvoiceService from '../../services/InvoiceService';
-import { Invoice } from '../../models/invoice/Invoice';
+import { Invoice, InvoiceCreationModel } from '../../models/invoice/Invoice';
 
 function* invoiceFetch(): Generator<any> {
   try {
@@ -25,14 +25,14 @@ function* invoiceFetch(): Generator<any> {
 
 export function* workGetInvoiceFetch() {
   try {
-    const invoices: Invoice[] = yield call(invoiceFetch);
+    const invoices: InvoiceCreationModel[] = yield call(invoiceFetch);
     yield put({ type: GET_INVOICE_SUCCESS, invoices });
   } catch (error) {
     // Handle error if needed
   }
 }
 
-function* createInvoice(action: { payload: Invoice }): Generator<any> {
+function* createInvoice(action: { payload: InvoiceCreationModel }): Generator<any> {
   try {
     const { payload } = action;
 
@@ -46,8 +46,8 @@ function* createInvoice(action: { payload: Invoice }): Generator<any> {
 
 export function* workCreateInvoice(action: any) {
   try {
-    const invoice: Invoice = yield call(createInvoice, { payload: action });
-    yield put({ type: CREATE_INVOICE_SUCCESS, invoice });
+    const invoiceModel: InvoiceCreationModel = yield call(createInvoice, { payload: action });
+    yield put({ type: CREATE_INVOICE_SUCCESS, invoiceModel });
   } catch (error) {
     // Handle error if needed
   }
@@ -58,7 +58,7 @@ function* getInvoiceById(action: { payload: any }): Generator<any> {
     const { payload } = action;
 
     const response = yield call(InvoiceService.GetInvoiceDetails, payload);
-    return response as Invoice;
+    return response as InvoiceCreationModel;
   } catch (error) {
     console.error('Error fetching invoice:', error);
     throw error;
@@ -67,7 +67,7 @@ function* getInvoiceById(action: { payload: any }): Generator<any> {
 
 export function* workGetInvoiceByIdFetch(action: any) {
   try {
-    const invoice: Invoice = yield call(getInvoiceById, { payload: action });
+    const invoice: InvoiceCreationModel = yield call(getInvoiceById, { payload: action });
     yield put({ type: GET_INVOICE_DETAIL_SUCCESS, invoice });
   } catch (error) {
     // Handle error if needed
@@ -88,7 +88,7 @@ function* updateInvoice(action: {payload: { invoice: any, id: any }}) : Generato
 
 export function* workUpdateInvoice(action: any) {
   try {
-    const updatedInvoice: Invoice = yield call(updateInvoice, {payload : action.payload} );
+    const updatedInvoice: InvoiceCreationModel = yield call(updateInvoice, {payload : action.payload} );
     yield put({ type: UPDATE_INVOICE_SUCCESS, updatedInvoice });
   } catch (error) {
     // Handle error if needed

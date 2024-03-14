@@ -1,9 +1,9 @@
 import agent from "../api/agent";
-import { Invoice } from "../models/invoice/Invoice";
+import { Invoice, InvoiceCreationModel } from "../models/invoice/Invoice";
 
 
 export default class InvoiceService {
-	static async GetInvoiceList(): Promise<Invoice[]> {
+	static async GetInvoiceList(): Promise<InvoiceCreationModel[]> {
 	  try {
 		const response  = await agent.Invoice.get();
 		console.log(response)
@@ -15,7 +15,7 @@ export default class InvoiceService {
 	  }
 	}
 
-	static async CreateInvoice(invoice: any): Promise<Invoice> {
+	static async CreateInvoice(invoice: any): Promise<InvoiceCreationModel> {
 		try {
 		  const response  = await agent.Invoice.create(invoice.payload);
 		  console.log(response)
@@ -28,13 +28,13 @@ export default class InvoiceService {
 		}
 	  }
 
-	static async GetInvoiceDetails(id:any): Promise<Invoice> {
+	static async GetInvoiceDetails(id:any): Promise<InvoiceCreationModel> {
 		try {
 		  const response  = await agent.Invoice.getById(id.payload);
 		  return response;
 		  }
 		catch (error) {
-		  console.error('Error fetching Invoices:', error);
+		  console.error('Invalid Invoice Id:', error);
 		  throw error; 
 		}
 	  }

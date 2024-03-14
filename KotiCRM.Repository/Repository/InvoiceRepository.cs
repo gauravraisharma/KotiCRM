@@ -1,4 +1,5 @@
 ﻿using KotiCRM.Repository.Data;
+using KotiCRM.Repository.Enums;
 using KotiCRM.Repository.IRepository;
 using KotiCRM.Repository.Models;
 using Microsoft.EntityFrameworkCore;
@@ -19,16 +20,32 @@ namespace KotiCRM.Repository.Repository
             _context = context;
         }
 
-        public async Task<DbResponse> CreateInvoice(Invoice invoice)
+        public async Task<DbResponse> CreateInvoice(InvoiceCreationModel invoiceModel)
         {
             try
             {
-                _context.Invoices.Add(invoice);
+                // Add invoice to context
+                _context.Invoices.Add(invoiceModel.Invoice);
+
+                // Save changes to generate InvoiceId
                 await _context.SaveChangesAsync();
+
+                // Set InvoiceId for invoice items
+                foreach (var item in invoiceModel.InvoiceItems)
+                {
+                    item.InvoiceID = invoiceModel.Invoice.ID;
+                }
+
+                // Add invoice items to context
+                _context.InvoiceItems.AddRange(invoiceModel.InvoiceItems);
+
+                // Save changes
+                await _context.SaveChangesAsync();
+
                 return new DbResponse()
                 {
                     Succeed = true,
-                    Message = "Invoice added successfully"
+                    Message = "Invoice and invoice items added successfully"
                 };
             }
             catch (Exception ex)
@@ -37,22 +54,29 @@ namespace KotiCRM.Repository.Repository
                 {
                     Succeed = false,
                     Message = ex.Message
-
                 };
             }
         }
 
-        public async Task<Invoice> GetInvoiceDetails(int id)
+        public async Task<InvoiceCreationModel> GetInvoiceDetails(int id)
         {
             try
             {
                 var invoice = await _context.Invoices.FindAsync(id);
-
                 if (invoice == null)
                 {
                     throw new Exception($"Invoice with ID {id} was not found.");
                 }
-                return invoice;
+                var invoiceItems = await _context.InvoiceItems
+                .Where(item => item.InvoiceID == id)
+                .ToListAsync();
+                var invoiceCreationModels =  new InvoiceCreationModel
+                {
+                    Invoice = invoice,
+                    InvoiceItems = invoiceItems
+                };
+                
+                return invoiceCreationModels;
             }
             catch (Exception ex)
             {
@@ -60,11 +84,19 @@ namespace KotiCRM.Repository.Repository
             }
         }
 
-        public async Task<IEnumerable<Invoice>> GetInvoiceList()
+        public async Task<IEnumerable<InvoiceCreationModel>> GetInvoiceList()
         {
             try
             {
-                return await _context.Invoices.OrderByDescending(invoice=> invoice.DueDate).ToListAsync();
+                var invoices =  await _context.Invoices.OrderByDescending(invoice=> invoice.DueDate).ToListAsync();
+                var invoiceItems = await _context.InvoiceItems.ToListAsync();
+                var invoiceCreationModels = invoices.Select(invoice => new InvoiceCreationModel
+                {
+                    Invoice = invoice,
+                    InvoiceItems = invoiceItems.Where(item => item.InvoiceID == invoice.ID).ToList()
+                });
+                return invoiceCreationModels;
+
             }
             catch (Exception ex)
             {
@@ -80,17 +112,17 @@ namespace KotiCRM.Repository.Repository
                 var invoice = await _context.Invoices.FindAsync(id);
                 if (invoice != null)
                 {
-                    _context.Invoices.Remove(invoice);
+                    invoice.Isdelete = true; 
                     await _context.SaveChangesAsync();
                     return new DbResponse()
                     {
                         Succeed = true,
-                        Message = "Invoice deleted successfully"
+                        Message = "Invoice  deleted successfully"
                     };
                 }
                 else
                 {
-                    // invoice not found
+                    // Invoice not found
                     return new DbResponse()
                     {
                         Succeed = false,
@@ -104,12 +136,10 @@ namespace KotiCRM.Repository.Repository
                 {
                     Succeed = false,
                     Message = ex.Message
-
                 };
             }
-
-
         }
+
         public async Task<Invoice> UpdateInvoice(int id, Invoice invoice)
         {
             if (id == invoice.ID)

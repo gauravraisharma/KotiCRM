@@ -160,7 +160,7 @@ const CreateOrEditContact = () => {
           validationSchema={validationSchema}
           onSubmit={handleFormSubmit}
         >
-          {({ handleSubmit, isValid, isSubmitting, dirty }) => (
+          {({ handleSubmit, isValid, isSubmitting }) => (
             <Form onSubmit={handleSubmit} autoComplete='off'>
               {/* <CRow className="mb-3">
                 <CCol sm={4}>

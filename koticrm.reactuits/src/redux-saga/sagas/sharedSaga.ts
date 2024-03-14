@@ -1,6 +1,6 @@
 import { call, put } from 'redux-saga/effects';
 import SharedService from '../../services/SharedService';
-import { SharedModel } from '../../models/commonModels/SharedModels';
+import { OrganizationModel, SharedModel } from '../../models/commonModels/SharedModels';
 
 import {
   GET_ACCOUNT_OWNER_SUCCESS,
@@ -8,7 +8,8 @@ import {
   GET_ACCOUNT_TYPE_SUCCESS,
   GET_INDUSTRY_SUCCESS,
   GET_INVOICE_OWNER_SUCCESS,
-  GET_INVOICE_STATUS_SUCCESS
+  GET_INVOICE_STATUS_SUCCESS,
+  GET_ORGANIZATION_SUCCESS
 } from '../../constants/reduxConstants';
 
 
@@ -124,6 +125,25 @@ export function* workGetInvoiceStatusFetch() {
   try {
     const invoiceStatus: SharedModel[] = yield call(invoiceStatusFetch);
     yield put({ type: GET_INVOICE_STATUS_SUCCESS, invoiceStatus });
+  } catch (error) {
+    // Handle error if needed
+  }
+}
+
+function* organizationFetch(): Generator<any> {
+  try {
+    const response = yield call(SharedService.GetOrganizationList);
+    return response;
+  } catch (error) {
+    console.error('Error fetching organization:', error);
+    throw error;
+  }
+}
+
+export function* workGetOrganizationFetch() {
+  try {
+    const organization: OrganizationModel[] = yield call(organizationFetch);
+    yield put({ type: GET_ORGANIZATION_SUCCESS, organization });
   } catch (error) {
     // Handle error if needed
   }

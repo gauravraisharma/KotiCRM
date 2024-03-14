@@ -15,7 +15,7 @@ interface Props {
 }
 
 const customStyles = {
-    option: (provided, state) => ({
+    option: (provided:any, state:any) => ({
         ...provided,
         borderBottom: '1px solid #ccc',
         color: state.isSelected ? '#fff' : '#333',
@@ -51,7 +51,7 @@ const SearchableDropdown = ({ name, options }: Props) => {
         label: renderOptionLabel(option)
     }));
 
-    const filterOptions = (candidate, input) => {
+    const filterOptions = (candidate:any, input:any) => {
         if (isObjectOptions) {
             const firstName = candidate.firstName.toLowerCase();
             const email = candidate.email.toLowerCase();

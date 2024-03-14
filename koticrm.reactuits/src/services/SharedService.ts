@@ -1,5 +1,5 @@
 import agent from "../api/agent";
-import { SharedModel, SharedOwnerModel } from "../models/commonModels/SharedModels";
+import { OrganizationModel, SharedModel, SharedOwnerModel } from "../models/commonModels/SharedModels";
 
 
 export default class SharedService {
@@ -62,6 +62,17 @@ export default class SharedService {
         catch (error) {
           console.error('Error fetching accounts:', error);
           throw error; 
+        }
+      }
+
+      static async GetOrganizationList(): Promise<OrganizationModel[]> {
+        try {
+        const response  = await agent.SharedData.getOrganization();
+        return response;
+        }
+        catch (error) {
+        console.error('Error fetching organizations:', error);
+        throw error; 
         }
       }
 }

@@ -2,9 +2,10 @@ import { CButton, CCard, CCardBody, CCardHeader, CCol, CRow, CTable, CTableBody,
 import { useEffect, useState } from 'react'
 import NewInvoice from './NewInvoice'
 import { useDispatch } from 'react-redux';
-import { getAccountOwner, getAccounts, getInvoice, getInvoiceOwner, getInvoiceStatus, getNotes } from '../../redux-saga/action';
+import { getAccountOwner, getAccounts, getInvoice, getInvoiceByIdRequest, getInvoiceOwner, getInvoiceStatus, getNotes } from '../../redux-saga/action';
 import { useSelector } from 'react-redux';
-import { Invoice } from '../../models/invoice/Invoice';
+
+import { MdDelete, MdPictureAsPdf } from 'react-icons/md';
 
 interface InvoiceProps {
 	getInvoiceCount: (data: string) => void;
@@ -14,12 +15,9 @@ interface InvoiceProps {
 }
 const InvoiceComponent: React.FC<InvoiceProps> = ({ accountId, ownerId, getInvoiceCount }) => {
 	const dispatch = useDispatch();
-	// const [invoiceStatus, setInvoiceStatus] = useState([]);
 	const [showCreateInvoice, setShowCreateInvoice] = useState(false)
-	const [showEditInvoice, setShowEditInvoice] = useState(false)
 
 	const invoices = useSelector((state: any) => state.reducer.invoices)
-	console.log(invoices)
 
 
 	const handleCreateNewInvoice = () => {
@@ -27,14 +25,13 @@ const InvoiceComponent: React.FC<InvoiceProps> = ({ accountId, ownerId, getInvoi
 	};
 	const backToInvoiceList = () => {
 		setShowCreateInvoice(false);
-		setShowEditInvoice(false);
 	};
 	const closeCreateModal = () => {
 		setShowCreateInvoice(false);
 	}
 
 	const invoiceStatus = useSelector((state: any) => state.reducer.invoiceStatus);
-	const invoiceResponse = useSelector((state: any) => state.reducer.invoices);
+	const invoiceResponse = useSelector((state: any) => state.reducer.createInvoiceResponse);
 
 	function getInvoiceStatusValue(statusValue: any): any {
 		const iStatus = invoiceStatus?.find((status: any) => status.value === statusValue);
@@ -50,9 +47,9 @@ const InvoiceComponent: React.FC<InvoiceProps> = ({ accountId, ownerId, getInvoi
 		return `${day}/${month < 10 ? '0' : ''}${month}/${year}`;
 	}
 
-	// useEffect(() => {
-	// 	dispatch(getInvoice())
-	// }, [invoiceResponse])
+	useEffect(() => {
+		dispatch(getInvoice())
+	}, [invoiceResponse])
 
 
 	const filteredInvoices = invoices?.filter((invoice: any) => {
@@ -62,17 +59,24 @@ const InvoiceComponent: React.FC<InvoiceProps> = ({ accountId, ownerId, getInvoi
 
 	console.log(filteredInvoices)
 
+	const generateInvoicePDF =(invoiceId : any)=>{
+		dispatch(getInvoiceByIdRequest(invoiceId))
+	}
+
+	const invoiceDetails = useSelector((state:any)=> state.reducer.invoice)
+	console.log(invoiceDetails)
+
 	// useEffect(() => {
 	// 	getInvoiceCount(invoiceCount)
-	// })
-	useEffect(()=>{
+	// })	
+	useEffect(() => {
 		dispatch(getInvoiceStatus());
 		dispatch(getInvoice());
 		dispatch(getNotes())
 		dispatch(getAccounts());
 		dispatch(getAccountOwner())
 		dispatch(getInvoiceOwner())
-	},[dispatch])
+	}, [dispatch])
 	return (
 		<div>
 			{showCreateInvoice ? (
@@ -114,15 +118,22 @@ const InvoiceComponent: React.FC<InvoiceProps> = ({ accountId, ownerId, getInvoi
 										<CTableHeaderCell scope="col">
 											Due Date
 										</CTableHeaderCell>
+										<CTableHeaderCell scope="col">
+											Actions
+										</CTableHeaderCell>
 									</CTableRow>
 								</CTableHead>
 								<CTableBody>
-									{invoices?.map((invoice: Invoice) => (
-										<CTableRow>
-											<CTableHeaderCell>{invoice.subject}</CTableHeaderCell>
-											<CTableDataCell>{getInvoiceStatusValue(invoice.status)}</CTableDataCell>
-											<CTableDataCell>{getDates(invoice.invoiceDate)}</CTableDataCell>
-											<CTableDataCell>{getDates(invoice.dueDate)}</CTableDataCell>
+									{invoices?.map((invoiceModel: any) => (
+										<CTableRow key={invoiceModel.invoice?.id}>
+											<CTableHeaderCell>{invoiceModel.invoice?.subject}</CTableHeaderCell>
+											<CTableDataCell>{getInvoiceStatusValue(invoiceModel.invoice?.status)}</CTableDataCell>
+											<CTableDataCell>{getDates(invoiceModel.invoice?.invoiceDate)}</CTableDataCell>
+											<CTableDataCell>{getDates(invoiceModel.invoice?.dueDate)}</CTableDataCell>
+											<CTableDataCell>
+											<MdPictureAsPdf size={21} style={{ color: "rgb(30, 30, 115)", marginRight:"7px" }}  onClick={()=>generateInvoicePDF(invoiceModel.invoice?.id)}/>
+                              <MdDelete size={21} style={{ color: "red" }} />
+                            </CTableDataCell>
 										</CTableRow>
 									))}
 

@@ -47,6 +47,8 @@ namespace KotiCRM.Repository.Repository
                               {
                                   Id = users.Id,
                                   Label=users.FirstName+' '+users.LastName,
+                                  FirstName = users.FirstName,
+                                  LastName = users.LastName,
                                   Email = users.Email
                               }).ToList();
                 return result;
@@ -70,9 +72,24 @@ namespace KotiCRM.Repository.Repository
                               {
                                   Id = users.Id,
                                   Label = users.FirstName + ' ' + users.LastName,
+                                  FirstName = users.FirstName,
+                                  LastName = users.LastName,
                                   Email = users.Email
                               }).ToList();
                 return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message, ex);
+
+            }
+        }
+
+        public async Task<IEnumerable<Organization>> GetOrganizationList()
+        {
+            try
+            {
+                return await _context.Organizations.ToListAsync();
             }
             catch (Exception ex)
             {

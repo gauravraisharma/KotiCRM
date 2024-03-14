@@ -14,42 +14,46 @@ import {
 } from './contactSaga';
 import workerLoginRequest from './loginSaga';
 import {
-  workGetAccountOwnerFetch,
-  workGetAccountStatusFetch,
-  workGetAccountTypeFetch,
-  workGetIndustryFetch,
-  workGetInvoiceOwnerFetch,
-  workGetInvoiceStatusFetch
+    workGetAccountOwnerFetch,
+    workGetAccountStatusFetch,
+    workGetAccountTypeFetch,
+    workGetIndustryFetch,
+    workGetInvoiceOwnerFetch,
+    workGetInvoiceStatusFetch,
+    workGetOrganizationFetch
 } from './sharedSaga';
 
 import {
-  CREATE_ACCOUNT_REQUEST,
-  GET_ACCOUNTS_FETCH,
-  GET_ACCOUNT_DETAIL_FETCH,
-  GET_ACCOUNT_OWNER_FETCH,
-  GET_ACCOUNT_STATUS_FETCH,
-  GET_ACCOUNT_TYPE_FETCH,
-  GET_CONTACTS_FETCH,
-  GET_INDUSTRY_FETCH,
-  GET_INVOICE_STATUS_FETCH,
-  LOGIN_REQUEST,
-  UPDATE_ACCOUNT_REQUEST,
-  DELETE_ACCOUNT_REQUEST,
-  GET_NOTES_FETCH,
-  CREATE_NOTES_REQUEST,
-  GET_INVOICE_FETCH,
-  GET_INVOICE_DETAIL_FETCH,
-  CREATE_INVOICE_REQUEST,
-  UPDATE_INVOICE_REQUEST,
-  DELETE_INVOICE_REQUEST,
+    CREATE_ACCOUNT_REQUEST,
+    GET_ACCOUNTS_FETCH,
+    GET_ACCOUNT_DETAIL_FETCH,
+    GET_ACCOUNT_OWNER_FETCH,
+    GET_ACCOUNT_STATUS_FETCH,
+    GET_ACCOUNT_TYPE_FETCH,
+    GET_CONTACTS_FETCH,
+    GET_INDUSTRY_FETCH,
+    GET_INVOICE_STATUS_FETCH,
+    LOGIN_REQUEST,
+    UPDATE_ACCOUNT_REQUEST,
+    DELETE_ACCOUNT_REQUEST,
+    GET_NOTES_FETCH,
+    CREATE_NOTES_REQUEST,
+    GET_INVOICE_FETCH,
+    GET_INVOICE_DETAIL_FETCH,
+    CREATE_INVOICE_REQUEST,
+    UPDATE_INVOICE_REQUEST,
+    DELETE_INVOICE_REQUEST,
+   
+    GET_CONTACT_DETAIL_FETCH,
+    CREATE_CONTACT_REQUEST,
+    UPDATE_CONTACT_REQUEST,
+    GET_INVOICE_OWNER_FETCH,
+    GET_ORGANIZATION_FETCH,
 
-  GET_ATTACHMENTS_FETCH,
-  CREATE_ATTACHMENT_REQUEST,
 
-  GET_CONTACT_DETAIL_FETCH,
-  CREATE_CONTACT_REQUEST,
-  UPDATE_CONTACT_REQUEST,
-  GET_INVOICE_OWNER_FETCH,
+    GET_ATTACHMENTS_FETCH,
+    CREATE_ATTACHMENT_REQUEST
+
 
 } from '../../constants/reduxConstants';
 import { workCreateNote, workGetNotesFetch } from './notesSaga';
@@ -70,6 +74,8 @@ export default function* mySaga() {
   yield takeEvery(LOGIN_REQUEST, workerLoginRequest);
   //industry
   yield takeEvery(GET_INDUSTRY_FETCH, workGetIndustryFetch);
+  //organization
+  yield takeEvery(GET_ORGANIZATION_FETCH, workGetOrganizationFetch)
   //Invoice
   yield takeEvery(GET_INVOICE_STATUS_FETCH, workGetInvoiceStatusFetch);
   yield takeEvery(GET_INVOICE_FETCH, workGetInvoiceFetch);

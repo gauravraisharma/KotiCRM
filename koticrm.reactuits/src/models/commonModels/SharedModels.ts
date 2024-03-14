@@ -9,6 +9,22 @@ export interface SharedOwnerModel {
     email: string
 }
 
+export interface OrganizationModel{
+    id :number;
+    orgName : string,
+    isActive: boolean,
+    timeZone: string,
+    shifts: boolean,
+    includeLogofToIdle :boolean,
+    currency : string,
+    billingStreet:string,
+    billingCity :string,
+    billingState:string,
+    billingCode:string,
+    billingCountry:string
+}
+
+
 export interface DbResponse {
     succeed: boolean;
     message: string;

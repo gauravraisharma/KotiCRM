@@ -17,52 +17,72 @@ namespace KotiCRM.Repository.Models
         [ForeignKey("Account")]
         [Required]
         public int AccountID { get; set; }
+
         [Required]
         [Column(TypeName = "nvarchar(100)")]
-        public string OwnerID { get; set; }
+        public string? OwnerID { get; set; }
+
         [Required]
-        public string Subject { get; set; }
+        public string? Subject { get; set; }
         public DateTime InvoiceDate { get; set; }
         public DateTime DueDate { get; set; }
+
         [ForeignKey("Contact")]
         [Required]
         public int ContactID { get; set; }
+
         [Column(TypeName = "nvarchar(200)")]
         public string? DealName { get; set; }
+
         [Column(TypeName = "nvarchar(200)")]
-
-        public string PurchaseOrder { get; set; }
+        public string? PurchaseOrder { get; set; }
         public InvoiceStatus Status { get; set; }
-        [Column(TypeName = "nvarchar(100)")]
-        public string BillingStreet { get; set; }
-        [Column(TypeName = "nvarchar(100)")]
 
-        public string BillingCity { get; set; }
         [Column(TypeName = "nvarchar(100)")]
+        public string? FromBillingStreet { get; set; }
 
-        public string BillingState { get; set; }
         [Column(TypeName = "nvarchar(100)")]
+        public string? FromBillingCity { get; set; }
 
-        public string BillingCode { get; set; }
         [Column(TypeName = "nvarchar(100)")]
+        public string? FromBillingState { get; set; }
 
-        public string BillingCountry { get; set; }
+        [Column(TypeName = "nvarchar(100)")]
+        public string? FromBillingCode { get; set; }
+
+        [Column(TypeName = "nvarchar(100)")]
+        public string? FromBillingCountry { get; set; }
+
+        [Column(TypeName = "nvarchar(100)")]
+        public string? ToBillingStreet { get; set; }
+
+        [Column(TypeName = "nvarchar(100)")]
+        public string? ToBillingCity { get; set; }
+
+        [Column(TypeName = "nvarchar(100)")]
+        public string? ToBillingState { get; set; }
+
+        [Column(TypeName = "nvarchar(100)")]
+        public string? ToBillingCode { get; set; }
+
+        [Column(TypeName = "nvarchar(100)")]
+        public string? ToBillingCountry { get; set; }
+
         [Column(TypeName = "nvarchar(max)")]
+        public string? TermsAndConditions { get; set; }
 
-        public string TermsAndConditions { get; set; }
-        [Column(TypeName = "nvarchar(450)")]
+        [Column(TypeName = "nvarchar(max)")]
+        public string? Description { get; set; }
 
-        public string Description { get; set; }
-        [Column(TypeName = "decimal(18, 2)")]
-        public decimal SubTotal { get; set; }
-        [Column(TypeName = "decimal(18, 2)")]
-        public decimal Discount { get; set; }
-        [Column(TypeName = "decimal(18, 2)")]
-        public decimal Adjustments { get; set; }
-        [Column(TypeName = "decimal(18, 2)")]
-        public decimal GrandTotal { get; set; }
+        public bool Isdelete { get; set; } = false;
 
+        [Column(TypeName = "nvarchar(200)")]
+        public string? CreatedBy { get; set; }
+        public DateTime CreatedOn { get; set; }
 
+        [Column(TypeName = "nvarchar(200)")]
+        public string? ModifiedBy { get; set; }
+        public DateTime ModifiedOn { get; set; }
 
     }
 }

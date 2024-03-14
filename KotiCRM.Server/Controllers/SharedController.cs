@@ -66,5 +66,12 @@ namespace KotiCRM.Server.Controllers
             var enumList = enumValues.Select(e => new { Value = (int)e, Name = e.ToString() }).ToList();
             return Ok(enumList);
         }
+        [HttpGet]
+        [Route("GetOrganizationList")]
+        public async Task<IEnumerable<Organization>> GetOrganizationList()
+        {
+            return await _sharedService.GetOrganizationList();
+        }
+
     }
 }

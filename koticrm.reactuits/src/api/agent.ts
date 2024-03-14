@@ -2,11 +2,11 @@ import { AxiosResponse } from 'axios';
 import { Account } from '../models/account/Account';
 import axiosInstance from './axiosInterceptor';
 import { Contact } from '../models/contact/Contact';
-import { Invoice } from '../models/invoice/Invoice';
+import { Invoice, InvoiceCreationModel } from '../models/invoice/Invoice';
 import { Note } from '../models/notes/notes';
 import { UserLogin } from '../models/userAccount/login';
-import { DbResponse, SharedModel, SharedOwnerModel } from '../models/commonModels/SharedModels';
 import { Attachment, CreateAttachment } from '../models/attachment/Attachment';
+import { OrganizationModel, SharedModel, SharedOwnerModel, DbResponse } from '../models/commonModels/SharedModels';
 
 const responseBody = <T>(response: AxiosResponse<T>) => response.data;
 
@@ -46,11 +46,11 @@ const Contact = {
     delete: (id: number) => requests.del<Contact>(`/Contact/DeleteContact/${id}`)
 }
 const Invoice = {
-    get: () => requests.get<Invoice[]>(`/Invoice/GetInvoiceList`),
-    create: (invoice: Invoice) => requests.post<Invoice>(`/Invoice/CreateInvoice`, invoice),
-    update: (id: number, invoice: Invoice) => requests.put<Invoice>(`/Invoice/UpdateInvoice/${id}`, invoice),
-    getById: (id: number) => requests.get<Invoice>(`/Invoice/GetInvoiceDetails/${id}`),
-    delete: (id: number) => requests.del<Invoice>(`/Invoice/DeleteInvoice/${id}`)
+    get: () => requests.get<InvoiceCreationModel[]>(`/Invoice/GetInvoiceList`),
+    create: (invoiceModel : InvoiceCreationModel) => requests.post<InvoiceCreationModel>(`/Invoice/CreateInvoice`, invoiceModel),
+    update: (id : number,invoice: Invoice) => requests.put<Invoice>(`/Invoice/UpdateInvoice/${id}`, invoice),
+    getById: (id : number) => requests.get<InvoiceCreationModel>(`/Invoice/GetInvoiceDetails/${id}`),
+    delete: (id : number) => requests.del<Invoice>(`/Invoice/DeleteInvoice/${id}`)  
 }
 const Notes = {
     get: () => requests.get<Note[]>(`/Notes/GetNoteList`),
@@ -66,7 +66,8 @@ const SharedData = {
     getInvoiceStatus: () => requests.get<SharedModel[]>(`/Shared/InvoiceStatus`),
     getAccountStatus: () => requests.get<SharedModel[]>(`/Shared/AccountStatus`),
     getAccountType: () => requests.get<SharedModel[]>(`/Shared/AccountType`),
-    getInvoiceOwner: () => requests.get<SharedOwnerModel[]>(`/Shared/GetInvoiceOwner`)
+    getInvoiceOwner : ()=> requests.get<SharedOwnerModel[]>(`/Shared/GetInvoiceOwner`),
+    getOrganization : ()=> requests.get<OrganizationModel[]>(`/Shared/GetOrganizationList`)
 
 }
 

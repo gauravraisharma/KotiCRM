@@ -18,8 +18,10 @@ namespace KotiCRM.Repository.Models
         public int InvoiceID { get; set; }
         public int Sno { get; set; }
         [Column(TypeName = "nvarchar(200)")]
-
         public string ProductName { get; set; }
+
+        [Column(TypeName = "nvarchar(max)")]
+        public string? Description { get; set; }
         [Required]
         public int Quantity { get; set; }
         [Column(TypeName = "decimal(18, 2)")]

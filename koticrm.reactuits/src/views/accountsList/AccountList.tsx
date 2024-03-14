@@ -24,7 +24,7 @@ import { useSelector } from 'react-redux';
 import DeleteConfirmationModal from "./DeleteConfirmation";
 import { ToastContainer } from 'react-toastify';
 import EditPage from './EditAccountModal';
-import { getAccountOwner, getAccountStatus, getAccountType, getAccounts, getContacts, getIndustry, getInvoice, getInvoiceStatus, getNotes } from "../../redux-saga/action";
+import { getAccountOwner, getAccountStatus, getAccountType, getAccounts, getContacts, getIndustry,  getNotes } from "../../redux-saga/action";
 
 
 
@@ -32,82 +32,82 @@ import { getAccountOwner, getAccountStatus, getAccountType, getAccounts, getCont
 const AccountList: React.FC = () => {
 
 
-    const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
-    const [accountId, setAccountId] = useState<number>();
-    const [stateData, setStateData] = useState<boolean>(false);
-    const [openEditModal, setOpenEditModal] = useState<boolean>(false);
-    const [accountData, setAccountData] = useState<Account | null>(null);
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+  const [accountId, setAccountId] = useState<number>();
+  const [stateData, setStateData] = useState<boolean>(false);
+  const [openEditModal, setOpenEditModal] = useState<boolean>(false);
+  const [accountData, setAccountData] = useState<Account | null>(null);
 
 
-    const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
-    const handleEditClick = (data: any) => {
-        setAccountData(data);
-        setOpenEditModal(true);
-    };
-    const closeEditModal = () => {
-        setOpenEditModal(false);
-    };
+  const handleEditClick = (data: any) => {
+    setAccountData(data);
+    setOpenEditModal(true);
+  };
+  const closeEditModal = () => {
+    setOpenEditModal(false);
+  };
 
-    const handleDeleteClick = (id: any) => {
-        setAccountId(id);
-        setShowDeleteConfirmation(true);
-    };
+  const handleDeleteClick = (id: any) => {
+    setAccountId(id);
+    setShowDeleteConfirmation(true);
+  };
 
-    const confirmDelete = () => {
-        setShowDeleteConfirmation(false);
-    };
+  const confirmDelete = () => {
+    setShowDeleteConfirmation(false);
+  };
 
-    const cancelDelete = () => {
-        setShowDeleteConfirmation(false);
-    };
-
-
-    const handleCreateNew = () => {
-        setStateData(true);
-
-    };
-    const closeCreateModal = () => {
-        setStateData(false);
-
-    }
-
-    const backToAccountList = () => {
-        setStateData(false);
-        setOpenEditModal(false);
-    };
-
-    const accounts = useSelector((state: any) => state.reducer.accounts);
-    const deleteResponse = useSelector((state: any) => state.reducer.deleteResponse)
-    const accountOwner = useSelector((state: any) => state.reducer.accountOwner);
-    const createresponse = useSelector((state: any) => state.reducer.createAccountResponse)
-    const updateResponse = useSelector((state: any) => state.reducer.updateAccountResponse)
+  const cancelDelete = () => {
+    setShowDeleteConfirmation(false);
+  };
 
 
-    function getOwnerName(ownerId: string): string {
-        const owner = accountOwner?.find((owner: any) => owner.id === ownerId);
-        return owner ? owner.label : '';
-    }
+  const handleCreateNew = () => {
+    setStateData(true);
+
+  };
+  const closeCreateModal = () => {
+    setStateData(false);
+
+  }
+
+  const backToAccountList = () => {
+    setStateData(false);
+    setOpenEditModal(false);
+  };
+
+  const accounts = useSelector((state: any) => state.reducer.accounts);
+  const deleteResponse = useSelector((state: any) => state.reducer.deleteResponse)
+  const accountOwner = useSelector((state: any) => state.reducer.accountOwner);
+  const createresponse = useSelector((state: any) => state.reducer.createAccountResponse)
+  const updateResponse = useSelector((state: any) => state.reducer.updateAccountResponse)
 
 
-    useEffect(() => {
-        dispatch(getAccounts());
-        dispatch(getAccountOwner());
-        dispatch(getAccountStatus());
-        dispatch(getAccountType());
-        dispatch(getIndustry());
-        dispatch(getNotes());
-        dispatch(getContacts());
-    }, [dispatch]);
+  function getOwnerName(ownerId: string): string {
+    const owner = accountOwner?.find((owner: any) => owner.id === ownerId);
+    return owner ? owner.label : '';
+  }
 
-    useEffect(() => {
-        dispatch(getAccounts())
-    }, [deleteResponse, createresponse, updateResponse])
 
-    const navigate = useNavigate()
-    const showItems = (id: any) => {
-        navigate(`/accountDetails/accountId=${id}`)
-    }
+  useEffect(() => {
+    dispatch(getAccounts());
+    dispatch(getAccountOwner());
+    dispatch(getAccountStatus());
+    dispatch(getAccountType());
+    dispatch(getIndustry());
+    dispatch(getNotes());
+    dispatch(getContacts());
+  }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(getAccounts())
+  }, [deleteResponse, createresponse, updateResponse])
+
+  const navigate = useNavigate()
+  const showItems = (id: any) => {
+    navigate(`/accountDetails/accountId=${id}`)
+  }
 
     return (
         <>
@@ -177,7 +177,7 @@ const AccountList: React.FC = () => {
                                             </CTableBody>
                                         </CTable>
 
-                                        {/* {isModalOpen && rowData && (
+                    {/* {isModalOpen && rowData && (
                   <OpenAccountModal
                     rowData={rowData}
                     closeModal={() => setIsModalOpen(false)}
@@ -185,15 +185,15 @@ const AccountList: React.FC = () => {
                   />
                 )} */}
 
-                                    </CCardBody>
-                                </CCard>
-                            </CCol>
-                        </CRow>
-                    )}
-                </>
-            )}
+                  </CCardBody>
+                </CCard>
+              </CCol>
+            </CRow>
+          )}
         </>
-    );
+      )}
+    </>
+  );
 };
 
 export default AccountList;

@@ -18,22 +18,22 @@ namespace KotiCRM.Server.Controllers
         }
         [HttpGet]
         [Route("GetInvoiceList")]
-        public async Task<IEnumerable<Invoice>> GetInvoiceList()
+        public async Task<IEnumerable<InvoiceCreationModel>> GetInvoiceList()
         {
             return await _invoiceService.GetInvoiceList();
         }
 
         [HttpGet("GetInvoiceDetails/{id}")]
-        public async Task<ActionResult<Invoice>> GetInvoiceDetails(int id)
+        public async Task<ActionResult<InvoiceCreationModel>> GetInvoiceDetails(int id)
         {
             return Ok(await _invoiceService.GetInvoiceDetails(id));
         }
 
         [HttpPost]
         [Route("CreateInvoice")]
-        public async Task<ActionResult<Invoice>> CreateInvoice(Invoice invoice)
+        public async Task<ActionResult<InvoiceCreationModel>> CreateInvoice([FromBody] InvoiceCreationModel invoiceModel)
         {
-            return Ok(await _invoiceService.CreateInvoice(invoice));
+            return Ok(await _invoiceService.CreateInvoice(invoiceModel));
         }
 
         [HttpPut("UpdateInvoice/{id}")]

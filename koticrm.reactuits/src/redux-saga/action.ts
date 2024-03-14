@@ -30,10 +30,11 @@ import {
     UPDATE_INVOICE_REQUEST,
     GET_INVOICE_OWNER_FETCH,
     GET_ATTACHMENTS_FETCH,
-    CREATE_ATTACHMENT_REQUEST
+    CREATE_ATTACHMENT_REQUEST,
+    GET_ORGANIZATION_FETCH
 } from "../constants/reduxConstants";
 import { Contact } from "../models/contact/Contact";
-import { Invoice } from "../models/invoice/Invoice";
+import { Invoice, InvoiceCreationModel } from "../models/invoice/Invoice";
 import { CreateAttachment } from "../models/attachment/Attachment";
 
 // Login
@@ -130,6 +131,11 @@ export const getIndustry = () => ({
   type: GET_INDUSTRY_FETCH
 })
 
+//organization
+export const getOrganization = () => ({
+  type: GET_ORGANIZATION_FETCH
+})
+
 //notes
 export const getNotes = () => ({
   type: GET_NOTES_FETCH
@@ -149,7 +155,7 @@ export const getInvoice = () => ({
   type: GET_INVOICE_FETCH
 })
 
-export const createInvoiceRequest = (invoice: Invoice) => ({
+export const createInvoiceRequest = (invoice: InvoiceCreationModel) => ({
   type: CREATE_INVOICE_REQUEST,
   payload: invoice,
 });
