@@ -15,14 +15,12 @@ import {
 } from "@coreui/react";
 import "../../css/style.css";
 import { useDispatch, useSelector } from "react-redux";
-import { LuView } from "react-icons/lu";
+import { MdEditSquare } from "react-icons/md";
 import { getContacts } from "../../redux-saga/action";
 import { useEffect } from "react";
 import { Contact } from "../../models/contact/Contact";
-import { FaEdit } from "react-icons/fa";
+import { AiFillEye } from "react-icons/ai";
 import { Link } from "react-router-dom";
-import CIcon from "@coreui/icons-react";
-import { cilFace, cilHamburgerMenu, cilPen } from "@coreui/icons";
 
 const tableHeader = [
   "Contact Name",
@@ -65,7 +63,7 @@ const Contacts = () => {
                     type="button"
                     color="primary"
                     value="New"
-                    variant="outline"
+                    // variant="outline"
                   />
                 </Link>
               </CCol>
@@ -78,14 +76,14 @@ const Contacts = () => {
                   {tableHeader.map((header, index) => (
                     <CTableHeaderCell key={index} scope="col">
                       {header}{" "}
-                      <span>
+                      {/* <span>
                         <CIcon
                           icon={cilHamburgerMenu}
                           title="hamburger"
                           className="me-1"
                           size="lg"
                         />
-                      </span>
+                      </span> */}
                     </CTableHeaderCell>
                   ))}
                 </CTableRow>
@@ -102,13 +100,13 @@ const Contacts = () => {
                       <CTableDataCell>{contact.ownerId}</CTableDataCell>
                       <CTableDataCell>
                         <Link to={`/contacts/editContact/${contact.id}`}>
-                          <FaEdit
+                            <MdEditSquare 
                             style={{ color: "green", marginRight: "10px",fontSize:"20px" }}
                           />
                         </Link>
 
                         <Link to={`/contacts/${contact.id}`}>
-                          <LuView style={{ color: "darkblue" ,marginRight: "10px",fontSize:"20px"}} />
+                          <AiFillEye style={{ color: "darkblue" ,marginRight: "10px",fontSize:"20px"}} />
                         </Link>
                       </CTableDataCell>
                     </CTableRow>

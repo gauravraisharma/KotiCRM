@@ -52,7 +52,11 @@ import {
 
 
     GET_ATTACHMENTS_FETCH,
-    CREATE_ATTACHMENT_REQUEST
+    CREATE_ATTACHMENT_REQUEST,
+
+
+  UPDATE_TIMEZONE_REQUEST,
+
 
 
 } from '../../constants/reduxConstants';
@@ -95,4 +99,7 @@ export default function* mySaga() {
   //note
   yield takeEvery(GET_NOTES_FETCH, workGetNotesFetch);
   yield takeEvery(CREATE_NOTES_REQUEST, workCreateNote);
+  //timezone
+  // yield takeEvery(UPDATE_TIMEZONE_REQUEST)
+
 }

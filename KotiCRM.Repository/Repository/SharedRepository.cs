@@ -84,18 +84,5 @@ namespace KotiCRM.Repository.Repository
 
             }
         }
-
-        public async Task<IEnumerable<Organization>> GetOrganizationList()
-        {
-            try
-            {
-                return await _context.Organizations.ToListAsync();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message, ex);
-
-            }
-        }
     }
 }

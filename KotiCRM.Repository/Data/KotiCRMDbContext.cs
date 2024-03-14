@@ -385,17 +385,23 @@ namespace KotiCRM.Repository.Data
             modelBuilder.Entity<Organization>(entity =>
             {
                 entity.ToTable("Organization");
+                entity.HasKey(e => e.Id);
 
                 entity.Property(e => e.Id)
                     .ValueGeneratedNever()
-                    .HasColumnName("ID");
+                    .HasColumnName("OrganizationID");
                 entity.Property(e => e.Currency).HasMaxLength(50);
                 entity.Property(e => e.OrgName)
                     .HasMaxLength(100)
                     .IsUnicode(false);
                 entity.Property(e => e.TimeZone)
-                    .HasMaxLength(255)
+                    .HasMaxLength(100)
                     .IsUnicode(false);
+                entity.Property(e => e.BillingStreet).HasMaxLength(100);
+                entity.Property(e => e.BillingCity).HasMaxLength(100);
+                entity.Property(e => e.BillingState).HasMaxLength(100);
+                entity.Property(e => e.BillingCode).HasMaxLength(100);
+                entity.Property(e => e.BillingCountry).HasMaxLength(100);
             });
             modelBuilder.Entity<ProcessedFile>(entity =>
             {

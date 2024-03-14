@@ -7,7 +7,6 @@ namespace KotiCRM.Repository.Models;
 
 public partial class Organization
 {
-    [Key]
     public int Id { get; set; }
 
     public string? OrgName { get; set; }
@@ -21,15 +20,10 @@ public partial class Organization
     public bool? IncludeLogofToIdle { get; set; }
 
     public string? Currency { get; set; }
-    [Column(TypeName = "nvarchar(100)")]
     public string ? BillingStreet { get; set; }
-    [Column(TypeName = "nvarchar(100)")]
     public string? BillingCity { get; set; }
-    [Column(TypeName = "nvarchar(100)")]
     public string? BillingState { get; set; }
-    [Column(TypeName = "nvarchar(100)")]
     public string? BillingCode {  get; set; }
-    [Column(TypeName = "nvarchar(100)")]
     public string? BillingCountry { get; set; }
 
     public virtual ICollection<Department> Departments { get; set; } = new List<Department>();

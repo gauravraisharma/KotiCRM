@@ -312,7 +312,7 @@ const NewInvoice: React.FC<newInvoiceProps> = ({ closeModal, onBackToListButtonC
 							<CButton
 								component="input"
 								type="button"
-								color="primary"
+								color="secondary"
 								value="Back To Invoices"
 								onClick={onBackToListButtonClickHandler}
 							/>

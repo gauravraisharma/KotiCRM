@@ -67,9 +67,17 @@ const SharedData = {
     getAccountStatus: () => requests.get<SharedModel[]>(`/Shared/AccountStatus`),
     getAccountType: () => requests.get<SharedModel[]>(`/Shared/AccountType`),
     getInvoiceOwner : ()=> requests.get<SharedOwnerModel[]>(`/Shared/GetInvoiceOwner`),
-    getOrganization : ()=> requests.get<OrganizationModel[]>(`/Shared/GetOrganizationList`)
 
 }
+const Organization ={
+    getOrganization : ()=> requests.get<OrganizationModel[]>(`/Shared/GetOrganizationList`)
+    // updateOrganization: (id : number,organization: ) => requests.put<OrganizationModel>(`/Attachment/UpdateOrganization/${id}`, organization),
+
+    
+
+    
+}
+
 
 const agent = {
     Login,
@@ -78,7 +86,8 @@ const agent = {
     Contact,
     Invoice,
     Notes,
-    SharedData
+    SharedData,
+    Organization,
 }
 
 export default agent;

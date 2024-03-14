@@ -31,7 +31,8 @@ import {
     GET_INVOICE_OWNER_FETCH,
     GET_ATTACHMENTS_FETCH,
     CREATE_ATTACHMENT_REQUEST,
-    GET_ORGANIZATION_FETCH
+    GET_ORGANIZATION_FETCH,
+    UPDATE_TIMEZONE_REQUEST,
 } from "../constants/reduxConstants";
 import { Contact } from "../models/contact/Contact";
 import { Invoice, InvoiceCreationModel } from "../models/invoice/Invoice";
@@ -177,3 +178,9 @@ export const updateInvoiceRequest = (invoice: Invoice,id: any) => ({
 export const getInvoiceOwner = () => ({
   type: GET_INVOICE_OWNER_FETCH
 })
+
+// Timezone
+export const updateTimeZoneRequest = (id: any,) => ({
+  type: UPDATE_TIMEZONE_REQUEST,
+  payload: { id }
+});

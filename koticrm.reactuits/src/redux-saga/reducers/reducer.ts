@@ -26,7 +26,8 @@ import {
     GET_INVOICE_OWNER_SUCCESS,
     GET_ORGANIZATION_SUCCESS,
     GET_ATTACHMENTS_SUCCESS,
-    CREATE_ATTACHMENT_SUCCESS
+    CREATE_ATTACHMENT_SUCCESS,
+    UPDATE_TIMEZONE_SUCCESS,
 } from "../../constants/reduxConstants";
 
 const initialState = {
@@ -240,6 +241,11 @@ const reducer = (state = initialState, action: any) => {
                 ...state,
                 invoiceOwner: action.invoiceOwners,
             }
+        case UPDATE_TIMEZONE_SUCCESS:
+                return {
+                    ...state,
+                    updateTimeZoneResposne: action.updatedTimeZone
+                }
 
         default:
             // console.error("No action matched");
