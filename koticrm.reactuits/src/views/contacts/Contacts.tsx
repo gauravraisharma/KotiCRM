@@ -98,19 +98,19 @@ const Contacts = ({accountId, accountName}:Props) => {
                   fetchedContacts?.map((contact: Contact, index: number) => (
                     <CTableRow key={index}>
                      
-                      <CTableDataCell>{`${contact.firstName} ${contact.lastName}`}</CTableDataCell>
-                      <CTableDataCell>{contact.accountID}</CTableDataCell>
-                      <CTableDataCell>{contact.email}</CTableDataCell>
-                      <CTableDataCell>{contact.phone}</CTableDataCell>
-                      <CTableDataCell>{contact.ownerId}</CTableDataCell>
+                      <CTableDataCell>{`${contact?.firstName} ${contact?.lastName}`}</CTableDataCell>
+                      <CTableDataCell>{contact?.accountID}</CTableDataCell>
+                      <CTableDataCell>{contact?.email}</CTableDataCell>
+                      <CTableDataCell>{contact?.phone}</CTableDataCell>
+                      <CTableDataCell>{contact?.ownerId}</CTableDataCell>
                       <CTableDataCell>
-                        <Link to={`/contacts/editContact/${contact.id}`}>
+                        <Link to={`/contacts/editContact/${contact?.id}`}>
                             <MdEditSquare 
                             style={{ color: "green", marginRight: "10px",fontSize:"20px" }}
                           />
                         </Link>
 
-                        <Link to={`/contacts/${contact.id}`}>
+                        <Link to={`/contacts/${contact?.id}`}>
                           <AiFillEye style={{ color: "darkblue" ,marginRight: "10px",fontSize:"20px"}} />
                         </Link>
                       </CTableDataCell>
