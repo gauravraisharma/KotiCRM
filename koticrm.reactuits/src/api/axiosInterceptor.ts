@@ -1,7 +1,8 @@
 import axios, { AxiosError } from 'axios';
+const apiUrl = import.meta.env.VITE_API_URL;
 
 const axiosInstance = axios.create({
-    baseURL: 'https://localhost:7063/api',
+    baseURL: apiUrl,
 });
 
 

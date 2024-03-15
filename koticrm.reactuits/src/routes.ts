@@ -88,7 +88,7 @@ export const appRoutes: Route[] = [
 ]
 
 const routes: Route[] = [
-    { path: '/', name: 'Home', element: null, isAuth: false},
+    // { path: '/', name: 'Home', element: null, isAuth: false},
     { path: '/dashboard', name: 'Dashboard', element: Dashboard, isAuth: true },
     { path: '/theme', name: 'Theme', element: Colors, isAuth: false },
     { path: '/theme/colors', name: 'Colors', element: Colors, isAuth: false },

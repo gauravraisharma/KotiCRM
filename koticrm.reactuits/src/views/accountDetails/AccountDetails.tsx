@@ -137,7 +137,7 @@ const AccountDetails = () => {
                   aria-controls="attachments"
                   aria-selected="false"
                 >
-                  Attachments 5
+                  Attachments
                 </button>
               </li>
               <li className="nav-item" role="presentation">
