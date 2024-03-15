@@ -1,26 +1,32 @@
-// import React from 'react';
-// import { useEffect, useState } from 'react';
-// import { DateTime } from 'luxon'; // Luxon library for working with dates and times
+import React from 'react';
+import { useEffect, useState } from 'react';
+import { DateTime } from 'luxon'; // Luxon library for working with dates and times
 
-// interface Props {
-//   date: Date;
-//   format?: string;
-// }
+interface Props {
+  date: Date;
+  format?: string;
+  timezone?: string; // New prop for timezone
+}
 
-// const DateTransformComponent: React.FC<Props> = ({ date, format = 'DD/MM/YYYY HH:mm' }) => {
-//   const [transformedDate, setTransformedDate] = useState<string>('');
+const DateTransformComponent: React.FC<Props> = ({ date, format = 'DD/MM/YYYY HH:mm', timezone }) => {
+  const [transformedDate, setTransformedDate] = useState<string>('');
 
-//   useEffect(() => {
-//     const formattedDate = DateTransformFunction(date, format);
-//     setTransformedDate(formattedDate);
-//   }, [date, format]);
+  useEffect(() => {
+    const formattedDate = DateTransformFunction(date, format, timezone); // Pass timezone to formatting function
+    setTransformedDate(formattedDate);
+  }, [date, format, timezone]);
 
-//   return <div>{transformedDate}</div>;
-// };
+  return <div>{transformedDate}</div>;
+};
 
-// function DateTransformFunction(date: Date, format: string = 'DD/MM/YYYY HH:mm'): string {
-//   const formattedDate = DateTime.fromJSDate(date).toFormat(format);
-//   return formattedDate;
-// }
+function DateTransformFunction(date: Date, format: string = 'DD/MM/YYYY HH:mm', timezone?: string): string {
+  let formattedDate;
+  if (timezone) {
+    formattedDate = DateTime.fromJSDate(date).setZone(timezone).toFormat(format); // Adjust timezone
+  } else {
+    formattedDate = DateTime.fromJSDate(date).toFormat(format);
+  }
+  return formattedDate;
+}
 
-// export default DateTransformComponent;
+export default DateTransformComponent;

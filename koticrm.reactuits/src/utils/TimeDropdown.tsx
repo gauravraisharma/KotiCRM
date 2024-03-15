@@ -3,6 +3,7 @@ import StaticTimeComponent from './StaticTime';
 import { GoStopwatch } from "react-icons/go";
 
 
+
 const WatchIcon: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -11,9 +12,15 @@ const WatchIcon: React.FC = () => {
   };
 
   return (
-    <div className="watch-icon" onClick={toggleDropdown}>
-      <GoStopwatch style={{color:'grey',fontSize:'20px',marginTop:'7px'}} />
-      {isOpen && <StaticTimeComponent format="DD/MM/YYYY HH:mm" />}
+    <div className="watch-icon" style={{ position: 'relative', display: 'inline-block' }}>
+      <GoStopwatch style={{ color: 'grey', fontSize: '20px', marginTop: '7px' }} onClick={toggleDropdown} />
+      {isOpen && (
+        <div style={{ position: 'absolute', top: '120%', left: '10', zIndex: '999' }}>
+          <StaticTimeComponent format="DD/MM/YYYY HH:mm" />
+          {/* <DateTransformComponent date={currentDate} format="DD/MM/YYYY HH:mm" timezone={selectedTimezone} /> */}
+
+        </div>
+      )}
     </div>
   );
 };
