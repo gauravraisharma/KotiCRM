@@ -98,14 +98,14 @@ export const getAccountType = () => ({
   type: GET_ACCOUNT_TYPE_FETCH
 })
 
-// Contact action methods
+// Attachment action methods
 export const getAttachments=()=>({
   type: GET_ATTACHMENTS_FETCH
 });
 
-export const createAttachment=(createAttachment: CreateAttachment)=>({
+export const createAttachment=(formData: FormData)=>({
   type: CREATE_ATTACHMENT_REQUEST,
-  payload: createAttachment
+  payload: formData
 });
 
 // Contact action methods

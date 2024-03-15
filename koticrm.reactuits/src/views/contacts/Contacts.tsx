@@ -31,7 +31,12 @@ const tableHeader = [
   "Actions",
 ];
 
-const Contacts = () => {
+interface Props {
+    accountId: string,
+    accountName: string
+}
+
+const Contacts = ({accountId, accountName}:Props) => {
   // const [contacts, setContacts] = useState([]);
   const dispatch = useDispatch();
   const fetchedContacts = useSelector((state: any) => state.reducer.contacts);

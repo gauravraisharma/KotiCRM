@@ -19,9 +19,9 @@ const Attachments = ({ accountId, accountName }: Props) => {
     const [isModalVisible, setIsModalVisible] = useState(false);
     const accountOwner = useSelector((state: any) => state.reducer.accountOwner);
 
-    if (accountId) {
-        const filteredAttachments = fetchedAttachments?.filter(attachment => attachment.accountID === accountId);
-    }
+    // if (accountId) {
+    //     const filteredAttachments = fetchedAttachments.filter(attachment => attachment.accountID === accountId);
+    // }
 
     function getOwnerName(ownerId: string): string {
         const owner = accountOwner?.find((owner: any) => owner.id === ownerId);
@@ -54,25 +54,16 @@ const Attachments = ({ accountId, accountName }: Props) => {
                     <CCardHeader>
                         <CRow className="align-items-center">
                             <CCol xs={6} >Attachments</CCol>
-                            <CCol xs={6}>
-                                <div className="text-end">
-                                    <CDropdown>
-                                        <CDropdownToggle color="primary" variant="outline">
-                                            Attach
-                                        </CDropdownToggle>
-                                        <CDropdownMenu>
-                                            <CDropdownItem
-                                                style={{ cursor: "pointer" }}
-                                                onClick={handleModalOpen}
-                                            >
-                                                Attach File
-                                            </CDropdownItem>
-                                            {/* <CDropdownItem href="#">Owner</CDropdownItem>
-                                            <CDropdownItem href="#">Phone</CDropdownItem>
-                                            <CDropdownItem href="#">Country</CDropdownItem> */}
-                                        </CDropdownMenu>
-                                    </CDropdown>
-                                </div>
+                            <CCol xs={6} className="text-end">
+                                <CButton
+                                    component="input"
+                                    type="button"
+                                    color="primary"
+                                    value="Add Attachment"
+                                    style={{ cursor: "pointer" }}
+                                    onClick={handleModalOpen}
+                                    // variant="outline"
+                                />
                             </CCol>
                         </CRow>
                     </CCardHeader>

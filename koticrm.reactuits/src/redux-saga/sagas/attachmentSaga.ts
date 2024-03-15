@@ -23,7 +23,7 @@ export function* workGetAttachmentsFetch() {
     }
 }
 
-function* createAttachment(action: { payload: CreateAttachment }): Generator<any> {
+function* createAttachment(action: any): Generator<any> {
     try {
         const { payload } = action;
         const response = yield call(AttachmentService.CreateAttachment, payload);
@@ -36,7 +36,7 @@ function* createAttachment(action: { payload: CreateAttachment }): Generator<any
 
 export function* workCreateAttachment(action: any) {
     try {
-        const dbResponse: DbResponse = yield call(createAttachment, { payload: action });
+        const dbResponse: DbResponse = yield call(createAttachment, action);
         yield put({ type: CREATE_CONTACT_SUCCESS, dbResponse });
     } catch (error) {
         console.log(error);

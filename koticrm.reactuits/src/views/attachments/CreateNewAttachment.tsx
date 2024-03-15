@@ -1,7 +1,9 @@
 import { CButton, CCol, CForm, CFormInput, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CRow } from "@coreui/react";
 import { CreateAttachment, CreateAttachmentClass } from "../../models/attachment/Attachment";
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { createAttachment } from "../../redux-saga/action";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 // const owners = [
 //     { id: '1', firstName: 'John', lastName: 'Doe', email: 'john@example.com', logo: 'path_to_logo1' },
@@ -17,10 +19,17 @@ interface Props {
 }
 
 const CreateNewAttachment = ({ isVisible, handleClose }: Props) => {
-    // const dispatch = useDispatch();
-    // const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
     const [newAttachment, setNewAttachment] = useState<CreateAttachment>(new CreateAttachmentClass());
     const [submitting, setSubmitting] = useState(false);
+
+    useEffect(() => {
+        // Handle file change after component has rendered
+        if (newAttachment.file) {
+            console.log(newAttachment);
+        }
+    }, [newAttachment]);
 
     const resetForm = () => {
         setNewAttachment(new CreateAttachmentClass());
@@ -41,14 +50,6 @@ const CreateNewAttachment = ({ isVisible, handleClose }: Props) => {
         console.log(newAttachment);
     }
 
-    const addAttachment = (formData: FormData, onSuccess) => {
-        // console.log("FormData contents:");
-        // for (const entry of formData.entries()) {
-        //     console.log(entry);
-        // }
-        createAttachment(formData);
-    }
-
     const handleFormSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         try {
@@ -56,9 +57,11 @@ const CreateNewAttachment = ({ isVisible, handleClose }: Props) => {
             const formDataToSend = new FormData();
             formDataToSend.append('userId', newAttachment.userID);
             formDataToSend.append('file', newAttachment.file as Blob);
-            addAttachment(formDataToSend, resetForm);
-            console.log(formDataToSend);
+            console.log("Submitting");
+            
+            dispatch(createAttachment(formDataToSend));
             resetForm();
+            handleClose();
         } catch (error) {
             console.log(error);
         } finally {
