@@ -32,11 +32,12 @@ import {
     GET_ATTACHMENTS_FETCH,
     CREATE_ATTACHMENT_REQUEST,
     GET_ORGANIZATION_FETCH,
-    UPDATE_TIMEZONE_REQUEST,
+    UPDATE_ORGANIZATION_REQUEST,
 } from "../constants/reduxConstants";
 import { Contact } from "../models/contact/Contact";
 import { Invoice, InvoiceCreationModel } from "../models/invoice/Invoice";
 import { CreateAttachment } from "../models/attachment/Attachment";
+import { OrganizationModel } from "../models/commonModels/SharedModels";
 
 // Login
 export const loginRequest = (userLogin: UserLogin, navigate: any, toast: any) => ({
@@ -137,6 +138,11 @@ export const getOrganization = () => ({
   type: GET_ORGANIZATION_FETCH
 })
 
+export const updateOrganization = (id:any, organizationResponse:any) => ({
+  type: UPDATE_ORGANIZATION_REQUEST,
+  payload: {id, organizationResponse },
+})
+
 //notes
 export const getNotes = () => ({
   type: GET_NOTES_FETCH
@@ -178,9 +184,3 @@ export const updateInvoiceRequest = (invoice: Invoice,id: any) => ({
 export const getInvoiceOwner = () => ({
   type: GET_INVOICE_OWNER_FETCH
 })
-
-// Timezone
-export const updateTimeZoneRequest = (id: any,) => ({
-  type: UPDATE_TIMEZONE_REQUEST,
-  payload: { id }
-});

@@ -70,11 +70,9 @@ const SharedData = {
 
 }
 const Organization ={
-    getOrganization: () => requests.get<OrganizationBankModel[]>(`/Organization/GetOrganizationList`)
-    // updateOrganization: (id : number,organization: ) => requests.put<OrganizationModel>(`/Attachment/UpdateOrganization/${id}`, organization),
-
-    
-
+    getOrganization: () => requests.get<OrganizationBankModel[]>(`/Organization/GetOrganizationList`),
+    // getOrganization: () => requests.get<OrganizationModel[]>(`/Organization/GetOrganizationList`)
+    updateOrganization: (id : number,organization: OrganizationModel) => requests.put<OrganizationModel>(`/Organization/UpdateOrganization/${id}`, organization),
     
 }
 

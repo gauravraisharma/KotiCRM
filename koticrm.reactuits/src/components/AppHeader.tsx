@@ -17,9 +17,13 @@ import { AppBreadcrumb } from './index'
 import { AppHeaderDropdown } from './header/index'
 import { logo } from '../assets/brand/logo'
 import { SIDEBAR_TOGGLE } from '../constants/reduxConstants'
+import WatchIcon from '../utils/TimeDropdown';
+
 
 const AppHeader = () => {
   const dispatch = useDispatch()
+  const currentDate = new Date();
+
     const sidebarShow = useSelector((state: any) => state.reducer.sidebarToggle)
   return (
     <CHeader position="sticky" className="mb-4">
@@ -56,6 +60,9 @@ const AppHeader = () => {
               <CIcon icon={cilBell} size="lg" />
             </CNavLink>
           </CNavItem>
+          
+          <WatchIcon />
+
         </CHeaderNav>
         <CHeaderNav className="ms-3">
           <AppHeaderDropdown />

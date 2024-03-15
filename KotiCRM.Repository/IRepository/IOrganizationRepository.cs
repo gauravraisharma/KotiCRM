@@ -7,7 +7,7 @@ namespace KotiCRM.Repository.IRepository
     {
         Task<IEnumerable<OrganizationBankResponse>> GetOrganizationList();
         Task<Organization> GetOrganization(int id);
-        Task<DbResponse> UpdateOrganization(Organization organization);
+        Task<OrganizationDTO> UpdateOrganization(int id, Organization organization);
 
     }
 }

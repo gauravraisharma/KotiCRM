@@ -136,9 +136,9 @@ namespace KotiCRM.Repository.Data
                     .IsUnicode(false);
                 entity.Property(e => e.OrganizationId).HasColumnName("OrganizationID");
 
-                entity.HasOne(d => d.Organization).WithMany(p => p.Departments)
-                    .HasForeignKey(d => d.OrganizationId)
-                    .HasConstraintName("FK_Department_Organization");
+                //entity.HasOne(d => d.Organization).WithMany(p => p.Departments)
+                //    .HasForeignKey(d => d.OrganizationId)
+                //    .HasConstraintName("FK_Department_Organization");
             });
 
             modelBuilder.Entity<Designation>(entity =>
@@ -151,9 +151,9 @@ namespace KotiCRM.Repository.Data
                     .IsUnicode(false);
                 entity.Property(e => e.OrganizationId).HasColumnName("OrganizationID");
 
-                entity.HasOne(d => d.Organization).WithMany(p => p.Designations)
-                    .HasForeignKey(d => d.OrganizationId)
-                    .HasConstraintName("FK_Designation_Organization");
+                //entity.HasOne(d => d.Organization).WithMany(p => p.Designations)
+                //    .HasForeignKey(d => d.OrganizationId)
+                //    .HasConstraintName("FK_Designation_Organization");
             });
 
             modelBuilder.Entity<Employee>(entity =>
@@ -241,9 +241,9 @@ namespace KotiCRM.Repository.Data
                     .HasForeignKey(d => d.DesignationId)
                     .HasConstraintName("FK_Employee_Designation");
 
-                entity.HasOne(d => d.Organization).WithMany(p => p.Employees)
-                    .HasForeignKey(d => d.OrganizationId)
-                    .HasConstraintName("FK_Employee_Organization");
+                //entity.HasOne(d => d.Organization).WithMany(p => p.Employees)
+                //    .HasForeignKey(d => d.OrganizationId)
+                //    .HasConstraintName("FK_Employee_Organization");
 
                 entity.HasOne(d => d.Role).WithMany(p => p.Employees)
                     .HasForeignKey(d => d.RoleId)

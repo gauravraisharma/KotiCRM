@@ -51,12 +51,13 @@ import {
 
 
     GET_ATTACHMENTS_FETCH,
-    CREATE_ATTACHMENT_REQUEST
+    CREATE_ATTACHMENT_REQUEST,
+    UPDATE_ORGANIZATION_REQUEST,
 } from '../../constants/reduxConstants';
 import { workCreateNote, workGetNotesFetch } from './notesSaga';
 import { workCreateInvoice, workDeleteInvoice, workGetInvoiceByIdFetch, workGetInvoiceFetch, workUpdateInvoice } from './invoiceSaga';
 import { workCreateAttachment, workGetAttachmentsFetch } from './attachmentSaga';
-import { workGetOrganizationFetch } from './organizationSaga';
+import { workGetOrganizationFetch, workUpdateOrganization } from './organizationSaga';
 
 export default function* mySaga() {
   //account
@@ -74,6 +75,7 @@ export default function* mySaga() {
   yield takeEvery(GET_INDUSTRY_FETCH, workGetIndustryFetch);
   //organization
   yield takeEvery(GET_ORGANIZATION_FETCH, workGetOrganizationFetch)
+  yield takeEvery(UPDATE_ORGANIZATION_REQUEST, workUpdateOrganization)
   //Invoice
   yield takeEvery(GET_INVOICE_STATUS_FETCH, workGetInvoiceStatusFetch);
   yield takeEvery(GET_INVOICE_FETCH, workGetInvoiceFetch);
@@ -93,7 +95,6 @@ export default function* mySaga() {
   //note
   yield takeEvery(GET_NOTES_FETCH, workGetNotesFetch);
   yield takeEvery(CREATE_NOTES_REQUEST, workCreateNote);
-  //timezone
-  // yield takeEvery(UPDATE_TIMEZONE_REQUEST)
 
+  
 }

@@ -27,7 +27,7 @@ import {
     GET_ORGANIZATION_SUCCESS,
     GET_ATTACHMENTS_SUCCESS,
     CREATE_ATTACHMENT_SUCCESS,
-    UPDATE_TIMEZONE_SUCCESS,
+    UPDATE_ORGANIZATION_SUCCESS,
 } from "../../constants/reduxConstants";
 
 const initialState = {
@@ -35,6 +35,7 @@ const initialState = {
         token: null,
         modulePermission: [],
         userId: null,
+        userType:null,
         loggedIn: false,
         accounts: [],
         createAccountResponse:null, 
@@ -58,7 +59,8 @@ const initialState = {
         updateInvoiceResposne: null,
         deleteInvoiceResponse: null,
         contact: null,
-        invoiceOwner: []
+        invoiceOwner: [],
+        updateOrgResponse:null
     }
 };
 
@@ -73,6 +75,7 @@ const reducer = (state = initialState, action: any) => {
                     token: action.payload.token,
                     modulePermission: action.payload.modulePermission,
                     userId: action.payload.userId,
+                    userType :action.payload.userType,
                     loggedIn: true,
                 };
             }
@@ -154,7 +157,11 @@ const reducer = (state = initialState, action: any) => {
             return {...state,
                 organization: action.organization,
                 }
-
+        case UPDATE_ORGANIZATION_SUCCESS: 
+            return {...state,
+                updateOrgResponse: action.updatedOrg,
+                }        
+        
         // Attachment
         case GET_ATTACHMENTS_SUCCESS:
             return {
@@ -242,12 +249,6 @@ const reducer = (state = initialState, action: any) => {
                 ...state,
                 invoiceOwner: action.invoiceOwners,
             }
-        case UPDATE_TIMEZONE_SUCCESS:
-                return {
-                    ...state,
-                    updateTimeZoneResposne: action.updatedTimeZone
-                }
-
         default:
             // console.error("No action matched");
             console.error("Unhandled action type:", action.type);

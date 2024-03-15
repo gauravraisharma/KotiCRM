@@ -26,9 +26,9 @@ public partial class Organization
     public string? BillingCode {  get; set; }
     public string? BillingCountry { get; set; }
 
-    public virtual ICollection<Department> Departments { get; set; } = new List<Department>();
+    //public virtual ICollection<Department> Departments { get; set; } = new List<Department>();
 
-    public virtual ICollection<Designation> Designations { get; set; } = new List<Designation>();
+    //public virtual ICollection<Designation> Designations { get; set; } = new List<Designation>();
 
-    public virtual ICollection<Employee> Employees { get; set; } = new List<Employee>();
+    //public virtual ICollection<Employee> Employees { get; set; } = new List<Employee>();
 }

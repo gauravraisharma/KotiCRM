@@ -32,10 +32,10 @@ namespace KotiCRM.Server.Controllers
             return await _organizationService.GetOrganization(id);
         }
 
-        [HttpPut("UpdateOrganization")]
-        public async Task<ActionResult<DbResponse>> UpdateOrganization(OrganizationDTO organizationDTO)
+        [HttpPut("UpdateOrganization/{id}")]
+        public async Task<ActionResult<OrganizationDTO>> UpdateOrganization(int id,Organization organization)
         {
-            var res = await _organizationService.UpdateOrganization(organizationDTO);
+            var res = await _organizationService.UpdateOrganization(id, organization);
             return Ok(res);
         }
     }
