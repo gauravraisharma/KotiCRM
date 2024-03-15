@@ -51,13 +51,7 @@ import {
 
 
     GET_ATTACHMENTS_FETCH,
-    CREATE_ATTACHMENT_REQUEST,
-
-
-  UPDATE_TIMEZONE_REQUEST,
-
-
-
+    CREATE_ATTACHMENT_REQUEST
 } from '../../constants/reduxConstants';
 import { workCreateNote, workGetNotesFetch } from './notesSaga';
 import { workCreateInvoice, workDeleteInvoice, workGetInvoiceByIdFetch, workGetInvoiceFetch, workUpdateInvoice } from './invoiceSaga';

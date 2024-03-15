@@ -100,11 +100,10 @@ export function* workUpdateInvoice(action: any) {
 function* deleteInvoice(action: { payload: any }) : Generator<any>{
   try {
     const { payload } = action;
-
       const response = yield call(InvoiceService.DeleteInvoice,payload );
       return response;
   } catch (error) {
-    console.error('Error fetching invoice:', error);
+    console.error('Error deleting invoice:', error);
     throw error;
   }
 }

@@ -1,3 +1,4 @@
+import { toast } from "react-toastify";
 import agent from "../api/agent";
 import { Invoice, InvoiceCreationModel } from "../models/invoice/Invoice";
 
@@ -11,6 +12,7 @@ export default class InvoiceService {
 		}
 	  catch (error) {
 		console.error('Error fetching Invoices:', error);
+		toast.error('Error fetching Invoices')
 		throw error; 
 	  }
 	}
@@ -19,12 +21,12 @@ export default class InvoiceService {
 		try {
 		  const response  = await agent.Invoice.create(invoice.payload);
 		  console.log(response)
-		  
+		  toast.success('Invoice created successfully')
 		  return response;
 		  }
 		catch (error) {
-		  console.error('Error logging in :', error);
-		  throw error; 
+			toast.error('Cannot you create Invoice. Please try again later')
+			throw error; 
 		}
 	  }
 
@@ -35,6 +37,8 @@ export default class InvoiceService {
 		  }
 		catch (error) {
 		  console.error('Invalid Invoice Id:', error);
+		  toast.error('Invalid Invoice Id')
+
 		  throw error; 
 		}
 	  }
@@ -43,23 +47,23 @@ export default class InvoiceService {
 		try {
 		  const response  = await agent.Invoice.update(id,invoice);
 		  console.log(response)
-		  
+		  toast.success('Invoice updated successfully')
 		  return response;
 		  }
 		catch (error) {
-		  console.error('Error updating Invoice :', error);
+			toast.error('Invoice not found')
 		  throw error; 
 		}
 	  }
 
-	  static async DeleteInvoice(id: any): Promise<Invoice> {
+	  static async DeleteInvoice(id: any): Promise<InvoiceCreationModel> {
 		try {
 		  const response  = await agent.Invoice.delete(id.payload);
-		  console.log(response)  
+		  toast.success('Invoice deleted successfully')
 		  return response;
 		  }
 		catch (error) {
-		  console.error('Error deleting Invoice :', error);
+		toast.error('Invoice not found')
 		  throw error; 
 		}
 	  }

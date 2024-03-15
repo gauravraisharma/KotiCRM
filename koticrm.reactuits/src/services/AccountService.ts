@@ -1,3 +1,4 @@
+import { toast } from "react-toastify";
 import agent from "../api/agent";
 import { Account } from "../models/account/Account";
 
@@ -11,6 +12,7 @@ export default class AccountService {
 		}
 	  catch (error) {
 		console.error('Error fetching accounts:', error);
+		toast.error('Error fetching accounts')
 		throw error; 
 	  }
 	}
@@ -18,12 +20,13 @@ export default class AccountService {
 	static async CreateAccount(account: any): Promise<Account> {
 		try {
 		  const response  = await agent.Account.create(account.payload);
-		  console.log(response)
-		  
+		  toast.success('Account created successfully')
+
 		  return response;
 		  }
 		catch (error) {
-		  console.error('Error logging in :', error);
+		  console.error('Error creating account :', error);
+		  toast.error('Cannot create account. Please try again later')
 		  throw error; 
 		}
 	  }
@@ -35,6 +38,7 @@ export default class AccountService {
 		  }
 		catch (error) {
 		  console.error('Error fetching accounts:', error);
+		  toast.error('Error fetching account')
 		  throw error; 
 		}
 	  }
@@ -42,12 +46,12 @@ export default class AccountService {
 	  static async UpdateAccount(account: any, id: any): Promise<Account> {
 		try {
 		  const response  = await agent.Account.update(id,account);
-		  console.log(response)
-		  
+		  toast.success('Account updated successfully')
 		  return response;
 		  }
 		catch (error) {
 		  console.error('Error updating account :', error);
+		  toast.error('Account not found')
 		  throw error; 
 		}
 	  }
@@ -55,11 +59,12 @@ export default class AccountService {
 	  static async DeleteAccount(id: any): Promise<Account> {
 		try {
 		  const response  = await agent.Account.delete(id.payload);
-		  console.log(response)  
+		  toast.success('Account deleted successfully')  
 		  return response;
 		  }
 		catch (error) {
 		  console.error('Error deleting account :', error);
+		  toast.error('Account not found')
 		  throw error; 
 		}
 	  }

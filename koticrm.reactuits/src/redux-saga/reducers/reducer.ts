@@ -84,6 +84,7 @@ const reducer = (state = initialState, action: any) => {
             };
 
         case LOGOUT:
+            localStorage.removeItem('accessToken')
             return {
                 ...initialState
             }

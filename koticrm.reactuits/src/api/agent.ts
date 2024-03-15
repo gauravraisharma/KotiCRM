@@ -6,7 +6,7 @@ import { Invoice, InvoiceCreationModel } from '../models/invoice/Invoice';
 import { Note } from '../models/notes/notes';
 import { UserLogin } from '../models/userAccount/login';
 import { Attachment, CreateAttachment } from '../models/attachment/Attachment';
-import { OrganizationModel, SharedModel, SharedOwnerModel, DbResponse, OrganizationBankModel } from '../models/commonModels/SharedModels';
+import { SharedModel, SharedOwnerModel, DbResponse, OrganizationBankModel } from '../models/commonModels/SharedModels';
 
 const responseBody = <T>(response: AxiosResponse<T>) => response.data;
 
@@ -50,7 +50,7 @@ const Invoice = {
     create: (invoiceModel : InvoiceCreationModel) => requests.post<InvoiceCreationModel>(`/Invoice/CreateInvoice`, invoiceModel),
     update: (id : number,invoice: Invoice) => requests.put<Invoice>(`/Invoice/UpdateInvoice/${id}`, invoice),
     getById: (id : number) => requests.get<InvoiceCreationModel>(`/Invoice/GetInvoiceDetails/${id}`),
-    delete: (id : number) => requests.del<Invoice>(`/Invoice/DeleteInvoice/${id}`)  
+    delete: (id : number) => requests.del<InvoiceCreationModel>(`/Invoice/DeleteInvoice/${id}`)  
 }
 const Notes = {
     get: () => requests.get<Note[]>(`/Notes/GetNoteList`),

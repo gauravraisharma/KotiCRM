@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import {
-    CCard,
-    CCardBody,
-    CCardHeader,
-    CCol,
-    CRow,
-    CTable,
-    CTableBody,
-    CTableDataCell,
-    CTableHead,
-    CTableHeaderCell,
-    CTableRow,
-    CButton,
+  CCard,
+  CCardBody,
+  CCardHeader,
+  CCol,
+  CRow,
+  CTable,
+  CTableBody,
+  CTableDataCell,
+  CTableHead,
+  CTableHeaderCell,
+  CTableRow,
+  CButton,
 } from '@coreui/react';
 import { useDispatch } from 'react-redux';
 import { MdEditSquare } from "react-icons/md";
@@ -27,7 +27,7 @@ import { useSelector } from 'react-redux';
 import DeleteConfirmationModal from "./DeleteConfirmation";
 import { ToastContainer } from 'react-toastify';
 import EditPage from './EditAccountModal';
-import { getAccountOwner, getAccountStatus, getAccountType, getAccounts, getContacts, getIndustry,  getNotes } from "../../redux-saga/action";
+import { getAccountOwner, getAccountStatus, getAccountType, getAccounts, getContacts, getIndustry, getNotes } from "../../redux-saga/action";
 
 
 
@@ -112,73 +112,73 @@ const AccountList: React.FC = () => {
     navigate(`/accountDetails/accountId=${id}`)
   }
 
-    return (
+  return (
+    <>
+      <ToastContainer />
+      {stateData ? (
+        <NewAccount closeModal={closeCreateModal} onBackToListButtonClickHandler={backToAccountList} />
+      ) : (
         <>
-            <ToastContainer />
-            {stateData ? (
-                <NewAccount closeModal={closeCreateModal} onBackToListButtonClickHandler={backToAccountList} />
-            ) : (
-                <>
-                    <DeleteConfirmationModal isOpen={showDeleteConfirmation} onCancel={cancelDelete} onConfirm={confirmDelete} id={accountId} />
-                    {openEditModal ? (
-                        <EditPage closeModal={closeEditModal} accountData={accountData} onBackToListButtonClickHandler={backToAccountList} />
-                    ) : (
-                        <CRow>
-                            <CCol xs={12}>
-                                <CCard className="mb-4">
-                                    <CCardHeader>
-                                        <CRow >
-                                            <CCol xs={6} className="d-flex align-items-center">
-                                                <h5 >
-                                                    <strong>Accounts</strong>
-                                                </h5>
-                                            </CCol>
-                                            <CCol xs={6}>
-                                                <div className="text-end">
-                                                    <CButton
-                                                        component="input"
-                                                        type="button"
-                                                        color="primary"
-                                                        value="New"
-                                                        onClick={handleCreateNew}
-                                                    />
-                                                </div>
-                                            </CCol>
-                                        </CRow>
-                                    </CCardHeader>
-                                    <CCardBody>
-                                        <CTable>
-                                            <CTableHead>
-                                                <CTableRow>
-                                                    <CTableHeaderCell scope="col">Account Name</CTableHeaderCell>
-                                                    <CTableHeaderCell scope="col">Owner</CTableHeaderCell>
-                                                    <CTableHeaderCell scope="col">Phone</CTableHeaderCell>
-                                                    <CTableHeaderCell scope="col">Website</CTableHeaderCell>
-                                                    <CTableHeaderCell scope="col">Country</CTableHeaderCell>
-                                                    <CTableHeaderCell scope="col">Actions</CTableHeaderCell>
-                                                </CTableRow>
-                                            </CTableHead>
-                                            <CTableBody>
-                                                {accounts?.map((account: Account) => (
-                                                    <CTableRow key={account.id}>
-                                                        <CTableDataCell>{account.accountName}</CTableDataCell>
-                                                        <CTableDataCell>{getOwnerName(account.ownerId)}</CTableDataCell>
-                                                        <CTableDataCell>{account.phone}</CTableDataCell>
-                                                        <CTableDataCell>{account.webSite}</CTableDataCell>
-                                                        <CTableDataCell>{account.country}</CTableDataCell>
-                                                        <CTableDataCell>
-                                                            <MdEditSquare 
-                                                                style={{ color: 'green', marginRight: "10px",fontSize:"20px"}}
-                                                                onClick={() => handleEditClick(account)}
-                                                            />
-                                                            <AiFillEye style={{ color: 'darkblue', marginRight: "10px",fontSize:"20px" }}
-                                                                onClick={() => showItems(account?.id)}/>
-                                                            <MdDelete style={{ color: "red", marginRight: "10px",fontSize:"20px" }} onClick={() => handleDeleteClick(account.id)} />
-                                                        </CTableDataCell>
-                                                    </CTableRow>
-                                                ))}
-                                            </CTableBody>
-                                        </CTable>
+          <DeleteConfirmationModal isOpen={showDeleteConfirmation} onCancel={cancelDelete} onConfirm={confirmDelete} accountId={accountId} invoiceId={null}  />
+          {openEditModal ? (
+            <EditPage closeModal={closeEditModal} accountData={accountData} onBackToListButtonClickHandler={backToAccountList} />
+          ) : (
+            <CRow>
+              <CCol xs={12}>
+                <CCard className="mb-4">
+                  <CCardHeader>
+                    <CRow >
+                      <CCol xs={6} className="d-flex align-items-center">
+                        <h5 >
+                          <strong>Accounts</strong>
+                        </h5>
+                      </CCol>
+                      <CCol xs={6}>
+                        <div className="text-end">
+                          <CButton
+                            component="input"
+                            type="button"
+                            color="primary"
+                            value="New"
+                            onClick={handleCreateNew}
+                          />
+                        </div>
+                      </CCol>
+                    </CRow>
+                  </CCardHeader>
+                  <CCardBody>
+                    <CTable>
+                      <CTableHead>
+                        <CTableRow>
+                          <CTableHeaderCell scope="col">Account Name</CTableHeaderCell>
+                          <CTableHeaderCell scope="col">Owner</CTableHeaderCell>
+                          <CTableHeaderCell scope="col">Phone</CTableHeaderCell>
+                          <CTableHeaderCell scope="col">Website</CTableHeaderCell>
+                          <CTableHeaderCell scope="col">Country</CTableHeaderCell>
+                          <CTableHeaderCell scope="col">Actions</CTableHeaderCell>
+                        </CTableRow>
+                      </CTableHead>
+                      <CTableBody>
+                        {accounts?.map((account: Account) => (
+                          <CTableRow key={account.id}>
+                            <CTableDataCell>{account.accountName}</CTableDataCell>
+                            <CTableDataCell>{getOwnerName(account.ownerId)}</CTableDataCell>
+                            <CTableDataCell>{account.phone}</CTableDataCell>
+                            <CTableDataCell>{account.webSite}</CTableDataCell>
+                            <CTableDataCell>{account.country}</CTableDataCell>
+                            <CTableDataCell>
+                              <MdEditSquare
+                                style={{ color: 'green', marginRight: "10px", fontSize: "20px" }}
+                                onClick={() => handleEditClick(account)}
+                              />
+                              <AiFillEye style={{ color: 'darkblue', marginRight: "10px", fontSize: "20px" }}
+                                onClick={() => showItems(account?.id)} />
+                              <MdDelete style={{ color: "red", marginRight: "10px", fontSize: "20px" }} onClick={() => handleDeleteClick(account.id)} />
+                            </CTableDataCell>
+                          </CTableRow>
+                        ))}
+                      </CTableBody>
+                    </CTable>
 
                     {/* {isModalOpen && rowData && (
                   <OpenAccountModal

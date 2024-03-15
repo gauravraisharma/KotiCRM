@@ -44,7 +44,16 @@ namespace KotiCRM.Repository.Repository
                             BillingCode = organization.BillingCode,
                             BillingCountry = organization.BillingCountry
                         },
-                        Banks = banks.Where(bank => bank.OrganizationId == organization.Id).ToList()
+                        Banks = banks.Where(bank => bank.OrganizationId == organization.Id)
+                .Select(bank => new BankResponse()
+                {
+                    BankId = bank.BankId,
+                    Name = bank.Name,
+                    Branch = bank.Branch,
+                    Ifsc = bank.Ifsc,
+                    OrganizationId = bank.OrganizationId
+                })
+                .ToList()
                     });
 
                     return organizationDto;

@@ -89,18 +89,22 @@ const NewInvoice: React.FC<newInvoiceProps> = ({ closeModal, onBackToListButtonC
     }));
   };
 
-	const organizationDetail = useSelector((state: any) => state.reducer.organization)
-
-	
-			const techbitOrganization = organizationDetail?.filter((org: any) => org.organizationResponse?.isActive === true);
+	const organization = useSelector((state: any) => state.reducer.organization)
+	var orgDetails;
+	if (organization) {
+		const activeOrg = organization.filter((org: any) => org.organizationResponse?.isActive === true);
+		if (activeOrg && activeOrg.length > 0) {
+				orgDetails  = activeOrg[0]?.organizationResponse;
+		}
+	}
 	var grandTotalValue = 0
 
 	const [invoice, setInvoice] = useState({
 		subject: '', dueDate: new Date(), dealName: '', purchaseOrder: '', status: 0,
 
-		fromBillingStreet:techbitOrganization[0]?.organizationResponse?.billingStreet, fromBillingCity: techbitOrganization[0]?.organizationResponse?.billingCity,
-		fromBillingState: techbitOrganization[0]?.organizationResponse?.billingState, fromBillingCode: techbitOrganization[0]?.organizationResponse?.billingCode,
-		fromBillingCountry: techbitOrganization[0]?.organizationResponse?.billingCountry,
+		fromBillingStreet:orgDetails?.billingStreet, fromBillingCity: orgDetails?.billingCity,
+		fromBillingState: orgDetails?.billingState, fromBillingCode: orgDetails?.billingCode,
+		fromBillingCountry:orgDetails?.billingCountry,
 
 		toBillingStreet: '',
 		toBillingCity: '',

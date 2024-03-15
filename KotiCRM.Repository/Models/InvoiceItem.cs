@@ -36,5 +36,6 @@ namespace KotiCRM.Repository.Models
         [Column(TypeName = "decimal(18, 2)")]
 
         public decimal Total { get; set; }
+        public bool IsDeleted { get; set; } = false;
     }
 }

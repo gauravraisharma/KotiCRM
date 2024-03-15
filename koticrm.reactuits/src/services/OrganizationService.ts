@@ -4,7 +4,6 @@ import { OrganizationBankModel } from "../models/commonModels/SharedModels";
 export default class OrganizationService {
 
 static async GetOrganizationList(): Promise<OrganizationBankModel[]> {
-    debugger
     try {
     const response  = await agent.Organization.getOrganization();
     return response;

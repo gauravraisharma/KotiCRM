@@ -10,7 +10,7 @@ namespace KotiCRM.Repository.Models
     public class OrganizationBankResponse
     {
         public OrganizationResponse OrganizationResponse { get; set; }
-        public List<Bank> Banks { get; set; }
+        public List<BankResponse> Banks { get; set; }
     }
 
     public class OrganizationResponse

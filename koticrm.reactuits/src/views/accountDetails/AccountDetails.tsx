@@ -123,7 +123,7 @@ const AccountDetails = () => {
                   aria-controls="notes"
                   aria-selected="false"
                 >
-                  Notes ({notesCount})
+                  Notes <strong>{ notesCount ==0 ? '' : `(${notesCount})`}</strong>
                 </button>
               </li>
               <li className="nav-item" role="presentation">
@@ -151,7 +151,7 @@ const AccountDetails = () => {
                   aria-controls="invoices"
                   aria-selected="false"
                 >
-                  Invoices ({invoicesCount})
+                  Invoices <strong>{ invoicesCount ==0 ? '' : `(${invoicesCount})`}</strong>
                 </button>
               </li>
             </ul>

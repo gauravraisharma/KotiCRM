@@ -83,8 +83,8 @@ namespace KotiCRM.Repository.Repository
                 var account = await _context.Accounts.FindAsync(id);
                 if (account != null)
                 {
-                    _context.Accounts.Remove(account);
-                    await _context.SaveChangesAsync();
+                    account.Isdelete = true;
+                    await _context.SaveChangesAsync(); 
 
                     return new DbResponse()
                     {
@@ -117,7 +117,7 @@ namespace KotiCRM.Repository.Repository
         {
             try
             {
-                var account = await _context.Accounts.FindAsync(id);
+                var account = await _context.Accounts.FirstOrDefaultAsync(account => account.Id == id && !account.Isdelete);
 
                 if (account == null)
                 {
@@ -135,7 +135,7 @@ namespace KotiCRM.Repository.Repository
         {
             try
             {
-                return await _context.Accounts.ToListAsync();
+                return await _context.Accounts.Where(account => !account.Isdelete).ToListAsync();
             }
             catch(Exception ex) 
             {

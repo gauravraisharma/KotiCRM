@@ -20,7 +20,7 @@ const Attachments = ({ accountId, accountName }: Props) => {
     const accountOwner = useSelector((state: any) => state.reducer.accountOwner);
 
     if (accountId) {
-        const filteredAttachments = fetchedAttachments.filter(attachment => attachment.accountID === accountId);
+        const filteredAttachments = fetchedAttachments?.filter(attachment => attachment.accountID === accountId);
     }
 
     function getOwnerName(ownerId: string): string {

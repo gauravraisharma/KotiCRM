@@ -62,13 +62,13 @@ namespace KotiCRM.Repository.Repository
         {
             try
             {
-                var invoice = await _context.Invoices.FindAsync(id);
+                var invoice = await _context.Invoices.FirstOrDefaultAsync(invoice => invoice.ID == id && !invoice.Isdelete);
                 if (invoice == null)
                 {
                     throw new Exception($"Invoice with ID {id} was not found.");
                 }
                 var invoiceItems = await _context.InvoiceItems
-                .Where(item => item.InvoiceID == id)
+                .Where(item => item.InvoiceID == id && !invoice.Isdelete)
                 .ToListAsync();
                 var invoiceCreationModels =  new InvoiceCreationModel
                 {
@@ -77,6 +77,7 @@ namespace KotiCRM.Repository.Repository
                 };
                 
                 return invoiceCreationModels;
+
             }
             catch (Exception ex)
             {
@@ -88,8 +89,8 @@ namespace KotiCRM.Repository.Repository
         {
             try
             {
-                var invoices =  await _context.Invoices.OrderByDescending(invoice=> invoice.DueDate).ToListAsync();
-                var invoiceItems = await _context.InvoiceItems.ToListAsync();
+                var invoices =  await _context.Invoices.OrderByDescending(invoice=> invoice.DueDate).Where(invoice => !invoice.Isdelete).ToListAsync();
+                var invoiceItems = await _context.InvoiceItems.Where(invoiceItem => !invoiceItem.IsDeleted).ToListAsync();
                 var invoiceCreationModels = invoices.Select(invoice => new InvoiceCreationModel
                 {
                     Invoice = invoice,
@@ -110,8 +111,14 @@ namespace KotiCRM.Repository.Repository
             try
             {
                 var invoice = await _context.Invoices.FindAsync(id);
-                if (invoice != null)
+                var invoiceItems = await _context.InvoiceItems.Where(invoiceItem => invoiceItem.InvoiceID == id).ToListAsync();
+
+                if (invoice != null && invoiceItems != null)
                 {
+                    foreach (var item in invoiceItems)
+                    {
+                        item.IsDeleted = true;
+                    }
                     invoice.Isdelete = true; 
                     await _context.SaveChangesAsync();
                     return new DbResponse()
