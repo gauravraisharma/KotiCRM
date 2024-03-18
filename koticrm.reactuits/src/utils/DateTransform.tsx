@@ -36,8 +36,8 @@
 
 
 import React, { useEffect, useState } from 'react';
+import moment from 'moment-timezone';
 
-import * as moment from 'moment';
 
 interface Props {
   date: Date;

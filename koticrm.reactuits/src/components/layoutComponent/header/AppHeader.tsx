@@ -59,7 +59,7 @@ const AppHeader = () => {
             </CNavLink>
           </CNavItem>
           
-          <WatchIcon />
+        
 
         </CHeaderNav>
         <CHeaderNav className="ms-3">

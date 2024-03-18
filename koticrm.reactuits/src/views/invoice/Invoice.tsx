@@ -164,7 +164,7 @@ const InvoiceComponent: React.FC<InvoiceProps> = ({
               <CCardHeader className="mb-3">
                 <div className="d-flex justify-content-between align-items-center">
                   <div>
-                    <h5 className="mb-0">Invoices</h5>
+                    <h5 className="mb-0"><strong>Invoices</strong></h5>
                   </div>
                   <div className="text-end">
                     <CButton

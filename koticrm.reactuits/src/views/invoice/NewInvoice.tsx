@@ -501,6 +501,7 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
                               ? "border-danger"
                               : ""
                           }`}
+                          style={{ height: "50px" }}
                           onChange={(e: any) => {
                             handleChangeData(e);
                             handleChange(e);
@@ -527,6 +528,7 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
                           className="form-control"
                           value={invoiceDate}
                           disabled
+                          style={{ height: "50px" }}
                         />
                         <ErrorMessage
                           name="invoiceDate"
@@ -550,6 +552,7 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
                               <DatePicker
                                 name="dueDate"
                                 selected={invoice.dueDate || null}
+                                // style={{ height: "50px" }}
                                 onChange={(date: any) => {
                                   handleChangeData({
                                     target: { name: "dueDate", value: date },
@@ -720,6 +723,7 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
                           type="text"
                           name="dealName"
                           className="form-control"
+                          style={{ height: "50px" }}
                           onChange={(e: any) => {
                             handleChangeData(e);
                             handleChange(e);
@@ -749,6 +753,7 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
                               ? "border-danger"
                               : ""
                           }`}
+                          style={{ height: "50px" }}
                           onChange={(e: any) => {
                             handleChangeData(e);
                             handleChange(e);
@@ -778,6 +783,7 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
                               ? "border-danger"
                               : ""
                           }`}
+                          style={{ height: "50px" }}
                           onChange={(e: any) => {
                             handleChangeData(e);
                             handleChange(e);
@@ -836,6 +842,7 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
                               ? "border-danger"
                               : ""
                           }`}
+                          style={{ height: "50px" }}
                           onChange={(e: any) => {
                             handleChangeData(e);
                             handleChange(e);
@@ -866,6 +873,7 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
                               ? "border-danger"
                               : ""
                           }`}
+                          style={{ height: "50px" }}
                           onChange={(e: any) => {
                             handleChangeData(e);
                             handleChange(e);
@@ -896,6 +904,7 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
                               ? "border-danger"
                               : ""
                           }`}
+                          style={{ height: "50px" }}
                           onChange={(e: any) => {
                             handleChangeData(e);
                             handleChange(e);
@@ -927,6 +936,7 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
                               ? "border-danger"
                               : ""
                           }`}
+                          style={{ height: "50px" }}
                           onChange={(e: any) => {
                             handleChangeData(e);
                             handleChange(e);
@@ -959,6 +969,7 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
                               ? "border-danger"
                               : ""
                           }`}
+                          style={{ height: "50px" }}
                           onChange={(e: any) => {
                             handleChangeData(e);
                             handleChange(e);
@@ -995,6 +1006,7 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
                               ? "border-danger"
                               : ""
                           }`}
+                          style={{ height: "50px" }}
                           onChange={(e: any) => {
                             handleChangeData(e);
                             handleChange(e);
@@ -1029,6 +1041,7 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
                               ? "border-danger"
                               : ""
                           }`}
+                          style={{ height: "50px" }}
                           onChange={(e: any) => {
                             handleChangeData(e);
                             handleChange(e);
@@ -1063,6 +1076,7 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
                               ? "border-danger"
                               : ""
                           }`}
+                          style={{ height: "50px" }}
                           onChange={(e: any) => {
                             handleChangeData(e);
                             handleChange(e);
@@ -1098,6 +1112,7 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
                               ? "border-danger"
                               : ""
                           }`}
+                          style={{ height: "50px" }}
                           onChange={(e: any) => {
                             handleChangeData(e);
                             handleChange(e);
@@ -1133,6 +1148,7 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
                               ? "border-danger"
                               : ""
                           }`}
+                          style={{ height: "50px" }}
                           onChange={(e: any) => {
                             handleChangeData(e);
                             handleChange(e);
