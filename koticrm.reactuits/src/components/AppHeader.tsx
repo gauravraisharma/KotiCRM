@@ -22,7 +22,6 @@ import WatchIcon from '../utils/TimeDropdown';
 
 const AppHeader = () => {
   const dispatch = useDispatch()
-  const currentDate = new Date();
 
     const sidebarShow = useSelector((state: any) => state.reducer.sidebarToggle)
   return (

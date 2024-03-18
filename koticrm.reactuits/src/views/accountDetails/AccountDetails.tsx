@@ -12,7 +12,6 @@ import {
 
 } from "@coreui/react";
 
-import { MdOutlinePictureAsPdf } from "react-icons/md";
 import { useEffect, useState } from "react";
 import "../../css/style.css";
 

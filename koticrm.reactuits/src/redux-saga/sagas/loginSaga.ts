@@ -20,7 +20,7 @@ function* workerLoginRequest(action: any) {
     try {
         const userReposne: LoginResponse = yield call(loginUser, { payload: action });
         yield put(loginSuccess(userReposne));
-        const isLoggedIn = yield select((state: any) => { return state.reducer.loggedIn });
+        const isLoggedIn =  select((state: any) => { return state.reducer.loggedIn });
 
         if (isLoggedIn) {
             action.navigate('/dashboard')

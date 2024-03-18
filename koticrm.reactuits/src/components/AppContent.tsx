@@ -11,7 +11,7 @@ const AppContent = () => {
     <CContainer lg>
       <Suspense fallback={<CSpinner color="primary" />}>
         <Routes>
-          {routes.map((route, index) => {
+          {routes.map((route:any, index) => {
 
             return (<Route key={index} path={route.path} element={<PermissionAuth modulePermission={route.modulePermission} isAuth={route.isAuth} />}>
               <Route

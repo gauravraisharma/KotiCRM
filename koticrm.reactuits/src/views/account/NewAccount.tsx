@@ -1,5 +1,5 @@
 import React, { ChangeEvent, useState } from "react";
-import { Formik, Form, Field, ErrorMessage, useFormik } from "formik";
+import { Formik, Form, Field, ErrorMessage } from "formik";
 import { useDispatch } from "react-redux";
 import { createAccountRequest } from "../../redux-saga/action";
 import { useSelector } from "react-redux";
@@ -8,7 +8,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { CButton, CCard, CCardBody, CCardHeader } from "@coreui/react";
 import Countries from "../../constants/country-state/countries+states.json";
-import { Country, State } from "../../models/Country-State/CountryState";
+import { Country } from "../../models/Country-State/CountryState";
 import * as Yup from "yup";
 import "../../css/style.css";
 import Select from "react-select";
@@ -79,23 +79,23 @@ const MyForm: React.FC<MyFormProps> = ({
 
   const [selectedCountry, setSelectedCountry] = useState<string>("");
   //   const [selectedState, setSelectedState] = useState<string>("");
-  const [states, setStates] = useState<State[]>([]);
+  // const [states, setStates] = useState<State[]>([]);
 
   const handleCountryChange = (e: ChangeEvent<HTMLSelectElement>) => {
     const selectedCountry = e.target.value;
     setSelectedCountry(selectedCountry);
 
-    const selectedCountryObject = countries.find(
-      (country) => country.name === selectedCountry
-    );
+    // const selectedCountryObject = countries.find(
+    //   (country) => country.name === selectedCountry
+    // );
 
     console.log(selectedCountry);
 
-    if (selectedCountryObject) {
-      setStates(selectedCountryObject.states);
-    } else {
-      setStates([]);
-    }
+    // if (selectedCountryObject) {
+    //   setStates(selectedCountryObject.states);
+    // } else {
+    //   setStates([]);
+    // }
   };
 
   // const handleDropdownChange = (selectedOption: any) => {
@@ -174,7 +174,7 @@ const MyForm: React.FC<MyFormProps> = ({
   const accountStatus = useSelector(
     (state: any) => state.reducer.accountStatus
   );
-  const currency = useSelector((state: any) => state.reducer.currency);
+  // const currency = useSelector((state: any) => state.reducer.currency);
   console.log(accountStatus);
   const accountType = useSelector((state: any) => state.reducer.accountType);
   console.log(accountType);

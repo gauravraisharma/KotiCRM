@@ -1,7 +1,6 @@
-import React from 'react'
-import { CCard, CCardBody, CCardHeader, CRow } from '@coreui/react'
-import { freeSet } from '@coreui/icons'
-import { getIconsView } from '../brands/Brands.js'
+import { CCard, CCardBody, CCardHeader } from '@coreui/react'
+// import { freeSet } from '@coreui/icons'
+// import { getIconsView } from '../brands/Brands.js'
 import DocsCallout from '../../../components/DocsCallout.js'
 
 const CoreUIIcons = () => {
@@ -15,7 +14,7 @@ const CoreUIIcons = () => {
       <CCard className="mb-4">
         <CCardHeader>Free Icons</CCardHeader>
         <CCardBody>
-          <CRow className="text-center">{getIconsView(freeSet)}</CRow>
+          {/* <CRow className="text-center">{getIconsView(freeSet)}</CRow> */}
         </CCardBody>
       </CCard>
     </>

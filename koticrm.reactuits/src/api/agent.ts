@@ -6,7 +6,7 @@ import { Invoice, InvoiceCreationModel } from '../models/invoice/Invoice';
 import { Note } from '../models/notes/notes';
 import { UserLogin } from '../models/userAccount/login';
 import { Attachment, CreateAttachment } from '../models/attachment/Attachment';
-import { SharedModel, SharedOwnerModel, DbResponse, OrganizationBankModel } from '../models/commonModels/SharedModels';
+import { SharedModel, SharedOwnerModel, DbResponse, OrganizationBankModel, OrganizationModel } from '../models/commonModels/SharedModels';
 
 const responseBody = <T>(response: AxiosResponse<T>) => response.data;
 

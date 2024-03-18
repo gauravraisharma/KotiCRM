@@ -4,7 +4,6 @@ import './scss/style.scss'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import { appRoutes } from './routes';
-import { AuthProvider } from './utils/AuthProvider';
 import AuthenticatedRoute from './utils/AuthenticatedRoute';
 
 const loading = (
@@ -16,11 +15,10 @@ const loading = (
 function App() {
   return (
     <HashRouter>
-      <AuthProvider>
       <Suspense fallback={loading}>
                   <Routes>
 
-                      {appRoutes.map((route, index) => {
+                      {appRoutes.map((route:any, index) => {
                               return (<Route
                                   key={index} 
                                   path={route.path}
@@ -35,7 +33,6 @@ function App() {
           })}
         </Routes>
       </Suspense>
-      </AuthProvider>
     </HashRouter>
   );
 }
