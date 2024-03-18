@@ -9,7 +9,6 @@ import {
   CDropdown,
   CDropdownToggle,
   CDropdownItem,
-
 } from "@coreui/react";
 
 import { useEffect, useState } from "react";
@@ -25,34 +24,38 @@ import Attachments from "../../attachments/Attachments";
 import { getAccountByIdRequest } from "../../../redux-saga/modules/account/action";
 
 const AccountDetails = () => {
-
   const navigate = useNavigate();
-  const data = useParams()
+  const data = useParams();
   const dispatch = useDispatch();
-  const accountId = data.accountId?.split('=')[1];
+  const accountId = data.accountId?.split("=")[1];
 
   const [notesCount, setNotesCount] = useState();
   const [invoicesCount, setInvoicesCount] = useState();
 
   const account = useSelector((state: any) => state.accountReducer.account);
 
-  const accountOwner = useSelector((state: any) => state.accountReducer.accountOwner);
+  const accountOwner = useSelector(
+    (state: any) => state.accountReducer.accountOwner
+  );
   const industry = useSelector((state: any) => state.accountReducer.industry);
 
-  const industryName = account && industry
-    ? industry.find((industry: any) => industry.id === account.industryId)?.name
-    : null;
-  const ownerName = account && accountOwner
-    ? accountOwner?.find((owner: any) => owner.id == account.ownerId)?.label
-    : null
+  const industryName =
+    account && industry
+      ? industry.find((industry: any) => industry.id === account.industryId)
+          ?.name
+      : null;
+  const ownerName =
+    account && accountOwner
+      ? accountOwner?.find((owner: any) => owner.id == account.ownerId)?.label
+      : null;
 
   const getNotesCount = (noteCount: any) => {
-    setNotesCount(noteCount)
-  }
+    setNotesCount(noteCount);
+  };
 
   const getInvoiceCount = (invoiceCount: any) => {
-    setInvoicesCount(invoiceCount)
-  }
+    setInvoicesCount(invoiceCount);
+  };
 
   useEffect(() => {
     dispatch(getAccountByIdRequest(accountId));
@@ -123,7 +126,8 @@ const AccountDetails = () => {
                   aria-controls="notes"
                   aria-selected="false"
                 >
-                  Notes <strong>{ notesCount ==0 ? '' : `(${notesCount})`}</strong>
+                  Notes{" "}
+                  <strong>{notesCount == 0 ? "" : `(${notesCount})`}</strong>
                 </button>
               </li>
               <li className="nav-item" role="presentation">
@@ -151,7 +155,10 @@ const AccountDetails = () => {
                   aria-controls="invoices"
                   aria-selected="false"
                 >
-                  Invoices <strong>{ invoicesCount ==0 ? '' : `(${invoicesCount})`}</strong>
+                  Invoices{" "}
+                  <strong>
+                    {invoicesCount == 0 ? "" : `(${invoicesCount})`}
+                  </strong>
                 </button>
               </li>
             </ul>
@@ -162,8 +169,9 @@ const AccountDetails = () => {
                 role="tabpanel"
                 aria-labelledby="home-tab"
               >
-
-                <div className="headings">Account information</div>
+                <div className="headings">
+                  <h5>Account information</h5>
+                </div>
                 <ul className="account-list">
                   <CRow>
                     <CCol xs={3}>
@@ -218,8 +226,8 @@ const AccountDetails = () => {
                 aria-labelledby="contacts-tab"
               >
                 <Contacts
-                  // accountId={account?.id}
-                  // accountName={account?.accountName}
+                // accountId={account?.id}
+                // accountName={account?.accountName}
                 />
               </div>
 
@@ -231,28 +239,37 @@ const AccountDetails = () => {
               >
                 <CCol xs={12}>
                   <CCard className="mb-4">
-                    <CCardHeader>
-                      <CRow className="align-items-center">
-                        <CCol xs={6}>Notes</CCol>
-                        <CCol xs={6}>
-                          <div className="text-end">
-                            <CDropdown>
-                              <CDropdownToggle
-                                color="primary"
-                                variant="outline"
-                              >
-                                Recent Last
-                              </CDropdownToggle>
-                              <CDropdownMenu>
-                                <CDropdownItem href="#">Name</CDropdownItem>
-                                <CDropdownItem href="#">Owner</CDropdownItem>
-                                <CDropdownItem href="#">Phone</CDropdownItem>
-                                <CDropdownItem href="#">Country</CDropdownItem>
-                              </CDropdownMenu>
-                            </CDropdown>
-                          </div>
-                        </CCol>
-                      </CRow>
+                    <CCardHeader className="mb-3">
+                      <div className="d-flex justify-content-between align-items-center">
+                        <div>
+                          <h5 className="mb-0">Notes</h5>
+                        </div>
+
+                        <div className="text-end">
+                          <CButton
+                            component="input"
+                            type="button"
+                            color="primary"
+                            value="New"
+                            
+                            // onClick={onBackToListButtonClickHandler}
+                          />
+                        </div>
+
+                        {/* <div className="text-end">
+                          <CDropdown>
+                            <CDropdownToggle color="primary" variant="outline">
+                              Recent Last
+                            </CDropdownToggle>
+                            <CDropdownMenu>
+                              <CDropdownItem href="#">Name</CDropdownItem>
+                              <CDropdownItem href="#">Owner</CDropdownItem>
+                              <CDropdownItem href="#">Phone</CDropdownItem>
+                              <CDropdownItem href="#">Country</CDropdownItem>
+                            </CDropdownMenu>
+                          </CDropdown>
+                        </div> */}
+                      </div>
                     </CCardHeader>
                     <CCardBody>
                       <Notes
@@ -271,7 +288,7 @@ const AccountDetails = () => {
                 role="tabpanel"
                 aria-labelledby="attachments-tab"
               >
-                <Attachments/>
+                <Attachments />
               </div>
 
               <div
@@ -281,9 +298,11 @@ const AccountDetails = () => {
                 aria-labelledby="invoices-tab"
               >
                 <CCol xs={12}>
-
-                  <InvoiceComponent accountId={account?.id} ownerId={account?.ownerId} getInvoiceCount={getInvoiceCount} />
-
+                  <InvoiceComponent
+                    accountId={account?.id}
+                    ownerId={account?.ownerId}
+                    getInvoiceCount={getInvoiceCount}
+                  />
                 </CCol>
               </div>
             </div>

@@ -228,6 +228,9 @@ const EditPage: React.FC<EditModalProps> = ({
                         className="col-sm-4 col-form-label"
                       >
                         Account Owner
+                        <span style={{ color: "red", fontSize: "25px" }}>
+                          *
+                        </span>
                       </label>
                       <div className="col-sm-6">
                         <Field
@@ -262,6 +265,9 @@ const EditPage: React.FC<EditModalProps> = ({
                         className="col-sm-4 col-form-label"
                       >
                         Industry
+                        <span style={{ color: "red", fontSize: "25px" }}>
+                          *
+                        </span>
                       </label>
                       <div className="col-sm-6">
                         <Field
@@ -294,6 +300,9 @@ const EditPage: React.FC<EditModalProps> = ({
                     <div className="form-group row">
                       <label htmlFor="type" className="col-sm-4 col-form-label">
                         Type
+                        <span style={{ color: "red", fontSize: "25px" }}>
+                          *
+                        </span>
                       </label>
                       <div className="col-sm-6">
                         <Field
@@ -329,6 +338,9 @@ const EditPage: React.FC<EditModalProps> = ({
                         className="col-sm-4 col-form-label"
                       >
                         Status
+                        <span style={{ color: "red", fontSize: "25px" }}>
+                          *
+                        </span>
                       </label>
                       <div className="col-sm-6">
                         <Field
@@ -363,6 +375,9 @@ const EditPage: React.FC<EditModalProps> = ({
                         className="col-sm-4 col-form-label"
                       >
                         Account Name
+                        <span style={{ color: "red", fontSize: "25px" }}>
+                          *
+                        </span>
                       </label>
                       <div className="col-sm-6">
                         <Field
@@ -417,6 +432,9 @@ const EditPage: React.FC<EditModalProps> = ({
                         className="col-sm-4 col-form-label"
                       >
                         Phone
+                        <span style={{ color: "red", fontSize: "25px" }}>
+                          *
+                        </span>
                       </label>
                       <div className="col-sm-6">
                         <Field
@@ -468,6 +486,9 @@ const EditPage: React.FC<EditModalProps> = ({
                         className="col-sm-4 col-form-label"
                       >
                         Website
+                        <span style={{ color: "red", fontSize: "25px" }}>
+                          *
+                        </span>
                       </label>
                       <div className="col-sm-6">
                         <Field
@@ -599,6 +620,9 @@ const EditPage: React.FC<EditModalProps> = ({
                         className="col-sm-4 col-form-label"
                       >
                         Country
+                        <span style={{ color: "red", fontSize: "25px" }}>
+                          *
+                        </span>
                       </label>
                       <div className="col-sm-6">
                         <Field
