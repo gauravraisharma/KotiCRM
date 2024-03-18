@@ -1,6 +1,6 @@
 import { call, put } from "redux-saga/effects";
 import AttachmentService from "../../services/AttachmentService";
-import { Attachment, CreateAttachment } from "../../models/attachment/Attachment";
+import { Attachment } from "../../models/attachment/Attachment";
 import { CREATE_CONTACT_SUCCESS, GET_ATTACHMENTS_SUCCESS } from "../../constants/reduxConstants";
 import { DbResponse } from "../../models/commonModels/SharedModels";
 

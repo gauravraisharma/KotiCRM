@@ -1,5 +1,5 @@
 import { call, put } from "redux-saga/effects";
-import { GET_ORGANIZATION_FETCH, GET_ORGANIZATION_SUCCESS, UPDATE_ORGANIZATION_SUCCESS } from "../../constants/reduxConstants";
+import { GET_ORGANIZATION_SUCCESS, UPDATE_ORGANIZATION_SUCCESS } from "../../constants/reduxConstants";
 import { OrganizationBankModel, OrganizationModel } from "../../models/commonModels/SharedModels";
 import OrganizationService from "../../services/OrganizationService";
 

@@ -3,7 +3,6 @@ import { CreateAttachment, CreateAttachmentClass } from "../../models/attachment
 import { FormEvent, useEffect, useState } from "react";
 import { createAttachment } from "../../redux-saga/action";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
 
 // const owners = [
 //     { id: '1', firstName: 'John', lastName: 'Doe', email: 'john@example.com', logo: 'path_to_logo1' },
@@ -20,7 +19,6 @@ interface Props {
 
 const CreateNewAttachment = ({ isVisible, handleClose }: Props) => {
     const dispatch = useDispatch();
-    const navigate = useNavigate();
     const [newAttachment, setNewAttachment] = useState<CreateAttachment>(new CreateAttachmentClass());
     const [submitting, setSubmitting] = useState(false);
 

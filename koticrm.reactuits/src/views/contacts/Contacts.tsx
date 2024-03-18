@@ -11,7 +11,7 @@ import {
   CTableHeaderCell,
   CTableRow,
   CButton,
-  CLink,
+  
 } from "@coreui/react";
 import "../../css/style.css";
 import { useDispatch, useSelector } from "react-redux";
@@ -36,7 +36,7 @@ interface Props {
     accountName: string
 }
 
-const Contacts = ({accountId, accountName}:Props) => {
+const Contacts = ({}:Props) => {
   // const [contacts, setContacts] = useState([]);
   const dispatch = useDispatch();
   const fetchedContacts = useSelector((state: any) => state.reducer.contacts);

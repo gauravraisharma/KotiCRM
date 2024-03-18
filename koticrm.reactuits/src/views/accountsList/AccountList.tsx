@@ -15,11 +15,8 @@ import {
 } from '@coreui/react';
 import { useDispatch } from 'react-redux';
 import { MdEditSquare } from "react-icons/md";
-import { FaEdit } from 'react-icons/fa';
 import { AiFillEye } from "react-icons/ai";
-import { MdDelete, MdPictureAsPdf } from 'react-icons/md';
-import { AiOutlineDelete } from "react-icons/ai";
-import { LuView } from 'react-icons/lu';
+import { MdDelete } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 import NewAccount from '../account/NewAccount';
 import { Account } from '../../models/account/Account';

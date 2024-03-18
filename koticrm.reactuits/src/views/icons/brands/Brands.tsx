@@ -1,7 +1,6 @@
-import React from 'react'
-import { CCard, CCardBody, CCardHeader, CCol, CRow } from '@coreui/react'
+import { CCard, CCardBody, CCardHeader, CCol } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
-import { brandSet } from '@coreui/icons'
+// import { brandSet } from '@coreui/icons'
 import { DocsCallout } from '../../../components'
 
 interface IconSet {
@@ -31,7 +30,7 @@ const CoreUIIcons = () => {
       <CCard className="mb-4">
         <CCardHeader>Brand Icons</CCardHeader>
         <CCardBody>
-          <CRow className="text-center">{getIconsView(brandSet)}</CRow>
+          {/* <CRow className="text-center">{getIconsView(brandSet)}</CRow> */}
         </CCardBody>
       </CCard>
     </>

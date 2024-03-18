@@ -1,4 +1,4 @@
-import { CButton, CCard, CCardBody, CCardHeader, CCol, CDropdown, CDropdownItem, CDropdownMenu, CDropdownToggle, CRow, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow } from "@coreui/react";
+import { CButton, CCard, CCardBody, CCardHeader, CCol, CRow, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow } from "@coreui/react";
 import { useEffect, useState } from "react";
 import { BsFiletypeDocx, BsFiletypePdf } from "react-icons/bs";
 import { MdOutlinePictureAsPdf } from "react-icons/md";
@@ -13,7 +13,7 @@ interface Props {
     accountName: string
 }
 
-const Attachments = ({ accountId, accountName }: Props) => {
+const Attachments = ({}: Props) => {
     const dispatch = useDispatch();
     const fetchedAttachments = useSelector((state: any) => state.reducer.attachments);
     const [isModalVisible, setIsModalVisible] = useState(false);
@@ -78,7 +78,7 @@ const Attachments = ({ accountId, accountName }: Props) => {
                                 </CTableRow>
                             </CTableHead>
                             <CTableBody>
-                                {fetchedAttachments ? fetchedAttachments.map(attachment => (
+                                {fetchedAttachments ? fetchedAttachments.map((attachment :any)=> (
                                     <CTableRow>
                                         <CTableHeaderCell>
                                             {attachment.fileExtension === ".pdf" ?

@@ -36,8 +36,7 @@ import {
 } from "../constants/reduxConstants";
 import { Contact } from "../models/contact/Contact";
 import { Invoice, InvoiceCreationModel } from "../models/invoice/Invoice";
-import { CreateAttachment } from "../models/attachment/Attachment";
-import { OrganizationModel } from "../models/commonModels/SharedModels";
+
 
 // Login
 export const loginRequest = (userLogin: UserLogin, navigate: any, toast: any) => ({
