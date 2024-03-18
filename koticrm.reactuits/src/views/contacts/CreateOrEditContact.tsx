@@ -42,7 +42,7 @@ const CreateOrEditContact = () => {
   const [contact, setContact] = useState<Contact>(new ContactClass());
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const fetchedContact = useSelector((state: any) => state.reducer.contact);
+  const fetchedContact = useSelector((state: any) => state.contactReducer.contact);
   console.log(contact);
 
   // Country-State
@@ -74,30 +74,26 @@ const CreateOrEditContact = () => {
   const validationSchema = Yup.object().shape({
     ownerId: Yup.number().required('Owner ID is required'),
     firstName: Yup.string().required('First Name is required'),
-    lastName: Yup.string().required('Last Name is required'),
-    accountID: Yup.number().required('Account ID is required'),
-    email: Yup.string().email('Invalid email').required('Email is required'),
-    phone: Yup.string().required('phone is required'),
-    mobile: Yup.string().required('mobile is required'),
-    department: Yup.string().required('Email is required'),
-    homePhone: Yup.string().required('HomePhone is required'),
-    linkedinURL: Yup.string().required('linkedinURL is required'),
-    secondaryEmail: Yup.string().required('SecondaryEmail is required'),
-    city: Yup.string().required('City is required'),
-    // zip: Yup.string().required('Zip is required'),
-    description: Yup.string().required('Description is required'),
-    otherPhone: Yup.string().required('OtherPhone is required'),
-    title: Yup.string().required('Title is required'),
-    // dateOfBirth: Yup.string().required('Date of Birth is required'),
-    skypeId: Yup.string().required('SkypeId is required'),
-    twitterUrl: Yup.string().required('Twitter Url is required'),
-    mailingStreet: Yup.string().required('Mailing Street Url is required'),
-    country: Yup.string().required('Country Url is required'),
-    state: Yup.string().required('State Url is required'),
-
-
-
-
+    // lastName: Yup.string().required('Last Name is required'),
+    // accountID: Yup.number().required('Account ID is required'),
+    // email: Yup.string().email('Invalid email').required('Email is required'),
+    // phone: Yup.string().required('phone is required'),
+    // mobile: Yup.string().required('mobile is required'),
+    // department: Yup.string().required('Email is required'),
+    // homePhone: Yup.string().required('HomePhone is required'),
+    // linkedinURL: Yup.string().required('linkedinURL is required'),
+    // secondaryEmail: Yup.string().required('SecondaryEmail is required'),
+    // city: Yup.string().required('City is required'),
+    // // zip: Yup.string().required('Zip is required'),
+    // description: Yup.string().required('Description is required'),
+    // otherPhone: Yup.string().required('OtherPhone is required'),
+    // title: Yup.string().required('Title is required'),
+    // // dateOfBirth: Yup.string().required('Date of Birth is required'),
+    // skypeId: Yup.string().required('SkypeId is required'),
+    // twitterUrl: Yup.string().required('Twitter Url is required'),
+    // mailingStreet: Yup.string().required('Mailing Street Url is required'),
+    // country: Yup.string().required('Country Url is required'),
+    // state: Yup.string().required('State Url is required'),
   });
 
   const handleFormSubmit = async (contact: Contact, { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }) => {

@@ -124,6 +124,40 @@ namespace KotiCRM.Repository.Data
                     .HasMaxLength(50)
                     .IsUnicode(false);
             });
+
+            modelBuilder.Entity<Contact>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+
+                entity.Property(e => e.Id).HasColumnName("ContactId");
+                entity.Property(e => e.OwnerId).HasMaxLength(200).IsRequired();
+                entity.Property(e => e.FirstName).HasMaxLength(200).IsRequired();
+                entity.Property(e => e.LastName).HasMaxLength(200);
+                entity.Property(e => e.AccountID).IsRequired();
+                entity.Property(e => e.Email).HasMaxLength(100);
+                entity.Property(e => e.Phone).HasMaxLength(20);
+                entity.Property(e => e.OtherPhone).HasMaxLength(20);
+                entity.Property(e => e.Mobile).HasMaxLength(20);
+                entity.Property(e => e.Title).HasMaxLength(200);
+                entity.Property(e => e.Department).HasMaxLength(200);
+                entity.Property(e => e.DateOfBirth).HasColumnType("date");
+                entity.Property(e => e.HomePhone).HasMaxLength(20);
+                entity.Property(e => e.SkypeID).HasMaxLength(200).IsRequired();
+                entity.Property(e => e.LinkedinURL).HasMaxLength(200);
+                entity.Property(e => e.TwitterURL).HasMaxLength(200);
+                entity.Property(e => e.SecondaryEmail).HasMaxLength(100);
+                entity.Property(e => e.MailingStreet).HasMaxLength(200);
+                entity.Property(e => e.City).HasMaxLength(100);
+                entity.Property(e => e.State).HasMaxLength(100);
+                entity.Property(e => e.Zip).HasMaxLength(100);
+                entity.Property(e => e.Country).HasMaxLength(100);
+                entity.Property(e => e.Description).HasMaxLength(450);
+
+                entity.HasOne(e => e.Account)
+                    .WithMany()
+                    .HasForeignKey(e => e.AccountID);
+            });
+
             modelBuilder.Entity<Department>(entity =>
             {
                 entity.HasKey(e => e.DepartmentId).HasName("PK_Table_1");

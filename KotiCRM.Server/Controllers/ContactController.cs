@@ -1,4 +1,5 @@
-﻿using KotiCRM.Repository.Models;
+﻿using KotiCRM.Repository.DTOs.Contact;
+using KotiCRM.Repository.Models;
 using KotiCRM.Services.IServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -14,34 +15,34 @@ namespace KotiCRM.Server.Controllers
 
         public ContactController(IContactService contactService)
         {
-             _contactService =  contactService;
+            _contactService = contactService;
         }
 
         [HttpGet]
         [Route("GetContactList")]
-        public async Task<IEnumerable<Contact>> GetContactList()
+        public async Task<IEnumerable<ContactDTO>> GetContactList()
         {
             return await _contactService.GetContactList();
         }
 
         [HttpGet("GetContactDetails/{id}")]
-        public async Task<ActionResult<Contact>> GetContactDetails(int id)
+        public async Task<ActionResult<ContactDTO>> GetContactDetails(int id)
         {
             return Ok(await _contactService.GetContactDetails(id));
         }
 
         [HttpPost]
         [Route("CreateContact")]
-        public async Task<ActionResult<Contact>> CreateContact(Contact contact)
+        public async Task<ActionResult<ContactDTO>> CreateContact(ContactDTO contactDTO)
         {
-            return Ok(await _contactService.CreateContact(contact));
+            return Ok(await _contactService.CreateContact(contactDTO));
         }
 
-        [HttpPut("UpdateContact/{id}")]
+        [HttpPut("UpdateContact")]
 
-        public async Task<IActionResult> UpdateContact(int id, Contact contact)
+        public async Task<ActionResult<ContactDTO>> UpdateContact(ContactDTO contactDTO)
         {
-            return Ok(await _contactService.UpdateContact(id, contact));
+            return Ok(await _contactService.UpdateContact(contactDTO));
         }
 
 

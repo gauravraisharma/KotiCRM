@@ -14,7 +14,7 @@ const Attachments = () => {
     const dispatch = useDispatch();
     const fetchedAttachments = useSelector((state: any) => state.attachmentReducer.attachments);
     const [isModalVisible, setIsModalVisible] = useState(false);
-    const accountOwner = useSelector((state: any) => state.reducer.accountOwner);
+    const accountOwner = useSelector((state: any) => state.accountReducer.accountOwner);
 
     // if (accountId) {
     //     const filteredAttachments = fetchedAttachments.filter(attachment => attachment.accountID === accountId);
