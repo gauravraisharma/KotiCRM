@@ -57,6 +57,13 @@ const AccountDetails = () => {
     setInvoicesCount(invoiceCount);
   };
 
+  // const handleNoteSave = (name: string) => {
+    // Filter notes based on the name parameter
+    // const filteredNotes = notes.filter((note: Note) => note.name === name);
+  
+    // Handle filteredNotes as needed
+  // };
+
   useEffect(() => {
     dispatch(getAccountByIdRequest(accountId));
   }, [dispatch]);
@@ -245,16 +252,6 @@ const AccountDetails = () => {
                           <h5 className="mb-0">Notes</h5>
                         </div>
 
-                        <div className="text-end">
-                          <CButton
-                            component="input"
-                            type="button"
-                            color="primary"
-                            value="New"
-                            
-                            // onClick={onBackToListButtonClickHandler}
-                          />
-                        </div>
 
                         {/* <div className="text-end">
                           <CDropdown>
@@ -262,14 +259,35 @@ const AccountDetails = () => {
                               Recent Last
                             </CDropdownToggle>
                             <CDropdownMenu>
-                              <CDropdownItem href="#">Name</CDropdownItem>
-                              <CDropdownItem href="#">Owner</CDropdownItem>
-                              <CDropdownItem href="#">Phone</CDropdownItem>
-                              <CDropdownItem href="#">Country</CDropdownItem>
+
+                            <CDropdownItem
+                              href="#"
+                              onClick={() => handleNoteSave("Name")}
+                            >
+                              Name
+                            </CDropdownItem>
+                            <CDropdownItem
+                              href="#"
+                              onClick={() => handleNoteSave("Owner")}
+                            >
+                              Owner
+                            </CDropdownItem>
+                            <CDropdownItem
+                              href="#"
+                              onClick={() => handleNoteSave("Phone")}
+                            >
+                              Phone
+                            </CDropdownItem>
+                            <CDropdownItem
+                              href="#"
+                              onClick={() => handleNoteSave("Country")}
+                            >
+                              Country
+                            </CDropdownItem>
                             </CDropdownMenu>
                           </CDropdown>
-                        </div> */}
-                      </div>
+                        </div>*/}
+                      </div> 
                     </CCardHeader>
                     <CCardBody>
                       <Notes
