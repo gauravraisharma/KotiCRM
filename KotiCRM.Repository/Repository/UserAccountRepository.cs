@@ -329,6 +329,7 @@ namespace KotiCRM.Repository.Repository
 
                     var timeZone = (from organization in _context.Organizations
                                      join users in _context.Users on organization.Id equals users.OrganizationId
+                                    where users.Id==user.Id
                                      select organization.TimeZone).FirstOrDefault();
 
                     if (timeZone == null)

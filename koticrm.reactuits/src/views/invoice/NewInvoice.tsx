@@ -6,12 +6,13 @@ import { useSelector } from "react-redux";
 import * as Yup from "yup";
 import { Invoice, InvoiceCreationModel, InvoiceItem } from "../../models/invoice/Invoice";
 import { useDispatch } from "react-redux";
-import { createInvoiceRequest, getOrganization } from "../../redux-saga/action";
 
 import Select from 'react-select';
 import DatePicker from "react-datepicker"
 
 import 'react-datepicker/dist/react-datepicker.css';
+import { getOrganization } from "../../redux-saga/modules/shared/action";
+import { createInvoiceRequest } from "../../redux-saga/modules/invoice/action";
 
 
 const initialValues = {
@@ -52,12 +53,12 @@ const NewInvoice: React.FC<newInvoiceProps> = ({ closeModal, onBackToListButtonC
 	const dispatch = useDispatch()
 
 
-	const contacts = useSelector((state: any) => state.reducer.contacts)
-	const invoiceStatus = useSelector((state: any) => state.reducer.invoiceStatus);
-	const invoiceOwner = useSelector((state: any) => state.reducer.invoiceOwner);
-	const accountOwner = useSelector((state: any) => state.reducer.accountOwner);
-	const userId = useSelector((state: any) => state.reducer.userId)
-	const accountNames = useSelector((state: any) => state.reducer.accounts)
+	const contacts = useSelector((state: any) => state.contactReducer.contacts)
+	const invoiceStatus = useSelector((state: any) => state.invoiceReducer.invoiceStatus);
+	const invoiceOwner = useSelector((state: any) => state.invoiceReducer.invoiceOwner);
+	const accountOwner = useSelector((state: any) => state.accountReducer.accountOwner);
+	const userId = useSelector((state: any) => state.authReducer.userId)
+	const accountNames = useSelector((state: any) => state.accountReducer.accounts)
 
 	const currentDate: Date = new Date();
 	const formattedDateTime: string = currentDate.toISOString().slice(0, -1);
@@ -89,7 +90,7 @@ const NewInvoice: React.FC<newInvoiceProps> = ({ closeModal, onBackToListButtonC
     }));
   };
 
-	const organization = useSelector((state: any) => state.reducer.organization)
+	const organization = useSelector((state: any) => state.sharedReducer.organization)
 	var orgDetails;
 	if (organization) {
 		const activeOrg = organization.filter((org: any) => org.organizationResponse?.isActive === true);

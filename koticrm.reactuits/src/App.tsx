@@ -16,11 +16,11 @@ const loading = (
 function App() {
   return (
     <HashRouter>
-      <AuthProvider>
+      {/* <AuthProvider> */}
       <Suspense fallback={loading}>
                   <Routes>
 
-                      {appRoutes.map((route, index) => {
+                      {appRoutes.map((route:any, index) => {
                               return (<Route
                                   key={index} 
                                   path={route.path}
@@ -35,7 +35,7 @@ function App() {
           })}
         </Routes>
       </Suspense>
-      </AuthProvider>
+      {/* </AuthProvider> */}
     </HashRouter>
   );
 }

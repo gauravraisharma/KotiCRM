@@ -24,8 +24,8 @@ import {
   cilPeople,
 } from '@coreui/icons'
 
-import WidgetsBrand from '../widgets/WidgetsBrand'
-import WidgetsDropdown from '../widgets/WidgetsDropdown'
+import WidgetsBrand from '../../components/widgets/WidgetsBrand'
+import WidgetsDropdown from '../../components/widgets/WidgetsDropdown'
 import {
   progressExample,
   progressGroupExample1,

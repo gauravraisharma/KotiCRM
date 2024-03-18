@@ -11,8 +11,8 @@ const PermissionAuth: React.FC<PermissionAuthProps> = ({ modulePermission, isAut
 
     //user should be logged in and have authorization 
     if (isAuth) {
-        const auth = useSelector((state: any) => state.reducer.loggedIn);
-        const Permissions = useSelector((state: any) => state.reducer.modulePermission);
+        const auth = useSelector((state: any) => state.authReducer.loggedIn);
+        const Permissions = useSelector((state: any) => state.authReducer.modulePermission);
         let IsModulePermission = false;
         if (Permissions == null || Permissions == undefined) {
             IsModulePermission = false;

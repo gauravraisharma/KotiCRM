@@ -2,10 +2,12 @@ import { useSelector } from "react-redux"
 import './invoiceTemplate.css'
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { getAccountByIdRequest, getInvoiceByIdRequest, getOrganization } from "../redux-saga/action";
 import { CButton, CCard, CCardHeader } from "@coreui/react";
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
+import { getAccountByIdRequest } from "../redux-saga/modules/account/action";
+import { getInvoiceByIdRequest } from "../redux-saga/modules/invoice/action";
+import { getOrganization } from "../redux-saga/modules/shared/action";
 
 
 interface InvoicePdfTemplateProps {
@@ -29,10 +31,10 @@ const InvoiceTemplate: React.FC<InvoicePdfTemplateProps> = ({
 		return formattedDate;
 	}
 
-	const invoiceDetails = useSelector((state: any) => state.reducer.invoice)
-	const accountDetails = useSelector((state: any) => state.reducer.account)
+	const invoiceDetails = useSelector((state: any) => state.invoiceReducer.invoice)
+	const accountDetails = useSelector((state: any) => state.accountReducer.account)
 	const totalAmount = invoiceDetails?.invoiceItems.reduce((total: any, item: any) => total + item.total, 0);
-	const organization = useSelector((state: any) => state.reducer.organization)
+	const organization = useSelector((state: any) => state.sharedReducer.organization)
 
 	var orgName;
 	var bankDetails;

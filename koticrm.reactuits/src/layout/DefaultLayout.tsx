@@ -1,4 +1,4 @@
-import { AppSidebar, AppFooter, AppHeader, AppContent } from '../components/index'
+import { AppSidebar, AppHeader, AppContent } from '../components/index'
 
 const DefaultLayout = () => {
 

@@ -11,16 +11,15 @@ import {
   CTableHeaderCell,
   CTableRow,
   CButton,
-  CLink,
 } from "@coreui/react";
 import "../../css/style.css";
 import { useDispatch, useSelector } from "react-redux";
 import { MdEditSquare } from "react-icons/md";
-import { getContacts } from "../../redux-saga/action";
 import { useEffect } from "react";
 import { Contact } from "../../models/contact/Contact";
 import { AiFillEye } from "react-icons/ai";
 import { Link } from "react-router-dom";
+import { getContacts } from "../../redux-saga/modules/contact/action";
 
 const tableHeader = [
   "Contact Name",
@@ -31,15 +30,11 @@ const tableHeader = [
   "Actions",
 ];
 
-interface Props {
-    accountId: string,
-    accountName: string
-}
 
-const Contacts = ({accountId, accountName}:Props) => {
+const Contacts = () => {
   // const [contacts, setContacts] = useState([]);
   const dispatch = useDispatch();
-  const fetchedContacts = useSelector((state: any) => state.reducer.contacts);
+  const fetchedContacts = useSelector((state: any) => state.contactReducer.contacts);
 
   useEffect(() => {
     dispatch(getContacts());

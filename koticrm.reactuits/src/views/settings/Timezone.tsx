@@ -8,7 +8,6 @@ import {
     CButton,
   } from "@coreui/react";
 import { OrganizationModel } from "../../models/commonModels/SharedModels";
-import { getOrganization, updateOrganization } from "../../redux-saga/action";
 import TimezoneSelect from "react-timezone-select";
 import "../../css/style.css";
 
@@ -16,6 +15,7 @@ import "../../css/style.css";
 import { useDispatch } from "react-redux";
 import { useSelector } from 'react-redux';
 import DateTransformComponent from '../../utils/DateTransform';
+import { getOrganization, updateTimeZone } from '../../redux-saga/modules/shared/action';
 
 const Timezone: React.FC = () => {
   const dispatch = useDispatch();
@@ -38,7 +38,7 @@ if (match && match.length > 1) {
   };
 
 }
-const organization = useSelector((state: any) => state.reducer.organization);
+const organization = useSelector((state: any) => state.sharedReducer.organization);
 console.log(organization)
 // var orgDetails:any;
 var orgDetails: OrganizationModel | undefined;
@@ -66,7 +66,7 @@ billingState:orgDetails.billingState,
 billingCode:orgDetails.billingCode,
 billingCountry:orgDetails.billingCountry
 };
-dispatch(updateOrganization(orgDetails.id, organizationDetail))
+dispatch(updateTimeZone(orgDetails.id, organizationDetail))
 
 }else{
   console.error("orgDetails is undefined");

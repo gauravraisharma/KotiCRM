@@ -5,10 +5,10 @@ import { Route } from './models/commonModels/CommonModels';
 // Containers
 const DefaultLayout = lazy(() => import('./layout/DefaultLayout'))
 // Pages
-const Login = lazy(() => import('./views/pages/login/Login'))
-const Register = lazy(() => import('./views/pages/register/Register'))
-const Page404 = lazy(() => import('./views/pages/page404/Page404'))
-const Page500 = lazy(() => import('./views/pages/page500/Page500'))
+const Login = lazy(() => import('./views/userAuthentication/login/Login'))
+const Register = lazy(() => import('./views/userAuthentication/register/Register'))
+const Page404 = lazy(() => import('./views/userAuthentication/page404/Page404'))
+const Page500 = lazy(() => import('./views/userAuthentication/page500/Page500'))
 
 
 //settings
@@ -16,12 +16,12 @@ const Page500 = lazy(() => import('./views/pages/page500/Page500'))
 const Settings = lazy(() => import('./views/settings/Settings'))
 
 const Dashboard = lazy(() => import('./views/dashboard/Dashboard'))
-const Colors = lazy(() => import('./views/theme/colors/Colors'))
-const Typography = lazy(() => import('./views/theme/typography/Typography'))
+const Colors = lazy(() => import('./theme/colors/Colors'))
+const Typography = lazy(() => import('./theme/typography/Typography'))
 // Account routes
-const AccountList = lazy(() => import('./views/accountsList/AccountList'))
-const AccountDetails = lazy(() => import('./views/accountDetails/AccountDetails'))
-const NewAccount = lazy(() => import('./views/account/NewAccount'))
+const AccountList = lazy(() => import('./views/account/accountsList/AccountList'))
+const AccountDetails = lazy(() => import('./views/account/accountDetails/AccountDetails'))
+const NewAccount = lazy(() => import('./views/account/createAccount/NewAccount'))
 // Contact routes
 const Contacts = lazy(() => import('./views/contacts/Contacts'))
 const contactDetails = lazy(() => import('./views/contacts/ContactDetails'))
@@ -33,50 +33,50 @@ const CreateInvoice = lazy(() => import('./views/invoice/NewInvoice'))
 
 
 // Base
-const Accordion = lazy(() => import('./views/base/accordion/Accordion'))
-const Breadcrumbs = lazy(() => import('./views/base/breadcrumbs/Breadcrumbs'))
-const Cards = lazy(() => import('./views/base/cards/Cards'))
-const Carousels = lazy(() => import('./views/base/carousels/Carousels'))
-const Collapses = lazy(() => import('./views/base/collapses/Collapses'))
-const ListGroups = lazy(() => import('./views/base/list-groups/ListGroups'))
-const Navs = lazy(() => import('./views/base/navs/Navs'))
-const Paginations = lazy(() => import('./views/base/paginations/Paginations'))
-const Placeholders = lazy(() => import('./views/base/placeholders/Placeholders'))
-const Popovers = lazy(() => import('./views/base/popovers/Popovers'))
-const Progress = lazy(() => import('./views/base/progress/Progress'))
-const Spinners = lazy(() => import('./views/base/spinners/Spinners'))
-const Tables = lazy(() => import('./views/base/tables/Tables'))
-const Tooltips = lazy(() => import('./views/base/tooltips/Tooltips'))
+const Accordion = lazy(() => import('./components/base/accordion/Accordion'))
+const Breadcrumbs = lazy(() => import('./components/base/breadcrumbs/Breadcrumbs'))
+const Cards = lazy(() => import('./components/base/cards/Cards'))
+const Carousels = lazy(() => import('./components/base/carousels/Carousels'))
+const Collapses = lazy(() => import('./components/base/collapses/Collapses'))
+const ListGroups = lazy(() => import('./components/base/list-groups/ListGroups'))
+const Navs = lazy(() => import('./components/base/navs/Navs'))
+const Paginations = lazy(() => import('./components/base/paginations/Paginations'))
+const Placeholders = lazy(() => import('./components/base/placeholders/Placeholders'))
+const Popovers = lazy(() => import('./components/base/popovers/Popovers'))
+const Progress = lazy(() => import('./components/base/progress/Progress'))
+const Spinners = lazy(() => import('./components/base/spinners/Spinners'))
+const Tables = lazy(() => import('./components/base/tables/Tables'))
+const Tooltips = lazy(() => import('./components/base/tooltips/Tooltips'))
 
 // Buttons
-const Buttons = lazy(() => import('./views/buttons/buttons/Buttons'))
-const ButtonGroups = lazy(() => import('./views/buttons/button-groups/ButtonGroups'))
-const Dropdowns = lazy(() => import('./views/buttons/dropdowns/Dropdowns'))
+const Buttons = lazy(() => import('./components/buttons/buttons/Buttons'))
+const ButtonGroups = lazy(() => import('./components/buttons/button-groups/ButtonGroups'))
+const Dropdowns = lazy(() => import('./components/buttons/dropdowns/Dropdowns'))
 
 //Forms
-const ChecksRadios = lazy(() => import('./views/forms/checks-radios/ChecksRadios'))
-const FloatingLabels = lazy(() => import('./views/forms/floating-labels/FloatingLabels'))
-const FormControl = lazy(() => import('./views/forms/form-control/FormControl'))
-const InputGroup = lazy(() => import('./views/forms/input-group/InputGroup'))
-const Layout = lazy(() => import('./views/forms/layout/Layout'))
-const Range = lazy(() => import('./views/forms/range/Range'))
-const Select = lazy(() => import('./views/forms/select/Select'))
-const Validation = lazy(() => import('./views/forms/validation/Validation'))
+const ChecksRadios = lazy(() => import('./components/forms/checks-radios/ChecksRadios'))
+const FloatingLabels = lazy(() => import('./components/forms/floating-labels/FloatingLabels'))
+const FormControl = lazy(() => import('./components/forms/form-control/FormControl'))
+const InputGroup = lazy(() => import('./components/forms/input-group/InputGroup'))
+const Layout = lazy(() => import('./components/forms/layout/Layout'))
+const Range = lazy(() => import('./components/forms/range/Range'))
+const Select = lazy(() => import('./components/forms/select/Select'))
+const Validation = lazy(() => import('./components/forms/validation/Validation'))
 
-const Charts = lazy(() => import('./views/charts/Charts'))
+const Charts = lazy(() => import('./components/charts/Charts'))
 
 // Icons
-const CoreUIIcons = lazy(() => import('./views/icons/coreui-icons/CoreUIIcons'))
-const Flags = lazy(() => import('./views/icons/flags/Flags'))
-const Brands = lazy(() => import('./views/icons/brands/Brands'))
+// const CoreUIIcons = lazy(() => import('./components/icons/coreui-icons/CoreUIIcons'))
+// const Flags = lazy(() => import('./components/icons/flags/Flags'))
+// const Brands = lazy(() => import('./components/icons/brands/Brands'))
 
 // Notifications
-const Alerts = lazy(() => import('./views/notifications/alerts/Alerts'))
-const Badges = lazy(() => import('./views/notifications/badges/Badges'))
-const Modals = lazy(() => import('./views/notifications/modals/Modals'))
-const Toasts = lazy(() => import('./views/notifications/toasts/Toasts'))
+const Alerts = lazy(() => import('./components/notifications/alerts/Alerts'))
+const Badges = lazy(() => import('./components/notifications/badges/Badges'))
+const Modals = lazy(() => import('./components/notifications/modals/Modals'))
+const Toasts = lazy(() => import('./components/notifications/toasts/Toasts'))
 
-const Widgets = lazy(() => import('./views/widgets/Widgets'))
+const Widgets = lazy(() => import('./components/widgets/Widgets'))
 
 export const appRoutes: Route[] = [
     // App routing
@@ -122,10 +122,10 @@ const routes: Route[] = [
     { path: '/forms/floating-labels', name: 'Floating Labels', element: FloatingLabels, isAuth: false },
     { path: '/forms/layout', name: 'Layout', element: Layout, isAuth: false },
     { path: '/forms/validation', name: 'Validation', element: Validation, isAuth: false },
-    { path: '/icons', name: 'Icons', element: CoreUIIcons, isAuth: false },
-    { path: '/icons/coreui-icons', name: 'CoreUI Icons', element: CoreUIIcons, isAuth: false },
-    { path: '/icons/flags', name: 'Flags', element: Flags, isAuth: false },
-    { path: '/icons/brands', name: 'Brands', element: Brands, isAuth: false },
+    // { path: '/icons', name: 'Icons', element: CoreUIIcons, isAuth: false },
+    // { path: '/icons/coreui-icons', name: 'CoreUI Icons', element: CoreUIIcons, isAuth: false },
+    // { path: '/icons/flags', name: 'Flags', element: Flags, isAuth: false },
+    // { path: '/icons/brands', name: 'Brands', element: Brands, isAuth: false },
     { path: '/notifications', name: 'Notifications', element: Alerts, isAuth: false },
     { path: '/notifications/alerts', name: 'Alerts', element: Alerts, isAuth: false },
     { path: '/notifications/badges', name: 'Badges', element: Badges, isAuth: false },

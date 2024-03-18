@@ -1,21 +1,18 @@
-import { CButton, CCard, CCardBody, CCardHeader, CCol, CDropdown, CDropdownItem, CDropdownMenu, CDropdownToggle, CRow, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow } from "@coreui/react";
+import { CButton, CCard, CCardBody, CCardHeader, CCol,CRow, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow } from "@coreui/react";
 import { useEffect, useState } from "react";
 import { BsFiletypeDocx, BsFiletypePdf } from "react-icons/bs";
 import { MdOutlinePictureAsPdf } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
-import { getAttachments } from "../../redux-saga/action";
 import CreateNewAttachment from "./CreateNewAttachment";
 import { getFileSizeAndLabel } from "../../utils/Shared/FileSizeAndLable";
 import { getDateTime } from "../../utils/Shared/FormatDate";
+import { getAttachments } from "../../redux-saga/modules/attachment/action";
 
-interface Props {
-    accountId: string,
-    accountName: string
-}
 
-const Attachments = ({ accountId, accountName }: Props) => {
+
+const Attachments = () => {
     const dispatch = useDispatch();
-    const fetchedAttachments = useSelector((state: any) => state.reducer.attachments);
+    const fetchedAttachments = useSelector((state: any) => state.attachmentReducer.attachments);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const accountOwner = useSelector((state: any) => state.reducer.accountOwner);
 
@@ -78,7 +75,7 @@ const Attachments = ({ accountId, accountName }: Props) => {
                                 </CTableRow>
                             </CTableHead>
                             <CTableBody>
-                                {fetchedAttachments ? fetchedAttachments.map(attachment => (
+                                {fetchedAttachments ? fetchedAttachments.map((attachment:any) => (
                                     <CTableRow>
                                         <CTableHeaderCell>
                                             {attachment.fileExtension === ".pdf" ?

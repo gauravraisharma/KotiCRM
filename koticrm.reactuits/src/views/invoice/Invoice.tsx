@@ -2,14 +2,16 @@ import { CButton, CCard, CCardBody, CCardHeader, CCol, CRow, CTable, CTableBody,
 import { useEffect, useState } from 'react'
 import NewInvoice from './NewInvoice'
 import { useDispatch } from 'react-redux';
-import { getAccountOwner, getAccounts, getInvoice, getInvoiceOwner, getInvoiceStatus, getNotes } from '../../redux-saga/action';
 import { useSelector } from 'react-redux';
 
 import { MdDelete, MdPreview } from 'react-icons/md';
 import InvoiceTemplate from '../../pdf-template/InvoiceTemplate';
 import { ToastContainer } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
-import DeleteConfirmationModal from '../accountsList/DeleteConfirmation';
+import DeleteConfirmationModal from '../account/accountsList/DeleteConfirmation';
+import { getAccountOwner, getAccounts } from '../../redux-saga/modules/account/action';
+import { getInvoice, getInvoiceOwner, getInvoiceStatus } from '../../redux-saga/modules/invoice/action';
+import { getNotes } from '../../redux-saga/modules/notes/action';
 
 
 interface InvoiceProps {
@@ -25,7 +27,7 @@ const InvoiceComponent: React.FC<InvoiceProps> = ({ accountId, ownerId, getInvoi
 	const [openPreviewModal, setOpenPreviewModal] = useState<boolean>(false);
 	const [invoiceId, setInvoiceId] = useState();
 
-	const invoices = useSelector((state: any) => state.reducer.invoices)
+	const invoices = useSelector((state: any) => state.invoiceReducer.invoices)
 
 
 	const handleCreateNewInvoice = () => {
@@ -63,8 +65,8 @@ const InvoiceComponent: React.FC<InvoiceProps> = ({ accountId, ownerId, getInvoi
 		setShowDeleteConfirmation(true);
 	};
 
-	const invoiceStatus = useSelector((state: any) => state.reducer.invoiceStatus);
-	const invoiceResponse = useSelector((state: any) => state.reducer.createInvoiceResponse);
+	const invoiceStatus = useSelector((state: any) => state.invoiceReducer.invoiceStatus);
+	const invoiceResponse = useSelector((state: any) => state.invoiceReducer.createInvoiceResponse);
 
 	function getInvoiceStatusValue(statusValue: any): any {
 		const iStatus = invoiceStatus?.find((status: any) => status.value === statusValue);
@@ -90,7 +92,7 @@ const InvoiceComponent: React.FC<InvoiceProps> = ({ accountId, ownerId, getInvoi
 	})
 	const invoiceCount = filteredInvoices?.length;
 
-	const invoiceDeleteResponse = useSelector((state: any) => state.reducer.deleteInvoiceResponse)
+	const invoiceDeleteResponse = useSelector((state: any) => state.invoiceReducer.deleteInvoiceResponse)
 
 	useEffect(() => {
 		if (getInvoiceCount) {

@@ -1,12 +1,12 @@
 import { CCard, CCardBody, CCardHeader, CCol, CRow } from "@coreui/react";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getContactById } from "../../redux-saga/action";
 import { useParams } from "react-router-dom";
+import { getContactById } from "../../redux-saga/modules/contact/action";
 
 const ContactDetails = () => {
     const dispatch = useDispatch();
-    const fetchedContact = useSelector((state: any) => state.reducer.contact);
+    const fetchedContact = useSelector((state: any) => state.contactReducer.contact);
     const { contactId } = useParams();
 
     useEffect(() => {
