@@ -8,6 +8,6 @@ namespace KotiCRM.Services.IServices
         Task<IEnumerable<OrganizationBankResponse>> GetOrganizationList();
 
         Task<OrganizationDTO> GetOrganization(int id);
-        Task<OrganizationDTO> UpdateOrganization(int id,Organization organization);
+        Task<OrganizationDTO> UpdateOrganizationTimeZone(int id,Organization organization);
     }
 }

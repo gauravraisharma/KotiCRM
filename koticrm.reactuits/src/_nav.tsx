@@ -60,18 +60,18 @@ const _nav:NavItem[] = [
     moduleName : 'Leads'
 
   },
-  {
-    component: CNavItem,
-    name: 'Employees',
-    to: '/theme/typography',
-    icon: <CIcon icon={cilGroup} customClassName="nav-icon" />,
-    moduleName : 'Employees'
+  // {
+  //   component: CNavItem,
+  //   name: 'Employees',
+  //   to: '/theme/typography',
+  //   icon: <CIcon icon={cilGroup} customClassName="nav-icon" />,
+  //   moduleName : 'Employees'
 
-  },
+  // },
   {
     component: CNavItem,
     name: 'Events',
-    to: '/theme/typography',
+    to: '/theme/typograph',
     icon: <CIcon icon={cibEventStore} customClassName="nav-icon" />,
     moduleName : 'Events'
 

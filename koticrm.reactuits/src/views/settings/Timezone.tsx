@@ -14,7 +14,6 @@ import "../../css/style.css";
 
 import { useDispatch } from "react-redux";
 import { useSelector } from 'react-redux';
-import DateTransformComponent from '../../utils/DateTransform';
 import { getOrganization, updateTimeZone } from '../../redux-saga/modules/shared/action';
 
 const Timezone: React.FC = () => {
@@ -92,7 +91,7 @@ dispatch(getOrganization());
                 <strong>Time Zone</strong>
               </h5>
             </CCol>
-          <DateTransformComponent date={currentDate} format="DD/MM/YYYY HH:mm" timezone={selectedTimezone} />
+          
 
           </CRow>
         </CCardHeader>

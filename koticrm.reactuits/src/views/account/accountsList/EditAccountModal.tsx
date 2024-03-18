@@ -335,14 +335,15 @@ const EditPage: React.FC<EditModalProps> = ({ closeModal, accountData, onBackToL
                     <div className="form-group row" >
                       <label htmlFor="country" className="col-sm-4 col-form-label">Country</label>
                       <div className="col-sm-6">
-                        <Field type="text" name="country" value={updateAccount.country} className="form-control" onChange={(e: any) => { handleChangeData(e); handleChange(e) }} />
+                        <Field type="text" name="country" value={updateAccount.country} className="form-control form-select" onChange={(e: any) => { handleChangeData(e); handleChange(e) }} />
                         <ErrorMessage name="country" component="div" className="error form-error" />
                       </div>
                     </div>
                     <div className="form-group row">
+                          
                       <label htmlFor="description" className="col-sm-4 col-form-label">Description</label>
                       <div className="col-sm-6">
-                        <Field as="textarea" name="description" value={updateAccount.description} className="form-control" onChange={(e: any) => { handleChangeData(e); handleChange(e) }} />
+                        <Field as="textarea" name="description" style={{ height: "120px" }}  value={updateAccount.description} className="form-control" onChange={(e: any) => { handleChangeData(e); handleChange(e) }} />
                         <ErrorMessage
                           name="description"
                           component="div"
@@ -353,8 +354,10 @@ const EditPage: React.FC<EditModalProps> = ({ closeModal, accountData, onBackToL
                   </div>
                 </div>
                 <div>
-                  <button className="btn btn-primary" onClick={() => handleSubmit}>Update</button>
+                <button className="btn btn-primary" onClick={() => handleSubmit}>Update</button>
+
                 </div>
+               
               </Form>
 
             )}

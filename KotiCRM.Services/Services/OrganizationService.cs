@@ -42,13 +42,13 @@ namespace KotiCRM.Services.Services
             return organizationDTO;
         }
 
-        public async Task<OrganizationDTO> UpdateOrganization(int id, Organization organization)
+        public async Task<OrganizationDTO> UpdateOrganizationTimeZone(int id, Organization organization)
         {
             if (organization == null)
             {
                 throw new ArgumentNullException(nameof(organization));
             }
-            var organizationData = await _organizationRepository.UpdateOrganization(id, organization);
+            var organizationData = await _organizationRepository.UpdateOrganizationTimeZone(id, organization);
             return organizationData;
   
         }

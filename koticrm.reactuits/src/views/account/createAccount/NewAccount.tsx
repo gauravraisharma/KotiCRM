@@ -37,36 +37,36 @@ interface MyFormProps {
 }
 
 const validationSchema = Yup.object().shape({
-    accountOwner: Yup.string().required("Required (Account Owner)"),
-    industry: Yup.number().required("Required (Industry)"),
-    type: Yup.number().required("Required (Type)"),
-    status: Yup.number().required("Required (Status)"),
-    accountName: Yup.string().required("Required (Account Name)"),
-    annualRevenue: Yup.string().required("Required (Annual Revenue)"),
-    phone: Yup.string()
-      .required("Required (Phone)")
-      .matches(/^[0-9()-\s]+$/, "Phone number must be a number")
-      .min(10, "Phone number must be at least 10 digits")
-      .max(
-        13,
-        "Phone number must be at most 13 digits with country calling code"
-      ),
-    fax: Yup.string()
-      .required("Required (Fax)")
-      .matches(/^[\d()-\s]{10}$/, "Fax number must be exactly 10 digits"),
-    website: Yup.string()
-      .required("Required (Website)")
-      .url("Website must be a valid URL"),
-    billingStreet: Yup.string().required("Required (Billing Street)"),
-    billingCity: Yup.string().required("Required (Billing City)"),
-    billingState: Yup.string().required("Required (Billing State)"),
-    billingCode: Yup.string()
-      .required("Required (Billing Code)")
-      .matches(/^\d+$/, "Billing Code must be a number")
-      .min(4, "Billing Code must be at least 4 digits")
-      .max(10, "Billing Code can have maximum 10 digits"),
-    country: Yup.string().required("Required (Country)"),
-    description: Yup.string().required("Required (Description)"),
+  accountOwner: Yup.string().required("Required (Account Owner)"),
+  industry: Yup.number().required("Required (Industry)"),
+  type: Yup.number().required("Required (Type)"),
+  status: Yup.number().required("Required (Status)"),
+  accountName: Yup.string().required("Required (Account Name)"),
+  annualRevenue: Yup.string().required("Required (Annual Revenue)"),
+  phone: Yup.string()
+    .required("Required (Phone)")
+    .matches(/^[0-9()-\s]+$/, "Phone number must be a number")
+    .min(10, "Phone number must be at least 10 digits")
+    .max(
+      13,
+      "Phone number must be at most 13 digits with country calling code"
+    ),
+  fax: Yup.string()
+    .required("Required (Fax)")
+    .matches(/^[\d()-\s]{10}$/, "Fax number must be exactly 10 digits"),
+  website: Yup.string()
+    .required("Required (Website)")
+    .url("Website must be a valid URL"),
+  billingStreet: Yup.string().required("Required (Billing Street)"),
+  billingCity: Yup.string().required("Required (Billing City)"),
+  billingState: Yup.string().required("Required (Billing State)"),
+  billingCode: Yup.string()
+    .required("Required (Billing Code)")
+    .matches(/^\d+$/, "Billing Code must be a number")
+    .min(4, "Billing Code must be at least 4 digits")
+    .max(10, "Billing Code can have maximum 10 digits"),
+  country: Yup.string().required("Required (Country)"),
+  description: Yup.string().required("Required (Description)"),
 });
 
 const MyForm: React.FC<MyFormProps> = ({
@@ -99,15 +99,15 @@ const MyForm: React.FC<MyFormProps> = ({
   };
 
   // const handleDropdownChange = (selectedOption: any) => {
-	// 	if (selectedOption) {
-	// 		// Handle selection
-	// 		setSelectedAccountOwner(selectedOption.key);
-	// 	} else {
-	// 		// Handle clearing
-	// 		setSelectedAccountOwner(''); // or undefined
-	// 	}
-	// };
-  const userId = useSelector((state:any)=> state.authReducer.userId)
+  // 	if (selectedOption) {
+  // 		// Handle selection
+  // 		setSelectedAccountOwner(selectedOption.key);
+  // 	} else {
+  // 		// Handle clearing
+  // 		setSelectedAccountOwner(''); // or undefined
+  // 	}
+  // };
+  const userId = useSelector((state: any) => state.authReducer.userId);
   const dispatch = useDispatch();
 
   const [account, setAccount] = useState({
@@ -137,7 +137,7 @@ const MyForm: React.FC<MyFormProps> = ({
   const formattedDateTime = currentDate.toISOString().slice(0, -1);
 
   const handleCreateAccountClick = () => {
-    debugger
+    debugger;
     const accountDetail: Account = {
       id: 0,
       ownerId: selectedAccountOwner,
@@ -167,7 +167,9 @@ const MyForm: React.FC<MyFormProps> = ({
     dispatch(createAccountRequest(accountDetail));
     closeModal();
   };
-  const accountOwner = useSelector((state: any) => state.accountReducer.accountOwner);
+  const accountOwner = useSelector(
+    (state: any) => state.accountReducer.accountOwner
+  );
   console.log(accountOwner);
   const industry = useSelector((state: any) => state.sharedReducer.industries);
   console.log(industry);
@@ -175,7 +177,9 @@ const MyForm: React.FC<MyFormProps> = ({
     (state: any) => state.accountReducer.accountStatus
   );
   console.log(accountStatus);
-  const accountType = useSelector((state: any) => state.accountReducer.accountType);
+  const accountType = useSelector(
+    (state: any) => state.accountReducer.accountType
+  );
   console.log(accountType);
   const [selectedAccountOwner, setSelectedAccountOwner] = useState("");
 
@@ -189,8 +193,6 @@ const MyForm: React.FC<MyFormProps> = ({
       setSelectedAccountOwner(""); // or undefined
     }
   };
-
-
 
   return (
     <div>
@@ -218,8 +220,8 @@ const MyForm: React.FC<MyFormProps> = ({
             validationSchema={validationSchema}
             onSubmit={handleCreateAccountClick}
           >
-            {({ errors, touched, handleChange,handleBlur, handleSubmit }) => (
-              <Form >
+            {({ errors, touched, handleChange, handleBlur, handleSubmit }) => (
+              <Form>
                 <div className="row">
                   <div className="col-md-6">
                     <div className="form-group row">
@@ -228,49 +230,60 @@ const MyForm: React.FC<MyFormProps> = ({
                         htmlFor="accountOwner"
                       >
                         Account Owner
+                        <span style={{ color: "red", fontSize: "25px" }}>
+                          *
+                        </span>
                       </label>
                       <div className="col-sm-6">
-                        	<Field name="invoiceOwner"
-												>
-													{(fieldProps: any) => (
-														<>
-																<Select
-															
-															name="invoiceOwner"
-															options={accountOwner?.map((owner: any) => ({
-																key: owner.id,
-																value: owner.firstName,
-																label: (
-																	<>
-																		<div style={{ fontSize: "15px" }}>{`${owner.label}`}</div>
-																		<div style={{ fontSize: "12px" }}>{owner.email}</div>
-																	</>
-																)
-															}))}
-															defaultValue={selectedAccountOwner}
-															isSearchable={true}
-															isClearable={true}
-															onChange={(selectedOption: any) => {
-																handleDropdownChange( selectedOption);
-																fieldProps.form.setFieldValue('accountOwner', selectedOption?.key, true);
-															}}
-															onBlur={handleBlur('accountOwner')}
-															
-															className={`form-control ${touched.accountOwner && errors.accountOwner ? 'border-danger' : ''}`}
-															styles={{
-																control: (provided) => ({
-																	...provided,
-																	outline: 'none',
-																	border: 'none',
-																}),
-														
-															}}
-														/>
-														</>
-													)}
+                        <Field name="accountOwner">
+                          {(fieldProps: any) => (
+                            <>
+                              <Select
+                              placeholder="Select Owner..."
+                                name="accountOwner"
+                                options={accountOwner?.map((owner: any) => ({
+                                  key: owner.id,
+                                  value: owner.firstName,
+                                  label: (
+                                    <>
+                                      <div
+                                        style={{ fontSize: "15px" }}
+                                      >{`${owner.label}`}</div>
+                                      <div style={{ fontSize: "12px" }}>
+                                        {owner.email}
+                                      </div>
+                                    </>
+                                  ),
+                                }))}
+                                defaultValue={selectedAccountOwner}
+                                isSearchable={true}
+                                isClearable={true}
+                                onChange={(selectedOption: any) => {
+                                  handleDropdownChange(selectedOption);
+                                  fieldProps.form.setFieldValue(
+                                    "accountOwner",
+                                    selectedOption?.key,
+                                    true
+                                  );
+                                }}
+                                onBlur={handleBlur("accountOwner")}
+                                className={`form-control ${
+                                  touched.accountOwner && errors.accountOwner
+                                    ? "border-danger"
+                                    : ""
+                                }`}
+                                styles={{
+                                  control: (provided) => ({
+                                    ...provided,
+                                    outline: "none",
+                                    border: "none",
+                                  }),
+                                }}
+                              />
+                            </>
+                          )}
+                        </Field>
 
-												</Field>
-							
                         <ErrorMessage
                           name="accountOwner"
                           component="div"
@@ -283,8 +296,9 @@ const MyForm: React.FC<MyFormProps> = ({
                       <label
                         className="col-sm-4 col-form-label"
                         htmlFor="industry"
+                      
                       >
-                        Industry
+                        Industry<span style={{ color: "red" }}>*</span>
                       </label>
                       <div className="col-sm-6">
                         <Field
@@ -295,12 +309,13 @@ const MyForm: React.FC<MyFormProps> = ({
                               ? "border-danger"
                               : ""
                           }`}
+                          style={{ height: "50px" }}
                           onChange={(e: any) => {
                             handleChangeData(e);
                             handleChange(e);
                           }}
                         >
-                          <option value="">Select Industry</option>
+                          <option value="">Select...</option>
                           {industry?.map((industry: any) => (
                             <option key={industry.id} value={industry.id}>
                               {industry.name}
@@ -321,6 +336,9 @@ const MyForm: React.FC<MyFormProps> = ({
                         htmlFor="status"
                       >
                         Status
+                        <span style={{ color: "red", fontSize: "25px" }}>
+                          *
+                        </span>
                       </label>
                       <div className="col-sm-6">
                         <Field
@@ -331,12 +349,13 @@ const MyForm: React.FC<MyFormProps> = ({
                               ? "border-danger"
                               : ""
                           }`}
+                          style={{ height: "50px" }}
                           onChange={(e: any) => {
                             handleChangeData(e);
                             handleChange(e);
                           }}
                         >
-                          <option value="">Select Account Status</option>
+                          <option value="">Select...</option>
                           {accountStatus?.map((status: any) => (
                             <option key={status.value} value={status.value}>
                               {status.name}
@@ -354,6 +373,9 @@ const MyForm: React.FC<MyFormProps> = ({
                     <div className="form-group row">
                       <label className="col-sm-4 col-form-label" htmlFor="type">
                         Type
+                        <span style={{ color: "red", fontSize: "25px" }}>
+                          *
+                        </span>
                       </label>
                       <div className="col-sm-6">
                         <Field
@@ -362,12 +384,13 @@ const MyForm: React.FC<MyFormProps> = ({
                           className={`form-control form-select ${
                             touched.type && errors.type ? "border-danger" : ""
                           }`}
+                          style={{ height: "50px" }}
                           onChange={(e: any) => {
                             handleChangeData(e);
                             handleChange(e);
                           }}
                         >
-                          <option value="">Select Account Type</option>
+                          <option value="" disabled style={{ color: 'grey' }}>Select...</option>
                           {accountType?.map((type: any) => (
                             <option key={type.value} value={type.value}>
                               {type.name}
@@ -381,13 +404,16 @@ const MyForm: React.FC<MyFormProps> = ({
                         />
                       </div>
                     </div>
-                    
+
                     <div className="form-group row">
                       <label
                         className="col-sm-4 col-form-label"
                         htmlFor="phone"
                       >
                         Phone
+                        <span style={{ color: "red", fontSize: "25px" }}>
+                          *
+                        </span>
                       </label>
                       <div className="col-sm-6">
                         <Field
@@ -396,6 +422,7 @@ const MyForm: React.FC<MyFormProps> = ({
                           className={`form-control ${
                             touched.phone && errors.phone ? "is-invalid" : ""
                           }`}
+                          style={{ height: "50px" }}
                           onChange={(e: any) => {
                             handleChangeData(e);
                             handleChange(e);
@@ -414,6 +441,9 @@ const MyForm: React.FC<MyFormProps> = ({
                         htmlFor="accountName"
                       >
                         Account Name
+                        <span style={{ color: "red", fontSize: "25px" }}>
+                          *
+                        </span>
                       </label>
                       <div className="col-sm-6">
                         <Field
@@ -424,6 +454,7 @@ const MyForm: React.FC<MyFormProps> = ({
                               ? "is-invalid"
                               : ""
                           }`}
+                          style={{ height: "50px" }}
                           onChange={(e: any) => {
                             handleChangeData(e);
                             handleChange(e);
@@ -453,6 +484,7 @@ const MyForm: React.FC<MyFormProps> = ({
                               ? "is-invalid"
                               : ""
                           }`}
+                          style={{ height: "50px" }}
                           onChange={(e: any) => {
                             handleChangeData(e);
                             handleChange(e);
@@ -465,7 +497,6 @@ const MyForm: React.FC<MyFormProps> = ({
                         />
                       </div>
                     </div>
-
                     <div className="form-group row">
                       <label className="col-sm-4 col-form-label" htmlFor="fax">
                         Fax
@@ -477,6 +508,7 @@ const MyForm: React.FC<MyFormProps> = ({
                           className={`form-control ${
                             touched.fax && errors.fax ? "is-invalid" : ""
                           }`}
+                          style={{ height: "50px" }}
                           onChange={(e: any) => {
                             handleChangeData(e);
                             handleChange(e);
@@ -498,6 +530,9 @@ const MyForm: React.FC<MyFormProps> = ({
                         htmlFor="website"
                       >
                         Website
+                        <span style={{ color: "red", fontSize: "25px" }}>
+                          *
+                        </span>
                       </label>
                       <div className="col-sm-6">
                         <Field
@@ -508,6 +543,7 @@ const MyForm: React.FC<MyFormProps> = ({
                               ? "is-invalid"
                               : ""
                           }`}
+                          style={{ height: "50px" }}
                           onChange={(e: any) => {
                             handleChangeData(e);
                             handleChange(e);
@@ -537,6 +573,7 @@ const MyForm: React.FC<MyFormProps> = ({
                               ? "is-invalid"
                               : ""
                           }`}
+                          style={{ height: "50px" }}
                           onChange={(e: any) => {
                             handleChangeData(e);
                             handleChange(e);
@@ -565,6 +602,7 @@ const MyForm: React.FC<MyFormProps> = ({
                               ? "is-invalid"
                               : ""
                           }`}
+                          style={{ height: "50px" }}
                           onChange={(e: any) => {
                             handleChangeData(e);
                             handleChange(e);
@@ -594,6 +632,7 @@ const MyForm: React.FC<MyFormProps> = ({
                               ? "is-invalid"
                               : ""
                           }`}
+                          style={{ height: "50px" }}
                           onChange={(e: any) => {
                             handleChangeData(e);
                             handleChange(e);
@@ -623,6 +662,7 @@ const MyForm: React.FC<MyFormProps> = ({
                               ? "is-invalid"
                               : ""
                           }`}
+                          style={{ height: "50px" }}
                           onChange={(e: any) => {
                             handleChangeData(e);
                             handleChange(e);
@@ -685,6 +725,9 @@ const MyForm: React.FC<MyFormProps> = ({
                         htmlFor="country"
                       >
                         Country
+                        <span style={{ color: "red", fontSize: "25px" }}>
+                          *
+                        </span>
                       </label>
                       <div className="col-sm-6">
                         <Field
@@ -692,11 +735,12 @@ const MyForm: React.FC<MyFormProps> = ({
                           id="country"
                           name="country"
                           type="text"
-                          className={`form-control ${
+                          className={`form-control  form-select ${
                             touched.country && errors.country
                               ? "is-invalid"
                               : ""
                           }`}
+                          style={{ height: "50px" }}
                           onChange={(e: any) => {
                             handleCountryChange(e);
                             handleChange(e);
@@ -713,11 +757,11 @@ const MyForm: React.FC<MyFormProps> = ({
                             </option>
                           ))}
                         </Field>
-                        {/* <ErrorMessage
+                        <ErrorMessage
                           name="country"
                           component="div"
                           className="invalid-feedback"
-                        /> */}
+                        />
                       </div>
                     </div>
 
@@ -729,14 +773,15 @@ const MyForm: React.FC<MyFormProps> = ({
                         Description
                       </label>
                       <div className="col-sm-6">
-                        <Field
-                          type="text"
+                        <textarea
+                          id="description"
                           name="description"
                           className={`form-control ${
                             touched.description && errors.description
                               ? "is-invalid"
                               : ""
                           }`}
+                          style={{ height: "120px" }}
                           onChange={(e: any) => {
                             handleChangeData(e);
                             handleChange(e);
@@ -751,13 +796,15 @@ const MyForm: React.FC<MyFormProps> = ({
                     </div>
                   </div>
                 </div>
-
-                <button type="submit" className="btn btn-primary" onClick={()=>handleSubmit}>
-                  Submit
-                </button>
-                {/* <button type="button" onClick={() => handleReset(formikProps)}>
-            Reset
-          </button> */}
+                <div >
+                  <button
+                    type="submit"
+                    className="btn btn-primary"
+                    onClick={() => handleSubmit}
+                  >
+                    Submit
+                  </button>
+                </div>
               </Form>
             )}
           </Formik>

@@ -17,7 +17,6 @@ import { AppBreadcrumb } from '../../index'
 import { AppHeaderDropdown } from './index'
 import { logo } from '../../../assets/brand/logo'
 import { SIDEBAR_TOGGLE } from '../../../constants/reduxConstants'
-import WatchIcon from '../../../utils/TimeDropdown';
 
 
 const AppHeader = () => {

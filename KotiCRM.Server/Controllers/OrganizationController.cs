@@ -35,7 +35,7 @@ namespace KotiCRM.Server.Controllers
         [HttpPut("UpdateOrganization/{id}")]
         public async Task<ActionResult<OrganizationDTO>> UpdateOrganization(int id,Organization organization)
         {
-            var res = await _organizationService.UpdateOrganization(id, organization);
+            var res = await _organizationService.UpdateOrganizationTimeZone(id, organization);
             return Ok(res);
         }
     }

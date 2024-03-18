@@ -84,7 +84,7 @@ namespace KotiCRM.Repository.Repository
             }
         }
 
-        public async Task<OrganizationDTO> UpdateOrganization(int id, Organization organization)
+        public async Task<OrganizationDTO> UpdateOrganizationTimeZone(int id, Organization organization)
         {
             //var userRoles = await _userManager.GetRolesAsync(ownerFound);
 

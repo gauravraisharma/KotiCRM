@@ -179,15 +179,6 @@ const AccountList: React.FC = () => {
                         ))}
                       </CTableBody>
                     </CTable>
-
-                    {/* {isModalOpen && rowData && (
-                  <OpenAccountModal
-                    rowData={rowData}
-                    closeModal={() => setIsModalOpen(false)}
-                    backToAccountList={backToAccountList}
-                  />
-                )} */}
-
                   </CCardBody>
                 </CCard>
               </CCol>
