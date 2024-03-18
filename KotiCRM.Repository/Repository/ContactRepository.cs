@@ -18,26 +18,17 @@ namespace KotiCRM.Repository.Repository
         {
             _context = context;
         }
-        public async Task<DbResponse> CreateContact(Contact contact)
+        public async Task<Contact> CreateContact(Contact contact)
         {
             try
             {
                 _context.Contacts.Add(contact);
                 await _context.SaveChangesAsync();
-                return new DbResponse()
-                {
-                    Succeed = true,
-                    Message = "Contact added successfully"
-                };
+                return contact;
             }
             catch (Exception ex)
             {
-                return new DbResponse()
-                {
-                    Succeed = false,
-                    Message = ex.Message
-
-                };
+                throw new Exception(ex.Message, ex);
             }
         }
 
@@ -47,8 +38,8 @@ namespace KotiCRM.Repository.Repository
             {
                 var contact = await _context.Contacts.FindAsync(id);
 
-            if (contact == null)
-            {
+                if (contact == null)
+                {
                     throw new Exception($"Contact with ID {id} was not found.");
                 }
                 return contact;
@@ -89,11 +80,11 @@ namespace KotiCRM.Repository.Repository
                 }
                 else
                 {
-                // Contact not found
+                    // Contact not found
                     return new DbResponse()
                     {
-                     Succeed = false,
-                     Message = "Contact not found"
+                        Succeed = false,
+                        Message = "Contact not found"
                     };
                 }
             }
@@ -106,17 +97,12 @@ namespace KotiCRM.Repository.Repository
 
                 };
             }
-
-
         }
-        public async Task<Contact> UpdateContact(int id, Contact contact)
+        public async Task<Contact> UpdateContact(Contact contact)
         {
-            if (id == contact.Id)
-            {
-                _context.Entry(contact).State = EntityState.Modified;
-            }
             try
             {
+                _context.Entry(contact).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException ex)

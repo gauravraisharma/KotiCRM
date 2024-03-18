@@ -13,7 +13,7 @@ import {
 } from "@coreui/react";
 
 import { useEffect, useState } from "react";
-import "../../css/style.css";
+// import "../../css/style.css";
 
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
