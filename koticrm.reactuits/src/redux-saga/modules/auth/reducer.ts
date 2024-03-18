@@ -7,10 +7,12 @@ const INITIAL_STATE = {
   token: null,
   modulePermission: null,
   timezone:null,
+  userType:null,
+  userId:null,
   loggedIn: false
 };
 
-const authReducer= (state = INITIAL_STATE, action:actionPayloadModel) => {
+const authReducer = (state = INITIAL_STATE, action: actionPayloadModel) => {
   switch (action.type) {
     case LOGIN_SUCCESS:
       if (action.payload != null && action.payload != undefined && action.payload.status == 'SUCCEED') {
