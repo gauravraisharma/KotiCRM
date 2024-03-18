@@ -1,11 +1,10 @@
-import React from 'react';
-import { useEffect, useState } from 'react';
-import { DateTime } from 'luxon'; // Luxon library for working with dates and times
+ import React, { useEffect, useState } from 'react';
+import moment from 'moment-timezone'; // Import moment-timezone for timezone handling
 
 interface Props {
   date: Date;
   format?: string;
-  timezone?: string; // New prop for timezone
+  timezone?: string;
 }
 
 const DateTransformComponent: React.FC<Props> = ({ date, format = 'DD/MM/YYYY HH:mm', timezone }) => {
@@ -19,13 +18,18 @@ const DateTransformComponent: React.FC<Props> = ({ date, format = 'DD/MM/YYYY HH
   return <div>{transformedDate}</div>;
 };
 
-function DateTransformFunction(date: Date, format: string = 'DD/MM/YYYY HH:mm', timezone?: string): string {
-  let formattedDate;
-  if (timezone) {
-    formattedDate = DateTime.fromJSDate(date).setZone(timezone).toFormat(format); // Adjust timezone
-  } else {
-    formattedDate = DateTime.fromJSDate(date).toFormat(format);
+// Global function for date transformation
+function DateTransformFunction(date: Date, format: string = 'YYYY-MM-DD HH:mm:ss', timezone?: string): string {
+  if (!date) return '';
+
+  if (!timezone) {
+    // Default timezone if none provided
+    timezone = 'Asia/Kolkata';
+    localStorage.setItem('timeZone', timezone);
   }
+
+  const convertedDate = moment.utc(date).tz(timezone);
+  const formattedDate = convertedDate.format(format);
   return formattedDate;
 }
 
