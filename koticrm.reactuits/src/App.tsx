@@ -4,7 +4,7 @@ import './scss/style.scss'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import { appRoutes } from './routes';
-import { AuthProvider } from './utils/AuthProvider';
+// import { AuthProvider } from './utils/AuthProvider';
 import AuthenticatedRoute from './utils/AuthenticatedRoute';
 
 const loading = (

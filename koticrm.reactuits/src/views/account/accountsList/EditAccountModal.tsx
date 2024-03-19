@@ -672,7 +672,7 @@ const EditPage: React.FC<EditModalProps> = ({
                     </div>
                   </div>
                 </div>
-                <div>
+                <div className="text-end">
                   <button
                     className="btn btn-primary"
                     onClick={() => handleSubmit}
