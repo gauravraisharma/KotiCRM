@@ -31,6 +31,7 @@ import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import "react-datepicker/dist/react-datepicker.css";
 import { getOrganization } from "../../redux-saga/modules/shared/action";
 import { createInvoiceRequest } from "../../redux-saga/modules/invoice/action";
+import { ToastContainer } from "react-toastify";
 
 const initialValues = {
   invoiceOwner: "",
@@ -392,6 +393,7 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
 
   return (
     <div>
+        <ToastContainer />
       <CCard>
         <CCardHeader className="mb-3">
           <div className="d-flex justify-content-between align-items-center">

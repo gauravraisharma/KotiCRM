@@ -24,7 +24,7 @@ import DeleteConfirmationModal from '../account/accountsList/DeleteConfirmation'
 import { getAccountOwner, getAccounts } from '../../redux-saga/modules/account/action';
 import { getInvoice, getInvoiceOwner, getInvoiceStatus } from '../../redux-saga/modules/invoice/action';
 import { getNotes } from '../../redux-saga/modules/notes/action';
-import { formatDate } from "../../utils/Shared/DateTransform";
+import { DateTransformFunction, formatDate } from "../../utils/Shared/DateTransform";
 
 interface InvoiceProps {
   getInvoiceCount: (data: string) => void;
@@ -206,7 +206,7 @@ const InvoiceComponent: React.FC<InvoiceProps> = ({
                               {getDates(invoiceModel.invoice?.invoiceDate)}
                             </CTableDataCell>
                             <CTableDataCell>
-                              {getDates(invoiceModel.invoice?.dueDate)}
+                              {formatDate(invoiceModel.invoice?.dueDate,'DD/MM/YYYY HH:mm')}
                             </CTableDataCell>
                             <CTableDataCell>
                               <AiFillEye
@@ -245,7 +245,7 @@ const InvoiceComponent: React.FC<InvoiceProps> = ({
                             </CTableDataCell>
                             <CTableDataCell>
                               {/* {getDates(invoiceModel.invoice?.dueDate)} */}
-                              {formatDate(invoiceModel.invoice?.dueDate, 'DD/MM/YYYY')}
+                              {formatDate(invoiceModel.invoice?.dueDate, 'DD/MM/YYYY HH:mm')}
                             </CTableDataCell>
                             <CTableDataCell>
                               <AiFillEye

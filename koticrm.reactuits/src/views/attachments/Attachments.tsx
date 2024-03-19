@@ -132,7 +132,7 @@ const Attachments = () => {
                         {getOwnerName(attachment.userID)}
                       </CTableDataCell>
                       <CTableDataCell>
-                        {formatDate(attachment.dateAdded)}
+                        {formatDate(attachment.dateAdded,'DD/MM/YYYY HH:mm')}
                       </CTableDataCell>
                       <CTableDataCell>
                         {getFileSizeAndLabel(attachment.fileSize)}

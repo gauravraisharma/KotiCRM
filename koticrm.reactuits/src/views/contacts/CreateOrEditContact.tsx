@@ -1,4 +1,4 @@
-import { CButton, CCard, CCardBody, CCardHeader, CCol, CRow } from "@coreui/react";
+import { CButton, CCard, CCardBody, CCardHeader, CCol, CRow, CToaster } from "@coreui/react";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { ChangeEvent, useEffect, useState } from "react";
 import * as Yup from "yup";
@@ -14,6 +14,7 @@ import {
   getContactById,
   updateContact,
 } from "../../redux-saga/modules/contact/action";
+import { ToastContainer } from "react-toastify";
 
 
 const owners = [
@@ -262,6 +263,8 @@ const CreateOrEditContact=()=>{
   });
 
   return (
+    <>
+    <ToastContainer />
     <CCard>
       <CCardHeader className="mb-3">
         <div className="d-flex justify-content-between align-items-center">
@@ -810,6 +813,7 @@ const CreateOrEditContact=()=>{
         </Formik>
       </CCardBody>
     </CCard>
+    </>
   );
 };
 
