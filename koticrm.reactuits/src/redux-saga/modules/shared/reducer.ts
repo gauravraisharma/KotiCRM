@@ -1,7 +1,8 @@
 
 import { actionPayloadModel } from "../../../models/actionModel/actionModel";
 import {  GET_INDUSTRY_SUCCESS, GET_ORGANIZATION_SUCCESS, SIDEBAR_TOGGLE, UPDATE_TIMEZONE_SUCCESS } from "../../../constants/reduxConstants";
-const INITIAL_STATE = {
+import { sharedState } from "../../../models/redux/reduxState/sharedState";
+const INITIAL_STATE : sharedState = {
    refreashData:true,
    industries:[],
    organization:[],
@@ -9,7 +10,7 @@ const INITIAL_STATE = {
   };
 
 
-  const sharedReducer= (state = INITIAL_STATE, action:actionPayloadModel) => {
+  const sharedReducer= (state : sharedState = INITIAL_STATE, action:actionPayloadModel) => {
     switch (action.type) {
         case UPDATE_TIMEZONE_SUCCESS: 
         return {...state,

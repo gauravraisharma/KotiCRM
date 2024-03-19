@@ -1,9 +1,10 @@
 
 import {LOGIN_SUCCESS,LOGOUT} from "../../../constants/reduxConstants";
 import { actionPayloadModel } from '../../../models/actionModel/actionModel';
+import { authState } from "../../../models/redux/reduxState/authState";
 
 
-const INITIAL_STATE = {
+const INITIAL_STATE : authState = {
   token: null,
   modulePermission: null,
   timezone:null,
@@ -12,7 +13,7 @@ const INITIAL_STATE = {
   loggedIn: false
 };
 
-const authReducer = (state = INITIAL_STATE, action: actionPayloadModel) => {
+const authReducer = (state : authState = INITIAL_STATE, action: actionPayloadModel) => {
   switch (action.type) {
     case LOGIN_SUCCESS:
       if (action.payload != null && action.payload != undefined && action.payload.status == 'SUCCEED') {

@@ -1,7 +1,8 @@
 import { CREATE_ACCOUNT_SUCCESS, DELETE_ACCOUNT_SUCCESS, GET_ACCOUNT_DETAIL_SUCCESS, GET_ACCOUNT_OWNER_SUCCESS, GET_ACCOUNT_STATUS_SUCCESS, GET_ACCOUNT_SUCCESS, GET_ACCOUNT_TYPE_SUCCESS, UPDATE_ACCOUNT_SUCCESS } from "../../../constants/reduxConstants";
 import { actionPayloadModel } from "../../../models/actionModel/actionModel";
 import { Account } from '../../../models/account/Account';
-const INITIAL_STATE = {
+import { AccountState } from "../../../models/redux/state/AccountState";
+const INITIAL_STATE : AccountState = {
    accounts:[],
    account:null as Account | null,
    createAccountResponse:null as Account | null,
@@ -10,7 +11,7 @@ const INITIAL_STATE = {
   };
 
 
-  const accountReducer= (state = INITIAL_STATE, action:actionPayloadModel) => {
+  const accountReducer= (state : AccountState = INITIAL_STATE, action:actionPayloadModel) => {
     switch (action.type) {
       case  GET_ACCOUNT_SUCCESS:
         return {

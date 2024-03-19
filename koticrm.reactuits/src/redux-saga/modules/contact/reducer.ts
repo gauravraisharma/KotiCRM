@@ -1,15 +1,16 @@
 import { CREATE_CONTACT_SUCCESS, GET_CONTACTS_SUCCESS, GET_CONTACT_DETAIL_SUCCESS, UPDATE_CONTACT_SUCCESS } from "../../../constants/reduxConstants";
 import { actionPayloadModel } from "../../../models/actionModel/actionModel";
 import { Contact } from "../../../models/contact/Contact";
+import { contactState } from "../../../models/redux/reduxState/contactState";
 
-const INITIAL_STATE = {
+const INITIAL_STATE : contactState = {
     contacts:[],
     contact:null as Contact | null,
    refreshList:false
   };
 
 
-  const contactReducer= (state = INITIAL_STATE, action:actionPayloadModel) => {
+  const contactReducer= (state : contactState = INITIAL_STATE, action:actionPayloadModel) => {
     switch (action.type) {
         case GET_CONTACTS_SUCCESS:
             return {

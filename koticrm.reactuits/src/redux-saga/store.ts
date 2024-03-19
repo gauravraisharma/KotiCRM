@@ -4,6 +4,8 @@ import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage'; // defaults to localStorage for web
 import rootSaga from './rootSaga';
 import rootReducer from './rootReducer';
+import { rootState } from '../models/redux/reduxState/rootState';
+import { actionPayloadModel } from '../models/actionModel/actionModel';
 
 
 const persistConfig = {
@@ -13,14 +15,15 @@ const persistConfig = {
   
 
 
-const persistedReducer = persistReducer(persistConfig, rootReducer);
+const persistedReducer = persistReducer<rootState>(persistConfig, rootReducer);
 const sagaMiddleware = createSagaMiddleware();
 
-let store = createStore(persistedReducer, 
-applyMiddleware(sagaMiddleware)
+const store = createStore(
+  persistedReducer, 
+  applyMiddleware(sagaMiddleware)
   );
 
   
 sagaMiddleware.run(rootSaga);
-let persistor = persistStore(store);
+const  persistor = persistStore(store);
 export { store, persistor, sagaMiddleware };
