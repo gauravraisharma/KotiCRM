@@ -796,7 +796,7 @@ const MyForm: React.FC<MyFormProps> = ({
                     </div>
                   </div>
                 </div>
-                <div >
+                <div  className="text-end">
                   <button
                     type="submit"
                     className="btn btn-primary"
