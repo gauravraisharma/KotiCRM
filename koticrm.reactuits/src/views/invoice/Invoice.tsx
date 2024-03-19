@@ -133,6 +133,7 @@ const InvoiceComponent: React.FC<InvoiceProps> = ({
     dispatch(getInvoice());
   }, [invoiceDeleteResponse]);
   return (
+    
     <div>
       <ToastContainer />
       {showCreateInvoice ? (

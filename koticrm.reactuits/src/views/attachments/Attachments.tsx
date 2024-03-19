@@ -22,6 +22,7 @@ import { formatDate } from "../../utils/Shared/DateTransform";
 import { getAttachments } from "../../redux-saga/modules/attachment/action";
 
 const Attachments = () => {
+  // getAttachmentsCount,
   const dispatch = useDispatch();
   const fetchedAttachments = useSelector(
     (state: any) => state.attachmentReducer.attachments
@@ -31,9 +32,7 @@ const Attachments = () => {
     (state: any) => state.accountReducer.accountOwner
   );
 
-  // if (accountId) {
-  //     const filteredAttachments = fetchedAttachments.filter(attachment => attachment.accountID === accountId);
-  // }
+ 
 
   function getOwnerName(ownerId: string): string {
     const owner = accountOwner?.find((owner: any) => owner.id === ownerId);
@@ -53,6 +52,23 @@ const Attachments = () => {
   const handleModalClose = () => {
     setIsModalVisible(false);
   };
+
+
+  // let fetchedAttachments = attachments;
+  // if (accountOwner) {
+  //   fetchedAttachments = fetchedAttachments?.filter((attachment: any) => attachment.accountOwner === accountOwner);
+  // }
+  // const attachmentCount = fetchedAttachments?.length;
+  
+  // console.log(filteredAttachments);
+  // useEffect(() => {
+  //   dispatch(getAttachments());
+  // }, [dispatch]);
+  
+  // useEffect(() => {
+  // getAttachments(attachmentCount); // Dispatch getAttachments with attachmentCount
+  // });// Add attachmentCount to the dependencies array
+  
 
   return (
     <CRow>

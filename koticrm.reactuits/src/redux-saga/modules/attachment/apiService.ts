@@ -17,7 +17,7 @@ import { DbResponse } from '../../../models/commonModels/SharedModels';
  }
    
  export function  CreateAttachment(createAttachment: CreateAttachment): Promise<apiResponse<DbResponse>>{
-    return axiosInstance.post<DbResponse>(`/Attachment/GetAttachmentList`,createAttachment).then((response: AxiosResponse<DbResponse>) => responseBody(response)).
+    return axiosInstance.post<DbResponse>(`/Attachment/CreateAttachment`,createAttachment).then((response: AxiosResponse<DbResponse>) => responseBody(response)).
     catch((error:AxiosError) =>{ 
         const errorResponse: apiResponse<DbResponse> = {
             data: undefined,

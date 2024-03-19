@@ -20,6 +20,7 @@ import { Contact } from "../../models/contact/Contact";
 import { AiFillEye } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import { getContacts } from "../../redux-saga/modules/contact/action";
+import { ToastContainer } from "react-toastify";
 
 const tableHeader = [
   "Contact Name",
@@ -44,6 +45,8 @@ const Contacts = () => {
   console.log(fetchedContacts);
 
   return (
+    <>
+    <ToastContainer/>
     <CRow>
       <CCol xs={12}>
         <CCard className="mb-4">
@@ -120,6 +123,7 @@ const Contacts = () => {
         </CCard>
       </CCol>
     </CRow>
+    </>
   );
 };
 

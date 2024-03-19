@@ -239,7 +239,7 @@ const MyForm: React.FC<MyFormProps> = ({
                           {(fieldProps: any) => (
                             <>
                               <Select
-                              placeholder="Select Owner..."
+                                placeholder="Select Owner..."
                                 name="accountOwner"
                                 options={accountOwner?.map((owner: any) => ({
                                   key: owner.id,
@@ -296,7 +296,6 @@ const MyForm: React.FC<MyFormProps> = ({
                       <label
                         className="col-sm-4 col-form-label"
                         htmlFor="industry"
-                      
                       >
                         Industry<span style={{ color: "red" }}>*</span>
                       </label>
@@ -390,7 +389,9 @@ const MyForm: React.FC<MyFormProps> = ({
                             handleChange(e);
                           }}
                         >
-                          <option value="" disabled style={{ color: 'grey' }}>Select...</option>
+                          <option value="" disabled style={{ color: "grey" }}>
+                            Select...
+                          </option>
                           {accountType?.map((type: any) => (
                             <option key={type.value} value={type.value}>
                               {type.name}
@@ -796,13 +797,20 @@ const MyForm: React.FC<MyFormProps> = ({
                     </div>
                   </div>
                 </div>
-                <div  className="text-end">
+                <div className="text-end">
                   <button
                     type="submit"
                     className="btn btn-primary"
                     onClick={() => handleSubmit}
                   >
                     Submit
+                  </button>
+                  <button
+                    type="button" 
+                    className="btn btn-secondary"
+                    onClick={() => onBackToListButtonClickHandler()} 
+                  >
+                    Cancel
                   </button>
                 </div>
               </Form>

@@ -15,6 +15,13 @@ import {
   updateContact,
 } from "../../redux-saga/modules/contact/action";
 
+
+
+interface MyFormProps {
+  closeModal: () => void;
+  onBackToListButtonClickHandler: () => void;
+}
+
 const owners = [
   {
     id: "1",
@@ -159,7 +166,11 @@ const owners = [
   // Add more options as needed
 ];
 
-const CreateOrEditContact = () => {
+const CreateOrEditContact :React.FC <MyFormProps> = ({
+  closeModal,
+  onBackToListButtonClickHandler,
+})=>{
+
   const { contactId } = useParams<{ contactId: string }>();
   const [contact, setContact] = useState<Contact>(new ContactClass());
   const dispatch = useDispatch();
@@ -232,6 +243,7 @@ const CreateOrEditContact = () => {
       if (!contact.id) {
         console.log("Create new contact:", contact);
         dispatch(createContact(contact));
+        closeModal();
       } else {
         console.log("Edit existing contact", contact);
         dispatch(updateContact(contact, contact.id));
@@ -789,6 +801,13 @@ const CreateOrEditContact = () => {
                       >
                         {isSubmitting ? "Submitting..." : "Submit"}
                       </button>
+                      <button
+                    type="button" 
+                    className="btn btn-secondary"
+                    onClick={() => (onBackToListButtonClickHandler)} 
+                  >
+                    Cancel
+                  </button>
                     </CCol>
                   </CRow>
                 </CCol>

@@ -679,6 +679,13 @@ const EditPage: React.FC<EditModalProps> = ({
                   >
                     Update
                   </button>
+                  <button
+                    type="button" 
+                    className="btn btn-secondary"
+                    onClick={() => onBackToListButtonClickHandler()} 
+                  >
+                    Cancel
+                  </button>
                 </div>
               </Form>
             )}
