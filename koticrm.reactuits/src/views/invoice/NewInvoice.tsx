@@ -68,7 +68,7 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
   onBackToListButtonClickHandler,
 }) => {
   const dispatch = useDispatch();
-  const handleEditorChange = (event: any, editor: any) => {
+  const handleEditorChange = (editor: any) => {
     const data = editor.getData();
     console.log(data); // You can handle the editor data here
   };

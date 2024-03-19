@@ -18,7 +18,7 @@ import { getOrganization, updateTimeZone } from '../../redux-saga/modules/shared
 
 const Timezone: React.FC = () => {
   const dispatch = useDispatch();
-  const currentDate = new Date(); // Example date
+  // const currentDate = new Date(); // Example date
   
   const [selectedTimezone, setSelectedTimezone] = useState(
     Intl.DateTimeFormat().resolvedOptions().timeZone

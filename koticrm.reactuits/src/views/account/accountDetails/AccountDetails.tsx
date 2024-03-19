@@ -4,11 +4,7 @@ import {
   CCard,
   CCardHeader,
   CButton,
-  CCardBody,
-  CDropdownMenu,
-  CDropdown,
-  CDropdownToggle,
-  CDropdownItem,
+  CCardBody
 } from "@coreui/react";
 
 import { useEffect, useState } from "react";

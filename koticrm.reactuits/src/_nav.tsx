@@ -7,7 +7,6 @@ import {
   cibEventStore,
   cibPaypal,
   cibMarkdown,
-  cilGroup,
   cilApplications,
   cilSettings,
   cilMoney,

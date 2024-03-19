@@ -3,8 +3,6 @@ import {
   CCard,
   CCardBody,
   CCardHeader,
-  CCol,
-  CRow,
   CTable,
   CTableBody,
   CTableDataCell,
@@ -18,7 +16,7 @@ import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { AiFillEye } from "react-icons/ai";
 
-import { MdDelete, MdPreview } from "react-icons/md";
+import { MdDelete} from "react-icons/md";
 import InvoiceTemplate from "../../pdf-template/InvoiceTemplate";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -246,7 +244,7 @@ const InvoiceComponent: React.FC<InvoiceProps> = ({
                             </CTableDataCell>
                             <CTableDataCell>
                               {/* {getDates(invoiceModel.invoice?.dueDate)} */}
-                              {formatDate(invoiceModel.invoice?.dueDate, 'DD/MM/YYYY HH:mm', 'Asia/Kolkata')}
+                              {formatDate(invoiceModel.invoice?.dueDate, 'DD/MM/YYYY HH:mm')} // , 'Asia/Kolkata'
                             </CTableDataCell>
                             <CTableDataCell>
                               <AiFillEye

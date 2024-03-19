@@ -14,20 +14,20 @@
 //     return formattedDate;
 // }
 
-// export function getDateTime(date: any) {
-//     const formattedDate = new Date(date).toLocaleDateString('en-US', {
-//         year: 'numeric',
-//         month: 'long',
-//         day: '2-digit',
-//     });
-//     return formattedDate;
-// }
+export function getDateTime(date: any) {
+    const formattedDate = new Date(date).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: '2-digit',
+    });
+    return formattedDate;
+}
 
-export function formatDate(date: Date, format: string = 'DD/MM/YYYY', timezone?: string): string {
+export function formatDate(date: Date, format: string = 'DD/MM/YYYY'): string {
     if (!date) return '';
 
-    const timeZoneOffset = timezone ? getTimezoneOffset(timezone) : 0;
-    const localDate = new Date(date.getTime() + timeZoneOffset);
+    // const timeZoneOffset = timezone ? getTimezoneOffset(timezone) : 0; + timeZoneOffset , timezone?: string
+    const localDate = new Date(date.getTime());
 
     // Replace placeholders with actual date values
     const year = localDate.getFullYear().toString();
@@ -48,11 +48,11 @@ export function formatDate(date: Date, format: string = 'DD/MM/YYYY', timezone?:
     return formattedString.trim();
 }
 
-function getTimezoneOffset(timezone: string): number {
-    const now = new Date();
-    const localOffset = now.getTimezoneOffset();
-    // Here, we need to convert timezone to a time zone offset in minutes
-    // You can use Intl.DateTimeFormat().resolvedOptions().timeZone in modern browsers to get the time zone offset directly
-    const targetOffset = -(new Date().toLocaleString('en', { timeZone: timezone as string }).getTimezoneOffset());
-    return (targetOffset - localOffset) * 60 * 1000;
-}
+// function getTimezoneOffset(timezone: string): number {
+//     const now = new Date();
+//     const localOffset = now.getTimezoneOffset();
+//     // Here, we need to convert timezone to a time zone offset in minutes
+//     // You can use Intl.DateTimeFormat().resolvedOptions().timeZone in modern browsers to get the time zone offset directly
+//     const targetOffset = -(new Date().toLocaleString('en', { timeZone: timezone as string }).getTimezoneOffset());
+//     return (targetOffset - localOffset) * 60 * 1000;
+// }
