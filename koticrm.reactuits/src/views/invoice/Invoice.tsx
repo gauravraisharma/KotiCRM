@@ -24,7 +24,7 @@ import DeleteConfirmationModal from '../account/accountsList/DeleteConfirmation'
 import { getAccountOwner, getAccounts } from '../../redux-saga/modules/account/action';
 import { getInvoice, getInvoiceOwner, getInvoiceStatus } from '../../redux-saga/modules/invoice/action';
 import { getNotes } from '../../redux-saga/modules/notes/action';
-import { DateTransformFunction, formatDate } from "../../utils/Shared/DateTransform";
+import { formatDate } from "../../utils/Shared/DateTransform";
 
 interface InvoiceProps {
   getInvoiceCount: (data: string) => void;

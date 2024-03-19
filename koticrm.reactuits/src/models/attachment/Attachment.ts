@@ -1,6 +1,7 @@
 export interface Attachment {
     id: number;
     userID: string;
+    accountID: number;
     dateAdded: string;
     fileSize: number;
     fileName: string;

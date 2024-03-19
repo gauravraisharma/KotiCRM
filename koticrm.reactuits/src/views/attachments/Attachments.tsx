@@ -21,18 +21,25 @@ import { getFileSizeAndLabel } from "../../utils/Shared/FileSizeAndLable";
 import { formatDate } from "../../utils/Shared/DateTransform";
 import { getAttachments } from "../../redux-saga/modules/attachment/action";
 
-const Attachments = () => {
+interface Props {
+  accountId: number;
+  getAttachmentsCount: (data: number) => void;
+}
+
+const Attachments = ({ accountId, getAttachmentsCount }: Props) => {
   // getAttachmentsCount,
   const dispatch = useDispatch();
-  const fetchedAttachments = useSelector(
-    (state: any) => state.attachmentReducer.attachments
-  );
+  const fetchedAttachments = useSelector((state: any) => state.attachmentReducer.attachments);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const accountOwner = useSelector(
     (state: any) => state.accountReducer.accountOwner
   );
 
- 
+  let filteredAttachments = fetchedAttachments;
+  if (accountId) {
+    filteredAttachments = fetchedAttachments?.filter((attachment: any) => attachment.accountID === accountId);
+  }
+  const attachmentsCount = filteredAttachments.length;
 
   function getOwnerName(ownerId: string): string {
     const owner = accountOwner?.find((owner: any) => owner.id === ownerId);
@@ -43,7 +50,11 @@ const Attachments = () => {
     dispatch(getAttachments());
   }, [dispatch]);
 
-  console.log(fetchedAttachments);
+  useEffect(() => {
+    getAttachmentsCount(attachmentsCount);
+  });
+
+  console.log("filteredAttachments:", filteredAttachments);
 
   const handleModalOpen = () => {
     setIsModalVisible(true);
@@ -59,7 +70,7 @@ const Attachments = () => {
   //   Attachments = fetchedAttachments?.filter((attachment: any) => attachment.accountOwner === accountOwner);
   // }
   // const attachmentCount = Attachments?.length; // Calculate attachmentCount based on filtered Attachments
-  
+
   // console.log(Attachments);
   // useEffect(() => {
   //   if (accountOwner) {
@@ -68,12 +79,12 @@ const Attachments = () => {
   //     dispatch(getAttachments()); // Dispatch getAttachments without accountOwner
   //   }
   // }, [accountOwner, dispatch]); // Add accountOwner to the dependencies array
-  
+
   // useEffect(() => {
   //   // Optionally, you can use attachmentCount here if needed
   //   console.log(attachmentCount);
   // }, [attachmentCount]); // Add attachmentCount to the dependencies array
-  
+
 
 
   return (
@@ -98,7 +109,7 @@ const Attachments = () => {
                   value="Add Attachment"
                   style={{ cursor: "pointer" }}
                   onClick={handleModalOpen}
-                  // variant="outline"
+                // variant="outline"
                 />
               </div>
             </div>
@@ -115,8 +126,8 @@ const Attachments = () => {
                 </CTableRow>
               </CTableHead>
               <CTableBody>
-                {fetchedAttachments ? (
-                  fetchedAttachments.map((attachment: any) => (
+                {filteredAttachments ? (
+                  filteredAttachments.map((attachment: any) => (
                     <CTableRow>
                       <CTableHeaderCell>
                         {attachment.fileExtension === ".pdf" ? (
@@ -132,7 +143,7 @@ const Attachments = () => {
                         {getOwnerName(attachment.userID)}
                       </CTableDataCell>
                       <CTableDataCell>
-                        {formatDate(attachment.dateAdded,'DD/MM/YYYY HH:mm')}
+                        {formatDate(attachment.dateAdded, 'DD/MM/YYYY HH:mm')}
                       </CTableDataCell>
                       <CTableDataCell>
                         {getFileSizeAndLabel(attachment.fileSize)}

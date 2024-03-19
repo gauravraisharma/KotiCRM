@@ -53,6 +53,7 @@ public class AttachmentService : IAttachmentService
         {
             ID = attachment.ID,
             UserID = attachment.UserID,
+            AccountID = attachment.AccountID,
             DateAdded = attachment.DateAdded,
             FileSize = attachment.FileSize,
             FileName = attachment.FileName,
