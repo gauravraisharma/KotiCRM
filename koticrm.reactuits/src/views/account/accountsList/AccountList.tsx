@@ -114,7 +114,7 @@ const AccountList: React.FC = () => {
 
   return (
     <>
-      <ToastContainer />
+      <ToastContainer/>
       {stateData ? (
         <NewAccount closeModal={closeCreateModal} onBackToListButtonClickHandler={backToAccountList} />
       ) : (

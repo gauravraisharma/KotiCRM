@@ -1,39 +1,42 @@
+import { Reducer } from "react";
 import { CREATE_CONTACT_SUCCESS, GET_CONTACTS_SUCCESS, GET_CONTACT_DETAIL_SUCCESS, UPDATE_CONTACT_SUCCESS } from "../../../constants/reduxConstants";
-import { actionPayloadModel } from "../../../models/actionModel/actionModel";
 import { Contact } from "../../../models/contact/Contact";
+import { contactState } from "../../../models/reduxState/contactState";
+import { AppAction } from "../../../models/redux/action/ActionModel";
+import { actionPayloadModel } from "../../../models/actionModel/actionModel";
 
-const INITIAL_STATE = {
+const INITIAL_STATE : contactState = {
     contacts:[],
     contact:null as Contact | null,
    refreshList:false
   };
 
 
-  const contactReducer= (state = INITIAL_STATE, action:actionPayloadModel) => {
+const contactReducer: Reducer<contactState, AppAction> = (state: contactState = INITIAL_STATE, action: AppAction): contactState => {
     switch (action.type) {
         case GET_CONTACTS_SUCCESS:
             return {
                 ...state,
-                contacts: action.payload,
+                contacts: (action as actionPayloadModel).payload,
             }
        
         case GET_CONTACT_DETAIL_SUCCESS:
             return {
                 ...state,
-                contact: action.payload,
+                contact: (action as actionPayloadModel).payload,
             }
        
         case CREATE_CONTACT_SUCCESS:
             return {
                 ...state,
-                contact: action.payload,
+                contact: (action as actionPayloadModel).payload,
                 refreshList : true
             }
        
         case UPDATE_CONTACT_SUCCESS:
             return {
                 ...state,
-                contact: action.payload,
+                contact: (action as actionPayloadModel).payload,
             }
 
       default:

@@ -10,9 +10,6 @@ import {
   CRow,
 } from '@coreui/react'
 
-import AngularImg from '../../../../src/assets/images/angular.jpg'
-import ReactImg from '../../../..src/assets/images/react.jpg'
-import VueImg from '../../../..src/assets/images/vue.jpg'
 import { DocsExample } from '../..'
 
 const slidesLight = [
@@ -34,13 +31,13 @@ const Carousels = () => {
             <DocsExample href="components/carousel">
               <CCarousel>
                 <CCarouselItem>
-                  <img className="d-block w-100" src={ReactImg} alt="slide 1" />
+                  <img className="d-block w-100" src="/images/react.jpg" alt="slide 1" />
                 </CCarouselItem>
                 <CCarouselItem>
-                  <img className="d-block w-100" src={AngularImg} alt="slide 2" />
+                  <img className="d-block w-100" src="/images/angular.jpg" alt="slide 2" />
                 </CCarouselItem>
                 <CCarouselItem>
-                  <img className="d-block w-100" src={VueImg} alt="slide 3" />
+                  <img className="d-block w-100" src="/images/vue.jpg" alt="slide 3" />
                 </CCarouselItem>
               </CCarousel>
             </DocsExample>
@@ -59,13 +56,13 @@ const Carousels = () => {
             <DocsExample href="components/carousel/#with-controls">
               <CCarousel controls>
                 <CCarouselItem>
-                  <img className="d-block w-100" src={ReactImg} alt="slide 1" />
+                  <img className="d-block w-100" src="/images/react.jpg" alt="slide 1" />
                 </CCarouselItem>
                 <CCarouselItem>
-                  <img className="d-block w-100" src={AngularImg} alt="slide 2" />
+                  <img className="d-block w-100" src="/images/angular.jpg" alt="slide 2" />
                 </CCarouselItem>
                 <CCarouselItem>
-                  <img className="d-block w-100" src={VueImg} alt="slide 3" />
+                  <img className="d-block w-100" src="/images/vue.jpg" alt="slide 3" />
                 </CCarouselItem>
               </CCarousel>
             </DocsExample>
@@ -84,13 +81,13 @@ const Carousels = () => {
             <DocsExample href="components/carousel/#with-indicators">
               <CCarousel controls indicators>
                 <CCarouselItem>
-                  <img className="d-block w-100" src={ReactImg} alt="slide 1" />
+                  <img className="d-block w-100" src="/images/react.jpg" alt="slide 1" />
                 </CCarouselItem>
                 <CCarouselItem>
-                  <img className="d-block w-100" src={AngularImg} alt="slide 2" />
+                  <img className="d-block w-100" src="/images/angular.jpg" alt="slide 2" />
                 </CCarouselItem>
                 <CCarouselItem>
-                  <img className="d-block w-100" src={VueImg} alt="slide 3" />
+                  <img className="d-block w-100" src="/images/vue.jpg" alt="slide 3" />
                 </CCarouselItem>
               </CCarousel>
             </DocsExample>
@@ -114,21 +111,21 @@ const Carousels = () => {
             <DocsExample href="components/carousel/#with-captions">
               <CCarousel controls indicators>
                 <CCarouselItem>
-                  <img className="d-block w-100" src={ReactImg} alt="slide 1" />
+                  <img className="d-block w-100" src="/images/react.jpg" alt="slide 1" />
                   <CCarouselCaption className="d-none d-md-block">
                     <h5>First slide label</h5>
                     <p>Some representative placeholder content for the first slide.</p>
                   </CCarouselCaption>
                 </CCarouselItem>
                 <CCarouselItem>
-                  <img className="d-block w-100" src={AngularImg} alt="slide 2" />
+                  <img className="d-block w-100" src="/images/angular.jpg" alt="slide 2" />
                   <CCarouselCaption className="d-none d-md-block">
                     <h5>Second slide label</h5>
                     <p>Some representative placeholder content for the first slide.</p>
                   </CCarouselCaption>
                 </CCarouselItem>
                 <CCarouselItem>
-                  <img className="d-block w-100" src={VueImg} alt="slide 3" />
+                  <img className="d-block w-100" src="/images/vue.jpg" alt="slide 3" />
                   <CCarouselCaption className="d-none d-md-block">
                     <h5>Third slide label</h5>
                     <p>Some representative placeholder content for the first slide.</p>
@@ -152,13 +149,13 @@ const Carousels = () => {
             <DocsExample href="components/carousel/#crossfade">
               <CCarousel controls transition="crossfade">
                 <CCarouselItem>
-                  <img className="d-block w-100" src={ReactImg} alt="slide 1" />
+                  <img className="d-block w-100" src="/images/react.jpg" alt="slide 1" />
                 </CCarouselItem>
                 <CCarouselItem>
-                  <img className="d-block w-100" src={AngularImg} alt="slide 2" />
+                  <img className="d-block w-100" src="/images/angular.jpg" alt="slide 2" />
                 </CCarouselItem>
                 <CCarouselItem>
-                  <img className="d-block w-100" src={VueImg} alt="slide 3" />
+                  <img className="d-block w-100" src="/images/vue.jpg" alt="slide 3" />
                 </CCarouselItem>
               </CCarousel>
             </DocsExample>

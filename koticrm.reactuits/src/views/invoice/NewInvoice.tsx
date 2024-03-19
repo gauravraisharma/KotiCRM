@@ -1461,7 +1461,15 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
                   >
                     Create Invoice
                   </button>
-                </div>
+                
+                <button
+                    type="button" 
+                    className="btn btn-secondary"
+                    onClick={() => onBackToListButtonClickHandler()} 
+                  >
+                    Cancel
+                  </button>
+                  </div>
               </Form>
             )}
           </Formik>

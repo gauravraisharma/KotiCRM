@@ -1,32 +1,39 @@
 import { CREATE_ACCOUNT_SUCCESS, DELETE_ACCOUNT_SUCCESS, GET_ACCOUNT_DETAIL_SUCCESS, GET_ACCOUNT_OWNER_SUCCESS, GET_ACCOUNT_STATUS_SUCCESS, GET_ACCOUNT_SUCCESS, GET_ACCOUNT_TYPE_SUCCESS, UPDATE_ACCOUNT_SUCCESS } from "../../../constants/reduxConstants";
-import { actionPayloadModel } from "../../../models/actionModel/actionModel";
+
 import { Account } from '../../../models/account/Account';
-const INITIAL_STATE = {
+import { actionPayloadModel } from "../../../models/actionModel/actionModel";
+import { AppAction } from "../../../models/redux/action/ActionModel";
+import { accountState } from "../../../models/reduxState/accountState";
+import { Reducer } from "react";
+const INITIAL_STATE : accountState = {
    accounts:[],
    account:null as Account | null,
    createAccountResponse:null as Account | null,
    updateAccountResponse:null as Account|null,
-   refreshList:false
+   refreshList:false,
+   accountOwner:null,
+   accountStatus:null,
+   accountType:null
   };
 
 
-  const accountReducer= (state = INITIAL_STATE, action:actionPayloadModel) => {
+const accountReducer: Reducer<accountState, AppAction> = (state: accountState = INITIAL_STATE, action: AppAction): accountState => {
     switch (action.type) {
       case  GET_ACCOUNT_SUCCESS:
         return {
             ...state,
-            accounts: action.payload,
+            accounts: (action as actionPayloadModel).payload,
         }
     case CREATE_ACCOUNT_SUCCESS:
         return {
             ...state,
-            createAccountResponse: action.payload,
+            createAccountResponse: (action as actionPayloadModel).payload,
             refreshList:true
         }
     case GET_ACCOUNT_DETAIL_SUCCESS:
             return {
                 ...state,
-                account: action.payload,
+                account: (action as actionPayloadModel).payload,
             }
     case DELETE_ACCOUNT_SUCCESS:
     return {
@@ -37,24 +44,23 @@ const INITIAL_STATE = {
     case UPDATE_ACCOUNT_SUCCESS:
         return {
             ...state,
-            updateAccountResponse: action.payload
+            updateAccountResponse: (action as actionPayloadModel).payload
         }
  case GET_ACCOUNT_OWNER_SUCCESS:
     return {
         ...state,
-
-        accountOwner: action.payload,
+        accountOwner: (action as actionPayloadModel).payload,
     }
 case GET_ACCOUNT_STATUS_SUCCESS:
     return {
         ...state,
-        accountStatus: action.payload,
+        accountStatus: (action as actionPayloadModel).payload,
     }
 
 case GET_ACCOUNT_TYPE_SUCCESS:
     return {
         ...state,
-        accountType: action.payload,
+        accountType: (action as actionPayloadModel).payload,
     }
 
       default:
