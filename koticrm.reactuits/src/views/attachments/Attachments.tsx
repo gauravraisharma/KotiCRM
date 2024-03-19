@@ -54,21 +54,27 @@ const Attachments = () => {
   };
 
 
-  // let fetchedAttachments = attachments;
+  // let Attachments = fetchedAttachments;
   // if (accountOwner) {
-  //   fetchedAttachments = fetchedAttachments?.filter((attachment: any) => attachment.accountOwner === accountOwner);
+  //   Attachments = fetchedAttachments?.filter((attachment: any) => attachment.accountOwner === accountOwner);
   // }
-  // const attachmentCount = fetchedAttachments?.length;
+  // const attachmentCount = Attachments?.length; // Calculate attachmentCount based on filtered Attachments
   
-  // console.log(filteredAttachments);
+  // console.log(Attachments);
   // useEffect(() => {
-  //   dispatch(getAttachments());
-  // }, [dispatch]);
+  //   if (accountOwner) {
+  //     dispatch(getAttachments(accountOwner)); // Dispatch getAttachments with accountOwner
+  //   } else {
+  //     dispatch(getAttachments()); // Dispatch getAttachments without accountOwner
+  //   }
+  // }, [accountOwner, dispatch]); // Add accountOwner to the dependencies array
   
   // useEffect(() => {
-  // getAttachments(attachmentCount); // Dispatch getAttachments with attachmentCount
-  // });// Add attachmentCount to the dependencies array
+  //   // Optionally, you can use attachmentCount here if needed
+  //   console.log(attachmentCount);
+  // }, [attachmentCount]); // Add attachmentCount to the dependencies array
   
+
 
   return (
     <CRow>

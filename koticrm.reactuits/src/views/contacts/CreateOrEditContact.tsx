@@ -1,9 +1,9 @@
-import { CCard, CCardBody, CCardHeader, CCol, CRow } from "@coreui/react";
+import { CButton, CCard, CCardBody, CCardHeader, CCol, CRow } from "@coreui/react";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { ChangeEvent, useEffect, useState } from "react";
 import * as Yup from "yup";
 import { Contact, ContactClass } from "../../models/contact/Contact";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import SearchDropdown from "../../components/base/select/SearchDropdown";
 
@@ -15,12 +15,6 @@ import {
   updateContact,
 } from "../../redux-saga/modules/contact/action";
 
-
-
-interface MyFormProps {
-  closeModal: () => void;
-  onBackToListButtonClickHandler: () => void;
-}
 
 const owners = [
   {
@@ -166,10 +160,8 @@ const owners = [
   // Add more options as needed
 ];
 
-const CreateOrEditContact :React.FC <MyFormProps> = ({
-  closeModal,
-  onBackToListButtonClickHandler,
-})=>{
+const CreateOrEditContact=()=>{
+
 
   const { contactId } = useParams<{ contactId: string }>();
   const [contact, setContact] = useState<Contact>(new ContactClass());
@@ -799,13 +791,16 @@ const CreateOrEditContact :React.FC <MyFormProps> = ({
                       >
                         {isSubmitting ? "Submitting..." : "Submit"}
                       </button>
-                      <button
-                    type="button" 
-                    className="btn btn-secondary"
-                    onClick={() => (onBackToListButtonClickHandler)} 
-                  >
-                    Cancel
-                  </button>
+                      <Link to={`/contacts`}>
+                  <CButton
+                    component="input"
+                    type="button"
+                    color="secondary"
+                    value="cancel"
+                    // variant="outline"
+                  />
+                </Link>
+              
                     </CCol>
                   </CRow>
                 </CCol>

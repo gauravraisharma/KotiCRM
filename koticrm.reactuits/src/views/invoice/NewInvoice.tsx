@@ -1454,7 +1454,7 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
 
 								</div>
 
-                <div>
+                <div className="text-end">
                   <button
                     className="btn btn-primary"
                     onClick={() => handleSubmit}
