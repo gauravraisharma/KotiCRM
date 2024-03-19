@@ -21,9 +21,8 @@ import { getAccountByIdRequest } from "../../../redux-saga/modules/account/actio
 
 const AccountDetails = () => {
   const navigate = useNavigate();
-  const data = useParams();
+  const { accountId } = useParams();
   const dispatch = useDispatch();
-  const accountId = data.accountId?.split("=")[1];
 
   const [notesCount, setNotesCount] = useState();
   const [invoicesCount, setInvoicesCount] = useState();
@@ -38,7 +37,7 @@ const AccountDetails = () => {
   const industryName =
     account && industry
       ? industry.find((industry: any) => industry.id === account.industryId)
-          ?.name
+        ?.name
       : null;
   const ownerName =
     account && accountOwner
@@ -54,15 +53,17 @@ const AccountDetails = () => {
   };
 
   // const handleNoteSave = (name: string) => {
-    // Filter notes based on the name parameter
-    // const filteredNotes = notes.filter((note: Note) => note.name === name);
-  
-    // Handle filteredNotes as needed
+  // Filter notes based on the name parameter
+  // const filteredNotes = notes.filter((note: Note) => note.name === name);
+
+  // Handle filteredNotes as needed
   // };
 
   useEffect(() => {
-    dispatch(getAccountByIdRequest(accountId));
-  }, [dispatch]);
+    if (accountId) {
+      dispatch(getAccountByIdRequest(+accountId));
+    }
+  }, [dispatch, accountId]);
 
   return (
     <CRow>
@@ -283,7 +284,7 @@ const AccountDetails = () => {
                             </CDropdownMenu>
                           </CDropdown>
                         </div>*/}
-                      </div> 
+                      </div>
                     </CCardHeader>
                     <CCardBody>
                       <Notes

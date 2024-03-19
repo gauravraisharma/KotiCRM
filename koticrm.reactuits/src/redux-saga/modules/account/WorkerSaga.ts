@@ -50,9 +50,9 @@ export function* workCreateAccount(action: actionPayloadModel): Generator<any> {
 
 
 
-export function* workGetAccountByIdFetch(action: any): Generator<any> {
+export function* workGetAccountByIdFetch(action: actionPayloadModel): Generator<any> {
   try {
-    const response: any = yield call(GetAccountById,action);
+    const response: any = yield call(GetAccountById,action.payload);
 
     if(response.status!=200){
       toast.error('Error fetching accounts')

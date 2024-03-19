@@ -10,7 +10,7 @@ export const getAccounts = () => ({
     payload: account,
   });
   
-  export const getAccountByIdRequest = (id: any) => ({
+  export const getAccountByIdRequest = (id: number) => ({
     type: GET_ACCOUNT_DETAIL_FETCH,
     payload: id,
   });
