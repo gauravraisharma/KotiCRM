@@ -129,7 +129,7 @@ namespace KotiCRM.Repository.Data
             {
                 entity.HasKey(e => e.Id);
 
-                entity.Property(e => e.Id).HasColumnName("Id");
+                entity.Property(e => e.Id).HasColumnName("ContactId");
                 entity.Property(e => e.OwnerId).HasMaxLength(200).IsRequired();
                 entity.Property(e => e.FirstName).HasMaxLength(200).IsRequired();
                 entity.Property(e => e.LastName).HasMaxLength(200);

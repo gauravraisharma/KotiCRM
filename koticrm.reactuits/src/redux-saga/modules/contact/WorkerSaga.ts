@@ -10,7 +10,7 @@ export function* workGetContactsFetch(): Generator<any> {
   try {
     const response: any = yield call(GetContactsList);
     if (response.status != 200) {
-      toast.error('Error fetching accounts')
+      toast.error('Error fetching contacts')
     } else {
       const contacts: Contact[] = response.data;
       yield put({ type: GET_CONTACTS_SUCCESS, payload: contacts });
