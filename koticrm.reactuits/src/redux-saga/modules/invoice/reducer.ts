@@ -1,7 +1,8 @@
+import { Reducer } from "react";
 import {  CREATE_INVOICE_SUCCESS, DELETE_INVOICE_SUCCESS, GET_INVOICE_DETAIL_SUCCESS, GET_INVOICE_OWNER_SUCCESS, GET_INVOICE_STATUS_SUCCESS, GET_INVOICE_SUCCESS, UPDATE_INVOICE_SUCCESS } from "../../../constants/reduxConstants";
 import { actionPayloadModel } from "../../../models/actionModel/actionModel";
 import { Invoice } from "../../../models/invoice/Invoice";
-import { invoiceState } from "../../../models/redux/reduxState/invoiceState";
+import { invoiceState } from "../../../models/reduxState/invoiceState";
 const INITIAL_STATE : invoiceState = {
     invoiceStatus : [],
     invoices:[],
@@ -14,7 +15,7 @@ const INITIAL_STATE : invoiceState = {
   };
 
 
-  const invoiceReducer= (state : invoiceState = INITIAL_STATE, action:actionPayloadModel) => {
+const invoiceReducer: Reducer<invoiceState, actionPayloadModel> = (state: invoiceState = INITIAL_STATE, action: actionPayloadModel): invoiceState => {
     switch (action.type) {
         case GET_INVOICE_STATUS_SUCCESS:
             return {

@@ -1,7 +1,8 @@
+import { Reducer } from "react";
 import {  CREATE_NOTES_SUCCESS, GET_NOTES_SUCCESS } from "../../../constants/reduxConstants";
-import { actionPayloadModel } from "../../../models/actionModel/actionModel";
 import { Note } from "../../../models/notes/notes";
-import { noteState } from "../../../models/redux/reduxState/noteState";
+import { noteState } from "../../../models/reduxState/noteState";
+import { actionPayloadModel } from "../../../models/actionModel/actionModel";
 const INITIAL_STATE : noteState = {
     notes:[],
     note:null as Note | null,
@@ -9,7 +10,7 @@ const INITIAL_STATE : noteState = {
   };
 
 
-  const noteReducer= (state : noteState = INITIAL_STATE, action:actionPayloadModel) => {
+const noteReducer: Reducer<noteState, actionPayloadModel> = (state: noteState = INITIAL_STATE, action: actionPayloadModel): noteState => {
     switch (action.type) {
         case GET_NOTES_SUCCESS:
             return {
@@ -20,7 +21,7 @@ const INITIAL_STATE : noteState = {
             return {
                 ...state,
                 note: action.payload,
-                refreash:true
+                refreshList:true
             }
       
       default:

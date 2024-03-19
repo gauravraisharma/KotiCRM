@@ -1,17 +1,21 @@
 import { CREATE_ACCOUNT_SUCCESS, DELETE_ACCOUNT_SUCCESS, GET_ACCOUNT_DETAIL_SUCCESS, GET_ACCOUNT_OWNER_SUCCESS, GET_ACCOUNT_STATUS_SUCCESS, GET_ACCOUNT_SUCCESS, GET_ACCOUNT_TYPE_SUCCESS, UPDATE_ACCOUNT_SUCCESS } from "../../../constants/reduxConstants";
 import { actionPayloadModel } from "../../../models/actionModel/actionModel";
 import { Account } from '../../../models/account/Account';
-import { AccountState } from "../../../models/redux/state/AccountState";
-const INITIAL_STATE : AccountState = {
+import { accountState } from "../../../models/reduxState/accountState";
+import { Reducer } from "react";
+const INITIAL_STATE : accountState = {
    accounts:[],
    account:null as Account | null,
    createAccountResponse:null as Account | null,
    updateAccountResponse:null as Account|null,
-   refreshList:false
+   refreshList:false,
+   accountOwner:null,
+   accountStatus:null,
+   accountType:null
   };
 
 
-  const accountReducer= (state : AccountState = INITIAL_STATE, action:actionPayloadModel) => {
+const accountReducer: Reducer<accountState, actionPayloadModel> = (state: accountState = INITIAL_STATE, action: actionPayloadModel): accountState => {
     switch (action.type) {
       case  GET_ACCOUNT_SUCCESS:
         return {
@@ -43,7 +47,6 @@ const INITIAL_STATE : AccountState = {
  case GET_ACCOUNT_OWNER_SUCCESS:
     return {
         ...state,
-
         accountOwner: action.payload,
     }
 case GET_ACCOUNT_STATUS_SUCCESS:

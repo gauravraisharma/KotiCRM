@@ -4,8 +4,7 @@ import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage'; // defaults to localStorage for web
 import rootSaga from './rootSaga';
 import rootReducer from './rootReducer';
-import { rootState } from '../models/redux/reduxState/rootState';
-import { actionPayloadModel } from '../models/actionModel/actionModel';
+import { rootState } from '../models/reduxState/rootState';
 
 
 const persistConfig = {
