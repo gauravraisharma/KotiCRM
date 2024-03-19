@@ -1,11 +1,11 @@
 export interface Contact {
   id: number;
-  ownerId: number;
-  firstName: string | null;
+  ownerId: string;
+  firstName: string;
   lastName: string | null;
   accountID: number;
-  email: string | null;
-  phone: string | null;
+  email: string;
+  phone: string;
   otherPhone: string | null;
   mobile: string | null;
   title: string | null;
@@ -17,7 +17,7 @@ export interface Contact {
   twitterURL: string | null;
   secondaryEmail: string | null;
   mailingStreet: string | null;
-  city: string | null;
+  city: string;
   state: string | null;
   zip: string | null;
   country: string | null;
@@ -26,12 +26,12 @@ export interface Contact {
 
 export class ContactClass implements Contact {
   id: number;
-  ownerId: number;
-  firstName: string | null;
+  ownerId: string;
+  firstName: string;
   lastName: string | null;
   accountID: number;
-  email: string | null;
-  phone: string | null;
+  email: string;
+  phone: string;
   otherPhone: string | null;
   mobile: string | null;
   title: string | null;
@@ -43,7 +43,7 @@ export class ContactClass implements Contact {
   twitterURL: string | null;
   secondaryEmail: string | null;
   mailingStreet: string | null;
-  city: string | null;
+  city: string;
   state: string | null;
   zip: string | null;
   country: string | null;
@@ -51,7 +51,7 @@ export class ContactClass implements Contact {
 
   constructor() {
     this.id = 0;
-    this.ownerId = 0;
+    this.ownerId = "";
     this.firstName = '';
     this.lastName = '';
     this.accountID = 0;

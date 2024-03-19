@@ -22,8 +22,6 @@ export function* workGetContactsFetch(): Generator<any> {
   }
 }
 
-
-
 export function* workGetContactByIdFetch(action: actionPayloadModel): Generator<any> {
   try {
     const response: any = yield call(GetContactDetails, action.payload);
@@ -39,11 +37,9 @@ export function* workGetContactByIdFetch(action: actionPayloadModel): Generator<
   }
 }
 
-
-
 export function* workCreateContact(action: any): Generator<any> {
   try {
-    const response: any = yield call(CreateContact, action);
+    const response: any = yield call(CreateContact, action.payload);
 
     if (response.status != 200) {
       toast.error('Error fetching accounts')
@@ -57,9 +53,9 @@ export function* workCreateContact(action: any): Generator<any> {
   }
 }
 
-export function* workUpdateContact(action: actionPayloadModel): Generator<any> {
+export function* workUpdateContact(action: any): Generator<any> {
   try {
-    const response: any = yield call(UpdateContact, action.payload.id, action.payload.contact);
+    const response: any = yield call(UpdateContact, action.payload);
 
     if (response.status != 200) {
       toast.error('Error fetching accounts')
