@@ -324,7 +324,7 @@ const CreateOrEditContact = () => {
                     </CCol>
                     <CCol sm={8}>
                       <Field
-                        type="text"
+                        type="number"
                         id="accountID"
                         name="accountID"
                         className="form-control"
