@@ -14,7 +14,7 @@ const persistConfig = {
   
 
 
-const persistedReducer = persistReducer<rootState>(persistConfig, rootReducer);
+const persistedReducer = persistReducer<rootState | undefined>(persistConfig, rootReducer);
 const sagaMiddleware = createSagaMiddleware();
 
 const store = createStore(

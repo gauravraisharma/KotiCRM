@@ -1,8 +1,9 @@
 import { Reducer } from "react";
 import {  CREATE_INVOICE_SUCCESS, DELETE_INVOICE_SUCCESS, GET_INVOICE_DETAIL_SUCCESS, GET_INVOICE_OWNER_SUCCESS, GET_INVOICE_STATUS_SUCCESS, GET_INVOICE_SUCCESS, UPDATE_INVOICE_SUCCESS } from "../../../constants/reduxConstants";
-import { actionPayloadModel } from "../../../models/actionModel/actionModel";
 import { Invoice } from "../../../models/invoice/Invoice";
 import { invoiceState } from "../../../models/reduxState/invoiceState";
+import { AppAction } from "../../../models/redux/action/ActionModel";
+import { actionPayloadModel } from "../../../models/actionModel/actionModel";
 const INITIAL_STATE : invoiceState = {
     invoiceStatus : [],
     invoices:[],
@@ -15,42 +16,42 @@ const INITIAL_STATE : invoiceState = {
   };
 
 
-const invoiceReducer: Reducer<invoiceState, actionPayloadModel> = (state: invoiceState = INITIAL_STATE, action: actionPayloadModel): invoiceState => {
+const invoiceReducer: Reducer<invoiceState, AppAction> = (state: invoiceState = INITIAL_STATE, action: AppAction): invoiceState => {
     switch (action.type) {
         case GET_INVOICE_STATUS_SUCCESS:
             return {
                 ...state,
-                invoiceStatus: action.payload,
+                invoiceStatus: (action as actionPayloadModel).payload,
             }
         case GET_INVOICE_SUCCESS:
             return {
                 ...state,
-                invoices: action.payload
+                invoices: (action as actionPayloadModel).payload
             }
         case GET_INVOICE_DETAIL_SUCCESS:
             return {
                 ...state,
-                invoice: action.payload
+                invoice: (action as actionPayloadModel).payload
             }
         case CREATE_INVOICE_SUCCESS:
             return {
                 ...state,
-                createInvoiceResponse: action.payload
+                createInvoiceResponse: (action as actionPayloadModel).payload
             }
         case UPDATE_INVOICE_SUCCESS:
             return {
                 ...state,
-                updateInvoiceResposne: action.payload
+                updateInvoiceResposne: (action as actionPayloadModel).payload
             }
         case DELETE_INVOICE_SUCCESS:
             return {
                 ...state,
-                deleteInvoiceResponse: action.payload
+                deleteInvoiceResponse: (action as actionPayloadModel).payload
             }
         case GET_INVOICE_OWNER_SUCCESS:
             return {
                 ...state,
-                invoiceOwner: action.payload,
+                invoiceOwner: (action as actionPayloadModel).payload,
             }
 
       default:

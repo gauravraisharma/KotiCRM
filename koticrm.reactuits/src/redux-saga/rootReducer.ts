@@ -7,9 +7,9 @@ import noteReducer from './modules/notes/reducer'
 import invoiceReducer from './modules/invoice/reducer'
 import sharedReducer from './modules/shared/reducer'
 import { Reducer } from 'react'
-import { RootState } from '../models/commonModels/CommonModels'
-import { actionPayloadModel } from '../models/actionModel/actionModel'
-const rootReducer: Reducer<RootState, actionPayloadModel> = combineReducers({ 
+import { rootState } from '../models/reduxState/rootState'
+import { AppAction } from '../models/redux/action/ActionModel'
+const rootReducer: Reducer<rootState | undefined, AppAction> = combineReducers({ 
                                     authReducer,
                                     accountReducer,
                                     attachmentReducer,

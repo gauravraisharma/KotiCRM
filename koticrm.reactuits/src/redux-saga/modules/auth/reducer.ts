@@ -1,8 +1,9 @@
 
 import { Reducer } from "react";
 import {LOGIN_SUCCESS,LOGOUT} from "../../../constants/reduxConstants";
-import { actionPayloadModel } from '../../../models/actionModel/actionModel';
 import { authState } from "../../../models/reduxState/authState";
+import { AppAction } from "../../../models/redux/action/ActionModel";
+import { actionPayloadModel } from "../../../models/actionModel/actionModel";
 
 
 const INITIAL_STATE : authState = {
@@ -14,17 +15,18 @@ const INITIAL_STATE : authState = {
   loggedIn: false
 };
 
-const authReducer: Reducer<authState, actionPayloadModel> = (state: authState = INITIAL_STATE, action: actionPayloadModel): authState => {
+const authReducer: Reducer<authState, AppAction> = (state: authState = INITIAL_STATE, action: AppAction): authState => {
   switch (action.type) {
-    case LOGIN_SUCCESS:
-      if (action.payload != null && action.payload != undefined && action.payload.status == 'SUCCEED') {
-          localStorage.setItem('accessToken', action.payload.token);
+      case LOGIN_SUCCESS:
+
+          if ((action as actionPayloadModel).payload != null && (action as actionPayloadModel).payload != undefined && (action as actionPayloadModel).payload.status == 'SUCCEED') {
+              localStorage.setItem('accessToken', (action as actionPayloadModel).payload.token);
           return {
               ...state,
-              token: action.payload.token,
-              modulePermission: action.payload.modulePermission,
-              userId: action.payload.userId,
-              userType :action.payload.userType,
+              token: (action as actionPayloadModel).payload.token,
+              modulePermission: (action as actionPayloadModel).payload.modulePermission,
+              userId: (action as actionPayloadModel).payload.userId,
+              userType: (action as actionPayloadModel).payload.userType,
               loggedIn: true,
           };
       }
