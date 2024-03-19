@@ -167,13 +167,27 @@ const CreateOrEditContact = () => {
   const fetchedContact = useSelector(
     (state: any) => state.contactReducer.contact
   );
-  console.log(contact);
+  console.log("Initial Contact:",contact);
 
   // Country-State
   const countries: Country[] = Countries;
   const [selectedCountry, setSelectedCountry] = useState<string>("");
   const [selectedState, setSelectedState] = useState<string>("");
   const [states, setStates] = useState<State[]>([]);
+
+  useEffect(() => {
+    if (contactId) {
+      dispatch(getContactById(+contactId));
+    } else {
+      setContact(new ContactClass());
+    }
+  }, [dispatch, contactId]);
+
+  useEffect(() => {
+    if (fetchedContact) {
+      setContact(fetchedContact);
+    }
+  }, [fetchedContact]);
 
   const handleCountryChange = (e: ChangeEvent<HTMLSelectElement>) => {
     const selectedCountry = e.target.value;
@@ -195,6 +209,28 @@ const CreateOrEditContact = () => {
   const handleStateChange = (e: ChangeEvent<HTMLSelectElement>) => {
     const selectedState = e.target.value;
     setSelectedState(selectedState);
+  };
+
+  const handleFormSubmit = async (
+    contact: Contact,
+    { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }
+  ) => {
+    try {
+      contact.country = selectedCountry;
+      contact.state = selectedState;
+      if (!contact.id) {
+        console.log("Create new contact:", contact);
+        dispatch(createContact(contact));
+      } else {
+        console.log("Edit existing contact", contact);
+        dispatch(updateContact(contact));
+      }
+      navigate("/contacts");
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const validationSchema = Yup.object().shape({
@@ -221,43 +257,6 @@ const CreateOrEditContact = () => {
     // country: Yup.string().required('Country Url is required'),
     // state: Yup.string().required('State Url is required'),
   });
-
-  const handleFormSubmit = async (
-    contact: Contact,
-    { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }
-  ) => {
-    try {
-      contact.country = selectedCountry;
-      contact.state = selectedState;
-      if (!contact.id) {
-        console.log("Create new contact:", contact);
-        dispatch(createContact(contact));
-      } else {
-        console.log("Edit existing contact", contact);
-        dispatch(updateContact(contact, contact.id));
-      }
-      navigate("/contacts");
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setSubmitting(false);
-    }
-  };
-
-  useEffect(() => {
-    if (contactId) {
-      dispatch(getContactById(+contactId));
-    } else {
-      setContact(new ContactClass());
-    }
-  }, [dispatch, contactId]);
-
-  useEffect(() => {
-    if (fetchedContact) {
-      console.log("Fetched contact");
-      setContact(fetchedContact);
-    }
-  }, [fetchedContact]);
 
   return (
     <CCard>

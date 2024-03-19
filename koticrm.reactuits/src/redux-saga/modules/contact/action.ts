@@ -16,8 +16,7 @@ export const createContact = (contact: Contact) => ({
   payload: contact
 });
 
-export const updateContact = (contact: Contact, id: any) => ({
+export const updateContact = (contact: Contact) => ({
   type: UPDATE_CONTACT_REQUEST,
-  payload: { contact, id },
+  payload: contact,
 });
-

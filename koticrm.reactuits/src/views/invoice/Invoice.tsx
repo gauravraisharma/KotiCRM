@@ -244,7 +244,7 @@ const InvoiceComponent: React.FC<InvoiceProps> = ({
                             </CTableDataCell>
                             <CTableDataCell>
                               {/* {getDates(invoiceModel.invoice?.dueDate)} */}
-                              {formatDate(invoiceModel.invoice?.dueDate, 'DD/MM/YYYY HH:mm')} // , 'Asia/Kolkata'
+                              {formatDate(invoiceModel.invoice?.dueDate, 'DD/MM/YYYY')}
                             </CTableDataCell>
                             <CTableDataCell>
                               <AiFillEye

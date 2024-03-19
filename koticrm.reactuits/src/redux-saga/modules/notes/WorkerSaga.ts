@@ -15,7 +15,6 @@ export function* workGetNotesFetch(): Generator<any> {
       toast.error('Error fetching accounts')
     }else{
       const notes: Note[] =response.data;
-      console.log("Notes on saga:",notes);
       
       yield put({ type: GET_NOTES_SUCCESS, payload:notes });
       return response;

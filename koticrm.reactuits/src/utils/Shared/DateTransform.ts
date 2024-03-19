@@ -28,11 +28,13 @@ export function formatDate(date: Date, format: string = 'DD/MM/YYYY', timezone?:
 
     const timeZoneOffset = timezone ? getTimezoneOffset(timezone) : 0; 
     const localDate = new Date(date); // Construct a Date object from the provided date string
+    
     localDate.setHours(localDate.getHours() + timeZoneOffset); // Adjust the local date based on the timezone offset
-
+    
     // Replace placeholders with actual date values
     const year = localDate.getFullYear().toString();
     const month = (localDate.getMonth() + 1).toString().padStart(2, '0');
+    console.log("Month:",month);
     const day = localDate.getDate().toString().padStart(2, '0');
 
     let formattedString = format
