@@ -109,7 +109,7 @@ const AccountList: React.FC = () => {
 
   const navigate = useNavigate()
   const showItems = (id: any) => {
-    navigate(`/accountDetails/accountId=${id}`)
+    navigate(`/accountDetails/${id}`)
   }
 
   return (

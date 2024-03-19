@@ -24,7 +24,8 @@ export function getDateTime(date: any) {
 }
 
 export function formatDate(date: Date, format: string = 'DD/MM/YYYY'): string {
-    if (!date) return '';
+    // Check if date is valid
+    if (!date || !(date instanceof Date)) return '';
 
     // const timeZoneOffset = timezone ? getTimezoneOffset(timezone) : 0; + timeZoneOffset , timezone?: string
     const localDate = new Date(date.getTime());

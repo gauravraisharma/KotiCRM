@@ -11,7 +11,7 @@
         align-items: center;
         justify-content: space-between;
         border-radius: 0.25rem;
-        border: 1px solid #050707;
+        border: 1px solid #bfc1c1;
     }
 
     .select-options {
@@ -32,7 +32,7 @@
 
         &.open {
             max-height: 200px;
-            border-color: #5CA8E6;
+            border-color: #bcbdbd;
         }
 
         &.close {
@@ -44,7 +44,7 @@
             align-items: center;
             padding-left: 0.25rem;
             padding-right: 0.25rem;
-            border: 1px solid #5CA8E6;
+            border: 1px solid #9a9c9d;
             border-radius: 0.25rem;
             margin: 0.5rem;
 
@@ -60,8 +60,9 @@
         li {
             padding: 0.5rem;
             font-size: 0.85rem;
+
             &:hover {
-                background-color: #5CA8E6;
+                background-color: #9aa1a5;
                 color: #ffffff;
                 cursor: pointer;
                 border-radius: 0.25rem;
