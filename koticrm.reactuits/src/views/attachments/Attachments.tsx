@@ -18,7 +18,7 @@ import { MdOutlinePictureAsPdf } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import CreateNewAttachment from "./CreateNewAttachment";
 import { getFileSizeAndLabel } from "../../utils/Shared/FileSizeAndLable";
-import { getDateTime } from "../../utils/Shared/DateTransform";
+import { formatDate } from "../../utils/Shared/DateTransform";
 import { getAttachments } from "../../redux-saga/modules/attachment/action";
 
 const Attachments = () => {
@@ -110,7 +110,7 @@ const Attachments = () => {
                         {getOwnerName(attachment.userID)}
                       </CTableDataCell>
                       <CTableDataCell>
-                        {getDateTime(attachment.dateAdded)}
+                        {formatDate(attachment.dateAdded)}
                       </CTableDataCell>
                       <CTableDataCell>
                         {getFileSizeAndLabel(attachment.fileSize)}
