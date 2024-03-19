@@ -1,4 +1,3 @@
-
 import {
   CButton,
   CCard,
@@ -25,7 +24,8 @@ import { useDispatch } from "react-redux";
 
 import Select from "react-select";
 import DatePicker from "react-datepicker";
-import { CKEditor } from "@ckeditor/ckeditor5-react";
+
+import {CKEditor} from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 
 import "react-datepicker/dist/react-datepicker.css";
@@ -242,7 +242,6 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
   });
 
   const handleDropdownChange = (e: any, selectedOption: any) => {
-    debugger;
     if (e != null) {
       setDropdownItems({ ...dropdownItems, [selectedOption.name]: e.key });
       if (selectedOption.name == "accountName") {
@@ -322,7 +321,6 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
   };
 
   const handleCreateInvoiceClick = () => {
-    debugger;
     const invoiceDetails: Invoice = {
       id: 0,
       ownerID: dropdownItems.invoiceOwner,
