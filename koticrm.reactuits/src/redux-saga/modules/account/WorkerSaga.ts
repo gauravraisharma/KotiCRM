@@ -41,7 +41,8 @@ export function* workCreateAccount(action: actionPayloadModel): Generator<any> {
     }
     else {
       const account: Account = response.data;
-      yield put({ type: CREATE_ACCOUNT_SUCCESS, account });
+      yield put({ type: CREATE_ACCOUNT_SUCCESS, payload: account });
+      toast.success('Account created successfully');
     }
   } catch (error) {
     toast.error('SomethingWent Wrong, Please try after sometime')
@@ -76,6 +77,7 @@ export function* workUpdateAccount(action: actionPayloadModel): Generator<any> {
     else {
       const updatedAccount: Account = response.data;
       yield put({ type: UPDATE_ACCOUNT_SUCCESS, payload: updatedAccount });
+      toast.success('Account details updated successfully');
     }
   } catch (error) {
     toast.error('SomethingWent Wrong, Please try after sometime')
@@ -94,6 +96,7 @@ export function* workDeleteAccount(action: actionPayloadModel): Generator<any> {
     else {
       const Account: Account = response.data;
       yield put({ type: DELETE_ACCOUNT_SUCCESS, payload: Account });
+      toast.success('Account deleted successfully');
     }
   } catch (error) {
     toast.error('SomethingWent Wrong, Please try after sometime')
