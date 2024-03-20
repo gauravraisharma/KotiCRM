@@ -232,7 +232,7 @@ const EditPage: React.FC<EditModalProps> = ({
                           *
                         </span>
                       </label>
-                      <div className="col-sm-6">
+                      <div className="col-sm-8">
                         <Field
                           as="select"
                           name="accountOwner"
@@ -269,7 +269,7 @@ const EditPage: React.FC<EditModalProps> = ({
                           *
                         </span>
                       </label>
-                      <div className="col-sm-6">
+                      <div className="col-sm-8">
                         <Field
                           as="select"
                           name="industry"
@@ -304,7 +304,7 @@ const EditPage: React.FC<EditModalProps> = ({
                           *
                         </span>
                       </label>
-                      <div className="col-sm-6">
+                      <div className="col-sm-8">
                         <Field
                           as="select"
                           name="type"
@@ -342,7 +342,7 @@ const EditPage: React.FC<EditModalProps> = ({
                           *
                         </span>
                       </label>
-                      <div className="col-sm-6">
+                      <div className="col-sm-8">
                         <Field
                           as="select"
                           name="status"
@@ -379,7 +379,7 @@ const EditPage: React.FC<EditModalProps> = ({
                           *
                         </span>
                       </label>
-                      <div className="col-sm-6">
+                      <div className="col-sm-8">
                         <Field
                           type="text"
                           value={updateAccount.accountName}
@@ -407,7 +407,7 @@ const EditPage: React.FC<EditModalProps> = ({
                       >
                         Annual Revenue
                       </label>
-                      <div className="col-sm-6">
+                      <div className="col-sm-8">
                         <Field
                           type="number"
                           value={updateAccount.annualRevenue}
@@ -436,7 +436,7 @@ const EditPage: React.FC<EditModalProps> = ({
                           *
                         </span>
                       </label>
-                      <div className="col-sm-6">
+                      <div className="col-sm-8">
                         <Field
                           type="phone"
                           name="phone"
@@ -455,11 +455,14 @@ const EditPage: React.FC<EditModalProps> = ({
                         />
                       </div>
                     </div>
-                    <div className="form-group row">
+                 
+                  </div>
+                  <div className="col-md-6">
+                  <div className="form-group row">
                       <label htmlFor="fax" className="col-sm-4 col-form-label">
                         Fax
                       </label>
-                      <div className="col-sm-6">
+                      <div className="col-sm-8">
                         <Field
                           type="text"
                           name="fax"
@@ -478,8 +481,6 @@ const EditPage: React.FC<EditModalProps> = ({
                         />
                       </div>
                     </div>
-                  </div>
-                  <div className="col-md-6">
                     <div className="form-group row">
                       <label
                         htmlFor="website"
@@ -490,7 +491,7 @@ const EditPage: React.FC<EditModalProps> = ({
                           *
                         </span>
                       </label>
-                      <div className="col-sm-6">
+                      <div className="col-sm-8">
                         <Field
                           type="text"
                           className="form-control"
@@ -517,7 +518,7 @@ const EditPage: React.FC<EditModalProps> = ({
                       >
                         Billing Street
                       </label>
-                      <div className="col-sm-6">
+                      <div className="col-sm-8">
                         <Field
                           type="text"
                           name="billingStreet"
@@ -543,7 +544,7 @@ const EditPage: React.FC<EditModalProps> = ({
                       >
                         Billing City
                       </label>
-                      <div className="col-sm-6">
+                      <div className="col-sm-8">
                         <Field
                           type="text"
                           name="billingCity"
@@ -569,7 +570,7 @@ const EditPage: React.FC<EditModalProps> = ({
                       >
                         Billing State
                       </label>
-                      <div className="col-sm-6">
+                      <div className="col-sm-8">
                         <Field
                           type="text"
                           name="billingState"
@@ -595,7 +596,7 @@ const EditPage: React.FC<EditModalProps> = ({
                       >
                         Billing Code
                       </label>
-                      <div className="col-sm-6">
+                      <div className="col-sm-8">
                         <Field
                           type="number"
                           name="billingCode"
@@ -624,7 +625,7 @@ const EditPage: React.FC<EditModalProps> = ({
                           *
                         </span>
                       </label>
-                      <div className="col-sm-6">
+                      <div className="col-sm-8">
                         <Field
                           type="text"
                           name="country"
@@ -643,14 +644,16 @@ const EditPage: React.FC<EditModalProps> = ({
                         />
                       </div>
                     </div>
-                    <div className="form-group row">
+                 
+                  </div>
+                  <div className="form-group row">
                       <label
                         htmlFor="description"
-                        className="col-sm-4 col-form-label"
+                        className="col-sm-2 col-form-label"
                       >
                         Description
                       </label>
-                      <div className="col-sm-6">
+                      <div className="col-sm-10">
                         <Field
                           as="textarea"
                           name="description"
@@ -670,7 +673,6 @@ const EditPage: React.FC<EditModalProps> = ({
                         />
                       </div>
                     </div>
-                  </div>
                 </div>
                 <div className="text-end">
                   <button

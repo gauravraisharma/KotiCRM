@@ -59,6 +59,7 @@ export function* workCreateInvoice(action:actionPayloadModel): Generator<any> {
     }else{
       const invoice: InvoiceCreationModel=response.data;
       yield put({ type: CREATE_INVOICE_SUCCESS, payload:invoice });
+      toast.success('Created invoice succeffully')
     }
    
   } catch (error) {
@@ -90,6 +91,7 @@ export function* workDeleteInvoice(action:actionPayloadModel): Generator<any> {
     }else{
       const invoice: Invoice=response.data;
       yield put({ type: DELETE_INVOICE_SUCCESS, payload:invoice });
+      toast.success('Delete invoice successfully')
     }
    
   } catch (error) {
