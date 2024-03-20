@@ -499,34 +499,7 @@ const CreateOrEditContact=()=>{
                       />
                     </CCol>
                   </CRow>
-               
                   <CRow className="mb-3">
-                    <CCol sm={4}>
-                      <label htmlFor="description" className="col-form-label">
-                        Description
-                      </label>
-                    </CCol>
-                    <CCol sm={8}>
-                      <Field
-                        as="textarea"
-                        id="description"
-                        name="description"
-                        className="form-control"
-                        placeholder="Leave a comment here"
-                        style={{ height: "50px" }}
-                      />
-                      <ErrorMessage
-                        name="description"
-                        component="div"
-                        className="invalid-feedback"
-                      />
-                    </CCol>
-                  </CRow>
-                </CCol>
-
-
-                <CCol xs={6}>
-                <CRow className="mb-3">
                     <CCol sm={4}>
                       <label htmlFor="zip" className="col-form-label">
                         Zip
@@ -547,7 +520,13 @@ const CreateOrEditContact=()=>{
                         className="invalid-feedback"
                       />
                     </CCol>
-                  </CRow>
+                </CRow>
+                
+                </CCol>
+
+
+                <CCol xs={6}>
+             
                   <CRow className="mb-3">
                     <CCol sm={4}>
                       <label htmlFor="lastName" className="col-form-label">
@@ -780,6 +759,28 @@ const CreateOrEditContact=()=>{
                       </Field>
                       <ErrorMessage
                         name="state"
+                        component="div"
+                        className="invalid-feedback"
+                      />
+                    </CCol>
+                  </CRow>
+                  <CRow className="mb-3">
+                    <CCol sm={4}>
+                      <label htmlFor="description" className="col-form-label">
+                        Description
+                      </label>
+                    </CCol>
+                    <CCol sm={8}>
+                      <Field
+                        as="textarea"
+                        id="description"
+                        name="description"
+                        className="form-control"
+                        placeholder="Leave a comment here"
+                        style={{ height: "50px" }}
+                      />
+                      <ErrorMessage
+                        name="description"
                         component="div"
                         className="invalid-feedback"
                       />

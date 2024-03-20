@@ -234,7 +234,7 @@ const MyForm: React.FC<MyFormProps> = ({
                           *
                         </span>
                       </label>
-                      <div className="col-sm-6">
+                      <div className="col-sm-8">
                         <Field name="accountOwner">
                           {(fieldProps: any) => (
                             <>
@@ -299,7 +299,7 @@ const MyForm: React.FC<MyFormProps> = ({
                       >
                         Industry<span style={{ color: "red" }}>*</span>
                       </label>
-                      <div className="col-sm-6">
+                      <div className="col-sm-8">
                         <Field
                           as="select"
                           name="industry"
@@ -339,7 +339,7 @@ const MyForm: React.FC<MyFormProps> = ({
                           *
                         </span>
                       </label>
-                      <div className="col-sm-6">
+                      <div className="col-sm-8">
                         <Field
                           as="select"
                           name="status"
@@ -376,7 +376,7 @@ const MyForm: React.FC<MyFormProps> = ({
                           *
                         </span>
                       </label>
-                      <div className="col-sm-6">
+                      <div className="col-sm-8">
                         <Field
                           as="select"
                           name="type"
@@ -416,7 +416,7 @@ const MyForm: React.FC<MyFormProps> = ({
                           *
                         </span>
                       </label>
-                      <div className="col-sm-6">
+                      <div className="col-sm-8">
                         <Field
                           type="text"
                           name="phone"
@@ -446,7 +446,7 @@ const MyForm: React.FC<MyFormProps> = ({
                           *
                         </span>
                       </label>
-                      <div className="col-sm-6">
+                      <div className="col-sm-8">
                         <Field
                           type="text"
                           name="accountName"
@@ -476,7 +476,7 @@ const MyForm: React.FC<MyFormProps> = ({
                       >
                         Annual Revenue
                       </label>
-                      <div className="col-sm-6">
+                      <div className="col-sm-8">
                         <Field
                           type="text"
                           name="annualRevenue"
@@ -498,11 +498,14 @@ const MyForm: React.FC<MyFormProps> = ({
                         />
                       </div>
                     </div>
+                  </div>
+
+                  <div className="col-md-6">
                     <div className="form-group row">
                       <label className="col-sm-4 col-form-label" htmlFor="fax">
                         Fax
                       </label>
-                      <div className="col-sm-6">
+                      <div className="col-sm-8">
                         <Field
                           type="text"
                           name="fax"
@@ -522,9 +525,6 @@ const MyForm: React.FC<MyFormProps> = ({
                         />
                       </div>
                     </div>
-                  </div>
-
-                  <div className="col-md-6">
                     <div className="form-group row">
                       <label
                         className="col-sm-4 col-form-label"
@@ -535,7 +535,7 @@ const MyForm: React.FC<MyFormProps> = ({
                           *
                         </span>
                       </label>
-                      <div className="col-sm-6">
+                      <div className="col-sm-8">
                         <Field
                           type="text"
                           name="website"
@@ -565,7 +565,7 @@ const MyForm: React.FC<MyFormProps> = ({
                       >
                         Billing Street
                       </label>
-                      <div className="col-sm-6">
+                      <div className="col-sm-8">
                         <Field
                           type="text"
                           name="billingStreet"
@@ -594,7 +594,7 @@ const MyForm: React.FC<MyFormProps> = ({
                       >
                         Billing City
                       </label>
-                      <div className="col-sm-6">
+                      <div className="col-sm-8">
                         <Field
                           type="text"
                           name="billingCity"
@@ -624,7 +624,7 @@ const MyForm: React.FC<MyFormProps> = ({
                       >
                         Billing State
                       </label>
-                      <div className="col-sm-6">
+                      <div className="col-sm-8">
                         <Field
                           type="text"
                           name="billingState"
@@ -654,7 +654,7 @@ const MyForm: React.FC<MyFormProps> = ({
                       >
                         Billing Code
                       </label>
-                      <div className="col-sm-6">
+                      <div className="col-sm-8">
                         <Field
                           type="text"
                           name="billingCode"
@@ -730,7 +730,7 @@ const MyForm: React.FC<MyFormProps> = ({
                           *
                         </span>
                       </label>
-                      <div className="col-sm-6">
+                      <div className="col-sm-8">
                         <Field
                           as="select"
                           id="country"
@@ -765,35 +765,30 @@ const MyForm: React.FC<MyFormProps> = ({
                         />
                       </div>
                     </div>
-
-                    <div className="form-group row">
-                      <label
-                        className="col-sm-4 col-form-label"
-                        htmlFor="country"
-                      >
-                        Description
-                      </label>
-                      <div className="col-sm-6">
-                        <textarea
-                          id="description"
-                          name="description"
-                          className={`form-control ${
-                            touched.description && errors.description
-                              ? "is-invalid"
-                              : ""
-                          }`}
-                          style={{ height: "120px" }}
-                          onChange={(e: any) => {
-                            handleChangeData(e);
-                            handleChange(e);
-                          }}
-                        />
-                        <ErrorMessage
+                  </div>
+                  <div className="form-group row">
+                    <label
+                      className="col-sm-2 col-form-label"
+                      htmlFor="country"
+                    >
+                      Description
+                    </label>
+                    <div className="col-sm-10">
+                      <textarea
+                        id="description"
+                        name="description"
+                        className="form-control"
+                        style={{ height: "120px" }}
+                        onChange={(e: any) => {
+                          handleChangeData(e);
+                          handleChange(e);
+                        }}
+                      />
+                      {/* <ErrorMessage
                           name="description"
                           component="div"
                           className="invalid-feedback"
-                        />
-                      </div>
+                        /> */}
                     </div>
                   </div>
                 </div>
@@ -806,9 +801,9 @@ const MyForm: React.FC<MyFormProps> = ({
                     Submit
                   </button>
                   <button
-                    type="button" 
+                    type="button"
                     className="btn btn-secondary"
-                    onClick={() => onBackToListButtonClickHandler()} 
+                    onClick={() => onBackToListButtonClickHandler()}
                   >
                     Cancel
                   </button>
