@@ -13,11 +13,12 @@ import { createAttachment } from "../../redux-saga/modules/attachment/action";
 // ]
 
 interface Props {
+    accountId: number;
     isVisible: boolean;
     handleClose: () => void;
 }
 
-const CreateNewAttachment = ({ isVisible, handleClose }: Props) => {
+const CreateNewAttachment = ({ accountId, isVisible, handleClose }: Props) => {
     const dispatch = useDispatch();
     const [newAttachment, setNewAttachment] = useState<CreateAttachment>(new CreateAttachmentClass());
     const [submitting, setSubmitting] = useState(false);
@@ -54,9 +55,10 @@ const CreateNewAttachment = ({ isVisible, handleClose }: Props) => {
             setSubmitting(true);
             const formDataToSend = new FormData();
             formDataToSend.append('userId', newAttachment.userID);
+            formDataToSend.append('accountID', accountId.toString());
             formDataToSend.append('file', newAttachment.file as Blob);
             console.log("Submitting");
-            
+
             dispatch(createAttachment(formDataToSend));
             resetForm();
             handleClose();

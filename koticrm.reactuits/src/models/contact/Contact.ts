@@ -54,7 +54,7 @@ export class ContactClass implements Contact {
     this.ownerId = "";
     this.firstName = '';
     this.lastName = '';
-    this.accountID = 0;
+    this.accountID = 1028;
     this.email = '';
     this.phone = '';
     this.otherPhone = '';

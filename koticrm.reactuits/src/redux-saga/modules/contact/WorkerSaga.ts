@@ -47,6 +47,7 @@ export function* workCreateContact(action: any): Generator<any> {
     else {
       const contact: Contact = response.data;
       yield put({ type: CREATE_CONTACT_SUCCESS, payload: contact });
+      toast.success('Contact created successfully ')
     }
   } catch (error) {
     toast.error('SomethingWent Wrong, Please try after sometime')
@@ -63,6 +64,7 @@ export function* workUpdateContact(action: any): Generator<any> {
     else {
       const updatedContact: Contact = response.data;
       yield put({ type: UPDATE_CONTACT_SUCCESS, payload: updatedContact });
+      toast.success('Update contact successfully')
     }
   } catch (error) {
     toast.error('SomethingWent Wrong, Please try after sometime')

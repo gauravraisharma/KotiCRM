@@ -31,15 +31,31 @@ const tableHeader = [
   "Actions",
 ];
 
+interface Props {
+  accountId: number;
+  accountName:string;
+  // getContactsCount: (data: number) => void;
+}
 
-const Contacts = () => {
+const Contacts = ({accountId, accountName}:Props) => {
   // const [contacts, setContacts] = useState([]);
   const dispatch = useDispatch();
   const fetchedContacts = useSelector((state: any) => state.contactReducer.contacts);
+  const fetchedaccount = useSelector((state: any) => state.accountReducer.account);
+
+  let filteredContacts = fetchedContacts;
+  if (accountId) {
+    filteredContacts = fetchedContacts?.filter((contact: any) => contact.accountID === accountId);
+  }
+  // const contactsCount = filteredContacts.length;
 
   useEffect(() => {
     dispatch(getContacts());
   }, [dispatch]);
+
+  // useEffect(() => {
+  //   getContactsCount(contactsCount);
+  // });
 
   console.log("Contact on component:");
   console.log(fetchedContacts);
@@ -92,12 +108,12 @@ const Contacts = () => {
                 </CTableRow>
               </CTableHead>
               <CTableBody>
-                {fetchedContacts ? (
-                  fetchedContacts?.map((contact: Contact, index: number) => (
+                {filteredContacts ? (
+                  filteredContacts?.map((contact: Contact, index: number) => (
                     <CTableRow key={index}>
                      
                       <CTableDataCell>{`${contact?.firstName} ${contact?.lastName}`}</CTableDataCell>
-                      <CTableDataCell>{contact?.accountID}</CTableDataCell>
+                      <CTableDataCell>{fetchedaccount.accountName}</CTableDataCell>
                       <CTableDataCell>{contact?.email}</CTableDataCell>
                       <CTableDataCell>{contact?.phone}</CTableDataCell>
                       <CTableDataCell>{contact?.ownerId}</CTableDataCell>

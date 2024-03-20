@@ -69,15 +69,16 @@ export function* workGetAccountByIdFetch(action: actionPayloadModel): Generator<
 
 export function* workUpdateAccount(action: actionPayloadModel): Generator<any> {
   try {
+    debugger;
     const response: any = yield call(UpdateAccount, action.payload.id, action.payload.account);
 
     if (response.status != 200) {
-      toast.error('Error fetching accounts')
+      toast.error('errror in updated account')
     }
     else {
       const updatedAccount: Account = response.data;
       yield put({ type: UPDATE_ACCOUNT_SUCCESS, payload: updatedAccount });
-      toast.success('Account details updated successfully');
+      toast.success('Account updated successfully')
     }
   } catch (error) {
     toast.error('SomethingWent Wrong, Please try after sometime')

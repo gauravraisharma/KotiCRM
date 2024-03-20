@@ -31,7 +31,7 @@ import { Invoice, InvoiceCreationModel } from '../../../models/invoice/Invoice';
  }
 
  export function  CreateInvoice(invoiceModel : InvoiceCreationModel): Promise<apiResponse<InvoiceCreationModel>>{
-    return axiosInstance.post<InvoiceCreationModel>(`/Invoice/GetInvoiceList`,invoiceModel).then((response: AxiosResponse<InvoiceCreationModel>) => responseBody(response)).
+    return axiosInstance.post<InvoiceCreationModel>(`/Invoice/CreateInvoice`,invoiceModel).then((response: AxiosResponse<InvoiceCreationModel>) => responseBody(response)).
     catch((error:AxiosError) =>{ 
         const errorResponse: apiResponse<InvoiceCreationModel> = {
             data: undefined,
@@ -67,17 +67,16 @@ import { Invoice, InvoiceCreationModel } from '../../../models/invoice/Invoice';
  }
 
  export function  DeleteInvoice(id : number): Promise<apiResponse<InvoiceCreationModel>>{
-    return axiosInstance.delete<InvoiceCreationModel>(`/Notes/DeleteNote/${id}`).then((response: AxiosResponse<InvoiceCreationModel>) => responseBody(response)).
-    catch((error:AxiosError) =>{ 
-        const errorResponse: apiResponse<InvoiceCreationModel> = {
-            data: undefined,
-            status: 500,
-            statusText: error.message
-        };
-        return errorResponse;
-    });
- }
-
+    return axiosInstance.delete<InvoiceCreationModel>(`/Invoice/DeleteInvoice/${id}`).then((response: AxiosResponse<InvoiceCreationModel>) => responseBody(response)).
+   catch((error:AxiosError) =>{ 
+       const errorResponse: apiResponse<InvoiceCreationModel> = {
+           data: undefined,
+           status: 500,
+           statusText: error.message
+       };
+       return errorResponse;
+   });
+}   
   
  export function  GetInvoiceOwnerList(): Promise<apiResponse<SharedOwnerModel[]>>{
     return axiosInstance.get<SharedOwnerModel[]>(`/Shared/GetInvoiceOwner`).then((response: AxiosResponse<SharedOwnerModel[]>) => responseBody(response)).

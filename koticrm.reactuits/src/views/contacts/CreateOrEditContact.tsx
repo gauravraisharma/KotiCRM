@@ -10,6 +10,7 @@ import SearchDropdown from "../../components/base/select/SearchDropdown";
 import Countries from "../../constants/country-state/countries+states.json";
 import { Country, State } from "../../models/Country-State/CountryState";
 import {
+  clearContact,
   createContact,
   getContactById,
   updateContact,
@@ -158,11 +159,9 @@ const owners = [
     email: "john@example.com",
     logo: "path_to_logo1",
   },
-  // Add more options as needed
 ];
 
 const CreateOrEditContact=()=>{
-
 
   const { contactId } = useParams<{ contactId: string }>();
   const [contact, setContact] = useState<Contact>(new ContactClass());
@@ -184,6 +183,7 @@ const CreateOrEditContact=()=>{
       dispatch(getContactById(+contactId));
     } else {
       setContact(new ContactClass());
+      dispatch(clearContact())
     }
   }, [dispatch, contactId]);
 
@@ -269,7 +269,7 @@ const CreateOrEditContact=()=>{
       <CCardHeader className="mb-3">
         <div className="d-flex justify-content-between align-items-center">
           <div>
-            <h5 className="mb-0">Create Account</h5>
+            <h5 className="mb-0">Create Or Edit Contact</h5>
           </div>
           <div className="text-end"></div>
         </div>
@@ -289,6 +289,9 @@ const CreateOrEditContact=()=>{
                     <CCol sm={4}>
                       <label htmlFor="ownerId" className="col-form-label">
                         Contact Owner
+                        <span style={{ color: "red", fontSize: "25px" }}>
+                          *
+                        </span>
                       </label>
                     </CCol>
                     <CCol sm={8}>
@@ -304,6 +307,9 @@ const CreateOrEditContact=()=>{
                     <CCol sm={4}>
                       <label htmlFor="firstName" className="col-form-label">
                         First Name
+                        <span style={{ color: "red", fontSize: "25px" }}>
+                          *
+                        </span>
                       </label>
                     </CCol>
                     <CCol sm={8}>
@@ -321,7 +327,7 @@ const CreateOrEditContact=()=>{
                       />
                     </CCol>
                   </CRow>
-                  <CRow className="mb-3">
+                  {/* <CRow className="mb-3">
                     <CCol sm={4}>
                       <label htmlFor="accountName" className="col-form-label">
                         Account ID
@@ -341,7 +347,7 @@ const CreateOrEditContact=()=>{
                         className="invalid-feedback"
                       />
                     </CCol>
-                  </CRow>
+                  </CRow> */}
                   <CRow className="mb-3">
                     <CCol sm={4}>
                       <label htmlFor="phone" className="col-form-label">
@@ -499,34 +505,7 @@ const CreateOrEditContact=()=>{
                       />
                     </CCol>
                   </CRow>
-               
                   <CRow className="mb-3">
-                    <CCol sm={4}>
-                      <label htmlFor="description" className="col-form-label">
-                        Description
-                      </label>
-                    </CCol>
-                    <CCol sm={8}>
-                      <Field
-                        as="textarea"
-                        id="description"
-                        name="description"
-                        className="form-control"
-                        placeholder="Leave a comment here"
-                        style={{ height: "50px" }}
-                      />
-                      <ErrorMessage
-                        name="description"
-                        component="div"
-                        className="invalid-feedback"
-                      />
-                    </CCol>
-                  </CRow>
-                </CCol>
-
-
-                <CCol xs={6}>
-                <CRow className="mb-3">
                     <CCol sm={4}>
                       <label htmlFor="zip" className="col-form-label">
                         Zip
@@ -547,7 +526,13 @@ const CreateOrEditContact=()=>{
                         className="invalid-feedback"
                       />
                     </CCol>
-                  </CRow>
+                </CRow>
+                
+                </CCol>
+
+
+                <CCol xs={6}>
+             
                   <CRow className="mb-3">
                     <CCol sm={4}>
                       <label htmlFor="lastName" className="col-form-label">
@@ -661,6 +646,9 @@ const CreateOrEditContact=()=>{
                     <CCol sm={4}>
                       <label htmlFor="skypeId" className="col-form-label">
                         Skype ID
+                        <span style={{ color: "red", fontSize: "25px" }}>
+                          *
+                        </span>
                       </label>
                     </CCol>
                     <CCol sm={8}>
@@ -780,6 +768,28 @@ const CreateOrEditContact=()=>{
                       </Field>
                       <ErrorMessage
                         name="state"
+                        component="div"
+                        className="invalid-feedback"
+                      />
+                    </CCol>
+                  </CRow>
+                  <CRow className="mb-3">
+                    <CCol sm={4}>
+                      <label htmlFor="description" className="col-form-label">
+                        Description
+                      </label>
+                    </CCol>
+                    <CCol sm={8}>
+                      <Field
+                        as="textarea"
+                        id="description"
+                        name="description"
+                        className="form-control"
+                        placeholder="Leave a comment here"
+                        style={{ height: "50px" }}
+                      />
+                      <ErrorMessage
+                        name="description"
                         component="div"
                         className="invalid-feedback"
                       />
