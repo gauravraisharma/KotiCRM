@@ -27,6 +27,7 @@ const AccountDetails = () => {
   const [notesCount, setNotesCount] = useState();
   const [invoicesCount, setInvoicesCount] = useState();
   const [attachmentsCount, setAttachmentsCount] = useState(0);
+  const [contactsCount, setContactsCount] = useState(0);
 
   const account = useSelector((state: any) => state.accountReducer.account);
 
@@ -55,6 +56,10 @@ const AccountDetails = () => {
 
   const getAttachmentsCount = (attachmentCount: number) => {
     setAttachmentsCount(attachmentCount);
+  };
+
+  const getContactsCount = (contactCount: number) => {
+    setContactsCount(contactCount);
   };
 
   // const handleNoteSave = (name: string) => {
@@ -122,6 +127,7 @@ const AccountDetails = () => {
                   aria-selected="false"
                 >
                   Contacts
+                  <strong>{contactsCount == 0 ? "" : ` (${contactsCount})`}</strong>
                 </button>
               </li>
               <li className="nav-item" role="presentation">
@@ -236,8 +242,9 @@ const AccountDetails = () => {
                 aria-labelledby="contacts-tab"
               >
                 <Contacts
-                // accountId={account?.id}
-                // accountName={account?.accountName}
+                accountId={account?.id}
+                accountName={account?.accountName}
+                getContactsCount={getContactsCount}
                 />
               </div>
 

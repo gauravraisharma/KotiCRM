@@ -10,6 +10,7 @@ import SearchDropdown from "../../components/base/select/SearchDropdown";
 import Countries from "../../constants/country-state/countries+states.json";
 import { Country, State } from "../../models/Country-State/CountryState";
 import {
+  clearContact,
   createContact,
   getContactById,
   updateContact,
@@ -158,11 +159,9 @@ const owners = [
     email: "john@example.com",
     logo: "path_to_logo1",
   },
-  // Add more options as needed
 ];
 
 const CreateOrEditContact=()=>{
-
 
   const { contactId } = useParams<{ contactId: string }>();
   const [contact, setContact] = useState<Contact>(new ContactClass());
@@ -184,6 +183,7 @@ const CreateOrEditContact=()=>{
       dispatch(getContactById(+contactId));
     } else {
       setContact(new ContactClass());
+      dispatch(clearContact())
     }
   }, [dispatch, contactId]);
 
@@ -269,7 +269,7 @@ const CreateOrEditContact=()=>{
       <CCardHeader className="mb-3">
         <div className="d-flex justify-content-between align-items-center">
           <div>
-            <h5 className="mb-0">Create Account</h5>
+            <h5 className="mb-0">Create Or Edit Contact</h5>
           </div>
           <div className="text-end"></div>
         </div>

@@ -14,12 +14,12 @@ import {
 } from "@coreui/react";
 import { useEffect, useState } from "react";
 import { BsFiletypeDocx, BsFiletypePdf } from "react-icons/bs";
-import { MdOutlinePictureAsPdf } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import CreateNewAttachment from "./CreateNewAttachment";
 import { getFileSizeAndLabel } from "../../utils/Shared/FileSizeAndLable";
 import { formatDate } from "../../utils/Shared/DateTransform";
 import { getAttachments } from "../../redux-saga/modules/attachment/action";
+import { GrDownload } from "react-icons/gr";
 
 interface Props {
   accountId: number;
@@ -99,6 +99,7 @@ const Attachments = ({ accountId, getAttachmentsCount }: Props) => {
     <CRow>
       <CCol xs={12}>
         <CreateNewAttachment
+          accountId={accountId}
           isVisible={isModalVisible}
           handleClose={handleModalClose}
         />
@@ -131,6 +132,7 @@ const Attachments = ({ accountId, getAttachmentsCount }: Props) => {
                   <CTableHeaderCell scope="col">Attached By</CTableHeaderCell>
                   <CTableHeaderCell scope="col">Date Added</CTableHeaderCell>
                   <CTableHeaderCell scope="col">Size</CTableHeaderCell>
+                  <CTableHeaderCell scope="col" className="text-center">Download</CTableHeaderCell>
                 </CTableRow>
               </CTableHead>
               <CTableBody>
@@ -155,6 +157,9 @@ const Attachments = ({ accountId, getAttachmentsCount }: Props) => {
                       </CTableDataCell>
                       <CTableDataCell>
                         {getFileSizeAndLabel(attachment.fileSize)}
+                      </CTableDataCell>
+                      <CTableDataCell className="text-center">
+                      <GrDownload style={{ color: "green", fontSize: "20px", cursor:"pointer" }} onClick={() => handleButttonClick(attachment.fileName)}/>
                       </CTableDataCell>
                     </CTableRow>
                   ))
