@@ -289,6 +289,9 @@ const CreateOrEditContact=()=>{
                     <CCol sm={4}>
                       <label htmlFor="ownerId" className="col-form-label">
                         Contact Owner
+                        <span style={{ color: "red", fontSize: "25px" }}>
+                          *
+                        </span>
                       </label>
                     </CCol>
                     <CCol sm={8}>
@@ -304,6 +307,9 @@ const CreateOrEditContact=()=>{
                     <CCol sm={4}>
                       <label htmlFor="firstName" className="col-form-label">
                         First Name
+                        <span style={{ color: "red", fontSize: "25px" }}>
+                          *
+                        </span>
                       </label>
                     </CCol>
                     <CCol sm={8}>
@@ -321,7 +327,7 @@ const CreateOrEditContact=()=>{
                       />
                     </CCol>
                   </CRow>
-                  <CRow className="mb-3">
+                  {/* <CRow className="mb-3">
                     <CCol sm={4}>
                       <label htmlFor="accountName" className="col-form-label">
                         Account ID
@@ -341,7 +347,7 @@ const CreateOrEditContact=()=>{
                         className="invalid-feedback"
                       />
                     </CCol>
-                  </CRow>
+                  </CRow> */}
                   <CRow className="mb-3">
                     <CCol sm={4}>
                       <label htmlFor="phone" className="col-form-label">
@@ -640,6 +646,9 @@ const CreateOrEditContact=()=>{
                     <CCol sm={4}>
                       <label htmlFor="skypeId" className="col-form-label">
                         Skype ID
+                        <span style={{ color: "red", fontSize: "25px" }}>
+                          *
+                        </span>
                       </label>
                     </CCol>
                     <CCol sm={8}>

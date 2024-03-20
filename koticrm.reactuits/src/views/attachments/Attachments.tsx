@@ -64,6 +64,14 @@ const Attachments = ({ accountId, getAttachmentsCount }: Props) => {
     setIsModalVisible(false);
   };
 
+  const handleButttonClick = (filename: string) => {
+    const filePath = `../../../../KotiCRM.Server/Contents/${filename}`;
+    const anchor = document.createElement('a');
+    anchor.href = filePath;
+    anchor.download = filename;
+    anchor.click();
+  }
+
 
   // let Attachments = fetchedAttachments;
   // if (accountOwner) {
@@ -135,7 +143,7 @@ const Attachments = ({ accountId, getAttachmentsCount }: Props) => {
                         ) : (
                           <BsFiletypeDocx className="doc" />
                         )}
-                        <CButton className="link" color="link">
+                        <CButton className="link" color="link" onClick={() => handleButttonClick(attachment.fileName)}>
                           {attachment.fileName}
                         </CButton>
                       </CTableHeaderCell>
@@ -153,17 +161,6 @@ const Attachments = ({ accountId, getAttachmentsCount }: Props) => {
                 ) : (
                   <div>No Attachment Available</div>
                 )}
-                <CTableRow>
-                  <CTableHeaderCell>
-                    <MdOutlinePictureAsPdf className="pdf" />
-                    <CButton className="link" color="link">
-                      Learner Settings Page-February 2024.pdf
-                    </CButton>
-                  </CTableHeaderCell>
-                  <CTableDataCell>Gourav Rai</CTableDataCell>
-                  <CTableDataCell>22/02/2024 06:50PM</CTableDataCell>
-                  <CTableDataCell>35kb</CTableDataCell>
-                </CTableRow>
               </CTableBody>
             </CTable>
           </CCardBody>
