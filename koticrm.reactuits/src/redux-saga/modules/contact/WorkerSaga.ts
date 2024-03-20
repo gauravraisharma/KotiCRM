@@ -5,6 +5,7 @@ import { Contact } from '../../../models/contact/Contact';
 import { CREATE_CONTACT_SUCCESS, GET_CONTACTS_SUCCESS, GET_CONTACT_DETAIL_SUCCESS, UPDATE_CONTACT_SUCCESS } from '../../../constants/reduxConstants';
 import { call, put } from 'redux-saga/effects';
 import { CreateContact, GetContactDetails, GetContactsList, UpdateContact } from './apiService';
+import { ContactWithAccountName } from '../../../models/contact/ContactWithAccountName';
 
 export function* workGetContactsFetch(): Generator<any> {
   try {
@@ -12,7 +13,7 @@ export function* workGetContactsFetch(): Generator<any> {
     if (response.status != 200) {
       toast.error('Error fetching contacts')
     } else {
-      const contacts: Contact[] = response.data;
+      const contacts: ContactWithAccountName[] = response.data;
       yield put({ type: GET_CONTACTS_SUCCESS, payload: contacts });
       return response;
     }
@@ -29,7 +30,7 @@ export function* workGetContactByIdFetch(action: actionPayloadModel): Generator<
       toast.error('Error fetching accounts')
     }
     else {
-      const contact: Contact = response.data;
+      const contact: ContactWithAccountName = response.data;
       yield put({ type: GET_CONTACT_DETAIL_SUCCESS, payload: contact });
     }
   } catch (error) {

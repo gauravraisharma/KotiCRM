@@ -1,12 +1,13 @@
 import { AxiosError, AxiosResponse } from 'axios';
 import { apiResponse, axiosInstance, responseBody } from '../../../apiInterceptor/axiosInterceptor';
 import { Contact } from '../../../models/contact/Contact';
+import { ContactWithAccountName } from '../../../models/contact/ContactWithAccountName';
 
 
-export function GetContactsList(): Promise<apiResponse<Contact[]>> {
-    return axiosInstance.get<Contact[]>(`/Contact/GetContactList`).then((response: AxiosResponse<Contact[]>) => responseBody(response)).
+export function GetContactsList(): Promise<apiResponse<ContactWithAccountName[]>> {
+    return axiosInstance.get<ContactWithAccountName[]>(`/Contact/GetContactList`).then((response: AxiosResponse<ContactWithAccountName[]>) => responseBody(response)).
         catch((error: AxiosError) => {
-            const errorResponse: apiResponse<Contact[]> = {
+            const errorResponse: apiResponse<ContactWithAccountName[]> = {
                 data: [],
                 status: 500,
                 statusText: error.message
@@ -15,10 +16,10 @@ export function GetContactsList(): Promise<apiResponse<Contact[]>> {
         });
 }
 
-export function GetContactDetails(id: any): Promise<apiResponse<Contact>> {
-    return axiosInstance.get<Contact>(`/Contact/GetContactDetails/${id}`).then((response: AxiosResponse<Contact>) => responseBody(response)).
+export function GetContactDetails(id: any): Promise<apiResponse<ContactWithAccountName>> {
+    return axiosInstance.get<ContactWithAccountName>(`/Contact/GetContactDetails/${id}`).then((response: AxiosResponse<ContactWithAccountName>) => responseBody(response)).
         catch((error: AxiosError) => {
-            const errorResponse: apiResponse<Contact> = {
+            const errorResponse: apiResponse<ContactWithAccountName> = {
                 data: undefined,
                 status: 500,
                 statusText: error.message

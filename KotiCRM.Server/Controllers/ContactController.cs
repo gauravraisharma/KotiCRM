@@ -20,13 +20,13 @@ namespace KotiCRM.Server.Controllers
 
         [HttpGet]
         [Route("GetContactList")]
-        public async Task<IEnumerable<ContactDTO>> GetContactList()
+        public async Task<IEnumerable<ContactWithAccountNameDTO>> GetContactList()
         {
             return await _contactService.GetContactList();
         }
 
         [HttpGet("GetContactDetails/{id}")]
-        public async Task<ActionResult<ContactDTO>> GetContactDetails(int id)
+        public async Task<ActionResult<ContactWithAccountNameDTO>> GetContactDetails(int id)
         {
             return Ok(await _contactService.GetContactDetails(id));
         }

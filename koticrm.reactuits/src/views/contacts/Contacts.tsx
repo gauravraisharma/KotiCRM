@@ -16,11 +16,11 @@ import "../../css/style.css";
 import { useDispatch, useSelector } from "react-redux";
 import { MdEditSquare } from "react-icons/md";
 import { useEffect } from "react";
-import { Contact } from "../../models/contact/Contact";
 import { AiFillEye } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import { getContacts } from "../../redux-saga/modules/contact/action";
 import { ToastContainer } from "react-toastify";
+import { ContactWithAccountName } from "../../models/contact/ContactWithAccountName";
 
 const tableHeader = [
   "Contact Name",
@@ -33,15 +33,13 @@ const tableHeader = [
 
 interface Props {
   accountId: number;
-  accountName:string;
   // getContactsCount: (data: number) => void;
 }
 
-const Contacts = ({accountId, accountName}:Props) => {
+const Contacts = ({accountId}:Props) => {
   // const [contacts, setContacts] = useState([]);
   const dispatch = useDispatch();
   const fetchedContacts = useSelector((state: any) => state.contactReducer.contacts);
-  const fetchedaccount = useSelector((state: any) => state.accountReducer.account);
 
   let filteredContacts = fetchedContacts;
   if (accountId) {
@@ -109,11 +107,11 @@ const Contacts = ({accountId, accountName}:Props) => {
               </CTableHead>
               <CTableBody>
                 {filteredContacts ? (
-                  filteredContacts?.map((contact: Contact, index: number) => (
+                  filteredContacts?.map((contact: ContactWithAccountName, index: number) => (
                     <CTableRow key={index}>
                      
                       <CTableDataCell>{`${contact?.firstName} ${contact?.lastName}`}</CTableDataCell>
-                      <CTableDataCell>{fetchedaccount.accountName}</CTableDataCell>
+                      <CTableDataCell>{contact.accountName}</CTableDataCell>
                       <CTableDataCell>{contact?.email}</CTableDataCell>
                       <CTableDataCell>{contact?.phone}</CTableDataCell>
                       <CTableDataCell>{contact?.ownerId}</CTableDataCell>

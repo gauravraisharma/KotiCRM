@@ -11,8 +11,8 @@ namespace KotiCRM.Services.IServices
     public interface IContactService
     {
         Task<ContactDTO> CreateContact(ContactDTO contactDTO);
-        Task<IEnumerable<ContactDTO>> GetContactList();
-        Task<ContactDTO> GetContactDetails(int id);
+        Task<IEnumerable<ContactWithAccountNameDTO>> GetContactList();
+        Task<ContactWithAccountNameDTO> GetContactDetails(int id);
         Task<DbResponse> DeleteContact(int id);
         Task<ContactDTO> UpdateContact(ContactDTO contactDTO);
     }

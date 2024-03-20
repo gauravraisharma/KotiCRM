@@ -12,7 +12,7 @@ namespace KotiCRM.Services.Services
     public class SharedService : ISharedService
     {
         private readonly ISharedRepository _sharedRepository;
-        public SharedService(ISharedRepository sharedRepository) 
+        public SharedService(ISharedRepository sharedRepository)
         {
             _sharedRepository = sharedRepository;
         }
@@ -23,7 +23,7 @@ namespace KotiCRM.Services.Services
         }
         public List<DropDownModel> GetAccountOwner()
         {
-            return  _sharedRepository.GetAccountOwner();
+            return _sharedRepository.GetAccountOwner();
         }
         public List<DropDownModel> GetInvoiceOwner()
         {

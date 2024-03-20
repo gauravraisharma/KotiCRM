@@ -15,7 +15,7 @@ namespace KotiCRM.Services.Services
             _organizationRepository = organizationRepository;
         }
 
-         public async Task<IEnumerable<OrganizationBankResponse>> GetOrganizationList()
+        public async Task<IEnumerable<OrganizationBankResponse>> GetOrganizationList()
         {
             return await _organizationRepository.GetOrganizationList();
         }
@@ -50,7 +50,7 @@ namespace KotiCRM.Services.Services
             }
             var organizationData = await _organizationRepository.UpdateOrganizationTimeZone(id, organization);
             return organizationData;
-  
+
         }
     }
 }

@@ -15,3 +15,7 @@
 /koticrm.reactuits/node_modules
 /koticrm.reactuits/obj/Debug
 /koticrm.reactuits/package-lock.json
+/koticrm.reactuits/dist
+/KotiCRM.Repository/bin/Release/net8.0
+/KotiCRM.Server/bin/Release/net8.0
+/KotiCRM.Services/bin/Release/net8.0

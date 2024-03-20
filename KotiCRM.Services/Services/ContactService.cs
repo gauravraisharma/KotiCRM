@@ -12,11 +12,13 @@ namespace KotiCRM.Services.Services
 {
     public class ContactService : IContactService
     {
+        private readonly IAccountRepository _accountRepository;
         private readonly IContactRepository _contactRepository;
 
-        public ContactService(IContactRepository contactRepository)
+        public ContactService(IAccountRepository accountRepository, IContactRepository contactRepository)
         {
             _contactRepository = contactRepository;
+            _accountRepository = accountRepository;
         }
 
         public async Task<ContactDTO> CreateContact(ContactDTO contactDTO)
@@ -85,16 +87,18 @@ namespace KotiCRM.Services.Services
             return await _contactRepository.DeleteContact(id);
         }
 
-        public async Task<ContactDTO> GetContactDetails(int id)
+        public async Task<ContactWithAccountNameDTO> GetContactDetails(int id)
         {
-            var contact = await _contactRepository.GetContactDetails(id);
-            ContactDTO contactDTO = new()
+            Contact contact = await _contactRepository.GetContactDetails(id);
+            Account account = await _accountRepository.GetAccountDetails(contact.AccountID);
+            ContactWithAccountNameDTO contactWithAccountNameDTO = new()
             {
                 Id = contact.Id,
                 OwnerId = contact.OwnerId,
                 FirstName = contact.FirstName,
                 LastName = contact.LastName,
                 AccountID = contact.AccountID,
+                AccountName = account.AccountName,
                 Email = contact.Email,
                 Phone = contact.Phone,
                 OtherPhone = contact.OtherPhone,
@@ -114,19 +118,23 @@ namespace KotiCRM.Services.Services
                 Country = contact.Country,
                 Description = contact.Description
             };
-            return contactDTO;
+            return contactWithAccountNameDTO;
         }
 
-        public async Task<IEnumerable<ContactDTO>> GetContactList()
+        public async Task<IEnumerable<ContactWithAccountNameDTO>> GetContactList()
         {
-            IEnumerable<Contact> contacts = await _contactRepository.GetContactList();
-            IEnumerable<ContactDTO> contactDTOs = contacts.Select(contact => new ContactDTO
+            IEnumerable<ContactWithAccountNameDTO> contactWithAccountNameDTOs =
+            from contact in await _contactRepository.GetContactList()
+            join account in await _accountRepository.GetAccountList()
+            on contact.AccountID equals account.Id
+            select new ContactWithAccountNameDTO
             {
                 Id = contact.Id,
                 OwnerId = contact.OwnerId,
                 FirstName = contact.FirstName,
                 LastName = contact.LastName,
                 AccountID = contact.AccountID,
+                AccountName = account.AccountName,
                 Email = contact.Email,
                 Phone = contact.Phone,
                 OtherPhone = contact.OtherPhone,
@@ -145,9 +153,8 @@ namespace KotiCRM.Services.Services
                 Zip = contact.Zip,
                 Country = contact.Country,
                 Description = contact.Description
-            });
-
-            return contactDTOs;
+            };
+            return contactWithAccountNameDTOs;
         }
 
         public async Task<ContactDTO> UpdateContact(ContactDTO contactDTO)

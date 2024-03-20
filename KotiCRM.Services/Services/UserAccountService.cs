@@ -68,10 +68,10 @@ namespace KotiCRM.Services.Services
         public async Task<LoginStatus> UserLogin(UserLoginModel userModel)
         {
 
-            var loginStatus =await  _accountRepository.UserLogin(userModel);
+            var loginStatus = await _accountRepository.UserLogin(userModel);
 
             return loginStatus;
-         }
+        }
         public ResponseStatus DeleteUser(string userId)
         {
             return _accountRepository.DeleteUser(userId);
