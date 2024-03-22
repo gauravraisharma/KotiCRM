@@ -39,6 +39,7 @@ interface Props {
 const Contacts = ({accountId}:Props) => {
   // const [contacts, setContacts] = useState([]);
   const dispatch = useDispatch();
+  const refreshList = useSelector((state: any) => state.contactReducer.refreshList)
   const fetchedContacts = useSelector((state: any) => state.contactReducer.contacts);
 
   let filteredContacts = fetchedContacts;
@@ -49,7 +50,7 @@ const Contacts = ({accountId}:Props) => {
 
   useEffect(() => {
     dispatch(getContacts());
-  }, [dispatch]);
+  }, [dispatch, refreshList, fetchedContacts]);
 
   // useEffect(() => {
   //   getContactsCount(contactsCount);
