@@ -15,7 +15,7 @@ import { createAccountRequest } from "../../../redux-saga/modules/account/action
 
 const initialValues = {
   accountOwner: "",
-  industry: "",
+  industry: 0,
   type: "",
   status: "",
   accountName: "",

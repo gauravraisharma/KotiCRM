@@ -16,7 +16,7 @@ interface EditModalProps {
 
 const initialValues = {
   accountOwner: "",
-  industry: "",
+  industry: 0,
   type: "",
   status: "",
   annualRevenue: "",
@@ -68,8 +68,8 @@ const EditPage: React.FC<EditModalProps> = ({
       ? Yup.string().required("Required(Account Owner)")
       : Yup.string(),
     industry: touchedFields.industry
-      ? Yup.string().required("Required (Industry)")
-      : Yup.string(),
+      ? Yup.number().required("Required (Industry)")
+      : Yup.number(),
     type: touchedFields.type
       ? Yup.string().required("Required (Type)")
       : Yup.string(),

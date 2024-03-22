@@ -51,7 +51,7 @@ const Contacts = ({ accountId }: Props) => {
 
   useEffect(() => {
     dispatch(getContacts());
-  }, [dispatch, refreshList, fetchedContacts]);
+  }, [dispatch]);
 
   // useEffect(() => {
   //   getContactsCount(contactsCount);

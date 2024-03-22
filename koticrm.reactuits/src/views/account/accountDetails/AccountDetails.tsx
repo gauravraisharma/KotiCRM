@@ -33,7 +33,8 @@ const AccountDetails = () => {
   const accountOwner = useSelector(
     (state: any) => state.accountReducer.accountOwner
   );
-  const industry = useSelector((state: any) => state.accountReducer.industry);
+  
+  const industry = useSelector((state: any) => state.sharedReducer.industries);
 
   const industryName =
     account && industry
