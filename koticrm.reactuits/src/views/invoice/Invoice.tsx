@@ -16,14 +16,21 @@ import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { AiFillEye } from "react-icons/ai";
 
-import { MdDelete} from "react-icons/md";
+import { MdDelete } from "react-icons/md";
 import InvoiceTemplate from "../../pdf-template/InvoiceTemplate";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import DeleteConfirmationModal from '../account/accountsList/DeleteConfirmation';
-import { getAccountOwner, getAccounts } from '../../redux-saga/modules/account/action';
-import { getInvoice, getInvoiceOwner, getInvoiceStatus } from '../../redux-saga/modules/invoice/action';
-import { getNotes } from '../../redux-saga/modules/notes/action';
+import DeleteConfirmationModal from "../account/accountsList/DeleteConfirmation";
+import {
+  getAccountOwner,
+  getAccounts,
+} from "../../redux-saga/modules/account/action";
+import {
+  getInvoice,
+  getInvoiceOwner,
+  getInvoiceStatus,
+} from "../../redux-saga/modules/invoice/action";
+import { getNotes } from "../../redux-saga/modules/notes/action";
 import { formatDate } from "../../utils/Shared/DateTransform";
 
 interface InvoiceProps {
@@ -133,7 +140,6 @@ const InvoiceComponent: React.FC<InvoiceProps> = ({
     dispatch(getInvoice());
   }, [invoiceDeleteResponse]);
   return (
-    
     <div>
       <ToastContainer />
       {showCreateInvoice ? (
@@ -164,7 +170,9 @@ const InvoiceComponent: React.FC<InvoiceProps> = ({
               <CCardHeader className="mb-3">
                 <div className="d-flex justify-content-between align-items-center">
                   <div>
-                    <h5 className="mb-0"><strong>Invoices</strong></h5>
+                    <h5 className="mb-0">
+                      <strong>Invoices</strong>
+                    </h5>
                   </div>
                   <div className="text-end">
                     <CButton
@@ -206,7 +214,10 @@ const InvoiceComponent: React.FC<InvoiceProps> = ({
                               {getDates(invoiceModel.invoice?.invoiceDate)}
                             </CTableDataCell>
                             <CTableDataCell>
-                              {formatDate(invoiceModel.invoice?.dueDate,'DD/MM/YYYY HH:mm')}
+                              {formatDate(
+                                invoiceModel.invoice?.dueDate,
+                                "DD/MM/YYYY HH:mm"
+                              )}
                             </CTableDataCell>
                             <CTableDataCell>
                               <AiFillEye
@@ -245,7 +256,10 @@ const InvoiceComponent: React.FC<InvoiceProps> = ({
                             </CTableDataCell>
                             <CTableDataCell>
                               {/* {getDates(invoiceModel.invoice?.dueDate)} */}
-                              {formatDate(invoiceModel.invoice?.dueDate, 'DD/MM/YYYY HH:mm')}
+                              {formatDate(
+                                invoiceModel.invoice?.dueDate,
+                                "DD/MM/YYYY HH:mm"
+                              )}
                             </CTableDataCell>
                             <CTableDataCell>
                               <AiFillEye
@@ -253,6 +267,7 @@ const InvoiceComponent: React.FC<InvoiceProps> = ({
                                 style={{
                                   color: "rgb(30, 30, 115)",
                                   marginRight: "7px",
+                                  cursor: "pointer",
                                 }}
                                 onClick={() =>
                                   generateInvoicePDF(invoiceModel.invoice?.id)
@@ -261,7 +276,7 @@ const InvoiceComponent: React.FC<InvoiceProps> = ({
 
                               <MdDelete
                                 size={21}
-                                style={{ color: "red" }}
+                                style={{ color: "red", marginRight: "10px", fontSize: "20px", cursor: 'pointer'}}
                                 onClick={() =>
                                   handleDeleteClick(invoiceModel.invoice?.id)
                                 }

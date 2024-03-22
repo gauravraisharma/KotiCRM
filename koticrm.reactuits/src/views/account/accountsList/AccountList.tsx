@@ -153,7 +153,6 @@ const AccountList: React.FC = () => {
                           <CTableHeaderCell scope="col">Account Name</CTableHeaderCell>
                           <CTableHeaderCell scope="col">Owner</CTableHeaderCell>
                           <CTableHeaderCell scope="col">Phone</CTableHeaderCell>
-                          <CTableHeaderCell scope="col">Website</CTableHeaderCell>
                           <CTableHeaderCell scope="col">Country</CTableHeaderCell>
                           <CTableHeaderCell scope="col">Actions</CTableHeaderCell>
                         </CTableRow>
@@ -164,16 +163,15 @@ const AccountList: React.FC = () => {
                             <CTableDataCell>{account.accountName}</CTableDataCell>
                             <CTableDataCell>{getOwnerName(account.ownerId)}</CTableDataCell>
                             <CTableDataCell>{account.phone}</CTableDataCell>
-                            <CTableDataCell>{account.webSite}</CTableDataCell>
                             <CTableDataCell>{account.country}</CTableDataCell>
                             <CTableDataCell>
                               <MdEditSquare
-                                style={{ color: 'green', marginRight: "10px", fontSize: "20px" }}
+                                style={{ color: 'green', marginRight: "10px", fontSize: "20px", cursor: 'pointer' }}
                                 onClick={() => handleEditClick(account)}
                               />
-                              <AiFillEye style={{ color: 'darkblue', marginRight: "10px", fontSize: "20px" }}
+                              <AiFillEye style={{ color: 'darkblue', marginRight: "10px", fontSize: "20px", cursor: 'pointer' }}
                                 onClick={() => showItems(account?.id)} />
-                              <MdDelete style={{ color: "red", marginRight: "10px", fontSize: "20px" }} onClick={() => handleDeleteClick(account.id)} />
+                              <MdDelete style={{ color: "red", marginRight: "10px", fontSize: "20px", cursor: 'pointer'}} onClick={() => handleDeleteClick(account.id)} />
                             </CTableDataCell>
                           </CTableRow>
                         ))}
