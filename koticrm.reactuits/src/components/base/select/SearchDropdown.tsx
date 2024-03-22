@@ -5,10 +5,9 @@ import { useState } from 'react';
 import { useFormikContext } from 'formik';
 
 interface Option {
-	id: string;
-	firstName: string;
-	lastName: string;
-	email: string;
+	value: string;
+	label1: string;
+	label2: string;
 }
 
 interface Props {
@@ -24,10 +23,10 @@ const SearchDropdown = (props: Props) => {
 	const [open, setOpen] = useState<boolean>(false);
 
 	const handleListClick = (option: Option) => {
-		if (!selected || option.id !== selected.id) {
+		if (!selected || option.value !== selected.value) {
 			setSelected(option);
 			setOpen(false);
-			formik.setFieldValue(name, option.id);
+			formik.setFieldValue(name, option.value);
 			setInputValue('');
 		}
 	}
@@ -38,7 +37,7 @@ const SearchDropdown = (props: Props) => {
 				onClick={() => setOpen(prev => !prev)}
 				className={`select-secondary ${!selected && "text-grey-700"}`}
 			>
-				{selected ? selected.firstName.length > 25 ? selected.firstName.substring(0, 25) + "..." : selected.firstName : "Select"}
+				{selected ? selected.label1.length > 25 ? selected.label1.substring(0, 25) + "..." : selected.label1 : "Select"}
 				<div>
 					<span
 						onClick={() => setSelected(null)}
@@ -65,17 +64,17 @@ const SearchDropdown = (props: Props) => {
 					/>
 				</div>
 				{options.map(option => (
-					(option.firstName.toLowerCase().includes(inputValue) || option.email.toLowerCase().includes(inputValue)) && (
+					(option.label1.toLowerCase().includes(inputValue) || option.label2.toLowerCase().includes(inputValue)) && (
 						<li
 							key={option.id}
 							onClick={() => handleListClick(option)}
-							className={option.id === selected?.id ? "selected-option" : ""}
+							className={option.value === selected?.value ? "selected-option" : ""}
 						>
 							<div>
-								<span>{option.firstName} {option.lastName}</span>
+								<span>{option.label1}</span>
 							</div>
 							<div>
-								<span>{option.email}</span>
+								<span>{option.label2}</span>
 							</div>
 						</li>
 					)

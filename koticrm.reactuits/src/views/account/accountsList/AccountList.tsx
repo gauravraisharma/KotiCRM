@@ -29,9 +29,6 @@ import { getIndustry } from '../../../redux-saga/modules/shared/action';
 import { getNotes } from '../../../redux-saga/modules/notes/action';
 import { getContacts } from '../../../redux-saga/modules/contact/action';
 
-
-
-
 const AccountList: React.FC = () => {
 
 
@@ -86,12 +83,12 @@ const AccountList: React.FC = () => {
   const createresponse = useSelector((state: any) => state.accountReducer.createAccountResponse)
   const updateResponse = useSelector((state: any) => state.accountReducer.updateAccountResponse)
 
-
   function getOwnerName(ownerId: string): string {
     const owner = accountOwner?.find((owner: any) => owner.id === ownerId);
     return owner ? owner.label : '';
   }
-
+  
+  console.log("Accounts on componenet:", accounts);
 
   useEffect(() => {
     dispatch(getAccounts());
@@ -105,7 +102,7 @@ const AccountList: React.FC = () => {
 
   useEffect(() => {
     dispatch(getAccounts())
-  }, [refreshList, createresponse, updateResponse])
+  }, [dispatch, refreshList, createresponse, updateResponse])
 
   const navigate = useNavigate()
   const showItems = (id: any) => {
