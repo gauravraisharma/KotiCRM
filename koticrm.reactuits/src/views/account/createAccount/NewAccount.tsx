@@ -75,9 +75,9 @@ const MyForm: React.FC<MyFormProps> = ({
 }) => {
   // Country-State
   const countries: Country[] = Countries;
-  // const [selectedAccountOwner, setSelectedAccountOwner] = useState('');
-
+  const [selectedAccountOwner, setSelectedAccountOwner] = useState("");
   const [selectedCountry, setSelectedCountry] = useState<string>("");
+  const [selectedCurrency, setSelectedCurrency] = useState<string>("");
   //   const [selectedState, setSelectedState] = useState<string>("");
   // const [states, setStates] = useState<State[]>([]);
 
@@ -85,17 +85,13 @@ const MyForm: React.FC<MyFormProps> = ({
     const selectedCountry = e.target.value;
     setSelectedCountry(selectedCountry);
 
-    // const selectedCountryObject = countries.find(
-    //   (country) => country.name === selectedCountry
-    // );
+    const selectedCountryObject = countries.find((country: Country) => country.name === selectedCountry);
 
-    console.log(selectedCountry);
-
-    // if (selectedCountryObject) {
-    //   setStates(selectedCountryObject.states);
-    // } else {
-    //   setStates([]);
-    // }
+    if (selectedCountryObject) {
+      setSelectedCurrency(selectedCountryObject.currency);
+    } else {
+      setSelectedCurrency("");
+    }
   };
 
   // const handleDropdownChange = (selectedOption: any) => {
@@ -129,7 +125,6 @@ const MyForm: React.FC<MyFormProps> = ({
     description: "",
   });
   const handleChangeData = (e: any) => {
-    debugger;
     setAccount({ ...account, [e.target.name]: e.target.value });
   };
 
@@ -137,7 +132,6 @@ const MyForm: React.FC<MyFormProps> = ({
   const formattedDateTime = currentDate.toISOString().slice(0, -1);
 
   const handleCreateAccountClick = () => {
-    debugger;
     const accountDetail: Account = {
       id: 0,
       ownerId: selectedAccountOwner,
@@ -148,13 +142,13 @@ const MyForm: React.FC<MyFormProps> = ({
       annualRevenue: account.annualRevenue,
       phone: account.phone,
       fax: account.fax,
-      currency: account.currency,
+      currency: "",
       webSite: account.website,
       billingStreet: account.billingStreet,
       billingCity: account.billingCity,
       billingState: account.billingState,
       billingCode: account.billingCode,
-      country: account.country,
+      country: "",
       description: account.description,
       createdBy: userId,
       createdOn: formattedDateTime,
@@ -164,27 +158,25 @@ const MyForm: React.FC<MyFormProps> = ({
       isdelete: false,
     };
 
+    accountDetail.country = selectedCountry;
+    accountDetail.currency = selectedCurrency;
+
     dispatch(createAccountRequest(accountDetail));
     closeModal();
   };
+
   const accountOwner = useSelector(
     (state: any) => state.accountReducer.accountOwner
   );
-  console.log(accountOwner);
   const industry = useSelector((state: any) => state.sharedReducer.industries);
-  console.log(industry);
   const accountStatus = useSelector(
     (state: any) => state.accountReducer.accountStatus
   );
-  console.log(accountStatus);
   const accountType = useSelector(
     (state: any) => state.accountReducer.accountType
   );
-  console.log(accountType);
-  const [selectedAccountOwner, setSelectedAccountOwner] = useState("");
 
   const handleDropdownChange = (selectedOption: any) => {
-    debugger;
     if (selectedOption) {
       // Handle selection
       setSelectedAccountOwner(selectedOption.key);
@@ -267,11 +259,10 @@ const MyForm: React.FC<MyFormProps> = ({
                                   );
                                 }}
                                 onBlur={handleBlur("accountOwner")}
-                                className={`form-control ${
-                                  touched.accountOwner && errors.accountOwner
-                                    ? "border-danger"
-                                    : ""
-                                }`}
+                                className={`form-control ${touched.accountOwner && errors.accountOwner
+                                  ? "border-danger"
+                                  : ""
+                                  }`}
                                 styles={{
                                   control: (provided) => ({
                                     ...provided,
@@ -303,11 +294,10 @@ const MyForm: React.FC<MyFormProps> = ({
                         <Field
                           as="select"
                           name="industry"
-                          className={`form-control form-select ${
-                            touched.industry && errors.industry
-                              ? "border-danger"
-                              : ""
-                          }`}
+                          className={`form-control form-select ${touched.industry && errors.industry
+                            ? "border-danger"
+                            : ""
+                            }`}
                           style={{ height: "50px" }}
                           onChange={(e: any) => {
                             handleChangeData(e);
@@ -343,11 +333,10 @@ const MyForm: React.FC<MyFormProps> = ({
                         <Field
                           as="select"
                           name="status"
-                          className={`form-control form-select ${
-                            touched.status && errors.status
-                              ? "border-danger"
-                              : ""
-                          }`}
+                          className={`form-control form-select ${touched.status && errors.status
+                            ? "border-danger"
+                            : ""
+                            }`}
                           style={{ height: "50px" }}
                           onChange={(e: any) => {
                             handleChangeData(e);
@@ -380,9 +369,8 @@ const MyForm: React.FC<MyFormProps> = ({
                         <Field
                           as="select"
                           name="type"
-                          className={`form-control form-select ${
-                            touched.type && errors.type ? "border-danger" : ""
-                          }`}
+                          className={`form-control form-select ${touched.type && errors.type ? "border-danger" : ""
+                            }`}
                           style={{ height: "50px" }}
                           onChange={(e: any) => {
                             handleChangeData(e);
@@ -420,9 +408,8 @@ const MyForm: React.FC<MyFormProps> = ({
                         <Field
                           type="text"
                           name="phone"
-                          className={`form-control ${
-                            touched.phone && errors.phone ? "is-invalid" : ""
-                          }`}
+                          className={`form-control ${touched.phone && errors.phone ? "is-invalid" : ""
+                            }`}
                           style={{ height: "50px" }}
                           onChange={(e: any) => {
                             handleChangeData(e);
@@ -450,11 +437,10 @@ const MyForm: React.FC<MyFormProps> = ({
                         <Field
                           type="text"
                           name="accountName"
-                          className={`form-control ${
-                            touched.accountName && errors.accountName
-                              ? "is-invalid"
-                              : ""
-                          }`}
+                          className={`form-control ${touched.accountName && errors.accountName
+                            ? "is-invalid"
+                            : ""
+                            }`}
                           style={{ height: "50px" }}
                           onChange={(e: any) => {
                             handleChangeData(e);
@@ -480,11 +466,10 @@ const MyForm: React.FC<MyFormProps> = ({
                         <Field
                           type="text"
                           name="annualRevenue"
-                          className={`form-control ${
-                            touched.annualRevenue && errors.annualRevenue
-                              ? "is-invalid"
-                              : ""
-                          }`}
+                          className={`form-control ${touched.annualRevenue && errors.annualRevenue
+                            ? "is-invalid"
+                            : ""
+                            }`}
                           style={{ height: "50px" }}
                           onChange={(e: any) => {
                             handleChangeData(e);
@@ -509,9 +494,8 @@ const MyForm: React.FC<MyFormProps> = ({
                         <Field
                           type="text"
                           name="fax"
-                          className={`form-control ${
-                            touched.fax && errors.fax ? "is-invalid" : ""
-                          }`}
+                          className={`form-control ${touched.fax && errors.fax ? "is-invalid" : ""
+                            }`}
                           style={{ height: "50px" }}
                           onChange={(e: any) => {
                             handleChangeData(e);
@@ -539,11 +523,10 @@ const MyForm: React.FC<MyFormProps> = ({
                         <Field
                           type="text"
                           name="website"
-                          className={`form-control ${
-                            touched.website && errors.website
-                              ? "is-invalid"
-                              : ""
-                          }`}
+                          className={`form-control ${touched.website && errors.website
+                            ? "is-invalid"
+                            : ""
+                            }`}
                           style={{ height: "50px" }}
                           onChange={(e: any) => {
                             handleChangeData(e);
@@ -569,11 +552,10 @@ const MyForm: React.FC<MyFormProps> = ({
                         <Field
                           type="text"
                           name="billingStreet"
-                          className={`form-control ${
-                            touched.billingStreet && errors.billingStreet
-                              ? "is-invalid"
-                              : ""
-                          }`}
+                          className={`form-control ${touched.billingStreet && errors.billingStreet
+                            ? "is-invalid"
+                            : ""
+                            }`}
                           style={{ height: "50px" }}
                           onChange={(e: any) => {
                             handleChangeData(e);
@@ -598,11 +580,10 @@ const MyForm: React.FC<MyFormProps> = ({
                         <Field
                           type="text"
                           name="billingCity"
-                          className={`form-control ${
-                            touched.billingCity && errors.billingCity
-                              ? "is-invalid"
-                              : ""
-                          }`}
+                          className={`form-control ${touched.billingCity && errors.billingCity
+                            ? "is-invalid"
+                            : ""
+                            }`}
                           style={{ height: "50px" }}
                           onChange={(e: any) => {
                             handleChangeData(e);
@@ -628,11 +609,10 @@ const MyForm: React.FC<MyFormProps> = ({
                         <Field
                           type="text"
                           name="billingState"
-                          className={`form-control ${
-                            touched.billingState && errors.billingState
-                              ? "is-invalid"
-                              : ""
-                          }`}
+                          className={`form-control ${touched.billingState && errors.billingState
+                            ? "is-invalid"
+                            : ""
+                            }`}
                           style={{ height: "50px" }}
                           onChange={(e: any) => {
                             handleChangeData(e);
@@ -658,11 +638,10 @@ const MyForm: React.FC<MyFormProps> = ({
                         <Field
                           type="text"
                           name="billingCode"
-                          className={`form-control ${
-                            touched.billingCode && errors.billingCode
-                              ? "is-invalid"
-                              : ""
-                          }`}
+                          className={`form-control ${touched.billingCode && errors.billingCode
+                            ? "is-invalid"
+                            : ""
+                            }`}
                           style={{ height: "50px" }}
                           onChange={(e: any) => {
                             handleChangeData(e);
@@ -676,49 +655,6 @@ const MyForm: React.FC<MyFormProps> = ({
                         />
                       </div>
                     </div>
-
-                    {/* <div className="form-group row">
-                      <label
-                        className="col-sm-4 col-form-label"
-                        htmlFor="currency"
-                      >
-                        Currency
-                      </label>
-                      <div className="col-sm-6">
-                      <Field
-                          as="select"
-                          id="country"
-                          name="country"
-                          type="text"
-                          className={`form-control ${
-                            touched.country && errors.country
-                              ? "is-invalid"
-                              : ""
-                          }`}
-                          onChange={(e: any) => {
-                            handleCountryChange(e);
-                            handleChange(e);
-                          }}
-                        >
-                          <option value="">
-                            {selectedCountry
-                              ? selectedCountry
-                              : "Select Country"}
-                          </option>
-                          {countries.map((country, index) => (
-                            <option key={index} value={country.name}>
-                              {country.name}
-                            </option>
-                          ))}
-                        </Field>
-                      
-                        <ErrorMessage
-                          name="currency"
-                          component="div"
-                          className="error form-error"
-                        />
-                      </div>
-                    </div> */}
 
                     <div className="form-group row">
                       <label
@@ -736,11 +672,10 @@ const MyForm: React.FC<MyFormProps> = ({
                           id="country"
                           name="country"
                           type="text"
-                          className={`form-control  form-select ${
-                            touched.country && errors.country
-                              ? "is-invalid"
-                              : ""
-                          }`}
+                          className={`form-control  form-select ${touched.country && errors.country
+                            ? "is-invalid"
+                            : ""
+                            }`}
                           style={{ height: "50px" }}
                           onChange={(e: any) => {
                             handleCountryChange(e);

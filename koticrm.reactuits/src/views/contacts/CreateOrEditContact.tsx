@@ -17,160 +17,22 @@ import {
 } from "../../redux-saga/modules/contact/action";
 import { ToastContainer } from "react-toastify";
 
-
-const owners = [
-  {
-    id: "1",
-    firstName: "John",
-    lastName: "Doe",
-    email: "john@example.com",
-    logo: "path_to_logo1",
-  },
-  {
-    id: "2",
-    firstName: "Jane",
-    lastName: "Smith",
-    email: "rony@test1.com",
-    logo: "path_to_logo2",
-  },
-  {
-    id: "3",
-    firstName: "Billy",
-    lastName: "Butcher",
-    email: "billy@example.com",
-    logo: "path_to_logo2",
-  },
-  {
-    id: "4",
-    firstName: "John",
-    lastName: "Doe",
-    email: "john@example.com",
-    logo: "path_to_logo1",
-  },
-  {
-    id: "5",
-    firstName: "Jane",
-    lastName: "Smith",
-    email: "jane@example.com",
-    logo: "path_to_logo2",
-  },
-  {
-    id: "6",
-    firstName: "Billy",
-    lastName: "Butcher",
-    email: "billy@example.com",
-    logo: "path_to_logo2",
-  },
-  {
-    id: "7",
-    firstName: "John",
-    lastName: "Doe",
-    email: "john@example.com",
-    logo: "path_to_logo1",
-  },
-  {
-    id: "8",
-    firstName: "Jane",
-    lastName: "Smith",
-    email: "jane@example.com",
-    logo: "path_to_logo2",
-  },
-  {
-    id: "9",
-    firstName: "Billy",
-    lastName: "Butcher",
-    email: "billy@example.com",
-    logo: "path_to_logo2",
-  },
-  {
-    id: "10",
-    firstName: "John",
-    lastName: "Doe",
-    email: "john@example.com",
-    logo: "path_to_logo1",
-  },
-  {
-    id: "11",
-    firstName: "John",
-    lastName: "Doe",
-    email: "john@example.com",
-    logo: "path_to_logo1",
-  },
-  {
-    id: "12",
-    firstName: "Jane",
-    lastName: "Smith",
-    email: "rony@test.com",
-    logo: "path_to_logo2",
-  },
-  {
-    id: "13",
-    firstName: "Billy",
-    lastName: "Butcher",
-    email: "billy@example.com",
-    logo: "path_to_logo2",
-  },
-  {
-    id: "14",
-    firstName: "John",
-    lastName: "Doe",
-    email: "john@example.com",
-    logo: "path_to_logo1",
-  },
-  {
-    id: "15",
-    firstName: "Jane",
-    lastName: "Smith",
-    email: "jane@example.com",
-    logo: "path_to_logo2",
-  },
-  {
-    id: "16",
-    firstName: "Billy",
-    lastName: "Butcher",
-    email: "billy@example.com",
-    logo: "path_to_logo2",
-  },
-  {
-    id: "17",
-    firstName: "John",
-    lastName: "Doe",
-    email: "john@example.com",
-    logo: "path_to_logo1",
-  },
-  {
-    id: "18",
-    firstName: "Jane",
-    lastName: "Smith",
-    email: "jane@example.com",
-    logo: "path_to_logo2",
-  },
-  {
-    id: "19",
-    firstName: "Billy",
-    lastName: "Butcher",
-    email: "billy@example.com",
-    logo: "path_to_logo2",
-  },
-  {
-    id: "20",
-    firstName: "John",
-    lastName: "Doe",
-    email: "john@example.com",
-    logo: "path_to_logo1",
-  },
-];
-
 const CreateOrEditContact=()=>{
 
   const { contactId } = useParams<{ contactId: string }>();
   const [contact, setContact] = useState<Contact>(new ContactClass());
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const fetchedContact = useSelector(
-    (state: any) => state.contactReducer.contact
-  );
-  console.log("Initial Contact:",contact);
+  const fetchedContact = useSelector((state: any) => state.contactReducer.contact);
+  const fetchedAccountOwners = useSelector((state: any) => state.accountReducer.accountOwner);
+  const fetchedAccount = useSelector((state: any) => state.accountReducer.account);
+  
+  const mappedFetchedAccountOwners = fetchedAccountOwners.map(fetchedAccountOwner=>({
+    ...fetchedAccountOwner,
+    value: fetchedAccountOwner.id,
+    label1: `${fetchedAccountOwner.firstName} ${fetchedAccountOwner.lastName}`,
+    label2: fetchedAccountOwner.email
+  }));
 
   // Country-State
   const countries: Country[] = Countries;
@@ -188,10 +50,10 @@ const CreateOrEditContact=()=>{
   }, [dispatch, contactId]);
 
   useEffect(() => {
-    if (fetchedContact) {
+    if (contactId) {
       setContact(fetchedContact);
     }
-  }, [fetchedContact]);
+  }, [contactId, fetchedContact]);
 
   const handleCountryChange = (e: ChangeEvent<HTMLSelectElement>) => {
     const selectedCountry = e.target.value;
@@ -222,6 +84,7 @@ const CreateOrEditContact=()=>{
     try {
       contact.country = selectedCountry;
       contact.state = selectedState;
+      contact.accountID = fetchedAccount.id;
       if (!contact.id) {
         console.log("Create new contact:", contact);
         dispatch(createContact(contact));
@@ -238,28 +101,10 @@ const CreateOrEditContact=()=>{
   };
 
   const validationSchema = Yup.object().shape({
-    ownerId: Yup.number().required("Owner ID is required"),
-    firstName: Yup.string().required("First Name is required"),
-    // lastName: Yup.string().required('Last Name is required'),
+    ownerId: Yup.string().required("Owner ID is required"),
+    // firstName: Yup.string().required("First Name is required"),
     // accountID: Yup.number().required('Account ID is required'),
-    // email: Yup.string().email('Invalid email').required('Email is required'),
-    // phone: Yup.string().required('phone is required'),
-    // mobile: Yup.string().required('mobile is required'),
-    // department: Yup.string().required('Email is required'),
-    // homePhone: Yup.string().required('HomePhone is required'),
-    // linkedinURL: Yup.string().required('linkedinURL is required'),
-    // secondaryEmail: Yup.string().required('SecondaryEmail is required'),
-    // city: Yup.string().required('City is required'),
-    // // zip: Yup.string().required('Zip is required'),
-    // description: Yup.string().required('Description is required'),
-    // otherPhone: Yup.string().required('OtherPhone is required'),
-    // title: Yup.string().required('Title is required'),
-    // // dateOfBirth: Yup.string().required('Date of Birth is required'),
-    // skypeId: Yup.string().required('SkypeId is required'),
-    // twitterUrl: Yup.string().required('Twitter Url is required'),
-    // mailingStreet: Yup.string().required('Mailing Street Url is required'),
-    // country: Yup.string().required('Country Url is required'),
-    // state: Yup.string().required('State Url is required'),
+    // skypeId: Yup.string().required('SkypeId is required')
   });
 
   return (
@@ -295,7 +140,7 @@ const CreateOrEditContact=()=>{
                       </label>
                     </CCol>
                     <CCol sm={8}>
-                      <SearchDropdown name="ownerId"options={owners} />
+                      <SearchDropdown name="ownerId" options={mappedFetchedAccountOwners} />
                       <ErrorMessage
                         name="ownerId"
                         component="div"

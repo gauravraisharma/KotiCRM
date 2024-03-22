@@ -169,6 +169,7 @@ namespace KotiCRM.Services.Services
                 throw new Exception("Contact not found.");
             }
 
+            contact.OwnerId = contactDTO.OwnerId;
             contact.FirstName = contactDTO.FirstName;
             contact.LastName = contactDTO.LastName;
             contact.AccountID = contactDTO.AccountID;

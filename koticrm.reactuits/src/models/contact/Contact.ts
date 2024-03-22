@@ -4,7 +4,7 @@ export interface Contact {
   firstName: string;
   lastName: string | null;
   accountID: number;
-  email: string;
+  email: string | null;
   phone: string;
   otherPhone: string | null;
   mobile: string | null;
@@ -30,7 +30,7 @@ export class ContactClass implements Contact {
   firstName: string;
   lastName: string | null;
   accountID: number;
-  email: string;
+  email: string | null;
   phone: string;
   otherPhone: string | null;
   mobile: string | null;
@@ -54,8 +54,8 @@ export class ContactClass implements Contact {
     this.ownerId = "";
     this.firstName = '';
     this.lastName = '';
-    this.accountID = 1028;
-    this.email = '';
+    this.accountID = 0;
+    this.email = null;
     this.phone = '';
     this.otherPhone = '';
     this.mobile = '';
@@ -66,7 +66,7 @@ export class ContactClass implements Contact {
     this.skypeID = '';
     this.linkedinURL = '';
     this.twitterURL = '';
-    this.secondaryEmail = '';
+    this.secondaryEmail = null;
     this.mailingStreet = '';
     this.city = '';
     this.state = '';
