@@ -16,6 +16,7 @@ import {
 } from '../../../constants/reduxConstants';
 import { actionPayloadModel } from '../../../models/actionModel/actionModel';
 import { SharedModel } from '../../../models/commonModels/SharedModels';
+import { getAccounts } from './action';
 
 export function* workGetAccountFetch(): Generator<any> {
   try {
@@ -69,7 +70,6 @@ export function* workGetAccountByIdFetch(action: actionPayloadModel): Generator<
 
 export function* workUpdateAccount(action: actionPayloadModel): Generator<any> {
   try {
-    debugger;
     const response: any = yield call(UpdateAccount, action.payload.id, action.payload.account);
 
     if (response.status != 200) {
@@ -97,6 +97,7 @@ export function* workDeleteAccount(action: actionPayloadModel): Generator<any> {
     else {
       const Account: Account = response.data;
       yield put({ type: DELETE_ACCOUNT_SUCCESS, payload: Account });
+      yield put(getAccounts());
       toast.success('Account deleted successfully');
     }
   } catch (error) {

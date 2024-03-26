@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import * as Yup from "yup";
 import { Formik, Form, Field, ErrorMessage } from "formik";
@@ -183,7 +182,11 @@ const EditPage: React.FC<EditModalProps> = ({
   const accountOwner = useSelector(
     (state: any) => state.accountReducer.accountOwner
   );
-  const industry = useSelector((state: any) => state.sharedReducer.industry);
+  // const industry = useSelector((state: any) => state.sharedReducer.industry);
+  // const accountStatus = useSelector(
+  //   (state: any) => state.accountReducer.accountStatus
+  // );
+  const industry = useSelector((state: any) => state.sharedReducer.industries);
   const accountStatus = useSelector(
     (state: any) => state.accountReducer.accountStatus
   );
@@ -259,7 +262,7 @@ const EditPage: React.FC<EditModalProps> = ({
                         />
                       </div>
                     </div>
-                    <div className="form-group row">
+                    {/* <div className="form-group row">
                       <label
                         htmlFor="industry"
                         className="col-sm-4 col-form-label"
@@ -295,8 +298,39 @@ const EditPage: React.FC<EditModalProps> = ({
                           className="error form-error"
                         />
                       </div>
+                    </div> */}
+                    <div className="form-group row">
+                      <label
+                        className="col-sm-4 col-form-label"
+                        htmlFor="industry"
+                      >
+                        Industry<span style={{ color: "red" }}>*</span>
+                      </label>
+                      <div className="col-sm-8">
+                        <Field
+                          as="select"
+                          name="industry"
+                          className="form-control form-select"
+                          style={{ height: "50px" }}
+                          onChange={(e: any) => {
+                            handleChangeData(e);
+                            handleChange(e);
+                          }}
+                        >
+                          <option value="">Select...</option>
+                          {industry?.map((industry: any) => (
+                            <option key={industry.id} value={industry.id}>
+                              {industry.name}
+                            </option>
+                          ))}
+                        </Field>
+                        <ErrorMessage
+                          name="industry"
+                          component="div"
+                          className="error form-error"
+                        />
+                      </div>
                     </div>
-
                     <div className="form-group row">
                       <label htmlFor="type" className="col-sm-4 col-form-label">
                         Type
@@ -455,10 +489,9 @@ const EditPage: React.FC<EditModalProps> = ({
                         />
                       </div>
                     </div>
-                 
                   </div>
                   <div className="col-md-6">
-                  <div className="form-group row">
+                    <div className="form-group row">
                       <label htmlFor="fax" className="col-sm-4 col-form-label">
                         Fax
                       </label>
@@ -644,35 +677,34 @@ const EditPage: React.FC<EditModalProps> = ({
                         />
                       </div>
                     </div>
-                 
                   </div>
                   <div className="form-group row">
-                      <label
-                        htmlFor="description"
-                        className="col-sm-2 col-form-label"
-                      >
-                        Description
-                      </label>
-                      <div className="col-sm-10">
-                        <Field
-                          as="textarea"
-                          name="description"
-                          style={{ height: "120px" }}
-                          value={updateAccount.description}
-                          className="form-control"
-                          // style={{ height: "50px" }}
-                          onChange={(e: any) => {
-                            handleChangeData(e);
-                            handleChange(e);
-                          }}
-                        />
-                        <ErrorMessage
-                          name="description"
-                          component="div"
-                          className="error form-error"
-                        />
-                      </div>
+                    <label
+                      htmlFor="description"
+                      className="col-sm-2 col-form-label"
+                    >
+                      Description
+                    </label>
+                    <div className="col-sm-10">
+                      <Field
+                        as="textarea"
+                        name="description"
+                        style={{ height: "120px" }}
+                        value={updateAccount.description}
+                        className="form-control"
+                        // style={{ height: "50px" }}
+                        onChange={(e: any) => {
+                          handleChangeData(e);
+                          handleChange(e);
+                        }}
+                      />
+                      <ErrorMessage
+                        name="description"
+                        component="div"
+                        className="error form-error"
+                      />
                     </div>
+                  </div>
                 </div>
                 <div className="text-end">
                   <button
@@ -682,9 +714,9 @@ const EditPage: React.FC<EditModalProps> = ({
                     Update
                   </button>
                   <button
-                    type="button" 
+                    type="button"
                     className="btn btn-secondary"
-                    onClick={() => onBackToListButtonClickHandler()} 
+                    onClick={() => onBackToListButtonClickHandler()}
                   >
                     Cancel
                   </button>
@@ -699,4 +731,3 @@ const EditPage: React.FC<EditModalProps> = ({
 };
 
 export default EditPage;
-

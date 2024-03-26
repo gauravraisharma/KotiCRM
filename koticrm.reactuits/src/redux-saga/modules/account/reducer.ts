@@ -27,8 +27,7 @@ const accountReducer: Reducer<accountState, AppAction> = (state: accountState = 
         case CREATE_ACCOUNT_SUCCESS:
             return {
                 ...state,
-                createAccountResponse: (action as actionPayloadModel).payload,
-                refreshList: true
+                createAccountResponse: (action as actionPayloadModel).payload
             }
         case GET_ACCOUNT_DETAIL_SUCCESS:
             return {

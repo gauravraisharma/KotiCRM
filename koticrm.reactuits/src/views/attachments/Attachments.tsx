@@ -13,13 +13,16 @@ import {
   CTableRow,
 } from "@coreui/react";
 import { useEffect, useState } from "react";
-import { BsFiletypeDocx, BsFiletypePdf } from "react-icons/bs";
+import { IoDocumentTextSharp } from "react-icons/io5";
+import { FaFilePdf } from "react-icons/fa6";
+
 import { useDispatch, useSelector } from "react-redux";
 import CreateNewAttachment from "./CreateNewAttachment";
 import { getFileSizeAndLabel } from "../../utils/Shared/FileSizeAndLable";
 import { formatDate } from "../../utils/Shared/DateTransform";
 import { getAttachments } from "../../redux-saga/modules/attachment/action";
-import { GrDownload } from "react-icons/gr";
+import { IoMdDownload } from "react-icons/io";
+// import { GrDownload } from "react-icons/gr";
 
 interface Props {
   accountId: number;
@@ -141,9 +144,9 @@ const Attachments = ({ accountId, getAttachmentsCount }: Props) => {
                     <CTableRow>
                       <CTableHeaderCell>
                         {attachment.fileExtension === ".pdf" ? (
-                          <BsFiletypePdf className="pdf" />
+                          <FaFilePdf className="pdf" />
                         ) : (
-                          <BsFiletypeDocx className="doc" />
+                          <IoDocumentTextSharp className="doc" />
                         )}
                         <CButton className="link" color="link" onClick={() => handleButttonClick(attachment.fileName)}>
                           {attachment.fileName}
@@ -159,7 +162,7 @@ const Attachments = ({ accountId, getAttachmentsCount }: Props) => {
                         {getFileSizeAndLabel(attachment.fileSize)}
                       </CTableDataCell>
                       <CTableDataCell className="text-center">
-                      <GrDownload style={{ color: "green", fontSize: "20px", cursor:"pointer" }} onClick={() => handleButttonClick(attachment.fileName)}/>
+                      <IoMdDownload style={{ color: "green", fontSize: "20px", cursor:"pointer" }} onClick={() => handleButttonClick(attachment.fileName)}/>
                       </CTableDataCell>
                     </CTableRow>
                   ))

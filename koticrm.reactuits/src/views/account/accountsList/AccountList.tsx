@@ -29,6 +29,7 @@ import { getIndustry } from '../../../redux-saga/modules/shared/action';
 import { getNotes } from '../../../redux-saga/modules/notes/action';
 import { getContacts } from '../../../redux-saga/modules/contact/action';
 
+
 const AccountList: React.FC = () => {
 
 
@@ -65,11 +66,10 @@ const AccountList: React.FC = () => {
 
   const handleCreateNew = () => {
     setStateData(true);
-
   };
+  
   const closeCreateModal = () => {
     setStateData(false);
-
   }
 
   const backToAccountList = () => {
@@ -99,6 +99,8 @@ const AccountList: React.FC = () => {
     dispatch(getNotes());
     dispatch(getContacts());
   }, [dispatch]);
+
+console.log(getNotes)
 
   useEffect(() => {
     dispatch(getAccounts())
@@ -146,7 +148,7 @@ const AccountList: React.FC = () => {
                   <CCardBody>
                     <CTable>
                       <CTableHead>
-                        <CTableRow>
+                        <CTableRow >
                           <CTableHeaderCell scope="col">Account Name</CTableHeaderCell>
                           <CTableHeaderCell scope="col">Owner</CTableHeaderCell>
                           <CTableHeaderCell scope="col">Phone</CTableHeaderCell>
