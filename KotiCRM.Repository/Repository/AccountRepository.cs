@@ -1,4 +1,5 @@
 ﻿using KotiCRM.Repository.Data;
+using KotiCRM.Repository.DTOs.Account;
 using KotiCRM.Repository.IRepository;
 using KotiCRM.Repository.Models;
 using Microsoft.AspNetCore.Http;
@@ -135,6 +136,33 @@ namespace KotiCRM.Repository.Repository
         {
             try
             {
+                //var accountList = (from account in _context.Accounts
+                //                   join industry in _context.Industry on account.IndustryId equals industry.Id
+                //                   select new AccountDTO
+                //                   {
+                //                       Id = account.Id,
+                //                       OwnerId = account.OwnerId,
+                //                       AccountName = account.AccountName,
+                //                       Industry = industry.Name,
+                //                       AnnualRevenue = account.AnnualRevenue,
+                //                       Status = account.Status,
+                //                       Phone = account.Phone,
+                //                       Fax = account.Fax,
+                //                       WebSite = account.WebSite,
+                //                       Type = account.Type,
+                //                       BillingStreet = account.BillingStreet,
+                //                       BillingCity = account.BillingCity,
+                //                       BillingState = account.BillingState,
+                //                       BillingCode = account.BillingCode,
+                //                       Country = account.Country,
+                //                       Description = account.Description,
+                //                       Isactive = account.Isactive,
+                //                       Isdelete = account.Isdelete,
+                //                       CreatedBy = account.CreatedBy,
+                //                       CreatedOn = account.CreatedOn,
+                //                       ModifiedBy = account.ModifiedBy,
+                //                       ModifiedOn = account.ModifiedOn
+                //                   }).ToList();
                 return await _context.Accounts.Where(account => !account.Isdelete).ToListAsync();
             }
             catch(Exception ex) 
