@@ -7,6 +7,7 @@ import { actionPayloadModel } from '../../../models/actionModel/actionModel';
 import { Note } from '../../../models/notes/notes';
 import { CREATE_NOTES_SUCCESS, GET_NOTES_SUCCESS } from '../../../constants/reduxConstants';
 import { CreateNote, GetNotesList } from './apiService';
+import { getNotes } from './action';
 
 export function* workGetNotesFetch(): Generator<any> {
   try {
@@ -34,6 +35,7 @@ export function* workCreateNote(action:actionPayloadModel): Generator<any> {
     }else{
       const note: Note=response.data;
       yield put({ type: CREATE_NOTES_SUCCESS, payload:note });
+      yield put(getNotes());
       return response;
     }
    

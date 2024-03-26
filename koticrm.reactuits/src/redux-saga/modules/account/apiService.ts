@@ -52,9 +52,9 @@ export function GetAccountById(id: number): Promise<apiResponse<Account>> {
 }
 
 export function DeleteAccount(id: number): Promise<apiResponse<Account>> {
-    return axiosInstance.delete<Account>(`/Account/DeleteAccount/${id}`).
-        then((response: AxiosResponse<Account>) => responseBody(response)).
-        catch((error: AxiosError) => {
+    return axiosInstance.delete<Account>(`/Account/DeleteAccount/${id}`)
+        .then((response: AxiosResponse<Account>) => responseBody(response))
+        .catch((error: AxiosError) => {
             const errorResponse: apiResponse<Account> = {
                 data: undefined,
                 status: 500,

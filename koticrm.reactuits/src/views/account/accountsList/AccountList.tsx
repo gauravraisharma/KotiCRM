@@ -66,11 +66,10 @@ const AccountList: React.FC = () => {
 
   const handleCreateNew = () => {
     setStateData(true);
-
   };
+  
   const closeCreateModal = () => {
     setStateData(false);
-
   }
 
   const backToAccountList = () => {

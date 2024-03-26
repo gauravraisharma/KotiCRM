@@ -8,6 +8,7 @@ import { actionPayloadModel } from "../../../models/actionModel/actionModel";
 const INITIAL_STATE: contactState = {
     contacts: [],
     contact: null as Contact | null,
+    createContactResponse: null as Contact | null,
     refreshList: false
 };
 
@@ -29,8 +30,7 @@ const contactReducer: Reducer<contactState, AppAction> = (state: contactState = 
         case CREATE_CONTACT_SUCCESS:
             return {
                 ...state,
-                contact: (action as actionPayloadModel).payload,
-                refreshList: true
+                createContactResponse: (action as actionPayloadModel).payload
             }
 
         case UPDATE_CONTACT_SUCCESS:
