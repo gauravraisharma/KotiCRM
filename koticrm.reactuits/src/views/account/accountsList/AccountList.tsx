@@ -94,7 +94,11 @@ const AccountList: React.FC = () => {
     dispatch(getAccounts());
   }, [dispatch, refreshList, createresponse, updateResponse]);
 
-  
+  const navigate = useNavigate()
+  const showItems = (id: any) => {
+    navigate(`/accounts/accountDetails/${id}`)
+  }
+
   return (
     <>
       <ToastContainer />

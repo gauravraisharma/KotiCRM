@@ -1,5 +1,5 @@
 import { Suspense } from 'react'
-import { HashRouter, Route, Routes } from 'react-router-dom'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import './scss/style.scss'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
@@ -14,7 +14,7 @@ const loading = (
 
 function App() {
   return (
-    <HashRouter>
+    <BrowserRouter>
       {/* <AuthProvider> */}
       <Suspense fallback={loading}>
                   <Routes>
@@ -35,7 +35,7 @@ function App() {
         </Routes>
       </Suspense>
       {/* </AuthProvider> */}
-    </HashRouter>
+    </BrowserRouter>
   );
 }
 

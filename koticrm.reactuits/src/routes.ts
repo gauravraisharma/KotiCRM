@@ -133,7 +133,7 @@ const routes: Route[] = [
     { path: '/notifications/toasts', name: 'Toasts', element: Toasts, isAuth: false },
     { path: '/widgets', name: 'Widgets', element: Widgets, isAuth: false },
     { path: '/accountsList', name: 'Account List', element: AccountList, isAuth: true, modulePermission: 'Accounts' },
-    { path: '/accountDetails/:accountId', name: 'Account Details', element: AccountDetails, isAuth: true, modulePermission: 'Accounts' },
+    { path: '/accounts/accountDetails/:accountId', name: 'Account Details', element: AccountDetails, isAuth: true, modulePermission: 'Accounts' },
     { path: '/account', name: 'Account', element: NewAccount, isAuth: true, modulePermission: 'Accounts' },
 
     { path: '/contacts', name: 'Contacts', element: Contacts, isAuth: true, modulePermission: 'Contacts' },
