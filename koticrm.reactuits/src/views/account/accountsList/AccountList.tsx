@@ -108,7 +108,7 @@ console.log(getNotes)
 
   const navigate = useNavigate()
   const showItems = (id: any) => {
-    navigate(`/accountDetails/${id}`)
+    navigate(`/accounts/accountDetails/${id}`)
   }
 
   return (
