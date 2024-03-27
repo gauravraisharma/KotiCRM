@@ -35,5 +35,31 @@ namespace KotiCRM.Server.Controllers
             }
             return Ok(response);
         }
+
+        [HttpGet("{attachmentId}/download")]
+        public async Task<IActionResult> DownloadAttachmentAsync(int attachmentId)
+        {
+            var dbResponse = await _attachmentService.DownloadAttachmentAsync(attachmentId);
+
+            if (dbResponse.Succeed == false)
+            {
+                return NotFound(dbResponse.Message);
+            }
+
+            var path = dbResponse.Message;
+
+            var memory = new MemoryStream();
+            using (var stream = new FileStream(path, FileMode.Open))
+            {
+                await stream.CopyToAsync(memory);
+            }
+            memory.Position = 0;
+            var contentType = "APPLICATION/octet-stream";
+            var fileName = Path.GetFileName(path);
+
+            var file = File(memory, contentType, fileName);
+
+            return file;
+        }
     }
 }

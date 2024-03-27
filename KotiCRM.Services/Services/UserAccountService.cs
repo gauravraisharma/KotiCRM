@@ -50,9 +50,9 @@ namespace KotiCRM.Services.Services
         }
 
 
-        public ResponseStatus GetRoleName(string roleId)
+        public Task<ResponseStatus> GetRoleName(string roleId)
         {
-            return _accountRepository.GetRoleName(roleId);
+            return _accountRepository.GetRoleNameAsync(roleId);
         }
 
         public IEnumerable<ResponseApplicationUserModel> GetUserList()

@@ -267,6 +267,9 @@ namespace KotiCRM.Server.Migrations
                     b.Property<int?>("AccountID")
                         .HasColumnType("int");
 
+                    b.Property<string>("ContentType")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("DateAdded")
                         .HasColumnType("datetime2");
 

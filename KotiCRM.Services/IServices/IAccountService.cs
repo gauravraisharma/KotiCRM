@@ -14,8 +14,5 @@ namespace KotiCRM.Services.IServices
         Task<Account> GetAccountDetails(int id);
         Task<DbResponse> DeleteAccount(int id);
         Task<Account> UpdateAccount(int id, Account account);
-
-
-
     }
 }

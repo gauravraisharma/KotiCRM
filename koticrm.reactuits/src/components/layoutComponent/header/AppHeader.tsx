@@ -12,7 +12,6 @@ import {
 } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
 import { cilBell, cilMenu } from "@coreui/icons";
-
 import { AppBreadcrumb } from "../../index";
 import { AppHeaderDropdown } from "./index";
 import { logo } from "../../../assets/brand/logo";

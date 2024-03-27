@@ -12,7 +12,7 @@ namespace KotiCRM.Repository.IRepository
         Task<LoginStatus> UserLogin(UserLoginModel userModel);
         Task<ResponseStatus> CreateApplicationUser(ApplicationUserModel userModel);
         Task<ResponseStatus> UpdateApplicationUser(UpdateApplicationUserModel userModel);
-        ResponseStatus GetRoleName(string roleId);
+        Task<ResponseStatus> GetRoleNameAsync(string roleId);
         Task<ResponseStatus> CreateNewRole(string roleName);
         DDListResponse GetUserTypeListDD();
         IEnumerable<ResponseApplicationUserModel> GetUserList();

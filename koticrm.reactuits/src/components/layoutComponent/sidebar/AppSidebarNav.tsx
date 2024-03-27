@@ -13,9 +13,10 @@ interface Props {
   items: NavItem[];
 }
 
-export const AppSidebarNav:FC<Props> = ({ items }) => {
+export const AppSidebarNav: FC<Props> = ({ items }) => {
   const location = useLocation()
-  const navLink = (name:string, icon:JSX.Element, badge?:Badge) => {
+
+  const navLink = (name: string, icon: JSX.Element, badge?: Badge) => {
     return (
       <>
         {icon && icon}
@@ -29,15 +30,15 @@ export const AppSidebarNav:FC<Props> = ({ items }) => {
     )
   }
 
-  const navItem = (item:NavItem, index:number) => {
+  const navItem = (item: NavItem, index: number) => {
     const { component, name, badge, icon, ...rest } = item
     const Component = component
     return (
       <Component
         {...(rest.to &&
           !rest.items && {
-            component: NavLink,
-          })}
+          component: NavLink,
+        })}
         key={index}
         {...rest}
       >
@@ -45,7 +46,8 @@ export const AppSidebarNav:FC<Props> = ({ items }) => {
       </Component>
     )
   }
-  const navGroup = (item:NavItem, index:number) => {
+  
+  const navGroup = (item: NavItem, index: number) => {
     const { component, name, icon, to, ...rest } = item
     const Component = component
     return (

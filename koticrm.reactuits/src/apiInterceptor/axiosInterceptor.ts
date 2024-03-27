@@ -1,4 +1,4 @@
-import axios, { AxiosError , AxiosResponse} from 'axios';
+import axios, { AxiosError, AxiosResponse } from 'axios';
 const apiUrl = import.meta.env.VITE_API_URL;
 
 const axiosInstance = axios.create({
@@ -8,7 +8,7 @@ const axiosInstance = axios.create({
 
 // Add a request interceptor
 axiosInstance.interceptors.request.use(
-        config => {
+    config => {
         const token = localStorage.getItem('accessToken')
         if (token) {
             config.headers['Authorization'] = 'Bearer ' + token;
@@ -26,11 +26,12 @@ export interface apiResponse<T> {
     status: number;
     statusText: string;
 }
-const responseBody = <T>(response: AxiosResponse<T>):apiResponse<T> => {
+const responseBody = <T>(response: AxiosResponse<T>): apiResponse<T> => {
     return {
         data: response.data,
         status: response.status,
         statusText: response.statusText
     };
 };
-export {axiosInstance,responseBody};
+
+export { axiosInstance, responseBody };

@@ -35,7 +35,7 @@ public class AttachmentService : IAttachmentService
         {
             await createAttachmentDTO.File.CopyToAsync(stream);
         }
-        Attachment attachment = new Attachment()
+        KotiCRM.Repository.Models.Attachment attachment = new()
         {
             UserID = createAttachmentDTO.UserID,
             AccountID = createAttachmentDTO.AccountID,
@@ -43,6 +43,7 @@ public class AttachmentService : IAttachmentService
             FileSize = createAttachmentDTO.File.Length,
             FileName = uploadedFileName,
             FileExtension = extension,
+            ContentType = createAttachmentDTO.File.ContentType
         };
         return await _attachmentRepository.CreateAttachment(attachment);
     }
@@ -58,9 +59,34 @@ public class AttachmentService : IAttachmentService
             DateAdded = attachment.DateAdded,
             FileSize = attachment.FileSize,
             FileName = attachment.FileName,
-            FileExtension = attachment.FileExtension
+            FileExtension = attachment.FileExtension,
+            ContentType = attachment.ContentType
         }).ToList();
 
         return attachmentDTOs;
+    }
+
+    public async Task<DbResponse> DownloadAttachmentAsync(int attachmentID)
+    {
+        var attachment = await _attachmentRepository.GetAttachmentByIdAsync(attachmentID);
+
+        if (attachment == null)
+        {
+            return new DbResponse
+            {
+                Succeed = false,
+                Message = $"Attachment with ID {attachmentID} not found."
+            };
+        }
+
+        var appDirectory = Path.Combine(Directory.GetCurrentDirectory(), "Contents");
+
+        var path = Path.Combine(appDirectory, attachment.FileName!);
+
+        return new DbResponse
+        {
+            Succeed = true,
+            Message = path
+        };
     }
 }

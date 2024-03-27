@@ -41,7 +41,20 @@ public class AttachmentRepository : IAttachmentRepository
     {
         try
         {
-            return await _context.Attachments.ToListAsync();
+            return await _context.Attachments.OrderByDescending(a => a.DateAdded).ToListAsync();
+        }
+        catch (Exception ex)
+        {
+            throw new Exception(ex.Message, ex);
+        }
+    }
+
+    public async Task<Attachment> GetAttachmentByIdAsync(int attachmentID)
+    {
+        try
+        {
+            var attachment = await _context.Attachments.FindAsync(attachmentID);
+            return attachment ?? throw new InvalidOperationException($"Attachment with ID {attachmentID} not found.");
         }
         catch (Exception ex)
         {

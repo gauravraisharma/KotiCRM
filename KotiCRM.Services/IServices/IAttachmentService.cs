@@ -7,4 +7,5 @@ public interface IAttachmentService
 {
     Task<DbResponse> CreateAttachment(CreateAttachmentDTO createAttachmentDTO);
     Task<IEnumerable<AttachmentDTO>> GetAttachmentList();
+    Task<DbResponse> DownloadAttachmentAsync(int attachmentID);
 }

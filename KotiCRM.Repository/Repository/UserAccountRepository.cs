@@ -2,10 +2,12 @@
 using KotiCRM.Repository.IRepository;
 using KotiCRM.Repository.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
@@ -62,7 +64,7 @@ namespace KotiCRM.Repository.Repository
                 }
 
 
-                var roleResponse = GetRoleName(userModel.UserType);
+                var roleResponse = await GetRoleNameAsync(userModel.UserType);
                 if (roleResponse.Status == "FAILED")
                 {
                     return new ResponseStatus
@@ -483,7 +485,40 @@ namespace KotiCRM.Repository.Repository
             }
 
         }
-        public ResponseStatus GetRoleName(string roleId)
+        //public ResponseStatus GetRoleName(string roleId)
+        //{
+        //    try
+        //    {
+        //        if (_context == null)
+        //        {
+        //            return new ResponseStatus
+        //            {
+        //                Status = "FAILED",
+        //                Message = "Db Context is null"
+        //            };
+        //        }
+        //        var result = from role in _context.Roles
+        //                      where role.Id == roleId
+        //                      select new
+        //                      {Name = role.Name};
+        //        return new ResponseStatus
+        //        {
+        //            Status = "SUCCEED",
+        //            Message = result.FirstOrDefault().Name
+        //        };
+
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return new ResponseStatus
+        //        {
+        //            Status = "FAILED",
+        //            Message = "Something went wrong"
+        //        };
+        //    }
+        //}
+
+        public async Task<ResponseStatus> GetRoleNameAsync(string roleId)
         {
             try
             {
@@ -495,31 +530,42 @@ namespace KotiCRM.Repository.Repository
                         Message = "Db Context is null"
                     };
                 }
-                var result = (from role in _context.Roles
-                              where role.Id == roleId
-                              select new
-                              {
-                                  Name = role.Name
-                              }
-                              );
+
+                var role = await _context.Roles.FirstOrDefaultAsync(r => r.Id == roleId);
+
+                if (role == null)
+                {
+                    return new ResponseStatus
+                    {
+                        Status = "FAILED",
+                        Message = "Role not found"
+                    };
+                }
 
                 return new ResponseStatus
                 {
                     Status = "SUCCEED",
-                    Message = result.FirstOrDefault().Name
+                    Message = role.Name!
                 };
-
             }
-            catch (Exception ex)
+            catch (DbException ex)
             {
+                // Handle specific database exceptions
                 return new ResponseStatus
                 {
                     Status = "FAILED",
-                    Message = "Something went wrong"
+                    Message = "Database error: " + ex.Message
                 };
             }
-
-
+            catch (Exception ex)
+            {
+                // Catch any other unexpected exceptions
+                return new ResponseStatus
+                {
+                    Status = "FAILED",
+                    Message = "An unexpected error occurred: " + ex.Message
+                };
+            }
         }
 
         public IEnumerable<ResponseApplicationUserModel> GetUserList()

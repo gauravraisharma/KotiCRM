@@ -22,6 +22,7 @@ import { getFileSizeAndLabel } from "../../utils/Shared/FileSizeAndLable";
 import { formatDate } from "../../utils/Shared/DateTransform";
 import { getAttachments } from "../../redux-saga/modules/attachment/action";
 import { IoMdDownload } from "react-icons/io";
+import { DownloadAttachmentAsync } from "../../redux-saga/modules/attachment/apiService";
 // import { GrDownload } from "react-icons/gr";
 
 interface Props {
@@ -67,13 +68,31 @@ const Attachments = ({ accountId, getAttachmentsCount }: Props) => {
     setIsModalVisible(false);
   };
 
-  const handleButttonClick = (filename: string) => {
-    const filePath = `../../../../KotiCRM.Server/Contents/${filename}`;
-    const anchor = document.createElement('a');
-    anchor.href = filePath;
-    anchor.download = filename;
-    anchor.click();
-  }
+  const handleDownloadClick = async (attachmentId: number, contentType: string, fileName: string) => {
+    const response = await DownloadAttachmentAsync(attachmentId, contentType);
+
+    if (response.status === 200) {
+      console.log("response:", response);
+
+      if (response.data) {
+        const blob = new Blob([response.data], { type: contentType });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = fileName;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+      } else {
+        console.error('Failed to download attachment: Response data is undefined');
+        // Handle error
+      }
+    } else {
+      console.error('Failed to download attachment:', response.statusText);
+      // Handle error
+    }
+  };
 
 
   
@@ -130,7 +149,10 @@ const Attachments = ({ accountId, getAttachmentsCount }: Props) => {
                         ) : (
                           <IoDocumentTextSharp className="doc" />
                         )}
-                        <CButton className="link" color="link" onClick={() => handleButttonClick(attachment.fileName)}>
+                        <CButton
+                          className="link"
+                          color="link"
+                          onClick={() => handleDownloadClick(attachment.id, attachment.contentType, attachment.fileName)}>
                           {attachment.fileName}
                         </CButton>
                       </CTableHeaderCell>
@@ -144,7 +166,10 @@ const Attachments = ({ accountId, getAttachmentsCount }: Props) => {
                         {getFileSizeAndLabel(attachment.fileSize)}
                       </CTableDataCell>
                       <CTableDataCell className="text-center">
-                      <IoMdDownload style={{ color: "green", fontSize: "20px", cursor:"pointer" }} onClick={() => handleButttonClick(attachment.fileName)}/>
+                        <IoMdDownload
+                          style={{ color: "green", fontSize: "20px", cursor: "pointer" }}
+                          onClick={() => handleDownloadClick(attachment.id, attachment.contentType, attachment.fileName)}
+                        />
                       </CTableDataCell>
                     </CTableRow>
                   ))

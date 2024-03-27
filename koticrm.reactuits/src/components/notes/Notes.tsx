@@ -6,11 +6,11 @@ import { Note } from "../../models/notes/notes";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { BsClockFill } from "react-icons/bs";
-import TimeDisplay from "../timeDisplay/TimeDisplay";
 import {
   createNotesRequest,
   getNotes,
 } from "../../redux-saga/modules/notes/action";
+import { formatDate } from "../../utils/Shared/DateTransform";
 
 interface NoteProps {
   getNotesCount: (data: string) => void;
@@ -74,13 +74,13 @@ const Notes: React.FC<NoteProps> = ({
                     <span>{note.description}</span>
                   </div>
                   <div className="mt-2 mx-5 d-flex align-items-center">
-                    <span>
+                    {/* <span>
                       Account - <span className="linking">{accountName} </span>
-                    </span>
-                    <span className=" mx-1">.</span>
-                    <span className="mx-2">Add Note</span>
+                    </span> */}
+                    {/* <span className=" mx-1">.</span> */}
                     <BsClockFill color="#3c4b64" className="mx-1" />
-                    <TimeDisplay createdAt={note.dateOfNote} />
+                    {/* <TimeDisplay createdAt={note.dateOfNote} /> */}
+                    <span className="mx-1">{formatDate(note.dateOfNote, "DD/MM/YYYY HH:mm")}</span>
                     <span className="mx-1">by</span>
                     <span className="mx-1 ">
                       {note.firstName} {note.lastName}

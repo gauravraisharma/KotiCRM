@@ -104,11 +104,11 @@ const CreateOrEditContact = () => {
       } else {
         dispatch(updateContact(contact));
       }
-      navigate("/contacts");
     } catch (error) {
-      console.log(error);
+      console.log("error message:",error.errors);
     } finally {
       setSubmitting(false);
+      navigate("/contacts");
     }
   };
 
