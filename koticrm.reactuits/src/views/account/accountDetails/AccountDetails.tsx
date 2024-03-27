@@ -1,69 +1,48 @@
-import {
-  CRow,
-  CCol,
-  CCard,
-  CCardHeader,
-  CButton,
-  CCardBody
-} from "@coreui/react";
-
+import {CRow,CCol,CCard,CCardHeader,CButton,CCardBody,} from "@coreui/react";
 import { useEffect, useState } from "react";
-// import "../../css/style.css";
-
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
+import { getAccountByIdRequest } from "../../../redux-saga/modules/account/action";
 import Notes from "../../../components/notes/Notes";
 import InvoiceComponent from "../../invoice/Invoice";
 import Contacts from "../../contacts/Contacts";
 import Attachments from "../../attachments/Attachments";
-import { getAccountByIdRequest } from "../../../redux-saga/modules/account/action";
 
 const AccountDetails = () => {
   const navigate = useNavigate();
   const { accountId } = useParams();
-  const dispatch = useDispatch();
-
   const [notesCount, setNotesCount] = useState();
   const [invoicesCount, setInvoicesCount] = useState();
   const [attachmentsCount, setAttachmentsCount] = useState(0);
+  const dispatch = useDispatch();
 
+ //Fetching data form store
   const account = useSelector((state: any) => state.accountReducer.account);
-
-  const accountOwner = useSelector(
-    (state: any) => state.accountReducer.accountOwner
-  );
-  
+  const accountOwner = useSelector((state: any) => state.accountReducer.accountOwner);
   const industry = useSelector((state: any) => state.sharedReducer.industries);
 
   const industryName =
     account && industry
       ? industry.find((industry: any) => industry.id === account.industryId)
-        ?.name
+          ?.name
       : null;
+
   const ownerName =
     account && accountOwner
       ? accountOwner?.find((owner: any) => owner.id == account.ownerId)?.label
       : null;
 
+  //counts
   const getNotesCount = (noteCount: any) => {
     setNotesCount(noteCount);
   };
-
   const getInvoiceCount = (invoiceCount: any) => {
     setInvoicesCount(invoiceCount);
   };
-
   const getAttachmentsCount = (attachmentCount: number) => {
     setAttachmentsCount(attachmentCount);
   };
-
-  // const handleNoteSave = (name: string) => {
-  // Filter notes based on the name parameter
-  // const filteredNotes = notes.filter((note: Note) => note.name === name);
-
-  // Handle filteredNotes as needed
-  // };
 
   useEffect(() => {
     if (accountId) {
@@ -152,7 +131,9 @@ const AccountDetails = () => {
                   aria-selected="false"
                 >
                   Attachments
-                  <strong>{attachmentsCount == 0 ? "" : ` (${attachmentsCount})`}</strong>
+                  <strong>
+                    {attachmentsCount == 0 ? "" : ` (${attachmentsCount})`}
+                  </strong>
                 </button>
               </li>
               <li className="nav-item" role="presentation">
@@ -190,7 +171,6 @@ const AccountDetails = () => {
                         Account Owner: <p>{ownerName}</p>
                       </li>
                     </CCol>
-
                     <CCol xs={3}>
                       <li>
                         Account type: <p>{account?.country}</p>
@@ -229,19 +209,14 @@ const AccountDetails = () => {
                   </CRow>
                 </ul>
               </div>
-
               <div
                 className="tab-pane fade"
                 id="contacts"
                 role="tabpanel"
                 aria-labelledby="contacts-tab"
               >
-                <Contacts
-                  accountId={account?.id}
-                // getContactsCount={getContactsCount}
-                />
+                <Contacts accountId={account?.id} />
               </div>
-
               <div
                 className="tab-pane fade"
                 id="notes"
@@ -255,42 +230,6 @@ const AccountDetails = () => {
                         <div>
                           <h5 className="mb-0">Notes</h5>
                         </div>
-
-
-                        {/* <div className="text-end">
-                          <CDropdown>
-                            <CDropdownToggle color="primary" variant="outline">
-                              Recent Last
-                            </CDropdownToggle>
-                            <CDropdownMenu>
-
-                            <CDropdownItem
-                              href="#"
-                              onClick={() => handleNoteSave("Name")}
-                            >
-                              Name
-                            </CDropdownItem>
-                            <CDropdownItem
-                              href="#"
-                              onClick={() => handleNoteSave("Owner")}
-                            >
-                              Owner
-                            </CDropdownItem>
-                            <CDropdownItem
-                              href="#"
-                              onClick={() => handleNoteSave("Phone")}
-                            >
-                              Phone
-                            </CDropdownItem>
-                            <CDropdownItem
-                              href="#"
-                              onClick={() => handleNoteSave("Country")}
-                            >
-                              Country
-                            </CDropdownItem>
-                            </CDropdownMenu>
-                          </CDropdown>
-                        </div>*/}
                       </div>
                     </CCardHeader>
                     <CCardBody>
@@ -303,7 +242,6 @@ const AccountDetails = () => {
                   </CCard>
                 </CCol>
               </div>
-
               <div
                 className="tab-pane fade"
                 id="attachments"
@@ -315,7 +253,6 @@ const AccountDetails = () => {
                   getAttachmentsCount={getAttachmentsCount}
                 />
               </div>
-
               <div
                 className="tab-pane fade"
                 id="invoices"

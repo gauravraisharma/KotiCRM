@@ -1,5 +1,3 @@
-// AuthenticatedRoute.js
-
 import {  Navigate, Outlet } from 'react-router-dom';
 interface AuthProps {
     isAuth: boolean;
@@ -7,7 +5,6 @@ interface AuthProps {
 const AuthenticatedRoute: React.FC<AuthProps> = ({ isAuth }) => {
 
     //user should be logged in and have authorization 
-    // const auth = useSelector((state: any) => state.accountReducer.loggedIn);
     const authLogin = localStorage.getItem('accessToken');
 
     //if not logged In than cannot authorized pages

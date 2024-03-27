@@ -71,7 +71,6 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
   const dispatch = useDispatch();
   const handleEditorChange = (editor: any) => {
     const data = editor.getData();
-    console.log(data); // You can handle the editor data here
   };
   const contacts = useSelector((state: any) => state.contactReducer.contacts);
   const invoiceStatus = useSelector(

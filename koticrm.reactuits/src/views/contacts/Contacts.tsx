@@ -1,16 +1,5 @@
-import {
-  CCard,
-  CCardBody,
-  CCardHeader,
-  CCol,
-  CRow,
-  CTable,
-  CTableBody,
-  CTableDataCell,
-  CTableHead,
-  CTableHeaderCell,
-  CTableRow,
-  CButton,
+import {CCard,CCardBody,CCardHeader,CCol,CRow,CTable,CTableBody,CTableDataCell,
+  CTableHead,CTableHeaderCell,CTableRow,CButton,
 } from "@coreui/react";
 import "../../css/style.css";
 import { useDispatch, useSelector } from "react-redux";
@@ -33,34 +22,30 @@ const tableHeader = [
 
 interface Props {
   accountId: number;
-  // getContactsCount: (data: number) => void;
 }
 
 const Contacts = ({ accountId }: Props) => {
-  // const [contacts, setContacts] = useState([]);
   const dispatch = useDispatch();
-  const refreshList = useSelector((state: any) => state.contactReducer.refreshList)
+  const refreshList = useSelector((state: any) => state.contactReducer.refreshList);
   const fetchedContacts = useSelector((state: any) => state.contactReducer.contacts);
   const fetchedAccountOwner = useSelector((state: any) => state.accountReducer.accountOwner);
 
   let filteredContacts = fetchedContacts;
   if (accountId) {
-    filteredContacts = fetchedContacts?.filter((contact: any) => contact.accountID === accountId);
+    filteredContacts = fetchedContacts?.filter(
+      (contact: any) => contact.accountID === accountId
+    );
   }
-  // const contactsCount = filteredContacts.length;
 
   useEffect(() => {
     dispatch(getContacts());
-  }, [dispatch]);
+  }, [dispatch,refreshList]);
 
-  // useEffect(() => {
-  //   getContactsCount(contactsCount);
-  // });
-
-  
   function getAccountOwnerName(ownerId: string): string {
-    const owner = fetchedAccountOwner?.find((owner: any) => owner.id === ownerId);
-    return owner ? owner.label : '';
+    const owner = fetchedAccountOwner?.find(
+      (owner: any) => owner.id === ownerId
+    );
+    return owner ? owner.label : "";
   }
 
   return (
@@ -77,15 +62,16 @@ const Contacts = ({ accountId }: Props) => {
                   </h5>
                 </CCol>
                 <CCol xs={6} className="text-end">
-                  {accountId && <Link to={`/contacts/createContact`}>
-                    <CButton
-                      component="input"
-                      type="button"
-                      color="primary"
-                      value="New"
-                    // variant="outline"
-                    />
-                  </Link>}
+                  {accountId && (
+                    <Link to={`/contacts/createContact`}>
+                      <CButton
+                        component="input"
+                        type="button"
+                        color="primary"
+                        value="New"
+                      />
+                    </Link>
+                  )}
                 </CCol>
               </CRow>
             </CCardHeader>
@@ -96,41 +82,45 @@ const Contacts = ({ accountId }: Props) => {
                     {tableHeader.map((header, index) => (
                       <CTableHeaderCell key={index} scope="col">
                         {header}{" "}
-                        {/* <span>
-                        <CIcon
-                          icon={cilHamburgerMenu}
-                          title="hamburger"
-                          className="me-1"
-                          size="lg"
-                        />
-                      </span> */}
                       </CTableHeaderCell>
                     ))}
                   </CTableRow>
                 </CTableHead>
                 <CTableBody>
                   {filteredContacts ? (
-                    filteredContacts?.map((contact: ContactWithAccountName, index: number) => (
-                      <CTableRow key={index}>
-
-                        <CTableDataCell>{`${contact?.firstName} ${contact?.lastName}`}</CTableDataCell>
-                        <CTableDataCell>{contact.accountName}</CTableDataCell>
-                        <CTableDataCell>{contact?.email}</CTableDataCell>
-                        <CTableDataCell>{contact?.phone}</CTableDataCell>
-                        <CTableDataCell>{getAccountOwnerName(contact?.ownerId)}</CTableDataCell>
-                        <CTableDataCell>
-                          <Link to={`/contacts/editContact/${contact?.id}`}>
-                            <MdEditSquare
-                              style={{ color: "green", marginRight: "10px", fontSize: "20px" }}
-                            />
-                          </Link>
-
-                          <Link to={`/contacts/${contact?.id}`}>
-                            <AiFillEye style={{ color: "darkblue", marginRight: "10px", fontSize: "20px" }} />
-                          </Link>
-                        </CTableDataCell>
-                      </CTableRow>
-                    ))
+                    filteredContacts?.map(
+                      (contact: ContactWithAccountName, index: number) => (
+                        <CTableRow key={index}>
+                          <CTableDataCell>{`${contact?.firstName} ${contact?.lastName}`}</CTableDataCell>
+                          <CTableDataCell>{contact.accountName}</CTableDataCell>
+                          <CTableDataCell>{contact?.email}</CTableDataCell>
+                          <CTableDataCell>{contact?.phone}</CTableDataCell>
+                          <CTableDataCell>
+                            {getAccountOwnerName(contact?.ownerId)}
+                          </CTableDataCell>
+                          <CTableDataCell>
+                            <Link to={`/contacts/editContact/${contact?.id}`}>
+                              <MdEditSquare
+                                style={{
+                                  color: "green",
+                                  marginRight: "10px",
+                                  fontSize: "20px",
+                                }}
+                              />
+                            </Link>
+                            <Link to={`/contacts/${contact?.id}`}>
+                              <AiFillEye
+                                style={{
+                                  color: "darkblue",
+                                  marginRight: "10px",
+                                  fontSize: "20px",
+                                }}
+                              />
+                            </Link>
+                          </CTableDataCell>
+                        </CTableRow>
+                      )
+                    )
                   ) : (
                     <div>No contact available</div>
                   )}

@@ -276,7 +276,12 @@ const InvoiceComponent: React.FC<InvoiceProps> = ({
 
                               <MdDelete
                                 size={21}
-                                style={{ color: "red", marginRight: "10px", fontSize: "20px", cursor: 'pointer'}}
+                                style={{
+                                  color: "red",
+                                  marginRight: "10px",
+                                  fontSize: "20px",
+                                  cursor: "pointer",
+                                }}
                                 onClick={() =>
                                   handleDeleteClick(invoiceModel.invoice?.id)
                                 }

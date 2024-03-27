@@ -9,7 +9,7 @@ interface DeleteConfirmationModalProps {
   onCancel: () => void;
   onConfirm: () => void;
   accountId: any;
-  invoiceId :any;
+  invoiceId: any;
 }
 
 const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = ({
@@ -17,28 +17,25 @@ const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = ({
   onCancel,
   onConfirm,
   accountId,
-  invoiceId
+  invoiceId,
 }) => {
   const dispatch = useDispatch();
 
   const handleDelete = () => {
-    debugger  
-    if(accountId != null){
-    dispatch(deleteAccountRequest(accountId));
-    }
-    else if(invoiceId != null){
-      dispatch(deleteInvoiceRequest(invoiceId))
+    if (accountId != null) {
+      dispatch(deleteAccountRequest(accountId));
+    } else if (invoiceId != null) {
+      dispatch(deleteInvoiceRequest(invoiceId));
     }
     onConfirm();
   };
 
   return isOpen ? (
     <div className="backdrop">
-      {" "}
       <div className="delete-confirmation-modal card">
         <div className="modal-content">
           <div className="modal-header flex-column">
-          <TiDeleteOutline className="deleteicon"/>
+            <TiDeleteOutline className="deleteicon" />
 
             <h4 className="modal-title w-100 ">Are you sure?</h4>
           </div>
@@ -63,7 +60,7 @@ const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = ({
             </button>
           </div>
         </div>
-      </div>{" "}
+      </div>
     </div>
   ) : (
     <React.Fragment />

@@ -25,11 +25,6 @@ const Notes: React.FC<NoteProps> = ({
 }) => {
   const dispatch = useDispatch();
   const notes = useSelector((state: any) => state.noteReducer.notes);
-  console.log("Notes on component", notes);
-  
-  // const noteResponse = useSelector(
-  //   (state: any) => state.noteReducer.noteResponse
-  // );
 
   const userId = useSelector((state: any) => state.authReducer.userId);
 
@@ -57,8 +52,6 @@ const Notes: React.FC<NoteProps> = ({
     filteredNotes = notes?.filter((note: any) => note.accountID === accountId);
   }
   const noteCount = filteredNotes?.length;
-
-  console.log(filteredNotes);
   useEffect(() => {
     dispatch(getNotes());
   }, [dispatch]);

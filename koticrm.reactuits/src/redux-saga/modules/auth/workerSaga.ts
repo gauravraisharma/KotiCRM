@@ -7,7 +7,6 @@ import { authAction } from "../../../models/actionModel/authAction";
 
 export function* workerloginUser(action: authAction): Generator<any> {
     try {
-      console.log("Entered")
       const response:any  = yield call(loginUser,action.payload);
       if(response.status!=200){
         toast.error('Error fetching accounts')

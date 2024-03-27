@@ -53,7 +53,6 @@ export function* workGetInvoiceByIdFetch(action:actionPayloadModel): Generator<a
 
 export function* workCreateInvoice(action:actionPayloadModel): Generator<any> {
   try {
-    debugger
     const response:any  = yield call(CreateInvoice,action.payload);
     if(response.status!=200){
       toast.error('Error fetching accounts')
@@ -86,7 +85,6 @@ export function* workUpdateInvoice(action:actionPayloadModel): Generator<any> {
 
 export function* workDeleteInvoice(action:actionPayloadModel): Generator<any> {
   try {
-    debugger;
     const response:any  = yield call(DeleteInvoice,action.payload);
     if(response.status!=200){
       toast.error('Error fetching accounts')

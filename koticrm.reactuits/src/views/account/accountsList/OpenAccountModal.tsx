@@ -25,8 +25,8 @@ const Modal: React.FC<ModalProps> = ({ onClose, rowData, handleSave }) => {
             phone: rowData.phone,
             country: rowData.country,
           }}
-          onSubmit={(values) => {
-            console.log('Form submitted with values:', values);
+          onSubmit={() => {
+          
             handleSave();
             onClose(); // Close modal after saving
           }}

@@ -18,14 +18,11 @@ import { getOrganization, updateTimeZone } from '../../redux-saga/modules/shared
 
 const Timezone: React.FC = () => {
   const dispatch = useDispatch();
-  // const currentDate = new Date(); // Example date
-  
   const [selectedTimezone, setSelectedTimezone] = useState(
     Intl.DateTimeFormat().resolvedOptions().timeZone
   );
   const [timezone, setTimezone] = useState('')
   const handleTimezone = (selectedItem: any) => {
-    debugger
     const regex = /\+(\d{1,2}:\d{2})/;
     const match = regex.exec(selectedItem.label);
 
@@ -38,10 +35,8 @@ if (match && match.length > 1) {
 
 }
 const organization = useSelector((state: any) => state.sharedReducer.organization);
-console.log(organization)
-// var orgDetails:any;
 var orgDetails: OrganizationModel | undefined;
-// console.log('orgDetails')  
+  
 if (organization) {
   const activeOrg = organization.filter((org: any) => org.organizationResponse?.isActive === true);
   if (activeOrg && activeOrg.length > 0) {
@@ -49,7 +44,6 @@ if (organization) {
   }
 }
 const saveSettings = () => {
-debugger
 if(orgDetails){
 const organizationDetail: OrganizationModel = {
 id :orgDetails.id,
@@ -69,18 +63,14 @@ dispatch(updateTimeZone(orgDetails.id, organizationDetail))
 
 }else{
   console.error("orgDetails is undefined");
-
 }
 };
-
-
 useEffect(()=>{
 dispatch(getOrganization());
 },[dispatch])
 
-
   return (
-    
+    <>
     <CRow>
     <CCol xs={12}>
       <CCard className="mb-4">
@@ -91,8 +81,6 @@ dispatch(getOrganization());
                 <strong>Time Zone</strong>
               </h5>
             </CCol>
-          
-
           </CRow>
         </CCardHeader>
         <CCardBody>
@@ -104,7 +92,6 @@ dispatch(getOrganization());
               />
             </div>
           </CRow>
-
           <div className="text-right">
             <CButton
               component="input"
@@ -124,6 +111,7 @@ dispatch(getOrganization());
       </CCard>
     </CCol>
   </CRow>
+  </>
   )
 }
 

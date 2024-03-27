@@ -57,7 +57,7 @@ const Attachments = ({ accountId, getAttachmentsCount }: Props) => {
     getAttachmentsCount(attachmentsCount);
   });
 
-  console.log("filteredAttachments:", filteredAttachments);
+
 
   const handleModalOpen = () => {
     setIsModalVisible(true);
@@ -76,25 +76,7 @@ const Attachments = ({ accountId, getAttachmentsCount }: Props) => {
   }
 
 
-  // let Attachments = fetchedAttachments;
-  // if (accountOwner) {
-  //   Attachments = fetchedAttachments?.filter((attachment: any) => attachment.accountOwner === accountOwner);
-  // }
-  // const attachmentCount = Attachments?.length; // Calculate attachmentCount based on filtered Attachments
-
-  // console.log(Attachments);
-  // useEffect(() => {
-  //   if (accountOwner) {
-  //     dispatch(getAttachments(accountOwner)); // Dispatch getAttachments with accountOwner
-  //   } else {
-  //     dispatch(getAttachments()); // Dispatch getAttachments without accountOwner
-  //   }
-  // }, [accountOwner, dispatch]); // Add accountOwner to the dependencies array
-
-  // useEffect(() => {
-  //   // Optionally, you can use attachmentCount here if needed
-  //   console.log(attachmentCount);
-  // }, [attachmentCount]); // Add attachmentCount to the dependencies array
+  
 
 
 

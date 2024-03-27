@@ -1,15 +1,6 @@
 import CIcon from '@coreui/icons-react'
-import {
-  cilSpeedometer,
-  cilBook,
-  cilContact,
-  cibMarketo,
-  cibEventStore,
-  cibPaypal,
-  cibMarkdown,
-  cilApplications,
-  cilSettings,
-  cilMoney,
+import {cilSpeedometer,cilBook,cilContact,cibMarketo,cibEventStore,cibPaypal,
+  cibMarkdown,cilApplications,cilSettings,cilMoney,
 } from '@coreui/icons'
 import { CNavItem } from '@coreui/react'
 import { NavItem } from './models/commonModels/CommonModels'
@@ -20,13 +11,8 @@ const _nav:NavItem[] = [
     name: 'Dashboard',
     to: '/dashboard',
     icon: <CIcon icon={cilSpeedometer} customClassName="nav-icon" />,
-    //badge: {
-    //  color: 'info',
-    //  text: 'NEW',
-    //},
     moduleName : 'Dashboard'
   },
-
   {
     component: CNavItem,
     name: 'Accounts',
@@ -59,14 +45,6 @@ const _nav:NavItem[] = [
     moduleName : 'Leads'
 
   },
-  // {
-  //   component: CNavItem,
-  //   name: 'Employees',
-  //   to: '/theme/typography',
-  //   icon: <CIcon icon={cilGroup} customClassName="nav-icon" />,
-  //   moduleName : 'Employees'
-
-  // },
   {
     component: CNavItem,
     name: 'Events',

@@ -4,13 +4,6 @@ import { FormEvent, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { createAttachment } from "../../redux-saga/modules/attachment/action";
 
-// const owners = [
-//     { id: '1', firstName: 'John', lastName: 'Doe', email: 'john@example.com', logo: 'path_to_logo1' },
-//     { id: '2', firstName: 'Jane', lastName: 'Smith', email: 'rony@test1.com', logo: 'path_to_logo2' },
-//     { id: '3', firstName: 'Billy', lastName: 'Butcher', email: 'billy@example.com', logo: 'path_to_logo2' },
-//     { id: '4', firstName: 'John', lastName: 'Doe', email: 'john@example.com', logo: 'path_to_logo1' },
-//     { id: '5', firstName: 'Jane', lastName: 'Smith', email: 'jane@example.com', logo: 'path_to_logo2' }
-// ]
 
 interface Props {
     accountId: number;
@@ -26,7 +19,7 @@ const CreateNewAttachment = ({ accountId, isVisible, handleClose }: Props) => {
     useEffect(() => {
         // Handle file change after component has rendered
         if (newAttachment.file) {
-            console.log(newAttachment);
+        
         }
     }, [newAttachment]);
 
@@ -46,7 +39,7 @@ const CreateNewAttachment = ({ accountId, isVisible, handleClose }: Props) => {
             };
             fileReader.readAsDataURL(file);
         }
-        console.log(newAttachment);
+        
     }
 
     const handleFormSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -57,7 +50,6 @@ const CreateNewAttachment = ({ accountId, isVisible, handleClose }: Props) => {
             formDataToSend.append('userId', newAttachment.userID);
             formDataToSend.append('accountID', accountId.toString());
             formDataToSend.append('file', newAttachment.file as Blob);
-            console.log("Submitting");
 
             dispatch(createAttachment(formDataToSend));
             resetForm();

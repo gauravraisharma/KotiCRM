@@ -25,7 +25,6 @@ const customStyles = {
 
 const SearchableDropdown = ({ name, options }: Props) => {
     const [field, , helpers] = useField(name);
-    console.log(options);
     
 
     const isObjectOptions = Array.isArray(options) && options.length > 0 && typeof options[0] === 'object';

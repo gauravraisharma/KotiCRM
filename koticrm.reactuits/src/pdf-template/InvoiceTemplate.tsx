@@ -44,7 +44,7 @@ const InvoiceTemplate: React.FC<InvoicePdfTemplateProps> = ({
 			orgName = activeOrg[0]?.organizationResponse?.orgName;
 			const bank = activeOrg[0]?.banks?.filter((bank: any) => bank.organizationId === activeOrg[0].organizationResponse?.id);
 			if (bank && bank.length > 0) {
-				console.log(bank[0]?.bankId);
+
 				bankDetails = bank[0];
 			}
 		}
@@ -52,7 +52,6 @@ const InvoiceTemplate: React.FC<InvoicePdfTemplateProps> = ({
 
 
 	const handleDownloadPDF = () => {
-		debugger
 		const input: any = document.getElementById('invoice-pdf');
 
 		html2canvas(input).then((canvas: any) => {

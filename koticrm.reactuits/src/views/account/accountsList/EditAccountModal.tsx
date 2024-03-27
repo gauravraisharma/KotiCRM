@@ -2,7 +2,14 @@ import React, { useState } from "react";
 import * as Yup from "yup";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { Account } from "../../../models/account/Account";
-import { CButton, CCard, CCardBody, CCardHeader } from "@coreui/react";
+import {
+  CButton,
+  CCard,
+  CCardBody,
+  CCardHeader,
+  CCol,
+  CRow,
+} from "@coreui/react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { updateAccountRequest } from "../../../redux-saga/modules/account/action";
@@ -35,7 +42,6 @@ const EditPage: React.FC<EditModalProps> = ({
   accountData,
   onBackToListButtonClickHandler,
 }) => {
-  console.log(accountData);
   const dispatch = useDispatch();
   const [touchedFields, setTouchedFields] = useState({
     accountOwner: false,
@@ -55,7 +61,7 @@ const EditPage: React.FC<EditModalProps> = ({
     description: false,
   });
 
-  const handleInputChange = (fieldName: any) => {
+  const handleInputChange = (fieldName: keyof typeof touchedFields) => {
     setTouchedFields((prevFields) => ({
       ...prevFields,
       [fieldName]: true, // Mark the field as touched
@@ -63,66 +69,31 @@ const EditPage: React.FC<EditModalProps> = ({
   };
 
   const validationSchema = Yup.object().shape({
-    accountOwner: touchedFields.accountOwner
-      ? Yup.string().required("Required(Account Owner)")
-      : Yup.string(),
-    industry: touchedFields.industry
-      ? Yup.number().required("Required (Industry)")
-      : Yup.number(),
-    type: touchedFields.type
-      ? Yup.string().required("Required (Type)")
-      : Yup.string(),
-    status: touchedFields.status
-      ? Yup.string().required("Required (Status)")
-      : Yup.string(),
-    accountName: touchedFields.accountName
-      ? Yup.string().required("Required(Account Name)")
-      : Yup.string(),
-    annualRevenue: touchedFields.annualRevenue
-      ? Yup.string().required("Required (Annual Revenue)")
-      : Yup.string(),
-    phone: touchedFields.phone
-      ? Yup.string()
-          .required("Required (Phone)")
-          .matches(/^[0-9]+$/, "Phone number must be a number")
-          .min(10, "Phone number must be at least 10 digits")
-          .max(
-            13,
-            "Phone number must be at most 13 digits with with country calling code"
-          )
-      : Yup.string(),
-    fax: touchedFields.fax
-      ? Yup.string()
-          .required("Required (fax)")
-          .matches(/^\d{10}$/, "Fax number must be exactly 10 digits")
-      : Yup.string(),
-    website: touchedFields.website
-      ? Yup.string()
-          .required("Required (Website)")
-          .url("Website must be a valid URL")
-      : Yup.string(),
-    billingStreet: touchedFields.billingStreet
-      ? Yup.string().required("Required (Billing Street)")
-      : Yup.string(),
-    billingCity: touchedFields.billingCity
-      ? Yup.string().required("Required (Billing City)")
-      : Yup.string(),
-    billingState: touchedFields.billingState
-      ? Yup.string().required("Required (Billing State)")
-      : Yup.string(),
-    billingCode: touchedFields.billingCode
-      ? Yup.string()
-          .required("Required (Billing Code)")
-          .matches(/^\d+$/, "Billing Code must be a number")
-          .min(4, "Billing Code must be at least 4 digit")
-          .max(10, "Billing Code can have maximum 10 digits")
-      : Yup.string(),
-    country: touchedFields.country
-      ? Yup.string().required("Required (Country)")
-      : Yup.string(),
-    description: touchedFields.description
-      ? Yup.string().required("Required (Description)")
-      : Yup.string(),
+    accountOwner: Yup.string().required("Required (Account Owner)"),
+    industry: Yup.number().required("Required (Industry)"),
+    type: Yup.number().required("Required (Type)"),
+    status: Yup.number().required("Required (Status)"),
+    accountName: Yup.string().required("Required (Account Name)"),
+    annualRevenue: Yup.string().required("Required (Annual Revenue)"),
+    phone: Yup.string()
+      .required("Required (Phone)")
+      .matches(/^[0-9()-\s]+$/, "Phone number must be a number")
+      .min(10, "Phone number must be at least 10 digits")
+      .max(
+        13,
+        "Phone number must be at most 13 digits with country calling code"
+      ),
+
+    billingStreet: Yup.string().required("Required (Billing Street)"),
+    billingCity: Yup.string().required("Required (Billing City)"),
+    billingState: Yup.string().required("Required (Billing State)"),
+    billingCode: Yup.string()
+      .required("Required (Zip Code)")
+      .matches(/^\d+$/, "Zip Code must be a number")
+      .min(4, "Zip Code must be at least 4 digits")
+      .max(10, "Zip Code can have maximum 10 digits"),
+    country: Yup.string().required("Required (Country)"),
+    description: Yup.string().required("Required (Description)"),
   });
 
   const [updateAccount, setUpdateAccount] = useState({
@@ -138,7 +109,7 @@ const EditPage: React.FC<EditModalProps> = ({
     billingStreet: accountData.billingStreet,
     billingCity: accountData.billingCity,
     billingState: accountData.billingState,
-    billingCode: accountData.billingCode,
+    zipCode: accountData.zipCode,
     country: accountData.country,
     description: accountData.description,
   });
@@ -164,7 +135,7 @@ const EditPage: React.FC<EditModalProps> = ({
       billingStreet: updateAccount.billingStreet,
       billingCity: updateAccount.billingCity,
       billingState: updateAccount.billingState,
-      billingCode: updateAccount.billingCode,
+      zipCode: updateAccount.zipCode,
       country: updateAccount.country,
       description: updateAccount.description,
       createdBy: accountData.createdBy,
@@ -178,14 +149,10 @@ const EditPage: React.FC<EditModalProps> = ({
     dispatch(updateAccountRequest(accountDetail, accountData.id));
     closeModal();
   };
-
+  //Fetching data from store
   const accountOwner = useSelector(
     (state: any) => state.accountReducer.accountOwner
   );
-  // const industry = useSelector((state: any) => state.sharedReducer.industry);
-  // const accountStatus = useSelector(
-  //   (state: any) => state.accountReducer.accountStatus
-  // );
   const industry = useSelector((state: any) => state.sharedReducer.industries);
   const accountStatus = useSelector(
     (state: any) => state.accountReducer.accountStatus
@@ -223,19 +190,18 @@ const EditPage: React.FC<EditModalProps> = ({
           >
             {({ handleChange, handleSubmit }) => (
               <Form>
-                <div className="row">
-                  <div className="col-md-6">
-                    <div className="form-group row">
-                      <label
-                        htmlFor="accountOwner"
-                        className="col-sm-4 col-form-label"
-                      >
-                        Account Owner
-                        <span style={{ color: "red", fontSize: "25px" }}>
-                          *
-                        </span>
-                      </label>
-                      <div className="col-sm-8">
+                <CRow className="justify-content-between">
+                  <CCol xs={6}>
+                    <CRow className="mb-3">
+                      <CCol sm={4}>
+                        <label htmlFor="accountOwner">
+                          Account Owner
+                          <span style={{ color: "red", fontSize: "25px" }}>
+                            *
+                          </span>
+                        </label>
+                      </CCol>
+                      <CCol sm={8}>
                         <Field
                           as="select"
                           name="accountOwner"
@@ -260,19 +226,15 @@ const EditPage: React.FC<EditModalProps> = ({
                           component="div"
                           className="error form-error"
                         />
-                      </div>
-                    </div>
-                    {/* <div className="form-group row">
-                      <label
-                        htmlFor="industry"
-                        className="col-sm-4 col-form-label"
-                      >
-                        Industry
-                        <span style={{ color: "red", fontSize: "25px" }}>
-                          *
-                        </span>
-                      </label>
-                      <div className="col-sm-8">
+                      </CCol>
+                    </CRow>
+                    <CRow className="mb-3">
+                      <CCol sm={4}>
+                        <label htmlFor="industry">
+                          Industry<span style={{ color: "red" }}>*</span>
+                        </label>
+                      </CCol>
+                      <CCol sm={8}>
                         <Field
                           as="select"
                           name="industry"
@@ -281,41 +243,8 @@ const EditPage: React.FC<EditModalProps> = ({
                           onChange={(e: any) => {
                             handleChangeData(e);
                             handleChange(e);
-                            handleInputChange("industry");
                           }}
                           value={updateAccount.industry}
-                        >
-                          <option value="">Select Industry</option>
-                          {industry?.map((industry: any) => (
-                            <option key={industry.id} value={industry.id}>
-                              {industry.name}
-                            </option>
-                          ))}
-                        </Field>
-                        <ErrorMessage
-                          name="industry"
-                          component="div"
-                          className="error form-error"
-                        />
-                      </div>
-                    </div> */}
-                    <div className="form-group row">
-                      <label
-                        className="col-sm-4 col-form-label"
-                        htmlFor="industry"
-                      >
-                        Industry<span style={{ color: "red" }}>*</span>
-                      </label>
-                      <div className="col-sm-8">
-                        <Field
-                          as="select"
-                          name="industry"
-                          className="form-control form-select"
-                          style={{ height: "50px" }}
-                          onChange={(e: any) => {
-                            handleChangeData(e);
-                            handleChange(e);
-                          }}
                         >
                           <option value="">Select...</option>
                           {industry?.map((industry: any) => (
@@ -329,16 +258,18 @@ const EditPage: React.FC<EditModalProps> = ({
                           component="div"
                           className="error form-error"
                         />
-                      </div>
-                    </div>
-                    <div className="form-group row">
-                      <label htmlFor="type" className="col-sm-4 col-form-label">
-                        Type
-                        <span style={{ color: "red", fontSize: "25px" }}>
-                          *
-                        </span>
-                      </label>
-                      <div className="col-sm-8">
+                      </CCol>
+                    </CRow>
+                    <CRow className="mb-3">
+                      <CCol sm={4}>
+                        <label htmlFor="type">
+                          Type
+                          <span style={{ color: "red", fontSize: "25px" }}>
+                            *
+                          </span>
+                        </label>
+                      </CCol>
+                      <CCol sm={8}>
                         <Field
                           as="select"
                           name="type"
@@ -363,20 +294,19 @@ const EditPage: React.FC<EditModalProps> = ({
                           component="div"
                           className="error form-error"
                         />
-                      </div>
-                    </div>
+                      </CCol>
+                    </CRow>
 
-                    <div className="form-group row">
-                      <label
-                        htmlFor="status"
-                        className="col-sm-4 col-form-label"
-                      >
-                        Status
-                        <span style={{ color: "red", fontSize: "25px" }}>
-                          *
-                        </span>
-                      </label>
-                      <div className="col-sm-8">
+                    <CRow className="mb-3">
+                      <CCol sm={4}>
+                        <label htmlFor="status">
+                          Status
+                          <span style={{ color: "red", fontSize: "25px" }}>
+                            *
+                          </span>
+                        </label>
+                      </CCol>
+                      <CCol sm={8}>
                         <Field
                           as="select"
                           name="status"
@@ -401,19 +331,18 @@ const EditPage: React.FC<EditModalProps> = ({
                           component="div"
                           className="error form-error"
                         />
-                      </div>
-                    </div>
-                    <div className="form-group row">
-                      <label
-                        htmlFor="accountName"
-                        className="col-sm-4 col-form-label"
-                      >
-                        Account Name
-                        <span style={{ color: "red", fontSize: "25px" }}>
-                          *
-                        </span>
-                      </label>
-                      <div className="col-sm-8">
+                      </CCol>
+                    </CRow>
+                    <CRow className="mb-3">
+                      <CCol sm={4}>
+                        <label htmlFor="accountName">
+                          Account Name
+                          <span style={{ color: "red", fontSize: "25px" }}>
+                            *
+                          </span>
+                        </label>
+                      </CCol>
+                      <CCol sm={8}>
                         <Field
                           type="text"
                           value={updateAccount.accountName}
@@ -431,17 +360,14 @@ const EditPage: React.FC<EditModalProps> = ({
                           component="div"
                           className="error form-error"
                         />
-                      </div>
-                    </div>
+                      </CCol>
+                    </CRow>
 
-                    <div className="form-group row">
-                      <label
-                        htmlFor="annualRevenue"
-                        className="col-sm-4 col-form-label"
-                      >
-                        Annual Revenue
-                      </label>
-                      <div className="col-sm-8">
+                    <CRow className="mb-3">
+                      <CCol sm={4}>
+                        <label htmlFor="annualRevenue">Annual Revenue</label>
+                      </CCol>
+                      <CCol sm={8}>
                         <Field
                           type="number"
                           value={updateAccount.annualRevenue}
@@ -458,19 +384,19 @@ const EditPage: React.FC<EditModalProps> = ({
                           component="div"
                           className="error form-error"
                         />
-                      </div>
-                    </div>
-                    <div className="form-group row">
-                      <label
-                        htmlFor="number"
-                        className="col-sm-4 col-form-label"
-                      >
-                        Phone
-                        <span style={{ color: "red", fontSize: "25px" }}>
-                          *
-                        </span>
-                      </label>
-                      <div className="col-sm-8">
+                      </CCol>
+                    </CRow>
+
+                    <CRow className="mb-3">
+                      <CCol sm={4}>
+                        <label htmlFor="number">
+                          Phone
+                          <span style={{ color: "red", fontSize: "25px" }}>
+                            *
+                          </span>
+                        </label>
+                      </CCol>
+                      <CCol sm={8}>
                         <Field
                           type="phone"
                           name="phone"
@@ -487,15 +413,15 @@ const EditPage: React.FC<EditModalProps> = ({
                           component="div"
                           className="error form-error"
                         />
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-md-6">
-                    <div className="form-group row">
-                      <label htmlFor="fax" className="col-sm-4 col-form-label">
-                        Fax
-                      </label>
-                      <div className="col-sm-8">
+                      </CCol>
+                    </CRow>
+                  </CCol>
+                  <CCol sm={6}>
+                    <CRow className="mb-3">
+                      <CCol sm={4}>
+                        <label htmlFor="fax">Fax</label>
+                      </CCol>
+                      <CCol sm={8}>
                         <Field
                           type="text"
                           name="fax"
@@ -512,19 +438,18 @@ const EditPage: React.FC<EditModalProps> = ({
                           component="div"
                           className="error form-error"
                         />
-                      </div>
-                    </div>
-                    <div className="form-group row">
-                      <label
-                        htmlFor="website"
-                        className="col-sm-4 col-form-label"
-                      >
-                        Website
-                        <span style={{ color: "red", fontSize: "25px" }}>
-                          *
-                        </span>
-                      </label>
-                      <div className="col-sm-8">
+                      </CCol>
+                    </CRow>
+                    <CRow className="mb-3">
+                      <CCol sm={4}>
+                        <label htmlFor="website">
+                          Website
+                          <span style={{ color: "red", fontSize: "25px" }}>
+                            *
+                          </span>
+                        </label>
+                      </CCol>
+                      <CCol sm={8}>
                         <Field
                           type="text"
                           className="form-control"
@@ -541,17 +466,14 @@ const EditPage: React.FC<EditModalProps> = ({
                           component="div"
                           className="error form-error"
                         />
-                      </div>
-                    </div>
+                      </CCol>
+                    </CRow>
 
-                    <div className="form-group row">
-                      <label
-                        htmlFor="billingStreet"
-                        className="col-sm-4 col-form-label"
-                      >
-                        Billing Street
-                      </label>
-                      <div className="col-sm-8">
+                    <CRow className="mb-3">
+                      <CCol sm={4}>
+                        <label htmlFor="billingStreet">Billing Street</label>
+                      </CCol>
+                      <CCol sm={8}>
                         <Field
                           type="text"
                           name="billingStreet"
@@ -568,16 +490,13 @@ const EditPage: React.FC<EditModalProps> = ({
                           component="div"
                           className="error form-error"
                         />
-                      </div>
-                    </div>
-                    <div className="form-group row">
-                      <label
-                        htmlFor="billingCity"
-                        className="col-sm-4 col-form-label"
-                      >
-                        Billing City
-                      </label>
-                      <div className="col-sm-8">
+                      </CCol>
+                    </CRow>
+                    <CRow className="mb-3">
+                      <CCol sm={4}>
+                        <label htmlFor="billingCity">Billing City</label>
+                      </CCol>
+                      <CCol sm={8}>
                         <Field
                           type="text"
                           name="billingCity"
@@ -594,16 +513,13 @@ const EditPage: React.FC<EditModalProps> = ({
                           component="div"
                           className="error form-error"
                         />
-                      </div>
-                    </div>
-                    <div className="form-group row">
-                      <label
-                        htmlFor="billingState"
-                        className="col-sm-4 col-form-label"
-                      >
-                        Billing State
-                      </label>
-                      <div className="col-sm-8">
+                      </CCol>
+                    </CRow>
+                    <CRow className="mb-3">
+                      <CCol sm={4}>
+                        <label htmlFor="billingState">Billing State</label>
+                      </CCol>
+                      <CCol sm={8}>
                         <Field
                           type="text"
                           name="billingState"
@@ -620,20 +536,17 @@ const EditPage: React.FC<EditModalProps> = ({
                           component="div"
                           className="error form-error"
                         />
-                      </div>
-                    </div>
-                    <div className="form-group row">
-                      <label
-                        htmlFor="billingCode"
-                        className="col-sm-4 col-form-label"
-                      >
-                        Billing Code
-                      </label>
-                      <div className="col-sm-8">
+                      </CCol>
+                    </CRow>
+                    <CRow className="mb-3">
+                      <CCol sm={4}>
+                        <label htmlFor="zipCode">Zip Code</label>
+                      </CCol>
+                      <CCol sm={8}>
                         <Field
                           type="number"
-                          name="billingCode"
-                          value={updateAccount.billingCode}
+                          name="zipCode"
+                          value={updateAccount.zipCode}
                           className="form-control"
                           style={{ height: "50px" }}
                           onChange={(e: any) => {
@@ -646,19 +559,18 @@ const EditPage: React.FC<EditModalProps> = ({
                           component="div"
                           className="error form-error"
                         />
-                      </div>
-                    </div>
-                    <div className="form-group row">
-                      <label
-                        htmlFor="country"
-                        className="col-sm-4 col-form-label"
-                      >
-                        Country
-                        <span style={{ color: "red", fontSize: "25px" }}>
-                          *
-                        </span>
-                      </label>
-                      <div className="col-sm-8">
+                      </CCol>
+                    </CRow>
+                    <CRow className="mb-3">
+                      <CCol sm={4}>
+                        <label htmlFor="country">
+                          Country
+                          <span style={{ color: "red", fontSize: "25px" }}>
+                            *
+                          </span>
+                        </label>
+                      </CCol>
+                      <CCol sm={8}>
                         <Field
                           type="text"
                           name="country"
@@ -675,52 +587,51 @@ const EditPage: React.FC<EditModalProps> = ({
                           component="div"
                           className="error form-error"
                         />
-                      </div>
-                    </div>
-                  </div>
-                  <div className="form-group row">
-                    <label
-                      htmlFor="description"
-                      className="col-sm-2 col-form-label"
+                      </CCol>
+                    </CRow>
+                  </CCol>
+                   <CCol xs={12}>
+                    <CRow className="mb-3">
+                      <CCol xs={2}>
+                        <label htmlFor="country">Description</label>
+                      </CCol>
+                      <CCol xs={10}>
+                        <textarea
+                          id="description"
+                          name="description"
+                          className="form-control"
+                          // style={{ height: "120px" }}
+                          onChange={(e: any) => {
+                            handleChangeData(e);
+                            handleChange(e);
+                          }}
+                        />
+                        {/* <ErrorMessage
+                          name="description"
+                          component="div"
+                          className="invalid-feedback"
+                        /> */}
+                      </CCol>
+                    </CRow>
+                  </CCol>
+                </CRow>
+                <CRow className="mb-3">
+                  <CCol sm={12} className="text-end">
+                    <button
+                      className="btn btn-primary"
+                      onClick={() => handleSubmit}
                     >
-                      Description
-                    </label>
-                    <div className="col-sm-10">
-                      <Field
-                        as="textarea"
-                        name="description"
-                        style={{ height: "120px" }}
-                        value={updateAccount.description}
-                        className="form-control"
-                        // style={{ height: "50px" }}
-                        onChange={(e: any) => {
-                          handleChangeData(e);
-                          handleChange(e);
-                        }}
-                      />
-                      <ErrorMessage
-                        name="description"
-                        component="div"
-                        className="error form-error"
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div className="text-end">
-                  <button
-                    className="btn btn-primary"
-                    onClick={() => handleSubmit}
-                  >
-                    Update
-                  </button>
-                  <button
-                    type="button"
-                    className="btn btn-secondary"
-                    onClick={() => onBackToListButtonClickHandler()}
-                  >
-                    Cancel
-                  </button>
-                </div>
+                      Update
+                    </button>
+                    <button
+                      type="button"
+                      className="btn btn-secondary"
+                      onClick={() => onBackToListButtonClickHandler()}
+                    >
+                      Cancel
+                    </button>
+                  </CCol>
+                </CRow>
               </Form>
             )}
           </Formik>

@@ -1,16 +1,13 @@
 import { Link, useNavigate } from 'react-router-dom'
 import {CButton,CCard,CCardBody,CCardGroup,CCol,CContainer,CForm,CFormCheck,CFormInput,CInputGroup,CInputGroupText,CRow,} from '@coreui/react'
-import CIcon from '@coreui/icons-react'
 import { cilLockLocked, cilUser } from '@coreui/icons'
 import { useDispatch } from 'react-redux';
 import { useState } from 'react';
 import { UserLogin } from '../../../models/userAccount/login';
 import { ToastContainer } from 'react-toastify';
-import "react-toastify/dist/ReactToastify.css";
 import { loginRequest } from '../../../redux-saga/modules/auth/action';
-
-
-
+import CIcon from '@coreui/icons-react'
+import "react-toastify/dist/ReactToastify.css";
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -22,10 +19,7 @@ const Login = () => {
   const handleChange = (e:any) => {
     setUser({ ...user, [e.target.name]: e.target.value })
   }
-
-
   const handleLoginClick = () => {
-
     const userLogin : UserLogin = {
       userName: user.userName,  
       password: user.password,
@@ -33,9 +27,7 @@ const Login = () => {
     };
       dispatch(loginRequest(userLogin, navigate));
   };
-
-
-  return (
+   return (
     <div className="bg-light min-vh-100 d-flex flex-row align-items-center">
       <ToastContainer />
       <CContainer>
