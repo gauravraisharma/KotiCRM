@@ -1,27 +1,10 @@
-// import moment from 'moment-timezone';
-
-// export function DateTransformFunction(date: Date, format: string = 'DD/MM/YYYY HH:mm', timezone?: string): string {
-//     if (!date) return '';
-
-//     if (!timezone) {
-//         timezone = 'Asia/Kolkata'; 
-//         localStorage.setItem('timezone', timezone);
-//     }
-
-//     const convertedDate = moment.utc(date).tz(timezone);
-
-//     const formattedDate = convertedDate.format(format);
-//     return formattedDate;
-// }
-
-// export function getDateTime(date: any) {
-//     const formattedDate = new Date(date).toLocaleDateString('en-US', {
-//         year: 'numeric',
-//         month: 'long',
-//         day: '2-digit',
-//     });
-//     return formattedDate;
-// }
+function getTimezoneOffset(timezone: string): number {
+    // Parse the timezone string to extract hours and minutes offset
+    const [fullMatch, sign, hoursStr, minutesStr] = (timezone.match(/([-+]?)(\d+):?(\d+)?/) ?? []);
+    const hours = parseInt(hoursStr, 10) * (sign === '-' ? -1 : 1);
+    const minutes = parseInt(minutesStr || '0', 10);
+    return hours * 60 + minutes; // Convert hours to minutes and add minutes
+}
 
 export function formatDate(date: Date, format: string = 'DD/MM/YYYY', timezone?: string): string {
     if (!date) return '';
@@ -29,7 +12,18 @@ export function formatDate(date: Date, format: string = 'DD/MM/YYYY', timezone?:
     const timeZoneOffset = timezone ? getTimezoneOffset(timezone) : 0;
     const localDate = new Date(date);
 
-    localDate.setHours(localDate.getHours() + timeZoneOffset);
+    // Adjust the date by adding or subtracting the timezone offset
+    localDate.setHours(localDate.getHours() + Math.floor(timeZoneOffset / 60));
+    localDate.setMinutes(localDate.getMinutes() + timeZoneOffset % 60);
+
+    // Check if adjusted time exceeds 24 hours and update date accordingly
+    if (localDate.getHours() >= 24) {
+        localDate.setDate(localDate.getDate() + 1);
+        localDate.setHours(localDate.getHours() % 24);
+    } else if (localDate.getHours() < 0) {
+        localDate.setDate(localDate.getDate() - 1);
+        localDate.setHours(24 + (localDate.getHours() % 24));
+    }
 
     // Replace placeholders with actual date values
     const year = localDate.getFullYear().toString();
@@ -41,7 +35,7 @@ export function formatDate(date: Date, format: string = 'DD/MM/YYYY', timezone?:
         .replace('MM', month)
         .replace('DD', day);
 
-
+    // If format includes time placeholders, replace them with actual time values
     if (format.includes('HH') || format.includes('mm')) {
         const hour = localDate.getHours().toString().padStart(2, '0');
         const minute = localDate.getMinutes().toString().padStart(2, '0');
@@ -49,39 +43,4 @@ export function formatDate(date: Date, format: string = 'DD/MM/YYYY', timezone?:
     }
 
     return formattedString.trim();
-}
-
-
-// export function formatDate(date: Date, format: string = 'DD/MM/YYYY', timezone?: string): string {
-//     if (!date) return '';
-
-//     const timeZoneOffset = timezone ? getTimezoneOffset(timezone) : 0; 
-//     const localDate = new Date(date.getDate() + timeZoneOffset);
-
-//     // Replace placeholders with actual date values
-//     const year = localDate.getFullYear().toString();
-//     const month = (localDate.getMonth() + 1).toString().padStart(2, '0');
-//     const day = localDate.getDate().toString().padStart(2, '0');
-
-//     let formattedString = format
-//         .replace('YYYY', year)
-//         .replace('MM', month)
-//         .replace('DD', day);
-
-//     if (format.includes('HH') || format.includes('mm')) {
-//         const hour = localDate.getHours().toString().padStart(2, '0');
-//         const minute = localDate.getMinutes().toString().padStart(2, '0');
-//         formattedString += ` ${hour}:${minute}`;
-//     }
-
-//     return formattedString.trim();
-// }
-
-function getTimezoneOffset(timezone: string): number {
-    const now = new Date();
-    const localOffset = now.getTimezoneOffset();
-    // Here, we need to convert timezone to a time zone offset in minutes
-    // You can use Intl.DateTimeFormat().resolvedOptions().timeZone in modern browsers to get the time zone offset directly
-    const targetOffset = -(new Date().toLocaleString('en', { timeZone: timezone as string }));
-    return (targetOffset - localOffset) * 60 * 1000;
 }

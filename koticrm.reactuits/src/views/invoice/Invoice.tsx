@@ -50,6 +50,7 @@ const InvoiceComponent: React.FC<InvoiceProps> = ({
   const [invoiceId, setInvoiceId] = useState();
 
   const invoices = useSelector((state: any) => state.invoiceReducer.invoices);
+  const timezone = useSelector((state: any) => state.authReducer.timezone);
 
   const handleCreateNewInvoice = () => {
     setShowCreateInvoice(true);
@@ -216,7 +217,8 @@ const InvoiceComponent: React.FC<InvoiceProps> = ({
                             <CTableDataCell>
                               {formatDate(
                                 invoiceModel.invoice?.dueDate,
-                                "DD/MM/YYYY HH:mm"
+                                "DD/MM/YYYY HH:mm",
+                                timezone
                               )}
                             </CTableDataCell>
                             <CTableDataCell>
@@ -258,7 +260,8 @@ const InvoiceComponent: React.FC<InvoiceProps> = ({
                               {/* {getDates(invoiceModel.invoice?.dueDate)} */}
                               {formatDate(
                                 invoiceModel.invoice?.dueDate,
-                                "DD/MM/YYYY HH:mm"
+                                "DD/MM/YYYY HH:mm",
+                                timezone
                               )}
                             </CTableDataCell>
                             <CTableDataCell>

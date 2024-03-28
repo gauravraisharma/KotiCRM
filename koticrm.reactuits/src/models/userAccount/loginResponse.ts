@@ -4,6 +4,7 @@ export interface LoginResponse {
   token: string;
   userType: string;
   userId: string;
+  timeZone: string;
   modulePermission: modulePermission[]
 }
 
