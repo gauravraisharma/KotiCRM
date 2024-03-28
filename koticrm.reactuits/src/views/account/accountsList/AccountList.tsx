@@ -30,9 +30,10 @@ const AccountList: React.FC = () => {
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
+  
   const showItems = (id: any) => {
-    navigate(`/accountDetails/${id}`);
-  };
+    navigate(`/accounts/accountDetails/${id}`)
+  }
 
   const handleEditClick = (data: any) => {
     setAccountData(data);
@@ -93,11 +94,6 @@ const AccountList: React.FC = () => {
   useEffect(() => {
     dispatch(getAccounts());
   }, [dispatch, refreshList, createresponse, updateResponse]);
-
-  const navigate = useNavigate()
-  const showItems = (id: any) => {
-    navigate(`/accounts/accountDetails/${id}`)
-  }
 
   return (
     <>
