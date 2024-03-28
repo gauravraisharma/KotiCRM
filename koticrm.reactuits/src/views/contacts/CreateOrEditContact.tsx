@@ -13,15 +13,19 @@ import { Contact, ContactClass } from "../../models/contact/Contact";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import SearchDropdown from "../../components/base/select/SearchDropdown";
-
+// Import countries data
 import Countries from "../../constants/country-state/countries+states.json";
 import { Country, State } from "../../models/Country-State/CountryState";
+
+// Import actions from Redux saga
 import {
   clearContact,
   createContact,
   getContactById,
   updateContact,
 } from "../../redux-saga/modules/contact/action";
+
+// Import ToastContainer
 import { ToastContainer } from "react-toastify";
 import { Account } from "../../models/account/Account";
 
@@ -105,6 +109,7 @@ const CreateOrEditContact = () => {
     { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }
   ) => {
     try {
+      // Assuming fetchedAccount.id is available
       contact.country = selectedCountry;
       contact.state = selectedState;
       if (!contact.id) {
@@ -115,7 +120,7 @@ const CreateOrEditContact = () => {
         dispatch(updateContact(contact));
       }
     } catch (error) {
-      console.log("error message:",error.errors);
+      console.log("error message:", error);
     } finally {
       setSubmitting(false);
       navigate("/contacts");
@@ -124,6 +129,8 @@ const CreateOrEditContact = () => {
 
   const validationSchema = Yup.object().shape({
     ownerId: Yup.string().required("Owner ID is required"),
+    skypeID: Yup.string().required("Skype ID is required"),
+    firstName: Yup.string().required("First Name is required"),
   });
 
 
@@ -699,7 +706,7 @@ const CreateOrEditContact = () => {
                           name="description"
                           className="form-control"
                           placeholder="Leave a comment here"
-                          style={{ height: "50px" }}
+                          style={{ height: "120px" }}
                         />
                         <ErrorMessage
                           name="description"
@@ -710,25 +717,24 @@ const CreateOrEditContact = () => {
                     </CRow>
                   </CCol>
                   <CRow className="mb-3">
-                      <CCol sm={12} className="text-end">
-                        <button
-                          type="submit"
-                          className="btn btn-primary"
-                          disabled={isSubmitting || !isValid}
-                        >
-                          {isSubmitting ? "Submitting..." : "Submit"}
-                        </button>
-                        <Link to={`/contacts`}>
-                          <CButton
-                            component="input"
-                            type="button"
-                            color="secondary"
-                            value="cancel"
-                            // variant="outline"
-                          />
-                        </Link>
-                      </CCol>
-                    </CRow>
+                    <CCol sm={12} className="text-end">
+                      <button
+                        type="submit"
+                        className="btn btn-primary"
+                        disabled={isSubmitting || !isValid}
+                      >
+                        {isSubmitting ? "Submitting..." : "Submit"}
+                      </button>
+                      <Link to={`/contacts`}>
+                        <CButton
+                          component="input"
+                          type="button"
+                          color="secondary"
+                          value="cancel"
+                        />
+                      </Link>
+                    </CCol>
+                  </CRow>
                 </CRow>
               </Form>
             )}

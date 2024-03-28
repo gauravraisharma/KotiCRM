@@ -1,5 +1,16 @@
-import {CCard,CCardBody,CCardHeader,CCol,CRow,CTable,CTableBody,CTableDataCell,
-  CTableHead,CTableHeaderCell,CTableRow,CButton,
+import {
+  CCard,
+  CCardBody,
+  CCardHeader,
+  CCol,
+  CRow,
+  CTable,
+  CTableBody,
+  CTableDataCell,
+  CTableHead,
+  CTableHeaderCell,
+  CTableRow,
+  CButton,
 } from "@coreui/react";
 import "../../css/style.css";
 import { useDispatch, useSelector } from "react-redux";
@@ -26,8 +37,15 @@ interface Props {
 
 const Contacts = ({ accountId }: Props) => {
   const dispatch = useDispatch();
-  const fetchedContacts = useSelector((state: any) => state.contactReducer.contacts);
-  const fetchedAccountOwner = useSelector((state: any) => state.accountReducer.accountOwner);
+  const refreshList = useSelector(
+    (state: any) => state.contactReducer.refreshList
+  );
+  const fetchedContacts = useSelector(
+    (state: any) => state.contactReducer.contacts
+  );
+  const fetchedAccountOwner = useSelector(
+    (state: any) => state.accountReducer.accountOwner
+  );
 
   let filteredContacts = fetchedContacts;
   if (accountId) {
@@ -38,7 +56,7 @@ const Contacts = ({ accountId }: Props) => {
 
   useEffect(() => {
     dispatch(getContacts());
-  }, [dispatch,refreshList]);
+  }, [dispatch, refreshList]);
 
   function getAccountOwnerName(ownerId: string): string {
     const owner = fetchedAccountOwner?.find(

@@ -1,4 +1,11 @@
-import {CCard,CCardBody,CCardHeader,CCardText,CCol,CRow,} from "@coreui/react";
+import {
+  CCard,
+  CCardBody,
+  CCardHeader,
+  CCardText,
+  CCol,
+  CRow,
+} from "@coreui/react";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
@@ -26,7 +33,9 @@ const DetailRow = ({ label, value }: DetailRowProps) => (
 
 const ContactDetails = () => {
   const dispatch = useDispatch();
-  const fetchedContact = useSelector((state: any) => state.contactReducer.contact);
+  const fetchedContact = useSelector(
+    (state: any) => state.contactReducer.contact
+  );
   const { contactId } = useParams();
 
   useEffect(() => {

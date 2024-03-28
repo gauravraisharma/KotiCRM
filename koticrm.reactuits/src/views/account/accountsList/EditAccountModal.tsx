@@ -590,7 +590,7 @@ const EditPage: React.FC<EditModalProps> = ({
                       </CCol>
                     </CRow>
                   </CCol>
-                   <CCol xs={12}>
+                  <CCol xs={12}>
                     <CRow className="mb-3">
                       <CCol xs={2}>
                         <label htmlFor="country">Description</label>
@@ -600,7 +600,7 @@ const EditPage: React.FC<EditModalProps> = ({
                           id="description"
                           name="description"
                           className="form-control"
-                          // style={{ height: "120px" }}
+                           style={{ height: "100px" }}
                           onChange={(e: any) => {
                             handleChangeData(e);
                             handleChange(e);

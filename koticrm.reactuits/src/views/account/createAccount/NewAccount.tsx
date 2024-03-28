@@ -301,7 +301,7 @@ const MyForm: React.FC<MyFormProps> = ({
                         >
                           <option value="">Select...</option>
                           {industry?.map((industry: any) => (
-                            <option key={industry.id} value={industry.id}>
+                            <option key={industry.value} value={industry.value  }>
                               {industry.name}
                             </option>
                           ))}
@@ -716,17 +716,12 @@ const MyForm: React.FC<MyFormProps> = ({
                           id="description"
                           name="description"
                           className="form-control"
-                          // style={{ height: "120px" }}
+                          style={{ height: "120px" }}
                           onChange={(e: any) => {
                             handleChangeData(e);
                             handleChange(e);
                           }}
                         />
-                        {/* <ErrorMessage
-                          name="description"
-                          component="div"
-                          className="invalid-feedback"
-                        /> */}
                       </CCol>
                     </CRow>
                   </CCol>

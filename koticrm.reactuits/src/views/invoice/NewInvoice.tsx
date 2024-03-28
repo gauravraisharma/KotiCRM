@@ -25,7 +25,7 @@ import { useDispatch } from "react-redux";
 import Select from "react-select";
 import DatePicker from "react-datepicker";
 
-import {CKEditor} from "@ckeditor/ckeditor5-react";
+import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 
 import "react-datepicker/dist/react-datepicker.css";
@@ -69,9 +69,7 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
   onBackToListButtonClickHandler,
 }) => {
   const dispatch = useDispatch();
-  const handleEditorChange = (editor: any) => {
-    const data = editor.getData();
-  };
+
   const contacts = useSelector((state: any) => state.contactReducer.contacts);
   const invoiceStatus = useSelector(
     (state: any) => state.invoiceReducer.invoiceStatus
@@ -95,6 +93,13 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
     month: "long",
     day: "2-digit",
   });
+
+  const [termsAndConditions, setTermsAndConditions] = useState("");
+
+  const handleEditorChange = (event:any, editor:any) => {
+    const data = editor.getData();
+    setTermsAndConditions(data);
+  };
 
   const [touchedFields, setTouchedFields] = useState({
     fromBillingStreet: false,
@@ -167,7 +172,7 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
 
     contacts: Yup.string().required("Required (Contacts)"),
     status: Yup.string().required("Required (Status)"),
-    purchaseOrder: Yup.string().required("Required(Purchase Order)"),
+    // purchaseOrder: Yup.string().required("Required(Purchase Order)"),
     fromBillingStreet: touchedFields.fromBillingStreet
       ? Yup.string().required("Required (Billing Street)")
       : Yup.string(),
@@ -223,8 +228,8 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
         : Yup.string(),
     // termsandConditions: Yup.string().required("Required (Terms and Conditions)"),
     // description: Yup.string().required("Required (Description)"),
-    tax: Yup.string().required("Required (Tax)"),
-    adjustments: Yup.string().required("Required (Adjustments)"),
+    // tax: Yup.string().required("Required (Tax)"),
+    // adjustments: Yup.string().required("Required (Adjustments)"),
   });
 
   const [toAddress, setToAddress] = useState({
@@ -392,7 +397,7 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
 
   return (
     <div>
-        <ToastContainer />
+      <ToastContainer />
       <CCard>
         <CCardHeader className="mb-3">
           <div className="d-flex justify-content-between align-items-center">
@@ -748,21 +753,12 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
                         <Field
                           type="text"
                           name="purchaseOrder"
-                          className={`form-control ${
-                            touched.purchaseOrder && errors.purchaseOrder
-                              ? "border-danger"
-                              : ""
-                          }`}
+                          className="form-control"
                           style={{ height: "50px" }}
                           onChange={(e: any) => {
                             handleChangeData(e);
                             handleChange(e);
                           }}
-                        />
-                        <ErrorMessage
-                          name="purchaseOrder"
-                          component="div"
-                          className="error form-error"
                         />
                       </div>
                     </div>
@@ -1312,7 +1308,6 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
                             value={subTotalValue}
                             //  onChange={(e: any) => { handleChangeData(e); handleChange(e) }}
                           />
-                          {/* <ErrorMessage name="subTotal" component="div" className="error form-error" /> */}
                         </div>
                       </div>
 
@@ -1332,7 +1327,6 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
                             className="form-control"
                             // onChange={(e: any) => { handleChangeData(e); handleChange(e) }}
                           />
-                          {/* <ErrorMessage name="discount" component="div" className="error form-error" /> */}
                         </div>
                       </div>
 
@@ -1347,18 +1341,11 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
                           <Field
                             type="text"
                             name="tax"
-                            className={`form-control  ${
-                              touched.tax && errors.tax ? "border-danger" : ""
-                            }`}
+                            className="form-control"
                             onChange={(e: any) => {
                               handleChangeData(e);
                               handleChange(e);
                             }}
-                          />
-                          <ErrorMessage
-                            name="tax"
-                            component="div"
-                            className="error form-error"
                           />
                         </div>
                       </div>
@@ -1374,20 +1361,11 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
                           <Field
                             type="text"
                             name="adjustments"
-                            className={`form-control  ${
-                              touched.adjustments && errors.adjustments
-                                ? "border-danger"
-                                : ""
-                            }`}
+                            className="form-control"
                             onChange={(e: any) => {
                               handleChangeData(e);
                               handleChange(e);
                             }}
-                          />
-                          <ErrorMessage
-                            name="adjustments"
-                            component="div"
-                            className="error form-error"
                           />
                         </div>
                       </div>
@@ -1406,14 +1384,11 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
                             value={grandTotalValue}
                             disabled
                             className="form-control"
-                            // className="form-control" onChange={(e: any) => { handleChangeData(e); handleChange(e) }}
                           />
-                          {/* <ErrorMessage name="grandTotal" component="div" className="error form-error" /> */}
                         </div>
                       </div>
                     </CCard>
                   </div>
-
                   <div
                     className="label-form"
                     style={{ marginLeft: "15px", paddingTop: "30px" }}
@@ -1423,15 +1398,15 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
                   <div className="form-group row">
                     <label
                       htmlFor="terms&condition"
-                      className="col-sm-3  col-form-label"
+                      className="col-sm-3 col-form-label"
                     >
                       Terms & Condition
                     </label>
                     <div className="col-sm-9">
                       <CKEditor
                         editor={ClassicEditor}
+                        data={termsAndConditions}
                         onChange={handleEditorChange}
-                        // className="editor-container"
                       />
                     </div>
                   </div>
@@ -1440,20 +1415,27 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
                     Description
                   </div>
 
-									<div className="form-group row">
-										<label htmlFor="description" className="col-sm-3  col-form-label">Description</label>
-										<div className="col-sm-9">
-											<Field as="textarea" name="description" className="form-control" onChange={(e: any) => { handleChangeData(e); handleChange(e) }} />
-											{/* <ErrorMessage
-												name="description"
-												component="div"
-												className="error form-error"
-											/> */}
-										</div>
-									</div>
-
-
-								</div>
+                  <div className="form-group row">
+                    <label
+                      htmlFor="description"
+                      className="col-sm-3  col-form-label"
+                    >
+                      Description
+                    </label>
+                    <div className="col-sm-9">
+                      <Field
+                        as="textarea"
+                        name="description"
+                        className="form-control"
+                        style={{ height: "120px" }}
+                        onChange={(e: any) => {
+                          handleChangeData(e);
+                          handleChange(e);
+                        }}
+                      />
+                    </div>
+                  </div>
+                </div>
 
                 <div className="text-end">
                   <button
@@ -1462,15 +1444,15 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
                   >
                     Create Invoice
                   </button>
-                
-                <button
-                    type="button" 
+
+                  <button
+                    type="button"
                     className="btn btn-secondary"
-                    onClick={() => onBackToListButtonClickHandler()} 
+                    onClick={() => onBackToListButtonClickHandler()}
                   >
                     Cancel
                   </button>
-                  </div>
+                </div>
               </Form>
             )}
           </Formik>
