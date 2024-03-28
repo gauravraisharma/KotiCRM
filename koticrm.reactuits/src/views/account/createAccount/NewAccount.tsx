@@ -68,10 +68,10 @@ const validationSchema = Yup.object().shape({
   billingCity: Yup.string().required("Required (Billing City)"),
   billingState: Yup.string().required("Required (Billing State)"),
   zipCode: Yup.string()
-    .required("Required (Zip Code)")
-    .matches(/^\d+$/, "Zip Code must be a number")
-    .min(4, "Zip Code must be at least 4 digits")
-    .max(10, "Zip Code can have maximum 10 digits"),
+    .required("Required (Zip Code)"),
+    // .matches(/^\d+$/, "Zip Code must be a number")
+    // .min(4, "Zip Code must be at least 4 digits")
+    // .max(10, "Zip Code can have maximum 10 digits"),
   country: Yup.string().required("Required (Country)"),
   // description: Yup.string().required("Required (Description)"),
 });
@@ -301,7 +301,7 @@ const MyForm: React.FC<MyFormProps> = ({
                         >
                           <option value="">Select...</option>
                           {industry?.map((industry: any) => (
-                            <option key={industry.value} value={industry.value  }>
+                            <option key={industry.id} value={industry.id  }>
                               {industry.name}
                             </option>
                           ))}

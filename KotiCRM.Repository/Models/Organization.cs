@@ -23,7 +23,7 @@ public partial class Organization
     public string ? BillingStreet { get; set; }
     public string? BillingCity { get; set; }
     public string? BillingState { get; set; }
-    public string? BillingCode {  get; set; }
+    public string? ZipCode {  get; set; }
     public string? BillingCountry { get; set; }
 
     //public virtual ICollection<Department> Departments { get; set; } = new List<Department>();

@@ -31,7 +31,7 @@ namespace KotiCRM.Repository.Models
         public string? BillingStreet { get; set; }
         public string? BillingCity { get; set; }
         public string? BillingState { get; set; }
-        public string? BillingCode { get; set; }
+        public string? ZipCode { get; set; }
         public string? BillingCountry { get; set; }
     }
         public class BankResponse

@@ -4,11 +4,6 @@ using KotiCRM.Repository.IRepository;
 using KotiCRM.Repository.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace KotiCRM.Repository.Repository
 {
@@ -45,7 +40,7 @@ namespace KotiCRM.Repository.Repository
                             BillingStreet = organization.BillingStreet,
                             BillingCity = organization.BillingCity,
                             BillingState = organization.BillingState,
-                            BillingCode = organization.BillingCode,
+                            ZipCode = organization.ZipCode,
                             BillingCountry = organization.BillingCountry
                         },
                         Banks = banks.Where(bank => bank.OrganizationId == organization.Id)
@@ -137,7 +132,7 @@ namespace KotiCRM.Repository.Repository
                     organizationDTO.BillingStreet = organization.BillingStreet;
                     organizationDTO.BillingCity = organization.BillingCity;
                     organizationDTO.BillingState = organization.BillingState;
-                    organizationDTO.BillingCode = organization.BillingCode;
+                    organizationDTO.ZipCode = organization.ZipCode;
                     organizationDTO.BillingCountry = organization.BillingCountry;
 
 

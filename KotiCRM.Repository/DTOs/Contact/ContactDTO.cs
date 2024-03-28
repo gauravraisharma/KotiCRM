@@ -50,7 +50,7 @@ public class ContactDTO
     [StringLength(100)]
     public string? State { get; set; }
     [StringLength(100)]
-    public string? Zip { get; set; }
+    public string? ZipCode { get; set; }
     [StringLength(100)]
     public string? Country { get; set; }
     [StringLength(450)]
