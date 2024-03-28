@@ -33,9 +33,8 @@ const DetailRow = ({ label, value }: DetailRowProps) => (
 
 const ContactDetails = () => {
   const dispatch = useDispatch();
-  const fetchedContact = useSelector(
-    (state: any) => state.contactReducer.contact
-  );
+  const fetchedContact = useSelector((state: any) => state.contactReducer.contact);
+  const timezone = useSelector((state: any) => state.authReducer.timezone);
   const { contactId } = useParams();
 
   useEffect(() => {
@@ -81,7 +80,7 @@ const ContactDetails = () => {
               />
               <DetailRow
                 label="Date Of Birth"
-                value={formatDate(fetchedContact.dateOfBirth)}
+                value={formatDate(fetchedContact.dateOfBirth, 'DD/MM/YYYY HH:mm', timezone)}
               />
               <DetailRow label="Mobile" value={fetchedContact.mobile} />
               <DetailRow

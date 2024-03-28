@@ -34,6 +34,7 @@ const Attachments = ({ accountId, getAttachmentsCount }: Props) => {
   // getAttachmentsCount,
   const dispatch = useDispatch();
   const fetchedAttachments = useSelector((state: any) => state.attachmentReducer.attachments);
+  const timezone = useSelector((state: any) => state.authReducer.timezone);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const accountOwner = useSelector(
     (state: any) => state.accountReducer.accountOwner
@@ -93,11 +94,6 @@ const Attachments = ({ accountId, getAttachmentsCount }: Props) => {
       // Handle error
     }
   };
-
-
-  
-
-
 
   return (
     <CRow>
@@ -160,7 +156,7 @@ const Attachments = ({ accountId, getAttachmentsCount }: Props) => {
                         {getOwnerName(attachment.userID)}
                       </CTableDataCell>
                       <CTableDataCell>
-                        {formatDate(attachment.dateAdded, 'DD/MM/YYYY HH:mm')}
+                        {formatDate(attachment.dateAdded, 'DD/MM/YYYY HH:mm', timezone)}
                       </CTableDataCell>
                       <CTableDataCell>
                         {getFileSizeAndLabel(attachment.fileSize)}

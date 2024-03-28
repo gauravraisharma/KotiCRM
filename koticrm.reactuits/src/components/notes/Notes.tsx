@@ -21,13 +21,12 @@ interface NoteProps {
 const Notes: React.FC<NoteProps> = ({
   getNotesCount,
   accountId,
-  accountName,
 }) => {
   const dispatch = useDispatch();
   const notes = useSelector((state: any) => state.noteReducer.notes);
-
   const userId = useSelector((state: any) => state.authReducer.userId);
-
+  const timezone = useSelector((state: any) => state.authReducer.timezone);
+  
   const [noteDescription, setNoteDescription] = useState("");
 
   const currentDate: Date = new Date();
@@ -59,6 +58,7 @@ const Notes: React.FC<NoteProps> = ({
   useEffect(() => {
     getNotesCount(noteCount);
   });
+
   return (
     <div>
       <CRow>
@@ -80,7 +80,7 @@ const Notes: React.FC<NoteProps> = ({
                     {/* <span className=" mx-1">.</span> */}
                     <BsClockFill color="#3c4b64" className="mx-1" />
                     {/* <TimeDisplay createdAt={note.dateOfNote} /> */}
-                    <span className="mx-1">{formatDate(note.dateOfNote, "DD/MM/YYYY HH:mm")}</span>
+                    <span className="mx-1">{formatDate(note.dateOfNote, "DD/MM/YYYY HH:mm", timezone)}</span>
                     <span className="mx-1">by</span>
                     <span className="mx-1 ">
                       {note.firstName} {note.lastName}
