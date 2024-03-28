@@ -76,14 +76,19 @@ const CreateOrEditContact = () => {
     const selectedCountry = e.target.value;
     setSelectedCountry(selectedCountry);
 
-    const selectedCountryObject = countries.find(
-      (country) => country.name === selectedCountry
-    );
+    // Update the contact's country when it's changed
+    setContact({ ...contact, country: e.target.value });
 
-    if (selectedCountryObject) {
-      setStates(selectedCountryObject.states);
-    } else {
-      setStates([]);
+    if(selectedCountry){
+      const selectedCountryObject = countries.find(
+        (country) => country.name === selectedCountry
+      );
+      if (selectedCountryObject) {
+        setStates(selectedCountryObject.states);
+        setSelectedState("");
+      } else {
+        setStates([]);
+      }
     }
   };
 
@@ -97,7 +102,7 @@ const CreateOrEditContact = () => {
         } else {
             setStates([]);
         }
-    }, [contact.id]);
+    }, [contact.id, selectedCountry]);
 
   const handleStateChange = (e: ChangeEvent<HTMLSelectElement>) => {
     const selectedState = e.target.value;
