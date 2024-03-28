@@ -1,7 +1,7 @@
 import CIcon from '@coreui/icons-react';
 import './SearchDropdown.scss';
 import { cilCaretBottom, cilCaretTop, cilSearch, cilX } from '@coreui/icons';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useFormikContext } from 'formik';
 
 interface Option {
@@ -15,6 +15,12 @@ interface Props {
 	options: Option[];
 }
 
+// Assuming FormValues is the interface representing your form values
+interface FormValues {
+    [key: string]: any;
+    // Define your form fields here
+}
+
 const SearchDropdown = (props: Props) => {
 	const { options, name } = props;
 	const formik = useFormikContext();
@@ -22,13 +28,28 @@ const SearchDropdown = (props: Props) => {
 	const [selected, setSelected] = useState<Option | null>(null);
 	const [open, setOpen] = useState<boolean>(false);
 
+	// Inside your component, type formik.values as FormValues
+	const formikValues = formik.values as FormValues;
+
+	// Set selected option based on formik values on component mount
+    useEffect(() => {
+        const selectedOption = options.find(option => option.value === formikValues[name]);
+        if (selectedOption) {
+            setSelected(selectedOption);
+        }
+    }, [formikValues[name], options, name]);
+
 	const handleListClick = (option: Option) => {
-		if (!selected || option.value !== selected.value) {
-			setSelected(option);
-			setOpen(false);
-			formik.setFieldValue(name, option.value);
-			setInputValue('');
-		}
+		setSelected(option);
+		setOpen(false);
+		formik.setFieldValue(name, option.value);
+		setInputValue('');
+		// if (!selected || option.value !== selected.value) {
+		// 	setSelected(option);
+		// 	setOpen(false);
+		// 	formik.setFieldValue(name, option.value);
+		// 	setInputValue('');
+		// }
 	}
 
 	return (
@@ -66,7 +87,7 @@ const SearchDropdown = (props: Props) => {
 				{options.map(option => (
 					(option.label1.toLowerCase().includes(inputValue) || option.label2.toLowerCase().includes(inputValue)) && (
 						<li
-							key={option.id}
+							key={option.value}
 							onClick={() => handleListClick(option)}
 							className={option.value === selected?.value ? "selected-option" : ""}
 						>
