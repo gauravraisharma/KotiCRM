@@ -44,12 +44,12 @@ const initialValues = {
   fromBillingStreet: "",
   fromBillingCity: "",
   fromBillingState: "",
-  fromBillingCode: "",
+  fromZipCode: "",
   fromBillingCountry: "",
   toBillingStreet: "",
   toBillingCity: "",
   toBillingState: "",
-  toBillingCode: "",
+  toZipCode: "",
   toBillingCountry: "",
   // termsandConditions: "",
   // description: "",
@@ -105,12 +105,12 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
     fromBillingStreet: false,
     fromBillingCity: false,
     fromBillingState: false,
-    fromBillingCode: false,
+    fromZipCode: false,
     fromBillingCountry: false,
     toBillingStreet: false,
     toBillingCity: false,
     toBillingState: false,
-    toBillingCode: false,
+    toZipCode: false,
     toBillingCountry: false,
     dueDate: false,
   });
@@ -145,13 +145,13 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
     fromBillingStreet: orgDetails?.billingStreet,
     fromBillingCity: orgDetails?.billingCity,
     fromBillingState: orgDetails?.billingState,
-    fromBillingCode: orgDetails?.billingCode,
+    fromZipCode: orgDetails?.zipCode,
     fromBillingCountry: orgDetails?.billingCountry,
 
     toBillingStreet: "",
     toBillingCity: "",
     toBillingState: "",
-    toBillingCode: "",
+    toZipCode: "",
     toBillingCountry: "",
 
     termsandConditions: "",
@@ -182,13 +182,13 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
     fromBillingState: touchedFields.fromBillingState
       ? Yup.string().required("Required (Billing State)")
       : Yup.string(),
-    fromBillingCode: touchedFields.fromBillingCode
+    fromZipCode: touchedFields.fromZipCode
       ? Yup.string()
-          .required("Required (Billing Code)")
-          .matches(/^\d+$/, "Billing Code must be a number")
-          .min(4, "Billing Code must be at least 4 digit")
-          .max(10, "Billing Code can have maximum 10 digits")
-      : Yup.string(),
+          .required("Required (zip Code)")
+      //     .matches(/^\d+$/, "Billing Code must be a number")
+      //     .min(4, "Billing Code must be at least 4 digit")
+      //     .max(10, "Billing Code can have maximum 10 digits")
+       : Yup.string(),
     fromBillingCountry: touchedFields.fromBillingCountry
       ? Yup.string().required("Required (Billing Country)")
       : Yup.string(),
@@ -210,16 +210,16 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
         : touchedFields.toBillingState
         ? Yup.string().required("Required (Billing State)")
         : Yup.string(),
-    toBillingCode:
-      invoice.toBillingCode == ""
-        ? Yup.string().required("Required (Billing Code)")
-        : touchedFields.toBillingCode
-        ? Yup.string()
-            .required("Required (Billing Code)")
-            .matches(/^\d+$/, "Billing Code must be a number")
-            .min(4, "Billing Code must be at least 4 digit")
-            .max(10, "Billing Code can have maximum 10 digits")
-        : Yup.string(),
+    toZipCode:
+      invoice.toZipCode == ""
+        ? Yup.string().required("Required (zip Code)")
+        // : touchedFields.toZipCode
+        // ? Yup.string()
+        //     .required("Required (Billing Code)")
+        //     .matches(/^\d+$/, "Billing Code must be a number")
+        //     .min(4, "Billing Code must be at least 4 digit")
+        //     .max(10, "Billing Code can have maximum 10 digits")
+         : Yup.string(),
     toBillingCountry:
       invoice.toBillingCountry == ""
         ? Yup.string().required("Required (Billing Country)")
@@ -236,7 +236,7 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
     billingStreet: "",
     billingCity: "",
     billingState: "",
-    billingCode: "",
+    zipCode: "",
     billingCountry: "",
   });
 
@@ -258,7 +258,7 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
             billingStreet: accountAddress.billingStreet || "",
             billingCity: accountAddress.billingCity || "",
             billingState: accountAddress.billingState || "",
-            billingCode: accountAddress.billingCode || "",
+            zipCode: accountAddress.zipCode || "",
             billingCountry: accountAddress.country || "",
           });
         }
@@ -274,7 +274,7 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
       toBillingStreet: toAddress?.billingStreet,
       toBillingCity: toAddress?.billingCity,
       toBillingState: toAddress?.billingState,
-      toBillingCode: toAddress?.billingCode,
+      toZipCode: toAddress?.zipCode,
       toBillingCountry: toAddress?.billingCountry,
     }));
   }, [toAddress]);
@@ -340,12 +340,12 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
       fromBillingStreet: invoice.fromBillingStreet,
       fromBillingCity: invoice.fromBillingCity,
       fromBillingState: invoice.fromBillingState,
-      fromBillingCode: invoice.fromBillingCode,
+      fromZipCode: invoice.fromZipCode,
       fromBillingCountry: invoice.fromBillingCountry,
       toBillingStreet: invoice.toBillingStreet,
       toBillingCity: invoice.toBillingCity,
       toBillingState: invoice.toBillingState,
-      toBillingCode: invoice.toBillingCode,
+      toZipCode: invoice.toZipCode,
       toBillingCountry: invoice.toBillingCountry,
       termsAndConditions: invoice.termsandConditions,
       description: invoice.description,
@@ -917,18 +917,18 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
 
                     <div className="form-group row">
                       <label
-                        htmlFor="fromBillingCode"
+                        htmlFor="fromZipCode"
                         className="col-sm-4 col-form-label"
                       >
-                        Billing Code
+                        Zip Code
                       </label>
                       <div className="col-sm-6">
                         <Field
                           type="number"
-                          name="fromBillingCode"
-                          value={invoice.fromBillingCode}
+                          name="fromZipCode"
+                          value={invoice.fromZipCode}
                           className={`form-control  ${
-                            touched.fromBillingCode && errors.fromBillingCode
+                            touched.fromZipCode && errors.fromZipCode
                               ? "border-danger"
                               : ""
                           }`}
@@ -936,11 +936,11 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
                           onChange={(e: any) => {
                             handleChangeData(e);
                             handleChange(e);
-                            handleInputChange("fromBillingCode");
+                            handleInputChange("fromZipCode");
                           }}
                         />
                         <ErrorMessage
-                          name="fromBillingCode"
+                          name="fromZipCode"
                           component="div"
                           className="error form-error"
                         />
@@ -1089,22 +1089,22 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
 
                     <div className="form-group row">
                       <label
-                        htmlFor="toBillingCode"
+                        htmlFor="toZipCode"
                         className="col-sm-4 col-form-label"
                       >
-                        Billing Code
+                        ZipCode
                       </label>
                       <div className="col-sm-6">
                         <Field
                           type="number"
-                          name="toBillingCode"
+                          name="toZipCode"
                           value={
                             dropdownItems.accountName !== ""
-                              ? invoice.toBillingCode
+                              ? invoice.toZipCode
                               : ""
                           }
                           className={`form-control  ${
-                            touched.toBillingCode && errors.toBillingCode
+                            touched.toZipCode && errors.toZipCode
                               ? "border-danger"
                               : ""
                           }`}
@@ -1112,11 +1112,11 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
                           onChange={(e: any) => {
                             handleChangeData(e);
                             handleChange(e);
-                            handleInputChange("toBillingCode");
+                            handleInputChange("toZipCode");
                           }}
                         />
                         <ErrorMessage
-                          name="toBillingCode"
+                          name="toZipCode"
                           component="div"
                           className="error form-error"
                         />

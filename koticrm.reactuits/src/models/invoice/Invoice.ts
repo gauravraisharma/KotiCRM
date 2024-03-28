@@ -18,12 +18,12 @@ export interface Invoice {
   fromBillingStreet: string | null;
   fromBillingCity: string | null;
   fromBillingState: string | null;
-  fromBillingCode: string | null;
+  fromZipCode: string | null;
   fromBillingCountry: string | null;
   toBillingStreet: string | null;
   toBillingCity: string | null;
   toBillingState: string | null;
-  toBillingCode: string | null;
+  toZipCode: string | null;
   toBillingCountry: string | null;
   termsAndConditions: string | null;
   description: string | null;
