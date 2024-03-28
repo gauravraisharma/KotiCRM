@@ -1,11 +1,6 @@
 ﻿using KotiCRM.Repository.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Sockets;
-using System.Text;
 using Task = KotiCRM.Repository.Models.Task;
 
 namespace KotiCRM.Repository.Data
@@ -434,7 +429,7 @@ namespace KotiCRM.Repository.Data
                 entity.Property(e => e.BillingStreet).HasMaxLength(100);
                 entity.Property(e => e.BillingCity).HasMaxLength(100);
                 entity.Property(e => e.BillingState).HasMaxLength(100);
-                entity.Property(e => e.BillingCode).HasMaxLength(100);
+                entity.Property(e => e.ZipCode).HasMaxLength(100);
                 entity.Property(e => e.BillingCountry).HasMaxLength(100);
             });
             modelBuilder.Entity<ProcessedFile>(entity =>

@@ -46,7 +46,7 @@ namespace KotiCRM.Repository.DTOs.Account
         public string BillingState { get; set; }
 
         [Column(TypeName = "nvarchar(100)")]
-        public string BillingCode { get; set; }
+        public string ZipCode { get; set; }
 
         [Column(TypeName = "nvarchar(200)")]
         public string Country { get; set; }

@@ -47,7 +47,7 @@ namespace KotiCRM.Repository.Models
         public string BillingState { get; set; }
 
         [Column(TypeName = "nvarchar(100)")]
-        public string BillingCode { get; set; }
+        public string ZipCode { get; set; }
 
         [Column(TypeName = "nvarchar(200)")]
         public string Country { get; set; }
@@ -63,6 +63,5 @@ namespace KotiCRM.Repository.Models
         [Column(TypeName = "nvarchar(200)")]
         public string ModifiedBy { get; set; }
         public DateTime ModifiedOn { get; set; }
-
     }
 }

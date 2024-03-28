@@ -153,7 +153,7 @@ namespace KotiCRM.Repository.Repository
                 //                       BillingStreet = account.BillingStreet,
                 //                       BillingCity = account.BillingCity,
                 //                       BillingState = account.BillingState,
-                //                       BillingCode = account.BillingCode,
+                //                       ZipCode = account.ZipCode,
                 //                       Country = account.Country,
                 //                       Description = account.Description,
                 //                       Isactive = account.Isactive,

@@ -1,7 +1,6 @@
 ﻿using KotiCRM.Repository.DTOs.Organization;
 using KotiCRM.Repository.IRepository;
 using KotiCRM.Repository.Models;
-using KotiCRM.Repository.Repository;
 using KotiCRM.Services.IServices;
 
 namespace KotiCRM.Services.Services
@@ -35,7 +34,7 @@ namespace KotiCRM.Services.Services
                 BillingStreet = organization.BillingStreet,
                 BillingCity = organization.BillingCity,
                 BillingState = organization.BillingState,
-                BillingCode = organization.BillingCode,
+                ZipCode = organization.ZipCode,
                 BillingCountry = organization.BillingCountry
             };
 
