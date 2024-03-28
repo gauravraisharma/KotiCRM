@@ -144,7 +144,7 @@ namespace KotiCRM.Repository.Data
                 entity.Property(e => e.MailingStreet).HasMaxLength(200);
                 entity.Property(e => e.City).HasMaxLength(100);
                 entity.Property(e => e.State).HasMaxLength(100);
-                entity.Property(e => e.Zip).HasMaxLength(100);
+                entity.Property(e => e.ZipCode).HasMaxLength(100);
                 entity.Property(e => e.Country).HasMaxLength(100);
                 entity.Property(e => e.Description).HasMaxLength(450);
 

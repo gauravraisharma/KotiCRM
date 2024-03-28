@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace KotiCRM.Server.Migrations
 {
     [DbContext(typeof(KotiCRMDbContext))]
-    [Migration("20240328113540_Changes_BillingCode_To_ZipCode")]
+    [Migration("20240328121920_Changes_BillingCode_To_ZipCode")]
     partial class Changes_BillingCode_To_ZipCode
     {
         /// <inheritdoc />
@@ -442,7 +442,7 @@ namespace KotiCRM.Server.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<string>("Zip")
+                    b.Property<string>("ZipCode")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 

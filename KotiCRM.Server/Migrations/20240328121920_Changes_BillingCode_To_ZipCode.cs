@@ -26,6 +26,11 @@ namespace KotiCRM.Server.Migrations
                 newName: "FromZipCode");
 
             migrationBuilder.RenameColumn(
+                name: "Zip",
+                table: "Contacts",
+                newName: "ZipCode");
+
+            migrationBuilder.RenameColumn(
                 name: "BillingCode",
                 table: "Accounts",
                 newName: "ZipCode");
@@ -48,6 +53,11 @@ namespace KotiCRM.Server.Migrations
                 name: "FromZipCode",
                 table: "Invoices",
                 newName: "FromBillingCode");
+
+            migrationBuilder.RenameColumn(
+                name: "ZipCode",
+                table: "Contacts",
+                newName: "Zip");
 
             migrationBuilder.RenameColumn(
                 name: "ZipCode",

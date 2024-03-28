@@ -439,7 +439,7 @@ namespace KotiCRM.Server.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<string>("Zip")
+                    b.Property<string>("ZipCode")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 

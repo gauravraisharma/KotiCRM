@@ -45,7 +45,7 @@ namespace KotiCRM.Services.Services
                 MailingStreet = contactDTO.MailingStreet,
                 City = contactDTO.City,
                 State = contactDTO.State,
-                Zip = contactDTO.Zip,
+                ZipCode = contactDTO.ZipCode,
                 Country = contactDTO.Country,
                 Description = contactDTO.Description
             };
@@ -74,7 +74,7 @@ namespace KotiCRM.Services.Services
                 MailingStreet = createdContact.MailingStreet,
                 City = createdContact.City,
                 State = createdContact.State,
-                Zip = createdContact.Zip,
+                ZipCode = createdContact.ZipCode,
                 Country = createdContact.Country,
                 Description = createdContact.Description
             };
@@ -114,7 +114,7 @@ namespace KotiCRM.Services.Services
                 MailingStreet = contact.MailingStreet,
                 City = contact.City,
                 State = contact.State,
-                Zip = contact.Zip,
+                ZipCode = contact.ZipCode,
                 Country = contact.Country,
                 Description = contact.Description
             };
@@ -150,7 +150,7 @@ namespace KotiCRM.Services.Services
                 MailingStreet = contact.MailingStreet,
                 City = contact.City,
                 State = contact.State,
-                Zip = contact.Zip,
+                ZipCode = contact.ZipCode,
                 Country = contact.Country,
                 Description = contact.Description
             };
@@ -188,7 +188,7 @@ namespace KotiCRM.Services.Services
             contact.MailingStreet = contactDTO.MailingStreet;
             contact.City = contactDTO.City;
             contact.State = contactDTO.State;
-            contact.Zip = contactDTO.Zip;
+            contact.ZipCode = contactDTO.ZipCode;
             contact.Country = contactDTO.Country;
             contact.Description = contactDTO.Description;
 
@@ -216,7 +216,7 @@ namespace KotiCRM.Services.Services
                 MailingStreet = updatedContact.MailingStreet,
                 City = updatedContact.City,
                 State = updatedContact.State,
-                Zip = updatedContact.Zip,
+                ZipCode = updatedContact.ZipCode,
                 Country = updatedContact.Country,
                 Description = updatedContact.Description
             };
