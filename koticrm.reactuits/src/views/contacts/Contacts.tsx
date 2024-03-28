@@ -26,7 +26,6 @@ interface Props {
 
 const Contacts = ({ accountId }: Props) => {
   const dispatch = useDispatch();
-  const refreshList = useSelector((state: any) => state.contactReducer.refreshList);
   const fetchedContacts = useSelector((state: any) => state.contactReducer.contacts);
   const fetchedAccountOwner = useSelector((state: any) => state.accountReducer.accountOwner);
 
@@ -62,16 +61,15 @@ const Contacts = ({ accountId }: Props) => {
                   </h5>
                 </CCol>
                 <CCol xs={6} className="text-end">
-                  {accountId && (
-                    <Link to={`/contacts/createContact`}>
-                      <CButton
-                        component="input"
-                        type="button"
-                        color="primary"
-                        value="New"
-                      />
-                    </Link>
-                  )}
+                  {<Link to={`/contacts/createContact`}>
+                    <CButton
+                      component="input"
+                      type="button"
+                      color="primary"
+                      value="New"
+                    // variant="outline"
+                    />
+                  </Link>}
                 </CCol>
               </CRow>
             </CCardHeader>

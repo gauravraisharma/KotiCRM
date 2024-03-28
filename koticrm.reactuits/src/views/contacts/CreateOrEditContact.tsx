@@ -23,33 +23,27 @@ import {
   updateContact,
 } from "../../redux-saga/modules/contact/action";
 import { ToastContainer } from "react-toastify";
+import { Account } from "../../models/account/Account";
 
 const CreateOrEditContact = () => {
   const { contactId } = useParams<{ contactId: string }>();
   const [contact, setContact] = useState<Contact>(new ContactClass());
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const fetchedContact = useSelector(
-    (state: any) => state.contactReducer.contact
-  );
-  const fetchedAccountOwners = useSelector(
-    (state: any) => state.accountReducer.accountOwner
-  );
-  const fetchedAccount = useSelector(
-    (state: any) => state.accountReducer.account
-  );
-
-  const mappedFetchedAccountOwners = fetchedAccountOwners.map(
-    (fetchedAccountOwner) => ({
-      ...fetchedAccountOwner,
-      value: fetchedAccountOwner.id,
-      label1: `${fetchedAccountOwner.firstName} ${fetchedAccountOwner.lastName}`,
-      label2: fetchedAccountOwner.email,
-    })
-  );
+  const fetchedContact = useSelector((state: any) => state.contactReducer.contact);
+  const fetchedAccountOwners = useSelector((state: any) => state.accountReducer.accountOwner);
+  const fetchedAccounts = useSelector((state: any) => state.accountReducer.accounts);
+  
+  const mappedFetchedAccountOwners = fetchedAccountOwners.map(fetchedAccountOwner=>({
+    ...fetchedAccountOwner,
+    value: fetchedAccountOwner.id,
+    label1: `${fetchedAccountOwner.firstName} ${fetchedAccountOwner.lastName}`,
+    label2: fetchedAccountOwner.email
+  }));
 
   // Country-State
   const countries: Country[] = Countries;
+  const [selectedAccountId, setSelectedAccountId] = useState(0);
   const [selectedCountry, setSelectedCountry] = useState<string>("");
   const [selectedState, setSelectedState] = useState<string>("");
   const [states, setStates] = useState<State[]>([]);
@@ -69,6 +63,11 @@ const CreateOrEditContact = () => {
     }
   }, [contactId, fetchedContact]);
 
+  const handleAccountChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    const accountId = e.target.value;
+    setSelectedAccountId(parseInt(accountId));
+  };
+
   const handleCountryChange = (e: ChangeEvent<HTMLSelectElement>) => {
     const selectedCountry = e.target.value;
     setSelectedCountry(selectedCountry);
@@ -77,14 +76,24 @@ const CreateOrEditContact = () => {
       (country) => country.name === selectedCountry
     );
 
-
-
     if (selectedCountryObject) {
       setStates(selectedCountryObject.states);
     } else {
       setStates([]);
     }
   };
+
+    useEffect(() => {
+        const selectedCountryObject = countries.find(
+            (country) => country.name === contact.country
+        );
+
+        if (selectedCountryObject) {
+            setStates(selectedCountryObject.states);
+        } else {
+            setStates([]);
+        }
+    }, [contact.id]);
 
   const handleStateChange = (e: ChangeEvent<HTMLSelectElement>) => {
     const selectedState = e.target.value;
@@ -98,8 +107,9 @@ const CreateOrEditContact = () => {
     try {
       contact.country = selectedCountry;
       contact.state = selectedState;
-      contact.accountID = fetchedAccount.id;
       if (!contact.id) {
+        contact.accountID = selectedAccountId;
+        console.log("Create new contact:", contact);
         dispatch(createContact(contact));
       } else {
         dispatch(updateContact(contact));
@@ -116,505 +126,566 @@ const CreateOrEditContact = () => {
     ownerId: Yup.string().required("Owner ID is required"),
   });
 
+
   return (
     <>
-      <ToastContainer />
-      <CCard>
-        <CCardHeader className="mb-3">
-          <div className="d-flex justify-content-between align-items-center">
-            <div>
-              <h5 className="mb-0">Create Or Edit Contact</h5>
-            </div>
-            <div className="text-end"></div>
+    <ToastContainer />
+    <CCard>
+      <CCardHeader className="mb-3">
+        <div className="d-flex justify-content-between align-items-center">
+          <div>
+            <h5 className="mb-0">Create Or Edit Contact</h5>
           </div>
-        </CCardHeader>
-        <CCardBody>
-          <Formik
-            initialValues={contact}
-            enableReinitialize
-            validationSchema={validationSchema}
-            onSubmit={handleFormSubmit}
-          >
-            {({ handleSubmit, isValid, isSubmitting }) => (
-              <Form onSubmit={handleSubmit} autoComplete="off">
-                <CRow className="justify-content-between">
-                  <CCol xs={6}>
-                    <CRow className="mb-3">
-                      <CCol sm={4}>
-                        <label htmlFor="ownerId" className="col-form-label">
-                          Contact Owner
-                          <span style={{ color: "red", fontSize: "25px" }}>
-                            *
-                          </span>
-                        </label>
-                      </CCol>
-                      <CCol sm={8}>
-                        <SearchDropdown
-                          name="ownerId"
-                          options={mappedFetchedAccountOwners}
-                        />
-                        <ErrorMessage
-                          name="ownerId"
-                          component="div"
-                          className="invalid-feedback"
-                        />
-                      </CCol>
-                    </CRow>
-                    <CRow className="mb-3">
-                      <CCol sm={4}>
-                        <label htmlFor="firstName" className="col-form-label">
-                          First Name
-                          <span style={{ color: "red", fontSize: "25px" }}>
-                            *
-                          </span>
-                        </label>
-                      </CCol>
-                      <CCol sm={8}>
-                        <Field
-                          type="text"
-                          id="firstName"
-                          name="firstName"
-                          className="form-control"
-                          style={{ height: "50px" }}
-                        />
-                        <ErrorMessage
-                          name="firstName"
-                          component="div"
-                          className="invalid-feedback"
-                        />
-                      </CCol>
-                    </CRow>
-                    <CRow className="mb-3">
-                      <CCol sm={4}>
-                        <label htmlFor="phone" className="col-form-label">
-                          Phone
-                        </label>
-                      </CCol>
-                      <CCol sm={8}>
-                        <Field
-                          type="text"
-                          id="phone"
-                          name="phone"
-                          className="form-control"
-                          placeholder="Enter your phone number"
-                          style={{ height: "50px" }}
-                        />
-                        <ErrorMessage
-                          name="phone"
-                          component="div"
-                          className="invalid-feedback"
-                        />
-                      </CCol>
-                    </CRow>
-                    <CRow className="mb-3">
-                      <CCol sm={4}>
-                        <label htmlFor="mobile" className="col-form-label">
-                          Mobile
-                        </label>
-                      </CCol>
-                      <CCol sm={8}>
-                        <Field
-                          type="text"
-                          id="mobile"
-                          name="mobile"
-                          className="form-control"
-                          placeholder="Enter your mobile number"
-                          style={{ height: "50px" }}
-                        />
-                        <ErrorMessage
-                          name="mobile"
-                          component="div"
-                          className="invalid-feedback"
-                        />
-                      </CCol>
-                    </CRow>
-                    <CRow className="mb-3">
-                      <CCol sm={4}>
-                        <label htmlFor="department" className="col-form-label">
-                          Department
-                        </label>
-                      </CCol>
-                      <CCol sm={8}>
-                        <Field
-                          type="text"
-                          id="department"
-                          name="department"
-                          className="form-control"
-                          placeholder="Enter department"
-                          style={{ height: "50px" }}
-                        />
-                        <ErrorMessage
-                          name="department"
-                          component="div"
-                          className="invalid-feedback"
-                        />
-                      </CCol>
-                    </CRow>
-                    <CRow className="mb-3">
-                      <CCol sm={4}>
-                        <label htmlFor="homePhone" className="col-form-label">
-                          Home Phone
-                        </label>
-                      </CCol>
-                      <CCol sm={8}>
-                        <Field
-                          type="text"
-                          id="homePhone"
-                          name="homePhone"
-                          className="form-control"
-                          placeholder="Home phone"
-                          style={{ height: "50px" }}
-                        />
-                        <ErrorMessage
-                          name="homePhone"
-                          component="div"
-                          className="invalid-feedback"
-                        />
-                      </CCol>
-                    </CRow>
-                    <CRow className="mb-3">
-                      <CCol sm={4}>
-                        <label htmlFor="linkedinUrl" className="col-form-label">
-                          Linkedin URL
-                        </label>
-                      </CCol>
-                      <CCol sm={8}>
-                        <Field
-                          type="text"
-                          id="linkedinUrl"
-                          name="linkedinURL"
-                          className="form-control"
-                          placeholder="Enter your LinkedIn URL"
-                          style={{ height: "50px" }}
-                        />
-                        <ErrorMessage
-                          name="linkedinURL"
-                          component="div"
-                          className="invalid-feedback"
-                        />
-                      </CCol>
-                    </CRow>
-                    <CRow className="mb-3">
-                      <CCol sm={4}>
-                        <label
-                          htmlFor="secondaryEmail"
-                          className="col-form-label"
-                        >
-                          Secondary Email
-                        </label>
-                      </CCol>
-                      <CCol sm={8}>
-                        <Field
-                          type="email"
-                          id="secondaryEmail"
-                          name="secondaryEmail"
-                          className="form-control"
-                          placeholder="name@example.com"
-                          style={{ height: "50px" }}
-                        />
-                        <ErrorMessage
-                          name="secondaryEmail"
-                          component="div"
-                          className="invalid-feedback"
-                        />
-                      </CCol>
-                    </CRow>
-                    <CRow className="mb-3">
-                      <CCol sm={4}>
-                        <label htmlFor="city" className="col-form-label">
-                          City
-                        </label>
-                      </CCol>
-                      <CCol sm={8}>
-                        <Field
-                          type="text"
-                          id="city"
-                          name="city"
-                          className="form-control"
-                          placeholder="Enter your city"
-                          style={{ height: "50px" }}
-                        />
-                        <ErrorMessage
-                          name="city"
-                          component="div"
-                          className="invalid-feedback"
-                        />
-                      </CCol>
-                    </CRow>
-                    <CRow className="mb-3">
-                      <CCol sm={4}>
-                        <label htmlFor="zip" className="col-form-label">
-                          Zip
-                        </label>
-                      </CCol>
-                      <CCol sm={8}>
-                        <Field
-                          type="text"
-                          id="zip"
-                          name="zip"
-                          className="form-control"
-                          placeholder="Enter your zip code"
-                          style={{ height: "50px" }}
-                        />
-                        <ErrorMessage
-                          name="zip"
-                          component="div"
-                          className="invalid-feedback"
-                        />
-                      </CCol>
-                    </CRow>
-                  </CCol>
+          <div className="text-end"></div>
+        </div>
+      </CCardHeader>
+      <CCardBody>
+        <Formik
+          initialValues={contact}
+          enableReinitialize
+          validationSchema={validationSchema}
+          onSubmit={handleFormSubmit}
+        >
+          {({ handleSubmit, isValid, isSubmitting }) => (
+            <Form onSubmit={handleSubmit} autoComplete="off">
+              <CRow className="justify-content-between">
+                <CCol xs={6}>
+                  <CRow className="mb-3">
+                    <CCol sm={4}>
+                      <label htmlFor="ownerId" className="col-form-label">
+                        Contact Owner
+                        <span style={{ color: "red", fontSize: "25px" }}>
+                          *
+                        </span>
+                      </label>
+                    </CCol>
+                    <CCol sm={8}>
+                      <SearchDropdown name="ownerId" options={mappedFetchedAccountOwners} />
+                      <ErrorMessage
+                        name="ownerId"
+                        component="div"
+                        className="invalid-feedback"
+                      />
+                    </CCol>
+                  </CRow>
 
-                  <CCol xs={6}>
-                    <CRow className="mb-3">
-                      <CCol sm={4}>
-                        <label htmlFor="lastName" className="col-form-label">
-                          Last Name
-                        </label>
-                      </CCol>
-                      <CCol sm={8}>
-                        <Field
-                          type="text"
-                          id="lastName"
-                          name="lastName"
-                          className="form-control"
-                          style={{ height: "50px" }}
-                        />
-                        <ErrorMessage
-                          name="lastName"
-                          component="div"
-                          className="invalid-feedback"
-                        />
-                      </CCol>
-                    </CRow>
-                    <CRow className="mb-3">
-                      <CCol sm={4}>
-                        <label htmlFor="email" className="col-form-label">
-                          Email
-                        </label>
-                      </CCol>
-                      <CCol sm={8}>
-                        <Field
-                          type="email"
-                          id="email"
-                          name="email"
-                          className="form-control"
-                          placeholder="name@example.com"
-                          style={{ height: "50px" }}
-                        />
-                        <ErrorMessage
-                          name="email"
-                          component="div"
-                          className="invalid-feedback"
-                        />
-                      </CCol>
-                    </CRow>
-                    <CRow className="mb-3">
-                      <CCol sm={4}>
-                        <label htmlFor="otherPhone" className="col-form-label">
-                          Other Phone
-                        </label>
-                      </CCol>
-                      <CCol sm={8}>
-                        <Field
-                          type="text"
-                          id="otherPhone"
-                          name="otherPhone"
-                          className="form-control"
-                          placeholder="Enter your second phone number"
-                          style={{ height: "50px" }}
-                        />
-                        <ErrorMessage
-                          name="otherPhone"
-                          component="div"
-                          className="invalid-feedback"
-                        />
-                      </CCol>
-                    </CRow>
-                    <CRow className="mb-3">
-                      <CCol sm={4}>
-                        <label htmlFor="title" className="col-form-label">
-                          Title
-                        </label>
-                      </CCol>
-                      <CCol sm={8}>
-                        <Field
-                          type="text"
-                          id="title"
-                          name="title"
-                          className="form-control"
-                          placeholder="Enter title"
-                          style={{ height: "50px" }}
-                        />
-                        <ErrorMessage
-                          name="title"
-                          component="div"
-                          className="invalid-feedback"
-                        />
-                      </CCol>
-                    </CRow>
-                    <CRow className="mb-3">
-                      <CCol sm={4}>
-                        <label htmlFor="dateOfBirth" className="col-form-label">
-                          Date of birth
-                        </label>
-                      </CCol>
-                      <CCol sm={8}>
-                        <Field
-                          type="date"
-                          id="dateOfBirth"
-                          name="dateOfBirth"
-                          className="form-control"
-                          placeholder="Enter DOB"
-                          style={{ height: "50px" }}
-                        />
-                        <ErrorMessage
-                          name="dateOfBirth"
-                          component="div"
-                          className="invalid-feedback"
-                        />
-                      </CCol>
-                    </CRow>
-                    <CRow className="mb-3">
-                      <CCol sm={4}>
-                        <label htmlFor="skypeId" className="col-form-label">
-                          Skype ID
-                          <span style={{ color: "red", fontSize: "25px" }}>
-                            *
-                          </span>
-                        </label>
-                      </CCol>
-                      <CCol sm={8}>
-                        <Field
-                          type="text"
-                          id="skypeId"
-                          name="skypeID"
-                          className="form-control"
-                          placeholder="Skype ID"
-                          style={{ height: "50px" }}
-                        />
-                        <ErrorMessage
-                          name="skypeId"
-                          component="div"
-                          className="invalid-feedback"
-                        />
-                      </CCol>
-                    </CRow>
-                    <CRow className="mb-3">
-                      <CCol sm={4}>
-                        <label htmlFor="twitterUrl" className="col-form-label">
-                          Twitter URL
-                        </label>
-                      </CCol>
-                      <CCol sm={8}>
-                        <Field
-                          type="text"
-                          id="twitterUrl"
-                          name="twitterURL"
-                          className="form-control"
-                          placeholder="Enter your Twitter URL"
-                          style={{ height: "50px" }}
-                        />
-                        <ErrorMessage
-                          name="twitterURL"
-                          component="div"
-                          className="invalid-feedback"
-                        />
-                      </CCol>
-                    </CRow>
-                    <CRow className="mb-3">
-                      <CCol sm={4}>
-                        <label
-                          htmlFor="mailingStreet"
-                          className="col-form-label"
-                        >
-                          Mailing Street
-                        </label>
-                      </CCol>
-                      <CCol sm={8}>
-                        <Field
-                          type="text"
-                          id="mailingStreet"
-                          name="mailingStreet"
-                          className="form-control"
-                          placeholder="Enter your Mailing Street"
-                          style={{ height: "50px" }}
-                        />
-                        <ErrorMessage
-                          name="mailingStreet"
-                          component="div"
-                          className="invalid-feedback"
-                        />
-                      </CCol>
-                    </CRow>
-                    <CRow className="mb-3">
-                      <CCol sm={4}>
-                        <label htmlFor="country" className="col-form-label">
-                          Country
-                        </label>
-                      </CCol>
-                      <CCol sm={8}>
-                        <Field
-                          as="select"
-                          id="country"
-                          name="country"
-                          className="form-control"
-                          onChange={handleCountryChange}
-                          style={{ height: "50px" }}
-                        >
-                          <option value="">
-                            {selectedCountry
-                              ? selectedCountry
-                              : "Select Country"}
-                          </option>
-                          {countries.map((country, index) => (
-                            <option key={index} value={country.name}>
-                              {country.name}
+                  { !contact.id 
+                    ? <CRow className="mb-3">
+                        <CCol sm={4}>
+                          <label htmlFor="account" className="col-form-label">
+                            Account
+                          </label>
+                        </CCol>
+                        <CCol sm={8}>
+                          <Field
+                            as="select"
+                            id="accountId"
+                            name="account"
+                            className="form-control"
+                            onChange={handleAccountChange}
+                            style={{ height: "50px" }}
+                            hidden = { contact.id ? "hidden" : ""}
+                          >
+                            <option value="">
+                              { contact.id ? contact.id : "Select Account"}
                             </option>
-                          ))}
-                        </Field>
-                        <ErrorMessage
-                          name="country"
-                          component="div"
-                          className="invalid-feedback"
-                        />
-                      </CCol>
-                    </CRow>
-                    <CRow className="mb-3">
-                      <CCol sm={4}>
-                        <label htmlFor="state" className="col-form-label">
-                          State
-                        </label>
-                      </CCol>
-                      <CCol sm={8}>
-                        <Field
-                          as="select"
-                          id="state"
-                          name="state"
-                          className="form-control"
-                          onChange={handleStateChange}
-                          style={{ height: "50px" }}
-                        >
-                          <option value="">
-                            {selectedState ? selectedState : "Select State"}
+                            {fetchedAccounts.map((account: Account) => (
+                              <option key={account.id} value={account.id}>
+                                {account.accountName}
+                              </option>
+                            ))}
+                          </Field>
+                          <ErrorMessage
+                            name="state"
+                            component="div"
+                            className="invalid-feedback"
+                          />
+                        </CCol>
+                      </CRow>
+                      : 
+                      <Field
+                        type="number"
+                        id="accountID"
+                        name="accountID"
+                        className="form-control"
+                        style={{ height: "50px" }}
+                        hidden
+                      />
+                  }
+                  
+
+                  <CRow className="mb-3">
+                    <CCol sm={4}>
+                      <label htmlFor="firstName" className="col-form-label">
+                        First Name
+                        <span style={{ color: "red", fontSize: "25px" }}>
+                          *
+                        </span>
+                      </label>
+                    </CCol>
+                    <CCol sm={8}>
+                      <Field
+                        type="text"
+                        id="firstName"
+                        name="firstName"
+                        className="form-control"
+                        placeholder="Enter your first name"
+                        style={{ height: "50px" }}
+                      />
+                      <ErrorMessage
+                        name="firstName"
+                        component="div"
+                        className="invalid-feedback"
+                      />
+                    </CCol>
+                  </CRow>
+                  {/* <CRow className="mb-3">
+                    <CCol sm={4}>
+                      <label htmlFor="accountName" className="col-form-label">
+                        Account ID
+                      </label>
+                    </CCol>
+                    <CCol sm={8}>
+                      <Field
+                        type="number"
+                        id="accountID"
+                        name="accountID"
+                        className="form-control"
+                        style={{ height: "50px" }}
+                      />
+                      <ErrorMessage
+                        name="accountID"
+                        component="div"
+                        className="invalid-feedback"
+                      />
+                    </CCol>
+                  </CRow> */}
+                  <CRow className="mb-3">
+                    <CCol sm={4}>
+                      <label htmlFor="phone" className="col-form-label">
+                        Phone
+                      </label>
+                    </CCol>
+                    <CCol sm={8}>
+                      <Field
+                        type="text"
+                        id="phone"
+                        name="phone"
+                        className="form-control"
+                        placeholder="Enter your phone number"
+                        style={{ height: "50px" }}
+                      />
+                      <ErrorMessage
+                        name="phone"
+                        component="div"
+                        className="invalid-feedback"
+                      />
+                    </CCol>
+                  </CRow>
+                  <CRow className="mb-3">
+                    <CCol sm={4}>
+                      <label htmlFor="mobile" className="col-form-label">
+                        Mobile
+                      </label>
+                    </CCol>
+                    <CCol sm={8}>
+                      <Field
+                        type="text"
+                        id="mobile"
+                        name="mobile"
+                        className="form-control"
+                        placeholder="Enter your mobile number"
+                        style={{ height: "50px" }}
+                      />
+                      <ErrorMessage
+                        name="mobile"
+                        component="div"
+                        className="invalid-feedback"
+                      />
+                    </CCol>
+                  </CRow>
+                  <CRow className="mb-3">
+                    <CCol sm={4}>
+                      <label htmlFor="department" className="col-form-label">
+                        Department
+                      </label>
+                    </CCol>
+                    <CCol sm={8}>
+                      <Field
+                        type="text"
+                        id="department"
+                        name="department"
+                        className="form-control"
+                        placeholder="Enter department"
+                        style={{ height: "50px" }}
+                      />
+                      <ErrorMessage
+                        name="department"
+                        component="div"
+                        className="invalid-feedback"
+                      />
+                    </CCol>
+                  </CRow>
+                  <CRow className="mb-3">
+                    <CCol sm={4}>
+                      <label htmlFor="homePhone" className="col-form-label">
+                        Home Phone
+                      </label>
+                    </CCol>
+                    <CCol sm={8}>
+                      <Field
+                        type="text"
+                        id="homePhone"
+                        name="homePhone"
+                        className="form-control"
+                        placeholder="Home phone"
+                        style={{ height: "50px" }}
+                      />
+                      <ErrorMessage
+                        name="homePhone"
+                        component="div"
+                        className="invalid-feedback"
+                      />
+                    </CCol>
+                  </CRow>
+                  <CRow className="mb-3">
+                    <CCol sm={4}>
+                      <label htmlFor="linkedinUrl" className="col-form-label">
+                        Linkedin URL
+                      </label>
+                    </CCol>
+                    <CCol sm={8}>
+                      <Field
+                        type="text"
+                        id="linkedinUrl"
+                        name="linkedinURL"
+                        className="form-control"
+                        placeholder="Enter your LinkedIn URL"
+                        style={{ height: "50px" }}
+                      />
+                      <ErrorMessage
+                        name="linkedinURL"
+                        component="div"
+                        className="invalid-feedback"
+                      />
+                    </CCol>
+                  </CRow>
+                  <CRow className="mb-3">
+                    <CCol sm={4}>
+                      <label
+                        htmlFor="secondaryEmail"
+                        className="col-form-label"
+                      >
+                        Secondary Email
+                      </label>
+                    </CCol>
+                    <CCol sm={8}>
+                      <Field
+                        type="email"
+                        id="secondaryEmail"
+                        name="secondaryEmail"
+                        className="form-control"
+                        placeholder="name@example.com"
+                        style={{ height: "50px" }}
+                      />
+                      <ErrorMessage
+                        name="secondaryEmail"
+                        component="div"
+                        className="invalid-feedback"
+                      />
+                    </CCol>
+                  </CRow>
+                  <CRow className="mb-3">
+                    <CCol sm={4}>
+                      <label htmlFor="city" className="col-form-label">
+                        City
+                      </label>
+                    </CCol>
+                    <CCol sm={8}>
+                      <Field
+                        type="text"
+                        id="city"
+                        name="city"
+                        className="form-control"
+                        placeholder="Enter your city"
+                        style={{ height: "50px" }}
+                      />
+                      <ErrorMessage
+                        name="city"
+                        component="div"
+                        className="invalid-feedback"
+                      />
+                    </CCol>
+                  </CRow>
+                  <CRow className="mb-3">
+                    <CCol sm={4}>
+                      <label htmlFor="zip" className="col-form-label">
+                        Zip
+                      </label>
+                    </CCol>
+                    <CCol sm={8}>
+                      <Field
+                        type="text"
+                        id="zip"
+                        name="zip"
+                        className="form-control"
+                        placeholder="Enter your zip code"
+                        style={{ height: "50px" }}
+                      />
+                      <ErrorMessage
+                        name="zip"
+                        component="div"
+                        className="invalid-feedback"
+                      />
+                    </CCol>
+                </CRow>
+                
+                </CCol>
+
+
+                <CCol xs={6}>
+             
+                  <CRow className="mb-3">
+                    <CCol sm={4}>
+                      <label htmlFor="lastName" className="col-form-label">
+                        Last Name
+                      </label>
+                    </CCol>
+                    <CCol sm={8}>
+                      <Field
+                        type="text"
+                        id="lastName"
+                        name="lastName"
+                        className="form-control"
+                        placeholder="Enter your last name"
+                        style={{ height: "50px" }}
+                      />
+                      <ErrorMessage
+                        name="lastName"
+                        component="div"
+                        className="invalid-feedback"
+                      />
+                    </CCol>
+                  </CRow>
+                  <CRow className="mb-3">
+                    <CCol sm={4}>
+                      <label htmlFor="email" className="col-form-label">
+                        Email
+                      </label>
+                    </CCol>
+                    <CCol sm={8}>
+                      <Field
+                        type="email"
+                        id="email"
+                        name="email"
+                        className="form-control"
+                        placeholder="name@example.com"
+                        style={{ height: "50px" }}
+                      />
+                      <ErrorMessage
+                        name="email"
+                        component="div"
+                        className="invalid-feedback"
+                      />
+                    </CCol>
+                  </CRow>
+                  <CRow className="mb-3">
+                    <CCol sm={4}>
+                      <label htmlFor="otherPhone" className="col-form-label">
+                        Other Phone
+                      </label>
+                    </CCol>
+                    <CCol sm={8}>
+                      <Field
+                        type="text"
+                        id="otherPhone"
+                        name="otherPhone"
+                        className="form-control"
+                        placeholder="Enter your second phone number"
+                        style={{ height: "50px" }}
+                      />
+                      <ErrorMessage
+                        name="otherPhone"
+                        component="div"
+                        className="invalid-feedback"
+                      />
+                    </CCol>
+                  </CRow>
+                  <CRow className="mb-3">
+                    <CCol sm={4}>
+                      <label htmlFor="title" className="col-form-label">
+                        Title
+                      </label>
+                    </CCol>
+                    <CCol sm={8}>
+                      <Field
+                        type="text"
+                        id="title"
+                        name="title"
+                        className="form-control"
+                        placeholder="Enter title"
+                        style={{ height: "50px" }}
+                      />
+                      <ErrorMessage
+                        name="title"
+                        component="div"
+                        className="invalid-feedback"
+                      />
+                    </CCol>
+                  </CRow>
+                  <CRow className="mb-3">
+                    <CCol sm={4}>
+                      <label htmlFor="dateOfBirth" className="col-form-label">
+                        Date of birth
+                      </label>
+                    </CCol>
+                    <CCol sm={8}>
+                      <Field
+                        type="date"
+                        id="dateOfBirth"
+                        name="dateOfBirth"
+                        className="form-control"
+                        placeholder="Enter DOB"
+                        style={{ height: "50px" }}
+                      />
+                      <ErrorMessage
+                        name="dateOfBirth"
+                        component="div"
+                        className="invalid-feedback"
+                      />
+                    </CCol>
+                  </CRow>
+                  <CRow className="mb-3">
+                    <CCol sm={4}>
+                      <label htmlFor="skypeId" className="col-form-label">
+                        Skype ID
+                        <span style={{ color: "red", fontSize: "25px" }}>
+                          *
+                        </span>
+                      </label>
+                    </CCol>
+                    <CCol sm={8}>
+                      <Field
+                        type="text"
+                        id="skypeId"
+                        name="skypeID"
+                        className="form-control"
+                        placeholder="Skype ID"
+                        style={{ height: "50px" }}
+                      />
+                      <ErrorMessage
+                        name="skypeId"
+                        component="div"
+                        className="invalid-feedback"
+                      />
+                    </CCol>
+                  </CRow>
+                  <CRow className="mb-3">
+                    <CCol sm={4}>
+                      <label htmlFor="twitterUrl" className="col-form-label">
+                        Twitter URL
+                      </label>
+                    </CCol>
+                    <CCol sm={8}>
+                      <Field
+                        type="text"
+                        id="twitterUrl"
+                        name="twitterURL"
+                        className="form-control"
+                        placeholder="Enter your Twitter URL"
+                        style={{ height: "50px" }}
+                      />
+                      <ErrorMessage
+                        name="twitterURL"
+                        component="div"
+                        className="invalid-feedback"
+                      />
+                    </CCol>
+                  </CRow>
+                  <CRow className="mb-3">
+                    <CCol sm={4}>
+                      <label htmlFor="mailingStreet" className="col-form-label">
+                        Mailing Street
+                      </label>
+                    </CCol>
+                    <CCol sm={8}>
+                      <Field
+                        type="text"
+                        id="mailingStreet"
+                        name="mailingStreet"
+                        className="form-control"
+                        placeholder="Enter your Mailing Street"
+                        style={{ height: "50px" }}
+                      />
+                      <ErrorMessage
+                        name="mailingStreet"
+                        component="div"
+                        className="invalid-feedback"
+                      />
+                    </CCol>
+                  </CRow>
+                  <CRow className="mb-3">
+                    <CCol sm={4}>
+                      <label htmlFor="country" className="col-form-label">
+                        Country
+                      </label>
+                    </CCol>
+                    <CCol sm={8}>
+                      <Field
+                        as="select"
+                        id="country"
+                        name="country"
+                        className="form-control"
+                        onChange={handleCountryChange}
+                        style={{ height: "50px" }}
+                      >
+                        <option value="">
+                          {selectedCountry ? selectedCountry : "Select Country"}
+                        </option>
+                        {countries.map((country, index) => (
+                          <option key={index} value={country.name}>
+                            {country.name}
                           </option>
-                          {states.map((state) => (
-                            <option key={state.id} value={state.name}>
-                              {state.name}
-                            </option>
-                          ))}
-                        </Field>
-                        <ErrorMessage
-                          name="state"
-                          component="div"
-                          className="invalid-feedback"
-                        />
-                      </CCol>
-                    </CRow>
-               
-                   
-                  </CCol>
-                  <CCol xs={12}>
+                        ))}
+                      </Field>
+                      <ErrorMessage
+                        name="country"
+                        component="div"
+                        className="invalid-feedback"
+                      />
+                    </CCol>
+                  </CRow>
+                  <CRow className="mb-3">
+                    <CCol sm={4}>
+                      <label htmlFor="state" className="col-form-label">
+                        State
+                      </label>
+                    </CCol>
+                    <CCol sm={8}>
+                      <Field
+                        as="select"
+                        id="state"
+                        name="state"
+                        className="form-control"
+                        onChange={handleStateChange}
+                        style={{ height: "50px" }}
+                      >
+                        <option value="">
+                          {selectedState ? selectedState : "Select State"}
+                        </option>
+                        {states.map((state, index) => (
+                          <option key={index} value={state.name}>
+                            {state.name}
+                          </option>
+                        ))}
+                      </Field>
+                      <ErrorMessage
+                        name="state"
+                        component="div"
+                        className="invalid-feedback"
+                      />
+                    </CCol>
+                  </CRow>
                   <CRow className="mb-3">
                       <CCol sm={2}>
                         <label htmlFor="description" className="col-form-label">
