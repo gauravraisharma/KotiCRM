@@ -631,7 +631,7 @@ const MyForm: React.FC<MyFormProps> = ({
 
                     <CRow className="mb-3">
                       <CCol xs={4}>
-                        <label htmlFor="billingCode">
+                        <label htmlFor="zipCode">
                           Zip Code
                           <span style={{ color: "red", fontSize: "25px" }}>
                             *
@@ -641,7 +641,7 @@ const MyForm: React.FC<MyFormProps> = ({
                       <CCol xs={8}>
                         <Field
                           type="text"
-                          name="billingCode"
+                          name="zipCode"
                           className={`form-control ${
                             touched.zipCode && errors.zipCode
                               ? "is-invalid"

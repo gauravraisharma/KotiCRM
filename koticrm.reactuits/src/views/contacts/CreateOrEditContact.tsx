@@ -431,21 +431,21 @@ const CreateOrEditContact = () => {
                   </CRow>
                   <CRow className="mb-3">
                     <CCol sm={4}>
-                      <label htmlFor="zip" className="col-form-label">
-                        Zip
+                      <label htmlFor="zipCode" className="col-form-label">
+                        Zip Code
                       </label>
                     </CCol>
                     <CCol sm={8}>
                       <Field
                         type="text"
-                        id="zip"
-                        name="zip"
+                        id="zipCode"
+                        name="zipCode"
                         className="form-control"
                         placeholder="Enter your zip code"
                         style={{ height: "50px" }}
                       />
                       <ErrorMessage
-                        name="zip"
+                        name="zipCode"
                         component="div"
                         className="invalid-feedback"
                       />

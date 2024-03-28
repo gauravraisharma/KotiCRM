@@ -33,7 +33,7 @@ const initialValues = {
   billingStreet: "",
   billingCity: "",
   billingState: "",
-  billingCode: "",
+  zipCode: "",
   country: "",
   description: "",
 };
@@ -56,7 +56,7 @@ const EditPage: React.FC<EditModalProps> = ({
     billingStreet: false,
     billingCity: false,
     billingState: false,
-    billingCode: false,
+    zipCode: false,
     country: false,
     description: false,
   });
@@ -87,11 +87,11 @@ const EditPage: React.FC<EditModalProps> = ({
     billingStreet: Yup.string().required("Required (Billing Street)"),
     billingCity: Yup.string().required("Required (Billing City)"),
     billingState: Yup.string().required("Required (Billing State)"),
-    billingCode: Yup.string()
-      .required("Required (Zip Code)")
-      .matches(/^\d+$/, "Zip Code must be a number")
-      .min(4, "Zip Code must be at least 4 digits")
-      .max(10, "Zip Code can have maximum 10 digits"),
+    zipCode: Yup.string()
+      .required("Required (Zip Code)"),
+      // .matches(/^\d+$/, "Zip Code must be a number")
+      // .min(4, "Zip Code must be at least 4 digits")
+      // .max(10, "Zip Code can have maximum 10 digits"),
     country: Yup.string().required("Required (Country)"),
     description: Yup.string().required("Required (Description)"),
   });
@@ -555,7 +555,7 @@ const EditPage: React.FC<EditModalProps> = ({
                           }}
                         />
                         <ErrorMessage
-                          name="billingCode"
+                          name="zipCode"
                           component="div"
                           className="error form-error"
                         />

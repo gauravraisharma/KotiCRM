@@ -19,7 +19,7 @@ export interface Contact {
   mailingStreet: string | null;
   city: string;
   state: string | null;
-  zip: string | null;
+  zipCode: string | null;
   country: string | null;
   description: string | null;
 }
@@ -45,7 +45,7 @@ export class ContactClass implements Contact {
   mailingStreet: string | null;
   city: string;
   state: string | null;
-  zip: string | null;
+  zipCode: string | null;
   country: string | null;
   description: string | null;
 
@@ -70,7 +70,7 @@ export class ContactClass implements Contact {
     this.mailingStreet = '';
     this.city = '';
     this.state = '';
-    this.zip = '';
+    this.zipCode = '';
     this.country = '';
     this.description = '';
   }

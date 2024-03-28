@@ -20,7 +20,7 @@ export interface ContactWithAccountName {
     mailingStreet: string;
     city: string;
     state: string;
-    zip: string;
+    zipCode: string;
     country: string;
     description: string;
 }
