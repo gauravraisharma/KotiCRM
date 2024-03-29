@@ -133,12 +133,12 @@ const CreateOrEditContact = () => {
   };
 
   const validationSchema = Yup.object({
-    ownerId: Yup.string().required("Owner ID is required"),
-    firstName: Yup.string().required("First Name is required"),
-    lastName: Yup.string().required("Last Name is required"),
-    accountID: Yup.string().required("Account Id is required"),
-    email: Yup.string().required("Email is required"),
-    mobile: Yup.string().required("Mobile is required")
+    ownerId: Yup.string().required("Required (Owner ID)"),
+    firstName: Yup.string().required("Required (First Name)"),
+    lastName: Yup.string().required("Required (Last Name)"),
+    accountID: Yup.string().required("Required (Account Id)"),
+    email: Yup.string().required("Required (Email)"),
+    mobile: Yup.string().required("Required (Mobile)")
   });
 
 
@@ -169,7 +169,9 @@ const CreateOrEditContact = () => {
                       <CCol sm={4}>
                         <label htmlFor="ownerId" className="col-form-label">
                           Contact Owner
-                          <span style={{ color: "red", fontSize: "25px" }}>*</span>
+                          <span style={{ color: "red", fontSize: "25px" }}>
+                            *
+                          </span>
                         </label>
                       </CCol>
                       <CCol sm={8}>
@@ -177,7 +179,7 @@ const CreateOrEditContact = () => {
                         <ErrorMessage
                           name="ownerId"
                           className="invalid-feedback"
-                          render={error => <label style={{ color: "red" }}>{error}</label>}
+                          render={error => <label style={{ color: '#dc3545' }}>{error}</label>}
                         />
                       </CCol>
                     </CRow>
@@ -194,7 +196,9 @@ const CreateOrEditContact = () => {
                             as="select"
                             id="accountId"
                             name="account"
-                            className="form-control"
+                            // className="form-control"
+                            className={`form-control ${touched.accountID && errors.accountID ? "is-invalid" : ""
+                          }`}
                             onChange={handleAccountChange}
                             style={{ height: "50px" }}
                             hidden = { contact.id ? "hidden" : ""}
@@ -230,7 +234,9 @@ const CreateOrEditContact = () => {
                       <CCol sm={4}>
                         <label htmlFor="firstName" className="col-form-label">
                           First Name
-                          <span style={{ color: "red", fontSize: "25px" }}>*</span>
+                          <span style={{ color: "red", fontSize: "25px" }}>
+                            *
+                          </span>
                         </label>
                       </CCol>
                       <CCol sm={8}>
@@ -246,7 +252,7 @@ const CreateOrEditContact = () => {
                         <ErrorMessage
                           name="firstName"
                           className="invalid-feedback"
-                          render={error => <label style={{ color: "red" }}>{error}</label>}
+                          render={error => <label style={{ color: '#dc3545' }}>{error}</label>}
                         />
                       </CCol>
                     </CRow>
@@ -297,7 +303,9 @@ const CreateOrEditContact = () => {
                       <CCol sm={4}>
                         <label htmlFor="mobile" className="col-form-label">
                           Mobile
-                          <span style={{ color: "red", fontSize: "25px" }}>*</span>
+                          <span style={{ color: "red", fontSize: "25px" }}>
+                            *
+                          </span>
                         </label>
                       </CCol>
                       <CCol sm={8}>
@@ -313,7 +321,7 @@ const CreateOrEditContact = () => {
                         <ErrorMessage
                           name="mobile"
                           className="invalid-feedback"
-                          render={error => <label style={{ color: "red" }}>{error}</label>}
+                          render={error =><label style={{ color: '#dc3545' }}>{error}</label>}
                         />
                       </CCol>
                     </CRow>
@@ -452,8 +460,10 @@ const CreateOrEditContact = () => {
                         />
                       </CCol>
                     </CRow>
+                    
 
                   </CCol>
+                  
 
 
                   <CCol xs={6}>
@@ -462,7 +472,9 @@ const CreateOrEditContact = () => {
                       <CCol sm={4}>
                         <label htmlFor="lastName" className="col-form-label">
                           Last Name
-                          <span style={{ color: "red", fontSize: "25px" }}>*</span>
+                          <span style={{ color: "red", fontSize: "25px" }}>
+                            *
+                          </span>
                         </label>
                       </CCol>
                       <CCol sm={8}>
@@ -478,7 +490,7 @@ const CreateOrEditContact = () => {
                         <ErrorMessage
                           name="lastName"
                           className="invalid-feedback"
-                          render={error => <label style={{ color: "red" }}>{error}</label>}
+                          render={error => <label style={{ color: '#dc3545' }}>{error}</label>}
                         />
                       </CCol>
                     </CRow>
@@ -486,7 +498,9 @@ const CreateOrEditContact = () => {
                       <CCol sm={4}>
                         <label htmlFor="email" className="col-form-label">
                           Email
-                          <span style={{ color: "red", fontSize: "25px" }}>*</span>
+                          <span style={{ color: "red", fontSize: "25px" }}>
+                            *
+                          </span>
                         </label>
                       </CCol>
                       <CCol sm={8}>
@@ -502,7 +516,7 @@ const CreateOrEditContact = () => {
                         <ErrorMessage
                           name="email"
                           className="invalid-feedback"
-                          render={error => <label style={{ color: "red" }}>{error}</label>}
+                          render={error => <label style={{ color: '#dc3545' }}>{error}</label>}
                         />
                       </CCol>
                     </CRow>
@@ -699,8 +713,11 @@ const CreateOrEditContact = () => {
                           className="invalid-feedback"
                         />
                       </CCol>
+                      
                     </CRow>
-                    <CRow className="mb-3">
+                
+                  </CCol>
+                  <CRow className="mb-3">
                       <CCol sm={2}>
                         <label htmlFor="description" className="col-form-label">
                           Description
@@ -722,7 +739,6 @@ const CreateOrEditContact = () => {
                         />
                       </CCol>
                     </CRow>
-                  </CCol>
                   <CRow className="mb-3">
                     <CCol sm={12} className="text-end">
                       <button

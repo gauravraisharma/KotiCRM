@@ -195,17 +195,7 @@ const EditPage: React.FC<EditModalProps> = ({
     closeModal();
   };
   
-  //Fetching data from store
-  const accountOwner = useSelector(
-    (state: any) => state.accountReducer.accountOwner
-  );
-  const industry = useSelector((state: any) => state.sharedReducer.industries);
-  const accountStatus = useSelector(
-    (state: any) => state.accountReducer.accountStatus
-  );
-  const accountType = useSelector(
-    (state: any) => state.accountReducer.accountType
-  );
+ 
 
   return (
     <div>
