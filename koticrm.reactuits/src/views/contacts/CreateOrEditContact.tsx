@@ -47,7 +47,7 @@ const CreateOrEditContact = () => {
 
   // Country-State
   const countries: Country[] = Countries;
-  const [selectedAccountId, setSelectedAccountId] = useState(0);
+  const [selectedAccount, setSelectedAccount] = useState<Account | null>(null);
   const [selectedCountry, setSelectedCountry] = useState<string>("");
   const [selectedState, setSelectedState] = useState<string>("");
   const [states, setStates] = useState<State[]>([]);
@@ -67,10 +67,17 @@ const CreateOrEditContact = () => {
     }
   }, [contactId, fetchedContact]);
 
-  const handleAccountChange = (e: ChangeEvent<HTMLSelectElement>) => {
-      const accountId = e.target.value;
-      setSelectedAccountId(parseInt(accountId));
-  };
+  useEffect(() => {
+    const selectedCountryObject = countries.find(
+      (country) => country.name === contact.country
+    );
+
+    if (selectedCountryObject) {
+      setStates(selectedCountryObject.states);
+    } else {
+      setStates([]);
+    }
+  }, [contact.id, selectedCountry]);
 
   const handleCountryChange = (e: ChangeEvent<HTMLSelectElement>) => {
     const selectedCountry = e.target.value;
@@ -92,21 +99,15 @@ const CreateOrEditContact = () => {
     }
   };
 
-  useEffect(() => {
-    const selectedCountryObject = countries.find(
-      (country) => country.name === contact.country
-    );
-
-    if (selectedCountryObject) {
-      setStates(selectedCountryObject.states);
-    } else {
-      setStates([]);
-    }
-  }, [contact.id, selectedCountry]);
-
   const handleStateChange = (e: ChangeEvent<HTMLSelectElement>) => {
     const selectedState = e.target.value;
     setSelectedState(selectedState);
+  };
+
+  const handleAccountChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    const accountId = parseInt(e.target.value);
+    const selectedAccount = fetchedAccounts.find((account: Account) => account.id === accountId);
+    setSelectedAccount(selectedAccount);
   };
 
   const handleFormSubmit = async (
@@ -118,7 +119,7 @@ const CreateOrEditContact = () => {
       contact.country = selectedCountry;
       contact.state = selectedState;
       if (!contact.id) {
-        contact.accountID = selectedAccountId;
+        contact.accountID = selectedAccount!.id;
         console.log("Create new contact:", contact);
         dispatch(createContact(contact));
       } else {
@@ -184,28 +185,26 @@ const CreateOrEditContact = () => {
                       </CCol>
                     </CRow>
 
-                  { !contact.id 
-                    ? <CRow className="mb-3">
+                    {!contact.id
+                      ? <CRow className="mb-3">
                         <CCol sm={4}>
-                          <label htmlFor="account" className="col-form-label">
+                          <label htmlFor="accountID" className="col-form-label">
                             Account
                           </label>
                         </CCol>
                         <CCol sm={8}>
                           <Field
                             as="select"
-                            id="accountId"
-                            name="account"
+                            id="accountID"
+                            name="accountID"
                             // className="form-control"
                             className={`form-control ${touched.accountID && errors.accountID ? "is-invalid" : ""
-                          }`}
+                              }`}
                             onChange={handleAccountChange}
                             style={{ height: "50px" }}
-                            hidden = { contact.id ? "hidden" : ""}
+                            hidden={contact.id ? "hidden" : ""}
                           >
-                            <option value="">
-                              { contact.id ? contact.id : "Select Account"}
-                            </option>
+                            <option value={0}>{selectedAccount ? selectedAccount.accountName : "Select Account"}</option>
                             {fetchedAccounts.map((account: Account) => (
                               <option key={account.id} value={account.id}>
                                 {account.accountName}
@@ -213,13 +212,13 @@ const CreateOrEditContact = () => {
                             ))}
                           </Field>
                           <ErrorMessage
-                            name="state"
-                            component="div"
+                            name="accountID"
                             className="invalid-feedback"
+                            render={error => <label style={{ color: '#dc3545' }}>{error}</label>}
                           />
                         </CCol>
                       </CRow>
-                      : 
+                      :
                       <Field
                         type="number"
                         id="accountID"
@@ -228,7 +227,7 @@ const CreateOrEditContact = () => {
                         style={{ height: "50px" }}
                         hidden
                       />
-                  }
+                    }
 
                     <CRow className="mb-3">
                       <CCol sm={4}>
@@ -321,7 +320,7 @@ const CreateOrEditContact = () => {
                         <ErrorMessage
                           name="mobile"
                           className="invalid-feedback"
-                          render={error =><label style={{ color: '#dc3545' }}>{error}</label>}
+                          render={error => <label style={{ color: '#dc3545' }}>{error}</label>}
                         />
                       </CCol>
                     </CRow>
@@ -460,10 +459,10 @@ const CreateOrEditContact = () => {
                         />
                       </CCol>
                     </CRow>
-                    
+
 
                   </CCol>
-                  
+
 
 
                   <CCol xs={6}>
@@ -713,32 +712,32 @@ const CreateOrEditContact = () => {
                           className="invalid-feedback"
                         />
                       </CCol>
-                      
+
                     </CRow>
-                
+
                   </CCol>
                   <CRow className="mb-3">
-                      <CCol sm={2}>
-                        <label htmlFor="description" className="col-form-label">
-                          Description
-                        </label>
-                      </CCol>
-                      <CCol sm={10}>
-                        <Field
-                          as="textarea"
-                          id="description"
-                          name="description"
-                          className="form-control"
-                          placeholder="Leave a comment here"
-                          style={{ height: "120px" }}
-                        />
-                        <ErrorMessage
-                          name="description"
-                          component="div"
-                          className="invalid-feedback"
-                        />
-                      </CCol>
-                    </CRow>
+                    <CCol sm={2}>
+                      <label htmlFor="description" className="col-form-label">
+                        Description
+                      </label>
+                    </CCol>
+                    <CCol sm={10}>
+                      <Field
+                        as="textarea"
+                        id="description"
+                        name="description"
+                        className="form-control"
+                        placeholder="Leave a comment here"
+                        style={{ height: "120px" }}
+                      />
+                      <ErrorMessage
+                        name="description"
+                        component="div"
+                        className="invalid-feedback"
+                      />
+                    </CCol>
+                  </CRow>
                   <CRow className="mb-3">
                     <CCol sm={12} className="text-end">
                       <button
