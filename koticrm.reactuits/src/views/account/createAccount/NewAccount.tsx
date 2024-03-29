@@ -461,6 +461,7 @@ const MyForm: React.FC<MyFormProps> = ({
                       <CCol xs={8}>
                         <Field
                           type="text"
+                          id="annualRevenue"
                           name="annualRevenue"
                           className={`form-control ${
                             touched.annualRevenue && errors.annualRevenue

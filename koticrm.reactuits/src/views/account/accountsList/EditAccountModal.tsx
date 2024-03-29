@@ -97,32 +97,55 @@ const EditPage: React.FC<EditModalProps> = ({
 
   // Validations
   const validationSchema = Yup.object().shape({
-    accountOwner: Yup.string().required("Required (Account Owner)"),
-    industry: Yup.number().required("Required (Industry)"),
-    type: Yup.number().required("Required (Type)"),
-    status: Yup.number().required("Required (Status)"),
-    accountName: Yup.string().required("Required (Account Name)"),
-    annualRevenue: Yup.string().required("Required (Annual Revenue)"),
-    phone: Yup.string()
-      .required("Required (Phone)")
-      .matches(/^[0-9()-\s]+$/, "Phone number must be a number")
-      .min(10, "Phone number must be at least 10 digits")
-      .max(
-        13,
-        "Phone number must be at most 13 digits with country calling code"
-      ),
-
-    billingStreet: Yup.string().required("Required (Billing Street)"),
-    billingCity: Yup.string().required("Required (Billing City)"),
-    billingState: Yup.string().required("Required (Billing State)"),
-    zipCode: Yup.string()
-      .required("Required (Zip Code)"),
-      // .matches(/^\d+$/, "Zip Code must be a number")
-      // .min(4, "Zip Code must be at least 4 digits")
-      // .max(10, "Zip Code can have maximum 10 digits"),
-    country: Yup.string().required("Required (Country)"),
-    // description: Yup.string().required("Required (Description)"),
+    accountOwner: touchedFields.accountOwner
+      ? Yup.string().required("Required (Account Owner)")
+      : Yup.string(),
+    industry: touchedFields.industry
+      ? Yup.number().required("Required (Industry)")
+      : Yup.number(),
+    type: touchedFields.type
+      ? Yup.number().required("Required (Type)")
+      : Yup.number(),
+    status: touchedFields.status
+      ? Yup.number().required("Required (Status)")
+      : Yup.number(),
+    accountName: touchedFields.accountName
+      ? Yup.string().required("Required (Account Name)")
+      : Yup.string(),
+    annualRevenue: touchedFields.annualRevenue
+      ? Yup.string().required("Required (Annual Revenue)")
+      : Yup.string(),
+    phone: touchedFields.phone
+      ? Yup.string()
+          .required("Required (Phone)")
+          .matches(/^[0-9()-\s]+$/, "Phone number must be a number")
+          .min(10, "Phone number must be at least 10 digits")
+          .max(13, "Phone number must be at most 13 digits with country calling code")
+      : Yup.string(),
+    billingStreet: touchedFields.billingStreet
+      ? Yup.string().required("Required (Billing Street)")
+      : Yup.string(),
+    billingCity: touchedFields.billingCity
+      ? Yup.string().required("Required (Billing City)")
+      : Yup.string(),
+    billingState: touchedFields.billingState
+      ? Yup.string().required("Required (Billing State)")
+      : Yup.string(),
+    zipCode: touchedFields.zipCode
+      ? Yup.string().required("Required (Zip Code)")
+      : Yup.string(),
+    country: touchedFields.country
+      ? Yup.string().required("Required (Country)")
+      : Yup.string(),
+    // description: Yup.string()
+    //   .required("Required (Description)")
+    //   .when(Object.keys(touchedFields), {
+    //     is: (field) => field.some((key) => key === "description"),
+    //     then: Yup.string().required("Required (Description)"),
+    //     otherwise: Yup.string(),
+    //   }),
   });
+  
 
   const handleInputChange = (fieldName: keyof typeof touchedFields) => {
     setTouchedFields((prevFields) => ({
@@ -171,6 +194,18 @@ const EditPage: React.FC<EditModalProps> = ({
     dispatch(updateAccountRequest(accountDetail, accountData.id));
     closeModal();
   };
+  
+  //Fetching data from store
+  const accountOwner = useSelector(
+    (state: any) => state.accountReducer.accountOwner
+  );
+  const industry = useSelector((state: any) => state.sharedReducer.industries);
+  const accountStatus = useSelector(
+    (state: any) => state.accountReducer.accountStatus
+  );
+  const accountType = useSelector(
+    (state: any) => state.accountReducer.accountType
+  );
 
   return (
     <div>
@@ -199,7 +234,7 @@ const EditPage: React.FC<EditModalProps> = ({
             validationSchema={validationSchema}
             onSubmit={handleEditClick}
           >
-            {({ handleChange, handleSubmit }) => (
+            {({ handleChange,errors, handleSubmit ,touched}) => (
               <Form>
                 <CRow className="justify-content-between">
                   <CCol xs={6}>
@@ -249,13 +284,13 @@ const EditPage: React.FC<EditModalProps> = ({
                         <Field
                           as="select"
                           name="industry"
+                          value={updateAccount.industry}
                           className="form-control form-select"
                           style={{ height: "50px" }}
                           onChange={(e: any) => {
                             handleChangeData(e);
                             handleChange(e);
                           }}
-                          value={updateAccount.industry}
                         >
                           <option value="">Select...</option>
                           {industry?.map((industry: any) => (
@@ -284,6 +319,8 @@ const EditPage: React.FC<EditModalProps> = ({
                         <Field
                           as="select"
                           name="type"
+                          value={updateAccount.type}
+
                           className="form-control form-select"
                           style={{ height: "50px" }}
                           onChange={(e: any) => {
@@ -291,7 +328,6 @@ const EditPage: React.FC<EditModalProps> = ({
                             handleChange(e);
                             handleInputChange("type");
                           }}
-                          value={updateAccount.type}
                         >
                           <option value="">Select Type</option>
                           {accountType?.map((type: any) => (
@@ -344,6 +380,7 @@ const EditPage: React.FC<EditModalProps> = ({
                         />
                       </CCol>
                     </CRow>
+
                     <CRow className="mb-3">
                       <CCol sm={4}>
                         <label htmlFor="accountName">
@@ -374,16 +411,49 @@ const EditPage: React.FC<EditModalProps> = ({
                       </CCol>
                     </CRow>
 
-                    <CRow className="mb-3">
+                    {/* <CRow className="mb-3">
                       <CCol sm={4}>
                         <label htmlFor="annualRevenue">Annual Revenue</label>
                       </CCol>
                       <CCol sm={8}>
                         <Field
                           type="number"
-                          value={updateAccount.annualRevenue}
-                          className="form-control"
                           name="annualRevenue"
+                          className={`form-control ${
+                            touched.annualRevenue && errors.annualRevenue
+                              ? "is-invalid"
+                              : ""
+                          }`}
+                          style={{ height: "50px" }}
+                          onChange={(e: any) => {
+                            handleChangeData(e);
+                            handleChange(e);
+                          }}
+                          value={updateAccount.annualRevenue}
+
+                        />
+                        <ErrorMessage
+                          name="annualRevenue"
+                          component="div"
+                          className="error form-error"
+                        />
+                      </CCol>
+                    </CRow> */}
+                    
+                    <CRow className="mb-3">
+                      <CCol xs={4}>
+                        <label htmlFor="annualRevenue">Annual Revenue</label>
+                      </CCol>
+                      <CCol xs={8}>
+                        <Field
+                          type="number"
+                          id="annualRevenue"
+                          name="annualRevenue"
+                          className={`form-control ${
+                            touched.annualRevenue && errors.annualRevenue
+                              ? "is-invalid"
+                              : ""
+                          }`}
                           style={{ height: "50px" }}
                           onChange={(e: any) => {
                             handleChangeData(e);
@@ -393,7 +463,7 @@ const EditPage: React.FC<EditModalProps> = ({
                         <ErrorMessage
                           name="annualRevenue"
                           component="div"
-                          className="error form-error"
+                          className="invalid-feedback"
                         />
                       </CCol>
                     </CRow>
@@ -539,7 +609,7 @@ const EditPage: React.FC<EditModalProps> = ({
                           style={{ height: "50px" }}
                           onChange={(e: any) => {
                             handleChangeData(e);
-                            handleChange(e);
+                             handleChange(e);
                           }}
                         />
                         <ErrorMessage
@@ -551,7 +621,10 @@ const EditPage: React.FC<EditModalProps> = ({
                     </CRow>
                     <CRow className="mb-3">
                       <CCol sm={4}>
-                        <label htmlFor="zipCode">Zip Code</label>
+                        <label htmlFor="zipCode">Zip Code
+                        <span style={{ color: "red", fontSize: "25px" }}>
+                            *
+                          </span></label>
                       </CCol>
                       <CCol sm={8}>
                         <Field
@@ -623,7 +696,7 @@ const EditPage: React.FC<EditModalProps> = ({
                           style={{ height: "100px" }}
                           onChange={(e: any) => {
                             handleChangeData(e);
-                            handleChange(e);
+                             handleChange(e);
                           }}
                         />
                         {/* <ErrorMessage
@@ -662,3 +735,5 @@ const EditPage: React.FC<EditModalProps> = ({
 };
 
 export default EditPage;
+
+
