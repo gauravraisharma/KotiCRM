@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 import * as Yup from "yup";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { Account } from "../../../models/account/Account";
@@ -13,7 +13,10 @@ import {
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { updateAccountRequest } from "../../../redux-saga/modules/account/action";
+import { Country } from "../../../models/Country-State/CountryState";
+import Countries from "../../../constants/country-state/countries+states.json";
 
+// Interfaces
 interface EditModalProps {
   closeModal: () => void;
   accountData: any;
@@ -37,12 +40,33 @@ const initialValues = {
   country: "",
   description: "",
 };
+
 const EditPage: React.FC<EditModalProps> = ({
   closeModal,
   accountData,
   onBackToListButtonClickHandler,
 }) => {
+  // State declaration 
   const dispatch = useDispatch();
+  const countries: Country[] = Countries;
+  const [selectedCountry, setSelectedCountry] = useState<string>("");
+  const [updateAccount, setUpdateAccount] = useState({
+    accountOwner: accountData.ownerId,
+    industry: accountData.industryId,
+    type: accountData.type,
+    status: accountData.status,
+    accountName: accountData.accountName,
+    annualRevenue: accountData.annualRevenue,
+    phone: accountData.phone,
+    fax: accountData.fax,
+    website: accountData.webSite,
+    billingStreet: accountData.billingStreet,
+    billingCity: accountData.billingCity,
+    billingState: accountData.billingState,
+    zipCode: accountData.zipCode,
+    country: accountData.country,
+    description: accountData.description,
+  });
   const [touchedFields, setTouchedFields] = useState({
     accountOwner: false,
     industry: false,
@@ -61,13 +85,17 @@ const EditPage: React.FC<EditModalProps> = ({
     description: false,
   });
 
-  const handleInputChange = (fieldName: keyof typeof touchedFields) => {
-    setTouchedFields((prevFields) => ({
-      ...prevFields,
-      [fieldName]: true, // Mark the field as touched
-    }));
-  };
+  // Values declaration
+  const currentDate: Date = new Date();
+  const formattedDateTime: string = currentDate.toISOString().slice(0, -1);
 
+  //Fetching data from store
+  const accountOwner = useSelector((state: any) => state.accountReducer.accountOwner);
+  const industry = useSelector((state: any) => state.sharedReducer.industries);
+  const accountStatus = useSelector((state: any) => state.accountReducer.accountStatus);
+  const accountType = useSelector((state: any) => state.accountReducer.accountType);
+
+  // Validations
   const validationSchema = Yup.object().shape({
     accountOwner: Yup.string().required("Required (Account Owner)"),
     industry: Yup.number().required("Required (Industry)"),
@@ -96,29 +124,23 @@ const EditPage: React.FC<EditModalProps> = ({
     // description: Yup.string().required("Required (Description)"),
   });
 
-  const [updateAccount, setUpdateAccount] = useState({
-    accountOwner: accountData.ownerId,
-    industry: accountData.industryId,
-    type: accountData.type,
-    status: accountData.status,
-    accountName: accountData.accountName,
-    annualRevenue: accountData.annualRevenue,
-    phone: accountData.phone,
-    fax: accountData.fax,
-    website: accountData.webSite,
-    billingStreet: accountData.billingStreet,
-    billingCity: accountData.billingCity,
-    billingState: accountData.billingState,
-    zipCode: accountData.zipCode,
-    country: accountData.country,
-    description: accountData.description,
-  });
+  const handleInputChange = (fieldName: keyof typeof touchedFields) => {
+    setTouchedFields((prevFields) => ({
+      ...prevFields,
+      [fieldName]: true, // Mark the field as touched
+    }));
+  };
+
+  const handleCountryChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    const selectedCountry = e.target.value;
+    setSelectedCountry(selectedCountry);
+    // Update the Account's country when it's changed
+    setUpdateAccount({ ...updateAccount, country: e.target.value });
+  };
+
   const handleChangeData = (e: any) => {
     setUpdateAccount({ ...updateAccount, [e.target.name]: e.target.value });
   };
-
-  const currentDate: Date = new Date();
-  const formattedDateTime: string = currentDate.toISOString().slice(0, -1);
 
   const handleEditClick = () => {
     const accountDetail: Account = {
@@ -149,17 +171,6 @@ const EditPage: React.FC<EditModalProps> = ({
     dispatch(updateAccountRequest(accountDetail, accountData.id));
     closeModal();
   };
-  //Fetching data from store
-  const accountOwner = useSelector(
-    (state: any) => state.accountReducer.accountOwner
-  );
-  const industry = useSelector((state: any) => state.sharedReducer.industries);
-  const accountStatus = useSelector(
-    (state: any) => state.accountReducer.accountStatus
-  );
-  const accountType = useSelector(
-    (state: any) => state.accountReducer.accountType
-  );
 
   return (
     <div>
@@ -572,16 +583,25 @@ const EditPage: React.FC<EditModalProps> = ({
                       </CCol>
                       <CCol sm={8}>
                         <Field
-                          type="text"
+                          as="select"
                           name="country"
+                          id="country"
                           value={updateAccount.country}
                           className="form-control form-select"
                           style={{ height: "50px" }}
-                          onChange={(e: any) => {
-                            handleChangeData(e);
-                            handleChange(e);
-                          }}
-                        />
+                          onChange={handleCountryChange}
+                        >
+                          <option value="">
+                            {selectedCountry
+                              ? selectedCountry
+                              : "Select Country"}
+                          </option>
+                          {countries.map((country, index) => (
+                            <option key={index} value={country.name}>
+                              {country.name}
+                            </option>
+                          ))}
+                        </Field>
                         <ErrorMessage
                           name="country"
                           component="div"
@@ -600,7 +620,7 @@ const EditPage: React.FC<EditModalProps> = ({
                           id="description"
                           name="description"
                           className="form-control"
-                           style={{ height: "100px" }}
+                          style={{ height: "100px" }}
                           onChange={(e: any) => {
                             handleChangeData(e);
                             handleChange(e);
