@@ -56,7 +56,7 @@ currency : orgDetails.currency,
 billingStreet:orgDetails.billingStreet,
 billingCity :orgDetails.billingCity,
 billingState:orgDetails.billingState,
-billingCode:orgDetails.billingCode,
+zipCode:orgDetails.zipCode,
 billingCountry:orgDetails.billingCountry
 };
 dispatch(updateTimeZone(orgDetails.id, organizationDetail))

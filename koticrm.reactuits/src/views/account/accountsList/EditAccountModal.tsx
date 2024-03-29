@@ -93,7 +93,7 @@ const EditPage: React.FC<EditModalProps> = ({
       // .min(4, "Zip Code must be at least 4 digits")
       // .max(10, "Zip Code can have maximum 10 digits"),
     country: Yup.string().required("Required (Country)"),
-    description: Yup.string().required("Required (Description)"),
+    // description: Yup.string().required("Required (Description)"),
   });
 
   const [updateAccount, setUpdateAccount] = useState({

@@ -24,7 +24,7 @@ export interface OrganizationModel{
     billingStreet:string,
     billingCity :string,
     billingState:string,
-    billingCode:string,
+    zipCode:string,
     billingCountry:string
 }
 export interface BankModel {
