@@ -267,7 +267,10 @@ const EditPage: React.FC<EditModalProps> = ({
                     <CRow className="mb-3">
                       <CCol sm={4}>
                         <label htmlFor="industry">
-                          Industry<span style={{ color: "red" }}>*</span>
+                          Industry
+                          <span style={{ color: "red", fontSize: "25px" }}>
+                            *
+                          </span>
                         </label>
                       </CCol>
                       <CCol sm={8}>
@@ -280,6 +283,7 @@ const EditPage: React.FC<EditModalProps> = ({
                           onChange={(e: any) => {
                             handleChangeData(e);
                             handleChange(e);
+                            handleInputChange("industry");
                           }}
                         >
                           <option value="">Select...</option>
@@ -432,7 +436,12 @@ const EditPage: React.FC<EditModalProps> = ({
                     
                     <CRow className="mb-3">
                       <CCol xs={4}>
-                        <label htmlFor="annualRevenue">Annual Revenue</label>
+                        <label htmlFor="annualRevenue">
+                          Annual 
+                          <span style={{ color: "red", fontSize: "25px" }}>
+                            *
+                          </span>
+                        </label>
                       </CCol>
                       <CCol xs={8}>
                         <Field
@@ -448,6 +457,7 @@ const EditPage: React.FC<EditModalProps> = ({
                           onChange={(e: any) => {
                             handleChangeData(e);
                             handleChange(e);
+                            handleInputChange("annualRevenue");
                           }}
                         />
                         <ErrorMessage
@@ -477,6 +487,7 @@ const EditPage: React.FC<EditModalProps> = ({
                           onChange={(e: any) => {
                             handleChangeData(e);
                             handleChange(e);
+                            handleInputChange("phone");
                           }}
                         />
                         <ErrorMessage
@@ -515,9 +526,6 @@ const EditPage: React.FC<EditModalProps> = ({
                       <CCol sm={4}>
                         <label htmlFor="website">
                           Website
-                          <span style={{ color: "red", fontSize: "25px" }}>
-                            *
-                          </span>
                         </label>
                       </CCol>
                       <CCol sm={8}>
@@ -542,7 +550,11 @@ const EditPage: React.FC<EditModalProps> = ({
 
                     <CRow className="mb-3">
                       <CCol sm={4}>
-                        <label htmlFor="billingStreet">Billing Street</label>
+                        <label htmlFor="billingStreet">Billing 
+                          <span style={{ color: "red", fontSize: "25px" }}>
+                            *
+                          </span>
+                        </label>
                       </CCol>
                       <CCol sm={8}>
                         <Field
@@ -554,6 +566,7 @@ const EditPage: React.FC<EditModalProps> = ({
                           onChange={(e: any) => {
                             handleChangeData(e);
                             handleChange(e);
+                            handleInputChange("billingStreet");
                           }}
                         />
                         <ErrorMessage
@@ -565,7 +578,11 @@ const EditPage: React.FC<EditModalProps> = ({
                     </CRow>
                     <CRow className="mb-3">
                       <CCol sm={4}>
-                        <label htmlFor="billingCity">Billing City</label>
+                        <label htmlFor="billingCity">Billing City
+                          <span style={{ color: "red", fontSize: "25px" }}>
+                            *
+                          </span>
+                        </label>
                       </CCol>
                       <CCol sm={8}>
                         <Field
@@ -577,6 +594,7 @@ const EditPage: React.FC<EditModalProps> = ({
                           onChange={(e: any) => {
                             handleChangeData(e);
                             handleChange(e);
+                            handleInputChange("billingCity");
                           }}
                         />
                         <ErrorMessage
@@ -588,7 +606,11 @@ const EditPage: React.FC<EditModalProps> = ({
                     </CRow>
                     <CRow className="mb-3">
                       <CCol sm={4}>
-                        <label htmlFor="billingState">Billing State</label>
+                        <label htmlFor="billingState">Billing State
+                          <span style={{ color: "red", fontSize: "25px" }}>
+                            *
+                          </span>
+                        </label>
                       </CCol>
                       <CCol sm={8}>
                         <Field
@@ -599,7 +621,8 @@ const EditPage: React.FC<EditModalProps> = ({
                           style={{ height: "50px" }}
                           onChange={(e: any) => {
                             handleChangeData(e);
-                             handleChange(e);
+                            handleChange(e);
+                            handleInputChange("billingState");
                           }}
                         />
                         <ErrorMessage
@@ -626,6 +649,7 @@ const EditPage: React.FC<EditModalProps> = ({
                           onChange={(e: any) => {
                             handleChangeData(e);
                             handleChange(e);
+                            handleInputChange("zipCode");
                           }}
                         />
                         <ErrorMessage
@@ -652,7 +676,12 @@ const EditPage: React.FC<EditModalProps> = ({
                           value={updateAccount.country}
                           className="form-control form-select"
                           style={{ height: "50px" }}
-                          onChange={handleCountryChange}
+                          onChange={(e: any) => {
+                            handleChangeData(e);
+                            handleChange(e);
+                            handleCountryChange
+                            handleInputChange("country");
+                          }}
                         >
                           <option value="">
                             {selectedCountry
