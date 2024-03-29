@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace KotiCRM.Repository.DTOs.Contact;
 
@@ -13,10 +12,12 @@ public class ContactDTO
     [Required(ErrorMessage = "First Name Is required")]
     [StringLength(200)]
     public string? FirstName { get; set; }
+    [Required(ErrorMessage = "Last Name Is required")]
     [StringLength(200)]
     public string? LastName { get; set; }
     [Required(ErrorMessage = "Account ID Is required")]
     public int AccountID { get; set; }
+    [Required(ErrorMessage = "Email Is required")]
     [EmailAddress]
     [StringLength(100)]
     public string? Email { get; set; }
@@ -24,6 +25,7 @@ public class ContactDTO
     public string? Phone { get; set; }
     [StringLength(20)]
     public string? OtherPhone { get; set; }
+    [Required(ErrorMessage = "Mobile number Is required")]
     [StringLength(20)]
     public string? Mobile { get; set; }
     [StringLength(200)]
@@ -33,7 +35,6 @@ public class ContactDTO
     public DateTime? DateOfBirth { get; set; }
     [StringLength(20)]
     public string? HomePhone { get; set; }
-    [Required(ErrorMessage = "Skype Id Is required")]
     [StringLength(200)]
     public string? SkypeID { get; set; }
     [StringLength(200)]

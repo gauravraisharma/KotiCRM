@@ -26,7 +26,7 @@ const tableHeader = [
   "Contact Name",
   "Account Name",
   "Email",
-  "Phone",
+  "Mobile",
   "Contact Owner",
   "Actions",
 ];
@@ -110,7 +110,7 @@ const Contacts = ({ accountId }: Props) => {
                           <CTableDataCell>{`${contact?.firstName} ${contact?.lastName}`}</CTableDataCell>
                           <CTableDataCell>{contact.accountName}</CTableDataCell>
                           <CTableDataCell>{contact?.email}</CTableDataCell>
-                          <CTableDataCell>{contact?.phone}</CTableDataCell>
+                          <CTableDataCell>{contact?.mobile}</CTableDataCell>
                           <CTableDataCell>
                             {getAccountOwnerName(contact?.ownerId)}
                           </CTableDataCell>
