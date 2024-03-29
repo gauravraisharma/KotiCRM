@@ -85,7 +85,7 @@ namespace KotiCRM.Repository.Repository
                 if (account != null)
                 {
                     account.Isdelete = true;
-                    await _context.SaveChangesAsync(); 
+                    await _context.SaveChangesAsync();
 
                     return new DbResponse()
                     {
@@ -107,7 +107,7 @@ namespace KotiCRM.Repository.Repository
             {
                 return new DbResponse()
                 {
-                    Succeed =  false,
+                    Succeed = false,
                     Message = ex.Message
 
                 };
@@ -163,9 +163,9 @@ namespace KotiCRM.Repository.Repository
                 //                       ModifiedBy = account.ModifiedBy,
                 //                       ModifiedOn = account.ModifiedOn
                 //                   }).ToList();
-                return await _context.Accounts.Where(account => !account.Isdelete).ToListAsync();
+                return await _context.Accounts.Where(account => !account.Isdelete).OrderByDescending(a => a.Id).ToListAsync();
             }
-            catch(Exception ex) 
+            catch (Exception ex)
             {
                 throw new Exception(ex.Message, ex);
 
