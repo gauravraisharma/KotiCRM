@@ -54,7 +54,7 @@ namespace KotiCRM.Repository.Repository
         {
             try
             {
-                return await _context.Contacts.ToListAsync();
+                return await _context.Contacts.OrderByDescending(c => c.Id).ToListAsync();
             }
             catch (Exception ex)
             {
