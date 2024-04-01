@@ -67,11 +67,10 @@ const validationSchema = Yup.object().shape({
   billingStreet: Yup.string().required("Required (Billing Street)"),
   billingCity: Yup.string().required("Required (Billing City)"),
   billingState: Yup.string().required("Required (Billing State)"),
-  zipCode: Yup.string()
-    .required("Required (Zip Code)"),
-    // .matches(/^\d+$/, "Zip Code must be a number")
-    // .min(4, "Zip Code must be at least 4 digits")
-    // .max(10, "Zip Code can have maximum 10 digits"),
+  zipCode: Yup.string().required("Required (Zip Code)"),
+  // .matches(/^\d+$/, "Zip Code must be a number")
+  // .min(4, "Zip Code must be at least 4 digits")
+  // .max(10, "Zip Code can have maximum 10 digits"),
   country: Yup.string().required("Required (Country)"),
   // description: Yup.string().required("Required (Description)"),
 });
@@ -278,10 +277,14 @@ const MyForm: React.FC<MyFormProps> = ({
                         />
                       </CCol>
                     </CRow>
+                 
                     <CRow className="mb-3">
                       <CCol sm={4}>
                         <label htmlFor="industry">
-                          Industry<span style={{ color: "red" }}>*</span>
+                          Industry
+                          <span style={{ color: "red", fontSize: "25px" }}>
+                            *
+                          </span>
                         </label>
                       </CCol>
                       <CCol sm={8}>
@@ -299,10 +302,10 @@ const MyForm: React.FC<MyFormProps> = ({
                             handleChange(e);
                           }}
                         >
-                          <option value="">Select...</option>
-                          {industry?.map((industry: any) => (
-                            <option key={industry.id} value={industry.id  }>
-                              {industry.name}
+                          <option value="di">Select Industry...</option>
+                          {industry?.map((status: any) => (
+                            <option key={status.id} value={status.id}>
+                              {status.name}
                             </option>
                           ))}
                         </Field>
@@ -313,7 +316,6 @@ const MyForm: React.FC<MyFormProps> = ({
                         />
                       </CCol>
                     </CRow>
-
                     <CRow className="mb-3">
                       <CCol sm={4}>
                         <label htmlFor="status">
@@ -338,7 +340,7 @@ const MyForm: React.FC<MyFormProps> = ({
                             handleChange(e);
                           }}
                         >
-                          <option value="">Select...</option>
+                          <option value="">Select Status...</option>
                           {accountStatus?.map((status: any) => (
                             <option key={status.value} value={status.value}>
                               {status.name}
@@ -352,10 +354,9 @@ const MyForm: React.FC<MyFormProps> = ({
                         />
                       </CCol>
                     </CRow>
-
                     <CRow className="mb-3">
                       <CCol sm={4}>
-                        <label htmlFor="type">
+                        <label htmlFor="status">
                           Type
                           <span style={{ color: "red", fontSize: "25px" }}>
                             *
@@ -375,9 +376,7 @@ const MyForm: React.FC<MyFormProps> = ({
                             handleChange(e);
                           }}
                         >
-                          <option value="" disabled style={{ color: "grey" }}>
-                            Select...
-                          </option>
+                          <option value="">Select Type...</option>
                           {accountType?.map((type: any) => (
                             <option key={type.value} value={type.value}>
                               {type.name}
@@ -385,7 +384,7 @@ const MyForm: React.FC<MyFormProps> = ({
                           ))}
                         </Field>
                         <ErrorMessage
-                          name="type"
+                          name="status"
                           component="div"
                           className="error form-error"
                         />
@@ -403,7 +402,7 @@ const MyForm: React.FC<MyFormProps> = ({
                       </CCol>
                       <CCol xs={8}>
                         <Field
-                          type="text"
+                          type="number"
                           name="phone"
                           className={`form-control ${
                             touched.phone && errors.phone ? "is-invalid" : ""
@@ -456,7 +455,12 @@ const MyForm: React.FC<MyFormProps> = ({
 
                     <CRow className="mb-3">
                       <CCol xs={4}>
-                        <label htmlFor="annualRevenue">Annual Revenue</label>
+                        <label htmlFor="annualRevenue">
+                          Annual Revenue
+                          <span style={{ color: "red", fontSize: "25px" }}>
+                            *
+                          </span>
+                        </label>
                       </CCol>
                       <CCol xs={8}>
                         <Field
@@ -691,7 +695,7 @@ const MyForm: React.FC<MyFormProps> = ({
                           <option value="">
                             {selectedCountry
                               ? selectedCountry
-                              : "Select Country"}
+                              : "Select Country..."}
                           </option>
                           {countries.map((country, index) => (
                             <option key={index} value={country.name}>
@@ -710,8 +714,8 @@ const MyForm: React.FC<MyFormProps> = ({
                   <CCol xs={12}>
                     <CRow className="mb-3">
                       <CCol xs={2}>
-                        <label htmlFor="country">Description</label>
-                      </CCol>
+                        <label htmlFor="description">Description</label>
+                      </CCol> 
                       <CCol xs={10}>
                         <textarea
                           id="description"

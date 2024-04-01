@@ -203,7 +203,7 @@ const AccountDetails = () => {
                     </CCol>
                     <CCol xs={3}>
                       <li>
-                        Billing Code: <p>{account?.billingCode}</p>
+                        Zip Code: <p>{account?.zipCode}</p>
                       </li>
                     </CCol>
                   </CRow>

@@ -58,7 +58,7 @@ const SearchDropdown = (props: Props) => {
 				onClick={() => setOpen(prev => !prev)}
 				className={`select-secondary ${!selected && "text-grey-700"}`}
 			>
-				{selected ? selected.label1.length > 25 ? selected.label1.substring(0, 25) + "..." : selected.label1 : "Select"}
+				{selected ? selected.label1.length > 25 ? selected.label1.substring(0, 25) + "..." : selected.label1 : "Select Contact Owner..."}
 				<div>
 					<span
 						onClick={() => setSelected(null)}

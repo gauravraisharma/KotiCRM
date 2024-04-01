@@ -2,6 +2,7 @@
     width: auto;
     position: relative;
     margin-bottom: 1rem;
+    // height: 50px;
 
     .select-secondary {
         background-color: #ffffff;
@@ -45,7 +46,7 @@
             padding-left: 0.25rem;
             padding-right: 0.25rem;
             border: 1px solid #9a9c9d;
-            border-radius: 0.25rem;
+            // border-radius: 0.25rem;
             margin: 0.5rem;
 
             input {
@@ -62,15 +63,15 @@
             font-size: 0.85rem;
 
             &:hover {
-                background-color: #9aa1a5;
+                background-color: #59859e;
                 color: #ffffff;
                 cursor: pointer;
-                border-radius: 0.25rem;
+                // border-radius: 0.25rem;
             }
         }
 
         .selected-option {
-            background-color: #5CA8E6;
+            background-color:  #59859e;
             color: #ffffff;
         }
     }

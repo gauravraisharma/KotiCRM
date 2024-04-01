@@ -34,16 +34,24 @@ const CreateOrEditContact = () => {
   const [contact, setContact] = useState<Contact>(new ContactClass());
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const fetchedContact = useSelector((state: any) => state.contactReducer.contact);
-  const fetchedAccountOwners = useSelector((state: any) => state.accountReducer.accountOwner);
-  const fetchedAccounts = useSelector((state: any) => state.accountReducer.accounts);
+  const fetchedContact = useSelector(
+    (state: any) => state.contactReducer.contact
+  );
+  const fetchedAccountOwners = useSelector(
+    (state: any) => state.accountReducer.accountOwner
+  );
+  const fetchedAccounts = useSelector(
+    (state: any) => state.accountReducer.accounts
+  );
 
-  const mappedFetchedAccountOwners = fetchedAccountOwners.map(fetchedAccountOwner => ({
-    ...fetchedAccountOwner,
-    value: fetchedAccountOwner.id,
-    label1: `${fetchedAccountOwner.firstName} ${fetchedAccountOwner.lastName}`,
-    label2: fetchedAccountOwner.email
-  }));
+  const mappedFetchedAccountOwners = fetchedAccountOwners.map(
+    (fetchedAccountOwner) => ({
+      ...fetchedAccountOwner,
+      value: fetchedAccountOwner.id,
+      label1: `${fetchedAccountOwner.firstName} ${fetchedAccountOwner.lastName}`,
+      label2: fetchedAccountOwner.email,
+    })
+  );
 
   // Country-State
   const countries: Country[] = Countries;
@@ -106,7 +114,9 @@ const CreateOrEditContact = () => {
 
   const handleAccountChange = (e: ChangeEvent<HTMLSelectElement>) => {
     const accountId = parseInt(e.target.value);
-    const selectedAccount = fetchedAccounts.find((account: Account) => account.id === accountId);
+    const selectedAccount = fetchedAccounts.find(
+      (account: Account) => account.id === accountId
+    );
     setSelectedAccount(selectedAccount);
   };
 
@@ -139,9 +149,8 @@ const CreateOrEditContact = () => {
     lastName: Yup.string().required("Required (Last Name)"),
     accountID: Yup.string().required("Required (Account Id)"),
     email: Yup.string().required("Required (Email)"),
-    mobile: Yup.string().required("Required (Mobile)")
+    mobile: Yup.string().required("Required (Mobile)"),
   });
-
 
   return (
     <>
@@ -176,17 +185,23 @@ const CreateOrEditContact = () => {
                         </label>
                       </CCol>
                       <CCol sm={8}>
-                        <SearchDropdown name="ownerId" options={mappedFetchedAccountOwners} />
+                        <SearchDropdown
+                          name="ownerId"
+                          options={mappedFetchedAccountOwners}
+                        />
                         <ErrorMessage
                           name="ownerId"
-                          className="invalid-feedback"
-                          render={error => <label style={{ color: '#dc3545' }}>{error}</label>}
+                          // className="invalid-feedback"
+                          
+                          render={(error) => (
+                            <label style={{ color: "#dc3545" }}>{error}</label>
+                          )}
                         />
                       </CCol>
                     </CRow>
 
-                    {!contact.id
-                      ? <CRow className="mb-3">
+                    {!contact.id ? (
+                      <CRow className="mb-3">
                         <CCol sm={4}>
                           <label htmlFor="accountID" className="col-form-label">
                             Account
@@ -197,14 +212,20 @@ const CreateOrEditContact = () => {
                             as="select"
                             id="accountID"
                             name="accountID"
-                            // className="form-control"
-                            className={`form-control ${touched.accountID && errors.accountID ? "is-invalid" : ""
-                              }`}
+                            className={`form-control ${
+                              touched.accountID && errors.accountID
+                                ? "is-invalid"
+                                : ""
+                            }`}
                             onChange={handleAccountChange}
                             style={{ height: "50px" }}
                             hidden={contact.id ? "hidden" : ""}
                           >
-                            <option value={0}>{selectedAccount ? selectedAccount.accountName : "Select Account"}</option>
+                            <option value={0}>
+                              {selectedAccount
+                                ? selectedAccount.accountName
+                                : "Select Account"}
+                            </option>
                             {fetchedAccounts.map((account: Account) => (
                               <option key={account.id} value={account.id}>
                                 {account.accountName}
@@ -214,11 +235,15 @@ const CreateOrEditContact = () => {
                           <ErrorMessage
                             name="accountID"
                             className="invalid-feedback"
-                            render={error => <label style={{ color: '#dc3545' }}>{error}</label>}
+                            render={(error) => (
+                              <label style={{ color: "#dc3545" }}>
+                                {error}
+                              </label>
+                            )}
                           />
                         </CCol>
                       </CRow>
-                      :
+                    ) : (
                       <Field
                         type="number"
                         id="accountID"
@@ -227,7 +252,7 @@ const CreateOrEditContact = () => {
                         style={{ height: "50px" }}
                         hidden
                       />
-                    }
+                    )}
 
                     <CRow className="mb-3">
                       <CCol sm={4}>
@@ -243,15 +268,20 @@ const CreateOrEditContact = () => {
                           type="text"
                           id="firstName"
                           name="firstName"
-                          className={`form-control ${touched.firstName && errors.firstName ? "is-invalid" : ""
-                            }`}
+                          className={`form-control ${
+                            touched.firstName && errors.firstName
+                              ? "is-invalid"
+                              : ""
+                          }`}
                           placeholder="Enter your first name"
                           style={{ height: "50px" }}
                         />
                         <ErrorMessage
                           name="firstName"
                           className="invalid-feedback"
-                          render={error => <label style={{ color: '#dc3545' }}>{error}</label>}
+                          render={(error) => (
+                            <label style={{ color: "#dc3545" }}>{error}</label>
+                          )}
                         />
                       </CCol>
                     </CRow>
@@ -312,15 +342,20 @@ const CreateOrEditContact = () => {
                           type="text"
                           id="mobile"
                           name="mobile"
-                          className={`form-control ${touched.firstName && errors.firstName ? "is-invalid" : ""
-                            }`}
+                          className={`form-control ${
+                            touched.firstName && errors.firstName
+                              ? "is-invalid"
+                              : ""
+                          }`}
                           placeholder="Enter your mobile number"
                           style={{ height: "50px" }}
                         />
                         <ErrorMessage
                           name="mobile"
                           className="invalid-feedback"
-                          render={error => <label style={{ color: '#dc3545' }}>{error}</label>}
+                          render={(error) => (
+                            <label style={{ color: "#dc3545" }}>{error}</label>
+                          )}
                         />
                       </CCol>
                     </CRow>
@@ -459,14 +494,9 @@ const CreateOrEditContact = () => {
                         />
                       </CCol>
                     </CRow>
-
-
                   </CCol>
 
-
-
                   <CCol xs={6}>
-
                     <CRow className="mb-3">
                       <CCol sm={4}>
                         <label htmlFor="lastName" className="col-form-label">
@@ -481,15 +511,20 @@ const CreateOrEditContact = () => {
                           type="text"
                           id="lastName"
                           name="lastName"
-                          className={`form-control ${touched.firstName && errors.firstName ? "is-invalid" : ""
-                            }`}
+                          className={`form-control ${
+                            touched.firstName && errors.firstName
+                              ? "is-invalid"
+                              : ""
+                          }`}
                           placeholder="Enter your last name"
                           style={{ height: "50px" }}
                         />
                         <ErrorMessage
                           name="lastName"
                           className="invalid-feedback"
-                          render={error => <label style={{ color: '#dc3545' }}>{error}</label>}
+                          render={(error) => (
+                            <label style={{ color: "#dc3545" }}>{error}</label>
+                          )}
                         />
                       </CCol>
                     </CRow>
@@ -507,15 +542,20 @@ const CreateOrEditContact = () => {
                           type="email"
                           id="email"
                           name="email"
-                          className={`form-control ${touched.firstName && errors.firstName ? "is-invalid" : ""
-                            }`}
+                          className={`form-control ${
+                            touched.firstName && errors.firstName
+                              ? "is-invalid"
+                              : ""
+                          }`}
                           placeholder="name@example.com"
                           style={{ height: "50px" }}
                         />
                         <ErrorMessage
                           name="email"
                           className="invalid-feedback"
-                          render={error => <label style={{ color: '#dc3545' }}>{error}</label>}
+                          render={(error) => (
+                            <label style={{ color: "#dc3545" }}>{error}</label>
+                          )}
                         />
                       </CCol>
                     </CRow>
@@ -631,7 +671,10 @@ const CreateOrEditContact = () => {
                     </CRow>
                     <CRow className="mb-3">
                       <CCol sm={4}>
-                        <label htmlFor="mailingStreet" className="col-form-label">
+                        <label
+                          htmlFor="mailingStreet"
+                          className="col-form-label"
+                        >
                           Mailing Street
                         </label>
                       </CCol>
@@ -662,12 +705,14 @@ const CreateOrEditContact = () => {
                           as="select"
                           id="country"
                           name="country"
-                          className="form-control"
+                          className="form-control form-select"
                           onChange={handleCountryChange}
                           style={{ height: "50px" }}
                         >
                           <option value="">
-                            {selectedCountry ? selectedCountry : "Select Country"}
+                            {selectedCountry
+                              ? selectedCountry
+                              : "Select Country"}
                           </option>
                           {countries.map((country, index) => (
                             <option key={index} value={country.name}>
@@ -712,9 +757,7 @@ const CreateOrEditContact = () => {
                           className="invalid-feedback"
                         />
                       </CCol>
-
                     </CRow>
-
                   </CCol>
                   <CRow className="mb-3">
                     <CCol sm={2}>
