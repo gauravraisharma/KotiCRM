@@ -2,9 +2,9 @@
 import { toast } from 'react-toastify';
 import { actionPayloadModel } from '../../../models/actionModel/actionModel';
 import { Contact } from '../../../models/contact/Contact';
-import { CREATE_CONTACT_SUCCESS, GET_CONTACTS_SUCCESS, GET_CONTACT_DETAIL_SUCCESS, UPDATE_CONTACT_SUCCESS } from '../../../constants/reduxConstants';
+import { CREATE_CONTACT_SUCCESS, DELETE_CONTACT_SUCCESS, GET_CONTACTS_SUCCESS, GET_CONTACT_DETAIL_SUCCESS, UPDATE_CONTACT_SUCCESS } from '../../../constants/reduxConstants';
 import { call, put } from 'redux-saga/effects';
-import { CreateContact, GetContactDetails, GetContactsList, UpdateContact } from './apiService';
+import { CreateContact, DeleteContact, GetContactDetails, GetContactsList, UpdateContact } from './apiService';
 import { ContactWithAccountName } from '../../../models/contact/ContactWithAccountName';
 import { getContacts } from './action';
 
@@ -71,5 +71,21 @@ export function* workUpdateContact(action: any): Generator<any> {
     }
   } catch (error) {
     toast.error('SomethingWent Wrong, Please try after sometime')
+  }
+}
+
+export function* workDeleteContact(action: actionPayloadModel): Generator<any> {
+  try {
+    const response: any = yield call(DeleteContact, action.payload);
+    if (response.status !== 200) {
+      toast.error("Error deleting contact");
+    } else {
+      const contact: Contact = response.data;
+      yield put({ type: DELETE_CONTACT_SUCCESS, payload: contact });
+      yield put(getContacts());
+      toast.success("Contact deleted successfully");
+    }
+  } catch (error) {
+    toast.error("Somethign went wrong, please try again or contact administrator");
   }
 }

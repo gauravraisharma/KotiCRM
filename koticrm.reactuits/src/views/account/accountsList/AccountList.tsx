@@ -148,12 +148,8 @@ const AccountList: React.FC = () => {
           ) : (
             <CRow>
               <CCol xs={12}>
-             
-                    
                 <CCard className="mb-4">
-                  
                   <CCardHeader>
-               
                     <CRow>
                       <CCol xs={6} className="d-flex align-items-center">
                         <h5>
@@ -169,13 +165,10 @@ const AccountList: React.FC = () => {
                             value="New"
                             onClick={handleCreateNew}
                           />
-                     
-                       
                         </div>
                       </CCol>
                     </CRow>
                   </CCardHeader>
-                  
                   <CCardBody>
                     <CTable>
                       <CTableHead>

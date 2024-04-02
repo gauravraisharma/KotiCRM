@@ -1,9 +1,8 @@
 import { CButton, CCol, CForm, CFormInput, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CRow } from "@coreui/react";
 import { CreateAttachment, CreateAttachmentClass } from "../../models/attachment/Attachment";
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useState } from "react";
 import { useDispatch } from "react-redux";
 import { createAttachment } from "../../redux-saga/modules/attachment/action";
-
 
 interface Props {
     accountId: number;
@@ -15,13 +14,6 @@ const CreateNewAttachment = ({ accountId, isVisible, handleClose }: Props) => {
     const dispatch = useDispatch();
     const [newAttachment, setNewAttachment] = useState<CreateAttachment>(new CreateAttachmentClass());
     const [submitting, setSubmitting] = useState(false);
-
-    useEffect(() => {
-        // Handle file change after component has rendered
-        if (newAttachment.file) {
-        
-        }
-    }, [newAttachment]);
 
     const resetForm = () => {
         setNewAttachment(new CreateAttachmentClass());
@@ -39,7 +31,7 @@ const CreateNewAttachment = ({ accountId, isVisible, handleClose }: Props) => {
             };
             fileReader.readAsDataURL(file);
         }
-        
+
     }
 
     const handleFormSubmit = async (event: FormEvent<HTMLFormElement>) => {

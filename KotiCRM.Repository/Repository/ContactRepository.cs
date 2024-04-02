@@ -2,11 +2,6 @@
 using KotiCRM.Repository.IRepository;
 using KotiCRM.Repository.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace KotiCRM.Repository.Repository
 {
@@ -94,7 +89,6 @@ namespace KotiCRM.Repository.Repository
                 {
                     Succeed = false,
                     Message = ex.Message
-
                 };
             }
         }

@@ -3,13 +3,15 @@ import { TiDeleteOutline } from "react-icons/ti";
 import { useDispatch } from "react-redux";
 import { deleteAccountRequest } from "../../../redux-saga/modules/account/action";
 import { deleteInvoiceRequest } from "../../../redux-saga/modules/invoice/action";
+import { deleteContact } from "../../../redux-saga/modules/contact/action";
 
 interface DeleteConfirmationModalProps {
   isOpen: boolean;
   onCancel: () => void;
   onConfirm: () => void;
-  accountId: any;
-  invoiceId: any;
+  accountId?: any;
+  invoiceId?: any;
+  contactId?:number;
 }
 
 const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = ({
@@ -18,6 +20,7 @@ const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = ({
   onConfirm,
   accountId,
   invoiceId,
+  contactId
 }) => {
   const dispatch = useDispatch();
 
@@ -26,6 +29,8 @@ const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = ({
       dispatch(deleteAccountRequest(accountId));
     } else if (invoiceId != null) {
       dispatch(deleteInvoiceRequest(invoiceId));
+    } else if (contactId) {
+      dispatch(deleteContact(contactId));
     }
     onConfirm();
   };

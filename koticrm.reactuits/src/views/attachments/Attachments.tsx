@@ -59,8 +59,6 @@ const Attachments = ({ accountId, getAttachmentsCount }: Props) => {
     getAttachmentsCount(attachmentsCount);
   });
 
-
-
   const handleModalOpen = () => {
     setIsModalVisible(true);
   };

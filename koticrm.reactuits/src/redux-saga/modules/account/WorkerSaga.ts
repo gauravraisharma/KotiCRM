@@ -2,7 +2,16 @@
 import { Account } from '../../../models/account/Account';
 import { call, put } from 'redux-saga/effects';
 import { toast } from "react-toastify";
-import { CreateAccount, DeleteAccount, GetAccountById, GetAccountList, GetAccountOwnerList, GetAccountStatus, GetAccountType, UpdateAccount } from './apiService';
+import {
+  CreateAccount,
+  DeleteAccount,
+  GetAccountById,
+  GetAccountList,
+  GetAccountOwnerList,
+  GetAccountStatus,
+  GetAccountType,
+  UpdateAccount
+} from './apiService';
 
 import {
   CREATE_ACCOUNT_SUCCESS,
@@ -92,7 +101,7 @@ export function* workDeleteAccount(action: actionPayloadModel): Generator<any> {
     const response: any = yield call(DeleteAccount, action.payload);
 
     if (response.status != 200) {
-      toast.error('Error fetching accounts')
+      toast.error('Error deleting account')
     }
     else {
       const Account: Account = response.data;

@@ -18,14 +18,15 @@ import {
 } from "@coreui/react";
 import "../../css/style.css";
 import { useDispatch, useSelector } from "react-redux";
-import { MdEditSquare } from "react-icons/md";
-import { useEffect ,useState} from "react";
+import { MdDelete, MdEditSquare } from "react-icons/md";
+import { useEffect, useState } from "react";
 import { AiFillEye } from "react-icons/ai";
 // import { FaPlus } from "react-icons/fa"; 
 import { Link } from "react-router-dom";
 import { getContacts } from "../../redux-saga/modules/contact/action";
 import { ToastContainer } from "react-toastify";
 import { ContactWithAccountName } from "../../models/contact/ContactWithAccountName";
+import DeleteConfirmationModal from "../account/accountsList/DeleteConfirmation";
 
 const tableHeader = [
   "Contact Name",
@@ -41,6 +42,8 @@ interface Props {
 }
 
 const Contacts = ({ accountId }: Props) => {
+  const [contactId, setContactId] = useState<number>(0);
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState<boolean>(false);
   const dispatch = useDispatch();
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState<number>(1); // Added currentPage state
@@ -95,6 +98,19 @@ const Contacts = ({ accountId }: Props) => {
     return owner ? owner.label : "";
   }
 
+  const handleDeleteClick = (id: number) => {
+    setContactId(id);
+    setShowDeleteConfirmation(true);
+  };
+
+  const confirmDelete = () => {
+    setShowDeleteConfirmation(false);
+  };
+
+  const cancelDelete = () => {
+    setShowDeleteConfirmation(false);
+  };
+
   return (
     <>
       <ToastContainer />
@@ -133,6 +149,12 @@ const Contacts = ({ accountId }: Props) => {
           </CCol>
         </CRow>
       </div>
+      <DeleteConfirmationModal
+            isOpen={showDeleteConfirmation}
+            onConfirm={confirmDelete}
+            onCancel={cancelDelete}
+            contactId={contactId}
+          />
       <CRow>
         <CCol xs={12}>
           <CCard className="mb-4">
@@ -187,6 +209,15 @@ const Contacts = ({ accountId }: Props) => {
                                 }}
                               />
                             </Link>
+                            <MdDelete
+                                style={{
+                                  color: "red",
+                                  marginRight: "10px",
+                                  fontSize: "20px",
+                                  cursor: "pointer",
+                                }}
+                                onClick={() => handleDeleteClick(contact.id)}
+                              />
                           </CTableDataCell>
                         </CTableRow>
                       )

@@ -1,4 +1,11 @@
-import { CLEAR_CONTACT_REQUEST, CREATE_CONTACT_REQUEST, GET_CONTACTS_FETCH, GET_CONTACT_DETAIL_FETCH, UPDATE_CONTACT_REQUEST } from "../../../constants/reduxConstants";
+import {
+  CLEAR_CONTACT_REQUEST,
+  CREATE_CONTACT_REQUEST,
+  DELETE_CONTACT_REQUEST,
+  GET_CONTACTS_FETCH,
+  GET_CONTACT_DETAIL_FETCH,
+  UPDATE_CONTACT_REQUEST
+} from "../../../constants/reduxConstants";
 import { Contact } from "../../../models/contact/Contact";
 
 
@@ -23,4 +30,9 @@ export const createContact = (contact: Contact) => ({
 export const updateContact = (contact: Contact) => ({
   type: UPDATE_CONTACT_REQUEST,
   payload: contact,
+});
+
+export const deleteContact = (id: number) => ({
+  type: DELETE_CONTACT_REQUEST,
+  payload: id,
 });

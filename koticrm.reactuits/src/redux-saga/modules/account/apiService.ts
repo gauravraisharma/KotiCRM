@@ -1,5 +1,9 @@
 import { AxiosError, AxiosResponse } from 'axios';
-import { apiResponse, axiosInstance, responseBody } from '../../../apiInterceptor/axiosInterceptor';
+import {
+    apiResponse,
+    axiosInstance,
+    responseBody
+} from '../../../apiInterceptor/axiosInterceptor';
 import { Account } from '../../../models/account/Account';
 import { SharedModel, SharedOwnerModel } from '../../../models/commonModels/SharedModels';
 

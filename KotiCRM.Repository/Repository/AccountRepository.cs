@@ -1,16 +1,9 @@
 ﻿using KotiCRM.Repository.Data;
-using KotiCRM.Repository.DTOs.Account;
 using KotiCRM.Repository.IRepository;
 using KotiCRM.Repository.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace KotiCRM.Repository.Repository
 {
@@ -54,7 +47,6 @@ namespace KotiCRM.Repository.Repository
                     {
                         Succeed = false,
                         Message = "Owner does not have the required permission."
-
                     };
                 }
                 _context.Accounts.Add(account);

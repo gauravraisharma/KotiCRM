@@ -1,5 +1,5 @@
 import { Reducer } from "react";
-import { CLEAR_CONTACT_SUCCESS, CREATE_CONTACT_SUCCESS, GET_CONTACTS_SUCCESS, GET_CONTACT_DETAIL_SUCCESS, UPDATE_CONTACT_SUCCESS } from "../../../constants/reduxConstants";
+import { CLEAR_CONTACT_SUCCESS, CREATE_CONTACT_SUCCESS, DELETE_CONTACT_SUCCESS, GET_CONTACTS_SUCCESS, GET_CONTACT_DETAIL_SUCCESS, UPDATE_CONTACT_SUCCESS } from "../../../constants/reduxConstants";
 import { Contact } from "../../../models/contact/Contact";
 import { contactState } from "../../../models/reduxState/contactState";
 import { AppAction } from "../../../models/redux/action/ActionModel";
@@ -37,6 +37,11 @@ const contactReducer: Reducer<contactState, AppAction> = (state: contactState = 
             return {
                 ...state,
                 contact: (action as actionPayloadModel).payload,
+            }
+        case DELETE_CONTACT_SUCCESS:
+            return {
+                ...state,
+                refreshList: true
             }
 
         case CLEAR_CONTACT_SUCCESS:
