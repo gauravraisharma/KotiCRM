@@ -146,13 +146,9 @@ const EditPage: React.FC<EditModalProps> = ({
     country: touchedFields.country
       ? Yup.string().required("Required (Country)")
       : Yup.string(),
-    // description: Yup.string()
-    //   .required("Required (Description)")
-    //   .when(Object.keys(touchedFields), {
-    //     is: (field) => field.some((key) => key === "description"),
-    //     then: Yup.string().required("Required (Description)"),
-    //     otherwise: Yup.string(),
-    //   }),
+      description:touchedFields.description
+      ? Yup.string().required("Required(Description)")
+      :Yup.string(),
   });
 
   const handleInputChange = (fieldName: keyof typeof touchedFields) => {
@@ -728,18 +724,23 @@ const EditPage: React.FC<EditModalProps> = ({
                         <textarea
                           id="description"
                           name="description"
-                          className="form-control"
+                          value={updateAccount.description}
+                          className={`form-control  ${
+                            touched.description && errors.description
+                              ? "is-invalid"
+                              : ""
+                          }`}
                           style={{ height: "100px" }}
                           onChange={(e: any) => {
                             handleChangeData(e);
                             handleChange(e);
                           }}
                         />
-                        {/* <ErrorMessage
+                        <ErrorMessage
                           name="description"
                           component="div"
                           className="invalid-feedback"
-                        /> */}
+                        />
                       </CCol>
                     </CRow>
                   </CCol>

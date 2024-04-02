@@ -1,5 +1,21 @@
-import {CCard,CCardBody,CCardHeader,CCol,CRow,CTable,CTableBody,CTableDataCell,
-  CTableHead,CTableHeaderCell,CTableRow,CButton,
+import {
+  CCard,
+  CCardBody,
+  CCardHeader,
+  CCol,
+  CRow,
+  CTable,
+  CTableBody,
+  CTableDataCell,
+  CTableHead,
+  CTableHeaderCell,
+  CTableRow,
+  CButton,
+  CPagination,
+  CPaginationItem,
+  CInputGroup,
+  CInputGroupText,
+  CFormSelect,
 } from "@coreui/react";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
@@ -10,7 +26,12 @@ import { useNavigate } from "react-router-dom";
 import { Account } from "../../../models/account/Account";
 import { useSelector } from "react-redux";
 import { ToastContainer } from "react-toastify";
-import {getAccountOwner,getAccountStatus,getAccountType,getAccounts,} from "../../../redux-saga/modules/account/action";
+import {
+  getAccountOwner,
+  getAccountStatus,
+  getAccountType,
+  getAccounts,
+} from "../../../redux-saga/modules/account/action";
 import { getIndustry } from "../../../redux-saga/modules/shared/action";
 import { getNotes } from "../../../redux-saga/modules/notes/action";
 import { getContacts } from "../../../redux-saga/modules/contact/action";
@@ -18,9 +39,7 @@ import DeleteConfirmationModal from "./DeleteConfirmation";
 import NewAccount from "../createAccount/NewAccount";
 import EditPage from "./EditAccountModal";
 
-
 const AccountList: React.FC = () => {
-  
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [accountId, setAccountId] = useState<number>();
   const [stateData, setStateData] = useState<boolean>(false);
@@ -30,16 +49,16 @@ const AccountList: React.FC = () => {
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
-  
+
   const showItems = (id: any) => {
-    navigate(`/accounts/accountDetails/${id}`)
-  }
+    navigate(`/accounts/accountDetails/${id}`);
+  };
 
   const handleEditClick = (data: any) => {
     setAccountData(data);
     setOpenEditModal(true);
   };
-  
+
   const closeEditModal = () => {
     setOpenEditModal(false);
   };
@@ -71,10 +90,18 @@ const AccountList: React.FC = () => {
   };
   //Fetching data from store
   const accounts = useSelector((state: any) => state.accountReducer.accounts);
-  const refreshList = useSelector((state: any) => state.accountReducer.refreshList);
-  const accountOwner = useSelector((state: any) => state.accountReducer.accountOwner);
-  const createresponse = useSelector((state: any) => state.accountReducer.createAccountResponse);
-  const updateResponse = useSelector((state: any) => state.accountReducer.updateAccountResponse);
+  const refreshList = useSelector(
+    (state: any) => state.accountReducer.refreshList
+  );
+  const accountOwner = useSelector(
+    (state: any) => state.accountReducer.accountOwner
+  );
+  const createresponse = useSelector(
+    (state: any) => state.accountReducer.createAccountResponse
+  );
+  const updateResponse = useSelector(
+    (state: any) => state.accountReducer.updateAccountResponse
+  );
 
   function getOwnerName(ownerId: string): string {
     const owner = accountOwner?.find((owner: any) => owner.id === ownerId);
@@ -121,8 +148,12 @@ const AccountList: React.FC = () => {
           ) : (
             <CRow>
               <CCol xs={12}>
+             
+                    
                 <CCard className="mb-4">
+                  
                   <CCardHeader>
+               
                     <CRow>
                       <CCol xs={6} className="d-flex align-items-center">
                         <h5>
@@ -138,10 +169,13 @@ const AccountList: React.FC = () => {
                             value="New"
                             onClick={handleCreateNew}
                           />
+                     
+                       
                         </div>
                       </CCol>
                     </CRow>
                   </CCardHeader>
+                  
                   <CCardBody>
                     <CTable>
                       <CTableHead>

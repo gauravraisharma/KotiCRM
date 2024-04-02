@@ -58,21 +58,15 @@ const validationSchema = Yup.object().shape({
       13,
       "Phone number must be at most 13 digits with country calling code"
     ),
-  // fax: Yup.string()
-  //   .required("Required (Fax)")
-  //   .matches(/^[\d()-\s]{10}$/, "Fax number must be exactly 10 digits"),
-  // website: Yup.string()
-  //   .required("Required (Website)")
-  //   .url("Website must be a valid URL"),
+  
   billingStreet: Yup.string().required("Required (Billing Street)"),
   billingCity: Yup.string().required("Required (Billing City)"),
   billingState: Yup.string().required("Required (Billing State)"),
   zipCode: Yup.string().required("Required (Zip Code)"),
-  // .matches(/^\d+$/, "Zip Code must be a number")
-  // .min(4, "Zip Code must be at least 4 digits")
-  // .max(10, "Zip Code can have maximum 10 digits"),
+
   country: Yup.string().required("Required (Country)"),
-  // description: Yup.string().required("Required (Description)"),
+  description:Yup.string().required("Required(Description)"),
+
 });
 
 const MyForm: React.FC<MyFormProps> = ({
@@ -720,7 +714,11 @@ const MyForm: React.FC<MyFormProps> = ({
                         <textarea
                           id="description"
                           name="description"
-                          className="form-control"
+                          className={`form-control  form-select ${
+                            touched.description && errors.description
+                              ? "is-invalid"
+                              : ""
+                          }`}
                           style={{ height: "120px" }}
                           onChange={(e: any) => {
                             handleChangeData(e);
