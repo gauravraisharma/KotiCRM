@@ -1,4 +1,4 @@
-import {CRow,CCol,CCard,CCardHeader,CButton,CCardBody,} from "@coreui/react";
+import { CRow, CCol, CCard, CCardHeader, CButton, CCardBody, } from "@coreui/react";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -12,12 +12,13 @@ import Attachments from "../../attachments/Attachments";
 const AccountDetails = () => {
   const navigate = useNavigate();
   const { accountId } = useParams();
+  const [contactsCount, setContactsCount] = useState(0);
   const [notesCount, setNotesCount] = useState();
   const [invoicesCount, setInvoicesCount] = useState();
   const [attachmentsCount, setAttachmentsCount] = useState(0);
   const dispatch = useDispatch();
 
- //Fetching data form store
+  //Fetching data form store
   const account = useSelector((state: any) => state.accountReducer.account);
   const accountOwner = useSelector((state: any) => state.accountReducer.accountOwner);
   const industry = useSelector((state: any) => state.sharedReducer.industries);
@@ -25,7 +26,7 @@ const AccountDetails = () => {
   const industryName =
     account && industry
       ? industry.find((industry: any) => industry.id === account.industryId)
-          ?.name
+        ?.name
       : null;
 
   const ownerName =
@@ -34,6 +35,9 @@ const AccountDetails = () => {
       : null;
 
   //counts
+  const getContactsCount = (contactsCount: any) => {
+    setContactsCount(contactsCount);
+  };
   const getNotesCount = (noteCount: any) => {
     setNotesCount(noteCount);
   };
@@ -102,6 +106,9 @@ const AccountDetails = () => {
                   aria-selected="false"
                 >
                   Contacts
+                  <strong>
+                    {contactsCount == 0 ? "" : ` (${contactsCount})`}
+                  </strong>
                 </button>
               </li>
               <li className="nav-item" role="presentation">
@@ -215,7 +222,10 @@ const AccountDetails = () => {
                 role="tabpanel"
                 aria-labelledby="contacts-tab"
               >
-                <Contacts accountId={account?.id} />
+                <Contacts
+                  getContactsCount={getContactsCount}
+                  accountId={account?.id}
+                />
               </div>
               <div
                 className="tab-pane fade"

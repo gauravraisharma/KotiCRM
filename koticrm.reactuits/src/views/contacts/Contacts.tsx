@@ -15,6 +15,7 @@ import {
   CInputGroup,
   CInputGroupText,
   CFormInput,
+  CPaginationItem,
 } from "@coreui/react";
 import "../../css/style.css";
 import { useDispatch, useSelector } from "react-redux";
@@ -38,58 +39,56 @@ const tableHeader = [
 ];
 
 interface Props {
-  accountId: number;
+  getContactsCount?: (data: number) => void;
+  accountId?: number;
 }
 
-const Contacts = ({ accountId }: Props) => {
+const Contacts = ({ getContactsCount, accountId }: Props) => {
+  const dispatch = useDispatch();
   const [contactId, setContactId] = useState<number>(0);
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState<boolean>(false);
-  const dispatch = useDispatch();
-  const [searchTerm, setSearchTerm] = useState("");
-  const [currentPage, setCurrentPage] = useState<number>(1); // Added currentPage state
-  // const totalPages = 10;
-  const pageSize = 5;
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [pageNumber, setPageNumber] = useState<number>(1);
 
-  const refreshList = useSelector(
-    (state: any) => state.contactReducer.refreshList
-  );
-  const fetchedContacts = useSelector(
+  const fetchedContactWithAccountNameListAndTotal = useSelector(
     (state: any) => state.contactReducer.contacts
   );
   const fetchedAccountOwner = useSelector(
     (state: any) => state.accountReducer.accountOwner
   );
 
-  let filteredContacts = fetchedContacts;
-  if (accountId) {
-    filteredContacts = fetchedContacts?.filter(
-      (contact: any) => contact.accountID === accountId
-    );
-  }
+  const contactsCount = fetchedContactWithAccountNameListAndTotal.length;
+
+  // Pagination
+  const pageSize = 5;
+  const totalCount = fetchedContactWithAccountNameListAndTotal.contactsCount;
+  const totalPages = Math.ceil(totalCount / pageSize);
 
   useEffect(() => {
-    dispatch(getContacts());
-  }, [dispatch, refreshList]);
-  
+    dispatch(getContacts(accountId, searchQuery, pageNumber, pageSize));
+  }, [dispatch, accountId, searchQuery, pageNumber, pageSize]);
 
+  useEffect(() => {
+    if (getContactsCount) {
+      getContactsCount(contactsCount);
+    }
+  });
 
-   // Filter based on search term
-   if (searchTerm) {
-    filteredContacts = fetchedContacts.filter(
-      (contact: any) =>
-        contact.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        contact.lastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        contact.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        contact.mobile.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-  }
-  // Pagination
+  // // Filter based on search term
+  // let filteredContacts = fetchedContactWithAccountNameListAndTotal;
+  // if (searchTerm) {
+  //   filteredContacts = fetchedContactWithAccountNameListAndTotal.filter(
+  //     (contact: any) =>
+  //       contact.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+  //       contact.lastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+  //       contact.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+  //       contact.mobile.toLowerCase().includes(searchTerm.toLowerCase())
+  //   );
+  // }
 
-  const totalItems = filteredContacts.length;
-  const totalPages = Math.ceil(totalItems / pageSize);
-   const startIndex = (currentPage - 1) * pageSize;
-  const endIndex = Math.min(startIndex + pageSize - 1, totalItems - 1);
-  const paginatedContacts = filteredContacts.slice(startIndex, endIndex + 1);
+  const handlePageChange = (pageNumber: number) => {
+    setPageNumber(pageNumber);
+  };
 
   function getAccountOwnerName(ownerId: string): string {
     const owner = fetchedAccountOwner?.find(
@@ -124,9 +123,9 @@ const Contacts = ({ accountId }: Props) => {
               <CFormInput
                 id="searchInput"
                 type="text"
-                style={{height:'50px'}}
-                value={searchTerm}
-                 onChange={(e)=>setSearchTerm(e.target.value)}
+                style={{ height: '50px' }}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search by..."
               />
             </CInputGroup>
@@ -137,10 +136,10 @@ const Contacts = ({ accountId }: Props) => {
                 <CButton
                   component="input"
                   type="button"
-                  style={{width:'100px',padding:'10px',fontSize:'18px'}}
-                   color="primary"
-                   value="+ New"
-                   variant="outline"
+                  style={{ width: '100px', padding: '10px', fontSize: '18px' }}
+                  color="primary"
+                  value="+ New"
+                  variant="outline"
                 />
                   {/* <FaPlus style={{ marginRight: '5px' }} /> New */}
               </Link>
@@ -149,11 +148,11 @@ const Contacts = ({ accountId }: Props) => {
         </CRow>
       </div>
       <DeleteConfirmationModal
-            isOpen={showDeleteConfirmation}
-            onConfirm={confirmDelete}
-            onCancel={cancelDelete}
-            contactId={contactId}
-          />
+        isOpen={showDeleteConfirmation}
+        onConfirm={confirmDelete}
+        onCancel={cancelDelete}
+        contactId={contactId}
+      />
       <CRow>
         <CCol xs={12}>
           <CCard className="mb-4">
@@ -178,8 +177,8 @@ const Contacts = ({ accountId }: Props) => {
                   </CTableRow>
                 </CTableHead>
                 <CTableBody>
-                  {paginatedContacts.length>0 ? (
-                    paginatedContacts?.map(
+                  {fetchedContactWithAccountNameListAndTotal.contactWithAccountNames.length > 0 ? (
+                    fetchedContactWithAccountNameListAndTotal.contactWithAccountNames?.map(
                       (contact: ContactWithAccountName, index: number) => (
                         <CTableRow key={index}>
                           <CTableDataCell>{`${contact?.firstName} ${contact?.lastName}`}</CTableDataCell>
@@ -209,14 +208,14 @@ const Contacts = ({ accountId }: Props) => {
                               />
                             </Link>
                             <MdDelete
-                                style={{
-                                  color: "red",
-                                  marginRight: "10px",
-                                  fontSize: "20px",
-                                  cursor: "pointer",
-                                }}
-                                onClick={() => handleDeleteClick(contact.id)}
-                              />
+                              style={{
+                                color: "red",
+                                marginRight: "10px",
+                                fontSize: "20px",
+                                cursor: "pointer",
+                              }}
+                              onClick={() => handleDeleteClick(contact.id)}
+                            />
                           </CTableDataCell>
                         </CTableRow>
                       )
@@ -234,12 +233,31 @@ const Contacts = ({ accountId }: Props) => {
           </CCard>
           <CCol xs={12}>
             <CPagination
+              size="lg"
               align="center"
-              aria-label="Page navigation example">
-              doubleArrows={false}
-              pages={totalPages}
-              activePage={currentPage}
-              {/* onActivePageChange={(page: number) => setCurrentPage(page)} */}
+              aria-label="Page navigation example"
+            >
+              <CPaginationItem
+                onClick={() => handlePageChange(pageNumber - 1)}
+                disabled={pageNumber === 1}
+              >
+                Previous
+              </CPaginationItem>
+              {Array.from({ length: totalPages }, (_, index) => (
+                <CPaginationItem
+                  key={index}
+                  active={pageNumber === index + 1}
+                  onClick={() => handlePageChange(index + 1)}
+                >
+                  {index + 1}
+                </CPaginationItem>
+              ))}
+              <CPaginationItem
+                onClick={() => handlePageChange(pageNumber + 1)}
+                disabled={pageNumber === totalPages}
+              >
+                Next
+              </CPaginationItem>
             </CPagination>
           </CCol>
         </CCol>
@@ -249,3 +267,13 @@ const Contacts = ({ accountId }: Props) => {
 };
 
 export default Contacts;
+
+
+//<CPagination
+//  activePage={pageNumber}
+//  onActivePageChange={handlePageChange}
+//  align="end"
+//  aria-label="Page navigation example"
+//>
+//  {/* Render pagination items based on total number of pages */}
+//</CPagination>

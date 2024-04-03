@@ -1,4 +1,3 @@
-
 import { toast } from 'react-toastify';
 import { actionPayloadModel } from '../../../models/actionModel/actionModel';
 import { Contact } from '../../../models/contact/Contact';
@@ -8,9 +7,13 @@ import { CreateContact, DeleteContact, GetContactDetails, GetContactsList, Updat
 import { ContactWithAccountName } from '../../../models/contact/ContactWithAccountName';
 import { getContacts } from './action';
 
-export function* workGetContactsFetch(): Generator<any> {
+const DEFAULT_PAGE_NUMBER = 1;
+const DEFAULT_PAGE_SIZE = 5;
+
+export function* workGetContactsFetch(action: actionPayloadModel): Generator<any> {
   try {
-    const response: any = yield call(GetContactsList);
+    const { accountId, searchQuery, pageNumber, pageSize } = action.payload;
+    const response: any = yield call(GetContactsList, accountId, searchQuery, pageNumber || DEFAULT_PAGE_NUMBER, pageSize || DEFAULT_PAGE_SIZE);
     if (response.status != 200) {
       toast.error('Error fetching contacts')
     } else {

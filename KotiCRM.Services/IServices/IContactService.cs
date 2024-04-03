@@ -1,19 +1,13 @@
 ﻿using KotiCRM.Repository.DTOs.Contact;
 using KotiCRM.Repository.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace KotiCRM.Services.IServices
+namespace KotiCRM.Services.IServices;
+
+public interface IContactService
 {
-    public interface IContactService
-    {
-        Task<ContactDTO> CreateContact(ContactDTO contactDTO);
-        Task<IEnumerable<ContactWithAccountNameDTO>> GetContactList();
-        Task<ContactWithAccountNameDTO> GetContactDetails(int id);
-        Task<DbResponse> DeleteContact(int id);
-        Task<ContactDTO> UpdateContact(ContactDTO contactDTO);
-    }
+    Task<ContactDTO> CreateContact(ContactDTO contactDTO);
+    Task<ContactWithAccountNameListAndTotalCountDTO> GetContactList(int? accountId, string? searchQuery, int? pageNumber, int? pageSize);
+    Task<ContactWithAccountNameDTO> GetContactDetails(int id);
+    Task<DbResponse> DeleteContact(int id);
+    Task<ContactDTO> UpdateContact(ContactDTO contactDTO);
 }

@@ -6,12 +6,22 @@ import {
 } from '../../../apiInterceptor/axiosInterceptor';
 import { Contact } from '../../../models/contact/Contact';
 import { ContactWithAccountName } from '../../../models/contact/ContactWithAccountName';
+import { ContactWithAccountNameListAndTotalCount } from '../../../models/contact/ContactWithAccountNameListAndTotalCount';
 
-export function GetContactsList(): Promise<apiResponse<ContactWithAccountName[]>> {
-    return axiosInstance.get<ContactWithAccountName[]>(`/Contact/GetContactList`).then((response: AxiosResponse<ContactWithAccountName[]>) => responseBody(response)).
-        catch((error: AxiosError) => {
-            const errorResponse: apiResponse<ContactWithAccountName[]> = {
-                data: [],
+export function GetContactsList(accountId?: number, searchQuery?: string, pageNumber?: number, pageSize?: number): Promise<apiResponse<ContactWithAccountNameListAndTotalCount>> {
+    // const getContactListURL = accountId ? `/Contact/GetContactList?accountId=${accountId}` : '/Contact/GetContactList';
+    const params = new URLSearchParams();
+    if (accountId) params.append('accountId', accountId.toString());
+    if (searchQuery) params.append('searchQuery', searchQuery.toString());
+    if (pageNumber) params.append('pageNumber', pageNumber.toString());
+    if (pageSize) params.append('pageSize', pageSize.toString());
+
+    const getContactListURL = `/Contact/GetContactList?${params.toString()}`;
+    return axiosInstance.get<ContactWithAccountNameListAndTotalCount>(getContactListURL)
+        .then((response: AxiosResponse<ContactWithAccountNameListAndTotalCount>) => responseBody(response))
+        .catch((error: AxiosError) => {
+            const errorResponse: apiResponse<ContactWithAccountNameListAndTotalCount> = {
+                data: undefined,
                 status: 500,
                 statusText: error.message
             };

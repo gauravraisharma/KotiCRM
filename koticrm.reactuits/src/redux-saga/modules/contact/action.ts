@@ -8,9 +8,9 @@ import {
 } from "../../../constants/reduxConstants";
 import { Contact } from "../../../models/contact/Contact";
 
-
-export const getContacts = () => ({
-  type: GET_CONTACTS_FETCH
+export const getContacts = (accountId?: number, searchQuery?: string, pageNumber?: number, pageSize?: number) => ({
+  type: GET_CONTACTS_FETCH,
+  payload: { accountId, searchQuery, pageNumber, pageSize }
 })
 
 export const getContactById = (id: number) => ({

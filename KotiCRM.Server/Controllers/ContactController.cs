@@ -1,5 +1,4 @@
 ﻿using KotiCRM.Repository.DTOs.Contact;
-using KotiCRM.Repository.Models;
 using KotiCRM.Services.IServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -20,9 +19,9 @@ namespace KotiCRM.Server.Controllers
 
         [HttpGet]
         [Route("GetContactList")]
-        public async Task<IEnumerable<ContactWithAccountNameDTO>> GetContactList()
+        public async Task<ContactWithAccountNameListAndTotalCountDTO> GetContactList(int? accountId, string? searchQuery, int? pageNumber, int? pageSize)
         {
-            return await _contactService.GetContactList();
+            return await _contactService.GetContactList(accountId, searchQuery, pageNumber, pageSize);
         }
 
         [HttpGet("GetContactDetails/{id}")]
