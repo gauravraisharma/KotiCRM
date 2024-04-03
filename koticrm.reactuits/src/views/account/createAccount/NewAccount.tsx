@@ -65,7 +65,7 @@ const validationSchema = Yup.object().shape({
   zipCode: Yup.string().required("Required (Zip Code)"),
 
   country: Yup.string().required("Required (Country)"),
-  description:Yup.string().required("Required(Description)"),
+  // description:Yup.string().required("Required(Description)"),
 
 });
 
@@ -271,10 +271,9 @@ const MyForm: React.FC<MyFormProps> = ({
                         />
                       </CCol>
                     </CRow>
-                 
-                    <CRow className="mb-3">
+                      <CRow className="mb-3">
                       <CCol sm={4}>
-                        <label htmlFor="industry">
+                        <label htmlFor="status">
                           Industry
                           <span style={{ color: "red", fontSize: "25px" }}>
                             *
@@ -296,20 +295,21 @@ const MyForm: React.FC<MyFormProps> = ({
                             handleChange(e);
                           }}
                         >
-                          <option value="di">Select Industry...</option>
-                          {industry?.map((status: any) => (
-                            <option key={status.id} value={status.id}>
-                              {status.name}
+                          <option value="">Select Industry...</option>
+                          {industry?.map((industry: any) => (
+                            <option key={industry.id} value={industry.id}>
+                              {industry.name}
                             </option>
                           ))}
                         </Field>
                         <ErrorMessage
-                          name="industry"
+                          name="status"
                           component="div"
                           className="error form-error"
                         />
                       </CCol>
                     </CRow>
+
                     <CRow className="mb-3">
                       <CCol sm={4}>
                         <label htmlFor="status">
@@ -714,11 +714,12 @@ const MyForm: React.FC<MyFormProps> = ({
                         <textarea
                           id="description"
                           name="description"
-                          className={`form-control  form-select ${
-                            touched.description && errors.description
-                              ? "is-invalid"
-                              : ""
-                          }`}
+                          // className={`form-control  form-select ${
+                          //   touched.description && errors.description
+                          //     ? "is-invalid"
+                          //     : ""
+                          // }`}
+                          className="form-control"
                           style={{ height: "120px" }}
                           onChange={(e: any) => {
                             handleChangeData(e);

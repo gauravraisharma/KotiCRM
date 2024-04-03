@@ -45,6 +45,7 @@ const AccountList: React.FC = () => {
   const [stateData, setStateData] = useState<boolean>(false);
   const [openEditModal, setOpenEditModal] = useState<boolean>(false);
   const [accountData, setAccountData] = useState<Account | null>(null);
+  const [searchTerm, setSearchTerm] = useState<string>("");
 
   const dispatch = useDispatch();
 
@@ -122,9 +123,52 @@ const AccountList: React.FC = () => {
     dispatch(getAccounts());
   }, [dispatch, refreshList, createresponse, updateResponse]);
 
+ 
+  const filteredAccounts = searchTerm
+    ? accounts.filter((account: Account) =>
+        account.accountName.toLowerCase().includes(searchTerm.toLowerCase())
+      )
+    : accounts;
+
   return (
     <>
       <ToastContainer />
+      <div className="head"style={{padding:'20px'}}>
+                <CRow>
+                  <CCol xs={6}>
+                    <CInputGroup className="mb-3">
+                      <CInputGroupText as="label" htmlFor="searchInput">
+                        Search
+                      </CInputGroupText>
+                      <input
+                        type="text"
+                        placeholder="Search by account name..."
+                        style={{ height: "50px" }}
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        className="form-control"
+                      />
+                    </CInputGroup>
+                  </CCol>
+
+                  <CCol xs={6}>
+                    <div className="text-end">
+                      <CButton
+                        style={{
+                          width: "100px",
+                          padding: "10px",
+                          fontSize: "18px",
+                        }}
+                        component="input"
+                        type="button"
+                        color="primary"
+                        value="+ New"
+                        onClick={handleCreateNew}
+                      />
+                    </div>
+                  </CCol>
+                </CRow>
+              </div>
       {stateData ? (
         <NewAccount
           closeModal={closeCreateModal}
@@ -147,6 +191,7 @@ const AccountList: React.FC = () => {
             />
           ) : (
             <CRow>
+            
               <CCol xs={12}>
                 <CCard className="mb-4">
                   <CCardHeader>
@@ -155,17 +200,6 @@ const AccountList: React.FC = () => {
                         <h5>
                           <strong>Accounts</strong>
                         </h5>
-                      </CCol>
-                      <CCol xs={6}>
-                        <div className="text-end">
-                          <CButton
-                            component="input"
-                            type="button"
-                            color="primary"
-                            value="New"
-                            onClick={handleCreateNew}
-                          />
-                        </div>
                       </CCol>
                     </CRow>
                   </CCardHeader>
@@ -187,7 +221,7 @@ const AccountList: React.FC = () => {
                         </CTableRow>
                       </CTableHead>
                       <CTableBody>
-                        {accounts?.map((account: Account) => (
+                        {filteredAccounts?.map((account: Account) => (
                           <CTableRow key={account.id}>
                             <CTableDataCell>
                               {account.accountName}

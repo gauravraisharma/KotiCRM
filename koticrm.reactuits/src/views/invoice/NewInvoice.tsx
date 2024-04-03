@@ -169,10 +169,8 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
       ? Yup.string().required("Required (Due Date)")
       : Yup.string(),
     accountName: Yup.string().required("Required (Account)"),
-
     contacts: Yup.string().required("Required (Contacts)"),
     status: Yup.string().required("Required (Status)"),
-    // purchaseOrder: Yup.string().required("Required(Purchase Order)"),
     fromBillingStreet: touchedFields.fromBillingStreet
       ? Yup.string().required("Required (Billing Street)")
       : Yup.string(),
@@ -185,9 +183,6 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
     fromZipCode: touchedFields.fromZipCode
       ? Yup.string()
           .required("Required (zip Code)")
-      //     .matches(/^\d+$/, "Billing Code must be a number")
-      //     .min(4, "Billing Code must be at least 4 digit")
-      //     .max(10, "Billing Code can have maximum 10 digits")
        : Yup.string(),
     fromBillingCountry: touchedFields.fromBillingCountry
       ? Yup.string().required("Required (Billing Country)")
@@ -213,12 +208,6 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
     toZipCode:
       invoice.toZipCode == ""
         ? Yup.string().required("Required (zip Code)")
-        // : touchedFields.toZipCode
-        // ? Yup.string()
-        //     .required("Required (Billing Code)")
-        //     .matches(/^\d+$/, "Billing Code must be a number")
-        //     .min(4, "Billing Code must be at least 4 digit")
-        //     .max(10, "Billing Code can have maximum 10 digits")
          : Yup.string(),
     toBillingCountry:
       invoice.toBillingCountry == ""
@@ -226,10 +215,6 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
         : touchedFields.toBillingCountry
         ? Yup.string().required("Required (Billing Country)")
         : Yup.string(),
-    // termsandConditions: Yup.string().required("Required (Terms and Conditions)"),
-    // description: Yup.string().required("Required (Description)"),
-    // tax: Yup.string().required("Required (Tax)"),
-    // adjustments: Yup.string().required("Required (Adjustments)"),
   });
 
   const [toAddress, setToAddress] = useState({
@@ -309,10 +294,15 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
   };
 
   const subTotalValue = rows.reduce((total, row) => {
-    return total + parseFloat(row.amount) * parseFloat(row.quantity);
-  }, 0);
+    // Parse row.amount and row.quantity to numbers, defaulting to 0 if NaN
+    const amount = parseFloat(row.amount) || 0;
+    const quantity = parseFloat(row.quantity) || 0;
+
+    return total + amount * quantity;
+}, 0);
   const discountValue = rows.reduce((discount, row) => {
-    return discount + parseFloat(row.discount);
+    const rowDiscount = parseFloat(row.discount) || 0
+    return discount +rowDiscount;
   }, 0);
 
   grandTotalValue =
@@ -382,9 +372,9 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
   };
 
   const calculateTotal = (row: any) => {
-    const amount = parseFloat(row.amount);
-    const discount = parseFloat(row.discount);
-    const quantity = parseFloat(row.quantity);
+    const amount = parseFloat(row.amount) || 0;
+    const discount = parseFloat(row.discount) || 0;
+    const quantity = parseFloat(row.quantity) || 0;
     return ((amount - discount) * quantity).toString();
   };
 
@@ -1216,12 +1206,15 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
                                   value={row.quantity}
                                   onChange={(e) => {
                                     const updatedRows = [...rows];
-                                    updatedRows[index].quantity =
-                                      e.target.value;
-                                    updatedRows[index].total = calculateTotal(
-                                      updatedRows[index]
-                                    );
-                                    setRows(updatedRows);
+                                    const newValue= parseFloat(e.target.value);
+                                    if(!isNaN(newValue)){
+                                      updatedRows[index].quantity = newValue.toString();
+                                      updatedRows[index].total = calculateTotal(updatedRows[index]);
+                                      console.log("Updated rows:", updatedRows); // Log updated rows
+                                      setRows(updatedRows);
+                                    } else {
+                                      console.error("Invalid input value:", e.target.value);
+                                    }
                                   }}
                                 />
                               </div>

@@ -146,9 +146,9 @@ const EditPage: React.FC<EditModalProps> = ({
     country: touchedFields.country
       ? Yup.string().required("Required (Country)")
       : Yup.string(),
-      description:touchedFields.description
-      ? Yup.string().required("Required(Description)")
-      :Yup.string(),
+      // description:touchedFields.description
+      // ? Yup.string().required("Required(Description)")
+      // :Yup.string(),
   });
 
   const handleInputChange = (fieldName: keyof typeof touchedFields) => {
@@ -725,22 +725,23 @@ const EditPage: React.FC<EditModalProps> = ({
                           id="description"
                           name="description"
                           value={updateAccount.description}
-                          className={`form-control  ${
-                            touched.description && errors.description
-                              ? "is-invalid"
-                              : ""
-                          }`}
+                          // className={`form-control  ${
+                          //   touched.description && errors.description
+                          //     ? "is-invalid"
+                          //     : ""
+                          // }`}
+                          className="form-control"
                           style={{ height: "100px" }}
                           onChange={(e: any) => {
                             handleChangeData(e);
                             handleChange(e);
                           }}
                         />
-                        <ErrorMessage
+                        {/* <ErrorMessage
                           name="description"
                           component="div"
                           className="invalid-feedback"
-                        />
+                        /> */}
                       </CCol>
                     </CRow>
                   </CCol>

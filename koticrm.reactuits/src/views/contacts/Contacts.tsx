@@ -117,7 +117,7 @@ const Contacts = ({ accountId }: Props) => {
       <div className="head" style={{ padding: "20px" }}>
         <CRow>
           <CCol xs={6}>
-            <CInputGroup className="mb-3">
+            <CInputGroup>
               <CInputGroupText as="label" htmlFor="searchInput">
                 Search
               </CInputGroupText>
@@ -140,10 +140,9 @@ const Contacts = ({ accountId }: Props) => {
                   style={{width:'100px',padding:'10px',fontSize:'18px'}}
                    color="primary"
                    value="+ New"
-                variant="outline"
+                   variant="outline"
                 />
                   {/* <FaPlus style={{ marginRight: '5px' }} /> New */}
-
               </Link>
             }
           </CCol>
@@ -240,7 +239,7 @@ const Contacts = ({ accountId }: Props) => {
               doubleArrows={false}
               pages={totalPages}
               activePage={currentPage}
-              onActivePageChange={(page: number) => setCurrentPage(page)}
+              {/* onActivePageChange={(page: number) => setCurrentPage(page)} */}
             </CPagination>
           </CCol>
         </CCol>
