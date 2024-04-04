@@ -1,6 +1,6 @@
 export interface InvoiceCreationModel{
-  Invoice: Invoice;
-  InvoiceItems : InvoiceItem[];
+  invoice: Invoice;
+  invoiceItems : InvoiceItem[];
 }
 
 

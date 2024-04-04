@@ -97,7 +97,7 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
 
   const [termsAndConditions, setTermsAndConditions] = useState("");
 
-  const handleEditorChange = (event:any, editor:any) => {
+  const handleEditorChange = (event: any, editor: any) => {
     const data = editor.getData();
     setTermsAndConditions(data);
   };
@@ -188,8 +188,8 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
       : Yup.string(),
     fromZipCode: touchedFields.fromZipCode
       ? Yup.string()
-          .required("Required (zip Code)")
-       : Yup.string(),
+        .required("Required (zip Code)")
+      : Yup.string(),
     fromBillingCountry: touchedFields.fromBillingCountry
       ? Yup.string().required("Required (Billing Country)")
       : Yup.string(),
@@ -197,30 +197,30 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
       invoice.toBillingStreet == ""
         ? Yup.string().required("Required (Billing Street)")
         : touchedFields.toBillingStreet
-        ? Yup.string().required("Required (Billing Street)")
-        : Yup.string(),
+          ? Yup.string().required("Required (Billing Street)")
+          : Yup.string(),
     toBillingCity:
       invoice.toBillingCity == ""
         ? Yup.string().required("Required (Billing City)")
         : touchedFields.toBillingCity
-        ? Yup.string().required("Required (Billing City)")
-        : Yup.string(),
+          ? Yup.string().required("Required (Billing City)")
+          : Yup.string(),
     toBillingState:
       invoice.toBillingState == ""
         ? Yup.string().required("Required (Billing State)")
         : touchedFields.toBillingState
-        ? Yup.string().required("Required (Billing State)")
-        : Yup.string(),
+          ? Yup.string().required("Required (Billing State)")
+          : Yup.string(),
     toZipCode:
       invoice.toZipCode == ""
         ? Yup.string().required("Required (zip Code)")
-         : Yup.string(),
+        : Yup.string(),
     toBillingCountry:
       invoice.toBillingCountry == ""
         ? Yup.string().required("Required (Billing Country)")
         : touchedFields.toBillingCountry
-        ? Yup.string().required("Required (Billing Country)")
-        : Yup.string(),
+          ? Yup.string().required("Required (Billing Country)")
+          : Yup.string(),
   });
 
   const [toAddress, setToAddress] = useState({
@@ -278,10 +278,10 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
     sNo: number;
     productName: string;
     description: string;
-    quantity: string;
-    discount: string;
-    amount: string;
-    total: string;
+    quantity: number;
+    discount: number;
+    amount: number;
+    total: number;
   }
 
   const [rows, setRows] = useState<Row[]>([]);
@@ -291,24 +291,25 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
       sNo: rows.length + 1,
       productName: "",
       description: "",
-      quantity: "",
-      discount: "",
-      amount: "",
-      total: "",
+      quantity: 0,
+      discount: 0,
+      amount: 0,
+      total: 0,
     };
     setRows([...rows, newRow]);
   };
 
   const subTotalValue = rows.reduce((total, row) => {
     // Parse row.amount and row.quantity to numbers, defaulting to 0 if NaN
-    const amount = parseFloat(row.amount) || 0;
-    const quantity = parseFloat(row.quantity) || 0;
+    const amount = row.amount || 0;
+    const quantity = row.quantity || 0;
 
     return total + amount * quantity;
-}, 0);
+  }, 0);
+
   const discountValue = rows.reduce((discount, row) => {
-    const rowDiscount = parseFloat(row.discount) || 0
-    return discount +rowDiscount;
+    const rowDiscount = row.discount || 0
+    return discount + rowDiscount;
   }, 0);
 
   grandTotalValue =
@@ -357,16 +358,16 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
         sno: row.sNo,
         productName: row.productName,
         description: row.description,
-        quantity: parseFloat(row.quantity),
-        discount: parseFloat(row.discount),
-        amount: parseFloat(row.amount),
+        quantity: row.quantity,
+        discount: row.discount,
+        amount: row.amount,
         tax: parseFloat(invoice.tax.toString()),
-        total: parseFloat(row.total),
+        total: row.total,
       };
     });
     const invoiceModel: InvoiceCreationModel = {
-      Invoice: invoiceDetails,
-      InvoiceItems: invoiceItemDetails,
+      invoice: invoiceDetails,
+      invoiceItems: invoiceItemDetails,
     };
     dispatch(createInvoiceRequest(invoiceModel));
     closeModal();
@@ -378,10 +379,10 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
   };
 
   const calculateTotal = (row: any) => {
-    const amount = parseFloat(row.amount) || 0;
-    const discount = parseFloat(row.discount) || 0;
-    const quantity = parseFloat(row.quantity) || 0;
-    return ((amount - discount) * quantity).toString();
+    const amount = row.amount || 0;
+    const discount = row.discount || 0;
+    const quantity = row.quantity || 0;
+    return ((amount - discount) * quantity);
   };
 
   const { handleSubmit } = useFormik({
@@ -462,11 +463,10 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
                                   );
                                 }}
                                 onBlur={handleBlur("invoiceOwner")}
-                                className={`form-control ${
-                                  touched.invoiceOwner && errors.invoiceOwner
-                                    ? "border-danger"
-                                    : ""
-                                }`}
+                                className={`form-control ${touched.invoiceOwner && errors.invoiceOwner
+                                  ? "border-danger"
+                                  : ""
+                                  }`}
                                 styles={{
                                   control: (provided) => ({
                                     ...provided,
@@ -497,11 +497,10 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
                         <Field
                           type="text"
                           name="subject"
-                          className={`form-control ${
-                            touched.subject && errors.subject
-                              ? "border-danger"
-                              : ""
-                          }`}
+                          className={`form-control ${touched.subject && errors.subject
+                            ? "border-danger"
+                            : ""
+                            }`}
                           style={{ height: "50px" }}
                           onChange={(e: any) => {
                             handleChangeData(e);
@@ -543,11 +542,10 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
                                   );
                                 }}
                                 dateFormat="MMM d, yyyy"
-                                className={`form-control ${
-                                  touched.invoiceDate && errors.invoiceDate
-                                    ? "border-danger"
-                                    : ""
-                                }`}
+                                className={`form-control ${touched.invoiceDate && errors.invoiceDate
+                                  ? "border-danger"
+                                  : ""
+                                  }`}
                               />
                             </>
                           )}
@@ -587,11 +585,10 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
                                   );
                                 }}
                                 dateFormat="MMM d, yyyy"
-                                className={`form-control ${
-                                  touched.dueDate && errors.dueDate
-                                    ? "border-danger"
-                                    : ""
-                                }`}
+                                className={`form-control ${touched.dueDate && errors.dueDate
+                                  ? "border-danger"
+                                  : ""
+                                  }`}
                               />
                             </>
                           )}
@@ -644,11 +641,10 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
                                 }}
                                 onBlur={handleBlur("accountName")}
                                 placeholder="Select account..."
-                                className={`form-control ${
-                                  touched.accountName && errors.accountName
-                                    ? "border-danger"
-                                    : ""
-                                }`}
+                                className={`form-control ${touched.accountName && errors.accountName
+                                  ? "border-danger"
+                                  : ""
+                                  }`}
                                 styles={{
                                   control: (provided) => ({
                                     ...provided,
@@ -709,11 +705,10 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
                                 }}
                                 onBlur={handleBlur("accountName")}
                                 placeholder="Select contact..."
-                                className={`form-control ${
-                                  touched.contacts && errors.contacts
-                                    ? "border-danger"
-                                    : ""
-                                }`}
+                                className={`form-control ${touched.contacts && errors.contacts
+                                  ? "border-danger"
+                                  : ""
+                                  }`}
                                 styles={{
                                   control: (provided) => ({
                                     ...provided,
@@ -791,11 +786,10 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
                         <Field
                           as="select"
                           name="status"
-                          className={`form-control form-select ${
-                            touched.status && errors.status
-                              ? "border-danger"
-                              : ""
-                          }`}
+                          className={`form-control form-select ${touched.status && errors.status
+                            ? "border-danger"
+                            : ""
+                            }`}
                           style={{ height: "50px" }}
                           onChange={(e: any) => {
                             handleChangeData(e);
@@ -849,12 +843,11 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
                           type="text"
                           name="fromBillingStreet"
                           value={invoice.fromBillingStreet}
-                          className={`form-control  ${
-                            touched.fromBillingStreet &&
+                          className={`form-control  ${touched.fromBillingStreet &&
                             errors.fromBillingStreet
-                              ? "border-danger"
-                              : ""
-                          }`}
+                            ? "border-danger"
+                            : ""
+                            }`}
                           style={{ height: "50px" }}
                           onChange={(e: any) => {
                             handleChangeData(e);
@@ -881,11 +874,10 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
                           type="text"
                           name="fromBillingCity"
                           value={invoice.fromBillingCity}
-                          className={`form-control  ${
-                            touched.fromBillingCity && errors.fromBillingCity
-                              ? "border-danger"
-                              : ""
-                          }`}
+                          className={`form-control  ${touched.fromBillingCity && errors.fromBillingCity
+                            ? "border-danger"
+                            : ""
+                            }`}
                           style={{ height: "50px" }}
                           onChange={(e: any) => {
                             handleChangeData(e);
@@ -912,11 +904,10 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
                           type="text"
                           name="fromBillingState"
                           value={invoice.fromBillingState}
-                          className={`form-control  ${
-                            touched.fromBillingState && errors.fromBillingState
-                              ? "border-danger"
-                              : ""
-                          }`}
+                          className={`form-control  ${touched.fromBillingState && errors.fromBillingState
+                            ? "border-danger"
+                            : ""
+                            }`}
                           style={{ height: "50px" }}
                           onChange={(e: any) => {
                             handleChangeData(e);
@@ -944,11 +935,10 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
                           type="number"
                           name="fromZipCode"
                           value={invoice.fromZipCode}
-                          className={`form-control  ${
-                            touched.fromZipCode && errors.fromZipCode
-                              ? "border-danger"
-                              : ""
-                          }`}
+                          className={`form-control  ${touched.fromZipCode && errors.fromZipCode
+                            ? "border-danger"
+                            : ""
+                            }`}
                           style={{ height: "50px" }}
                           onChange={(e: any) => {
                             handleChangeData(e);
@@ -976,12 +966,11 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
                           type="text"
                           name="fromBillingCountry"
                           value={invoice.fromBillingCountry}
-                          className={`form-control  ${
-                            touched.fromBillingCountry &&
+                          className={`form-control  ${touched.fromBillingCountry &&
                             errors.fromBillingCountry
-                              ? "border-danger"
-                              : ""
-                          }`}
+                            ? "border-danger"
+                            : ""
+                            }`}
                           style={{ height: "50px" }}
                           onChange={(e: any) => {
                             handleChangeData(e);
@@ -1014,11 +1003,10 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
                               ? invoice.toBillingStreet
                               : ""
                           }
-                          className={`form-control  ${
-                            touched.toBillingStreet && errors.toBillingStreet
-                              ? "border-danger"
-                              : ""
-                          }`}
+                          className={`form-control  ${touched.toBillingStreet && errors.toBillingStreet
+                            ? "border-danger"
+                            : ""
+                            }`}
                           style={{ height: "50px" }}
                           onChange={(e: any) => {
                             handleChangeData(e);
@@ -1049,11 +1037,10 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
                               ? invoice.toBillingCity
                               : ""
                           }
-                          className={`form-control  ${
-                            touched.toBillingCity && errors.toBillingCity
-                              ? "border-danger"
-                              : ""
-                          }`}
+                          className={`form-control  ${touched.toBillingCity && errors.toBillingCity
+                            ? "border-danger"
+                            : ""
+                            }`}
                           style={{ height: "50px" }}
                           onChange={(e: any) => {
                             handleChangeData(e);
@@ -1084,11 +1071,10 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
                               ? invoice.toBillingState
                               : ""
                           }
-                          className={`form-control  ${
-                            touched.toBillingState && errors.toBillingState
-                              ? "border-danger"
-                              : ""
-                          }`}
+                          className={`form-control  ${touched.toBillingState && errors.toBillingState
+                            ? "border-danger"
+                            : ""
+                            }`}
                           style={{ height: "50px" }}
                           onChange={(e: any) => {
                             handleChangeData(e);
@@ -1120,11 +1106,10 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
                               ? invoice.toZipCode
                               : ""
                           }
-                          className={`form-control  ${
-                            touched.toZipCode && errors.toZipCode
-                              ? "border-danger"
-                              : ""
-                          }`}
+                          className={`form-control  ${touched.toZipCode && errors.toZipCode
+                            ? "border-danger"
+                            : ""
+                            }`}
                           style={{ height: "50px" }}
                           onChange={(e: any) => {
                             handleChangeData(e);
@@ -1156,11 +1141,10 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
                               ? invoice.toBillingCountry
                               : ""
                           }
-                          className={`form-control  ${
-                            touched.toBillingCountry && errors.toBillingCountry
-                              ? "border-danger"
-                              : ""
-                          }`}
+                          className={`form-control  ${touched.toBillingCountry && errors.toBillingCountry
+                            ? "border-danger"
+                            : ""
+                            }`}
                           style={{ height: "50px" }}
                           onChange={(e: any) => {
                             handleChangeData(e);
@@ -1203,6 +1187,7 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
                                   type="text"
                                   className="form-control mb-2"
                                   value={row.productName}
+                                  placeholder="Item name"
                                   onChange={(e) => {
                                     const updatedRows = [...rows];
                                     updatedRows[index].productName =
@@ -1228,14 +1213,14 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
                             <CTableDataCell>
                               <div>
                                 <input
-                                  type="text"
+                                  type="number"
                                   className="form-control"
                                   value={row.quantity}
                                   onChange={(e) => {
                                     const updatedRows = [...rows];
-                                    const newValue= parseFloat(e.target.value);
-                                    if(!isNaN(newValue)){
-                                      updatedRows[index].quantity = newValue.toString();
+                                    const newValue = parseFloat(e.target.value);
+                                    if (!isNaN(newValue)) {
+                                      updatedRows[index].quantity = newValue;
                                       updatedRows[index].total = calculateTotal(updatedRows[index]);
                                       console.log("Updated rows:", updatedRows); // Log updated rows
                                       setRows(updatedRows);
@@ -1249,16 +1234,13 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
                             <CTableDataCell>
                               <div>
                                 <input
-                                  type="text"
+                                  type="number"
                                   className="form-control"
                                   value={row.discount}
                                   onChange={(e) => {
                                     const updatedRows = [...rows];
-                                    updatedRows[index].discount =
-                                      e.target.value;
-                                    updatedRows[index].total = calculateTotal(
-                                      updatedRows[index]
-                                    );
+                                    updatedRows[index].discount = parseFloat(e.target.value);
+                                    updatedRows[index].total = calculateTotal(updatedRows[index]);
                                     setRows(updatedRows);
                                   }}
                                 />
@@ -1267,12 +1249,12 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
                             <CTableDataCell>
                               <div>
                                 <input
-                                  type="text"
+                                  type="number"
                                   className="form-control"
                                   value={row.amount}
                                   onChange={(e) => {
                                     const updatedRows = [...rows];
-                                    updatedRows[index].amount = e.target.value;
+                                    updatedRows[index].amount = parseFloat(e.target.value);
                                     updatedRows[index].total = calculateTotal(
                                       updatedRows[index]
                                     );
@@ -1326,7 +1308,7 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
                             disabled
                             className="form-control"
                             value={subTotalValue}
-                            //  onChange={(e: any) => { handleChangeData(e); handleChange(e) }}
+                          //  onChange={(e: any) => { handleChangeData(e); handleChange(e) }}
                           />
                         </div>
                       </div>
@@ -1345,7 +1327,7 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
                             disabled
                             value={discountValue}
                             className="form-control"
-                            // onChange={(e: any) => { handleChangeData(e); handleChange(e) }}
+                          // onChange={(e: any) => { handleChangeData(e); handleChange(e) }}
                           />
                         </div>
                       </div>

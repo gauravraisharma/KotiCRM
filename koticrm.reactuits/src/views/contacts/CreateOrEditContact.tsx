@@ -43,6 +43,9 @@ const CreateOrEditContact = () => {
   const fetchedAccounts = useSelector(
     (state: any) => state.accountReducer.accounts
   );
+  const fetchedAccount = useSelector(
+    (state: any) => state.accountReducer.account
+  );
 
   const mappedFetchedAccountOwners = fetchedAccountOwners.map(
     (fetchedAccountOwner) => ({
@@ -79,6 +82,8 @@ const CreateOrEditContact = () => {
     const selectedCountryObject = countries.find(
       (country) => country.name === contact.country
     );
+
+    setSelectedAccount(fetchedAccount);
 
     if (selectedCountryObject) {
       setStates(selectedCountryObject.states);
@@ -192,7 +197,7 @@ const CreateOrEditContact = () => {
                         <ErrorMessage
                           name="ownerId"
                           // className="invalid-feedback"
-                          
+
                           render={(error) => (
                             <label style={{ color: "#dc3545" }}>{error}</label>
                           )}
@@ -212,11 +217,10 @@ const CreateOrEditContact = () => {
                             as="select"
                             id="accountID"
                             name="accountID"
-                            className={`form-control ${
-                              touched.accountID && errors.accountID
+                            className={`form-control ${touched.accountID && errors.accountID
                                 ? "is-invalid"
                                 : ""
-                            }`}
+                              }`}
                             onChange={handleAccountChange}
                             style={{ height: "50px" }}
                             hidden={contact.id ? "hidden" : ""}
@@ -268,11 +272,10 @@ const CreateOrEditContact = () => {
                           type="text"
                           id="firstName"
                           name="firstName"
-                          className={`form-control ${
-                            touched.firstName && errors.firstName
+                          className={`form-control ${touched.firstName && errors.firstName
                               ? "is-invalid"
                               : ""
-                          }`}
+                            }`}
                           placeholder="Enter your first name"
                           style={{ height: "50px" }}
                         />
@@ -342,11 +345,10 @@ const CreateOrEditContact = () => {
                           type="text"
                           id="mobile"
                           name="mobile"
-                          className={`form-control ${
-                            touched.firstName && errors.firstName
+                          className={`form-control ${touched.firstName && errors.firstName
                               ? "is-invalid"
                               : ""
-                          }`}
+                            }`}
                           placeholder="Enter your mobile number"
                           style={{ height: "50px" }}
                         />
@@ -511,11 +513,10 @@ const CreateOrEditContact = () => {
                           type="text"
                           id="lastName"
                           name="lastName"
-                          className={`form-control ${
-                            touched.firstName && errors.firstName
+                          className={`form-control ${touched.firstName && errors.firstName
                               ? "is-invalid"
                               : ""
-                          }`}
+                            }`}
                           placeholder="Enter your last name"
                           style={{ height: "50px" }}
                         />
@@ -542,11 +543,10 @@ const CreateOrEditContact = () => {
                           type="email"
                           id="email"
                           name="email"
-                          className={`form-control ${
-                            touched.firstName && errors.firstName
+                          className={`form-control ${touched.firstName && errors.firstName
                               ? "is-invalid"
                               : ""
-                          }`}
+                            }`}
                           placeholder="name@example.com"
                           style={{ height: "50px" }}
                         />
