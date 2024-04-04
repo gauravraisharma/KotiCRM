@@ -64,7 +64,7 @@ interface newInvoiceProps {
   ownerId: any;
 }
 
-const NewInvoice: React.FC<newInvoiceProps> = ({
+const EditInvoice: React.FC<newInvoiceProps> = ({
   closeModal,
   onBackToListButtonClickHandler,
 }) => {
@@ -1482,4 +1482,4 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
   );
 };
 
-export default NewInvoice;
+export default EditInvoice;

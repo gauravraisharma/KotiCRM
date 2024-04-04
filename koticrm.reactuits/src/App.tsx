@@ -17,20 +17,20 @@ function App() {
     <BrowserRouter>
       {/* <AuthProvider> */}
       <Suspense fallback={loading}>
-                  <Routes>
+        <Routes>
 
-                      {appRoutes.map((route:any, index) => {
-                              return (<Route
-                                  key={index} 
-                                  path={route.path}
-                                  element={<AuthenticatedRoute isAuth={route.isAuth} />}>
-                               <Route
-                                   key={index} 
-                                   path={route.path}
-                                   element={<route.element />} />
-                              </Route>
-                              )
-                          
+          {appRoutes.map((route: any, index) => {
+            return (<Route
+              key={index}
+              path={route.path}
+              element={<AuthenticatedRoute isAuth={route.isAuth} />}>
+              <Route
+                key={index}
+                path={route.path}
+                element={<route.element />} />
+            </Route>
+            )
+
           })}
         </Routes>
       </Suspense>

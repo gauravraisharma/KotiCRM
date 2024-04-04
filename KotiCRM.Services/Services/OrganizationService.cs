@@ -51,5 +51,10 @@ namespace KotiCRM.Services.Services
             return organizationData;
 
         }
+
+        public Task<bool> UpdateTimeZoneAsync(string userId, string timeZone)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

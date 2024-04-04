@@ -16,7 +16,7 @@ import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { AiFillEye } from "react-icons/ai";
 
-import { MdDelete } from "react-icons/md";
+import { MdDelete, MdEditSquare } from "react-icons/md";
 import InvoiceTemplate from "../../pdf-template/InvoiceTemplate";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -32,6 +32,7 @@ import {
 } from "../../redux-saga/modules/invoice/action";
 import { getNotes } from "../../redux-saga/modules/notes/action";
 import { formatDate } from "../../utils/Shared/DateTransform";
+import { Link } from "react-router-dom";
 
 interface InvoiceProps {
   getInvoiceCount: (data: string) => void;
@@ -202,96 +203,113 @@ const InvoiceComponent: React.FC<InvoiceProps> = ({
                   <CTableBody>
                     {accountId != null
                       ? filteredInvoices?.map((invoiceModel: any) => (
-                          <CTableRow key={invoiceModel.invoice?.id}>
-                            <CTableDataCell>
-                              {invoiceModel.invoice?.subject}
-                            </CTableDataCell>
-                            <CTableDataCell>
-                              {getInvoiceStatusValue(
-                                invoiceModel.invoice?.status
-                              )}
-                            </CTableDataCell>
-                            <CTableDataCell>
-                              {getDates(invoiceModel.invoice?.invoiceDate)}
-                            </CTableDataCell>
-                            <CTableDataCell>
-                              {formatDate(
-                                invoiceModel.invoice?.dueDate,
-                                "DD/MM/YYYY HH:mm",
-                                timezone
-                              )}
-                            </CTableDataCell>
-                            <CTableDataCell>
-                              <AiFillEye
-                                size={21}
+                        <CTableRow key={invoiceModel.invoice?.id}>
+                          <CTableDataCell>
+                            {invoiceModel.invoice?.subject}
+                          </CTableDataCell>
+                          <CTableDataCell>
+                            {getInvoiceStatusValue(
+                              invoiceModel.invoice?.status
+                            )}
+                          </CTableDataCell>
+                          <CTableDataCell>
+                            {getDates(invoiceModel.invoice?.invoiceDate)}
+                          </CTableDataCell>
+                          <CTableDataCell>
+                            {formatDate(
+                              invoiceModel.invoice?.dueDate,
+                              "DD/MM/YYYY HH:mm",
+                              timezone
+                            )}d
+                          </CTableDataCell>
+                          <CTableDataCell>
+                            {invoiceModel.invoice?.status !== 3 && <Link to={`/invoices/editInvoice/${invoiceModel.invoice?.id}`}>
+                              <MdEditSquare
                                 style={{
-                                  color: "rgb(30, 30, 115)",
-                                  marginRight: "7px",
-                                }}
-                                onClick={() =>
-                                  generateInvoicePDF(invoiceModel.invoice?.id)
-                                }
-                              />
-
-                              <MdDelete
-                                size={21}
-                                style={{ color: "red" }}
-                                onClick={() =>
-                                  handleDeleteClick(invoiceModel.invoice?.id)
-                                }
-                              />
-                            </CTableDataCell>
-                          </CTableRow>
-                        ))
-                      : invoices?.map((invoiceModel: any) => (
-                          <CTableRow key={invoiceModel.invoice?.id}>
-                            <CTableDataCell>
-                              {invoiceModel.invoice?.subject}
-                            </CTableDataCell>
-                            <CTableDataCell>
-                              {getInvoiceStatusValue(
-                                invoiceModel.invoice?.status
-                              )}
-                            </CTableDataCell>
-                            <CTableDataCell>
-                              {getDates(invoiceModel.invoice?.invoiceDate)}
-                            </CTableDataCell>
-                            <CTableDataCell>
-                              {/* {getDates(invoiceModel.invoice?.dueDate)} */}
-                              {formatDate(
-                                invoiceModel.invoice?.dueDate,
-                                "DD/MM/YYYY HH:mm",
-                                timezone
-                              )}
-                            </CTableDataCell>
-                            <CTableDataCell>
-                              <AiFillEye
-                                size={21}
-                                style={{
-                                  color: "rgb(30, 30, 115)",
-                                  marginRight: "7px",
-                                  cursor: "pointer",
-                                }}
-                                onClick={() =>
-                                  generateInvoicePDF(invoiceModel.invoice?.id)
-                                }
-                              />
-
-                              <MdDelete
-                                size={21}
-                                style={{
-                                  color: "red",
+                                  color: "green",
                                   marginRight: "10px",
                                   fontSize: "20px",
-                                  cursor: "pointer",
                                 }}
-                                onClick={() =>
-                                  handleDeleteClick(invoiceModel.invoice?.id)
-                                }
                               />
-                            </CTableDataCell>
-                          </CTableRow>
-                        ))}
+                            </Link>}
+                            <AiFillEye
+                              size={21}
+                              style={{
+                                color: "rgb(30, 30, 115)",
+                                marginRight: "7px",
+                              }}
+                              onClick={() =>
+                                generateInvoicePDF(invoiceModel.invoice?.id)
+                              }
+                            />
+                            <MdDelete
+                              size={21}
+                              style={{ color: "red" }}
+                              onClick={() =>
+                                handleDeleteClick(invoiceModel.invoice?.id)
+                              }
+                            />
+                          </CTableDataCell>
+                        </CTableRow>
+                      ))
+                      : invoices?.map((invoiceModel: any) => (
+                        <CTableRow key={invoiceModel.invoice?.id}>
+                          <CTableDataCell>
+                            {invoiceModel.invoice?.subject}
+                          </CTableDataCell>
+                          <CTableDataCell>
+                            {getInvoiceStatusValue(
+                              invoiceModel.invoice?.status
+                            )}
+                          </CTableDataCell>
+                          <CTableDataCell>
+                            {getDates(invoiceModel.invoice?.invoiceDate)}
+                          </CTableDataCell>
+                          <CTableDataCell>
+                            {/* {getDates(invoiceModel.invoice?.dueDate)} */}
+                            {formatDate(
+                              invoiceModel.invoice?.dueDate,
+                              "DD/MM/YYYY HH:mm",
+                              timezone
+                            )}
+                          </CTableDataCell>
+                          <CTableDataCell>
+                            {invoiceModel.invoice?.status !== 3 && <Link to={`/invoices/editInvoice/${invoiceModel.invoice?.id}`}>
+                              <MdEditSquare
+                                style={{
+                                  color: "green",
+                                  marginRight: "10px",
+                                  fontSize: "20px",
+                                }}
+                              />
+                            </Link>}
+                            <AiFillEye
+                              size={21}
+                              style={{
+                                color: "rgb(30, 30, 115)",
+                                marginRight: "7px",
+                                cursor: "pointer",
+                              }}
+                              onClick={() =>
+                                generateInvoicePDF(invoiceModel.invoice?.id)
+                              }
+                            />
+
+                            <MdDelete
+                              size={21}
+                              style={{
+                                color: "red",
+                                marginRight: "10px",
+                                fontSize: "20px",
+                                cursor: "pointer",
+                              }}
+                              onClick={() =>
+                                handleDeleteClick(invoiceModel.invoice?.id)
+                              }
+                            />
+                          </CTableDataCell>
+                        </CTableRow>
+                      ))}
                   </CTableBody>
                 </CTable>
               </CCardBody>

@@ -57,7 +57,7 @@ const Contacts = ({ getContactsCount, accountId }: Props) => {
     (state: any) => state.accountReducer.accountOwner
   );
 
-  const contactsCount = fetchedContactWithAccountNameListAndTotal.length;
+  const contactsCount = fetchedContactWithAccountNameListAndTotal.contactsCount;
 
   // Pagination
   const pageSize = 5;
@@ -141,7 +141,7 @@ const Contacts = ({ getContactsCount, accountId }: Props) => {
                   value="+ New"
                   variant="outline"
                 />
-                  {/* <FaPlus style={{ marginRight: '5px' }} /> New */}
+                {/* <FaPlus style={{ marginRight: '5px' }} /> New */}
               </Link>
             }
           </CCol>
@@ -267,13 +267,3 @@ const Contacts = ({ getContactsCount, accountId }: Props) => {
 };
 
 export default Contacts;
-
-
-//<CPagination
-//  activePage={pageNumber}
-//  onActivePageChange={handlePageChange}
-//  align="end"
-//  aria-label="Page navigation example"
-//>
-//  {/* Render pagination items based on total number of pages */}
-//</CPagination>

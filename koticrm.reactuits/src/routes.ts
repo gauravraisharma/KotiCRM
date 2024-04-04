@@ -30,6 +30,7 @@ const CreateContact = lazy(() => import('./views/contacts/CreateOrEditContact'))
 //Invoices Routes
 const Invoices = lazy(() => import('./views/invoice/Invoice'))
 const CreateInvoice = lazy(() => import('./views/invoice/NewInvoice'))
+const EditInvoice = lazy(() => import('./views/invoice/EditInvoice'))
 
 
 // Base
@@ -146,6 +147,7 @@ const routes: Route[] = [
     { path: '/newAccount', name: 'NewAccount', element: NewAccount, isAuth: true, modulePermission: 'Accounts' },
     { path: '/invoices', name: 'Invoices', element: Invoices, isAuth: true, modulePermission: 'Invoices' },
     { path: '/invoices/createInvoice', name: 'CreateInvoice', element: CreateInvoice, isAuth: true, modulePermission: 'Invoices' },
+    { path: '/invoices/editInvoice/:invoiceId', name: 'EditInvoice', element: EditInvoice, isAuth: true, modulePermission: 'Invoices' },
     { path: '/settings', name: 'Settings', element: Settings, isAuth: true },
 
 

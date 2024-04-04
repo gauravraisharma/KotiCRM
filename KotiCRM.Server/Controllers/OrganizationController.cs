@@ -4,6 +4,7 @@ using KotiCRM.Services.IServices;
 using KotiCRM.Services.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace KotiCRM.Server.Controllers
 {
@@ -36,6 +37,15 @@ namespace KotiCRM.Server.Controllers
         public async Task<ActionResult<OrganizationDTO>> UpdateOrganization(int id,Organization organization)
         {
             var res = await _organizationService.UpdateOrganizationTimeZone(id, organization);
+            return Ok(res);
+        }
+
+        [HttpPut("UpdateTimeZone")]
+        public async Task<ActionResult<bool>> UpdateTimeZone(string timeZone)
+        {
+            string username = User.Identity.Name;
+            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var res = await _organizationService.UpdateTimeZoneAsync(userId, timeZone);
             return Ok(res);
         }
     }
