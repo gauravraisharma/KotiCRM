@@ -5,7 +5,7 @@ import { OrganizationBankModel, OrganizationModel, SharedModel } from '../../../
 
 
  export function updateTimeZone(id : number,organization: OrganizationModel): Promise<apiResponse<OrganizationModel>>{ 
-   return axiosInstance.post<OrganizationModel>(`/Organization/UpdateOrganization/${id}`, organization).
+   return axiosInstance.put<OrganizationModel>(`/Organization/UpdateOrganization/${id}`, organization).
    then((response: AxiosResponse<OrganizationModel>) => responseBody(response)).
    catch((error:AxiosError) =>{ 
     const errorResponse: apiResponse<OrganizationModel> = {
