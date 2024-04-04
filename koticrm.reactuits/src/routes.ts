@@ -6,6 +6,7 @@ import { Route } from './models/commonModels/CommonModels';
 const DefaultLayout = lazy(() => import('./layout/DefaultLayout'))
 // Pages
 const Login = lazy(() => import('./views/userAuthentication/login/Login'))
+const Home = lazy(()=>import ('./views/userAuthentication/home/Home'))
 const Register = lazy(() => import('./views/userAuthentication/register/Register'))
 const Page404 = lazy(() => import('./views/userAuthentication/page404/Page404'))
 const Page500 = lazy(() => import('./views/userAuthentication/page500/Page500'))
@@ -14,7 +15,6 @@ const Page500 = lazy(() => import('./views/userAuthentication/page500/Page500'))
 //settings
 
 const Settings = lazy(() => import('./views/settings/Settings'))
-
 const Dashboard = lazy(() => import('./views/dashboard/Dashboard'))
 const Colors = lazy(() => import('./theme/colors/Colors'))
 const Typography = lazy(() => import('./theme/typography/Typography'))
@@ -81,6 +81,7 @@ const Widgets = lazy(() => import('./components/widgets/Widgets'))
 export const appRoutes: Route[] = [
     // App routing
     { path: "/login", name: "Login Page", element: Login, isAuth:false },
+    { path: "/",name :" Home Page", element:Home,isAuth:false},
     { path: "/register", name: "Register Page", element: Register, isAuth: false },
     { path: "/404", name: "Page 404", element: Page404, isAuth: false },
     { path: "/500", name: "Page 500", element: Page500, isAuth: false },
@@ -90,6 +91,8 @@ export const appRoutes: Route[] = [
 const routes: Route[] = [
     // { path: '/', name: 'Home', element: null, isAuth: false},
     { path: '/dashboard', name: 'Dashboard', element: Dashboard, isAuth: true },
+    // { path: '/dashboard', name: 'Dashboard', element: Dashboard, isAuth: true },
+
     { path: '/theme', name: 'Theme', element: Colors, isAuth: false },
     { path: '/theme/colors', name: 'Colors', element: Colors, isAuth: false },
     { path: '/theme/typography', name: 'Typography', element: Typography, isAuth: false },
