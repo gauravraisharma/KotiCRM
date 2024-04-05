@@ -1,37 +1,43 @@
-import {
-  CButton,
-  CCard,
-  CCardBody,
-  CCardHeader,
-  CFormTextarea,
-  CTable,
-  CTableDataCell,
-  CTableHead,
-  CTableHeaderCell,
-  CTableRow,
-} from "@coreui/react";
-import { Formik, Form, Field, ErrorMessage, useFormik } from "formik";
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { Formik, Form, Field, ErrorMessage, useFormik } from 'formik';
+import DatePicker from 'react-datepicker';
+import Select from 'react-select';
+import { ToastContainer } from 'react-toastify';
+import { useDispatch, useSelector } from 'react-redux';
+import * as Yup from 'yup'; // Add import for validationSchema
+import { CButton, CCard, CCardBody, CCardHeader, CCol } from '@coreui/react';
+import { getOrganization } from '../../redux-saga/modules/shared/action';
 
-import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import * as Yup from "yup";
-import {
-  Invoice,
-  InvoiceCreationModel,
-  InvoiceItem,
-} from "../../models/invoice/Invoice";
-import { useDispatch } from "react-redux";
+interface newInvoiceProps {
+  invoiceData: any;
+  accountId: any;
+  ownerId: any;
+}
+const validationSchema = Yup.object().shape({
+  invoiceOwner: Yup.string().required("Invoice owner is required"),
+  subject: Yup.string().required("Subject is required"),
+  dueDate: Yup.date().required("Due date is required"),
+  accountName: Yup.string().required("Account name is required"),
+  contacts: Yup.string().required("Contacts are required"),
+  purchaseOrder: Yup.string().required("Purchase order is required"),
+  status: Yup.string().required("Status is required"),
+  fromBillingStreet: Yup.string().required("From billing street is required"),
+  fromBillingCity: Yup.string().required("From billing city is required"),
+  fromBillingState: Yup.string().required("From billing state is required"),
+  fromZipCode: Yup.string().required("From zip code is required"),
+  fromBillingCountry: Yup.string().required("From billing country is required"),
+  toBillingStreet: Yup.string().required("To billing street is required"),
+  toBillingCity: Yup.string().required("To billing city is required"),
+  toBillingState: Yup.string().required("To billing state is required"),
+  toZipCode: Yup.string().required("To zip code is required"),
+  toBillingCountry: Yup.string().required("To billing country is required"),
+  termsandConditions: Yup.string().required("Terms and conditions are required"),
+  description: Yup.string().required("Description is required"),
+  tax: Yup.number().required("Tax is required"),
+  adjustments: Yup.number().required("Adjustments are required"),
+});
 
-import Select from "react-select";
-import DatePicker from "react-datepicker";
-
-import { CKEditor } from "@ckeditor/ckeditor5-react";
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-
-import "react-datepicker/dist/react-datepicker.css";
-import { getOrganization } from "../../redux-saga/modules/shared/action";
-import { createInvoiceRequest } from "../../redux-saga/modules/invoice/action";
-import { ToastContainer } from "react-toastify";
 
 const initialValues = {
   invoiceOwner: "",
@@ -51,81 +57,77 @@ const initialValues = {
   toBillingState: "",
   toZipCode: "",
   toBillingCountry: "",
-  // termsandConditions: "",
-  // description: "",
+   termsandConditions: "",
+   description: "",
   tax: "",
   adjustments: "",
 };
 
-interface newInvoiceProps {
-  onBackToListButtonClickHandler: () => void;
-  closeModal: () => void;
-  accountId: any;
-  ownerId: any;
-}
 
-const EditInvoice: React.FC<newInvoiceProps> = ({
-  closeModal,
-  onBackToListButtonClickHandler,
-}) => {
-  const dispatch = useDispatch();
-
-  const contactWithAccountNameListAndTotalCount = useSelector((state: any) => state.contactReducer.contacts);
-  const contacts = contactWithAccountNameListAndTotalCount.contactWithAccountNames;
-  const invoiceStatus = useSelector(
-    (state: any) => state.invoiceReducer.invoiceStatus
-  );
-  const invoiceOwner = useSelector(
-    (state: any) => state.invoiceReducer.invoiceOwner
-  );
-  const accountOwner = useSelector(
-    (state: any) => state.accountReducer.accountOwner
-  );
-  const userId = useSelector((state: any) => state.authReducer.userId);
-  const accountNames = useSelector(
-    (state: any) => state.accountReducer.accounts
-  );
-
-  const currentDate: Date = new Date();
-  const formattedDateTime: string = currentDate.toISOString().slice(0, -1);
-
-  const invoiceDate = new Date().toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "long",
-    day: "2-digit",
-  });
-
+const EditInvoice: React.FC<newInvoiceProps> = ({ invoiceData }) => {
   const [termsAndConditions, setTermsAndConditions] = useState("");
 
-  const handleEditorChange = (event:any, editor:any) => {
-    const data = editor.getData();
-    setTermsAndConditions(data);
-  };
+  const dispatch = useDispatch();
+  
+  const [updateInvoice, setUpdateInvoice] = useState({
+  invoiceOwner: invoiceData.invoiceOwner,
+  subject: invoiceData.subject,
+  dueDate: invoiceData.dueDate,
+  accountName: invoiceData.accountName,
+  contacts: invoiceData.contacts,
+  purchaseOrder: invoiceData.purchaseOrder,
+  status: invoiceData.status,
+  fromBillingStreet: invoiceData.fromBillingStreet,
+  fromBillingCity: invoiceData.fromBillingCity,
+  fromBillingState: invoiceData.fromBillingState,
+  fromZipCode:invoiceData.fromZipCode ,
+  fromBillingCountry: invoiceData.fromBillingCountry,
+  toBillingStreet: invoiceData.toBillingStreet,
+  toBillingCity: invoiceData.toBillingCity,
+  toBillingState:invoiceData.toBillingState ,
+  toZipCode: invoiceData.toZipCode,
+  toBillingCountry:invoiceData.toBillingCountry ,
+  termsandConditions: invoiceData.termsandConditions,
+  description: invoiceData.description,
+  tax: invoiceData.tax,
+  adjustments: invoiceData.adjustments,
 
-  const [touchedFields, setTouchedFields] = useState({
-    fromBillingStreet: false,
-    fromBillingCity: false,
-    fromBillingState: false,
-    fromZipCode: false,
-    fromBillingCountry: false,
-    toBillingStreet: false,
-    toBillingCity: false,
-    toBillingState: false,
-    toZipCode: false,
-    toBillingCountry: false,
-    dueDate: false,
-    invoiceDate: false,
   });
-  const handleInputChange = (fieldName: any) => {
-    setTouchedFields((prevFields) => ({
-      ...prevFields,
-      [fieldName]: true, // Mark the field as touched
-    }));
-  };
+  // const [touchedFields, setTouchedFields] = useState({
+  //   invoiceOwner: false,
+  //   subject: false,
+  //   dueDate: false,
+  //   accountName: false,
+  //   contacts: false,
+  //   purchaseOrder: false,
+  //   status: false,
+  //   fromBillingStreet: false,
+  //   fromBillingCity: false,
+  //   fromBillingState: false,
+  //   fromZipCode: false,
+  //   fromBillingCountry: false,
+  //   toBillingStreet: false,
+  //   toBillingCity: false,
+  //   toBillingState: false,
+  //   toZipCode: false,
+  //   toBillingCountry: false,
+  //    termsandConditions: false,
+  //    description: false,
+  //   tax: false,
+  //   adjustments: false,
 
-  const organization = useSelector(
-    (state: any) => state.sharedReducer.organization
-  );
+  // )};
+
+  // Fetching data from store
+  const contactWithAccountNameListAndTotalCount = useSelector((state: any) => state.contactReducer.contacts);
+  const contacts = contactWithAccountNameListAndTotalCount.contactWithAccountNames;
+  const invoiceStatus = useSelector((state: any) => state.invoiceReducer.invoiceStatus);
+  const invoiceOwner = useSelector((state: any) => state.invoiceReducer.invoiceOwner);
+  const accountOwner = useSelector((state: any) => state.accountReducer.accountOwner);
+  const userId = useSelector((state: any) => state.authReducer.userId);
+  const accountNames = useSelector((state: any) => state.accountReducer.accounts);
+  const organization = useSelector((state: any) => state.sharedReducer.organization);
+
   var orgDetails;
   if (organization) {
     const activeOrg = organization.filter(
@@ -135,94 +137,12 @@ const EditInvoice: React.FC<newInvoiceProps> = ({
       orgDetails = activeOrg[0]?.organizationResponse;
     }
   }
+  
+  useEffect(() => {
+    dispatch(getOrganization());
+  }, [dispatch]);
+
   var grandTotalValue = 0;
-
-  const [invoice, setInvoice] = useState({
-    subject: "",
-    invoiceDate: new Date(),
-    dueDate: new Date(),
-    dealName: "",
-    purchaseOrder: "",
-    status: 0,
-
-    fromBillingStreet: orgDetails?.billingStreet,
-    fromBillingCity: orgDetails?.billingCity,
-    fromBillingState: orgDetails?.billingState,
-    fromZipCode: orgDetails?.zipCode,
-    fromBillingCountry: orgDetails?.billingCountry,
-
-    toBillingStreet: "",
-    toBillingCity: "",
-    toBillingState: "",
-    toZipCode: "",
-    toBillingCountry: "",
-
-    termsandConditions: "",
-    description: "",
-    subTotal: 0,
-    discount: 0,
-    tax: 0,
-    adjustments: 0,
-    grandTotal: grandTotalValue,
-  });
-  const validationSchema = Yup.object().shape({
-    invoiceOwner: Yup.string().required("Required (Invoice Owner)"),
-    subject: Yup.string().required("Required(Subject)"),
-    invoiceDate: touchedFields.invoiceDate
-      ? Yup.string().required("Required (Due Date)")
-      : Yup.string(),
-    dueDate: touchedFields.dueDate
-      ? Yup.string().required("Required (Due Date)")
-      : Yup.string(),
-    accountName: Yup.string().required("Required (Account)"),
-    contacts: Yup.string().required("Required (Contacts)"),
-    status: Yup.string().required("Required (Status)"),
-    fromBillingStreet: touchedFields.fromBillingStreet
-      ? Yup.string().required("Required (Billing Street)")
-      : Yup.string(),
-    fromBillingCity: touchedFields.fromBillingCity
-      ? Yup.string().required("Required (Billing City)")
-      : Yup.string(),
-    fromBillingState: touchedFields.fromBillingState
-      ? Yup.string().required("Required (Billing State)")
-      : Yup.string(),
-    fromZipCode: touchedFields.fromZipCode
-      ? Yup.string()
-          .required("Required (zip Code)")
-       : Yup.string(),
-    fromBillingCountry: touchedFields.fromBillingCountry
-      ? Yup.string().required("Required (Billing Country)")
-      : Yup.string(),
-    toBillingStreet:
-      invoice.toBillingStreet == ""
-        ? Yup.string().required("Required (Billing Street)")
-        : touchedFields.toBillingStreet
-        ? Yup.string().required("Required (Billing Street)")
-        : Yup.string(),
-    toBillingCity:
-      invoice.toBillingCity == ""
-        ? Yup.string().required("Required (Billing City)")
-        : touchedFields.toBillingCity
-        ? Yup.string().required("Required (Billing City)")
-        : Yup.string(),
-    toBillingState:
-      invoice.toBillingState == ""
-        ? Yup.string().required("Required (Billing State)")
-        : touchedFields.toBillingState
-        ? Yup.string().required("Required (Billing State)")
-        : Yup.string(),
-    toZipCode:
-      invoice.toZipCode == ""
-        ? Yup.string().required("Required (zip Code)")
-         : Yup.string(),
-    toBillingCountry:
-      invoice.toBillingCountry == ""
-        ? Yup.string().required("Required (Billing Country)")
-        : touchedFields.toBillingCountry
-        ? Yup.string().required("Required (Billing Country)")
-        : Yup.string(),
-  });
-
   const [toAddress, setToAddress] = useState({
     billingStreet: "",
     billingCity: "",
@@ -236,7 +156,6 @@ const EditInvoice: React.FC<newInvoiceProps> = ({
     invoiceOwner: "",
     accountName: "",
   });
-
   const handleDropdownChange = (e: any, selectedOption: any) => {
     if (e != null) {
       setDropdownItems({ ...dropdownItems, [selectedOption.name]: e.key });
@@ -259,21 +178,18 @@ const EditInvoice: React.FC<newInvoiceProps> = ({
     }
   };
 
-  useEffect(() => {
-    setInvoice((prevInvoice) => ({
-      ...prevInvoice,
-      toBillingStreet: toAddress?.billingStreet,
-      toBillingCity: toAddress?.billingCity,
-      toBillingState: toAddress?.billingState,
-      toZipCode: toAddress?.zipCode,
-      toBillingCountry: toAddress?.billingCountry,
-    }));
-  }, [toAddress]);
+  const currentDate: Date = new Date();
+  const formattedDateTime: string = currentDate.toISOString().slice(0, -1);
 
-  useEffect(() => {
-    dispatch(getOrganization());
-  }, [dispatch]);
+  const invoiceDate = new Date().toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "2-digit",
+  });
 
+  const handleChangeData = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setUpdateInvoice({ ...updateInvoice, [e.target.name]: e.target.value });
+  };
   interface Row {
     sNo: number;
     productName: string;
@@ -283,9 +199,6 @@ const EditInvoice: React.FC<newInvoiceProps> = ({
     amount: string;
     total: string;
   }
-
-  const [rows, setRows] = useState<Row[]>([]);
-
   const handleAddRow = () => {
     const newRow: Row = {
       sNo: rows.length + 1,
@@ -298,7 +211,6 @@ const EditInvoice: React.FC<newInvoiceProps> = ({
     };
     setRows([...rows, newRow]);
   };
-
   const subTotalValue = rows.reduce((total, row) => {
     // Parse row.amount and row.quantity to numbers, defaulting to 0 if NaN
     const amount = parseFloat(row.amount) || 0;
@@ -310,68 +222,19 @@ const EditInvoice: React.FC<newInvoiceProps> = ({
     const rowDiscount = parseFloat(row.discount) || 0
     return discount +rowDiscount;
   }, 0);
-
-  grandTotalValue =
+    grandTotalValue =
     subTotalValue -
     discountValue +
     parseFloat(invoice.tax.toString()) -
     parseFloat(invoice.adjustments.toString());
 
-  const handleChangeData = (e: any) => {
-    setInvoice({ ...invoice, [e.target.name]: e.target.value });
-  };
+  // const handleChangeData = (e: any) => {
+  //   setInvoice({ ...invoice, [e.target.name]: e.target.value });
+  // };
+  const handleUpdateInvoiceClick = () => {
 
-  const handleCreateInvoiceClick = () => {
-    const invoiceDetails: Invoice = {
-      id: 0,
-      ownerID: dropdownItems.invoiceOwner,
-      accountID: parseInt(dropdownItems.accountName, 10),
-      subject: invoice.subject,
-      invoiceDate: invoice.invoiceDate ? new Date(invoice.invoiceDate).toISOString() : "",
-      dueDate: invoice.dueDate ? new Date(invoice.dueDate).toISOString() : "",
-      contactID: parseInt(dropdownItems.contacts, 10),
-      dealName: invoice.dealName,
-      purchaseOrder: invoice.purchaseOrder,
-      status: parseInt(invoice.status.toString(), 10),
-      fromBillingStreet: invoice.fromBillingStreet,
-      fromBillingCity: invoice.fromBillingCity,
-      fromBillingState: invoice.fromBillingState,
-      fromZipCode: invoice.fromZipCode,
-      fromBillingCountry: invoice.fromBillingCountry,
-      toBillingStreet: invoice.toBillingStreet,
-      toBillingCity: invoice.toBillingCity,
-      toBillingState: invoice.toBillingState,
-      toZipCode: invoice.toZipCode,
-      toBillingCountry: invoice.toBillingCountry,
-      termsAndConditions: invoice.termsandConditions,
-      description: invoice.description,
-      createdBy: userId,
-      createdOn: formattedDateTime,
-      modifiedBy: userId,
-      modifiedOn: formattedDateTime,
-    };
-    const invoiceItemDetails: InvoiceItem[] = rows.map((row) => {
-      return {
-        id: 0,
-        invoiceID: 0,
-        sno: row.sNo,
-        productName: row.productName,
-        description: row.description,
-        quantity: parseFloat(row.quantity),
-        discount: parseFloat(row.discount),
-        amount: parseFloat(row.amount),
-        tax: parseFloat(invoice.tax.toString()),
-        total: parseFloat(row.total),
-      };
-    });
-    const invoiceModel: InvoiceCreationModel = {
-      Invoice: invoiceDetails,
-      InvoiceItems: invoiceItemDetails,
-    };
-    dispatch(createInvoiceRequest(invoiceModel));
-    closeModal();
   };
-
+  
   const getAccountOwner = (ownerId: any) => {
     const owner = accountOwner?.find((owner: any) => owner.id === ownerId);
     return owner ? owner.label : "";
@@ -384,12 +247,13 @@ const EditInvoice: React.FC<newInvoiceProps> = ({
     return ((amount - discount) * quantity).toString();
   };
 
-  const { handleSubmit } = useFormik({
-    enableReinitialize: true,
-    initialValues: initialValues,
-    validationSchema: validationSchema,
-    onSubmit: handleCreateInvoiceClick,
-  });
+  // const { handleSubmit } = useFormik({
+  //   enableReinitialize: true,
+  //   initialValues: initialValues,
+  //   validationSchema: validationSchema,
+  // });
+
+
 
   return (
     <div>
@@ -398,29 +262,32 @@ const EditInvoice: React.FC<newInvoiceProps> = ({
         <CCardHeader className="mb-3">
           <div className="d-flex justify-content-between align-items-center">
             <div>
-              <h5 className="mb-0">Create Invoice</h5>
+              <h5 className="mb-0">Upadte Invoice</h5>
             </div>
-            <div className="text-end">
-              <CButton
-                component="input"
-                type="button"
-                color="secondary"
-                value="Back To Invoices"
-                onClick={onBackToListButtonClickHandler}
-              />
-            </div>
+            <CCol xs={6} className="text-end">
+              {
+                <Link to={`/invoices`}>
+                  <CButton
+                    component="input"
+                    type="button"
+                    color="secondary"
+                    value="Back To Invoices"
+                  />
+                </Link>
+              }
+            </CCol>
           </div>
         </CCardHeader>
         <CCardBody>
           <Formik
             initialValues={initialValues}
             validationSchema={validationSchema}
-            onSubmit={handleCreateInvoiceClick}
           >
-            {({ handleChange, touched, errors, handleBlur }) => (
-              <Form>
-                <div className="label-form">Invoice Information</div>
-                <div className="row">
+          {({ handleChange, errors, handleSubmit, touched }) => (
+            <Form>
+              <div className="label-form">Invoice Information</div>
+              
+              <div className="row">
                   <div className="col-md-6">
                     <div className="form-group row">
                       <label
@@ -543,11 +410,8 @@ const EditInvoice: React.FC<newInvoiceProps> = ({
                                   );
                                 }}
                                 dateFormat="MMM d, yyyy"
-                                className={`form-control ${
-                                  touched.invoiceDate && errors.invoiceDate
-                                    ? "border-danger"
-                                    : ""
-                                }`}
+                                className="form-control"
+                               
                               />
                             </>
                           )}
@@ -1457,24 +1321,15 @@ const EditInvoice: React.FC<newInvoiceProps> = ({
                   </div>
                 </div>
 
-                <div className="text-end">
-                  <button
-                    className="btn btn-primary"
-                    onClick={() => handleSubmit}
-                  >
-                    Create Invoice
-                  </button>
+              <div className="text-end">
+                <button className="btn btn-primary">Update</button>
 
-                  <button
-                    type="button"
-                    className="btn btn-secondary"
-                    onClick={() => onBackToListButtonClickHandler()}
-                  >
-                    Cancel
-                  </button>
-                </div>
-              </Form>
-            )}
+                <button type="button" className="btn btn-secondary">
+                  Cancel
+                </button>
+              </div>
+            </Form>
+          )}
           </Formik>
         </CCardBody>
       </CCard>
