@@ -1,106 +1,179 @@
-import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Formik, Form, Field, ErrorMessage, useFormik } from 'formik';
-import DatePicker from 'react-datepicker';
-import Select from 'react-select';
-import { ToastContainer } from 'react-toastify';
-import { useDispatch, useSelector } from 'react-redux';
-import * as Yup from 'yup'; // Add import for validationSchema
-import { CButton, CCard, CCardBody, CCardHeader, CCol } from '@coreui/react';
-import { getOrganization } from '../../redux-saga/modules/shared/action';
+import {
+  CButton,
+  CCard,
+  CCardBody,
+  CCardHeader,
+  CFormTextarea,
+  CTable,
+  CTableDataCell,
+  CTableHead,
+  CTableHeaderCell,
+  CTableRow,
+} from "@coreui/react";
+import { Formik, Form, Field, ErrorMessage, useFormik } from "formik";
+
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import * as Yup from "yup";
+import {
+  Invoice,
+  InvoiceClass,
+  InvoiceCreationModel,
+  InvoiceItem,
+} from "../../models/invoice/Invoice";
+import { useDispatch } from "react-redux";
+
+import Select from "react-select";
+import DatePicker from "react-datepicker";
+
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+
+import "react-datepicker/dist/react-datepicker.css";
+import { getOrganization } from "../../redux-saga/modules/shared/action";
+import { clearInvoice, createInvoiceRequest, getInvoiceByIdRequest, updateInvoiceRequest } from "../../redux-saga/modules/invoice/action";
+import { ToastContainer } from "react-toastify";
+import { useNavigate, useParams } from "react-router-dom";
+
+// const initialValues = {
+//   invoiceOwner: "",
+//   subject: "",
+//   dueDate: "",
+//   accountID: "",
+//   contacts: "",
+//   purchaseOrder: "",
+//   status: "",
+//   fromBillingStreet: "",
+//   fromBillingCity: "",
+//   fromBillingState: "",
+//   fromZipCode: "",
+//   fromBillingCountry: "",
+//   toBillingStreet: "",
+//   toBillingCity: "",
+//   toBillingState: "",
+//   toZipCode: "",
+//   toBillingCountry: "",
+//   termsandConditions: "",
+//   description: "",
+//   tax: "",
+//   adjustments: "",
+// };
 
 interface newInvoiceProps {
-  invoiceData: any;
   accountId: any;
   ownerId: any;
 }
-const validationSchema = Yup.object().shape({
-  invoiceOwner: Yup.string().required("Invoice owner is required"),
-  subject: Yup.string().required("Subject is required"),
-  dueDate: Yup.date().required("Due date is required"),
-  accountName: Yup.string().required("Account name is required"),
-  contacts: Yup.string().required("Contacts are required"),
-  purchaseOrder: Yup.string().required("Purchase order is required"),
-  status: Yup.string().required("Status is required"),
-  fromBillingStreet: Yup.string().required("From billing street is required"),
-  fromBillingCity: Yup.string().required("From billing city is required"),
-  fromBillingState: Yup.string().required("From billing state is required"),
-  fromZipCode: Yup.string().required("From zip code is required"),
-  fromBillingCountry: Yup.string().required("From billing country is required"),
-  toBillingStreet: Yup.string().required("To billing street is required"),
-  toBillingCity: Yup.string().required("To billing city is required"),
-  toBillingState: Yup.string().required("To billing state is required"),
-  toZipCode: Yup.string().required("To zip code is required"),
-  toBillingCountry: Yup.string().required("To billing country is required"),
-  termsandConditions: Yup.string().required("Terms and conditions are required"),
-  description: Yup.string().required("Description is required"),
-  tax: Yup.number().required("Tax is required"),
-  adjustments: Yup.number().required("Adjustments are required"),
-});
 
-
-const initialValues = {
-  invoiceOwner: "",
-  subject: "",
-  dueDate: "",
-  accountName: "",
-  contacts: "",
-  purchaseOrder: "",
-  status: "",
-  fromBillingStreet: "",
-  fromBillingCity: "",
-  fromBillingState: "",
-  fromZipCode: "",
-  fromBillingCountry: "",
-  toBillingStreet: "",
-  toBillingCity: "",
-  toBillingState: "",
-  toZipCode: "",
-  toBillingCountry: "",
-   termsandConditions: "",
-   description: "",
-  tax: "",
-  adjustments: "",
-};
-
-
-const EditInvoice: React.FC<newInvoiceProps> = ({ invoiceData }) => {
-  const [termsAndConditions, setTermsAndConditions] = useState("");
-
+const EditInvoice: React.FC<newInvoiceProps> = () => {
+  const { invoiceId } = useParams<{ invoiceId: string }>();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
-  
-  const [updateInvoice, setUpdateInvoice] = useState({
-  invoiceOwner: invoiceData.invoiceOwner,
-  subject: invoiceData.subject,
-  dueDate: invoiceData.dueDate,
-  accountName: invoiceData.accountName,
-  contacts: invoiceData.contacts,
-  purchaseOrder: invoiceData.purchaseOrder,
-  status: invoiceData.status,
-  fromBillingStreet: invoiceData.fromBillingStreet,
-  fromBillingCity: invoiceData.fromBillingCity,
-  fromBillingState: invoiceData.fromBillingState,
-  fromZipCode:invoiceData.fromZipCode ,
-  fromBillingCountry: invoiceData.fromBillingCountry,
-  toBillingStreet: invoiceData.toBillingStreet,
-  toBillingCity: invoiceData.toBillingCity,
-  toBillingState:invoiceData.toBillingState ,
-  toZipCode: invoiceData.toZipCode,
-  toBillingCountry:invoiceData.toBillingCountry ,
-  termsandConditions: invoiceData.termsandConditions,
-  description: invoiceData.description,
-  tax: invoiceData.tax,
-  adjustments: invoiceData.adjustments,
 
+  interface Row {
+    sNo: number;
+    productName: string;
+    description: string;
+    quantity: number;
+    discount: number;
+    amount: number;
+    total: number;
+  }
+
+  const [updateInvoice, setUpdateInvoice] = useState<Invoice>(new InvoiceClass());
+  const [termsAndConditions, setTermsAndConditions] = useState("");
+  const [extraFields, setExtraFields] = useState({
+    tax: 0,
+    adjustments: 0
   });
+  const [toAddress, setToAddress] = useState({
+    billingStreet: "",
+    billingCity: "",
+    billingState: "",
+    zipCode: "",
+    billingCountry: "",
+  });
+  const [dropdownItems, setDropdownItems] = useState({
+    contactID: 0,
+    accountID: 0,
+    ownerID: "",
+  });
+
+  const [rows, setRows] = useState<Row[]>([]);
+
+  const contactWithAccountNameListAndTotalCount = useSelector((state: any) => state.contactReducer.contacts);
+  const contacts = contactWithAccountNameListAndTotalCount.contactWithAccountNames;
+  const fetchedInvoice = useSelector((state: any) => state.invoiceReducer.invoice);
+  const invoice = fetchedInvoice.invoice;
+  // const organization = useSelector((state: any) => state.sharedReducer.organization);
+  const invoiceStatus = useSelector((state: any) => state.invoiceReducer.invoiceStatus);
+  const invoiceOwners = useSelector((state: any) => state.invoiceReducer.invoiceOwner);
+  const accountOwner = useSelector((state: any) => state.accountReducer.accountOwner);
+  const userId = useSelector((state: any) => state.authReducer.userId);
+  const accountNames = useSelector((state: any) => state.accountReducer.accounts);
+
+  const currentDate: Date = new Date();
+  const formattedDateTime: string = currentDate.toISOString().slice(0, -1);
+
+  // const invoiceDate = new Date().toLocaleDateString("en-US", {
+  //   year: "numeric",
+  //   month: "long",
+  //   day: "2-digit",
+  // });
+
+  useEffect(() => {
+    if (invoiceId) {
+      dispatch(getInvoiceByIdRequest(+invoiceId));
+    } else {
+      setUpdateInvoice(new InvoiceClass());
+      dispatch(clearInvoice());
+    }
+  }, [dispatch, invoiceId]);
+
+  useEffect(() => {
+    setDropdownItems({
+      contactID: invoice.contactID,
+      ownerID: invoice.ownerID,
+      accountID: invoice.accountID
+    });
+    if (invoiceId) {
+      setUpdateInvoice(invoice);
+    }
+  }, [invoiceId, invoice]);
+
+  useEffect(() => {
+    setUpdateInvoice((prevInvoice) => ({
+      ...prevInvoice,
+      toBillingStreet: toAddress?.billingStreet,
+      toBillingCity: toAddress?.billingCity,
+      toBillingState: toAddress?.billingState,
+      toZipCode: toAddress?.zipCode,
+      toBillingCountry: toAddress?.billingCountry,
+    }));
+  }, [toAddress]);
+
+  // useEffect(() => {
+  //   dispatch(getOrganization());
+  // }, [dispatch]);
+
+  const handleAddRow = () => {
+    const newRow: Row = {
+      sNo: rows.length + 1,
+      productName: "",
+      description: "",
+      quantity: 0,
+      discount: 0,
+      amount: 0,
+      total: 0,
+    };
+    setRows([...rows, newRow]);
+  };
+
+  const handleEditorChange = (event: any, editor: any) => {
+    const data = editor.getData();
+    setTermsAndConditions(data);
+  };
+
   // const [touchedFields, setTouchedFields] = useState({
-  //   invoiceOwner: false,
-  //   subject: false,
-  //   dueDate: false,
-  //   accountName: false,
-  //   contacts: false,
-  //   purchaseOrder: false,
-  //   status: false,
   //   fromBillingStreet: false,
   //   fromBillingCity: false,
   //   fromBillingState: false,
@@ -111,55 +184,118 @@ const EditInvoice: React.FC<newInvoiceProps> = ({ invoiceData }) => {
   //   toBillingState: false,
   //   toZipCode: false,
   //   toBillingCountry: false,
-  //    termsandConditions: false,
-  //    description: false,
-  //   tax: false,
-  //   adjustments: false,
+  //   dueDate: false,
+  //   invoiceDate: false,
+  // });
+  // const handleInputChange = (fieldName: any) => {
+  //   setTouchedFields((prevFields) => ({
+  //     ...prevFields,
+  //     [fieldName]: true, // Mark the field as touched
+  //   }));
+  // };
 
-  // )};
+  // var orgDetails;
+  // if (organization) {
+  //   const activeOrg = organization.filter(
+  //     (org: any) => org.organizationResponse?.isActive === true
+  //   );
+  //   if (activeOrg && activeOrg.length > 0) {
+  //     orgDetails = activeOrg[0]?.organizationResponse;
+  //   }
+  // }
 
-  // Fetching data from store
-  const contactWithAccountNameListAndTotalCount = useSelector((state: any) => state.contactReducer.contacts);
-  const contacts = contactWithAccountNameListAndTotalCount.contactWithAccountNames;
-  const invoiceStatus = useSelector((state: any) => state.invoiceReducer.invoiceStatus);
-  const invoiceOwner = useSelector((state: any) => state.invoiceReducer.invoiceOwner);
-  const accountOwner = useSelector((state: any) => state.accountReducer.accountOwner);
-  const userId = useSelector((state: any) => state.authReducer.userId);
-  const accountNames = useSelector((state: any) => state.accountReducer.accounts);
-  const organization = useSelector((state: any) => state.sharedReducer.organization);
+  let grandTotalValue = 0;
 
-  var orgDetails;
-  if (organization) {
-    const activeOrg = organization.filter(
-      (org: any) => org.organizationResponse?.isActive === true
-    );
-    if (activeOrg && activeOrg.length > 0) {
-      orgDetails = activeOrg[0]?.organizationResponse;
-    }
-  }
-  
-  useEffect(() => {
-    dispatch(getOrganization());
-  }, [dispatch]);
+  // const [updateInvoice, setUpdateInvoice] = useState({
+  //   subject: "",
+  //   invoiceDate: new Date(),
+  //   dueDate: new Date(),
+  //   dealName: "",
+  //   purchaseOrder: "",
+  //   status: 0,
 
-  var grandTotalValue = 0;
-  const [toAddress, setToAddress] = useState({
-    billingStreet: "",
-    billingCity: "",
-    billingState: "",
-    zipCode: "",
-    billingCountry: "",
-  });
+  //   fromBillingStreet: orgDetails?.billingStreet,
+  //   fromBillingCity: orgDetails?.billingCity,
+  //   fromBillingState: orgDetails?.billingState,
+  //   fromZipCode: orgDetails?.zipCode,
+  //   fromBillingCountry: orgDetails?.billingCountry,
 
-  const [dropdownItems, setDropdownItems] = useState({
-    contacts: "",
-    invoiceOwner: "",
-    accountName: "",
-  });
+  //   toBillingStreet: "",
+  //   toBillingCity: "",
+  //   toBillingState: "",
+  //   toZipCode: "",
+  //   toBillingCountry: "",
+
+  //   termsandConditions: "",
+  //   description: "",
+  //   subTotal: 0,
+  //   discount: 0,
+  //   tax: 0,
+  //   adjustments: 0,
+  //   grandTotal: grandTotalValue,
+  // });
+  // const validationSchema = Yup.object().shape({
+  //   ownerID: Yup.string().required("Required (Invoice Owner)"),
+  //   subject: Yup.string().required("Required(Subject)"),
+  //   invoiceDate: touchedFields.invoiceDate
+  //     ? Yup.string().required("Required (Due Date)")
+  //     : Yup.string(),
+  //   dueDate: touchedFields.dueDate
+  //     ? Yup.string().required("Required (Due Date)")
+  //     : Yup.string(),
+  //   accountID: Yup.string().required("Required (Account)"),
+  //   contactID: Yup.string().required("Required (Contacts)"),
+  //   status: Yup.string().required("Required (Status)"),
+  //   fromBillingStreet: touchedFields.fromBillingStreet
+  //     ? Yup.string().required("Required (Billing Street)")
+  //     : Yup.string(),
+  //   fromBillingCity: touchedFields.fromBillingCity
+  //     ? Yup.string().required("Required (Billing City)")
+  //     : Yup.string(),
+  //   fromBillingState: touchedFields.fromBillingState
+  //     ? Yup.string().required("Required (Billing State)")
+  //     : Yup.string(),
+  //   fromZipCode: touchedFields.fromZipCode
+  //     ? Yup.string()
+  //       .required("Required (zip Code)")
+  //     : Yup.string(),
+  //   fromBillingCountry: touchedFields.fromBillingCountry
+  //     ? Yup.string().required("Required (Billing Country)")
+  //     : Yup.string(),
+  //   toBillingStreet:
+  //     updateInvoice.toBillingStreet == ""
+  //       ? Yup.string().required("Required (Billing Street)")
+  //       : touchedFields.toBillingStreet
+  //         ? Yup.string().required("Required (Billing Street)")
+  //         : Yup.string(),
+  //   toBillingCity:
+  //     updateInvoice.toBillingCity == ""
+  //       ? Yup.string().required("Required (Billing City)")
+  //       : touchedFields.toBillingCity
+  //         ? Yup.string().required("Required (Billing City)")
+  //         : Yup.string(),
+  //   toBillingState:
+  //     updateInvoice.toBillingState == ""
+  //       ? Yup.string().required("Required (Billing State)")
+  //       : touchedFields.toBillingState
+  //         ? Yup.string().required("Required (Billing State)")
+  //         : Yup.string(),
+  //   toZipCode:
+  //     updateInvoice.toZipCode == ""
+  //       ? Yup.string().required("Required (zip Code)")
+  //       : Yup.string(),
+  //   toBillingCountry:
+  //     updateInvoice.toBillingCountry == ""
+  //       ? Yup.string().required("Required (Billing Country)")
+  //       : touchedFields.toBillingCountry
+  //         ? Yup.string().required("Required (Billing Country)")
+  //         : Yup.string(),
+  // });
+
   const handleDropdownChange = (e: any, selectedOption: any) => {
     if (e != null) {
       setDropdownItems({ ...dropdownItems, [selectedOption.name]: e.key });
-      if (selectedOption.name == "accountName") {
+      if (selectedOption.name == "accountID") {
         const accountAddress = accountNames?.find(
           (account: any) => account.id == e.key
         );
@@ -178,82 +314,100 @@ const EditInvoice: React.FC<newInvoiceProps> = ({ invoiceData }) => {
     }
   };
 
-  const currentDate: Date = new Date();
-  const formattedDateTime: string = currentDate.toISOString().slice(0, -1);
-
-  const invoiceDate = new Date().toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "long",
-    day: "2-digit",
-  });
-
-  const handleChangeData = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setUpdateInvoice({ ...updateInvoice, [e.target.name]: e.target.value });
-  };
-  interface Row {
-    sNo: number;
-    productName: string;
-    description: string;
-    quantity: string;
-    discount: string;
-    amount: string;
-    total: string;
-  }
-  const handleAddRow = () => {
-    const newRow: Row = {
-      sNo: rows.length + 1,
-      productName: "",
-      description: "",
-      quantity: "",
-      discount: "",
-      amount: "",
-      total: "",
-    };
-    setRows([...rows, newRow]);
-  };
   const subTotalValue = rows.reduce((total, row) => {
     // Parse row.amount and row.quantity to numbers, defaulting to 0 if NaN
-    const amount = parseFloat(row.amount) || 0;
-    const quantity = parseFloat(row.quantity) || 0;
+    const amount = row.amount || 0;
+    const quantity = row.quantity || 0;
 
     return total + amount * quantity;
-}, 0);
-  const discountValue = rows.reduce((discount, row) => {
-    const rowDiscount = parseFloat(row.discount) || 0
-    return discount +rowDiscount;
   }, 0);
-    grandTotalValue =
+
+  const discountValue = rows.reduce((discount, row) => {
+    const rowDiscount = row.discount || 0
+    return discount + rowDiscount;
+  }, 0);
+
+  grandTotalValue =
     subTotalValue -
     discountValue +
-    parseFloat(invoice.tax.toString()) -
-    parseFloat(invoice.adjustments.toString());
+    extraFields.tax -
+    extraFields.adjustments;
 
-  // const handleChangeData = (e: any) => {
-  //   setInvoice({ ...invoice, [e.target.name]: e.target.value });
-  // };
-  const handleUpdateInvoiceClick = () => {
-
+  const handleChangeData = (e: any) => {
+    setUpdateInvoice({ ...updateInvoice, [e.target.name]: e.target.value });
   };
-  
+
+  const handleCreateInvoiceClick = () => {
+    const invoiceDetails: Invoice = {
+      id: updateInvoice.id,
+      accountID: dropdownItems.accountID,
+      ownerID: dropdownItems.ownerID,
+      subject: updateInvoice.subject,
+      invoiceDate: updateInvoice.invoiceDate ? new Date(updateInvoice.invoiceDate).toISOString() : "",
+      dueDate: updateInvoice.dueDate ? new Date(updateInvoice.dueDate).toISOString() : "",
+      contactID: dropdownItems.contactID,
+      dealName: updateInvoice.dealName,
+      purchaseOrder: updateInvoice.purchaseOrder,
+      status: parseInt(updateInvoice.status.toString(), 10),
+      fromBillingStreet: updateInvoice.fromBillingStreet,
+      fromBillingCity: updateInvoice.fromBillingCity,
+      fromBillingState: updateInvoice.fromBillingState,
+      fromZipCode: updateInvoice.fromZipCode,
+      fromBillingCountry: updateInvoice.fromBillingCountry,
+      toBillingStreet: updateInvoice.toBillingStreet,
+      toBillingCity: updateInvoice.toBillingCity,
+      toBillingState: updateInvoice.toBillingState,
+      toZipCode: updateInvoice.toZipCode,
+      toBillingCountry: updateInvoice.toBillingCountry,
+      termsAndConditions: updateInvoice.termsAndConditions,
+      description: updateInvoice.description,
+      isDelete: false,
+      createdBy: userId,
+      createdOn: formattedDateTime,
+      modifiedBy: userId,
+      modifiedOn: formattedDateTime,
+    };
+    // const invoiceItemDetails: InvoiceItem[] = rows.map((row) => {
+    //   return {
+    //     id: 0,
+    //     invoiceID: 0,
+    //     sno: row.sNo,
+    //     productName: row.productName,
+    //     description: row.description,
+    //     quantity: row.quantity,
+    //     discount: row.discount,
+    //     amount: row.amount,
+    //     tax: parseFloat(updateInvoice.tax.toString()),
+    //     total: row.total,
+    //   };
+    // });
+    // const invoiceModel: InvoiceCreationModel = {
+    //   invoice: invoiceDetails,
+    //   invoiceItems: invoiceItemDetails,
+    // };
+    dispatch(updateInvoiceRequest(invoiceDetails, invoiceDetails.id));
+    navigate("/invoices");
+    // console.log(invoiceDetails);
+  };
+
   const getAccountOwner = (ownerId: any) => {
     const owner = accountOwner?.find((owner: any) => owner.id === ownerId);
     return owner ? owner.label : "";
   };
 
   const calculateTotal = (row: any) => {
-    const amount = parseFloat(row.amount) || 0;
-    const discount = parseFloat(row.discount) || 0;
-    const quantity = parseFloat(row.quantity) || 0;
-    return ((amount - discount) * quantity).toString();
+    const amount = row.amount || 0;
+    const discount = row.discount || 0;
+    const quantity = row.quantity || 0;
+    return ((amount - discount) * quantity);
   };
 
   // const { handleSubmit } = useFormik({
   //   enableReinitialize: true,
   //   initialValues: initialValues,
   //   validationSchema: validationSchema,
+  //   onSubmit: handleCreateInvoiceClick,
   // });
-
-
 
   return (
     <div>
@@ -262,78 +416,65 @@ const EditInvoice: React.FC<newInvoiceProps> = ({ invoiceData }) => {
         <CCardHeader className="mb-3">
           <div className="d-flex justify-content-between align-items-center">
             <div>
-              <h5 className="mb-0">Upadte Invoice</h5>
+              <h5 className="mb-0">Create Invoice</h5>
             </div>
-            <CCol xs={6} className="text-end">
-              {
-                <Link to={`/invoices`}>
-                  <CButton
-                    component="input"
-                    type="button"
-                    color="secondary"
-                    value="Back To Invoices"
-                  />
-                </Link>
-              }
-            </CCol>
+            <div className="text-end">
+              <CButton
+                component="input"
+                type="button"
+                color="secondary"
+                value="Back To Invoices"
+                onClick={() => navigate("/invoices")}
+              />
+            </div>
           </div>
         </CCardHeader>
         <CCardBody>
           <Formik
-            initialValues={initialValues}
-            validationSchema={validationSchema}
+            initialValues={updateInvoice}
+            enableReinitialize
+            // validationSchema={validationSchema}
+            onSubmit={handleCreateInvoiceClick}
           >
-          {({ handleChange, errors, handleSubmit, touched }) => (
-            <Form>
-              <div className="label-form">Invoice Information</div>
-              
-              <div className="row">
+            {({ handleSubmit, handleChange, touched, errors, handleBlur }) => (
+              <Form onSubmit={handleSubmit}>
+                <div className="label-form">Invoice Information</div>
+                <div className="row">
                   <div className="col-md-6">
                     <div className="form-group row">
                       <label
-                        htmlFor="invoiceOwner"
+                        htmlFor="ownerID"
                         className="col-sm-4 col-form-label"
                       >
                         Invoice Owner
                       </label>
                       <div className="col-sm-6">
-                        <Field name="invoiceOwner">
+                        <Field name="ownerID">
                           {(fieldProps: any) => (
                             <>
                               <Select
                                 placeholder="Select Owner..."
-                                name="invoiceOwner"
-                                options={invoiceOwner?.map((invoice: any) => ({
-                                  key: invoice.id,
-                                  value: invoice.firstName,
+                                id="ownerID"
+                                name="ownerID"
+                                options={invoiceOwners?.map((owner: any) => ({
+                                  key: owner.id,
+                                  value: owner.firstName,
                                   label: (
                                     <>
-                                      <div
-                                        style={{ fontSize: "15px" }}
-                                      >{`${invoice.label}`}</div>
-                                      <div style={{ fontSize: "12px" }}>
-                                        {invoice.email}
-                                      </div>
+                                      <div style={{ fontSize: "15px" }}>{owner.label}</div>
+                                      <div style={{ fontSize: "12px" }}>{owner.email}</div>
                                     </>
                                   ),
                                 }))}
-                                defaultValue={dropdownItems.invoiceOwner}
+                                defaultValue={dropdownItems.ownerID}
                                 isSearchable={true}
                                 isClearable={true}
                                 onChange={(e: any, selectedOption: any) => {
                                   handleDropdownChange(e, selectedOption);
-                                  fieldProps.form.setFieldValue(
-                                    "invoiceOwner",
-                                    e?.key,
-                                    true
-                                  );
+                                  fieldProps.form.setFieldValue("ownerID", e?.key, true);
                                 }}
-                                onBlur={handleBlur("invoiceOwner")}
-                                className={`form-control ${
-                                  touched.invoiceOwner && errors.invoiceOwner
-                                    ? "border-danger"
-                                    : ""
-                                }`}
+                                onBlur={handleBlur("ownerID")}
+                                className={`form-control ${touched.ownerID && errors.ownerID ? "border-danger" : ""}`}
                                 styles={{
                                   control: (provided) => ({
                                     ...provided,
@@ -346,7 +487,7 @@ const EditInvoice: React.FC<newInvoiceProps> = ({ invoiceData }) => {
                           )}
                         </Field>
                         <ErrorMessage
-                          name="invoiceOwner"
+                          name="ownerID"
                           component="div"
                           className="error form-error"
                         />
@@ -364,11 +505,11 @@ const EditInvoice: React.FC<newInvoiceProps> = ({ invoiceData }) => {
                         <Field
                           type="text"
                           name="subject"
-                          className={`form-control ${
-                            touched.subject && errors.subject
-                              ? "border-danger"
-                              : ""
-                          }`}
+                          value={updateInvoice.subject}
+                          className={`form-control ${touched.subject && errors.subject
+                            ? "border-danger"
+                            : ""
+                            }`}
                           style={{ height: "50px" }}
                           onChange={(e: any) => {
                             handleChangeData(e);
@@ -396,7 +537,7 @@ const EditInvoice: React.FC<newInvoiceProps> = ({ invoiceData }) => {
                             <>
                               <DatePicker
                                 name="invoiceDate"
-                                selected={invoice.invoiceDate || null}
+                                selected={updateInvoice.invoiceDate || null}
                                 // style={{ height: "50px" }}
                                 onChange={(date: any) => {
                                   handleChangeData({
@@ -410,8 +551,10 @@ const EditInvoice: React.FC<newInvoiceProps> = ({ invoiceData }) => {
                                   );
                                 }}
                                 dateFormat="MMM d, yyyy"
-                                className="form-control"
-                               
+                                className={`form-control ${touched.invoiceDate && errors.invoiceDate
+                                  ? "border-danger"
+                                  : ""
+                                  }`}
                               />
                             </>
                           )}
@@ -437,7 +580,7 @@ const EditInvoice: React.FC<newInvoiceProps> = ({ invoiceData }) => {
                             <>
                               <DatePicker
                                 name="dueDate"
-                                selected={invoice.dueDate || null}
+                                selected={updateInvoice.dueDate || null}
                                 // style={{ height: "50px" }}
                                 onChange={(date: any) => {
                                   handleChangeData({
@@ -451,11 +594,10 @@ const EditInvoice: React.FC<newInvoiceProps> = ({ invoiceData }) => {
                                   );
                                 }}
                                 dateFormat="MMM d, yyyy"
-                                className={`form-control ${
-                                  touched.dueDate && errors.dueDate
-                                    ? "border-danger"
-                                    : ""
-                                }`}
+                                className={`form-control ${touched.dueDate && errors.dueDate
+                                  ? "border-danger"
+                                  : ""
+                                  }`}
                               />
                             </>
                           )}
@@ -470,20 +612,20 @@ const EditInvoice: React.FC<newInvoiceProps> = ({ invoiceData }) => {
 
                     <div className="form-group row">
                       <label
-                        htmlFor="accountName"
+                        htmlFor="accountID"
                         className="col-sm-4 col-form-label"
                       >
                         Account
                       </label>
                       <div className="col-sm-6">
-                        <Field name="accountName">
+                        <Field name="accountID">
                           {(fieldProps: any) => (
                             <>
                               <Select
-                                name="accountName"
+                                name="accountID"
                                 options={accountNames?.map((name: any) => ({
                                   key: name.id,
-                                  value: name.accountName,
+                                  value: name.id,
                                   label: (
                                     <>
                                       <div
@@ -495,24 +637,23 @@ const EditInvoice: React.FC<newInvoiceProps> = ({ invoiceData }) => {
                                     </>
                                   ),
                                 }))}
-                                defaultValue={dropdownItems.accountName}
+                                defaultValue={dropdownItems.accountID}
                                 isSearchable
                                 isClearable
                                 onChange={(e: any, selectedOption: any) => {
                                   handleDropdownChange(e, selectedOption);
                                   fieldProps.form.setFieldValue(
-                                    "accountName",
+                                    "accountID",
                                     e?.key,
                                     true
                                   );
                                 }}
-                                onBlur={handleBlur("accountName")}
+                                onBlur={handleBlur("accountID")}
                                 placeholder="Select account..."
-                                className={`form-control ${
-                                  touched.accountName && errors.accountName
-                                    ? "border-danger"
-                                    : ""
-                                }`}
+                                className={`form-control ${touched.accountID && errors.accountID
+                                  ? "border-danger"
+                                  : ""
+                                  }`}
                                 styles={{
                                   control: (provided) => ({
                                     ...provided,
@@ -525,7 +666,7 @@ const EditInvoice: React.FC<newInvoiceProps> = ({ invoiceData }) => {
                           )}
                         </Field>
                         <ErrorMessage
-                          name="accountName"
+                          name="accountID"
                           component="div"
                           className="error form-error"
                         />
@@ -535,17 +676,17 @@ const EditInvoice: React.FC<newInvoiceProps> = ({ invoiceData }) => {
                   <div className="col-md-6">
                     <div className="form-group row">
                       <label
-                        htmlFor="contacts"
+                        htmlFor="contactID"
                         className="col-sm-4 col-form-label"
                       >
                         Contacts
                       </label>
                       <div className="col-sm-6">
-                        <Field name="contacts">
+                        <Field name="contactID">
                           {(fieldProps: any) => (
                             <>
                               <Select
-                                name="contacts"
+                                name="contactID"
                                 options={contacts?.map((contact: any) => ({
                                   key: contact.id,
                                   value: contact.firstName,
@@ -560,24 +701,23 @@ const EditInvoice: React.FC<newInvoiceProps> = ({ invoiceData }) => {
                                     </>
                                   ),
                                 }))}
-                                defaultValue={dropdownItems.contacts}
+                                defaultValue={dropdownItems.contactID}
                                 isSearchable
                                 isClearable
                                 onChange={(e: any, selectedOption: any) => {
                                   handleDropdownChange(e, selectedOption);
                                   fieldProps.form.setFieldValue(
-                                    "contacts",
+                                    "contactID",
                                     e?.key,
                                     true
                                   );
                                 }}
                                 onBlur={handleBlur("accountName")}
                                 placeholder="Select contact..."
-                                className={`form-control ${
-                                  touched.contacts && errors.contacts
-                                    ? "border-danger"
-                                    : ""
-                                }`}
+                                className={`form-control ${touched.contactID && errors.contactID
+                                  ? "border-danger"
+                                  : ""
+                                  }`}
                                 styles={{
                                   control: (provided) => ({
                                     ...provided,
@@ -590,7 +730,7 @@ const EditInvoice: React.FC<newInvoiceProps> = ({ invoiceData }) => {
                           )}
                         </Field>
                         <ErrorMessage
-                          name="contacts"
+                          name="contactID"
                           component="div"
                           className="error form-error"
                         />
@@ -655,11 +795,10 @@ const EditInvoice: React.FC<newInvoiceProps> = ({ invoiceData }) => {
                         <Field
                           as="select"
                           name="status"
-                          className={`form-control form-select ${
-                            touched.status && errors.status
-                              ? "border-danger"
-                              : ""
-                          }`}
+                          className={`form-control form-select ${touched.status && errors.status
+                            ? "border-danger"
+                            : ""
+                            }`}
                           style={{ height: "50px" }}
                           onChange={(e: any) => {
                             handleChangeData(e);
@@ -712,13 +851,12 @@ const EditInvoice: React.FC<newInvoiceProps> = ({ invoiceData }) => {
                         <Field
                           type="text"
                           name="fromBillingStreet"
-                          value={invoice.fromBillingStreet}
-                          className={`form-control  ${
-                            touched.fromBillingStreet &&
+                          value={updateInvoice.fromBillingStreet}
+                          className={`form-control  ${touched.fromBillingStreet &&
                             errors.fromBillingStreet
-                              ? "border-danger"
-                              : ""
-                          }`}
+                            ? "border-danger"
+                            : ""
+                            }`}
                           style={{ height: "50px" }}
                           onChange={(e: any) => {
                             handleChangeData(e);
@@ -744,12 +882,11 @@ const EditInvoice: React.FC<newInvoiceProps> = ({ invoiceData }) => {
                         <Field
                           type="text"
                           name="fromBillingCity"
-                          value={invoice.fromBillingCity}
-                          className={`form-control  ${
-                            touched.fromBillingCity && errors.fromBillingCity
-                              ? "border-danger"
-                              : ""
-                          }`}
+                          value={updateInvoice.fromBillingCity}
+                          className={`form-control  ${touched.fromBillingCity && errors.fromBillingCity
+                            ? "border-danger"
+                            : ""
+                            }`}
                           style={{ height: "50px" }}
                           onChange={(e: any) => {
                             handleChangeData(e);
@@ -775,12 +912,11 @@ const EditInvoice: React.FC<newInvoiceProps> = ({ invoiceData }) => {
                         <Field
                           type="text"
                           name="fromBillingState"
-                          value={invoice.fromBillingState}
-                          className={`form-control  ${
-                            touched.fromBillingState && errors.fromBillingState
-                              ? "border-danger"
-                              : ""
-                          }`}
+                          value={updateInvoice.fromBillingState}
+                          className={`form-control  ${touched.fromBillingState && errors.fromBillingState
+                            ? "border-danger"
+                            : ""
+                            }`}
                           style={{ height: "50px" }}
                           onChange={(e: any) => {
                             handleChangeData(e);
@@ -807,12 +943,11 @@ const EditInvoice: React.FC<newInvoiceProps> = ({ invoiceData }) => {
                         <Field
                           type="number"
                           name="fromZipCode"
-                          value={invoice.fromZipCode}
-                          className={`form-control  ${
-                            touched.fromZipCode && errors.fromZipCode
-                              ? "border-danger"
-                              : ""
-                          }`}
+                          value={updateInvoice.fromZipCode}
+                          className={`form-control  ${touched.fromZipCode && errors.fromZipCode
+                            ? "border-danger"
+                            : ""
+                            }`}
                           style={{ height: "50px" }}
                           onChange={(e: any) => {
                             handleChangeData(e);
@@ -839,13 +974,12 @@ const EditInvoice: React.FC<newInvoiceProps> = ({ invoiceData }) => {
                         <Field
                           type="text"
                           name="fromBillingCountry"
-                          value={invoice.fromBillingCountry}
-                          className={`form-control  ${
-                            touched.fromBillingCountry &&
+                          value={updateInvoice.fromBillingCountry}
+                          className={`form-control  ${touched.fromBillingCountry &&
                             errors.fromBillingCountry
-                              ? "border-danger"
-                              : ""
-                          }`}
+                            ? "border-danger"
+                            : ""
+                            }`}
                           style={{ height: "50px" }}
                           onChange={(e: any) => {
                             handleChangeData(e);
@@ -875,14 +1009,13 @@ const EditInvoice: React.FC<newInvoiceProps> = ({ invoiceData }) => {
                           name="toBillingStreet"
                           value={
                             dropdownItems.accountName !== ""
-                              ? invoice.toBillingStreet
+                              ? updateInvoice.toBillingStreet
                               : ""
                           }
-                          className={`form-control  ${
-                            touched.toBillingStreet && errors.toBillingStreet
-                              ? "border-danger"
-                              : ""
-                          }`}
+                          className={`form-control  ${touched.toBillingStreet && errors.toBillingStreet
+                            ? "border-danger"
+                            : ""
+                            }`}
                           style={{ height: "50px" }}
                           onChange={(e: any) => {
                             handleChangeData(e);
@@ -910,14 +1043,13 @@ const EditInvoice: React.FC<newInvoiceProps> = ({ invoiceData }) => {
                           name="toBillingCity"
                           value={
                             dropdownItems.accountName !== ""
-                              ? invoice.toBillingCity
+                              ? updateInvoice.toBillingCity
                               : ""
                           }
-                          className={`form-control  ${
-                            touched.toBillingCity && errors.toBillingCity
-                              ? "border-danger"
-                              : ""
-                          }`}
+                          className={`form-control  ${touched.toBillingCity && errors.toBillingCity
+                            ? "border-danger"
+                            : ""
+                            }`}
                           style={{ height: "50px" }}
                           onChange={(e: any) => {
                             handleChangeData(e);
@@ -945,14 +1077,13 @@ const EditInvoice: React.FC<newInvoiceProps> = ({ invoiceData }) => {
                           name="toBillingState"
                           value={
                             dropdownItems.accountName !== ""
-                              ? invoice.toBillingState
+                              ? updateInvoice.toBillingState
                               : ""
                           }
-                          className={`form-control  ${
-                            touched.toBillingState && errors.toBillingState
-                              ? "border-danger"
-                              : ""
-                          }`}
+                          className={`form-control  ${touched.toBillingState && errors.toBillingState
+                            ? "border-danger"
+                            : ""
+                            }`}
                           style={{ height: "50px" }}
                           onChange={(e: any) => {
                             handleChangeData(e);
@@ -981,14 +1112,13 @@ const EditInvoice: React.FC<newInvoiceProps> = ({ invoiceData }) => {
                           name="toZipCode"
                           value={
                             dropdownItems.accountName !== ""
-                              ? invoice.toZipCode
+                              ? updateInvoice.toZipCode
                               : ""
                           }
-                          className={`form-control  ${
-                            touched.toZipCode && errors.toZipCode
-                              ? "border-danger"
-                              : ""
-                          }`}
+                          className={`form-control  ${touched.toZipCode && errors.toZipCode
+                            ? "border-danger"
+                            : ""
+                            }`}
                           style={{ height: "50px" }}
                           onChange={(e: any) => {
                             handleChangeData(e);
@@ -1017,14 +1147,13 @@ const EditInvoice: React.FC<newInvoiceProps> = ({ invoiceData }) => {
                           name="toBillingCountry"
                           value={
                             dropdownItems.accountName !== ""
-                              ? invoice.toBillingCountry
+                              ? updateInvoice.toBillingCountry
                               : ""
                           }
-                          className={`form-control  ${
-                            touched.toBillingCountry && errors.toBillingCountry
-                              ? "border-danger"
-                              : ""
-                          }`}
+                          className={`form-control  ${touched.toBillingCountry && errors.toBillingCountry
+                            ? "border-danger"
+                            : ""
+                            }`}
                           style={{ height: "50px" }}
                           onChange={(e: any) => {
                             handleChangeData(e);
@@ -1067,6 +1196,7 @@ const EditInvoice: React.FC<newInvoiceProps> = ({ invoiceData }) => {
                                   type="text"
                                   className="form-control mb-2"
                                   value={row.productName}
+                                  placeholder="Item name"
                                   onChange={(e) => {
                                     const updatedRows = [...rows];
                                     updatedRows[index].productName =
@@ -1092,14 +1222,14 @@ const EditInvoice: React.FC<newInvoiceProps> = ({ invoiceData }) => {
                             <CTableDataCell>
                               <div>
                                 <input
-                                  type="text"
+                                  type="number"
                                   className="form-control"
                                   value={row.quantity}
                                   onChange={(e) => {
                                     const updatedRows = [...rows];
-                                    const newValue= parseFloat(e.target.value);
-                                    if(!isNaN(newValue)){
-                                      updatedRows[index].quantity = newValue.toString();
+                                    const newValue = parseFloat(e.target.value);
+                                    if (!isNaN(newValue)) {
+                                      updatedRows[index].quantity = newValue;
                                       updatedRows[index].total = calculateTotal(updatedRows[index]);
                                       console.log("Updated rows:", updatedRows); // Log updated rows
                                       setRows(updatedRows);
@@ -1113,16 +1243,13 @@ const EditInvoice: React.FC<newInvoiceProps> = ({ invoiceData }) => {
                             <CTableDataCell>
                               <div>
                                 <input
-                                  type="text"
+                                  type="number"
                                   className="form-control"
                                   value={row.discount}
                                   onChange={(e) => {
                                     const updatedRows = [...rows];
-                                    updatedRows[index].discount =
-                                      e.target.value;
-                                    updatedRows[index].total = calculateTotal(
-                                      updatedRows[index]
-                                    );
+                                    updatedRows[index].discount = parseFloat(e.target.value);
+                                    updatedRows[index].total = calculateTotal(updatedRows[index]);
                                     setRows(updatedRows);
                                   }}
                                 />
@@ -1131,12 +1258,12 @@ const EditInvoice: React.FC<newInvoiceProps> = ({ invoiceData }) => {
                             <CTableDataCell>
                               <div>
                                 <input
-                                  type="text"
+                                  type="number"
                                   className="form-control"
                                   value={row.amount}
                                   onChange={(e) => {
                                     const updatedRows = [...rows];
-                                    updatedRows[index].amount = e.target.value;
+                                    updatedRows[index].amount = parseFloat(e.target.value);
                                     updatedRows[index].total = calculateTotal(
                                       updatedRows[index]
                                     );
@@ -1190,7 +1317,7 @@ const EditInvoice: React.FC<newInvoiceProps> = ({ invoiceData }) => {
                             disabled
                             className="form-control"
                             value={subTotalValue}
-                            //  onChange={(e: any) => { handleChangeData(e); handleChange(e) }}
+                          //  onChange={(e: any) => { handleChangeData(e); handleChange(e) }}
                           />
                         </div>
                       </div>
@@ -1209,7 +1336,7 @@ const EditInvoice: React.FC<newInvoiceProps> = ({ invoiceData }) => {
                             disabled
                             value={discountValue}
                             className="form-control"
-                            // onChange={(e: any) => { handleChangeData(e); handleChange(e) }}
+                          // onChange={(e: any) => { handleChangeData(e); handleChange(e) }}
                           />
                         </div>
                       </div>
@@ -1321,15 +1448,25 @@ const EditInvoice: React.FC<newInvoiceProps> = ({ invoiceData }) => {
                   </div>
                 </div>
 
-              <div className="text-end">
-                <button className="btn btn-primary">Update</button>
+                <div className="text-end">
+                  <button
+                    type="submit"
+                    className="btn btn-primary"
+                    onClick={() => handleSubmit}
+                  >
+                    Update Invoice
+                  </button>
 
-                <button type="button" className="btn btn-secondary">
-                  Cancel
-                </button>
-              </div>
-            </Form>
-          )}
+                  <button
+                    type="button"
+                    className="btn btn-secondary"
+                    onClick={() => navigate("/invoices")}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </Form>
+            )}
           </Formik>
         </CCardBody>
       </CCard>

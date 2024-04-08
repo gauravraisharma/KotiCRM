@@ -346,6 +346,7 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
       toBillingCountry: invoice.toBillingCountry,
       termsAndConditions: invoice.termsandConditions,
       description: invoice.description,
+      isDelete: false,
       createdBy: userId,
       createdOn: formattedDateTime,
       modifiedBy: userId,
@@ -1441,6 +1442,7 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
 
                 <div className="text-end">
                   <button
+                    type="submit"
                     className="btn btn-primary"
                     onClick={() => handleSubmit}
                   >

@@ -15,8 +15,6 @@ import { Invoice, InvoiceCreationModel } from '../../../models/invoice/Invoice';
         return errorResponse;
     });
  }
-  
-
  
  export function  GetInvoiceList(): Promise<apiResponse<InvoiceCreationModel[]>>{
     return axiosInstance.get<InvoiceCreationModel[]>(`/Invoice/GetInvoiceList`).then((response: AxiosResponse<InvoiceCreationModel[]>) => responseBody(response)).
@@ -43,7 +41,7 @@ import { Invoice, InvoiceCreationModel } from '../../../models/invoice/Invoice';
  }
 
  export function  UpdateInvoice(id : number,invoice: Invoice): Promise<apiResponse<Invoice>>{
-    return axiosInstance.post<Invoice>(`/Invoice/UpdateInvoice/${id}`, invoice).then((response: AxiosResponse<Invoice>) => responseBody(response)).
+    return axiosInstance.put<Invoice>(`/Invoice/UpdateInvoice/${id}`, invoice).then((response: AxiosResponse<Invoice>) => responseBody(response)).
     catch((error:AxiosError) =>{ 
         const errorResponse: apiResponse<Invoice> = {
             data: undefined,

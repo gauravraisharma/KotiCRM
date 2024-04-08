@@ -1,4 +1,4 @@
-import { CREATE_INVOICE_REQUEST, DELETE_INVOICE_REQUEST, GET_INVOICE_DETAIL_FETCH, GET_INVOICE_FETCH, GET_INVOICE_OWNER_FETCH, GET_INVOICE_STATUS_FETCH, UPDATE_INVOICE_REQUEST } from "../../../constants/reduxConstants";
+import { CLEAR_INVOICE_REQUEST, CREATE_INVOICE_REQUEST, DELETE_INVOICE_REQUEST, GET_INVOICE_DETAIL_FETCH, GET_INVOICE_FETCH, GET_INVOICE_OWNER_FETCH, GET_INVOICE_STATUS_FETCH, UPDATE_INVOICE_REQUEST } from "../../../constants/reduxConstants";
 import { Invoice, InvoiceCreationModel } from "../../../models/invoice/Invoice";
 
 export const getInvoiceStatus = () => ({
@@ -30,4 +30,8 @@ export const updateInvoiceRequest = (invoice: Invoice,id: any) => ({
 
 export const getInvoiceOwner = () => ({
   type: GET_INVOICE_OWNER_FETCH
+})
+
+export const clearInvoice = () => ({
+  type: CLEAR_INVOICE_REQUEST
 })
