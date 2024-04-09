@@ -49,7 +49,7 @@ const validationSchema = Yup.object().shape({
   type: Yup.number().required("Required (Type)"),
   status: Yup.number().required("Required (Status)"),
   accountName: Yup.string().required("Required (Account Name)"),
-  annualRevenue: Yup.string().required("Required (Annual Revenue)"),
+  // annualRevenue: Yup.string().required("Required (Annual Revenue)"),
   phone: Yup.string()
     .required("Required (Phone)")
     .matches(/^[0-9()-\s]+$/, "Phone number must be a number")
@@ -451,9 +451,7 @@ const MyForm: React.FC<MyFormProps> = ({
                       <CCol xs={4}>
                         <label htmlFor="annualRevenue">
                           Annual Revenue
-                          <span style={{ color: "red", fontSize: "25px" }}>
-                            *
-                          </span>
+                        
                         </label>
                       </CCol>
                       <CCol xs={8}>
@@ -461,22 +459,14 @@ const MyForm: React.FC<MyFormProps> = ({
                           type="text"
                           id="annualRevenue"
                           name="annualRevenue"
-                          className={`form-control ${
-                            touched.annualRevenue && errors.annualRevenue
-                              ? "is-invalid"
-                              : ""
-                          }`}
+                          className="form-control"
                           style={{ height: "50px" }}
                           onChange={(e: any) => {
                             handleChangeData(e);
                             handleChange(e);
                           }}
                         />
-                        <ErrorMessage
-                          name="annualRevenue"
-                          component="div"
-                          className="invalid-feedback"
-                        />
+                       
                       </CCol>
                     </CRow>
                   </CCol>

@@ -1,6 +1,6 @@
 
 import { Reducer } from "react";
-import { LOGIN_SUCCESS, LOGOUT } from "../../../constants/reduxConstants";
+import { LOGIN_SUCCESS, LOGOUT, START_LOADING } from "../../../constants/reduxConstants";
 import { authState } from "../../../models/reduxState/authState";
 import { AppAction } from "../../../models/redux/action/ActionModel";
 import { actionPayloadModel } from "../../../models/actionModel/actionModel";
@@ -12,7 +12,8 @@ const INITIAL_STATE: authState = {
     timezone: "",
     userType: null,
     userId: null,
-    loggedIn: false
+    loggedIn: false,
+    isLoading: false
 };
 
 const authReducer: Reducer<authState, AppAction> = (state: authState = INITIAL_STATE, action: AppAction): authState => {
@@ -44,6 +45,11 @@ const authReducer: Reducer<authState, AppAction> = (state: authState = INITIAL_S
             return {
                 ...INITIAL_STATE
             }
+            case START_LOADING:
+                return {
+                    ...INITIAL_STATE,
+                    isLoading: true
+                }
         default:
             return state;
     }

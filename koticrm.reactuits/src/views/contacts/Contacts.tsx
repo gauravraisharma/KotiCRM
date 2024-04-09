@@ -22,7 +22,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { MdDelete, MdEditSquare } from "react-icons/md";
 import { useEffect, useState } from "react";
 import { AiFillEye } from "react-icons/ai";
-// import { FaPlus } from "react-icons/fa"; 
+// import { FaPlus } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { getContacts } from "../../redux-saga/modules/contact/action";
 import { ToastContainer } from "react-toastify";
@@ -46,7 +46,8 @@ interface Props {
 const Contacts = ({ getContactsCount, accountId }: Props) => {
   const dispatch = useDispatch();
   const [contactId, setContactId] = useState<number>(0);
-  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState<boolean>(false);
+  const [showDeleteConfirmation, setShowDeleteConfirmation] =
+    useState<boolean>(false);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [pageNumber, setPageNumber] = useState<number>(1);
 
@@ -123,10 +124,10 @@ const Contacts = ({ getContactsCount, accountId }: Props) => {
               <CFormInput
                 id="searchInput"
                 type="text"
-                style={{ height: '50px' }}
+                style={{ height: "50px" }}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search by..."
+                placeholder="Search by name,email,mobile..."
               />
             </CInputGroup>
           </CCol>
@@ -136,7 +137,7 @@ const Contacts = ({ getContactsCount, accountId }: Props) => {
                 <CButton
                   component="input"
                   type="button"
-                  style={{ width: '100px', padding: '10px', fontSize: '18px' }}
+                  style={{ width: "100px", padding: "10px", fontSize: "18px" }}
                   color="primary"
                   value="+ New"
                   variant="outline"
@@ -177,7 +178,8 @@ const Contacts = ({ getContactsCount, accountId }: Props) => {
                   </CTableRow>
                 </CTableHead>
                 <CTableBody>
-                  {fetchedContactWithAccountNameListAndTotal.contactWithAccountNames.length > 0 ? (
+                  {fetchedContactWithAccountNameListAndTotal
+                    .contactWithAccountNames.length > 0 ? (
                     fetchedContactWithAccountNameListAndTotal.contactWithAccountNames?.map(
                       (contact: ContactWithAccountName, index: number) => (
                         <CTableRow key={index}>
@@ -222,9 +224,11 @@ const Contacts = ({ getContactsCount, accountId }: Props) => {
                     )
                   ) : (
                     <CTableRow>
-                      <CTableDataCell colSpan={tableHeader.length}>
-                        No contact available
-                      </CTableDataCell>
+                      {/* <CTableDataCell colSpan={tableHeader.length}> */}
+                      <div>
+                        <p>No contacts found.</p>
+                      </div>
+                      {/* </CTableDataCell> */}
                     </CTableRow>
                   )}
                 </CTableBody>
@@ -233,13 +237,20 @@ const Contacts = ({ getContactsCount, accountId }: Props) => {
           </CCard>
           <CCol xs={12}>
             <CPagination
-              size="lg"
-              align="center"
+              size="sm" // Change the size to "sm" (small)
+              align="end"
               aria-label="Page navigation example"
+              style={{
+                backgroundColor: "lightgray",
+                padding: "5px",
+                borderRadius: "5px",
+                height: "40px",
+              }} // Decrease padding
             >
               <CPaginationItem
                 onClick={() => handlePageChange(pageNumber - 1)}
                 disabled={pageNumber === 1}
+                style={{ marginRight: "5px", fontSize: "12px" }} // Decrease font size
               >
                 Previous
               </CPaginationItem>
@@ -248,6 +259,11 @@ const Contacts = ({ getContactsCount, accountId }: Props) => {
                   key={index}
                   active={pageNumber === index + 1}
                   onClick={() => handlePageChange(index + 1)}
+                  style={{
+                    margin: "0 2px",
+                    cursor: "pointer",
+                    fontSize: "12px",
+                  }} // Decrease font size
                 >
                   {index + 1}
                 </CPaginationItem>
@@ -255,6 +271,7 @@ const Contacts = ({ getContactsCount, accountId }: Props) => {
               <CPaginationItem
                 onClick={() => handlePageChange(pageNumber + 1)}
                 disabled={pageNumber === totalPages}
+                style={{ marginLeft: "5px", fontSize: "12px" }} // Decrease font size
               >
                 Next
               </CPaginationItem>

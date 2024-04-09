@@ -5,5 +5,6 @@ export interface authState{
     timezone:string |null,
     loggedIn: boolean,
     userId:string | null,
-    userType:string | null
+    userType:string | null,
+    isLoading:boolean
 }

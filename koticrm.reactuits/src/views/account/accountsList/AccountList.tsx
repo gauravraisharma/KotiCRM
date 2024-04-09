@@ -44,6 +44,7 @@ const AccountList: React.FC = () => {
   const [accountId, setAccountId] = useState<number>();
   const [stateData, setStateData] = useState<boolean>(false);
   const [openEditModal, setOpenEditModal] = useState<boolean>(false);
+  const [openCreateModal, setCreateModal] = useState<boolean>(false);
   const [accountData, setAccountData] = useState<Account | null>(null);
   const [searchTerm, setSearchTerm] = useState<string>("");
 
@@ -79,6 +80,7 @@ const AccountList: React.FC = () => {
 
   const handleCreateNew = () => {
     setStateData(true);
+    setCreateModal(true);
   };
 
   const closeCreateModal = () => {
@@ -86,6 +88,7 @@ const AccountList: React.FC = () => {
   };
 
   const backToAccountList = () => {
+    setCreateModal(false)
     setStateData(false);
     setOpenEditModal(false);
   };
@@ -133,7 +136,8 @@ const AccountList: React.FC = () => {
   return (
     <>
       <ToastContainer />
-      <div className="head"style={{padding:'20px'}}>
+      {!openCreateModal && !openEditModal && (
+        <div className="head"style={{padding:'20px'}}>
                 <CRow>
                   <CCol xs={6}>
                     <CInputGroup className="mb-3">
@@ -168,12 +172,13 @@ const AccountList: React.FC = () => {
                     </div>
                   </CCol>
                 </CRow>
-              </div>
+      </div>)}
       {stateData ? (
         <NewAccount
           closeModal={closeCreateModal}
           onBackToListButtonClickHandler={backToAccountList}
         />
+        
       ) : (
         <>
           <DeleteConfirmationModal
