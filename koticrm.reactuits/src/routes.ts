@@ -32,6 +32,10 @@ const Invoices = lazy(() => import('./views/invoice/Invoice'))
 const CreateInvoice = lazy(() => import('./views/invoice/NewInvoice'))
 const EditInvoice = lazy(() => import('./views/invoice/EditInvoice'))
 
+//Manage Users Routes
+const Users = lazy(() => import('./views/userManagement/Users'))
+const UserDetail = lazy(() => import('./views/userManagement/UserDetail'))
+const CreateOrUpdateUser = lazy(() => import('./views/userManagement/CreateOrUpdateUser'))
 
 // Base
 const Accordion = lazy(() => import('./components/base/accordion/Accordion'))
@@ -150,7 +154,9 @@ const routes: Route[] = [
     { path: '/invoices/editInvoice/:invoiceId', name: 'EditInvoice', element: EditInvoice, isAuth: true, modulePermission: 'Invoices' },
     { path: '/settings', name: 'Settings', element: Settings, isAuth: true },
 
-
+    { path: '/users', name: 'Users', element: Users, isAuth: true, modulePermission: 'ManageUsers' },
+    { path: '/users/:usreId', name: 'UserDetail', element: UserDetail, isAuth: true, modulePermission: 'ManageUsers' },
+    { path: '/users/createOrUpdateUser', name: 'CreateUser', element: CreateOrUpdateUser, isAuth: true, modulePermission: 'ManageUsers' },
 ]
 
 export default routes

@@ -1,6 +1,6 @@
 import CIcon from '@coreui/icons-react'
 import {cilSpeedometer,cilBook,cilContact,cibMarketo,cibEventStore,cibPaypal,
-  cibMarkdown,cilApplications,cilSettings,cilMoney,
+  cibMarkdown,cilApplications,cilSettings,cilMoney, cilUser,
 } from '@coreui/icons'
 import { CNavItem } from '@coreui/react'
 import { NavItem } from './models/commonModels/CommonModels'
@@ -83,6 +83,14 @@ const _nav:NavItem[] = [
     to: '/theme/typography',
     icon: <CIcon icon={cilSettings} customClassName="nav-icon" />,
     moduleName : 'Settings'
+
+  },
+  {
+    component: CNavItem,
+    name: 'ManageUsers',
+    to: '/users',
+    icon: <CIcon icon={cilUser} customClassName="nav-icon" />,
+    moduleName : 'ManageUsers'
 
   },
   ]
