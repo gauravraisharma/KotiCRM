@@ -9,7 +9,10 @@ import PermissionAuth from '../../../utils/PermissionAuth'
 const AppContent = () => {
   return (
     <CContainer lg>
-      <Suspense fallback={<CSpinner color="primary" />}>
+      {/* <Suspense fallback={<CSpinner color="primary" />}> */}
+      {/* <div className="spinner-backdrop">
+    <CSpinner className="spinner" color="primary" />
+</div> */}
         <Routes>
           {routes.map((route:any, index) => {
 
@@ -24,7 +27,7 @@ const AppContent = () => {
           })}
           <Route path="/" element={<Navigate to="dashboard" replace />} />
         </Routes>
-      </Suspense>
+      {/* </Suspense> */}
     </CContainer>
   )
 }

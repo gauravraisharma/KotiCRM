@@ -3,6 +3,11 @@ const LOGIN_REQUEST = 'LOGIN_REQUEST';
 const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 const LOGOUT = 'LOGOUT';
 
+// Lazy Loader
+export const START_LOADING = 'START_LOADING';
+export const STOP_LOADING = 'STOP_LOADING'; 
+
+
 //Application Setting
 export const SIDEBAR_TOGGLE = "SIDEBAR_TOGGLE";
 

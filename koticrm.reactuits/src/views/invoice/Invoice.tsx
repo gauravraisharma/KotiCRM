@@ -200,9 +200,10 @@ const InvoiceComponent: React.FC<InvoiceProps> = ({
                       <CTableHeaderCell scope="col">Actions</CTableHeaderCell>
                     </CTableRow>
                   </CTableHead>
+
                   <CTableBody>
-                    {accountId != null
-                      ? filteredInvoices?.map((invoiceModel: any) => (
+                    {accountId != null && filteredInvoices?.length > 0 ? (
+                      filteredInvoices.map((invoiceModel: any) => (
                         <CTableRow key={invoiceModel.invoice?.id}>
                           <CTableDataCell>
                             {invoiceModel.invoice?.subject}
@@ -220,18 +221,22 @@ const InvoiceComponent: React.FC<InvoiceProps> = ({
                               invoiceModel.invoice?.dueDate,
                               "DD/MM/YYYY HH:mm",
                               timezone
-                            )}d
+                            )}
                           </CTableDataCell>
                           <CTableDataCell>
-                            {invoiceModel.invoice?.status !== 3 && <Link to={`/invoices/editInvoice/${invoiceModel.invoice?.id}`}>
-                              <MdEditSquare
-                                style={{
-                                  color: "green",
-                                  marginRight: "10px",
-                                  fontSize: "20px",
-                                }}
-                              />
-                            </Link>}
+                            {invoiceModel.invoice?.status !== 3 && (
+                              <Link
+                                to={`/invoices/editInvoice/${invoiceModel.invoice?.id}`}
+                              >
+                                <MdEditSquare
+                                  style={{
+                                    color: "green",
+                                    marginRight: "10px",
+                                    fontSize: "20px",
+                                  }}
+                                />
+                              </Link>
+                            )}
                             <AiFillEye
                               size={21}
                               style={{
@@ -252,7 +257,12 @@ const InvoiceComponent: React.FC<InvoiceProps> = ({
                           </CTableDataCell>
                         </CTableRow>
                       ))
-                      : invoices?.map((invoiceModel: any) => (
+                    ) : accountId != null && filteredInvoices?.length === 0 ? (
+                      <tr>
+                        <td colSpan={5}>No invoices found</td>
+                      </tr>
+                    ) : (
+                      invoices?.map((invoiceModel: any) => (
                         <CTableRow key={invoiceModel.invoice?.id}>
                           <CTableDataCell>
                             {invoiceModel.invoice?.subject}
@@ -266,7 +276,6 @@ const InvoiceComponent: React.FC<InvoiceProps> = ({
                             {getDates(invoiceModel.invoice?.invoiceDate)}
                           </CTableDataCell>
                           <CTableDataCell>
-                            {/* {getDates(invoiceModel.invoice?.dueDate)} */}
                             {formatDate(
                               invoiceModel.invoice?.dueDate,
                               "DD/MM/YYYY HH:mm",
@@ -274,15 +283,19 @@ const InvoiceComponent: React.FC<InvoiceProps> = ({
                             )}
                           </CTableDataCell>
                           <CTableDataCell>
-                            {invoiceModel.invoice?.status !== 3 && <Link to={`/invoices/editInvoice/${invoiceModel.invoice?.id}`}>
-                              <MdEditSquare
-                                style={{
-                                  color: "green",
-                                  marginRight: "10px",
-                                  fontSize: "20px",
-                                }}
-                              />
-                            </Link>}
+                            {invoiceModel.invoice?.status !== 3 && (
+                              <Link
+                                to={`/invoices/editInvoice/${invoiceModel.invoice?.id}`}
+                              >
+                                <MdEditSquare
+                                  style={{
+                                    color: "green",
+                                    marginRight: "10px",
+                                    fontSize: "20px",
+                                  }}
+                                />
+                              </Link>
+                            )}
                             <AiFillEye
                               size={21}
                               style={{
@@ -294,7 +307,6 @@ const InvoiceComponent: React.FC<InvoiceProps> = ({
                                 generateInvoicePDF(invoiceModel.invoice?.id)
                               }
                             />
-
                             <MdDelete
                               size={21}
                               style={{
@@ -309,7 +321,8 @@ const InvoiceComponent: React.FC<InvoiceProps> = ({
                             />
                           </CTableDataCell>
                         </CTableRow>
-                      ))}
+                      ))
+                    )}
                   </CTableBody>
                 </CTable>
               </CCardBody>

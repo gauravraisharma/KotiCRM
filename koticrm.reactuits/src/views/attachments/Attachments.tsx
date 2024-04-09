@@ -134,42 +134,45 @@ const Attachments = ({ accountId, getAttachmentsCount }: Props) => {
                 </CTableRow>
               </CTableHead>
               <CTableBody>
-                {filteredAttachments ? (
-                  filteredAttachments.map((attachment: any) => (
-                    <CTableRow>
-                      <CTableHeaderCell>
-                        {attachment.fileExtension === ".pdf" ? (
-                          <FaFilePdf className="pdf" />
-                        ) : (
-                          <IoDocumentTextSharp className="doc" />
-                        )}
-                        <CButton
-                          className="link"
-                          color="link"
-                          onClick={() => handleDownloadClick(attachment.id, attachment.contentType, attachment.fileName)}>
-                          {attachment.fileName}
-                        </CButton>
-                      </CTableHeaderCell>
-                      <CTableDataCell>
-                        {getOwnerName(attachment.userID)}
-                      </CTableDataCell>
-                      <CTableDataCell>
-                        {formatDate(attachment.dateAdded, 'DD/MM/YYYY HH:mm', timezone)}
-                      </CTableDataCell>
-                      <CTableDataCell>
-                        {getFileSizeAndLabel(attachment.fileSize)}
-                      </CTableDataCell>
-                      <CTableDataCell className="text-center">
-                        <IoMdDownload
-                          style={{ color: "green", fontSize: "20px", cursor: "pointer" }}
-                          onClick={() => handleDownloadClick(attachment.id, attachment.contentType, attachment.fileName)}
-                        />
-                      </CTableDataCell>
-                    </CTableRow>
-                  ))
-                ) : (
-                  <div>No Attachment Available</div>
-                )}
+              {filteredAttachments && filteredAttachments.length > 0 ? (
+  filteredAttachments.map((attachment: any) => (
+    <CTableRow key={attachment.id}>
+      <CTableHeaderCell>
+        {attachment.fileExtension === ".pdf" ? (
+          <FaFilePdf className="pdf" />
+        ) : (
+          <IoDocumentTextSharp className="doc" />
+        )}
+        <CButton
+          className="link"
+          color="link"
+          onClick={() => handleDownloadClick(attachment.id, attachment.contentType, attachment.fileName)}>
+          {attachment.fileName}
+        </CButton>
+      </CTableHeaderCell>
+      <CTableDataCell>
+        {getOwnerName(attachment.userID)}
+      </CTableDataCell>
+      <CTableDataCell>
+        {formatDate(attachment.dateAdded, 'DD/MM/YYYY HH:mm', timezone)}
+      </CTableDataCell>
+      <CTableDataCell>
+        {getFileSizeAndLabel(attachment.fileSize)}
+      </CTableDataCell>
+      <CTableDataCell className="text-center">
+        <IoMdDownload
+          style={{ color: "green", fontSize: "20px", cursor: "pointer" }}
+          onClick={() => handleDownloadClick(attachment.id, attachment.contentType, attachment.fileName)}
+        />
+      </CTableDataCell>
+    </CTableRow>
+  ))
+) : (
+  <div>
+    <p>No attachments found.</p>
+  </div>
+)}
+
               </CTableBody>
             </CTable>
           </CCardBody>

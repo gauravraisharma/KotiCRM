@@ -118,9 +118,9 @@ const EditPage: React.FC<EditModalProps> = ({
     accountName: touchedFields.accountName
       ? Yup.string().required("Required (Account Name)")
       : Yup.string(),
-    annualRevenue: touchedFields.annualRevenue
-      ? Yup.string().required("Required (Annual Revenue)")
-      : Yup.string(),
+    // annualRevenue: touchedFields.annualRevenue
+    //   ? Yup.string().required("Required (Annual Revenue)")
+    //   : Yup.string(),
     phone: touchedFields.phone
       ? Yup.string()
           .required("Required (Phone)")
@@ -428,9 +428,7 @@ const EditPage: React.FC<EditModalProps> = ({
                       <CCol sm={4}>
                         <label htmlFor="number">
                           Annual Revenue
-                          <span style={{ color: "red", fontSize: "25px" }}>
-                            *
-                          </span>
+                       
                         </label>
                       </CCol>
                       <CCol sm={8}>
@@ -438,11 +436,8 @@ const EditPage: React.FC<EditModalProps> = ({
                           type="number"
                           name="annualRevenue"
                           value={updateAccount.annualRevenue}
-                          className={`form-control ${
-                            touched.annualRevenue && errors.annualRevenue
-                              ? "border-danger"
-                              : ""
-                          }`}
+                          className="form-control"
+                      
                           style={{ height: "50px" }}
                           onChange={(e: any) => {
                             handleChangeData(e);
@@ -450,11 +445,8 @@ const EditPage: React.FC<EditModalProps> = ({
                             handleInputChange("annualRevenue");
                           }}
                         />
-                        <ErrorMessage
-                          name="annualRevenue"
-                          component="div"
-                          className="error form-error"
-                        />
+                     
+                     
                       </CCol>
                     </CRow>
 

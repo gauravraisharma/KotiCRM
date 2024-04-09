@@ -9,7 +9,7 @@ const INITIAL_STATE: contactState = {
     contacts: [],
     contact: null as Contact | null,
     createContactResponse: null as Contact | null,
-    refreshList: false
+    refreshList: false,
 };
 
 
