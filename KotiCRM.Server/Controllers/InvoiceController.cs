@@ -1,4 +1,5 @@
-﻿using KotiCRM.Repository.Models;
+﻿using KotiCRM.Repository.DTOs.Invoice;
+using KotiCRM.Repository.Models;
 using KotiCRM.Services.IServices;
 using KotiCRM.Services.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -36,11 +37,11 @@ namespace KotiCRM.Server.Controllers
             return Ok(await _invoiceService.CreateInvoice(invoiceModel));
         }
 
-        [HttpPut("UpdateInvoice/{id}")]
+        [HttpPut("UpdateInvoice")]
 
-        public async Task<IActionResult> UpdateInvoice(int id, Invoice invoice)
+        public async Task<IActionResult> UpdateInvoice(InvoiceWithItemsDTO invoiceWithItemsDTO)
         {
-            return Ok(await _invoiceService.UpdateInvoice(id, invoice));
+            return Ok(await _invoiceService.UpdateInvoiceAsync(invoiceWithItemsDTO));
         }
 
 

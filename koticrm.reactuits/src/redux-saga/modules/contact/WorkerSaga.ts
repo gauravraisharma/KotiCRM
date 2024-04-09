@@ -7,13 +7,13 @@ import { CreateContact, DeleteContact, GetContactDetails, GetContactsList, Updat
 import { ContactWithAccountName } from '../../../models/contact/ContactWithAccountName';
 import { getContacts } from './action';
 
-const DEFAULT_PAGE_NUMBER = 1;
-const DEFAULT_PAGE_SIZE = 5;
+// const DEFAULT_PAGE_NUMBER = 1;
+// const DEFAULT_PAGE_SIZE = 5;
 
 export function* workGetContactsFetch(action: actionPayloadModel): Generator<any> {
   try {
     const { accountId, searchQuery, pageNumber, pageSize } = action.payload;
-    const response: any = yield call(GetContactsList, accountId, searchQuery, pageNumber || DEFAULT_PAGE_NUMBER, pageSize || DEFAULT_PAGE_SIZE);
+    const response: any = yield call(GetContactsList, accountId, searchQuery, pageNumber, pageSize);
     if (response.status != 200) {
       toast.error('Error fetching contacts')
     } else {

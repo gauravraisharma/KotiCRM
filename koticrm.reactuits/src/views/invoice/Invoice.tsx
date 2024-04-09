@@ -33,6 +33,7 @@ import {
 import { getNotes } from "../../redux-saga/modules/notes/action";
 import { formatDate } from "../../utils/Shared/DateTransform";
 import { Link } from "react-router-dom";
+import { getContacts } from "../../redux-saga/modules/contact/action";
 
 interface InvoiceProps {
   getInvoiceCount: (data: string) => void;
@@ -130,6 +131,7 @@ const InvoiceComponent: React.FC<InvoiceProps> = ({
   });
 
   useEffect(() => {
+    dispatch(getContacts());
     dispatch(getInvoiceStatus());
     dispatch(getInvoice());
     dispatch(getNotes());
@@ -224,19 +226,24 @@ const InvoiceComponent: React.FC<InvoiceProps> = ({
                             )}
                           </CTableDataCell>
                           <CTableDataCell>
-                            {invoiceModel.invoice?.status !== 3 && (
-                              <Link
-                                to={`/invoices/editInvoice/${invoiceModel.invoice?.id}`}
-                              >
-                                <MdEditSquare
-                                  style={{
-                                    color: "green",
-                                    marginRight: "10px",
-                                    fontSize: "20px",
-                                  }}
-                                />
-                              </Link>
-                            )}
+                            {invoiceModel.invoice?.status === 3 ? (<MdEditSquare
+                              style={{
+                                color: "green",
+                                marginRight: "10px",
+                                fontSize: "20px",
+                                opacity: "0.5",
+                                cursor: "not-allowed"
+                              }}
+                              title="Paid invoice is not editable"
+                            />) : (<Link to={`/invoices/editInvoice/${invoiceModel.invoice?.id}`}>
+                              <MdEditSquare
+                                style={{
+                                  color: "green",
+                                  marginRight: "10px",
+                                  fontSize: "20px",
+                                }}
+                              />
+                            </Link>)}
                             <AiFillEye
                               size={21}
                               style={{
@@ -283,19 +290,24 @@ const InvoiceComponent: React.FC<InvoiceProps> = ({
                             )}
                           </CTableDataCell>
                           <CTableDataCell>
-                            {invoiceModel.invoice?.status !== 3 && (
-                              <Link
-                                to={`/invoices/editInvoice/${invoiceModel.invoice?.id}`}
-                              >
-                                <MdEditSquare
-                                  style={{
-                                    color: "green",
-                                    marginRight: "10px",
-                                    fontSize: "20px",
-                                  }}
-                                />
-                              </Link>
-                            )}
+                            {invoiceModel.invoice?.status === 3 ? (<MdEditSquare
+                              style={{
+                                color: "green",
+                                marginRight: "10px",
+                                fontSize: "20px",
+                                opacity: "0.5",
+                                cursor: "not-allowed"
+                              }}
+                              title="Paid invoice is not editable"
+                            />) : (<Link to={`/invoices/editInvoice/${invoiceModel.invoice?.id}`}>
+                              <MdEditSquare
+                                style={{
+                                  color: "green",
+                                  marginRight: "10px",
+                                  fontSize: "20px",
+                                }}
+                              />
+                            </Link>)}
                             <AiFillEye
                               size={21}
                               style={{

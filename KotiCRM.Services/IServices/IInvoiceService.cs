@@ -1,18 +1,12 @@
-﻿using KotiCRM.Repository.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using KotiCRM.Repository.DTOs.Invoice;
+using KotiCRM.Repository.Models;
 
-namespace KotiCRM.Services.IServices
+namespace KotiCRM.Services.IServices;
+public interface IInvoiceService
 {
-    public interface IInvoiceService
-    {
-        Task<DbResponse> CreateInvoice(InvoiceCreationModel invoiceModel);
-        Task<IEnumerable<InvoiceCreationModel>> GetInvoiceList();
-        Task<InvoiceCreationModel> GetInvoiceDetails(int id);
-        Task<DbResponse> DeleteInvoice(int id);
-        Task<Invoice> UpdateInvoice(int id, Invoice invoice);
-    }
+    Task<IEnumerable<InvoiceCreationModel>> GetInvoiceList();
+    Task<InvoiceCreationModel> GetInvoiceDetails(int id);
+    Task<DbResponse> CreateInvoice(InvoiceCreationModel invoiceModel);
+    Task<DbResponse> UpdateInvoiceAsync(InvoiceWithItemsDTO invoiceWithItemsDTO);
+    Task<DbResponse> DeleteInvoice(int id);
 }

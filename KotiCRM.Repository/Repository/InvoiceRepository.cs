@@ -20,6 +20,54 @@ namespace KotiCRM.Repository.Repository
             _context = context;
         }
 
+        public async Task<IEnumerable<InvoiceCreationModel>> GetInvoiceList()
+        {
+            try
+            {
+                var invoices = await _context.Invoices.OrderByDescending(invoice => invoice.DueDate).Where(invoice => !invoice.Isdelete).ToListAsync();
+                var invoiceItems = await _context.InvoiceItems.Where(invoiceItem => !invoiceItem.IsDeleted).ToListAsync();
+                var invoiceCreationModels = invoices.Select(invoice => new InvoiceCreationModel
+                {
+                    Invoice = invoice,
+                    InvoiceItems = invoiceItems.Where(item => item.InvoiceID == invoice.ID).ToList()
+                });
+                return invoiceCreationModels;
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message, ex);
+
+            }
+        }
+
+        public async Task<InvoiceCreationModel> GetInvoiceDetails(int id)
+        {
+            try
+            {
+                var invoice = await _context.Invoices.FirstOrDefaultAsync(invoice => invoice.ID == id && !invoice.Isdelete);
+                if (invoice == null)
+                {
+                    throw new Exception($"Invoice with ID {id} was not found.");
+                }
+                var invoiceItems = await _context.InvoiceItems
+                .Where(item => item.InvoiceID == id && !invoice.Isdelete)
+                .ToListAsync();
+                var invoiceCreationModels = new InvoiceCreationModel
+                {
+                    Invoice = invoice,
+                    InvoiceItems = invoiceItems
+                };
+
+                return invoiceCreationModels;
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message, ex);
+            }
+        }
+
         public async Task<DbResponse> CreateInvoice(InvoiceCreationModel invoiceModel)
         {
             try
@@ -58,51 +106,48 @@ namespace KotiCRM.Repository.Repository
             }
         }
 
-        public async Task<InvoiceCreationModel> GetInvoiceDetails(int id)
+        public async Task<DbResponse> UpdateInvoiceAsync(InvoiceCreationModel invoiceCreationModel)
         {
             try
             {
-                var invoice = await _context.Invoices.FirstOrDefaultAsync(invoice => invoice.ID == id && !invoice.Isdelete);
-                if (invoice == null)
+                // Update Invoice
+                _context.Entry(invoiceCreationModel.Invoice).State = EntityState.Modified;
+
+                // Update InvoiceItems
+                foreach (var invoiceItem in invoiceCreationModel.InvoiceItems)
                 {
-                    throw new Exception($"Invoice with ID {id} was not found.");
+                    // Check if the invoice item is already tracked by the context
+                    if (_context.Entry(invoiceItem).State == EntityState.Detached)
+                    {
+                        // If it's detached, attach it to the context
+                        _context.Attach(invoiceItem);
+                    }
+                    _context.Entry(invoiceItem).State = EntityState.Modified;
                 }
-                var invoiceItems = await _context.InvoiceItems
-                .Where(item => item.InvoiceID == id && !invoice.Isdelete)
-                .ToListAsync();
-                var invoiceCreationModels =  new InvoiceCreationModel
+
+                await _context.SaveChangesAsync();
+
+                return new DbResponse()
                 {
-                    Invoice = invoice,
-                    InvoiceItems = invoiceItems
+                    Succeed = true,
+                    Message = "Invoice and invoice items updated successfully"
                 };
-                
-                return invoiceCreationModels;
-
             }
-            catch (Exception ex)
+            catch (DbUpdateConcurrencyException ex)
             {
-                throw new Exception(ex.Message, ex);
-            }
-        }
-
-        public async Task<IEnumerable<InvoiceCreationModel>> GetInvoiceList()
-        {
-            try
-            {
-                var invoices =  await _context.Invoices.OrderByDescending(invoice=> invoice.DueDate).Where(invoice => !invoice.Isdelete).ToListAsync();
-                var invoiceItems = await _context.InvoiceItems.Where(invoiceItem => !invoiceItem.IsDeleted).ToListAsync();
-                var invoiceCreationModels = invoices.Select(invoice => new InvoiceCreationModel
+                return new DbResponse()
                 {
-                    Invoice = invoice,
-                    InvoiceItems = invoiceItems.Where(item => item.InvoiceID == invoice.ID).ToList()
-                });
-                return invoiceCreationModels;
-
+                    Succeed = false,
+                    Message = ex.Message
+                };
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message, ex);
-
+                return new DbResponse()
+                {
+                    Succeed = false,
+                    Message = ex.Message
+                };
             }
         }
 
@@ -119,7 +164,7 @@ namespace KotiCRM.Repository.Repository
                     {
                         item.IsDeleted = true;
                     }
-                    invoice.Isdelete = true; 
+                    invoice.Isdelete = true;
                     await _context.SaveChangesAsync();
                     return new DbResponse()
                     {
@@ -145,23 +190,6 @@ namespace KotiCRM.Repository.Repository
                     Message = ex.Message
                 };
             }
-        }
-
-        public async Task<Invoice> UpdateInvoice(int id, Invoice invoice)
-        {
-            if (id == invoice.ID)
-            {
-                _context.Entry(invoice).State = EntityState.Modified;
-            }
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException ex)
-            {
-                throw new Exception("Concurrency conflict occurred. The entity has been modified or deleted by another user.", ex);
-            }
-            return invoice;
         }
     }
 }

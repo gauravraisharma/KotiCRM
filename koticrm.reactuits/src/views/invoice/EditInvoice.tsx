@@ -10,11 +10,10 @@ import {
   CTableHeaderCell,
   CTableRow,
 } from "@coreui/react";
-import { Formik, Form, Field, ErrorMessage, useFormik } from "formik";
+import { Formik, Form, Field, ErrorMessage } from "formik";
 
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import * as Yup from "yup";
 import {
   Invoice,
   InvoiceClass,
@@ -30,10 +29,10 @@ import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 
 import "react-datepicker/dist/react-datepicker.css";
-import { getOrganization } from "../../redux-saga/modules/shared/action";
-import { clearInvoice, createInvoiceRequest, getInvoiceByIdRequest, updateInvoiceRequest } from "../../redux-saga/modules/invoice/action";
+import { clearInvoice, getInvoiceByIdRequest, updateInvoiceRequest } from "../../redux-saga/modules/invoice/action";
 import { ToastContainer } from "react-toastify";
 import { useNavigate, useParams } from "react-router-dom";
+import * as Yup from "yup";
 
 // const initialValues = {
 //   invoiceOwner: "",
@@ -69,15 +68,15 @@ const EditInvoice: React.FC<newInvoiceProps> = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  interface Row {
-    sNo: number;
-    productName: string;
-    description: string;
-    quantity: number;
-    discount: number;
-    amount: number;
-    total: number;
-  }
+  // interface Row {
+  //   sNo: number;
+  //   productName: string;
+  //   description: string;
+  //   quantity: number;
+  //   discount: number;
+  //   amount: number;
+  //   total: number;
+  // }
 
   const [updateInvoice, setUpdateInvoice] = useState<Invoice>(new InvoiceClass());
   const [termsAndConditions, setTermsAndConditions] = useState("");
@@ -98,12 +97,13 @@ const EditInvoice: React.FC<newInvoiceProps> = () => {
     ownerID: "",
   });
 
-  const [rows, setRows] = useState<Row[]>([]);
+  const [rows, setRows] = useState<InvoiceItem[]>([]);
 
   const contactWithAccountNameListAndTotalCount = useSelector((state: any) => state.contactReducer.contacts);
   const contacts = contactWithAccountNameListAndTotalCount.contactWithAccountNames;
   const fetchedInvoice = useSelector((state: any) => state.invoiceReducer.invoice);
   const invoice = fetchedInvoice.invoice;
+  const invoiceItems = fetchedInvoice.invoiceItems;
   // const organization = useSelector((state: any) => state.sharedReducer.organization);
   const invoiceStatus = useSelector((state: any) => state.invoiceReducer.invoiceStatus);
   const invoiceOwners = useSelector((state: any) => state.invoiceReducer.invoiceOwner);
@@ -137,8 +137,9 @@ const EditInvoice: React.FC<newInvoiceProps> = () => {
     });
     if (invoiceId) {
       setUpdateInvoice(invoice);
+      setRows(invoiceItems);
     }
-  }, [invoiceId, invoice]);
+  }, [invoiceId, invoice, invoiceItems]);
 
   useEffect(() => {
     setUpdateInvoice((prevInvoice) => ({
@@ -151,22 +152,26 @@ const EditInvoice: React.FC<newInvoiceProps> = () => {
     }));
   }, [toAddress]);
 
+  const defaultOwner = invoiceOwners?.find(dOwner => dOwner.id === invoice.ownerID);
+  const defaultAccount = accountNames?.find(dAccount => dAccount.id === invoice.accountID);
+  const defaultContact = contacts?.find(dContact => dContact.id === invoice.contactID);
+
   // useEffect(() => {
   //   dispatch(getOrganization());
   // }, [dispatch]);
 
-  const handleAddRow = () => {
-    const newRow: Row = {
-      sNo: rows.length + 1,
-      productName: "",
-      description: "",
-      quantity: 0,
-      discount: 0,
-      amount: 0,
-      total: 0,
-    };
-    setRows([...rows, newRow]);
-  };
+  // const handleAddRow = () => {
+  //   const newRow: InvoiceItem = {
+  //     sNo: rows.length + 1,
+  //     productName: "",
+  //     description: "",
+  //     quantity: 0,
+  //     discount: 0,
+  //     amount: 0,
+  //     total: 0,
+  //   };
+  //   setRows([...rows, newRow]);
+  // };
 
   const handleEditorChange = (event: any, editor: any) => {
     const data = editor.getData();
@@ -234,63 +239,64 @@ const EditInvoice: React.FC<newInvoiceProps> = () => {
   //   adjustments: 0,
   //   grandTotal: grandTotalValue,
   // });
-  // const validationSchema = Yup.object().shape({
-  //   ownerID: Yup.string().required("Required (Invoice Owner)"),
-  //   subject: Yup.string().required("Required(Subject)"),
-  //   invoiceDate: touchedFields.invoiceDate
-  //     ? Yup.string().required("Required (Due Date)")
-  //     : Yup.string(),
-  //   dueDate: touchedFields.dueDate
-  //     ? Yup.string().required("Required (Due Date)")
-  //     : Yup.string(),
-  //   accountID: Yup.string().required("Required (Account)"),
-  //   contactID: Yup.string().required("Required (Contacts)"),
-  //   status: Yup.string().required("Required (Status)"),
-  //   fromBillingStreet: touchedFields.fromBillingStreet
-  //     ? Yup.string().required("Required (Billing Street)")
-  //     : Yup.string(),
-  //   fromBillingCity: touchedFields.fromBillingCity
-  //     ? Yup.string().required("Required (Billing City)")
-  //     : Yup.string(),
-  //   fromBillingState: touchedFields.fromBillingState
-  //     ? Yup.string().required("Required (Billing State)")
-  //     : Yup.string(),
-  //   fromZipCode: touchedFields.fromZipCode
-  //     ? Yup.string()
-  //       .required("Required (zip Code)")
-  //     : Yup.string(),
-  //   fromBillingCountry: touchedFields.fromBillingCountry
-  //     ? Yup.string().required("Required (Billing Country)")
-  //     : Yup.string(),
-  //   toBillingStreet:
-  //     updateInvoice.toBillingStreet == ""
-  //       ? Yup.string().required("Required (Billing Street)")
-  //       : touchedFields.toBillingStreet
-  //         ? Yup.string().required("Required (Billing Street)")
-  //         : Yup.string(),
-  //   toBillingCity:
-  //     updateInvoice.toBillingCity == ""
-  //       ? Yup.string().required("Required (Billing City)")
-  //       : touchedFields.toBillingCity
-  //         ? Yup.string().required("Required (Billing City)")
-  //         : Yup.string(),
-  //   toBillingState:
-  //     updateInvoice.toBillingState == ""
-  //       ? Yup.string().required("Required (Billing State)")
-  //       : touchedFields.toBillingState
-  //         ? Yup.string().required("Required (Billing State)")
-  //         : Yup.string(),
-  //   toZipCode:
-  //     updateInvoice.toZipCode == ""
-  //       ? Yup.string().required("Required (zip Code)")
-  //       : Yup.string(),
-  //   toBillingCountry:
-  //     updateInvoice.toBillingCountry == ""
-  //       ? Yup.string().required("Required (Billing Country)")
-  //       : touchedFields.toBillingCountry
-  //         ? Yup.string().required("Required (Billing Country)")
-  //         : Yup.string(),
-  // });
+
+  const validationSchema = Yup.object().shape({
+    accountID: Yup.string().required("Required (Account)"),
+    ownerID: Yup.string().required("Required (Invoice Owner)"),
+    subject: Yup.string().required("Required(Subject)"),
+    contactID: Yup.string().required("Required (Contacts)"),
+    // invoiceDate: touchedFields.invoiceDate
+    //   ? Yup.string().required("Required (Due Date)")
+    //   : Yup.string(),
+    // dueDate: touchedFields.dueDate
+    //   ? Yup.string().required("Required (Due Date)")
+    //   : Yup.string(),
+    // status: Yup.string().required("Required (Status)"),
+    // fromBillingStreet: touchedFields.fromBillingStreet
+    //   ? Yup.string().required("Required (Billing Street)")
+    //   : Yup.string(),
+    // fromBillingCity: touchedFields.fromBillingCity
+    //   ? Yup.string().required("Required (Billing City)")
+    //   : Yup.string(),
+    // fromBillingState: touchedFields.fromBillingState
+    //   ? Yup.string().required("Required (Billing State)")
+    //   : Yup.string(),
+    // fromZipCode: touchedFields.fromZipCode
+    //   ? Yup.string()
+    //     .required("Required (zip Code)")
+    //   : Yup.string(),
+    // fromBillingCountry: touchedFields.fromBillingCountry
+    //   ? Yup.string().required("Required (Billing Country)")
+    //   : Yup.string(),
+    // toBillingStreet:
+    //   updateInvoice.toBillingStreet == ""
+    //     ? Yup.string().required("Required (Billing Street)")
+    //     : touchedFields.toBillingStreet
+    //       ? Yup.string().required("Required (Billing Street)")
+    //       : Yup.string(),
+    // toBillingCity:
+    //   updateInvoice.toBillingCity == ""
+    //     ? Yup.string().required("Required (Billing City)")
+    //     : touchedFields.toBillingCity
+    //       ? Yup.string().required("Required (Billing City)")
+    //       : Yup.string(),
+    // toBillingState:
+    //   updateInvoice.toBillingState == ""
+    //     ? Yup.string().required("Required (Billing State)")
+    //     : touchedFields.toBillingState
+    //       ? Yup.string().required("Required (Billing State)")
+    //       : Yup.string(),
+    // toZipCode:
+    //   updateInvoice.toZipCode == ""
+    //     ? Yup.string().required("Required (zip Code)")
+    //     : Yup.string(),
+    // toBillingCountry:
+    //   updateInvoice.toBillingCountry == ""
+    //     ? Yup.string().required("Required (Billing Country)")
+    //     : touchedFields.toBillingCountry
+    //       ? Yup.string().required("Required (Billing Country)")
+    //       : Yup.string(),
+  });
 
   const handleDropdownChange = (e: any, selectedOption: any) => {
     if (e != null) {
@@ -367,27 +373,28 @@ const EditInvoice: React.FC<newInvoiceProps> = () => {
       modifiedBy: userId,
       modifiedOn: formattedDateTime,
     };
-    // const invoiceItemDetails: InvoiceItem[] = rows.map((row) => {
-    //   return {
-    //     id: 0,
-    //     invoiceID: 0,
-    //     sno: row.sNo,
-    //     productName: row.productName,
-    //     description: row.description,
-    //     quantity: row.quantity,
-    //     discount: row.discount,
-    //     amount: row.amount,
-    //     tax: parseFloat(updateInvoice.tax.toString()),
-    //     total: row.total,
-    //   };
-    // });
-    // const invoiceModel: InvoiceCreationModel = {
-    //   invoice: invoiceDetails,
-    //   invoiceItems: invoiceItemDetails,
-    // };
-    dispatch(updateInvoiceRequest(invoiceDetails, invoiceDetails.id));
+
+    const invoiceItemsDetails: InvoiceItem[] = rows.map((row) => ({
+      id: row.id,
+      invoiceID: row.invoiceID,
+      sno: row.sno,
+      productName: row.productName,
+      description: row.description,
+      quantity: row.quantity,
+      amount: row.amount,
+      discount: row.discount,
+      tax: row.tax,
+      total: row.total
+    }));
+
+    const invoiceModel: InvoiceCreationModel = {
+      invoice: invoiceDetails,
+      invoiceItems: invoiceItemsDetails,
+    };
+
+    dispatch(updateInvoiceRequest(invoiceModel));
     navigate("/invoices");
-    // console.log(invoiceDetails);
+    // console.log(rows);
   };
 
   const getAccountOwner = (ownerId: any) => {
@@ -433,7 +440,7 @@ const EditInvoice: React.FC<newInvoiceProps> = () => {
           <Formik
             initialValues={updateInvoice}
             enableReinitialize
-            // validationSchema={validationSchema}
+            validationSchema={validationSchema}
             onSubmit={handleCreateInvoiceClick}
           >
             {({ handleSubmit, handleChange, touched, errors, handleBlur }) => (
@@ -447,6 +454,7 @@ const EditInvoice: React.FC<newInvoiceProps> = () => {
                         className="col-sm-4 col-form-label"
                       >
                         Invoice Owner
+                        <span style={{ color: "red", fontSize: "25px" }}>*</span>
                       </label>
                       <div className="col-sm-6">
                         <Field name="ownerID">
@@ -466,7 +474,7 @@ const EditInvoice: React.FC<newInvoiceProps> = () => {
                                     </>
                                   ),
                                 }))}
-                                defaultValue={dropdownItems.ownerID}
+                                defaultValue={{ value: defaultOwner.firstName, label: `${defaultOwner.label} (${defaultOwner.email})` }}
                                 isSearchable={true}
                                 isClearable={true}
                                 onChange={(e: any, selectedOption: any) => {
@@ -500,6 +508,7 @@ const EditInvoice: React.FC<newInvoiceProps> = () => {
                         className="col-sm-4 col-form-label"
                       >
                         Subject
+                        <span style={{ color: "red", fontSize: "25px" }}>*</span>
                       </label>
                       <div className="col-sm-6">
                         <Field
@@ -543,7 +552,6 @@ const EditInvoice: React.FC<newInvoiceProps> = () => {
                                   handleChangeData({
                                     target: { name: "invoiceDate", value: date },
                                   });
-                                  handleInputChange("invoiceDate");
                                   fieldProps.form.setFieldValue(
                                     "invoiceDate",
                                     date,
@@ -586,7 +594,6 @@ const EditInvoice: React.FC<newInvoiceProps> = () => {
                                   handleChangeData({
                                     target: { name: "dueDate", value: date },
                                   });
-                                  handleInputChange("dueDate");
                                   fieldProps.form.setFieldValue(
                                     "dueDate",
                                     date,
@@ -616,6 +623,7 @@ const EditInvoice: React.FC<newInvoiceProps> = () => {
                         className="col-sm-4 col-form-label"
                       >
                         Account
+                        <span style={{ color: "red", fontSize: "25px" }}>*</span>
                       </label>
                       <div className="col-sm-6">
                         <Field name="accountID">
@@ -637,7 +645,7 @@ const EditInvoice: React.FC<newInvoiceProps> = () => {
                                     </>
                                   ),
                                 }))}
-                                defaultValue={dropdownItems.accountID}
+                                defaultValue={{ value: defaultAccount.id, label: `${defaultAccount.accountName} (${getAccountOwner(defaultAccount.ownerId)})` }}
                                 isSearchable
                                 isClearable
                                 onChange={(e: any, selectedOption: any) => {
@@ -680,6 +688,7 @@ const EditInvoice: React.FC<newInvoiceProps> = () => {
                         className="col-sm-4 col-form-label"
                       >
                         Contacts
+                        <span style={{ color: "red", fontSize: "25px" }}>*</span>
                       </label>
                       <div className="col-sm-6">
                         <Field name="contactID">
@@ -701,7 +710,7 @@ const EditInvoice: React.FC<newInvoiceProps> = () => {
                                     </>
                                   ),
                                 }))}
-                                defaultValue={dropdownItems.contactID}
+                                defaultValue={{ value: defaultContact?.firstName, label: `${defaultContact?.firstName} (${defaultContact?.email})` }}
                                 isSearchable
                                 isClearable
                                 onChange={(e: any, selectedOption: any) => {
@@ -861,7 +870,6 @@ const EditInvoice: React.FC<newInvoiceProps> = () => {
                           onChange={(e: any) => {
                             handleChangeData(e);
                             handleChange(e);
-                            handleInputChange("fromBillingStreet");
                           }}
                         />
                         <ErrorMessage
@@ -891,7 +899,6 @@ const EditInvoice: React.FC<newInvoiceProps> = () => {
                           onChange={(e: any) => {
                             handleChangeData(e);
                             handleChange(e);
-                            handleInputChange("fromBillingCity");
                           }}
                         />
                         <ErrorMessage
@@ -921,7 +928,6 @@ const EditInvoice: React.FC<newInvoiceProps> = () => {
                           onChange={(e: any) => {
                             handleChangeData(e);
                             handleChange(e);
-                            handleInputChange("fromBillingState");
                           }}
                         />
                         <ErrorMessage
@@ -952,7 +958,6 @@ const EditInvoice: React.FC<newInvoiceProps> = () => {
                           onChange={(e: any) => {
                             handleChangeData(e);
                             handleChange(e);
-                            handleInputChange("fromZipCode");
                           }}
                         />
                         <ErrorMessage
@@ -984,7 +989,6 @@ const EditInvoice: React.FC<newInvoiceProps> = () => {
                           onChange={(e: any) => {
                             handleChangeData(e);
                             handleChange(e);
-                            handleInputChange("fromBillingCountry");
                           }}
                         />
                         <ErrorMessage
@@ -1020,7 +1024,6 @@ const EditInvoice: React.FC<newInvoiceProps> = () => {
                           onChange={(e: any) => {
                             handleChangeData(e);
                             handleChange(e);
-                            handleInputChange("toBillingStreet");
                           }}
                         />
                         <ErrorMessage
@@ -1054,7 +1057,6 @@ const EditInvoice: React.FC<newInvoiceProps> = () => {
                           onChange={(e: any) => {
                             handleChangeData(e);
                             handleChange(e);
-                            handleInputChange("toBillingCity");
                           }}
                         />
                         <ErrorMessage
@@ -1088,7 +1090,6 @@ const EditInvoice: React.FC<newInvoiceProps> = () => {
                           onChange={(e: any) => {
                             handleChangeData(e);
                             handleChange(e);
-                            handleInputChange("toBillingState");
                           }}
                         />
                         <ErrorMessage
@@ -1123,7 +1124,6 @@ const EditInvoice: React.FC<newInvoiceProps> = () => {
                           onChange={(e: any) => {
                             handleChangeData(e);
                             handleChange(e);
-                            handleInputChange("toZipCode");
                           }}
                         />
                         <ErrorMessage
@@ -1158,7 +1158,6 @@ const EditInvoice: React.FC<newInvoiceProps> = () => {
                           onChange={(e: any) => {
                             handleChangeData(e);
                             handleChange(e);
-                            handleInputChange("toBillingCountry");
                           }}
                         />
                         <ErrorMessage
@@ -1189,7 +1188,7 @@ const EditInvoice: React.FC<newInvoiceProps> = () => {
                         </CTableHead>
                         {rows.map((row, index) => (
                           <CTableRow key={index}>
-                            <CTableDataCell>{row.sNo}</CTableDataCell>
+                            <CTableDataCell>{row.id}</CTableDataCell>
                             <CTableDataCell width={250}>
                               <div style={{ margin: "5px" }}>
                                 <input
@@ -1288,7 +1287,7 @@ const EditInvoice: React.FC<newInvoiceProps> = () => {
                     </CCardBody>
                   </CCard>
 
-                  <div className="col-sm-4 ">
+                  {/* <div className="col-sm-4 ">
                     <CButton
                       color="primary"
                       variant="outline"
@@ -1297,7 +1296,7 @@ const EditInvoice: React.FC<newInvoiceProps> = () => {
                     >
                       + Add Row
                     </CButton>
-                  </div>
+                  </div> */}
                   <div>
                     <CCard
                       className="rounded col-4 offset-md-7"
