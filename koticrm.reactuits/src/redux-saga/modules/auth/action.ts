@@ -21,11 +21,11 @@ export const loginSuccess = (response: LoginResponse) => ({
   });
 
 
-export const workerLoader = (isLoading:boolean) => ({
-  type: START_LOADING,
-  payload:isLoading
-});
+// export const workerLoader = (isLoading:boolean) => ({
+//   type: START_LOADING,
+//   payload:isLoading
+// });
 
-export const stopLoading = () => ({
-  type: STOP_LOADING,
-});
+// export const stopLoading = () => ({
+//   type: STOP_LOADING,
+// });

@@ -31,10 +31,10 @@ const Login = () => {
 
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const fetchLoader = useSelector(
-    (state: any) => state.authReducer.isLoading
-  );
-  console.log("", fetchLoader)
+  // const fetchLoader = useSelector(
+  //   (state: any) => state.authReducer.isLoading
+  // );
+  // console.log("", fetchLoader)
 
   const [user, setUser] = useState({
     userName: "",
@@ -53,7 +53,7 @@ const Login = () => {
     };
     try {
       await dispatch(loginRequest(userLogin, navigate));
-      await dispatch(workerLoader(true))
+      // await dispatch(workerLoader(true))
     } finally {
       setLoading(false); // Stop loading regardless of success or failure
     }
@@ -62,9 +62,9 @@ const Login = () => {
 
   return (
     <>
-      {loading ?  <div className="spinner-backdrop">
+      {/* {loading ?  <div className="spinner-backdrop">
         <CSpinner className="spinner" color="primary" />
-      </div>: ''}
+      </div>: ''} */}
       {/* <CSpinner color="primary" /> */}
       
 
