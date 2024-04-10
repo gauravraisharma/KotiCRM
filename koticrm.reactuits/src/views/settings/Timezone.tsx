@@ -60,7 +60,7 @@ const Timezone: React.FC = () => {
         billingCountry: orgDetails.billingCountry
       };
       dispatch(updateTimeZone(orgDetails.id, organizationDetail))
-      alert("To see the timezone changes in action, please logout and login again");
+      // alert("To see the timezone changes in action, please logout and login again");
     } else {
       console.error("orgDetails is undefined");
     }

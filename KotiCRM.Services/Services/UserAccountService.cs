@@ -92,5 +92,10 @@ namespace KotiCRM.Services.Services
         {
             return await _accountRepository.CreateEmployee(createEmployeeDTO);
         }
+        public async Task<IEnumerable<UserDetailModel>> GetUsers()
+        {
+            var users= await _accountRepository.GetUsers();
+            return users;
+        }
     }
 }

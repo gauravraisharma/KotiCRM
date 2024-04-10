@@ -197,6 +197,17 @@ namespace KotiCRM.Server.Controllers
                 return BadRequest(responseStatus.Message);
             }
         }
+        [Authorize(Roles = "Administrator")]
+        //This method is used to get List of Roles
+        [HttpGet("GetUsers")]
+        public ActionResult GetUsers()
+        {
+            var users = _accountService.GetUsers();
+
+            return Ok(users);
+        }
+
+
 
     }
 }

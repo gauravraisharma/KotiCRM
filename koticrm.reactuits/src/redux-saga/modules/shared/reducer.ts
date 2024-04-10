@@ -14,10 +14,10 @@ const INITIAL_STATE : sharedState = {
 
 const sharedReducer: Reducer<sharedState, AppAction> = (state: sharedState = INITIAL_STATE, action: AppAction): sharedState => {
     switch (action.type) {
-        case UPDATE_TIMEZONE_SUCCESS: 
-        return {...state,
-            refreashData: true,
-            }    
+        // case UPDATE_TIMEZONE_SUCCESS: 
+        // return {...state,
+        //     refreashData: true,
+        //     }    
     case GET_INDUSTRY_SUCCESS:
         return {
             ...state,

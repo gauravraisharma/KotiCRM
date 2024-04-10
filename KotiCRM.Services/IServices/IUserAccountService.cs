@@ -25,5 +25,6 @@ namespace KotiCRM.Services.IServices
 
         // For Employee
         Task<ResponseStatus> CreateEmployee(CreateEmployeeDTO createEmployeeDTO);
+        Task<IEnumerable<UserDetailModel>> GetUsers();
     }
 }

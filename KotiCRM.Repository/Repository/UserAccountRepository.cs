@@ -126,10 +126,7 @@ namespace KotiCRM.Repository.Repository
                     Message = "Something went wrong "
                 };
             }
-            finally
-            {
-                _context.Dispose();
-            }
+      
         }
 
         public async Task<ResponseStatus> UpdateApplicationUser(UpdateApplicationUserModel userModel)
@@ -764,8 +761,7 @@ namespace KotiCRM.Repository.Repository
 
         }
 
-
-        // For create Employee
+        //for createEmployee
         public async Task<ResponseStatus> CreateEmployee(CreateEmployeeDTO createEmployeeDTO)
         {
             using var transaction = _context.Database.BeginTransaction(); // Begin transaction
@@ -807,8 +803,8 @@ namespace KotiCRM.Repository.Repository
                     CreatedBy = ""
                 };
 
-                var result =  await CreateApplicationUser(user);
-                
+                var result = await CreateApplicationUser(user);
+
                 if (result.Status == "FAILED")
                 {
                     return new ResponseStatus
@@ -874,5 +870,34 @@ namespace KotiCRM.Repository.Repository
                 _context.Dispose();
             }
         }
+
+        //userList
+        public async Task<IEnumerable<UserDetailModel>> GetUsers()
+        {
+            try
+            {
+                var users = from user in _context.Users
+                            join userRole in _context.UserRoles on user.Id equals userRole.UserId
+                            join role in _context.Roles on userRole.RoleId equals role.Id
+
+                            select new UserDetailModel
+                            {
+                                Username = user.UserName,
+                                FirstName = user.FirstName,
+                                LastName = user.LastName,
+                                Email = user.Email,
+                                PhoneNumber = user.PhoneNumber,
+                                UserType = userRole.RoleId,
+                                Password = user.PasswordHash,
+                                IsAdmin = (role.Name.ToUpper() == "ADMIN") ? true : false
+                            };
+                        return users;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message, ex);
+            }
+        }
     }
 }
+
