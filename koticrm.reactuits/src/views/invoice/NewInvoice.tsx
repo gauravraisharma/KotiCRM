@@ -430,6 +430,9 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
                         className="col-sm-4 col-form-label"
                       >
                         Invoice Owner
+                        <span style={{ color: "red", fontSize: "25px" }}>
+                            *
+                          </span>
                       </label>
                       <div className="col-sm-6">
                         <Field name="invoiceOwner">
@@ -493,6 +496,9 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
                         className="col-sm-4 col-form-label"
                       >
                         Subject
+                        <span style={{ color: "red", fontSize: "25px" }}>
+                            *
+                          </span>
                       </label>
                       <div className="col-sm-6">
                         <Field
@@ -608,6 +614,9 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
                         className="col-sm-4 col-form-label"
                       >
                         Account
+                        <span style={{ color: "red", fontSize: "25px" }}>
+                            *
+                          </span>
                       </label>
                       <div className="col-sm-6">
                         <Field name="accountName">
@@ -672,6 +681,9 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
                         className="col-sm-4 col-form-label"
                       >
                         Contacts
+                        <span style={{ color: "red", fontSize: "25px" }}>
+                            *
+                          </span>
                       </label>
                       <div className="col-sm-6">
                         <Field name="contacts">
@@ -782,6 +794,9 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
                         className="col-sm-4 col-form-label"
                       >
                         Status
+                        <span style={{ color: "red", fontSize: "25px" }}>
+                            *
+                          </span>
                       </label>
                       <div className="col-sm-6">
                         <Field
@@ -838,6 +853,7 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
                         className="col-sm-4 col-form-label"
                       >
                         Billing Street
+                        
                       </label>
                       <div className="col-sm-6">
                         <Field
@@ -961,6 +977,9 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
                         className="col-sm-4 col-form-label"
                       >
                         Billing Country
+                        <span style={{ color: "red", fontSize: "25px" }}>
+                            *
+                          </span>
                       </label>
                       <div className="col-sm-6">
                         <Field
@@ -994,6 +1013,9 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
                         className="col-sm-4 col-form-label"
                       >
                         Billing Street
+                        <span style={{ color: "red", fontSize: "25px" }}>
+                            *
+                          </span>
                       </label>
                       <div className="col-sm-6">
                         <Field
@@ -1028,6 +1050,9 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
                         className="col-sm-4 col-form-label"
                       >
                         Billing City
+                        <span style={{ color: "red", fontSize: "25px" }}>
+                            *
+                          </span>
                       </label>
                       <div className="col-sm-6">
                         <Field
@@ -1062,6 +1087,9 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
                         className="col-sm-4 col-form-label"
                       >
                         Billing State
+                        <span style={{ color: "red", fontSize: "25px" }}>
+                            *
+                          </span>
                       </label>
                       <div className="col-sm-6">
                         <Field
@@ -1097,6 +1125,9 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
                         className="col-sm-4 col-form-label"
                       >
                         ZipCode
+                        <span style={{ color: "red", fontSize: "25px" }}>
+                            *
+                          </span>
                       </label>
                       <div className="col-sm-6">
                         <Field
@@ -1132,6 +1163,9 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
                         className="col-sm-4 col-form-label"
                       >
                         Billing Country
+                        <span style={{ color: "red", fontSize: "25px" }}>
+                            *
+                          </span>
                       </label>
                       <div className="col-sm-6">
                         <Field

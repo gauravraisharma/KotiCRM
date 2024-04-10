@@ -1,19 +1,17 @@
-
 import { Reducer } from "react";
 import { LOGIN_SUCCESS, LOGOUT, START_LOADING, UPDATE_TIMEZONE_SUCCESS } from "../../../constants/reduxConstants";
 import { authState } from "../../../models/reduxState/authState";
 import { AppAction } from "../../../models/redux/action/ActionModel";
 import { actionPayloadModel } from "../../../models/actionModel/actionModel";
 
-
 const INITIAL_STATE: authState = {
-    token: null,
-    modulePermission: null,
-    timezone: "",
-    userType: null,
-    userId: null,
-    loggedIn: false,
-    isLoading: false
+  token: null,
+  modulePermission: null,
+  timezone: "",
+  userType: null,
+  userId: null,
+  loggedIn: false,
+  isLoading: false,
 };
 
 const authReducer: Reducer<authState, AppAction> = (state: authState = INITIAL_STATE, action: AppAction): authState => {
@@ -44,19 +42,19 @@ const authReducer: Reducer<authState, AppAction> = (state: authState = INITIAL_S
                 loggedIn: false,
             };
 
-        case LOGOUT:
-            localStorage.removeItem('accessToken')
-            return {
-                ...INITIAL_STATE
-            }
-            case START_LOADING:
-                return {
-                    ...INITIAL_STATE,
-                    isLoading: true
-                }
-        default:
-            return state;
-    }
+    case LOGOUT:
+      localStorage.removeItem("accessToken");
+      return {
+        ...INITIAL_STATE,
+      };
+    case START_LOADING:
+      return {
+        ...INITIAL_STATE,
+        isLoading: (action as actionPayloadModel).payload,
+      };
+    default:
+      return state;
+  }
 };
 
 export default authReducer;

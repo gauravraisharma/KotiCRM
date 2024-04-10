@@ -328,9 +328,9 @@ namespace KotiCRM.Repository.Repository
 
 
                     var timeZone = (from organization in _context.Organizations
-                                     join users in _context.Users on organization.Id equals users.OrganizationId
-                                    where users.Id==user.Id
-                                     select organization.TimeZone).FirstOrDefault();
+                                    join users in _context.Users on organization.Id equals users.OrganizationId
+                                    where users.Id == user.Id
+                                    select organization.TimeZone).FirstOrDefault();
 
                     if (timeZone == null)
                     {
@@ -348,10 +348,10 @@ namespace KotiCRM.Repository.Repository
                         Message = "Login Successfully",
                         Token = token,
                         UserType = userRoles[0],
-                        TimeZone= timeZone,
+                        TimeZone = timeZone,
                         UserId = user.Id,
 
-                        ModulePermission=ModulePermissionList
+                        ModulePermission = ModulePermissionList
                     };
 
                 }
@@ -640,7 +640,7 @@ namespace KotiCRM.Repository.Repository
 
 
         }
-        
+
         public async Task<ModulePermissionResponse> GetModulePermission(string userId)
         {
             try
@@ -654,7 +654,7 @@ namespace KotiCRM.Repository.Repository
                     };
                 }
 
-                var userFound = await  _userManager.FindByIdAsync(userId);
+                var userFound = await _userManager.FindByIdAsync(userId);
                 if (userFound == null || userFound.IsDeleted)
                 {
                     return new ModulePermissionResponse
@@ -680,23 +680,23 @@ namespace KotiCRM.Repository.Repository
                 var roleid = role.Id;
 
                 var ModulePermissionList = (from Permissions in _context.Permissions
-                                  join Module in _context.Modules on Permissions.ModuleID equals Module.Id
-                                  where Permissions.RoleID == roleid
-                                  select new ModulePermission
-                                  {
-                                      ModuleId = Module.Id,
-                                      ModuleName = Module.Name,
-                                      IsAdd = Permissions.Add,
-                                      IsEdit = Permissions.Edit,
-                                      IsView = Permissions.View,
-                                      IsDelete = Permissions.Delete,
-                                  }
+                                            join Module in _context.Modules on Permissions.ModuleID equals Module.Id
+                                            where Permissions.RoleID == roleid
+                                            select new ModulePermission
+                                            {
+                                                ModuleId = Module.Id,
+                                                ModuleName = Module.Name,
+                                                IsAdd = Permissions.Add,
+                                                IsEdit = Permissions.Edit,
+                                                IsView = Permissions.View,
+                                                IsDelete = Permissions.Delete,
+                                            }
                               ).ToList();
                 return new ModulePermissionResponse
                 {
                     Status = "SUCCEED",
                     Message = "User Module with permission get successfully ",
-                    ModulePermissions=ModulePermissionList
+                    ModulePermissions = ModulePermissionList
                 };
 
             }
@@ -862,13 +862,13 @@ namespace KotiCRM.Repository.Repository
                 return new ResponseStatus
                 {
                     Status = "FAILED",
-                    Message = "Something went wrong "
+                    Message = "Failed to create employee"
                 };
+
             }
-            finally
-            {
-                _context.Dispose();
-            }
+
+            
+
         }
 
         //userList
@@ -891,13 +891,14 @@ namespace KotiCRM.Repository.Repository
                                 Password = user.PasswordHash,
                                 IsAdmin = (role.Name.ToUpper() == "ADMIN") ? true : false
                             };
-                        return users;
+                return users;
             }
             catch (Exception ex)
             {
                 throw new Exception(ex.Message, ex);
             }
         }
+
     }
 }
 

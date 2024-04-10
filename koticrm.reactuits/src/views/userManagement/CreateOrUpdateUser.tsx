@@ -17,7 +17,6 @@ import SearchDropdown from "../../components/base/select/SearchDropdown";
 import { ToastContainer } from "react-toastify";
 import { User, UserClass } from "../../models/userManagement/user";
 
-
 const CreateOrUpdateUser = () => {
   // Parameters
   const dispatch = useDispatch();
@@ -36,13 +35,11 @@ const CreateOrUpdateUser = () => {
   useEffect(() => {
     const employeeId = generateEmployeeId();
     setEmployeeId(employeeId);
-    if(employeeId !== "0")
-    {
-        const employeeCode = generateEmployeeCode("tcs", 3, employeeId);
-        setEmployeeCode(employeeCode);
+    if (employeeId !== "0") {
+      const employeeCode = generateEmployeeCode("tcs", 3, employeeId);
+      setEmployeeCode(employeeCode);
     }
-  },[]);
-
+  }, []);
 
   // Handlers
   const handleCheckbox = (event: any) => {
@@ -51,7 +48,7 @@ const CreateOrUpdateUser = () => {
     //     setIsRelievedChecked(true);
     // }
     // isActiveChecked ? setIsRelievedChecked(false) : "";
-    
+
     const { id, checked } = event.target;
 
     if (id === "isActive" && checked) {
@@ -70,17 +67,20 @@ const CreateOrUpdateUser = () => {
     }
   };
 
-
   // Generate Employee Number
   const generateEmployeeId = () => {
-    const paddedCount = String(employeeCount).padStart(7, '0'); // Ensure 8 characters with leading zeros
+    const paddedCount = String(employeeCount).padStart(7, "0"); // Ensure 8 characters with leading zeros
     const employeeId = `0000000${paddedCount}`.slice(-8); // Ensure exactly 8 characters
-    setEmployeeCount(prevCount => prevCount + 1); // Increment employee count for uniqueness
+    setEmployeeCount((prevCount) => prevCount + 1); // Increment employee count for uniqueness
     return employeeId;
   };
 
   // Generate EmployeeCode
-  const generateEmployeeCode = (organizationName: string, departmentId: number, employeeId: string ) => {
+  const generateEmployeeCode = (
+    organizationName: string,
+    departmentId: number,
+    employeeId: string
+  ) => {
     // Generate a random 4-letter combination for the organization name
     // const generateRandomLetters = () => {
     //     const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -97,18 +97,15 @@ const CreateOrUpdateUser = () => {
 
     const name = organizationName.toUpperCase();
     return `${name}-EMP-${departmentId}-${employeeId}`;
-  }
+  };
 
   // Submit
-  const handleFormSubmit = async(
+  const handleFormSubmit = async (
     user: User,
     { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }
   ) => {
     try {
-        
-    } catch (error) {
-        
-    }
+    } catch (error) {}
   };
 
   return (
@@ -118,9 +115,20 @@ const CreateOrUpdateUser = () => {
         <CCardHeader className="mb-3">
           <div className="d-flex justify-content-between align-items-center">
             <div>
-              <h5 className="mb-0">{userId ? "Update" + userId : "Create"} User</h5>
+              <h5 className="mb-0">
+                {userId ? "Update" + userId : "Create"} User
+              </h5>
             </div>
-            <div className="text-end"></div>
+            <div className="text-end">
+              <Link to={`/users`}>
+                <CButton
+                  component="input"
+                  type="button"
+                  color="secondary"
+                  value="Back to Users"
+                />
+              </Link>
+            </div>
           </div>
         </CCardHeader>
         <CCardBody>
@@ -144,7 +152,11 @@ const CreateOrUpdateUser = () => {
                           width={120}
                           height={120}
                           className="rounded-circle"
-                          style={{ borderRadius: "50%", marginLeft: "5rem", marginTop: "2rem" }}
+                          style={{
+                            borderRadius: "50%",
+                            marginLeft: "5rem",
+                            marginTop: "2rem",
+                          }}
                         />
                       </CCol>
                     </CRow>
@@ -165,7 +177,13 @@ const CreateOrUpdateUser = () => {
                           name="employeeID"
                           className="form-control"
                           disabled
-                          style={{ borderBottom: "1px solid gray", borderLeft: "none", borderRight: "none", borderTop: "none", height: "50%" }}
+                          style={{
+                            borderBottom: "1px solid gray",
+                            borderLeft: "none",
+                            borderRight: "none",
+                            borderTop: "none",
+                            height: "50%",
+                          }}
                         />
                         <ErrorMessage
                           name="employeeID"
@@ -178,9 +196,7 @@ const CreateOrUpdateUser = () => {
                     </CRow>
                     <CRow className="mb-3">
                       <CCol sm={12}>
-                        <label htmlFor="joiningDate">
-                          Joining Date
-                        </label>
+                        <label htmlFor="joiningDate">Joining Date</label>
                         <Field
                           type="date"
                           id="joiningDate"
@@ -190,7 +206,13 @@ const CreateOrUpdateUser = () => {
                           //       ? "is-invalid"
                           //       : ""
                           //     }`}
-                          style={{ borderBottom: "1px solid gray", borderLeft: "none", borderRight: "none", borderTop: "none", height: "50%" }}
+                          style={{
+                            borderBottom: "1px solid gray",
+                            borderLeft: "none",
+                            borderRight: "none",
+                            borderTop: "none",
+                            height: "50%",
+                          }}
                         />
                         <ErrorMessage
                           name="joiningDate"
@@ -203,7 +225,12 @@ const CreateOrUpdateUser = () => {
                     </CRow>
                     <CRow className="mb-3">
                       <CCol sm={12}>
-                        <CFormCheck id="isRelieved" name="isRelieved" label="isRelieved" onChange={handleCheckbox}/>
+                        <CFormCheck
+                          id="isRelieved"
+                          name="isRelieved"
+                          label="isRelieved"
+                          onChange={handleCheckbox}
+                        />
                         <ErrorMessage
                           name="isRelieved"
                           className="invalid-feedback"
@@ -234,7 +261,13 @@ const CreateOrUpdateUser = () => {
                           //       : ""
                           //     }`}
                           disabled
-                          style={{ borderBottom: "1px solid gray", borderLeft: "none", borderRight: "none", borderTop: "none", height: "50%" }}
+                          style={{
+                            borderBottom: "1px solid gray",
+                            borderLeft: "none",
+                            borderRight: "none",
+                            borderTop: "none",
+                            height: "50%",
+                          }}
                         />
                         <ErrorMessage
                           name="employeeCode"
@@ -247,9 +280,11 @@ const CreateOrUpdateUser = () => {
                     </CRow>
                     <CRow className="mb-3">
                       <CCol sm={12}>
-                        <CFormCheck id="isActive" label="Active" 
-                        checked={isActiveChecked} // Set checked status based on isActiveChecked state
-                        onChange={() => setIsActiveChecked(!isActiveChecked)} // Toggle isActiveChecked state
+                        <CFormCheck
+                          id="isActive"
+                          label="Active"
+                          checked={isActiveChecked} // Set checked status based on isActiveChecked state
+                          onChange={() => setIsActiveChecked(!isActiveChecked)} // Toggle isActiveChecked state
                         />
                         <ErrorMessage
                           name="isActive"
@@ -262,24 +297,22 @@ const CreateOrUpdateUser = () => {
                     </CRow>
                     <CRow className="mb-3">
                       <CCol sm={12}>
-                        <label htmlFor="relievingDate">
-                          Relieving Date
-                        </label>
+                        <label htmlFor="relievingDate">Relieving Date</label>
                         {isRelievedChecked && ( // Render relievingDate field only if isRelieved is checked
-                        <Field
+                          <Field
                             type="date"
                             id="relievingDate"
                             name="relievingDate"
                             className="form-control"
                             // Add validation rules for relievingDate if needed
                             style={{
-                            borderBottom: "1px solid gray",
-                            borderLeft: "none",
-                            borderRight: "none",
-                            borderTop: "none",
-                            height: "50%",
+                              borderBottom: "1px solid gray",
+                              borderLeft: "none",
+                              borderRight: "none",
+                              borderTop: "none",
+                              height: "50%",
                             }}
-                        />
+                          />
                         )}
                         <ErrorMessage
                           name="relievingDate"
@@ -297,9 +330,7 @@ const CreateOrUpdateUser = () => {
                   <CCol xs={4}>
                     <CRow className="mb-3">
                       <CCol sm={12}>
-                        <label htmlFor="name">
-                          Employee Name
-                        </label>
+                        <label htmlFor="name">Employee Name</label>
                         <Field
                           type="text"
                           id="name"
@@ -309,8 +340,14 @@ const CreateOrUpdateUser = () => {
                           //       ? "is-invalid"
                           //       : ""
                           //     }`}
-                          placeholder= "Employee Name"
-                          style={{ borderBottom: "1px solid gray", borderLeft: "none", borderRight: "none", borderTop: "none", height: "50%" }}
+                          placeholder="Employee Name"
+                          style={{
+                            borderBottom: "1px solid gray",
+                            borderLeft: "none",
+                            borderRight: "none",
+                            borderTop: "none",
+                            height: "50%",
+                          }}
                         />
                         <ErrorMessage
                           name="name"
@@ -323,9 +360,7 @@ const CreateOrUpdateUser = () => {
                     </CRow>
                     <CRow className="mb-3">
                       <CCol sm={12}>
-                        <label htmlFor="panNumber">
-                          Pan Number
-                        </label>
+                        <label htmlFor="panNumber">Pan Number</label>
                         <Field
                           type="text"
                           id="panNumber"
@@ -335,8 +370,14 @@ const CreateOrUpdateUser = () => {
                           //       ? "is-invalid"
                           //       : ""
                           //     }`}
-                          placeholder= "Pan Number"
-                          style={{ borderBottom: "1px solid gray", borderLeft: "none", borderRight: "none", borderTop: "none", height: "50%" }}
+                          placeholder="Pan Number"
+                          style={{
+                            borderBottom: "1px solid gray",
+                            borderLeft: "none",
+                            borderRight: "none",
+                            borderTop: "none",
+                            height: "50%",
+                          }}
                         />
                         <ErrorMessage
                           name="panNumber"
@@ -351,9 +392,7 @@ const CreateOrUpdateUser = () => {
                   <CCol xs={4}>
                     <CRow className="mb-3">
                       <CCol sm={12}>
-                        <label htmlFor="fatherName">
-                          Father Name
-                        </label>
+                        <label htmlFor="fatherName">Father Name</label>
                         <Field
                           type="text"
                           id="fatherName"
@@ -363,8 +402,14 @@ const CreateOrUpdateUser = () => {
                           //       ? "is-invalid"
                           //       : ""
                           //     }`}
-                          placeholder= "Father Name"
-                          style={{ borderBottom: "1px solid gray", borderLeft: "none", borderRight: "none", borderTop: "none", height: "50%" }}
+                          placeholder="Father Name"
+                          style={{
+                            borderBottom: "1px solid gray",
+                            borderLeft: "none",
+                            borderRight: "none",
+                            borderTop: "none",
+                            height: "50%",
+                          }}
                         />
                         <ErrorMessage
                           name="fatherName"
@@ -377,9 +422,7 @@ const CreateOrUpdateUser = () => {
                     </CRow>
                     <CRow className="mb-3">
                       <CCol sm={12}>
-                        <label htmlFor="aadharCardNumber">
-                        Aadhar Number
-                        </label>
+                        <label htmlFor="aadharCardNumber">Aadhar Number</label>
                         <Field
                           type="text"
                           id="aadharCardNumber"
@@ -389,8 +432,14 @@ const CreateOrUpdateUser = () => {
                           //       ? "is-invalid"
                           //       : ""
                           //     }`}
-                          placeholder= "Aadhar Number"
-                          style={{ borderBottom: "1px solid gray", borderLeft: "none", borderRight: "none", borderTop: "none", height: "50%" }}
+                          placeholder="Aadhar Number"
+                          style={{
+                            borderBottom: "1px solid gray",
+                            borderLeft: "none",
+                            borderRight: "none",
+                            borderTop: "none",
+                            height: "50%",
+                          }}
                         />
                         <ErrorMessage
                           name="aadharCardNumber"
@@ -403,11 +452,9 @@ const CreateOrUpdateUser = () => {
                     </CRow>
                   </CCol>
                   <CCol xs={4}>
-                  <CRow className="mb-3">
+                    <CRow className="mb-3">
                       <CCol sm={12}>
-                        <label htmlFor="dateOfBirth">
-                          Date of Birth
-                        </label>
+                        <label htmlFor="dateOfBirth">Date of Birth</label>
                         <Field
                           type="date"
                           id="dateOfBirth"
@@ -417,7 +464,13 @@ const CreateOrUpdateUser = () => {
                           //       ? "is-invalid"
                           //       : ""
                           //     }`}
-                          style={{ borderBottom: "1px solid gray", borderLeft: "none", borderRight: "none", borderTop: "none", height: "50%" }}
+                          style={{
+                            borderBottom: "1px solid gray",
+                            borderLeft: "none",
+                            borderRight: "none",
+                            borderTop: "none",
+                            height: "50%",
+                          }}
                         />
                         <ErrorMessage
                           name="dateOfBirth"
@@ -430,19 +483,17 @@ const CreateOrUpdateUser = () => {
                     </CRow>
                     <CRow className="mb-3">
                       <CCol sm={12}>
-                        <label htmlFor="bloodGroup">
-                          Blood Group
-                        </label>
-                        <CFormSelect 
-                            id="bloodGroup"
-                            name="bloodGroup"
-                            aria-label="Default select example"
-                            options={[
-                                {label: 'select'},
-                                { label: 'A+', value: '1' },
-                                { label: 'B+', value: '2' },
-                                { label: 'O-', value: '3'}
-                            ]}
+                        <label htmlFor="bloodGroup">Blood Group</label>
+                        <CFormSelect
+                          id="bloodGroup"
+                          name="bloodGroup"
+                          aria-label="Default select example"
+                          options={[
+                            { label: "select" },
+                            { label: "A+", value: "1" },
+                            { label: "B+", value: "2" },
+                            { label: "O-", value: "3" },
+                          ]}
                         />
                         <ErrorMessage
                           name="bloodGroup"
@@ -461,7 +512,7 @@ const CreateOrUpdateUser = () => {
                     <CRow className="mb-3">
                       <CCol sm={12}>
                         <label htmlFor="correspondenceAddress">
-                        Correspondence Address
+                          Correspondence Address
                         </label>
                         <Field
                           type="text"
@@ -472,8 +523,14 @@ const CreateOrUpdateUser = () => {
                           //       ? "is-invalid"
                           //       : ""
                           //     }`}
-                          placeholder= "Correspondence Address"
-                          style={{ borderBottom: "1px solid gray", borderLeft: "none", borderRight: "none", borderTop: "none", height: "50%" }}
+                          placeholder="Correspondence Address"
+                          style={{
+                            borderBottom: "1px solid gray",
+                            borderLeft: "none",
+                            borderRight: "none",
+                            borderTop: "none",
+                            height: "50%",
+                          }}
                         />
                         <ErrorMessage
                           name="correspondenceAddress"
@@ -498,8 +555,14 @@ const CreateOrUpdateUser = () => {
                           //       ? "is-invalid"
                           //       : ""
                           //     }`}
-                          placeholder= "Permanent Address"
-                          style={{ borderBottom: "1px solid gray", borderLeft: "none", borderRight: "none", borderTop: "none", height: "50%" }}
+                          placeholder="Permanent Address"
+                          style={{
+                            borderBottom: "1px solid gray",
+                            borderLeft: "none",
+                            borderRight: "none",
+                            borderTop: "none",
+                            height: "50%",
+                          }}
                         />
                         <ErrorMessage
                           name="permanentAddress"
@@ -513,13 +576,11 @@ const CreateOrUpdateUser = () => {
                   </CCol>
                 </CRow>
                 <CRow>
-                <span className="mt-4"></span>
+                  <span className="mt-4"></span>
                   <CCol xs={4}>
                     <CRow className="mb-3">
                       <CCol sm={12}>
-                        <label htmlFor="contactNumber1">
-                         Contact Number 1
-                        </label>
+                        <label htmlFor="contactNumber1">Contact Number 1</label>
                         <Field
                           type="text"
                           id="contactNumber1"
@@ -529,8 +590,14 @@ const CreateOrUpdateUser = () => {
                           //       ? "is-invalid"
                           //       : ""
                           //     }`}
-                          placeholder= "Contact Number 1"
-                          style={{ borderBottom: "1px solid gray", borderLeft: "none", borderRight: "none", borderTop: "none", height: "50%" }}
+                          placeholder="Contact Number 1"
+                          style={{
+                            borderBottom: "1px solid gray",
+                            borderLeft: "none",
+                            borderRight: "none",
+                            borderTop: "none",
+                            height: "50%",
+                          }}
                         />
                         <ErrorMessage
                           name="contactNumber1"
@@ -543,9 +610,7 @@ const CreateOrUpdateUser = () => {
                     </CRow>
                     <CRow className="mb-3">
                       <CCol sm={12}>
-                        <label htmlFor="officialEmail">
-                          Official Email
-                        </label>
+                        <label htmlFor="officialEmail">Official Email</label>
                         <Field
                           type="text"
                           id="officialEmail"
@@ -555,8 +620,14 @@ const CreateOrUpdateUser = () => {
                           //       ? "is-invalid"
                           //       : ""
                           //     }`}
-                          placeholder= "Official Email"
-                          style={{ borderBottom: "1px solid gray", borderLeft: "none", borderRight: "none", borderTop: "none", height: "50%" }}
+                          placeholder="Official Email"
+                          style={{
+                            borderBottom: "1px solid gray",
+                            borderLeft: "none",
+                            borderRight: "none",
+                            borderTop: "none",
+                            height: "50%",
+                          }}
                         />
                         <ErrorMessage
                           name="officialEmail"
@@ -571,9 +642,7 @@ const CreateOrUpdateUser = () => {
                   <CCol xs={4}>
                     <CRow className="mb-3">
                       <CCol sm={12}>
-                        <label htmlFor="contactNumber2">
-                          Contact Number 2
-                        </label>
+                        <label htmlFor="contactNumber2">Contact Number 2</label>
                         <Field
                           type="text"
                           id="contactNumber2"
@@ -583,8 +652,14 @@ const CreateOrUpdateUser = () => {
                           //       ? "is-invalid"
                           //       : ""
                           //     }`}
-                          placeholder= "Contact Number 2"
-                          style={{ borderBottom: "1px solid gray", borderLeft: "none", borderRight: "none", borderTop: "none", height: "50%" }}
+                          placeholder="Contact Number 2"
+                          style={{
+                            borderBottom: "1px solid gray",
+                            borderLeft: "none",
+                            borderRight: "none",
+                            borderTop: "none",
+                            height: "50%",
+                          }}
                         />
                         <ErrorMessage
                           name="contactNumber2"
@@ -609,8 +684,14 @@ const CreateOrUpdateUser = () => {
                           //       ? "is-invalid"
                           //       : ""
                           //     }`}
-                          placeholder= "Official Email Password"
-                          style={{ borderBottom: "1px solid gray", borderLeft: "none", borderRight: "none", borderTop: "none", height: "50%" }}
+                          placeholder="Official Email Password"
+                          style={{
+                            borderBottom: "1px solid gray",
+                            borderLeft: "none",
+                            borderRight: "none",
+                            borderTop: "none",
+                            height: "50%",
+                          }}
                         />
                         <ErrorMessage
                           name="officialEmailPassword"
@@ -623,11 +704,9 @@ const CreateOrUpdateUser = () => {
                     </CRow>
                   </CCol>
                   <CCol xs={4}>
-                  <CRow className="mb-3">
+                    <CRow className="mb-3">
                       <CCol sm={12}>
-                        <label htmlFor="personalEmail">
-                          Personal Email
-                        </label>
+                        <label htmlFor="personalEmail">Personal Email</label>
                         <Field
                           type="text"
                           id="PersonalEmail"
@@ -637,8 +716,14 @@ const CreateOrUpdateUser = () => {
                           //       ? "is-invalid"
                           //       : ""
                           //     }`}
-                          placeholder= "Personal Email"
-                          style={{ borderBottom: "1px solid gray", borderLeft: "none", borderRight: "none", borderTop: "none", height: "50%" }}
+                          placeholder="Personal Email"
+                          style={{
+                            borderBottom: "1px solid gray",
+                            borderLeft: "none",
+                            borderRight: "none",
+                            borderTop: "none",
+                            height: "50%",
+                          }}
                         />
                         <ErrorMessage
                           name="PersonalEmail"
@@ -651,9 +736,7 @@ const CreateOrUpdateUser = () => {
                     </CRow>
                     <CRow className="mb-3">
                       <CCol sm={12}>
-                        <label htmlFor="officialSkype">
-                          Official Skype
-                        </label>
+                        <label htmlFor="officialSkype">Official Skype</label>
                         <Field
                           type="text"
                           id="officialSkype"
@@ -663,8 +746,14 @@ const CreateOrUpdateUser = () => {
                           //       ? "is-invalid"
                           //       : ""
                           //     }`}
-                          placeholder= "Official Skype"
-                          style={{ borderBottom: "1px solid gray", borderLeft: "none", borderRight: "none", borderTop: "none", height: "50%" }}
+                          placeholder="Official Skype"
+                          style={{
+                            borderBottom: "1px solid gray",
+                            borderLeft: "none",
+                            borderRight: "none",
+                            borderTop: "none",
+                            height: "50%",
+                          }}
                         />
                         <ErrorMessage
                           name="officialSkype"
@@ -682,19 +771,17 @@ const CreateOrUpdateUser = () => {
                   <CCol xs={4}>
                     <CRow className="mb-3">
                       <CCol sm={12}>
-                        <label htmlFor="designationID">
-                        Designation
-                        </label>
-                        <CFormSelect 
-                            id="designationID"
-                            name="designationID"
-                            aria-label="Default select example"
-                            options={[
-                                {label: 'select'},
-                                { label: 'A+', value: '1' },
-                                { label: 'B+', value: '2' },
-                                { label: 'O-', value: '3'}
-                            ]}
+                        <label htmlFor="designationID">Designation</label>
+                        <CFormSelect
+                          id="designationID"
+                          name="designationID"
+                          aria-label="Default select example"
+                          options={[
+                            { label: "select" },
+                            { label: "A+", value: "1" },
+                            { label: "B+", value: "2" },
+                            { label: "O-", value: "3" },
+                          ]}
                         />
                         <ErrorMessage
                           name="designationID"
@@ -707,19 +794,17 @@ const CreateOrUpdateUser = () => {
                     </CRow>
                     <CRow className="mb-3">
                       <CCol sm={12}>
-                        <label htmlFor="bankID">
-                          Bank Name
-                        </label>
-                        <CFormSelect 
-                            id="bankID"
-                            name="bankID"
-                            aria-label="select bank"
-                            options={[
-                                {label: 'select'},
-                                { label: 'A+', value: '1' },
-                                { label: 'B+', value: '2' },
-                                { label: 'O-', value: '3'}
-                            ]}
+                        <label htmlFor="bankID">Bank Name</label>
+                        <CFormSelect
+                          id="bankID"
+                          name="bankID"
+                          aria-label="select bank"
+                          options={[
+                            { label: "select" },
+                            { label: "A+", value: "1" },
+                            { label: "B+", value: "2" },
+                            { label: "O-", value: "3" },
+                          ]}
                         />
                         <ErrorMessage
                           name="bankID"
@@ -734,19 +819,17 @@ const CreateOrUpdateUser = () => {
                   <CCol xs={4}>
                     <CRow className="mb-3">
                       <CCol sm={12}>
-                        <label htmlFor="departmentID">
-                        Department
-                        </label>
-                        <CFormSelect 
-                            id="departmentID"
-                            name="departmentID"
-                            aria-label="Default select example"
-                            options={[
-                                {label: 'select'},
-                                { label: 'A+', value: '1' },
-                                { label: 'B+', value: '2' },
-                                { label: 'O-', value: '3'}
-                            ]}
+                        <label htmlFor="departmentID">Department</label>
+                        <CFormSelect
+                          id="departmentID"
+                          name="departmentID"
+                          aria-label="Default select example"
+                          options={[
+                            { label: "select" },
+                            { label: "A+", value: "1" },
+                            { label: "B+", value: "2" },
+                            { label: "O-", value: "3" },
+                          ]}
                         />
                         <ErrorMessage
                           name="departmentID"
@@ -759,9 +842,7 @@ const CreateOrUpdateUser = () => {
                     </CRow>
                     <CRow className="mb-3">
                       <CCol sm={12}>
-                        <label htmlFor="accountNumber">
-                          Account Number
-                        </label>
+                        <label htmlFor="accountNumber">Account Number</label>
                         <Field
                           type="number"
                           id="accountNumber"
@@ -771,8 +852,14 @@ const CreateOrUpdateUser = () => {
                           //       ? "is-invalid"
                           //       : ""
                           //     }`}
-                          placeholder= "Account Number"
-                          style={{ borderBottom: "1px solid gray", borderLeft: "none", borderRight: "none", borderTop: "none", height: "50%" }}
+                          placeholder="Account Number"
+                          style={{
+                            borderBottom: "1px solid gray",
+                            borderLeft: "none",
+                            borderRight: "none",
+                            borderTop: "none",
+                            height: "50%",
+                          }}
                         />
                         <ErrorMessage
                           name="accountNumber"
@@ -787,9 +874,7 @@ const CreateOrUpdateUser = () => {
                   <CCol xs={4}>
                     <CRow className="mb-3">
                       <CCol sm={12}>
-                        <label htmlFor="ifscCode">
-                          IFSC Code
-                        </label>
+                        <label htmlFor="ifscCode">IFSC Code</label>
                         <Field
                           type="text"
                           id="ifscCode"
@@ -799,8 +884,14 @@ const CreateOrUpdateUser = () => {
                           //       ? "is-invalid"
                           //       : ""
                           //     }`}
-                          placeholder= "IFSC Code"
-                          style={{ borderBottom: "1px solid gray", borderLeft: "none", borderRight: "none", borderTop: "none", height: "50%" }}
+                          placeholder="IFSC Code"
+                          style={{
+                            borderBottom: "1px solid gray",
+                            borderLeft: "none",
+                            borderRight: "none",
+                            borderTop: "none",
+                            height: "50%",
+                          }}
                         />
                         <ErrorMessage
                           name="ifscCode"
@@ -813,19 +904,17 @@ const CreateOrUpdateUser = () => {
                     </CRow>
                     <CRow className="mb-3">
                       <CCol sm={12}>
-                        <label htmlFor="shiftID">
-                          Shift
-                        </label>
-                        <CFormSelect 
-                            id="shiftID"
-                            name="shiftID"
-                            aria-label="Default select example"
-                            options={[
-                                {label: 'select'},
-                                { label: 'A+', value: '1' },
-                                { label: 'B+', value: '2' },
-                                { label: 'O-', value: '3'}
-                            ]}
+                        <label htmlFor="shiftID">Shift</label>
+                        <CFormSelect
+                          id="shiftID"
+                          name="shiftID"
+                          aria-label="Default select example"
+                          options={[
+                            { label: "select" },
+                            { label: "A+", value: "1" },
+                            { label: "B+", value: "2" },
+                            { label: "O-", value: "3" },
+                          ]}
                         />
                         <ErrorMessage
                           name="shiftID"
@@ -839,24 +928,24 @@ const CreateOrUpdateUser = () => {
                   </CCol>
                 </CRow>
                 <CRow className="mb-3">
-                    <CCol sm={12} className="text-end">
-                      <button
-                        type="submit"
-                        className="btn btn-primary"
-                        disabled={isSubmitting || !isValid}
-                      >
-                        {isSubmitting ? "Submitting..." : "Submit"}
-                      </button>
-                      <Link to={`/contacts`}>
-                        <CButton
-                          component="input"
-                          type="button"
-                          color="secondary"
-                          value="cancel"
-                        />
-                      </Link>
-                    </CCol>
-                </CRow> 
+                  <CCol sm={12} className="text-end">
+                    <button
+                      type="submit"
+                      className="btn btn-primary"
+                      disabled={isSubmitting || !isValid}
+                    >
+                      {isSubmitting ? "Submitting..." : "Submit"}
+                    </button>
+                    <Link to={`/users`}>
+                      <CButton
+                        component="input"
+                        type="button"
+                        color="secondary"
+                        value="cancel"
+                      />
+                    </Link>
+                  </CCol>
+                </CRow>
               </Form>
             )}
           </Formik>
