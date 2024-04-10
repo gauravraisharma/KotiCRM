@@ -1,4 +1,5 @@
 ﻿using KotiCRM.Repository.Data;
+using KotiCRM.Repository.DTOs.UserManagement;
 using KotiCRM.Repository.IRepository;
 using KotiCRM.Repository.Models;
 using Microsoft.AspNetCore.Identity;
@@ -518,7 +519,7 @@ namespace KotiCRM.Repository.Repository
         //    }
         //}
 
-        public async Task<ResponseStatus> GetRoleNameAsync(string roleId)
+        public async Task<ResponseStatus> GetRoleNameAsync(string roleName)
         {
             try
             {
@@ -531,7 +532,7 @@ namespace KotiCRM.Repository.Repository
                     };
                 }
 
-                var role = await _context.Roles.FirstOrDefaultAsync(r => r.Id == roleId);
+                var role = await _context.Roles.FirstOrDefaultAsync(r => r.Name == roleName);
 
                 if (role == null)
                 {
@@ -763,5 +764,115 @@ namespace KotiCRM.Repository.Repository
 
         }
 
+
+        // For create Employee
+        public async Task<ResponseStatus> CreateEmployee(CreateEmployeeDTO createEmployeeDTO)
+        {
+            using var transaction = _context.Database.BeginTransaction(); // Begin transaction
+            try
+            {
+                //Check if createEmployeeDTO is null
+                if (createEmployeeDTO == null)
+                {
+                    return new ResponseStatus
+                    {
+                        Status = "FAILED",
+                        Message = "Invalid payload"
+                    };
+                }
+                var userId = "";
+
+                // For extract FirstName and LastName from Name
+                string[] nameParts = createEmployeeDTO.Name.Split(' ');
+                var firstName = "";
+                var lastName = "";
+                var username = "";
+                if (nameParts.Length >= 2)
+                {
+                    firstName = nameParts.FirstOrDefault();
+                    lastName = nameParts.LastOrDefault();
+                }
+                username = (nameParts.Length >= 2 ? firstName : createEmployeeDTO.Name);
+
+
+                ApplicationUserModel user = new ApplicationUserModel
+                {
+                    FirstName = (nameParts.Length >= 2 ? firstName : createEmployeeDTO.Name),
+                    LastName = lastName,
+                    UserName = username,
+                    Email = createEmployeeDTO.PersonalEmailId,
+                    PhoneNumber = createEmployeeDTO.ContactNumber1,
+                    UserType = "Employee",
+                    Password = createEmployeeDTO.OfficialEmailPassword,
+                    CreatedBy = ""
+                };
+
+                var result =  await CreateApplicationUser(user);
+                
+                if (result.Status == "FAILED")
+                {
+                    return new ResponseStatus
+                    {
+                        Status = "FAILED",
+                        Message = result.Message
+                    };
+                }
+                var createdUser = await _userManager.FindByNameAsync(username);
+                userId = createdUser.Id;
+
+
+                Employee employee = new()
+                {
+                    EmployeeId = createEmployeeDTO.EmployeeId,
+                    UserId = userId,
+                    FatherName = createEmployeeDTO.FatherName,
+                    EmpCode = createEmployeeDTO.EmployeeCode,
+                    DesignationId = createEmployeeDTO.DesignationId,
+                    DepartmentId = createEmployeeDTO.DepartmentId,
+                    JoiningDate = createEmployeeDTO.JoiningDate,
+                    RelievingDate = createEmployeeDTO.RelievingDate,
+                    BankId = createEmployeeDTO.BankId,
+                    DateOfBirth = createEmployeeDTO.DateOfBirth,
+                    CorrespondenceAddress = createEmployeeDTO.CorrespondenceAddress,
+                    PermanentAddress = createEmployeeDTO.PermanentAddress,
+                    PersonalEmailId = createEmployeeDTO.PersonalEmailId,
+                    PanNumber = createEmployeeDTO.PanNumber,
+                    OfficialEmailId = createEmployeeDTO.OfficialEmailId,
+                    SkypeId = createEmployeeDTO.SkypeId,
+                    Status = createEmployeeDTO.StatusId,
+                    CompanyId = createEmployeeDTO.CompanyId,
+                    AdharCardNumber = createEmployeeDTO.AdharCardNumber,
+                    BloodGroup = createEmployeeDTO.BloodGroup,
+                    ShiftId = createEmployeeDTO.ShiftId,
+                };
+
+                _context.Employees.Add(employee);
+                await _context.SaveChangesAsync();
+
+                // Commit transaction if everything succeeds
+                await transaction.CommitAsync();
+
+                return new ResponseStatus
+                {
+                    Status = "SUCCEED",
+                    Message = "Employee successfully created"
+                };
+            }
+            catch (Exception ex)
+            {
+                // Rollback transaction if an exception occurs
+                await transaction.RollbackAsync();
+
+                return new ResponseStatus
+                {
+                    Status = "FAILED",
+                    Message = "Something went wrong "
+                };
+            }
+            finally
+            {
+                _context.Dispose();
+            }
+        }
     }
 }

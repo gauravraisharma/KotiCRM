@@ -3,6 +3,7 @@ using KotiCRM.Repository.Models;
 using KotiCRM.Services.IServices;
 using Microsoft.Extensions.Configuration;
 using KotiCRM.Repository.IRepository;
+using KotiCRM.Repository.DTOs.UserManagement;
 
 namespace KotiCRM.Services.Services
 {
@@ -86,6 +87,10 @@ namespace KotiCRM.Services.Services
             return _accountRepository.GetUserDataById(userId);
         }
 
-
+        // For Employee
+        public async Task<ResponseStatus> CreateEmployee(CreateEmployeeDTO createEmployeeDTO)
+        {
+            return await _accountRepository.CreateEmployee(createEmployeeDTO);
+        }
     }
 }

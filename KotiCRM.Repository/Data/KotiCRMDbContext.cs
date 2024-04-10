@@ -34,7 +34,7 @@ namespace KotiCRM.Repository.Data
 
         public virtual DbSet<EmployeeLeaf> EmployeeLeaves { get; set; }
 
-        public virtual DbSet<EmployeeRole> EmployeeRoles { get; set; }
+        // public virtual DbSet<EmployeeRole> EmployeeRoles { get; set; }
 
         public virtual DbSet<ImportHistory> ImportHistories { get; set; }
         public virtual DbSet<LeaveApplication> LeaveApplications { get; set; }
@@ -194,22 +194,16 @@ namespace KotiCRM.Repository.Data
                 entity.Property(e => e.EmployeeId)
                     .HasMaxLength(50)
                     .IsUnicode(false);
+                entity.Property(e => e.UserId)
+                    .HasMaxLength(255);
                 entity.Property(e => e.AdharCardNumber)
                     .HasMaxLength(50)
-                    .IsUnicode(false);
-                entity.Property(e => e.BankAccountNumber)
-                    .HasMaxLength(20)
                     .IsUnicode(false);
                 entity.Property(e => e.BloodGroup)
                     .HasMaxLength(50)
                     .IsUnicode(false);
-                entity.Property(e => e.CompanyId).HasDefaultValue(1);
-                entity.Property(e => e.ContactNumber1)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-                entity.Property(e => e.ContactNumber2)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                entity.Property(e => e.CompanyId)
+                    .HasDefaultValue(1);
                 entity.Property(e => e.CorrespondenceAddress)
                     .HasMaxLength(255)
                     .IsUnicode(false);
@@ -219,28 +213,11 @@ namespace KotiCRM.Repository.Data
                 entity.Property(e => e.FatherName)
                     .HasMaxLength(100)
                     .IsUnicode(false);
-                entity.Property(e => e.Id)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-                entity.Property(e => e.Ifsccode)
-                    .HasMaxLength(50)
-                    .IsUnicode(false)
-                    .HasColumnName("IFSCCode");
-                entity.Property(e => e.Name)
-                    .HasMaxLength(100)
-                    .IsUnicode(false);
                 entity.Property(e => e.OfficialEmailId)
                     .HasMaxLength(100)
                     .IsUnicode(false);
-                entity.Property(e => e.OfficialEmailPassword)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-                entity.Property(e => e.OrganizationId).HasColumnName("OrganizationID");
                 entity.Property(e => e.PanNumber)
                     .HasMaxLength(20)
-                    .IsUnicode(false);
-                entity.Property(e => e.Password)
-                    .HasMaxLength(10)
                     .IsUnicode(false);
                 entity.Property(e => e.PermanentAddress)
                     .HasMaxLength(255)
@@ -248,10 +225,18 @@ namespace KotiCRM.Repository.Data
                 entity.Property(e => e.PersonalEmailId)
                     .HasMaxLength(100)
                     .IsUnicode(false);
-                entity.Property(e => e.RoleId).HasDefaultValue(1);
                 entity.Property(e => e.SkypeId)
                     .HasMaxLength(100)
                     .IsUnicode(false);
+                entity.Property(e => e.Status)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+                entity.Property(e => e.DateOfBirth)
+                    .HasColumnType("date");
+                entity.Property(e => e.RelievingDate)
+                    .HasColumnType("date");
+                entity.Property(e => e.JoiningDate)
+                    .HasColumnType("date");
 
                 entity.HasOne(d => d.Bank).WithMany(p => p.Employees)
                     .HasForeignKey(d => d.BankId)
@@ -270,19 +255,11 @@ namespace KotiCRM.Repository.Data
                     .HasForeignKey(d => d.DesignationId)
                     .HasConstraintName("FK_Employee_Designation");
 
-                //entity.HasOne(d => d.Organization).WithMany(p => p.Employees)
-                //    .HasForeignKey(d => d.OrganizationId)
-                //    .HasConstraintName("FK_Employee_Organization");
-
-                entity.HasOne(d => d.Role).WithMany(p => p.Employees)
-                    .HasForeignKey(d => d.RoleId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Employee_EmployeeRoles");
-
                 entity.HasOne(d => d.Shift).WithMany(p => p.Employees)
                     .HasForeignKey(d => d.ShiftId)
                     .HasConstraintName("FK_Employee_Shift");
             });
+
 
             modelBuilder.Entity<EmployeeAppraisal>(entity =>
             {
@@ -313,18 +290,18 @@ namespace KotiCRM.Repository.Data
                     .IsUnicode(false);
             });
 
-            modelBuilder.Entity<EmployeeRole>(entity =>
-            {
-                entity.HasKey(e => e.RoleId);
+            //modelBuilder.Entity<EmployeeRole>(entity =>
+            //{
+            //    entity.HasKey(e => e.RoleId);
 
-                entity.Property(e => e.RoleId).ValueGeneratedNever();
-                entity.Property(e => e.Description)
-                    .HasMaxLength(255)
-                    .IsUnicode(false);
-                entity.Property(e => e.Name)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-            });
+            //    entity.Property(e => e.RoleId).ValueGeneratedNever();
+            //    entity.Property(e => e.Description)
+            //        .HasMaxLength(255)
+            //        .IsUnicode(false);
+            //    entity.Property(e => e.Name)
+            //        .HasMaxLength(50)
+            //        .IsUnicode(false);
+            //});
 
             modelBuilder.Entity<ImportHistory>(entity =>
             {
@@ -737,10 +714,6 @@ namespace KotiCRM.Repository.Data
                     .HasMaxLength(200)
                     .IsUnicode(false);
                 entity.Property(e => e.ReasonForLeave).IsUnicode(false);
-
-                entity.HasOne(d => d.Employee).WithMany(p => p.UserLeaves)
-                    .HasForeignKey(d => d.EmployeeId)
-                    .HasConstraintName("FK_UserLeave_Employee");
             });
 
             modelBuilder.Entity<WorkLog>(entity =>

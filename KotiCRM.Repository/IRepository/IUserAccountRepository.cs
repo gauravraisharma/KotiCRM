@@ -1,4 +1,5 @@
-﻿using KotiCRM.Repository.Models;
+﻿using KotiCRM.Repository.DTOs.UserManagement;
+using KotiCRM.Repository.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,5 +21,8 @@ namespace KotiCRM.Repository.IRepository
         Task<ModulePermissionResponse> GetModulePermission(string userId);
 
         UserDataResponse GetUserDataById(string userId);
+
+        // For Employee
+        Task<ResponseStatus> CreateEmployee(CreateEmployeeDTO createEmployeeDTO);
     }
 }

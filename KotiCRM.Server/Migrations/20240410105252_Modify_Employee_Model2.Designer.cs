@@ -4,6 +4,7 @@ using KotiCRM.Repository.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace KotiCRM.Server.Migrations
 {
     [DbContext(typeof(KotiCRMDbContext))]
-    partial class KotiCRMDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240410105252_Modify_Employee_Model2")]
+    partial class Modify_Employee_Model2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -526,32 +529,22 @@ namespace KotiCRM.Server.Migrations
             modelBuilder.Entity("KotiCRM.Repository.Models.Employee", b =>
                 {
                     b.Property<string>("EmployeeId")
-                        .HasMaxLength(50)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(50)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("AdharCardNumber")
-                        .HasMaxLength(50)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("BankId")
                         .HasColumnType("int");
 
                     b.Property<string>("BloodGroup")
-                        .HasMaxLength(50)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("CompanyId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(1);
+                        .HasColumnType("int");
 
                     b.Property<string>("CorrespondenceAddress")
-                        .HasMaxLength(255)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(255)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateOnly?>("DateOfBirth")
                         .HasColumnType("date");
@@ -563,40 +556,28 @@ namespace KotiCRM.Server.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("EmpCode")
-                        .HasMaxLength(50)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("EmployeeRoleRoleId")
                         .HasColumnType("int");
 
                     b.Property<string>("FatherName")
-                        .HasMaxLength(100)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateOnly?>("JoiningDate")
                         .HasColumnType("date");
 
                     b.Property<string>("OfficialEmailId")
-                        .HasMaxLength(100)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PanNumber")
-                        .HasMaxLength(20)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(20)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PermanentAddress")
-                        .HasMaxLength(255)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(255)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PersonalEmailId")
-                        .HasMaxLength(100)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateOnly?>("RelievingDate")
                         .HasColumnType("date");
@@ -605,18 +586,13 @@ namespace KotiCRM.Server.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("SkypeId")
-                        .HasMaxLength(100)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("Status")
-                        .HasMaxLength(50)
-                        .IsUnicode(false)
                         .HasColumnType("int");
 
                     b.Property<string>("UserId")
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("EmployeeId");
 
@@ -632,7 +608,7 @@ namespace KotiCRM.Server.Migrations
 
                     b.HasIndex("ShiftId");
 
-                    b.ToTable("Employee", (string)null);
+                    b.ToTable("Employees");
                 });
 
             modelBuilder.Entity("KotiCRM.Repository.Models.EmployeeAppraisal", b =>
@@ -2033,24 +2009,21 @@ namespace KotiCRM.Server.Migrations
                 {
                     b.HasOne("KotiCRM.Repository.Models.Bank", "Bank")
                         .WithMany("Employees")
-                        .HasForeignKey("BankId")
-                        .HasConstraintName("FK_Employee_Bank");
+                        .HasForeignKey("BankId");
 
                     b.HasOne("KotiCRM.Repository.Models.Company", "Company")
                         .WithMany("Employees")
                         .HasForeignKey("CompanyId")
-                        .IsRequired()
-                        .HasConstraintName("FK_Employee_Company");
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("KotiCRM.Repository.Models.Department", "Department")
                         .WithMany("Employees")
-                        .HasForeignKey("DepartmentId")
-                        .HasConstraintName("FK_Employee_Department");
+                        .HasForeignKey("DepartmentId");
 
                     b.HasOne("KotiCRM.Repository.Models.Designation", "Designation")
                         .WithMany("Employees")
-                        .HasForeignKey("DesignationId")
-                        .HasConstraintName("FK_Employee_Designation");
+                        .HasForeignKey("DesignationId");
 
                     b.HasOne("KotiCRM.Repository.Models.EmployeeRole", null)
                         .WithMany("Employees")
@@ -2058,8 +2031,7 @@ namespace KotiCRM.Server.Migrations
 
                     b.HasOne("KotiCRM.Repository.Models.Shift", "Shift")
                         .WithMany("Employees")
-                        .HasForeignKey("ShiftId")
-                        .HasConstraintName("FK_Employee_Shift");
+                        .HasForeignKey("ShiftId");
 
                     b.Navigation("Bank");
 

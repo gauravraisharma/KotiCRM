@@ -1,4 +1,5 @@
-﻿using KotiCRM.Repository.Models;
+﻿using KotiCRM.Repository.DTOs.UserManagement;
+using KotiCRM.Repository.Models;
 using KotiCRM.Server.Authentication;
 using KotiCRM.Services.IServices;
 using Microsoft.AspNetCore.Authorization;
@@ -176,6 +177,26 @@ namespace KotiCRM.Server.Controllers
             return Ok(dbResponse);
         }
 
+        // It will create employee
+        [Authorize(Roles = "Administrator")]
+        [HttpPost("CreateEmployee")]
+        public async Task<ActionResult> CreateEmployee(CreateEmployeeDTO createEmployeeDTO)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest("Please pass the valid Input.");
+            }
+            var responseStatus = await _accountService.CreateEmployee(createEmployeeDTO);
+
+            if (responseStatus.Status == "SUCCEED")
+            {
+                return Ok(responseStatus);
+            }
+            else
+            {
+                return BadRequest(responseStatus.Message);
+            }
+        }
 
     }
 }

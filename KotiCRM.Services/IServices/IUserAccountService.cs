@@ -1,5 +1,6 @@
 ﻿
 
+using KotiCRM.Repository.DTOs.UserManagement;
 using KotiCRM.Repository.Models;
 using System;
 using System.Collections.Generic;
@@ -21,5 +22,8 @@ namespace KotiCRM.Services.IServices
         ResponseStatus DeleteUser(string userId);
         Task<ModulePermissionResponse> GetModulePermission(string userId);
         UserDataResponse GetUserDataById(string userId);
+
+        // For Employee
+        Task<ResponseStatus> CreateEmployee(CreateEmployeeDTO createEmployeeDTO);
     }
 }
