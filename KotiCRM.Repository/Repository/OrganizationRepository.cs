@@ -46,7 +46,7 @@ namespace KotiCRM.Repository.Repository
                         Banks = banks.Where(bank => bank.OrganizationId == organization.Id)
                 .Select(bank => new BankResponse()
                 {
-                    BankId = bank.BankId,
+                    BankId = (int)bank.BankId,
                     Name = bank.Name,
                     Branch = bank.Branch,
                     Ifsc = bank.Ifsc,

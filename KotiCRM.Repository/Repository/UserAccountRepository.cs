@@ -796,7 +796,7 @@ namespace KotiCRM.Repository.Repository
                     FirstName = (nameParts.Length >= 2 ? firstName : createEmployeeDTO.Name),
                     LastName = lastName,
                     UserName = username,
-                    Email = createEmployeeDTO.PersonalEmailId,
+                    Email = createEmployeeDTO.PersonalEmail,
                     PhoneNumber = createEmployeeDTO.ContactNumber1,
                     UserType = "Employee",
                     Password = createEmployeeDTO.OfficialEmailPassword,
@@ -816,30 +816,53 @@ namespace KotiCRM.Repository.Repository
                 var createdUser = await _userManager.FindByNameAsync(username);
                 userId = createdUser.Id;
 
+                Bank bank = new()
+                {
+                    Name = createEmployeeDTO.Bank,
+                    BankAccountNumber = createEmployeeDTO.BankAccountNumber,
+                    Branch = createEmployeeDTO.Branch,
+                    Ifsc = createEmployeeDTO.Ifsc,
+                    OrganizationId = createdUser.OrganizationId,
+                };
 
+                _context.Banks.Add(bank);
+                await _context.SaveChangesAsync();
+
+                _context.Entry(bank).GetDatabaseValues();
+                int newBankId = (int)bank.BankId;
+
+                
                 Employee employee = new()
                 {
                     EmployeeId = createEmployeeDTO.EmployeeId,
-                    UserId = userId,
-                    FatherName = createEmployeeDTO.FatherName,
                     EmpCode = createEmployeeDTO.EmployeeCode,
-                    DesignationId = createEmployeeDTO.DesignationId,
-                    DepartmentId = createEmployeeDTO.DepartmentId,
+                    UserId = userId,
+                    Name = createEmployeeDTO.Name,
+                    ProfilePictureURL = createEmployeeDTO.ProfilePictureURL,
+                    FatherName = createEmployeeDTO.FatherName,
+                    GuardianName = createEmployeeDTO.GuardianName,
+                    BloodGroup = createEmployeeDTO.BloodGroup,
+                    DateOfBirth = createEmployeeDTO.DateOfBirth,
                     JoiningDate = createEmployeeDTO.JoiningDate,
                     RelievingDate = createEmployeeDTO.RelievingDate,
-                    BankId = createEmployeeDTO.BankId,
-                    DateOfBirth = createEmployeeDTO.DateOfBirth,
-                    CorrespondenceAddress = createEmployeeDTO.CorrespondenceAddress,
-                    PermanentAddress = createEmployeeDTO.PermanentAddress,
-                    PersonalEmailId = createEmployeeDTO.PersonalEmailId,
-                    PanNumber = createEmployeeDTO.PanNumber,
-                    OfficialEmailId = createEmployeeDTO.OfficialEmailId,
+                    ContactNumber1 = createEmployeeDTO.ContactNumber1,
+                    ContactNumber2 = createEmployeeDTO.ContactNumber2,
+                    GuardianContactNumber = createEmployeeDTO.GuardianContactNumber,
+                    PersonalEmailId = createEmployeeDTO.PersonalEmail,
+                    OfficialEmailId = createEmployeeDTO.OfficialEmail,
+                    OfficialEmailPassword = createEmployeeDTO.OfficialEmailPassword,
                     SkypeId = createEmployeeDTO.SkypeId,
-                    Status = createEmployeeDTO.StatusId,
-                    CompanyId = createEmployeeDTO.CompanyId,
                     AdharCardNumber = createEmployeeDTO.AdharCardNumber,
-                    BloodGroup = createEmployeeDTO.BloodGroup,
+                    PanNumber = createEmployeeDTO.PanNumber,
+                    DepartmentId = createEmployeeDTO.DepartmentId,
+                    DesignationId = createEmployeeDTO.DesignationId,
+                    BankId = newBankId,
                     ShiftId = createEmployeeDTO.ShiftId,
+                    IsActive = createEmployeeDTO.IsActive,
+                    PermanentAddress = createEmployeeDTO.PermanentAddress,
+                    CorrespondenceAddress = createEmployeeDTO.CorrespondenceAddress,
+                    CreateBy = userId,
+                    CreatedDate = DateTime.UtcNow,
                 };
 
                 _context.Employees.Add(employee);

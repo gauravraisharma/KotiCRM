@@ -178,8 +178,9 @@ namespace KotiCRM.Server.Controllers
         }
 
         // It will create employee
-        [Authorize(Roles = "Administrator")]
-        [HttpPost("CreateEmployee")]
+        // [Authorize(Roles = "Administrator")]
+        [HttpPost]
+        [Route("CreateEmployee")]
         public async Task<ActionResult> CreateEmployee(CreateEmployeeDTO createEmployeeDTO)
         {
             if (!ModelState.IsValid)
@@ -197,9 +198,10 @@ namespace KotiCRM.Server.Controllers
                 return BadRequest(responseStatus.Message);
             }
         }
-        [Authorize(Roles = "Administrator")]
+        // [Authorize(Roles = "Administrator")]
         //This method is used to get List of Roles
-        [HttpGet("GetUsers")]
+        [HttpGet]
+        [Route("GetUsers")]
         public ActionResult GetUsers()
         {
             var users = _accountService.GetUsers();

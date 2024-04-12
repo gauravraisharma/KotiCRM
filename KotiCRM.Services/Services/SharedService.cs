@@ -29,5 +29,22 @@ namespace KotiCRM.Services.Services
         {
             return _sharedRepository.GetInvoiceOwner();
         }
+
+        public async Task<IEnumerable<Department>> GetDepartmentList()
+        {
+            return await _sharedRepository.GetDepartmentList();
+        }
+        public async Task<IEnumerable<Designation>> GetDesignationList()
+        {
+            return await _sharedRepository.GetDesignationList();
+        }
+        public async Task<IEnumerable<Bank>> GetBankList()
+        {
+            return await _sharedRepository.GetBankList();
+        }
+        public async Task<IEnumerable<Shift>> GetShiftList()
+        {
+            return await _sharedRepository.GetShiftList();
+        }
     }
 }

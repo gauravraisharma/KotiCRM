@@ -84,5 +84,57 @@ namespace KotiCRM.Repository.Repository
 
             }
         }
+
+        public async Task<IEnumerable<Department>> GetDepartmentList()
+        {
+            try
+            {
+                return await _context.Departments.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message, ex);
+
+            }
+        }
+
+        public async Task<IEnumerable<Designation>> GetDesignationList()
+        {
+            try
+            {
+                return await _context.Designations.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message, ex);
+
+            }
+        }
+
+        public async Task<IEnumerable<Bank>> GetBankList()
+        {
+            try
+            {
+                return await _context.Banks.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message, ex);
+
+            }
+        }
+
+        public async Task<IEnumerable<Shift>> GetShiftList()
+        {
+            try
+            {
+                return await _context.Shifts.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message, ex);
+
+            }
+        }
     }
 }

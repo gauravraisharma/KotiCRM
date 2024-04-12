@@ -15,13 +15,33 @@ import {
   CTableHeaderCell,
   CTableRow,
 } from "@coreui/react";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { AiFillEye } from "react-icons/ai";
 import { MdDelete, MdEditSquare } from "react-icons/md";
 import { Link } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
+import { GetEmployeesList } from "../../redux-saga/modules/userManagement/apiService";
+import { Employees } from "../../models/userManagement/employees";
 
 const Users = () => {
+
+  // States
+  const [employeesList, setEmployeesList] = useState<Employees[]>([]);
+
+  useEffect(() => {
+    GetEmployees();
+  },[]);
+
+  const GetEmployees = async () => {
+    const response = await GetEmployeesList();
+    if(response)
+      {
+        setEmployeesList(response);
+      }
+  }
+
+
+
   return (
     <>
       <ToastContainer />
@@ -76,51 +96,50 @@ const Users = () => {
               <CTable>
                 <CTableHead>
                   <CTableRow>
-                    <CTableDataCell scope="col">Employee Name</CTableDataCell>
-                    <CTableDataCell scope="col">Father Name</CTableDataCell>
+                    <CTableDataCell scope="col">User Name</CTableDataCell>
                     <CTableDataCell scope="col">Contact No.</CTableDataCell>
-                    <CTableDataCell scope="col">Address</CTableDataCell>
                     <CTableDataCell scope="col">Email</CTableDataCell>
                     <CTableDataCell scope="col">Actions</CTableDataCell>
                   </CTableRow>
                 </CTableHead>
                 <CTableBody>
-                  <CTableRow>
-                    <CTableDataCell>1</CTableDataCell>
-                    <CTableDataCell>2</CTableDataCell>
-                    <CTableDataCell>3</CTableDataCell>
-                    <CTableDataCell>4</CTableDataCell>
-                    <CTableDataCell>5</CTableDataCell>
+                  {employeesList?.map((employee: any) => (
+                    <CTableRow> 
+                    <CTableDataCell>{employee.username}</CTableDataCell>
+                    <CTableDataCell>{employee.phoneNumber}</CTableDataCell>
+                    <CTableDataCell>{employee.email}</CTableDataCell>
                     <CTableDataCell>
                       {/* <Link to={`/contacts/editContact/${contact?.id}`}> */}
-                      <MdEditSquare
-                        style={{
-                          color: "green",
-                          marginRight: "10px",
-                          fontSize: "20px",
-                        }}
-                      />
-                      {/* </Link> */}
-                      {/* <Link to={`/contacts/${contact?.id}`}> */}
-                      <AiFillEye
-                        style={{
-                          color: "darkblue",
-                          marginRight: "10px",
-                          fontSize: "20px",
-                        }}
-                      />
-                      {/* </Link> */}
-                      <MdDelete
-                        style={{
-                          color: "red",
-                          marginRight: "10px",
-                          fontSize: "20px",
-                          cursor: "pointer",
-                        }}
-                        //  onClick={() => handleDeleteClick(contact.id)}
-                      />
-                    </CTableDataCell>
-                  </CTableRow>
+                        <MdEditSquare
+                          style={{
+                            color: "green",
+                            marginRight: "10px",
+                            fontSize: "20px",
+                          }}
+                        />
+                        {/* </Link> */}
+                        {/* <Link to={`/contacts/${contact?.id}`}> */}
+                        <AiFillEye
+                          style={{
+                            color: "darkblue",
+                            marginRight: "10px",
+                            fontSize: "20px",
+                          }}
+                        />
+                        {/* </Link> */}
+                        <MdDelete
+                          style={{
+                            color: "red",
+                            marginRight: "10px",
+                            fontSize: "20px",
+                            cursor: "pointer",
+                          }}
+                          //  onClick={() => handleDeleteClick(contact.id)}
+                        />
+                      </CTableDataCell>
+                    </CTableRow>
+                  ))}
+                  
                 </CTableBody>
               </CTable>
             </CCardBody>

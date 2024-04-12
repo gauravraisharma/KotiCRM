@@ -12,5 +12,10 @@ namespace KotiCRM.Repository.IRepository
         Task<IEnumerable<Industry>> GetIndustryList();
         List<DropDownModel> GetAccountOwner();
         List<DropDownModel> GetInvoiceOwner();
+
+        Task<IEnumerable<Department>> GetDepartmentList();
+        Task<IEnumerable<Designation>> GetDesignationList();
+        Task<IEnumerable<Bank>> GetBankList();
+        Task<IEnumerable<Shift>> GetShiftList();
     }
 }
