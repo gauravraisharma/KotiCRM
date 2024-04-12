@@ -1,13 +1,7 @@
 ﻿using KotiCRM.Repository.Data;
-using KotiCRM.Repository.Enums;
 using KotiCRM.Repository.IRepository;
 using KotiCRM.Repository.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace KotiCRM.Repository.Repository
 {
@@ -20,24 +14,40 @@ namespace KotiCRM.Repository.Repository
             _context = context;
         }
 
-        public async Task<IEnumerable<InvoiceCreationModel>> GetInvoiceList()
+        public async Task<IEnumerable<InvoiceCreationModel>> GetInvoiceList(int? accountID = null, int? status = null, DateTime? startDate = null, DateTime? endDate = null)
         {
             try
             {
-                var invoices = await _context.Invoices.OrderByDescending(invoice => invoice.DueDate).Where(invoice => !invoice.Isdelete).ToListAsync();
-                var invoiceItems = await _context.InvoiceItems.Where(invoiceItem => !invoiceItem.IsDeleted).ToListAsync();
+                // Set default start date and end date if not provided
+                startDate ??= new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+                endDate ??= new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month));
+
+                var invoices = await _context.Invoices
+                    .Where(invoice => !invoice.Isdelete)
+                    .Where(invoice => accountID == null || invoice.AccountID == accountID)
+                    .Where(invoice => status == null || (int)invoice.Status == status)
+                    .Where(invoice => invoice.DueDate >= startDate && invoice.DueDate <= endDate)
+                    .OrderByDescending(invoice => invoice.DueDate)
+                    .ToListAsync();
+
+                var invoiceIds = invoices.Select(invoice => invoice.ID).ToList();
+
+                var invoiceItems = await _context.InvoiceItems
+                    .Where(invoiceItem => !invoiceItem.IsDeleted)
+                    .Where(invoiceItem => invoiceIds.Contains(invoiceItem.InvoiceID))
+                    .ToListAsync();
+
                 var invoiceCreationModels = invoices.Select(invoice => new InvoiceCreationModel
                 {
                     Invoice = invoice,
                     InvoiceItems = invoiceItems.Where(item => item.InvoiceID == invoice.ID).ToList()
                 });
-                return invoiceCreationModels;
 
+                return invoiceCreationModels;
             }
             catch (Exception ex)
             {
                 throw new Exception(ex.Message, ex);
-
             }
         }
 

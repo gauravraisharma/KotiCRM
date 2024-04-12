@@ -1312,7 +1312,7 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
                         ))}
                       </CTable>
                     </CCardBody>
-                    
+
                   </CCard>
 
                   <div className="col-sm-4 ">
