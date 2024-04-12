@@ -19,9 +19,9 @@ namespace KotiCRM.Server.Controllers
         }
         [HttpGet]
         [Route("GetInvoiceList")]
-        public async Task<IEnumerable<InvoiceCreationModel>> GetInvoiceList()
+        public async Task<IEnumerable<InvoiceCreationModel>> GetInvoiceList(int? accountID = null, int? status = null, DateTime? startDate = null, DateTime? endDate = null)
         {
-            return await _invoiceService.GetInvoiceList();
+            return await _invoiceService.GetInvoiceList(accountID, status, startDate, endDate);
         }
 
         [HttpGet("GetInvoiceDetails/{id}")]

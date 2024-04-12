@@ -114,40 +114,44 @@ const Contacts = ({ getContactsCount, accountId }: Props) => {
   return (
     <>
       <ToastContainer />
-      <div className="head" style={{ padding: "20px" }}>
-        <CRow>
-          <CCol xs={6}>
-            <CInputGroup>
-              <CInputGroupText as="label" htmlFor="searchInput">
-                Search
-              </CInputGroupText>
-              <CFormInput
-                id="searchInput"
-                type="text"
-                style={{ height: "50px" }}
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search by name,email,mobile..."
-              />
-            </CInputGroup>
-          </CCol>
-          <CCol xs={6} className="text-end">
-            {
-              <Link to={`/contacts/createContact`}>
-                <CButton
-                  component="input"
-                  type="button"
-                  style={{ width: "100px", padding: "10px", fontSize: "18px" }}
-                  color="primary"
-                  value="+ New"
-                  variant="outline"
-                />
-                {/* <FaPlus style={{ marginRight: '5px' }} /> New */}
-              </Link>
-            }
-          </CCol>
-        </CRow>
-      </div>
+      <CRow>
+        <CCol xs={12}>
+          <CCard>
+            <CRow className="align-items-center m-1">
+              <CCol xs={6} className="text-start">
+                <CInputGroup>
+                  <CInputGroupText as="label" htmlFor="searchInput">
+                    Search
+                  </CInputGroupText>
+                  <CFormInput
+                    id="searchInput"
+                    type="text"
+                    style={{ height: "50px" }}
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="Search by name,email,mobile..."
+                  />
+                </CInputGroup>
+              </CCol>
+              <CCol xs={6} className="text-end">
+                {
+                  <Link to={`/contacts/createContact`}>
+                    <CButton
+                      component="input"
+                      type="button"
+                      style={{ width: "100px", padding: "10px", fontSize: "18px" }}
+                      color="primary"
+                      value="+ New"
+                      variant="outline"
+                    />
+                    {/* <FaPlus style={{ marginRight: '5px' }} /> New */}
+                  </Link>
+                }
+              </CCol>
+            </CRow>
+          </CCard>
+        </CCol>
+      </CRow>
       <DeleteConfirmationModal
         isOpen={showDeleteConfirmation}
         onConfirm={confirmDelete}
@@ -156,7 +160,7 @@ const Contacts = ({ getContactsCount, accountId }: Props) => {
       />
       <CRow>
         <CCol xs={12}>
-          <CCard className="mb-4">
+          <CCard>
             <CCardHeader>
               <CRow>
                 <CCol xs={6} className="d-flex align-items-center">
@@ -235,22 +239,25 @@ const Contacts = ({ getContactsCount, accountId }: Props) => {
               </CTable>
             </CCardBody>
           </CCard>
-          <CCol xs={12}>
+        </CCol>
+      </CRow>
+      <CRow>
+        <CCol xs={12}>
+          <CCard>
             <CPagination
-              size="sm" // Change the size to "sm" (small)
+              size="lg" // Change the size to "sm" (small)
               align="end"
               aria-label="Page navigation example"
-              style={{
-                backgroundColor: "lightgray",
-                padding: "5px",
-                borderRadius: "5px",
-                height: "40px",
-              }} // Decrease padding
+              className="m-auto"
             >
               <CPaginationItem
                 onClick={() => handlePageChange(pageNumber - 1)}
                 disabled={pageNumber === 1}
-                style={{ marginRight: "5px", fontSize: "12px" }} // Decrease font size
+                style={{
+                  margin: "0 2px",
+                  cursor: "pointer",
+                  // fontSize: "12px",
+                }} // Decrease font size
               >
                 Previous
               </CPaginationItem>
@@ -262,7 +269,7 @@ const Contacts = ({ getContactsCount, accountId }: Props) => {
                   style={{
                     margin: "0 2px",
                     cursor: "pointer",
-                    fontSize: "12px",
+                    // fontSize: "12px",
                   }} // Decrease font size
                 >
                   {index + 1}
@@ -271,12 +278,16 @@ const Contacts = ({ getContactsCount, accountId }: Props) => {
               <CPaginationItem
                 onClick={() => handlePageChange(pageNumber + 1)}
                 disabled={pageNumber === totalPages}
-                style={{ marginLeft: "5px", fontSize: "12px" }} // Decrease font size
+                style={{
+                  margin: "0 2px",
+                  cursor: "pointer",
+                  // fontSize: "12px",
+                }} // Decrease font size
               >
                 Next
               </CPaginationItem>
             </CPagination>
-          </CCol>
+          </CCard>
         </CCol>
       </CRow>
     </>

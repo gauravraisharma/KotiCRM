@@ -1,5 +1,4 @@
-﻿using KotiCRM.Repository.DTOs.Contact;
-using KotiCRM.Repository.DTOs.Invoice;
+﻿using KotiCRM.Repository.DTOs.Invoice;
 using KotiCRM.Repository.IRepository;
 using KotiCRM.Repository.Models;
 using KotiCRM.Services.IServices;
@@ -15,9 +14,9 @@ public class InvoiceService : IInvoiceService
         _invoiceRepository = invoiceRepository;
     }
 
-    public async Task<IEnumerable<InvoiceCreationModel>> GetInvoiceList()
+    public async Task<IEnumerable<InvoiceCreationModel>> GetInvoiceList(int? accountID = null, int? status = null, DateTime? startDate = null, DateTime? endDate = null)
     {
-        return await _invoiceRepository.GetInvoiceList();
+        return await _invoiceRepository.GetInvoiceList(accountID, status, startDate, endDate);
     }
 
     public async Task<InvoiceCreationModel> GetInvoiceDetails(int id)
