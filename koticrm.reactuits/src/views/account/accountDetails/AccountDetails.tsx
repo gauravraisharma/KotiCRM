@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { getAccountByIdRequest } from "../../../redux-saga/modules/account/action";
 import Notes from "../../../components/notes/Notes";
-import InvoiceComponent from "../../invoice/Invoice";
+import InvoiceComponent from "../../invoice/Invoices";
 import Contacts from "../../contacts/Contacts";
 import Attachments from "../../attachments/Attachments";
 

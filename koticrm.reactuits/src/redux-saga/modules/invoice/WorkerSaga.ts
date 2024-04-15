@@ -3,10 +3,26 @@ import { call, put } from 'redux-saga/effects';
 import { toast } from "react-toastify";
 import { actionPayloadModel } from '../../../models/actionModel/actionModel';
 import { SharedModel } from '../../../models/commonModels/SharedModels';
-import { CREATE_INVOICE_SUCCESS, DELETE_INVOICE_SUCCESS, GET_INVOICE_DETAIL_SUCCESS, GET_INVOICE_OWNER_SUCCESS, GET_INVOICE_STATUS_SUCCESS, GET_INVOICE_SUCCESS, UPDATE_INVOICE_SUCCESS } from '../../../constants/reduxConstants';
+import {
+  CREATE_INVOICE_SUCCESS,
+  DELETE_INVOICE_SUCCESS,
+  GET_INVOICES_SUCCESS,
+  GET_INVOICE_DETAIL_SUCCESS,
+  GET_INVOICE_OWNER_SUCCESS,
+  GET_INVOICE_STATUS_SUCCESS,
+  UPDATE_INVOICE_SUCCESS
+} from '../../../constants/reduxConstants';
 import { Invoice, InvoiceCreationModel } from '../../../models/invoice/Invoice';
-import { CreateInvoice, DeleteInvoice, GetInvoiceDetails, GetInvoiceList, GetInvoiceOwnerList, GetInvoiceStatus, UpdateInvoice } from './apiService';
-import { getInvoice } from './action';
+import {
+  CreateInvoice,
+  DeleteInvoice,
+  GetInvoiceDetails,
+  GetInvoiceList,
+  GetInvoiceOwnerList,
+  GetInvoiceStatus,
+  UpdateInvoice
+} from './apiService';
+import { getInvoices } from './action';
 
 export function* workGetInvoiceStatusFetch(): Generator<any> {
   try {
@@ -23,14 +39,16 @@ export function* workGetInvoiceStatusFetch(): Generator<any> {
   }
 }
 
-export function* workGetInvoiceFetch(): Generator<any> {
+export function* workGetInvoicesFetch(action: actionPayloadModel): Generator<any> {
   try {
-    const response: any = yield call(GetInvoiceList);
+    const { accountID, status, startDate, endDate } = action.payload;
+    const response: any = yield call(GetInvoiceList, accountID, status, startDate, endDate);
     if (response.status != 200) {
-      toast.error('Error fetching accounts')
+      toast.error('Error fetching invoices')
     } else {
       const invoices: InvoiceCreationModel[] = response.data;
-      yield put({ type: GET_INVOICE_SUCCESS, payload: invoices });
+      yield put({ type: GET_INVOICES_SUCCESS, payload: invoices });
+      return response;
     }
 
   } catch (error) {
@@ -77,7 +95,6 @@ export function* workUpdateInvoice(action: actionPayloadModel): Generator<any> {
     } else {
       const invoice: InvoiceCreationModel = response.data;
       yield put({ type: UPDATE_INVOICE_SUCCESS, payload: invoice });
-      yield put(getInvoice());
       toast.success('Invoice updated succeffully')
     }
 

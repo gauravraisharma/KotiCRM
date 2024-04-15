@@ -1230,7 +1230,7 @@ const EditInvoice: React.FC<newInvoiceProps> = () => {
                                     if (!isNaN(newValue)) {
                                       updatedRows[index].quantity = newValue;
                                       updatedRows[index].total = calculateTotal(updatedRows[index]);
-                                      console.log("Updated rows:", updatedRows); // Log updated rows
+                                      // console.log("Updated rows:", updatedRows); // Log updated rows
                                       setRows(updatedRows);
                                     } else {
                                       console.error("Invalid input value:", e.target.value);
@@ -1447,7 +1447,7 @@ const EditInvoice: React.FC<newInvoiceProps> = () => {
                   </div>
                 </div>
 
-                <div className="text-end">
+                <div className="text-end mt-3">
                   <button
                     type="submit"
                     className="btn btn-primary"
@@ -1458,7 +1458,7 @@ const EditInvoice: React.FC<newInvoiceProps> = () => {
 
                   <button
                     type="button"
-                    className="btn btn-secondary"
+                    className="btn btn-secondary ms-1"
                     onClick={() => navigate("/invoices")}
                   >
                     Cancel

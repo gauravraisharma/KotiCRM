@@ -28,7 +28,7 @@ const contactDetails = lazy(() => import('./views/contacts/ContactDetails'))
 const CreateContact = lazy(() => import('./views/contacts/CreateOrEditContact'))
 
 //Invoices Routes
-const Invoices = lazy(() => import('./views/invoice/Invoice'))
+const Invoices = lazy(() => import('./views/invoice/Invoices'))
 const CreateInvoice = lazy(() => import('./views/invoice/NewInvoice'))
 const EditInvoice = lazy(() => import('./views/invoice/EditInvoice'))
 

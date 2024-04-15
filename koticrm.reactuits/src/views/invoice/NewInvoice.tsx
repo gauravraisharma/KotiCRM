@@ -31,7 +31,7 @@ import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import "react-datepicker/dist/react-datepicker.css";
 import { getOrganization } from "../../redux-saga/modules/shared/action";
 import { createInvoiceRequest } from "../../redux-saga/modules/invoice/action";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 
 const initialValues = {
   invoiceOwner: "",
@@ -366,6 +366,10 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
         total: row.total,
       };
     });
+    if (invoiceItemDetails.length === 0) {
+      toast.warn("You need to add item to the invoice");
+      return;
+    }
     const invoiceModel: InvoiceCreationModel = {
       invoice: invoiceDetails,
       invoiceItems: invoiceItemDetails,
@@ -383,7 +387,7 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
     const amount = row.amount || 0;
     const discount = row.discount || 0;
     const quantity = row.quantity || 0;
-    return ((amount - discount) * quantity);
+    return (amount * quantity - discount);
   };
 
   const { handleSubmit } = useFormik({
@@ -431,8 +435,8 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
                       >
                         Invoice Owner
                         <span style={{ color: "red", fontSize: "25px" }}>
-                            *
-                          </span>
+                          *
+                        </span>
                       </label>
                       <div className="col-sm-6">
                         <Field name="invoiceOwner">
@@ -497,8 +501,8 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
                       >
                         Subject
                         <span style={{ color: "red", fontSize: "25px" }}>
-                            *
-                          </span>
+                          *
+                        </span>
                       </label>
                       <div className="col-sm-6">
                         <Field
@@ -615,8 +619,8 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
                       >
                         Account
                         <span style={{ color: "red", fontSize: "25px" }}>
-                            *
-                          </span>
+                          *
+                        </span>
                       </label>
                       <div className="col-sm-6">
                         <Field name="accountName">
@@ -682,8 +686,8 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
                       >
                         Contacts
                         <span style={{ color: "red", fontSize: "25px" }}>
-                            *
-                          </span>
+                          *
+                        </span>
                       </label>
                       <div className="col-sm-6">
                         <Field name="contacts">
@@ -795,8 +799,8 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
                       >
                         Status
                         <span style={{ color: "red", fontSize: "25px" }}>
-                            *
-                          </span>
+                          *
+                        </span>
                       </label>
                       <div className="col-sm-6">
                         <Field
@@ -853,7 +857,7 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
                         className="col-sm-4 col-form-label"
                       >
                         Billing Street
-                        
+
                       </label>
                       <div className="col-sm-6">
                         <Field
@@ -978,8 +982,8 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
                       >
                         Billing Country
                         <span style={{ color: "red", fontSize: "25px" }}>
-                            *
-                          </span>
+                          *
+                        </span>
                       </label>
                       <div className="col-sm-6">
                         <Field
@@ -1014,8 +1018,8 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
                       >
                         Billing Street
                         <span style={{ color: "red", fontSize: "25px" }}>
-                            *
-                          </span>
+                          *
+                        </span>
                       </label>
                       <div className="col-sm-6">
                         <Field
@@ -1051,8 +1055,8 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
                       >
                         Billing City
                         <span style={{ color: "red", fontSize: "25px" }}>
-                            *
-                          </span>
+                          *
+                        </span>
                       </label>
                       <div className="col-sm-6">
                         <Field
@@ -1088,8 +1092,8 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
                       >
                         Billing State
                         <span style={{ color: "red", fontSize: "25px" }}>
-                            *
-                          </span>
+                          *
+                        </span>
                       </label>
                       <div className="col-sm-6">
                         <Field
@@ -1126,8 +1130,8 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
                       >
                         ZipCode
                         <span style={{ color: "red", fontSize: "25px" }}>
-                            *
-                          </span>
+                          *
+                        </span>
                       </label>
                       <div className="col-sm-6">
                         <Field
@@ -1164,8 +1168,8 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
                       >
                         Billing Country
                         <span style={{ color: "red", fontSize: "25px" }}>
-                            *
-                          </span>
+                          *
+                        </span>
                       </label>
                       <div className="col-sm-6">
                         <Field

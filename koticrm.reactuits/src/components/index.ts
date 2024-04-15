@@ -7,7 +7,7 @@ import AppSidebar from './layoutComponent/sidebar/AppSidebar'
 import DocsCallout from './docs/DocsCallout'
 import DocsLink from './docs/DocsLink'
 import DocsExample from './docs/DocsExample'
-import Invoice from '../views/invoice/Invoice'
+import Invoice from '../views/invoice/Invoices'
 import NewInvoice from '../views/invoice/NewInvoice'
 
 export {

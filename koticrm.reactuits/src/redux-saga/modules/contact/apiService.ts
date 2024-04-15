@@ -9,7 +9,6 @@ import { ContactWithAccountName } from '../../../models/contact/ContactWithAccou
 import { ContactWithAccountNameListAndTotalCount } from '../../../models/contact/ContactWithAccountNameListAndTotalCount';
 
 export function GetContactsList(accountId?: number, searchQuery?: string, pageNumber?: number, pageSize?: number): Promise<apiResponse<ContactWithAccountNameListAndTotalCount>> {
-    // const getContactListURL = accountId ? `/Contact/GetContactList?accountId=${accountId}` : '/Contact/GetContactList';
     const params = new URLSearchParams();
     if (accountId) params.append('accountId', accountId.toString());
     if (searchQuery) params.append('searchQuery', searchQuery.toString());

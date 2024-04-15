@@ -27,7 +27,7 @@ interface AuthProps {
 const AuthenticatedRoute: React.FC<AuthProps> = ({ isAuth }) => {
     // user should be logged in and have authorization 
     const authLogin = localStorage.getItem('accessToken');
-    console.log("authLogin:", authLogin); // Add this line to check the value of authLogin
+    // console.log("authLogin:", authLogin);
 
     // if not logged In then cannot access authorized pages
     if (isAuth) {
