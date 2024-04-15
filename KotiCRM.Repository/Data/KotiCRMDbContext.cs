@@ -93,11 +93,13 @@ namespace KotiCRM.Repository.Data
 
             modelBuilder.Entity<Bank>(entity =>
             {
+                entity.HasKey(e => e.BankId);
+
                 entity.ToTable("Bank");
 
-                entity.Property(e => e.BankId)
-                    .ValueGeneratedNever()
-                    .HasColumnName("BankID");
+                entity.Property(e => e.BankAccountNumber)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
                 entity.Property(e => e.Branch)
                     .HasMaxLength(100)
                     .IsUnicode(false);
@@ -192,51 +194,66 @@ namespace KotiCRM.Repository.Data
                 entity.ToTable("Employee");
 
                 entity.Property(e => e.EmployeeId)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                .HasMaxLength(50)
+                .IsUnicode(false);
+
+                entity.Property(e => e.EmpCode)
+                    .HasMaxLength(255);
+
                 entity.Property(e => e.UserId)
                     .HasMaxLength(255);
+
+                entity.Property(e => e.Name)
+                    .HasMaxLength(255);
+
+                entity.Property(e => e.ProfilePictureURL)
+                    .HasMaxLength(255);
+
+                entity.Property(e => e.FatherName)
+                    .HasMaxLength(255);
+
+                entity.Property(e => e.GuardianName)
+                    .HasMaxLength(255);
+
+                entity.Property(e => e.BloodGroup)
+                    .HasMaxLength(10);
+
+                entity.Property(e => e.ContactNumber1)
+                    .HasMaxLength(15);
+
+                entity.Property(e => e.ContactNumber2)
+                    .HasMaxLength(15);
+
+                entity.Property(e => e.GuardianContactNumber)
+                    .HasMaxLength(15);
+
+                entity.Property(e => e.PersonalEmailId)
+                    .HasMaxLength(255);
+
+                entity.Property(e => e.OfficialEmailId)
+                    .HasMaxLength(255);
+
+                entity.Property(e => e.OfficialEmailPassword)
+                    .HasMaxLength(255);
+
+                entity.Property(e => e.SkypeId)
+                    .HasMaxLength(100);
+
                 entity.Property(e => e.AdharCardNumber)
                     .HasMaxLength(50)
                     .IsUnicode(false);
-                entity.Property(e => e.BloodGroup)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-                entity.Property(e => e.CompanyId)
-                    .HasDefaultValue(1);
-                entity.Property(e => e.CorrespondenceAddress)
-                    .HasMaxLength(255)
-                    .IsUnicode(false);
-                entity.Property(e => e.EmpCode)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-                entity.Property(e => e.FatherName)
-                    .HasMaxLength(100)
-                    .IsUnicode(false);
-                entity.Property(e => e.OfficialEmailId)
-                    .HasMaxLength(100)
-                    .IsUnicode(false);
+
                 entity.Property(e => e.PanNumber)
-                    .HasMaxLength(20)
-                    .IsUnicode(false);
+                    .HasMaxLength(10);
+
+                entity.Property(e => e.BankId)
+                    .HasMaxLength(20);
+
                 entity.Property(e => e.PermanentAddress)
-                    .HasMaxLength(255)
-                    .IsUnicode(false);
-                entity.Property(e => e.PersonalEmailId)
-                    .HasMaxLength(100)
-                    .IsUnicode(false);
-                entity.Property(e => e.SkypeId)
-                    .HasMaxLength(100)
-                    .IsUnicode(false);
-                entity.Property(e => e.Status)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-                entity.Property(e => e.DateOfBirth)
-                    .HasColumnType("date");
-                entity.Property(e => e.RelievingDate)
-                    .HasColumnType("date");
-                entity.Property(e => e.JoiningDate)
-                    .HasColumnType("date");
+                    .HasMaxLength(500);
+
+                entity.Property(e => e.CorrespondenceAddress)
+                    .HasMaxLength(500);
 
                 entity.HasOne(d => d.Bank).WithMany(p => p.Employees)
                     .HasForeignKey(d => d.BankId)

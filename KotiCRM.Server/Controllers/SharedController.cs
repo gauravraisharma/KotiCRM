@@ -67,5 +67,39 @@ namespace KotiCRM.Server.Controllers
             return Ok(enumList);
         }
 
+        [HttpGet]
+        [Route("GetDepartmentList")]
+        public async Task<IEnumerable<Department>> GetDepartmentList()
+        {
+            return await _sharedService.GetDepartmentList();
+        }
+
+        [HttpGet]
+        [Route("GetDesignationList")]
+        public async Task<IEnumerable<Designation>> GetDesignationList()
+        {
+            return await _sharedService.GetDesignationList();
+        }
+
+        [HttpGet]
+        [Route("GetBankList")]
+        public async Task<IEnumerable<Bank>> GetBankList()
+        {
+            return await _sharedService.GetBankList();
+        }
+
+        [HttpGet]
+        [Route("GetShiftList")]
+        public async Task<IEnumerable<Shift>> GetShiftList()
+        {
+            return await _sharedService.GetShiftList();
+        }
+
+        [HttpGet]
+        [Route("GetEmployeeId")]
+        public string GetEmployeeId()
+        {
+            return _sharedService.GetEmployeeId();
+        }
     }
 }

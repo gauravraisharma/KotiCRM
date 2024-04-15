@@ -24,7 +24,11 @@ namespace KotiCRM.Services.IServices
         UserDataResponse GetUserDataById(string userId);
 
         // For Employee
-        Task<ResponseStatus> CreateEmployee(CreateEmployeeDTO createEmployeeDTO);
         Task<IEnumerable<UserDetailModel>> GetUsers();
+        EmployeeResponse GetEmployeeById(string employeeId);
+        Task<EmployeeResponseStatus> CreateEmployee(CreateEmployeeDTO createEmployeeDTO);
+        Task<EmployeeResponseStatus> UpdateEmployee(CreateEmployeeDTO createEmployeeDTO);
+        ResponseStatus DeleteEmployee(string employeeId);
+
     }
 }

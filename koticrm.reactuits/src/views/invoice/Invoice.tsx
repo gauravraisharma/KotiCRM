@@ -3,6 +3,13 @@ import {
   CCard,
   CCardBody,
   CCardHeader,
+  CCol,
+  CDropdown,
+  CDropdownItem,
+  CDropdownMenu,
+  CDropdownToggle,
+  CFormSelect,
+  CRow,
   CTable,
   CTableBody,
   CTableDataCell,
@@ -34,6 +41,8 @@ import { getNotes } from "../../redux-saga/modules/notes/action";
 import { formatDate } from "../../utils/Shared/DateTransform";
 import { Link } from "react-router-dom";
 import { getContacts } from "../../redux-saga/modules/contact/action";
+import SearchDropdown from "../../components/base/select/SearchDropdown";
+import ReactDatePicker from "react-datepicker";
 import moment from "moment";
 import 'moment-timezone' 
 
@@ -48,11 +57,23 @@ const InvoiceComponent: React.FC<InvoiceProps> = ({
   ownerId,
   getInvoiceCount,
 }) => {
+  const getFirstDayOfMonth = () => {
+    const today = new Date();
+    return new Date(today.getFullYear(), today.getMonth(), 1);
+  };
+
+  const getLastDayOfMonth = () => {
+    const today = new Date();
+    return new Date(today.getFullYear(), today.getMonth() + 1, 0);
+  };
+
   const dispatch = useDispatch();
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [showCreateInvoice, setShowCreateInvoice] = useState(false);
   const [openPreviewModal, setOpenPreviewModal] = useState<boolean>(false);
   const [invoiceId, setInvoiceId] = useState();
+  const [startDate, setStartDate] = useState(getFirstDayOfMonth());
+  const [endDate, setEndDate] = useState(getLastDayOfMonth());
 
   const invoices = useSelector((state: any) => state.invoiceReducer.invoices);
   const timezone = useSelector((state: any) => state.sharedReducer.timezone);
@@ -89,6 +110,14 @@ const InvoiceComponent: React.FC<InvoiceProps> = ({
   const handleDeleteClick = (invoiceId: any) => {
     setInvoiceId(invoiceId);
     setShowDeleteConfirmation(true);
+  };
+
+  const handleAccountChange = (event) => {
+    console.log("Selected account:", event.target.value);
+  };
+
+  const handleStatusChange = (event) => {
+    console.log("Selected status:", event.target);
   };
 
   const invoiceStatus = useSelector(
@@ -146,8 +175,67 @@ const InvoiceComponent: React.FC<InvoiceProps> = ({
   useEffect(() => {
     dispatch(getInvoice());
   }, [invoiceDeleteResponse]);
+
   return (
     <div>
+      <CCard className="d-flex flex-row justify-content-between m-1 p-2">
+        {/* <CDropdown className="d-inline" onChange={handleAccountChange}>
+          <CDropdownToggle color="secondary">Dropdown button</CDropdownToggle>
+          <CDropdownMenu>
+            <CDropdownItem value={"Action"}>Action</CDropdownItem>
+            <CDropdownItem value={"Another action"}>Another action</CDropdownItem>
+            <CDropdownItem value={"Something else here"}>Something else here</CDropdownItem>
+          </CDropdownMenu>
+        </CDropdown>
+        <CDropdown className="d-inline" onChange={handleStatusChange}>
+          <CDropdownToggle color="secondary">Dropdown button</CDropdownToggle>
+          <CDropdownMenu>
+            <CDropdownItem value={"Action"}>Action</CDropdownItem>
+            <CDropdownItem value={"Another action"}>Another action</CDropdownItem>
+            <CDropdownItem value={"Something else here"}>Something else here</CDropdownItem>
+          </CDropdownMenu>
+        </CDropdown> */}
+        <div>
+          <label htmlFor="accountId" className="form-label fw-bold">Select Account</label>
+          <CFormSelect
+            id="accountId"
+            name="accountId"
+            aria-label="Select Account"
+            options={['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-']}
+            onChange={handleAccountChange}
+          />
+        </div>
+        <div>
+          <label htmlFor="status" className="form-label fw-bold">Select Status</label>
+          <CFormSelect
+            id="status"
+            name="status"
+            aria-label="Select status"
+            options={['Ag+', 'Ag-', 'Bg+', 'Bg-', 'ABg+', 'ABg-', 'Og+', 'Og-']}
+            onChange={handleStatusChange}
+          />
+        </div>
+        <div>
+          <div>
+            <label htmlFor="startDate" className="form-label fw-bold">Start Date</label>
+          </div>
+          <div>
+            <ReactDatePicker selected={startDate} onChange={(date) => setStartDate(date!)} className="form-control" />
+          </div>
+        </div>
+        <div>
+          <div>
+            <label htmlFor="endDate" className="form-label fw-bold">End Date</label>
+          </div>
+          <div>
+            <ReactDatePicker selected={endDate} onChange={(date) => setEndDate(date!)} className="form-control" />
+          </div>
+        </div>
+      </CCard>
+      <div className="d-flex justify-content-around my-3">
+        <h4>Create + Pending : $43543</h4>
+        <h4>Paid: $5822</h4>
+      </div>
       <ToastContainer />
       {showCreateInvoice ? (
         <NewInvoice

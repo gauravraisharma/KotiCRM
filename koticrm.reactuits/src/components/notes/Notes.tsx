@@ -199,7 +199,7 @@ const Notes: React.FC<NoteProps> = ({
   return (
     <div>
       {filteredNotes.length === 0 && (
-        <div>No notes available</div>
+        <div>No notes found</div>
       )}
       {filteredNotes.length > 0 && (
         <CRow>

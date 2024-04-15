@@ -88,14 +88,26 @@ namespace KotiCRM.Services.Services
         }
 
         // For Employee
-        public async Task<ResponseStatus> CreateEmployee(CreateEmployeeDTO createEmployeeDTO)
+        public async Task<IEnumerable<UserDetailModel>> GetUsers()
+        {
+            var users = await _accountRepository.GetUsers();
+            return users;
+        }
+        public EmployeeResponse GetEmployeeById(string employeeId)
+        {
+            return _accountRepository.GetEmployeeById(employeeId);
+        }
+        public async Task<EmployeeResponseStatus> CreateEmployee(CreateEmployeeDTO createEmployeeDTO)
         {
             return await _accountRepository.CreateEmployee(createEmployeeDTO);
         }
-        public async Task<IEnumerable<UserDetailModel>> GetUsers()
+        public async Task<EmployeeResponseStatus> UpdateEmployee(CreateEmployeeDTO createEmployeeDTO)
         {
-            var users= await _accountRepository.GetUsers();
-            return users;
+            return await _accountRepository.UpdateEmployee(createEmployeeDTO);
+        }
+        public ResponseStatus DeleteEmployee(string employeeId)
+        {
+            return _accountRepository.DeleteEmployee(employeeId);
         }
     }
 }

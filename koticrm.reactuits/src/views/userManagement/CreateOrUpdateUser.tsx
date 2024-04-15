@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useId, useState } from "react";
 import {
   CButton,
   CCard,
@@ -11,52 +11,69 @@ import {
   CRow,
 } from "@coreui/react";
 import { ErrorMessage, Field, Form, Formik } from "formik";
-import { Link, useNavigate, useParams, useRoutes } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import SearchDropdown from "../../components/base/select/SearchDropdown";
-import { ToastContainer } from "react-toastify";
-import { User, UserClass } from "../../models/userManagement/user";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { ToastContainer, toast } from "react-toastify";
+import { Employee, EmployeeClass } from "../../models/userManagement/employee";
+import { CreateEmployee, GetEmployeeId } from "../../redux-saga/modules/userManagement/apiService";
+import { Department, Designation, Shift } from "../../models/commonModels/SharedModels";
+import { GetDepartments, GetDesignations, GetShifts } from "../../redux-saga/modules/shared/apiService";
 
 const CreateOrUpdateUser = () => {
   // Parameters
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const userId = useParams<{ userId: string }>();
+  const bloodGroups = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
+
 
   // States
-  const [user, setUser] = useState<User>(new UserClass());
-  const [employeeCount, setEmployeeCount] = useState(0);
+  const [formData, setFormData] = useState<Employee>(new EmployeeClass());
+  // const [employeeCount, setEmployeeCount] = useState(0);
   const [employeeId, setEmployeeId] = useState("");
-  const [employeeCode, setEmployeeCode] = useState("");
   const [isActiveChecked, setIsActiveChecked] = useState(true);
   const [isRelievedChecked, setIsRelievedChecked] = useState(false);
+  const [relievingDateRequired, setRelievingDateRequired] = useState(false);
+  const [departmentList, setDepartmentList] = useState<Department[] | undefined>([]);
+  const [designationList, setDesignationList] = useState<Designation[] | undefined>([]);
+  const [shiftList, setShiftList] = useState<Shift[] | undefined>([]);
+  const [bloodGroup, setBloodGroup] = useState("");
+  const [departmentId, setDepartmentId] = useState(0);
+  const [designationId, setDesignationId] = useState(0);
+  const [shiftId, setShiftId] = useState(0);
+
 
   // Effects
   useEffect(() => {
-    const employeeId = generateEmployeeId();
-    setEmployeeId(employeeId);
-    if (employeeId !== "0") {
-      const employeeCode = generateEmployeeCode("tcs", 3, employeeId);
-      setEmployeeCode(employeeCode);
+    getEmployeeId();
+    getDepartmentList();
+    getDesignationList();
+    getShiftList();
+  },[]);
+
+  useEffect(() => {
+    if (employeeId != null) {
+      const employeeCode = generateEmployeeCode("tech", departmentId, employeeId);
+      formData.employeeCode = employeeCode;
     }
-  }, []);
+  }, [employeeId, departmentId]);
+
+  useEffect(() => {
+    if(userId){
+
+    }
+  })
 
   // Handlers
   const handleCheckbox = (event: any) => {
-    // setIsActiveChecked(!event.target.checked); // Uncheck isActive if isRelieved is checked
-    // if(event.target.name){
-    //     setIsRelievedChecked(true);
-    // }
-    // isActiveChecked ? setIsRelievedChecked(false) : "";
-
     const { id, checked } = event.target;
 
     if (id === "isActive" && checked) {
-      // If Active is checked, uncheck isRelieved
       setIsRelievedChecked(false);
+      setRelievingDateRequired(false);
     } else if (id === "isRelieved" && checked) {
-      // If isRelieved is checked, uncheck Active
       setIsActiveChecked(false);
+      setRelievingDateRequired(true);
     }
 
     // Update the checked status of the corresponding checkbox
@@ -67,12 +84,11 @@ const CreateOrUpdateUser = () => {
     }
   };
 
-  // Generate Employee Number
-  const generateEmployeeId = () => {
-    const paddedCount = String(employeeCount).padStart(7, "0"); // Ensure 8 characters with leading zeros
-    const employeeId = `0000000${paddedCount}`.slice(-8); // Ensure exactly 8 characters
-    setEmployeeCount((prevCount) => prevCount + 1); // Increment employee count for uniqueness
-    return employeeId;
+  // Generate EmployeeId
+  const getEmployeeId = async () => {
+    const employeeId = await GetEmployeeId();
+    setEmployeeId(employeeId.data);
+    formData.employeeId = employeeId.data;
   };
 
   // Generate EmployeeCode
@@ -81,31 +97,72 @@ const CreateOrUpdateUser = () => {
     departmentId: number,
     employeeId: string
   ) => {
-    // Generate a random 4-letter combination for the organization name
-    // const generateRandomLetters = () => {
-    //     const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    //     let result = '';
-    //     for (let i = 0; i < 4; i++) {
-    //         result += letters.charAt(Math.floor(Math.random() * letters.length));
-    //     }
-    //     return result;
-    // };
-
-    // // Format employee code
-    // const randomLetters = generateRandomLetters();
-    // return `${randomLetters}-EMP-${departmentId}-${employeeId.padStart(8, '0')}`;
-
     const name = organizationName.toUpperCase();
     return `${name}-EMP-${departmentId}-${employeeId}`;
   };
 
+  // Department list
+  const getDepartmentList = () => {
+    GetDepartments()
+      .then((response) => {
+        setDepartmentList(response.data);
+      })
+      .catch((error) => {
+          console.error('Error getting department list:', error.statusText);
+      });
+  }
+
+  // Designation list
+  const getDesignationList = () => {
+    GetDesignations()
+      .then((response) => {
+        setDesignationList(response.data);
+      })
+      .catch((error) => {
+          console.error('Error getting designation list:', error.statusText);
+      });
+  }
+
+  // Shift list
+  const getShiftList = () => {
+    GetShifts()
+      .then((response) => {
+        setShiftList(response.data);
+      })
+      .catch((error) => {
+          console.error('Error getting shift list:', error.statusText);
+      });
+  }
+
   // Submit
   const handleFormSubmit = async (
-    user: User,
+    employee: Employee,
     { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }
   ) => {
     try {
-    } catch (error) {}
+      employee.employeeId = employeeId;
+      employee.bloodGroup = bloodGroup;
+      employee.departmentId = departmentId;
+      employee.designationId = designationId;
+      employee.shiftId = shiftId;
+      await CreateEmployee(employee)
+      .then((response) => {
+        // Handle success response
+        console.log("response", response);
+        console.log("employeeId", response.data?.employeeId);
+        toast.success("Employee created successfully");
+      })
+      .catch((error) => {
+        // Handle error response
+        toast.error("Employee creation failed");
+        console.error('Error creating employee:', error.statusText);
+      });
+    } catch (error) {
+      console.log("error message:", error);
+    } finally {
+      setSubmitting(false);
+      navigate("/users");
+    }
   };
 
   return (
@@ -116,7 +173,7 @@ const CreateOrUpdateUser = () => {
           <div className="d-flex justify-content-between align-items-center">
             <div>
               <h5 className="mb-0">
-                {userId ? "Update" + userId : "Create"} User
+                {userId == null ? "Create" : "Update"} User
               </h5>
             </div>
             <div className="text-end">
@@ -133,7 +190,7 @@ const CreateOrUpdateUser = () => {
         </CCardHeader>
         <CCardBody>
           <Formik
-            initialValues={user}
+            initialValues={formData}
             enableReinitialize
             // validationSchema={validationSchema}
             onSubmit={handleFormSubmit}
@@ -164,7 +221,7 @@ const CreateOrUpdateUser = () => {
                   <CCol xs={4}>
                     <CRow className="mb-3">
                       <CCol sm={12}>
-                        <label htmlFor="employeeID">
+                        <label htmlFor="employeeId">
                           Id
                           <span style={{ color: "red", fontSize: "25px" }}>
                             *
@@ -172,9 +229,8 @@ const CreateOrUpdateUser = () => {
                         </label>
                         <Field
                           type="number"
-                          id="employeeID"
-                          value={employeeId}
-                          name="employeeID"
+                          id="employeeId"
+                          name="employeeId"
                           className="form-control"
                           disabled
                           style={{
@@ -186,7 +242,7 @@ const CreateOrUpdateUser = () => {
                           }}
                         />
                         <ErrorMessage
-                          name="employeeID"
+                          name="employeeId"
                           className="invalid-feedback"
                           render={(error) => (
                             <label style={{ color: "#dc3545" }}>{error}</label>
@@ -229,7 +285,9 @@ const CreateOrUpdateUser = () => {
                           id="isRelieved"
                           name="isRelieved"
                           label="isRelieved"
+                          checked={isRelievedChecked}
                           onChange={handleCheckbox}
+                          disabled={!isActiveChecked} 
                         />
                         <ErrorMessage
                           name="isRelieved"
@@ -254,7 +312,6 @@ const CreateOrUpdateUser = () => {
                           type="text"
                           id="employeeCode"
                           name="employeeCode"
-                          value={employeeCode}
                           className="form-control"
                           //   className={`form-control ${touched.employeeCode && errors.employeeCode
                           //       ? "is-invalid"
@@ -283,8 +340,8 @@ const CreateOrUpdateUser = () => {
                         <CFormCheck
                           id="isActive"
                           label="Active"
-                          checked={isActiveChecked} // Set checked status based on isActiveChecked state
-                          onChange={() => setIsActiveChecked(!isActiveChecked)} // Toggle isActiveChecked state
+                          checked={isActiveChecked}
+                          onChange={handleCheckbox}
                         />
                         <ErrorMessage
                           name="isActive"
@@ -422,13 +479,13 @@ const CreateOrUpdateUser = () => {
                     </CRow>
                     <CRow className="mb-3">
                       <CCol sm={12}>
-                        <label htmlFor="aadharCardNumber">Aadhar Number</label>
+                        <label htmlFor="adharCardNumber">Aadhar Number</label>
                         <Field
                           type="text"
-                          id="aadharCardNumber"
-                          name="aadharCardNumber"
+                          id="adharCardNumber"
+                          name="adharCardNumber"
                           className="form-control"
-                          //   className={`form-control ${touched.aadharCardNumber && errors.aadharCardNumber
+                          //   className={`form-control ${touched.adharCardNumber && errors.adharCardNumber
                           //       ? "is-invalid"
                           //       : ""
                           //     }`}
@@ -442,7 +499,7 @@ const CreateOrUpdateUser = () => {
                           }}
                         />
                         <ErrorMessage
-                          name="aadharCardNumber"
+                          name="adharCardNumber"
                           className="invalid-feedback"
                           render={(error) => (
                             <label style={{ color: "#dc3545" }}>{error}</label>
@@ -488,12 +545,9 @@ const CreateOrUpdateUser = () => {
                           id="bloodGroup"
                           name="bloodGroup"
                           aria-label="Default select example"
-                          options={[
-                            { label: "select" },
-                            { label: "A+", value: "1" },
-                            { label: "B+", value: "2" },
-                            { label: "O-", value: "3" },
-                          ]}
+                          value={bloodGroup}
+                          options={bloodGroups}
+                          onChange={(e) => setBloodGroup(e.target.value)}
                         />
                         <ErrorMessage
                           name="bloodGroup"
@@ -580,6 +634,36 @@ const CreateOrUpdateUser = () => {
                   <CCol xs={4}>
                     <CRow className="mb-3">
                       <CCol sm={12}>
+                        <label htmlFor="guardianName">Guardian Name</label>
+                        <Field
+                          type="text"
+                          id="guardianName"
+                          name="guardianName"
+                          className="form-control"
+                          //   className={`form-control ${touched.guardianName && errors.guardianName
+                          //       ? "is-invalid"
+                          //       : ""
+                          //     }`}
+                          placeholder="Guardian Name"
+                          style={{
+                            borderBottom: "1px solid gray",
+                            borderLeft: "none",
+                            borderRight: "none",
+                            borderTop: "none",
+                            height: "50%",
+                          }}
+                        />
+                        <ErrorMessage
+                          name="guardianName"
+                          className="invalid-feedback"
+                          render={(error) => (
+                            <label style={{ color: "#dc3545" }}>{error}</label>
+                          )}
+                        />
+                      </CCol>
+                    </CRow>
+                    <CRow className="mb-3">
+                      <CCol sm={12}>
                         <label htmlFor="contactNumber1">Contact Number 1</label>
                         <Field
                           type="text"
@@ -640,6 +724,36 @@ const CreateOrUpdateUser = () => {
                     </CRow>
                   </CCol>
                   <CCol xs={4}>
+                    <CRow className="mb-3">
+                      <CCol sm={12}>
+                        <label htmlFor="guardianContactNumber">Guardian Contact Number</label>
+                        <Field
+                          type="text"
+                          id="guardianContactNumber"
+                          name="guardianContactNumber"
+                          className="form-control"
+                          //   className={`form-control ${touched.guardianContactNumber && errors.guardianContactNumber
+                          //       ? "is-invalid"
+                          //       : ""
+                          //     }`}
+                          placeholder="Guardian Contact Number"
+                          style={{
+                            borderBottom: "1px solid gray",
+                            borderLeft: "none",
+                            borderRight: "none",
+                            borderTop: "none",
+                            height: "50%",
+                          }}
+                        />
+                        <ErrorMessage
+                          name="guardianContactNumber"
+                          className="invalid-feedback"
+                          render={(error) => (
+                            <label style={{ color: "#dc3545" }}>{error}</label>
+                          )}
+                        />
+                      </CCol>
+                    </CRow>
                     <CRow className="mb-3">
                       <CCol sm={12}>
                         <label htmlFor="contactNumber2">Contact Number 2</label>
@@ -709,10 +823,10 @@ const CreateOrUpdateUser = () => {
                         <label htmlFor="personalEmail">Personal Email</label>
                         <Field
                           type="text"
-                          id="PersonalEmail"
-                          name="PersonalEmail"
+                          id="personalEmail"
+                          name="personalEmail"
                           className="form-control"
-                          //   className={`form-control ${touched.PersonalEmail && errors.PersonalEmail
+                          //   className={`form-control ${touched.personalEmail && errors.personalEmail
                           //       ? "is-invalid"
                           //       : ""
                           //     }`}
@@ -726,7 +840,7 @@ const CreateOrUpdateUser = () => {
                           }}
                         />
                         <ErrorMessage
-                          name="PersonalEmail"
+                          name="personalEmail"
                           className="invalid-feedback"
                           render={(error) => (
                             <label style={{ color: "#dc3545" }}>{error}</label>
@@ -736,13 +850,13 @@ const CreateOrUpdateUser = () => {
                     </CRow>
                     <CRow className="mb-3">
                       <CCol sm={12}>
-                        <label htmlFor="officialSkype">Official Skype</label>
+                        <label htmlFor="skypeId">Official Skype</label>
                         <Field
                           type="text"
-                          id="officialSkype"
-                          name="officialSkype"
+                          id="skypeId"
+                          name="skypeId"
                           className="form-control"
-                          //   className={`form-control ${touched.officialSkype && errors.officialSkype
+                          //   className={`form-control ${touched.skypeId && errors.skypeId
                           //       ? "is-invalid"
                           //       : ""
                           //     }`}
@@ -756,7 +870,7 @@ const CreateOrUpdateUser = () => {
                           }}
                         />
                         <ErrorMessage
-                          name="officialSkype"
+                          name="skypeId"
                           className="invalid-feedback"
                           render={(error) => (
                             <label style={{ color: "#dc3545" }}>{error}</label>
@@ -776,13 +890,16 @@ const CreateOrUpdateUser = () => {
                           id="designationID"
                           name="designationID"
                           aria-label="Default select example"
-                          options={[
-                            { label: "select" },
-                            { label: "A+", value: "1" },
-                            { label: "B+", value: "2" },
-                            { label: "O-", value: "3" },
-                          ]}
-                        />
+                          value={designationId}
+                          onChange={(e) => setDesignationId(parseInt(e.target.value))}
+                        >
+                          <option value="">Select a Designation</option>
+                          {designationList?.map(designation => (
+                            <option key={designation.designationId} value={designation.designationId}>
+                              {designation.name}
+                            </option>
+                          ))}
+                        </CFormSelect>
                         <ErrorMessage
                           name="designationID"
                           className="invalid-feedback"
@@ -794,20 +911,27 @@ const CreateOrUpdateUser = () => {
                     </CRow>
                     <CRow className="mb-3">
                       <CCol sm={12}>
-                        <label htmlFor="bankID">Bank Name</label>
-                        <CFormSelect
-                          id="bankID"
-                          name="bankID"
-                          aria-label="select bank"
-                          options={[
-                            { label: "select" },
-                            { label: "A+", value: "1" },
-                            { label: "B+", value: "2" },
-                            { label: "O-", value: "3" },
-                          ]}
+                        <label htmlFor="bank">Bank Name</label>
+                        <Field
+                          type="text"
+                          id="bank"
+                          name="bank"
+                          className="form-control"
+                          //   className={`form-control ${touched.bank && errors.bank
+                          //       ? "is-invalid"
+                          //       : ""
+                          //     }`}
+                          placeholder="Bank"
+                          style={{
+                            borderBottom: "1px solid gray",
+                            borderLeft: "none",
+                            borderRight: "none",
+                            borderTop: "none",
+                            height: "50%",
+                          }}
                         />
                         <ErrorMessage
-                          name="bankID"
+                          name="bank"
                           className="invalid-feedback"
                           render={(error) => (
                             <label style={{ color: "#dc3545" }}>{error}</label>
@@ -824,13 +948,16 @@ const CreateOrUpdateUser = () => {
                           id="departmentID"
                           name="departmentID"
                           aria-label="Default select example"
-                          options={[
-                            { label: "select" },
-                            { label: "A+", value: "1" },
-                            { label: "B+", value: "2" },
-                            { label: "O-", value: "3" },
-                          ]}
-                        />
+                          value={departmentId}
+                          onChange={(e) => setDepartmentId(parseInt(e.target.value))}
+                        >
+                          <option value="">Select a Department</option>
+                          {departmentList?.map(department => (
+                            <option key={department.departmentId} value={department.departmentId}>
+                              {department.name}
+                            </option>
+                          ))}
+                        </CFormSelect>
                         <ErrorMessage
                           name="departmentID"
                           className="invalid-feedback"
@@ -842,13 +969,13 @@ const CreateOrUpdateUser = () => {
                     </CRow>
                     <CRow className="mb-3">
                       <CCol sm={12}>
-                        <label htmlFor="accountNumber">Account Number</label>
+                        <label htmlFor="bankAccountNumber">Account Number</label>
                         <Field
-                          type="number"
-                          id="accountNumber"
-                          name="accountNumber"
+                          type="text"
+                          id="bankAccountNumber"
+                          name="bankAccountNumber"
                           className="form-control"
-                          //   className={`form-control ${touched.accountNumber && errors.accountNumber
+                          //   className={`form-control ${touched.bankAccountNumber && errors.bankAccountNumber
                           //       ? "is-invalid"
                           //       : ""
                           //     }`}
@@ -862,7 +989,7 @@ const CreateOrUpdateUser = () => {
                           }}
                         />
                         <ErrorMessage
-                          name="accountNumber"
+                          name="bankAccountNumber"
                           className="invalid-feedback"
                           render={(error) => (
                             <label style={{ color: "#dc3545" }}>{error}</label>
@@ -874,13 +1001,13 @@ const CreateOrUpdateUser = () => {
                   <CCol xs={4}>
                     <CRow className="mb-3">
                       <CCol sm={12}>
-                        <label htmlFor="ifscCode">IFSC Code</label>
+                        <label htmlFor="ifsc">IFSC Code</label>
                         <Field
                           type="text"
-                          id="ifscCode"
-                          name="ifscCode"
+                          id="ifsc"
+                          name="ifsc"
                           className="form-control"
-                          //   className={`form-control ${touched.ifscCode && errors.ifscCode
+                          //   className={`form-control ${touched.ifsc && errors.ifsc
                           //       ? "is-invalid"
                           //       : ""
                           //     }`}
@@ -894,7 +1021,7 @@ const CreateOrUpdateUser = () => {
                           }}
                         />
                         <ErrorMessage
-                          name="ifscCode"
+                          name="ifsc"
                           className="invalid-feedback"
                           render={(error) => (
                             <label style={{ color: "#dc3545" }}>{error}</label>
@@ -909,13 +1036,16 @@ const CreateOrUpdateUser = () => {
                           id="shiftID"
                           name="shiftID"
                           aria-label="Default select example"
-                          options={[
-                            { label: "select" },
-                            { label: "A+", value: "1" },
-                            { label: "B+", value: "2" },
-                            { label: "O-", value: "3" },
-                          ]}
-                        />
+                          value={shiftId}
+                          onChange={(e) => setShiftId(parseInt(e.target.value))}
+                        >
+                          <option value="">Select a Shift</option>
+                          {shiftList?.map(shift => (
+                            <option key={shift.shiftId} value={shift.shiftId}>
+                              {shift.name}
+                            </option>
+                          ))}
+                        </CFormSelect>
                         <ErrorMessage
                           name="shiftID"
                           className="invalid-feedback"
@@ -925,6 +1055,66 @@ const CreateOrUpdateUser = () => {
                         />
                       </CCol>
                     </CRow>
+                  </CCol>
+                </CRow>
+                <CRow>
+                <CCol xs={4}>
+                    <CRow className="mb-3">
+                      <CCol sm={12}>
+                        <label htmlFor="branch">Branch</label>
+                        <Field
+                          type="text"
+                          id="branch"
+                          name="branch"
+                          className="form-control"
+                          //   className={`form-control ${touched.branch && errors.branch
+                          //       ? "is-invalid"
+                          //       : ""
+                          //     }`}
+                          placeholder="Branch"
+                          style={{
+                            borderBottom: "1px solid gray",
+                            borderLeft: "none",
+                            borderRight: "none",
+                            borderTop: "none",
+                            height: "50%",
+                          }}
+                        />
+                        <ErrorMessage
+                          name="branch"
+                          className="invalid-feedback"
+                          render={(error) => (
+                            <label style={{ color: "#dc3545" }}>{error}</label>
+                          )}
+                        />
+                      </CCol>
+                    </CRow>
+                    {/* <CRow className="mb-3">
+                      <CCol sm={12}>
+                        <label htmlFor="shiftID">Shift</label>
+                        <CFormSelect
+                          id="shiftID"
+                          name="shiftID"
+                          aria-label="Default select example"
+                          value={shiftID}
+                          onChange={(e) => setShiftID(parseInt(e.target.value))}
+                        >
+                          <option value="">Select a Shift</option>
+                          {shiftList?.map(shift => (
+                            <option key={shift.shiftId} value={shift.shiftId}>
+                              {shift.name}
+                            </option>
+                          ))}
+                        </CFormSelect>
+                        <ErrorMessage
+                          name="shiftID"
+                          className="invalid-feedback"
+                          render={(error) => (
+                            <label style={{ color: "#dc3545" }}>{error}</label>
+                          )}
+                        />
+                      </CCol>
+                    </CRow> */}
                   </CCol>
                 </CRow>
                 <CRow className="mb-3">

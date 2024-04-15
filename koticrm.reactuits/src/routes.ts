@@ -156,6 +156,7 @@ const routes: Route[] = [
 
     { path: '/users', name: 'Users', element: Users, isAuth: true, modulePermission: 'ManageUsers' },
     { path: '/users/:usreId', name: 'UserDetail', element: UserDetail, isAuth: true, modulePermission: 'ManageUsers' },
+    { path: '/users/updateUser/:usreId', name: 'UpdateUser', element: CreateOrUpdateUser, isAuth: true, modulePermission: 'ManageUsers' },
     { path: '/users/createOrUpdateUser', name: 'CreateUser', element: CreateOrUpdateUser, isAuth: true, modulePermission: 'ManageUsers' },
 ]
 
