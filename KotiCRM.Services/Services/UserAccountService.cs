@@ -88,9 +88,9 @@ namespace KotiCRM.Services.Services
         }
 
         // For Employee
-        public async Task<IEnumerable<UserDetailModel>> GetUsers()
+        public async Task<IEnumerable<GetEmployeesDTO>> GetEmployees()
         {
-            var users = await _accountRepository.GetUsers();
+            var users = await _accountRepository.GetEmployees();
             return users;
         }
         public EmployeeResponse GetEmployeeById(string employeeId)

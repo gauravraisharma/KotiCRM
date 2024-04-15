@@ -57,10 +57,10 @@ namespace KotiCRM.Repository.Models
     public class UserDataResponse {
         public string Status { get; set; }
         public string Message { get; set; }
-        public UserDetailModel userDetail { get; set; }
+        public EmployeesDTO userDetail { get; set; }
     }
 
-    public class UserDetailModel
+    public class EmployeesDTO
     {
         public string Username { get; set; }
         public string FirstName { get; set; }

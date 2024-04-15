@@ -23,7 +23,7 @@ namespace KotiCRM.Repository.IRepository
         UserDataResponse GetUserDataById(string userId);
 
         // For Employee
-        Task<IEnumerable<UserDetailModel>> GetUsers();
+        Task<IEnumerable<GetEmployeesDTO>> GetEmployees();
         EmployeeResponse GetEmployeeById(string employeeId);
         Task<EmployeeResponseStatus> CreateEmployee(CreateEmployeeDTO createEmployeeDTO);
         Task<EmployeeResponseStatus> UpdateEmployee(CreateEmployeeDTO createEmployeeDTO);

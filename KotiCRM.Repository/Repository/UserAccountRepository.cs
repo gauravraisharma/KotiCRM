@@ -727,7 +727,7 @@ namespace KotiCRM.Repository.Repository
                                 join userRole in _context.UserRoles on user.Id equals userRole.UserId
                                 join role in _context.Roles on userRole.RoleId equals role.Id
                                 where user.Id == userId
-                                select new UserDetailModel
+                                select new EmployeesDTO
                                 {
                                     Username = user.UserName,
                                     FirstName = user.FirstName,
@@ -763,32 +763,38 @@ namespace KotiCRM.Repository.Repository
 
 
         // for get employee list
-        public async Task<IEnumerable<UserDetailModel>> GetUsers()
+        public async Task<IEnumerable<GetEmployeesDTO>> GetEmployees()
         {
             try
             {
-                var users = from user in _context.Users
-                            join userRole in _context.UserRoles on user.Id equals userRole.UserId
-                            join role in _context.Roles on userRole.RoleId equals role.Id
+                var users = await (from user in _context.Users
+                                   join employee in _context.Employees on user.Id equals employee.UserId
+                                   join department in _context.Departments on employee.DepartmentId equals department.DepartmentId
+                                   join designation in _context.Designations on employee.DesignationId equals designation.DesignationId
+                                   join shift in _context.Shifts on employee.ShiftId equals shift.ShiftId
+                                   select new GetEmployeesDTO
+                                   {
+                                       EmployeeId = employee.EmployeeId,
+                                       EmployeeCode = employee.EmpCode,
+                                       Name = user.FirstName + " " + user.LastName,
+                                       OfficialEmail = user.Email,
+                                       ContactNumber1 = user.PhoneNumber,
+                                       JoiningDate = employee.JoiningDate,
+                                       Department = department.Name,
+                                       Designation = designation.Name,
+                                       Shift = shift.Name,
+                                   })
+                                   .OrderByDescending(u => u.Name) // Order by Name in descending order
+                                   .ToListAsync();
 
-                            select new UserDetailModel
-                            {
-                                Username = user.UserName,
-                                FirstName = user.FirstName,
-                                LastName = user.LastName,
-                                Email = user.Email,
-                                PhoneNumber = user.PhoneNumber,
-                                UserType = userRole.RoleId,
-                                Password = user.PasswordHash,
-                                IsAdmin = (role.Name.ToUpper() == "ADMIN") ? true : false
-                            };
                 return users;
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message, ex);
+                throw new Exception("Error fetching users.", ex);
             }
         }
+
 
         // for get employee by id
         public EmployeeResponse GetEmployeeById(string employeeId)

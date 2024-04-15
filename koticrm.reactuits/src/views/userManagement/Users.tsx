@@ -34,14 +34,12 @@ const Users = () => {
 
   const GetEmployees = async () => {
     const response = await GetEmployeesList();
+    console.log("response", response.data);
     if(response)
       {
-        setEmployeesList(response);
+        setEmployeesList(response.data);
       }
   }
-
-
-
   return (
     <>
       <ToastContainer />
@@ -96,18 +94,32 @@ const Users = () => {
               <CTable>
                 <CTableHead>
                   <CTableRow>
-                    <CTableDataCell scope="col">User Name</CTableDataCell>
+                  <CTableDataCell scope="col">UserName</CTableDataCell>
+                    {/* <CTableDataCell scope="col">Employee Id</CTableDataCell>
+                    <CTableDataCell scope="col">EmployeeCode</CTableDataCell> */}
                     <CTableDataCell scope="col">Contact No.</CTableDataCell>
-                    <CTableDataCell scope="col">Email</CTableDataCell>
-                    <CTableDataCell scope="col">Actions</CTableDataCell>
+                    <CTableDataCell scope="col">Officail Email</CTableDataCell>
+                    <CTableDataCell scope="col">Joining Date</CTableDataCell>
+                    {/* <CTableDataCell scope="col">Department</CTableDataCell>
+                    <CTableDataCell scope="col">Designation</CTableDataCell> */}
+
+                  <CTableDataCell scope="col">Actions</CTableDataCell>
                   </CTableRow>
                 </CTableHead>
                 <CTableBody>
                   {employeesList?.map((employee: any) => (
                     <CTableRow> 
-                    <CTableDataCell>{employee.username}</CTableDataCell>
-                    <CTableDataCell>{employee.phoneNumber}</CTableDataCell>
-                    <CTableDataCell>{employee.email}</CTableDataCell>
+                    <CTableDataCell>{employee.name}</CTableDataCell>
+                    {/* <CTableDataCell>{employee.id}</CTableDataCell>
+                    <CTableDataCell>{employee.employeeCode}</CTableDataCell> */}
+                    <CTableDataCell>{employee.contactNumber1}</CTableDataCell>
+                    <CTableDataCell>{employee.officialEmail}</CTableDataCell>
+                    <CTableDataCell>{employee.joiningDate}</CTableDataCell>
+                    {/* <CTableDataCell>{employee.department}</CTableDataCell>
+                    <CTableDataCell>{employee.designation}</CTableDataCell> */}
+
+                  
+
                     <CTableDataCell>
                       <Link to={`/users/updateUser/${employee?.employeeId}`}>
                         <MdEditSquare

@@ -21,7 +21,7 @@ export async function GetEmployeeId(){
 export async function GetEmployeesList(){
     try {
         const response = await axiosInstance.get(`/UserAccount/GetUsers`);
-        return response.data.result;
+        return response;
     } catch (error: any) {
         const errorResponse: apiResponse<Employees[]> = {
             data: undefined,

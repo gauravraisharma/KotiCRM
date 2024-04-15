@@ -18,8 +18,20 @@ import { Employee, EmployeeClass } from "../../models/userManagement/employee";
 import { CreateEmployee, GetEmployeeId } from "../../redux-saga/modules/userManagement/apiService";
 import { Department, Designation, Shift } from "../../models/commonModels/SharedModels";
 import { GetDepartments, GetDesignations, GetShifts } from "../../redux-saga/modules/shared/apiService";
+import * as Yup from 'yup';
 
 const CreateOrUpdateUser = () => {
+  //initial values
+  const initialValues = {
+    employeeId: '',
+    joiningDate: '',
+    isRelieved: false,
+    employeeCode: '',
+    isActive: false,
+    relievingDate: ''
+  };
+
+
   // Parameters
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -165,6 +177,15 @@ const CreateOrUpdateUser = () => {
     }
   };
 
+  //validation schema 
+  const validationSchema = Yup.object().shape({
+    employeeId: Yup.number().required('Employee ID is required'),
+    joiningDate: Yup.date().required('Joining Date is required'),
+    employeeCode: Yup.string().required('Employee Code is required'),
+    isActive: Yup.boolean(),
+
+  });
+
   return (
     <>
       <ToastContainer />
@@ -192,7 +213,7 @@ const CreateOrUpdateUser = () => {
           <Formik
             initialValues={formData}
             enableReinitialize
-            // validationSchema={validationSchema}
+            validationSchema={validationSchema}
             onSubmit={handleFormSubmit}
           >
             {({ handleSubmit, isValid, isSubmitting, touched, errors }) => (
@@ -257,11 +278,11 @@ const CreateOrUpdateUser = () => {
                           type="date"
                           id="joiningDate"
                           name="joiningDate"
-                          className="form-control"
-                          //   className={`form-control ${touched.joiningDate && errors.joiningDate
-                          //       ? "is-invalid"
-                          //       : ""
-                          //     }`}
+                          // className="form-control"
+                            className={`form-control ${touched.joiningDate && errors.joiningDate
+                                ? "is-invalid"
+                                : ""
+                              }`}
                           style={{
                             borderBottom: "1px solid gray",
                             borderLeft: "none",
@@ -392,11 +413,11 @@ const CreateOrUpdateUser = () => {
                           type="text"
                           id="name"
                           name="name"
-                          className="form-control"
-                          //   className={`form-control ${touched.name && errors.name
-                          //       ? "is-invalid"
-                          //       : ""
-                          //     }`}
+                          // className="form-control"
+                            className={`form-control ${touched.name && errors.name
+                                ? "is-invalid"
+                                : ""
+                              }`}
                           placeholder="Employee Name"
                           style={{
                             borderBottom: "1px solid gray",
@@ -422,11 +443,11 @@ const CreateOrUpdateUser = () => {
                           type="text"
                           id="panNumber"
                           name="panNumber"
-                          className="form-control"
-                          //   className={`form-control ${touched.panNumber && errors.panNumber
-                          //       ? "is-invalid"
-                          //       : ""
-                          //     }`}
+                          // className="form-control"
+                            className={`form-control ${touched.panNumber && errors.panNumber
+                                ? "is-invalid"
+                                : ""
+                              }`}
                           placeholder="Pan Number"
                           style={{
                             borderBottom: "1px solid gray",
@@ -454,11 +475,11 @@ const CreateOrUpdateUser = () => {
                           type="text"
                           id="fatherName"
                           name="fatherName"
-                          className="form-control"
-                          //   className={`form-control ${touched.fatherName && errors.fatherName
-                          //       ? "is-invalid"
-                          //       : ""
-                          //     }`}
+                          // className="form-control"
+                            className={`form-control ${touched.fatherName && errors.fatherName
+                                ? "is-invalid"
+                                : ""
+                              }`}
                           placeholder="Father Name"
                           style={{
                             borderBottom: "1px solid gray",
@@ -484,11 +505,11 @@ const CreateOrUpdateUser = () => {
                           type="text"
                           id="adharCardNumber"
                           name="adharCardNumber"
-                          className="form-control"
-                          //   className={`form-control ${touched.adharCardNumber && errors.adharCardNumber
-                          //       ? "is-invalid"
-                          //       : ""
-                          //     }`}
+                          // className="form-control"
+                            className={`form-control ${touched.adharCardNumber && errors.adharCardNumber
+                                ? "is-invalid"
+                                : ""
+                              }`}
                           placeholder="Aadhar Number"
                           style={{
                             borderBottom: "1px solid gray",
@@ -604,11 +625,11 @@ const CreateOrUpdateUser = () => {
                           type="text"
                           id="permanentAddress"
                           name="permanentAddress"
-                          className="form-control"
-                          //   className={`form-control ${touched.permanentAddress && errors.permanentAddress
-                          //       ? "is-invalid"
-                          //       : ""
-                          //     }`}
+                          // className="form-control"
+                            className={`form-control ${touched.permanentAddress && errors.permanentAddress
+                                ? "is-invalid"
+                                : ""
+                              }`}
                           placeholder="Permanent Address"
                           style={{
                             borderBottom: "1px solid gray",
@@ -669,11 +690,11 @@ const CreateOrUpdateUser = () => {
                           type="text"
                           id="contactNumber1"
                           name="contactNumber1"
-                          className="form-control"
-                          //   className={`form-control ${touched.contactNumber1 && errors.contactNumber1
-                          //       ? "is-invalid"
-                          //       : ""
-                          //     }`}
+                          // className="form-control"
+                            className={`form-control ${touched.contactNumber1 && errors.contactNumber1
+                                ? "is-invalid"
+                                : ""
+                              }`}
                           placeholder="Contact Number 1"
                           style={{
                             borderBottom: "1px solid gray",
@@ -699,11 +720,11 @@ const CreateOrUpdateUser = () => {
                           type="text"
                           id="officialEmail"
                           name="officialEmail"
-                          className="form-control"
-                          //   className={`form-control ${touched.officialEmail && errors.officialEmail
-                          //       ? "is-invalid"
-                          //       : ""
-                          //     }`}
+                          // className="form-control"
+                            className={`form-control ${touched.officialEmail && errors.officialEmail
+                                ? "is-invalid"
+                                : ""
+                              }`}
                           placeholder="Official Email"
                           style={{
                             borderBottom: "1px solid gray",
@@ -793,11 +814,11 @@ const CreateOrUpdateUser = () => {
                           type="password"
                           id="officialEmailPassword"
                           name="officialEmailPassword"
-                          className="form-control"
-                          //   className={`form-control ${touched.officialEmailPassword && errors.officialEmailPassword
-                          //       ? "is-invalid"
-                          //       : ""
-                          //     }`}
+                          // className="form-control"
+                            className={`form-control ${touched.officialEmailPassword && errors.officialEmailPassword
+                                ? "is-invalid"
+                                : ""
+                              }`}
                           placeholder="Official Email Password"
                           style={{
                             borderBottom: "1px solid gray",
@@ -855,11 +876,11 @@ const CreateOrUpdateUser = () => {
                           type="text"
                           id="skypeId"
                           name="skypeId"
-                          className="form-control"
-                          //   className={`form-control ${touched.skypeId && errors.skypeId
-                          //       ? "is-invalid"
-                          //       : ""
-                          //     }`}
+                          // className="form-control"
+                            className={`form-control ${touched.skypeId && errors.skypeId
+                                ? "is-invalid"
+                                : ""
+                              }`}
                           placeholder="Official Skype"
                           style={{
                             borderBottom: "1px solid gray",
@@ -916,11 +937,11 @@ const CreateOrUpdateUser = () => {
                           type="text"
                           id="bank"
                           name="bank"
-                          className="form-control"
-                          //   className={`form-control ${touched.bank && errors.bank
-                          //       ? "is-invalid"
-                          //       : ""
-                          //     }`}
+                          // className="form-control"
+                            className={`form-control ${touched.bank && errors.bank
+                                ? "is-invalid"
+                                : ""
+                              }`}
                           placeholder="Bank"
                           style={{
                             borderBottom: "1px solid gray",
@@ -974,11 +995,11 @@ const CreateOrUpdateUser = () => {
                           type="text"
                           id="bankAccountNumber"
                           name="bankAccountNumber"
-                          className="form-control"
-                          //   className={`form-control ${touched.bankAccountNumber && errors.bankAccountNumber
-                          //       ? "is-invalid"
-                          //       : ""
-                          //     }`}
+                          // className="form-control"
+                            className={`form-control ${touched.bankAccountNumber && errors.bankAccountNumber
+                                ? "is-invalid"
+                                : ""
+                              }`}
                           placeholder="Account Number"
                           style={{
                             borderBottom: "1px solid gray",
@@ -1006,11 +1027,11 @@ const CreateOrUpdateUser = () => {
                           type="text"
                           id="ifsc"
                           name="ifsc"
-                          className="form-control"
-                          //   className={`form-control ${touched.ifsc && errors.ifsc
-                          //       ? "is-invalid"
-                          //       : ""
-                          //     }`}
+                          // className="form-control"
+                            className={`form-control ${touched.ifsc && errors.ifsc
+                                ? "is-invalid"
+                                : ""
+                              }`}
                           placeholder="IFSC Code"
                           style={{
                             borderBottom: "1px solid gray",
@@ -1066,11 +1087,11 @@ const CreateOrUpdateUser = () => {
                           type="text"
                           id="branch"
                           name="branch"
-                          className="form-control"
-                          //   className={`form-control ${touched.branch && errors.branch
-                          //       ? "is-invalid"
-                          //       : ""
-                          //     }`}
+                          // className="form-control"
+                            className={`form-control ${touched.branch && errors.branch
+                                ? "is-invalid"
+                                : ""
+                              }`}
                           placeholder="Branch"
                           style={{
                             borderBottom: "1px solid gray",
