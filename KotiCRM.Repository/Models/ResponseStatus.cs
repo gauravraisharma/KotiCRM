@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using KotiCRM.Repository.DTOs.UserManagement;
+using System.ComponentModel.DataAnnotations;
 
 namespace KotiCRM.Repository.Models
 {
@@ -18,10 +19,13 @@ namespace KotiCRM.Repository.Models
         public string Message { get; set; }
     }
 
+    public class EmployeeResponseStatus
+    {
+        public string? EmployeeId { get; set; }
+        public string Status { get; set; }
+        public string Message { get; set; }
+    }
 
-  
-
- 
     public class DDListResponse
     {
         public string Status { get; set; }
@@ -84,6 +88,13 @@ namespace KotiCRM.Repository.Models
         public bool IsEdit { get; set; }
         public bool IsDelete { get; set; }
         public bool IsAdd { get; set; }
+    }
+
+    public class EmployeeResponse
+    {
+        public string Status { get; set; }
+        public string Message { get; set; }
+        public EmployeeDTO employeeData { get; set; }
     }
 
 }

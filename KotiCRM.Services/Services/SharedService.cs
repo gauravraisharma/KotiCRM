@@ -46,5 +46,9 @@ namespace KotiCRM.Services.Services
         {
             return await _sharedRepository.GetShiftList();
         }
+        public string GetEmployeeId()
+        {
+            return _sharedRepository.GetEmployeeId();
+        }
     }
 }

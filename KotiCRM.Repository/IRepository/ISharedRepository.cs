@@ -17,5 +17,6 @@ namespace KotiCRM.Repository.IRepository
         Task<IEnumerable<Designation>> GetDesignationList();
         Task<IEnumerable<Bank>> GetBankList();
         Task<IEnumerable<Shift>> GetShiftList();
+        string GetEmployeeId();
     }
 }

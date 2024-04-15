@@ -109,7 +109,7 @@ const Users = () => {
                     <CTableDataCell>{employee.phoneNumber}</CTableDataCell>
                     <CTableDataCell>{employee.email}</CTableDataCell>
                     <CTableDataCell>
-                      {/* <Link to={`/contacts/editContact/${contact?.id}`}> */}
+                      <Link to={`/users/updateUser/${employee?.employeeId}`}>
                         <MdEditSquare
                           style={{
                             color: "green",
@@ -117,7 +117,7 @@ const Users = () => {
                             fontSize: "20px",
                           }}
                         />
-                        {/* </Link> */}
+                      </Link>
                         {/* <Link to={`/contacts/${contact?.id}`}> */}
                         <AiFillEye
                           style={{

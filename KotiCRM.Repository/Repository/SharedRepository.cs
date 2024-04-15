@@ -136,5 +136,60 @@ namespace KotiCRM.Repository.Repository
 
             }
         }
+
+        public string GetEmployeeId()
+        {
+            try
+            {
+                string lastCreatedEmployeeId = "";
+                var lastCreatedEmployee = _context.Employees.OrderByDescending(e => e.EmployeeId).FirstOrDefault();
+                if (lastCreatedEmployee != null && lastCreatedEmployee.EmployeeId != null)
+                {
+                    int employeeId = int.Parse(lastCreatedEmployee.EmployeeId);
+                    if (employeeId <= 0)
+                    {
+                        lastCreatedEmployeeId = "";
+                    }
+                    else
+                    {
+                        lastCreatedEmployeeId = (employeeId + 1).ToString().PadLeft(lastCreatedEmployee.EmployeeId.Length, '0');
+                    }
+                    return lastCreatedEmployeeId;
+                }
+                else
+                {
+                    return lastCreatedEmployeeId = "";
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message, ex);
+            }
+        }
+
+        //public string GetEmployeeId()
+        //{
+        //    try
+        //    {
+
+        //        string lastCreatedEmployeeId = "";
+        //        var lastCreatedEmployee = _context.Employees.OrderByDescending(e => e.EmployeeId).FirstOrDefault();
+        //        if (lastCreatedEmployee != null && lastCreatedEmployee.EmployeeId != null)
+        //        {
+        //            int employeeId = int.Parse(lastCreatedEmployee.EmployeeId);
+        //            if (employeeId <= 0) lastCreatedEmployeeId = "";
+        //            lastCreatedEmployeeId = (employeeId + 1).ToString();
+        //            return lastCreatedEmployeeId;
+        //        }
+        //        else
+        //        {
+        //            return lastCreatedEmployeeId = "";
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception(ex.Message, ex);
+        //    }
+        //}
     }
 }

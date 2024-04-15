@@ -17,7 +17,7 @@ namespace KotiCRM.Services.IServices
         Task<IEnumerable<Designation>> GetDesignationList();
         Task<IEnumerable<Bank>> GetBankList();
         Task<IEnumerable<Shift>> GetShiftList();
-
+        string GetEmployeeId();
 
     }
 }

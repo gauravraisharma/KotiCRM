@@ -94,5 +94,12 @@ namespace KotiCRM.Server.Controllers
         {
             return await _sharedService.GetShiftList();
         }
+
+        [HttpGet]
+        [Route("GetEmployeeId")]
+        public string GetEmployeeId()
+        {
+            return _sharedService.GetEmployeeId();
+        }
     }
 }

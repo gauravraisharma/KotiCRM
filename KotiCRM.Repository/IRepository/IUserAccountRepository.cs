@@ -21,9 +21,12 @@ namespace KotiCRM.Repository.IRepository
         Task<ModulePermissionResponse> GetModulePermission(string userId);
 
         UserDataResponse GetUserDataById(string userId);
-        Task<IEnumerable<UserDetailModel>> GetUsers();
 
         // For Employee
-        Task<ResponseStatus> CreateEmployee(CreateEmployeeDTO createEmployeeDTO);
+        Task<IEnumerable<UserDetailModel>> GetUsers();
+        EmployeeResponse GetEmployeeById(string employeeId);
+        Task<EmployeeResponseStatus> CreateEmployee(CreateEmployeeDTO createEmployeeDTO);
+        Task<EmployeeResponseStatus> UpdateEmployee(CreateEmployeeDTO createEmployeeDTO);
+        ResponseStatus DeleteEmployee(string employeeId);
     }
 }

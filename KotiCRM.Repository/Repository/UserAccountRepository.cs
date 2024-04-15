@@ -761,8 +761,115 @@ namespace KotiCRM.Repository.Repository
 
         }
 
-        //for createEmployee
-        public async Task<ResponseStatus> CreateEmployee(CreateEmployeeDTO createEmployeeDTO)
+
+        // for get employee list
+        public async Task<IEnumerable<UserDetailModel>> GetUsers()
+        {
+            try
+            {
+                var users = from user in _context.Users
+                            join userRole in _context.UserRoles on user.Id equals userRole.UserId
+                            join role in _context.Roles on userRole.RoleId equals role.Id
+
+                            select new UserDetailModel
+                            {
+                                Username = user.UserName,
+                                FirstName = user.FirstName,
+                                LastName = user.LastName,
+                                Email = user.Email,
+                                PhoneNumber = user.PhoneNumber,
+                                UserType = userRole.RoleId,
+                                Password = user.PasswordHash,
+                                IsAdmin = (role.Name.ToUpper() == "ADMIN") ? true : false
+                            };
+                return users;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message, ex);
+            }
+        }
+
+        // for get employee by id
+        public EmployeeResponse GetEmployeeById(string employeeId)
+        {
+            try
+            {
+                if (employeeId == null)
+                {
+                    return new EmployeeResponse
+                    {
+                        Status = "FAILED",
+                        Message = "Db Context is null"
+                    };
+                }
+                var employeeData = (from user in _context.Users
+                                    join employee in _context.Employees on user.Id equals employee.UserId
+                                    join department in _context.Departments on employee.DepartmentId equals department.DepartmentId
+                                    join designation in _context.Designations on employee.DesignationId equals designation.DesignationId
+                                    join shift in _context.Shifts on employee.ShiftId equals shift.ShiftId
+                                    join bank in _context.Banks on employee.BankId equals bank.BankId
+                                    where employee.EmployeeId == employeeId
+                                    select new EmployeeDTO
+                                    {
+                                        EmployeeId = employee.EmployeeId,
+                                        EmployeeCode = employee.EmpCode,
+                                        Name = user.FirstName + " " + user.LastName,
+                                        ProfilePictureURL = employee.ProfilePictureURL,
+                                        FatherName = employee.FatherName,
+                                        GuardianName = employee.GuardianName,
+                                        BloodGroup = employee.BloodGroup,
+                                        DateOfBirth = employee.DateOfBirth,
+                                        JoiningDate = employee.JoiningDate,
+                                        RelievingDate = employee.RelievingDate,
+                                        ContactNumber1 = employee.ContactNumber1,
+                                        ContactNumber2 = employee.ContactNumber2,
+                                        GuardianContactNumber = employee.GuardianContactNumber,
+                                        PersonalEmail = employee.PersonalEmailId,
+                                        OfficialEmail = employee.OfficialEmailId,
+                                        SkypeId = employee.SkypeId,
+                                        AdharCardNumber = employee.AdharCardNumber,
+                                        PanNumber = employee.PanNumber,
+                                        BankAccountNumber = bank.BankAccountNumber,
+                                        Bank = bank.Name,
+                                        Branch = bank.Branch,
+                                        Ifsc = bank.Ifsc,
+                                        DepartmentId = employee.DepartmentId,
+                                        DesignationId = employee.DesignationId,
+                                        ShiftId = employee.ShiftId,
+                                        IsActive = employee.IsActive,
+                                        PermanentAddress = employee.PermanentAddress,
+                                        CorrespondenceAddress = employee.CorrespondenceAddress
+                                    }).FirstOrDefault();
+
+                if (employeeData == null)
+                {
+                    return new EmployeeResponse
+                    {
+                        Status = "FAILED",
+                        Message = "No record found"
+                    };
+                }
+                return new EmployeeResponse
+                {
+                    Status = "SUCCEED",
+                    Message = "Employee record found",
+                    employeeData = employeeData
+                };
+
+            }
+            catch (Exception ex)
+            {
+                return new EmployeeResponse
+                {
+                    Status = "FAILED",
+                    Message = "Something went wrong"
+                };
+            }
+        }
+
+        //for create Employee
+        public async Task<EmployeeResponseStatus> CreateEmployee(CreateEmployeeDTO createEmployeeDTO)
         {
             using var transaction = _context.Database.BeginTransaction(); // Begin transaction
             try
@@ -770,7 +877,7 @@ namespace KotiCRM.Repository.Repository
                 //Check if createEmployeeDTO is null
                 if (createEmployeeDTO == null)
                 {
-                    return new ResponseStatus
+                    return new EmployeeResponseStatus
                     {
                         Status = "FAILED",
                         Message = "Invalid payload"
@@ -796,7 +903,7 @@ namespace KotiCRM.Repository.Repository
                     FirstName = (nameParts.Length >= 2 ? firstName : createEmployeeDTO.Name),
                     LastName = lastName,
                     UserName = username,
-                    Email = createEmployeeDTO.PersonalEmail,
+                    Email = createEmployeeDTO.OfficialEmail,
                     PhoneNumber = createEmployeeDTO.ContactNumber1,
                     UserType = "Employee",
                     Password = createEmployeeDTO.OfficialEmailPassword,
@@ -807,7 +914,7 @@ namespace KotiCRM.Repository.Repository
 
                 if (result.Status == "FAILED")
                 {
-                    return new ResponseStatus
+                    return new EmployeeResponseStatus
                     {
                         Status = "FAILED",
                         Message = result.Message
@@ -845,12 +952,12 @@ namespace KotiCRM.Repository.Repository
                     DateOfBirth = createEmployeeDTO.DateOfBirth,
                     JoiningDate = createEmployeeDTO.JoiningDate,
                     RelievingDate = createEmployeeDTO.RelievingDate,
-                    ContactNumber1 = createEmployeeDTO.ContactNumber1,
+                    ContactNumber1 = createEmployeeDTO.ContactNumber1,                // Remove
                     ContactNumber2 = createEmployeeDTO.ContactNumber2,
                     GuardianContactNumber = createEmployeeDTO.GuardianContactNumber,
                     PersonalEmailId = createEmployeeDTO.PersonalEmail,
-                    OfficialEmailId = createEmployeeDTO.OfficialEmail,
-                    OfficialEmailPassword = createEmployeeDTO.OfficialEmailPassword,
+                    OfficialEmailId = createEmployeeDTO.OfficialEmail,               // Remove
+                    OfficialEmailPassword = createEmployeeDTO.OfficialEmailPassword, // Remove
                     SkypeId = createEmployeeDTO.SkypeId,
                     AdharCardNumber = createEmployeeDTO.AdharCardNumber,
                     PanNumber = createEmployeeDTO.PanNumber,
@@ -868,11 +975,15 @@ namespace KotiCRM.Repository.Repository
                 _context.Employees.Add(employee);
                 await _context.SaveChangesAsync();
 
+                _context.Entry(employee).GetDatabaseValues();
+                string employeeId = employee.EmployeeId;
+
                 // Commit transaction if everything succeeds
                 await transaction.CommitAsync();
 
-                return new ResponseStatus
+                return new EmployeeResponseStatus
                 {
+                    EmployeeId = employeeId,
                     Status = "SUCCEED",
                     Message = "Employee successfully created"
                 };
@@ -882,44 +993,194 @@ namespace KotiCRM.Repository.Repository
                 // Rollback transaction if an exception occurs
                 await transaction.RollbackAsync();
 
-                return new ResponseStatus
+                return new EmployeeResponseStatus
                 {
                     Status = "FAILED",
                     Message = "Failed to create employee"
                 };
 
             }
-
-            
-
         }
 
-        //userList
-        public async Task<IEnumerable<UserDetailModel>> GetUsers()
+        // for Update employee
+        public async Task<EmployeeResponseStatus> UpdateEmployee(CreateEmployeeDTO createEmployeeDTO)
         {
+            using var transaction = _context.Database.BeginTransaction(); // Begin transaction
             try
             {
-                var users = from user in _context.Users
-                            join userRole in _context.UserRoles on user.Id equals userRole.UserId
-                            join role in _context.Roles on userRole.RoleId equals role.Id
+                //Check if createEmployeeDTO is null
+                if (createEmployeeDTO == null)
+                {
+                    return new EmployeeResponseStatus
+                    {
+                        Status = "FAILED",
+                        Message = "Invalid payload"
+                    };
+                }
+                var userId = "";
 
-                            select new UserDetailModel
-                            {
-                                Username = user.UserName,
-                                FirstName = user.FirstName,
-                                LastName = user.LastName,
-                                Email = user.Email,
-                                PhoneNumber = user.PhoneNumber,
-                                UserType = userRole.RoleId,
-                                Password = user.PasswordHash,
-                                IsAdmin = (role.Name.ToUpper() == "ADMIN") ? true : false
-                            };
-                return users;
+                // For extract FirstName and LastName from Name
+                string[] nameParts = createEmployeeDTO.Name.Split(' ');
+                var firstName = "";
+                var lastName = "";
+                var username = "";
+                if (nameParts.Length >= 2)
+                {
+                    firstName = nameParts.FirstOrDefault();
+                    lastName = nameParts.LastOrDefault();
+                }
+                username = (nameParts.Length >= 2 ? firstName : createEmployeeDTO.Name);
+
+
+                ApplicationUserModel user = new ApplicationUserModel
+                {
+                    FirstName = (nameParts.Length >= 2 ? firstName : createEmployeeDTO.Name),
+                    LastName = lastName,
+                    UserName = username,
+                    Email = createEmployeeDTO.OfficialEmail,
+                    PhoneNumber = createEmployeeDTO.ContactNumber1,
+                    UserType = "Employee",
+                    Password = createEmployeeDTO.OfficialEmailPassword,
+                    CreatedBy = ""
+                };
+
+                var result = await CreateApplicationUser(user);
+
+                if (result.Status == "FAILED")
+                {
+                    return new EmployeeResponseStatus
+                    {
+                        Status = "FAILED",
+                        Message = result.Message
+                    };
+                }
+                var createdUser = await _userManager.FindByNameAsync(username);
+                userId = createdUser.Id;
+
+                Bank bank = new()
+                {
+                    Name = createEmployeeDTO.Bank,
+                    BankAccountNumber = createEmployeeDTO.BankAccountNumber,
+                    Branch = createEmployeeDTO.Branch,
+                    Ifsc = createEmployeeDTO.Ifsc,
+                    OrganizationId = createdUser.OrganizationId,
+                };
+
+                _context.Banks.Add(bank);
+                await _context.SaveChangesAsync();
+
+                _context.Entry(bank).GetDatabaseValues();
+                int newBankId = (int)bank.BankId;
+
+
+                Employee employee = new()
+                {
+                    EmployeeId = createEmployeeDTO.EmployeeId,
+                    EmpCode = createEmployeeDTO.EmployeeCode,
+                    UserId = userId,
+                    Name = createEmployeeDTO.Name,
+                    ProfilePictureURL = createEmployeeDTO.ProfilePictureURL,
+                    FatherName = createEmployeeDTO.FatherName,
+                    GuardianName = createEmployeeDTO.GuardianName,
+                    BloodGroup = createEmployeeDTO.BloodGroup,
+                    DateOfBirth = createEmployeeDTO.DateOfBirth,
+                    JoiningDate = createEmployeeDTO.JoiningDate,
+                    RelievingDate = createEmployeeDTO.RelievingDate,
+                    ContactNumber1 = createEmployeeDTO.ContactNumber1,                // Remove
+                    ContactNumber2 = createEmployeeDTO.ContactNumber2,
+                    GuardianContactNumber = createEmployeeDTO.GuardianContactNumber,
+                    PersonalEmailId = createEmployeeDTO.PersonalEmail,
+                    OfficialEmailId = createEmployeeDTO.OfficialEmail,               // Remove
+                    OfficialEmailPassword = createEmployeeDTO.OfficialEmailPassword, // Remove
+                    SkypeId = createEmployeeDTO.SkypeId,
+                    AdharCardNumber = createEmployeeDTO.AdharCardNumber,
+                    PanNumber = createEmployeeDTO.PanNumber,
+                    DepartmentId = createEmployeeDTO.DepartmentId,
+                    DesignationId = createEmployeeDTO.DesignationId,
+                    BankId = newBankId,
+                    ShiftId = createEmployeeDTO.ShiftId,
+                    IsActive = createEmployeeDTO.IsActive,
+                    PermanentAddress = createEmployeeDTO.PermanentAddress,
+                    CorrespondenceAddress = createEmployeeDTO.CorrespondenceAddress,
+                    CreateBy = userId,
+                    CreatedDate = DateTime.UtcNow,
+                };
+
+                _context.Employees.Add(employee);
+                await _context.SaveChangesAsync();
+
+                _context.Entry(employee).GetDatabaseValues();
+                string employeeId = employee.EmployeeId;
+
+                // Commit transaction if everything succeeds
+                await transaction.CommitAsync();
+
+                return new EmployeeResponseStatus
+                {
+                    EmployeeId = employeeId,
+                    Status = "SUCCEED",
+                    Message = "Employee successfully created"
+                };
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message, ex);
+                // Rollback transaction if an exception occurs
+                await transaction.RollbackAsync();
+
+                return new EmployeeResponseStatus
+                {
+                    Status = "FAILED",
+                    Message = "Failed to create employee"
+                };
+
             }
+        }
+
+        // for delete employee
+        public ResponseStatus DeleteEmployee(string employeeId)
+        {
+            try
+            {
+                if (_context == null)
+                {
+                    return new ResponseStatus
+                    {
+                        Status = "FAILED",
+                        Message = "Db Context is null"
+                    };
+                }
+
+                var existingEmployee = (from employee in _context.Employees
+                  where employee.EmployeeId == employeeId
+                  select employee).FirstOrDefault(employee => employee.IsActive == true);
+
+                if (existingEmployee == null)
+                {
+                    return new ResponseStatus
+                    {
+                        Status = "FAILED",
+                        Message = "No record found"
+                    };
+                }
+
+                _context.Employees.Remove(existingEmployee);
+                _context.SaveChanges();
+                return new ResponseStatus
+                {
+                    Status = "SUCCEED",
+                    Message = "Employee record deleted successfully"
+                };
+
+            }
+            catch (Exception ex)
+            {
+                return new ResponseStatus
+                {
+                    Status = "FAILED",
+                    Message = "Something went wrong"
+                };
+            }
+
         }
 
     }

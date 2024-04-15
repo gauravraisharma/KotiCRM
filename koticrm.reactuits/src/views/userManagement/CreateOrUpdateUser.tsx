@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useId, useState } from "react";
 import {
   CButton,
   CCard,
@@ -15,7 +15,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import { Employee, EmployeeClass } from "../../models/userManagement/employee";
-import { CreateEmployee } from "../../redux-saga/modules/userManagement/apiService";
+import { CreateEmployee, GetEmployeeId } from "../../redux-saga/modules/userManagement/apiService";
 import { Department, Designation, Shift } from "../../models/commonModels/SharedModels";
 import { GetDepartments, GetDesignations, GetShifts } from "../../redux-saga/modules/shared/apiService";
 
@@ -29,10 +29,11 @@ const CreateOrUpdateUser = () => {
 
   // States
   const [formData, setFormData] = useState<Employee>(new EmployeeClass());
-  const [employeeCount, setEmployeeCount] = useState(0);
+  // const [employeeCount, setEmployeeCount] = useState(0);
   const [employeeId, setEmployeeId] = useState("");
   const [isActiveChecked, setIsActiveChecked] = useState(true);
   const [isRelievedChecked, setIsRelievedChecked] = useState(false);
+  const [relievingDateRequired, setRelievingDateRequired] = useState(false);
   const [departmentList, setDepartmentList] = useState<Department[] | undefined>([]);
   const [designationList, setDesignationList] = useState<Designation[] | undefined>([]);
   const [shiftList, setShiftList] = useState<Shift[] | undefined>([]);
@@ -44,30 +45,35 @@ const CreateOrUpdateUser = () => {
 
   // Effects
   useEffect(() => {
-    const employeeId = generateEmployeeId();
-    setEmployeeId(employeeId);
-    if (employeeId !== "0") {
-      const employeeCode = generateEmployeeCode("tech", 3, employeeId);
-      formData.employeeCode = employeeCode;
-    }
-  }, []);
-
-  useEffect(() => {
+    getEmployeeId();
     getDepartmentList();
     getDesignationList();
     getShiftList();
   },[]);
+
+  useEffect(() => {
+    if (employeeId != null) {
+      const employeeCode = generateEmployeeCode("tech", departmentId, employeeId);
+      formData.employeeCode = employeeCode;
+    }
+  }, [employeeId, departmentId]);
+
+  useEffect(() => {
+    if(userId){
+
+    }
+  })
 
   // Handlers
   const handleCheckbox = (event: any) => {
     const { id, checked } = event.target;
 
     if (id === "isActive" && checked) {
-      // If Active is checked, uncheck isRelieved
       setIsRelievedChecked(false);
+      setRelievingDateRequired(false);
     } else if (id === "isRelieved" && checked) {
-      // If isRelieved is checked, uncheck Active
       setIsActiveChecked(false);
+      setRelievingDateRequired(true);
     }
 
     // Update the checked status of the corresponding checkbox
@@ -78,14 +84,11 @@ const CreateOrUpdateUser = () => {
     }
   };
 
-  // Generate Employee Number
-  const generateEmployeeId = () => {
-    const paddedCount = String(employeeCount).padStart(7, "0"); // Ensure 8 characters with leading zeros
-    const employeeId = `0000000${paddedCount}`.slice(-8); // Ensure exactly 8 characters
-    setEmployeeCount((prevCount) => prevCount + 1); // Increment employee count for uniqueness
-
-    // employeeList[employeeList.length - 1].id;
-    return employeeId;
+  // Generate EmployeeId
+  const getEmployeeId = async () => {
+    const employeeId = await GetEmployeeId();
+    setEmployeeId(employeeId.data);
+    formData.employeeId = employeeId.data;
   };
 
   // Generate EmployeeCode
@@ -94,20 +97,6 @@ const CreateOrUpdateUser = () => {
     departmentId: number,
     employeeId: string
   ) => {
-    // Generate a random 4-letter combination for the organization name
-    // const generateRandomLetters = () => {
-    //     const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    //     let result = '';
-    //     for (let i = 0; i < 4; i++) {
-    //         result += letters.charAt(Math.floor(Math.random() * letters.length));
-    //     }
-    //     return result;
-    // };
-
-    // // Format employee code
-    // const randomLetters = generateRandomLetters();
-    // return `${randomLetters}-EMP-${departmentId}-${employeeId.padStart(8, '0')}`;
-
     const name = organizationName.toUpperCase();
     return `${name}-EMP-${departmentId}-${employeeId}`;
   };
@@ -156,10 +145,11 @@ const CreateOrUpdateUser = () => {
       employee.departmentId = departmentId;
       employee.designationId = designationId;
       employee.shiftId = shiftId;
-      console.log("employee :" , employee);
       await CreateEmployee(employee)
-      .then(() => {
+      .then((response) => {
         // Handle success response
+        console.log("response", response);
+        console.log("employeeId", response.data?.employeeId);
         toast.success("Employee created successfully");
       })
       .catch((error) => {
@@ -183,7 +173,7 @@ const CreateOrUpdateUser = () => {
           <div className="d-flex justify-content-between align-items-center">
             <div>
               <h5 className="mb-0">
-                {userId ? "Update" : "Create"} User
+                {userId == null ? "Create" : "Update"} User
               </h5>
             </div>
             <div className="text-end">
@@ -241,7 +231,6 @@ const CreateOrUpdateUser = () => {
                           type="number"
                           id="employeeId"
                           name="employeeId"
-                          value={employeeId}
                           className="form-control"
                           disabled
                           style={{
@@ -296,7 +285,9 @@ const CreateOrUpdateUser = () => {
                           id="isRelieved"
                           name="isRelieved"
                           label="isRelieved"
+                          checked={isRelievedChecked}
                           onChange={handleCheckbox}
+                          disabled={!isActiveChecked} 
                         />
                         <ErrorMessage
                           name="isRelieved"
@@ -349,8 +340,8 @@ const CreateOrUpdateUser = () => {
                         <CFormCheck
                           id="isActive"
                           label="Active"
-                          checked={isActiveChecked} // Set checked status based on isActiveChecked state
-                          onChange={() => setIsActiveChecked(!isActiveChecked)} // Toggle isActiveChecked state
+                          checked={isActiveChecked}
+                          onChange={handleCheckbox}
                         />
                         <ErrorMessage
                           name="isActive"

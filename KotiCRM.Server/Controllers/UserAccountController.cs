@@ -177,8 +177,27 @@ namespace KotiCRM.Server.Controllers
             return Ok(dbResponse);
         }
 
-        // It will create employee
-        // [Authorize(Roles = "Administrator")]
+
+        //This method is used to get List of Employees
+        [HttpGet]
+        [Route("GetUsers")]
+        public ActionResult GetUsers()
+        {
+            var users = _accountService.GetUsers();
+
+            return Ok(users);
+        }
+
+        //This method is used to get Employee by id
+        [HttpGet]
+        [Route("GetEmployeeById/{employeeId}")]
+        public ActionResult GetEmployeeById(string employeeId)
+        {
+            var response = _accountService.GetEmployeeById(employeeId);
+            return Ok(response);
+        }
+
+        // This method is used to create Employee
         [HttpPost]
         [Route("CreateEmployee")]
         public async Task<ActionResult> CreateEmployee(CreateEmployeeDTO createEmployeeDTO)
@@ -198,18 +217,39 @@ namespace KotiCRM.Server.Controllers
                 return BadRequest(responseStatus.Message);
             }
         }
-        // [Authorize(Roles = "Administrator")]
-        //This method is used to get List of Roles
-        [HttpGet]
-        [Route("GetUsers")]
-        public ActionResult GetUsers()
-        {
-            var users = _accountService.GetUsers();
 
-            return Ok(users);
+        // This method is used to update Employee
+        [HttpPut]
+        [Route("UpdateEmployee")]
+        public async Task<ActionResult> UpdateEmployee(CreateEmployeeDTO createEmployeeDTO)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest("Please pass the valid Input.");
+            }
+            var responseStatus = await _accountService.CreateEmployee(createEmployeeDTO);
+
+            if (responseStatus.Status == "SUCCEED")
+            {
+                return Ok(responseStatus);
+            }
+            else
+            {
+                return BadRequest(responseStatus.Message);
+            }
         }
 
-
-
+        // This method is used to delete Employee
+        [HttpGet]
+        [Route("DeleteEmployee/{employeeId}")]
+        public ActionResult DeleteEmployee(string employeeId)
+        {
+            var dbResponse = _accountService.DeleteEmployee(employeeId);
+            if (dbResponse.Status == "FAILED")
+            {
+                return BadRequest();
+            }
+            return Ok(dbResponse);
+        }
     }
 }

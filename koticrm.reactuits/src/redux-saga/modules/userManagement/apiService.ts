@@ -4,7 +4,35 @@ import { Employee } from "../../../models/userManagement/employee";
 import { Employees } from "../../../models/userManagement/employees";
 
 
+export async function GetEmployeeId(){
+    try {
+        const response = await axiosInstance.get(`/Shared/GetEmployeeId`);
+        return response;
+    } catch (error: any) {
+        const errorResponse = {
+            data: undefined,
+            status: 500,
+            statusText: error.message
+        };
+        return errorResponse;
+    }
+}
+
 export async function GetEmployeesList(){
+    try {
+        const response = await axiosInstance.get(`/UserAccount/GetUsers`);
+        return response.data.result;
+    } catch (error: any) {
+        const errorResponse: apiResponse<Employees[]> = {
+            data: undefined,
+            status: 500,
+            statusText: error.message
+        };
+        return errorResponse;
+    }
+}
+
+export async function GetEmployeeById(){
     try {
         const response = await axiosInstance.get(`/UserAccount/GetUsers`);
         return response.data.result;
