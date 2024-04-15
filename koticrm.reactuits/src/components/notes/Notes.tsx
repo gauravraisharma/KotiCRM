@@ -138,11 +138,13 @@ import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { BsClockFill } from "react-icons/bs";
+import 'moment-timezone' 
 import {
   createNotesRequest,
   getNotes,
 } from "../../redux-saga/modules/notes/action";
 import { formatDate } from "../../utils/Shared/DateTransform";
+import moment from "moment";
 
 interface NoteProps {
   getNotesCount: (data: string) => void;
@@ -158,10 +160,12 @@ const Notes: React.FC<NoteProps> = ({
   const dispatch = useDispatch();
   const notes = useSelector((state: any) => state.noteReducer.notes);
   const userId = useSelector((state: any) => state.authReducer.userId);
-  const timezone = useSelector((state: any) => state.authReducer.timezone);
+  const timezone = useSelector((state: any) => state.sharedReducer.timezone);
+  console.log(timezone)
   
   const [noteDescription, setNoteDescription] = useState("");
 
+  
   const currentDate: Date = new Date();
   const formattedDateTime: string = currentDate.toISOString().slice(0, -1);
   const handleNoteSave = () => {
@@ -213,7 +217,9 @@ const Notes: React.FC<NoteProps> = ({
                     <div className="mt-2 mx-5 d-flex align-items-center">
                       <BsClockFill color="#3c4b64" className="mx-1" />
                       <span className="mx-1">
-                        {formatDate(note.dateOfNote, "DD/MM/YYYY HH:mm", timezone)}
+                        {/* {formatDate(note.dateOfNote, "DD/MM/YYYY HH:mm", timezone)} */}
+                        {moment.utc(note.dateOfNote).tz(timezone).format('DD/MM/YYYY hh:mm A')}
+
                       </span>
                       <span className="mx-1">by</span>
                       <span className="mx-1">

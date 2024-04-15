@@ -25,7 +25,7 @@ export function* workUpdateTimezone(action: actionPayloadModel) : Generator<any>
     }
     
   } catch (error) {
-    toast.error('SomethingWent Wrong, Please try after sometime')
+    toast.error('Something Went Wrong, Please try after sometime')
     }
 }
 
