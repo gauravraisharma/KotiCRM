@@ -15,26 +15,45 @@ import "../../css/style.css";
 import { useDispatch } from "react-redux";
 import { useSelector } from 'react-redux';
 import { getOrganization, updateTimeZone } from '../../redux-saga/modules/shared/action';
+import moment from 'moment';
+import 'moment-timezone';
+import Select from 'react-select'
+
 
 const Timezone: React.FC = () => {
   const dispatch = useDispatch();
-  const [selectedTimezone, setSelectedTimezone] = useState(
-    Intl.DateTimeFormat().resolvedOptions().timeZone
-  );
-  const [timezone, setTimezone] = useState('')
-  const handleTimezone = (selectedItem: any) => {
-    const regex = /\+(\d{1,2}:\d{2})/;
-    const match = regex.exec(selectedItem.label);
-
-    if (match && match.length > 1) {
-      const extractedTimezone = match[0];
-      setSelectedTimezone(selectedItem.value);
-      setTimezone(extractedTimezone)
-
-    };
-
-  }
+  //Fetch data from redux
+  const timeZone = useSelector((state: any) => state.sharedReducer.timezone);
   const organization = useSelector((state: any) => state.sharedReducer.organization);
+
+
+  // const [selectedTimezone, setSelectedTimezone] = useState(
+  //   Intl.DateTimeFormat().resolvedOptions().timeZone
+  // );
+
+
+  const [timezone, setTimezone] = useState({ value: timeZone, label: timeZone })
+
+  const handleTimezone = (selectedItem: any) => {
+    debugger
+    // const regex = /\+(\d{1,2}:\d{2})/;
+    // const match = regex.exec(selectedItem.label);
+
+    // if (match && match.length > 1) {
+    //   const extractedTimezone = match[0];
+      // setSelectedTimezone(selectedItem.value);
+      setTimezone(selectedItem.value)
+  }
+
+  //All timezones
+  const allTimeZones = moment.tz.names().map(timezone => ({
+    value: timezone,
+    label: timezone
+  }));
+
+
+
+
   var orgDetails: OrganizationModel | undefined;
 
   if (organization) {
@@ -44,6 +63,7 @@ const Timezone: React.FC = () => {
     }
   }
   const saveSettings = () => {
+    debugger
     if (orgDetails) {
       const organizationDetail: OrganizationModel = {
         id: orgDetails.id,
@@ -60,7 +80,6 @@ const Timezone: React.FC = () => {
         billingCountry: orgDetails.billingCountry
       };
       dispatch(updateTimeZone(orgDetails.id, organizationDetail))
-      // alert("To see the timezone changes in action, please logout and login again");
     } else {
       console.error("orgDetails is undefined");
     }
@@ -86,10 +105,18 @@ const Timezone: React.FC = () => {
             <CCardBody>
               <CRow className="mb-3">
                 <div className="select-wrapper">
-                  <TimezoneSelect
+                  {/* <TimezoneSelect
                     value={selectedTimezone}
                     onChange={handleTimezone}
-                  />
+                  /> */}
+                    <Select 
+                    defaultValue= {timezone}
+                    onChange={handleTimezone}
+                    options={allTimeZones} 
+                    isClearable
+                    isSearchable
+                    />
+
                 </div>
               </CRow>
               <div className="text-right">

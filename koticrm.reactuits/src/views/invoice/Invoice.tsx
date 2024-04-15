@@ -34,6 +34,9 @@ import { getNotes } from "../../redux-saga/modules/notes/action";
 import { formatDate } from "../../utils/Shared/DateTransform";
 import { Link } from "react-router-dom";
 import { getContacts } from "../../redux-saga/modules/contact/action";
+import moment from "moment";
+import 'moment-timezone' 
+
 
 interface InvoiceProps {
   getInvoiceCount: (data: string) => void;
@@ -52,7 +55,7 @@ const InvoiceComponent: React.FC<InvoiceProps> = ({
   const [invoiceId, setInvoiceId] = useState();
 
   const invoices = useSelector((state: any) => state.invoiceReducer.invoices);
-  const timezone = useSelector((state: any) => state.authReducer.timezone);
+  const timezone = useSelector((state: any) => state.sharedReducer.timezone);
 
   const handleCreateNewInvoice = () => {
     setShowCreateInvoice(true);
@@ -219,11 +222,12 @@ const InvoiceComponent: React.FC<InvoiceProps> = ({
                             {getDates(invoiceModel.invoice?.invoiceDate)}
                           </CTableDataCell>
                           <CTableDataCell>
-                            {formatDate(
+                          {/* formatDate(
                               invoiceModel.invoice?.dueDate,
                               "DD/MM/YYYY HH:mm",
                               timezone
-                            )}
+                            ) */}
+                            {moment.utc(invoiceModel.invoice?.dueDate).tz(timezone).format('DD/MM/YYYY hh:mm A')}
                           </CTableDataCell>
                           <CTableDataCell>
                             {invoiceModel.invoice?.status === 3 ? (<MdEditSquare
@@ -283,11 +287,7 @@ const InvoiceComponent: React.FC<InvoiceProps> = ({
                             {getDates(invoiceModel.invoice?.invoiceDate)}
                           </CTableDataCell>
                           <CTableDataCell>
-                            {formatDate(
-                              invoiceModel.invoice?.dueDate,
-                              "DD/MM/YYYY HH:mm",
-                              timezone
-                            )}
+                            {moment.utc(invoiceModel.invoice?.invoiceDate).tz(timezone).format('DD/MM/YYYY hh:mm A')}
                           </CTableDataCell>
                           <CTableDataCell>
                             {invoiceModel.invoice?.status === 3 ? (<MdEditSquare

@@ -16,11 +16,12 @@ const INITIAL_STATE: authState = {
 
 const authReducer: Reducer<authState, AppAction> = (state: authState = INITIAL_STATE, action: AppAction): authState => {
     let loginPayload;
+    
     switch (action.type) {
-         case UPDATE_TIMEZONE_SUCCESS: 
-        return {...state,
-            timezone:(action as actionPayloadModel).payload,
-            }    
+        //  case UPDATE_TIMEZONE_SUCCESS: 
+        // return {...state,
+        //     timezone:(action as actionPayloadModel).payload,
+        //     }    
         case LOGIN_SUCCESS:
             loginPayload = (action as actionPayloadModel).payload;
             if (loginPayload && loginPayload.status === 'SUCCEED') { // Simplify condition

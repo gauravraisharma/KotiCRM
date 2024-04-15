@@ -23,6 +23,9 @@ import { formatDate } from "../../utils/Shared/DateTransform";
 import { getAttachments } from "../../redux-saga/modules/attachment/action";
 import { IoMdDownload } from "react-icons/io";
 import { DownloadAttachmentAsync } from "../../redux-saga/modules/attachment/apiService";
+import moment from "moment";
+import 'moment-timezone' 
+
 // import { GrDownload } from "react-icons/gr";
 
 interface Props {
@@ -34,7 +37,7 @@ const Attachments = ({ accountId, getAttachmentsCount }: Props) => {
   // getAttachmentsCount,
   const dispatch = useDispatch();
   const fetchedAttachments = useSelector((state: any) => state.attachmentReducer.attachments);
-  const timezone = useSelector((state: any) => state.authReducer.timezone);
+  const timezone = useSelector((state: any) => state.sharedReducer.timezone);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const accountOwner = useSelector(
     (state: any) => state.accountReducer.accountOwner
@@ -154,7 +157,9 @@ const Attachments = ({ accountId, getAttachmentsCount }: Props) => {
         {getOwnerName(attachment.userID)}
       </CTableDataCell>
       <CTableDataCell>
-        {formatDate(attachment.dateAdded, 'DD/MM/YYYY HH:mm', timezone)}
+        {/* {formatDate(attachment.dateAdded, 'DD/MM/YYYY HH:mm', timezone)} */}
+        {moment.utc(attachment.dateAdded).tz(timezone).format('DD/MM/YYYY hh:mm A')}
+
       </CTableDataCell>
       <CTableDataCell>
         {getFileSizeAndLabel(attachment.fileSize)}

@@ -9,15 +9,16 @@ const INITIAL_STATE : sharedState = {
    industries:[],
    organization:[],
    sidebarToggle:true,
+   timezone : ''
   };
 
 
-const sharedReducer: Reducer<sharedState, AppAction> = (state: sharedState = INITIAL_STATE, action: AppAction): sharedState => {
+const sharedReducer: Reducer<sharedState, AppAction> = (state: sharedState = INITIAL_STATE, action: any): sharedState => {
     switch (action.type) {
-        // case UPDATE_TIMEZONE_SUCCESS: 
-        // return {...state,
-        //     refreashData: true,
-        //     }    
+        case UPDATE_TIMEZONE_SUCCESS: 
+        return {...state,
+            timezone: action.timeZone
+            }    
     case GET_INDUSTRY_SUCCESS:
         return {
             ...state,

@@ -4,4 +4,5 @@ export interface sharedState{
     industries:[],
     organization:[],
     sidebarToggle:boolean,
+    timezone : ''
 }
