@@ -18,7 +18,7 @@ import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { AiFillEye } from "react-icons/ai";
 
-import { MdDelete, MdEditSquare } from "react-icons/md";
+import { MdDelete, MdEdit, MdEditSquare } from "react-icons/md";
 import InvoiceTemplate from "../../pdf-template/InvoiceTemplate";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -38,9 +38,8 @@ import { Link } from "react-router-dom";
 import { getContacts } from "../../redux-saga/modules/contact/action";
 import ReactDatePicker from "react-datepicker";
 // import moment from "moment";
-// import 'moment-timezone' 
-import moment from 'moment-timezone'
-
+// import 'moment-timezone'
+import moment from "moment-timezone";
 
 interface InvoiceProps {
   getInvoiceCount: (data: string) => void;
@@ -77,25 +76,41 @@ const Invoices: React.FC<InvoiceProps> = ({
   const [endDate, setEndDate] = useState(getLastDayOfMonth());
 
   const invoices = useSelector((state: any) => state.invoiceReducer.invoices);
-  const invoiceStatuses = useSelector((state: any) => state.invoiceReducer.invoiceStatus);
-  const fetchedAccounts = useSelector((state: any) => state.accountReducer.accounts);
+  const invoiceStatuses = useSelector(
+    (state: any) => state.invoiceReducer.invoiceStatus
+  );
+  const fetchedAccounts = useSelector(
+    (state: any) => state.accountReducer.accounts
+  );
   const timezone = useSelector((state: any) => state.sharedReducer.timezone);
-  const invoiceStatus = useSelector((state: any) => state.invoiceReducer.invoiceStatus);
-  const invoiceCreateResponse = useSelector((state: any) => state.invoiceReducer.createInvoiceResponse);
-  const invoiceUpdateResponse = useSelector((state: any) => state.invoiceReducer.updateInvoiceResposne);
-  const invoiceDeleteResponse = useSelector((state: any) => state.invoiceReducer.deleteInvoiceResponse);
-  const isLoading = useSelector((state:any)=> state.invoiceReducer.isLoading)
+  const invoiceStatus = useSelector(
+    (state: any) => state.invoiceReducer.invoiceStatus
+  );
+  const invoiceCreateResponse = useSelector(
+    (state: any) => state.invoiceReducer.createInvoiceResponse
+  );
+  const invoiceUpdateResponse = useSelector(
+    (state: any) => state.invoiceReducer.updateInvoiceResposne
+  );
+  const invoiceDeleteResponse = useSelector(
+    (state: any) => state.invoiceReducer.deleteInvoiceResponse
+  );
+  const isLoading = useSelector((state: any) => state.invoiceReducer.isLoading);
 
-  let createdAndPending = 0, paid = 0;
+  let createdAndPending = 0,
+    paid = 0;
   const invoiceCount = invoices?.length;
-  invoices.map(invoiceWithItems => {
+  invoices.map((invoiceWithItems) => {
     const currentInvoiceItem = invoiceWithItems.invoiceItems;
-    if (invoiceWithItems.invoice.status === 1 || invoiceWithItems.invoice.status === 2) {
-      currentInvoiceItem.map(invoiceItem => {
+    if (
+      invoiceWithItems.invoice.status === 1 ||
+      invoiceWithItems.invoice.status === 2
+    ) {
+      currentInvoiceItem.map((invoiceItem) => {
         createdAndPending += invoiceItem.total;
       });
     } else if (invoiceWithItems.invoice.status === 3) {
-      currentInvoiceItem.map(invoiceItem => {
+      currentInvoiceItem.map((invoiceItem) => {
         paid += invoiceItem.total;
       });
     }
@@ -136,7 +151,7 @@ const Invoices: React.FC<InvoiceProps> = ({
   };
 
   const handleAccountChange = (event) => {
-    if (event.target.value === '0') {
+    if (event.target.value === "0") {
       setAccountID(null);
     } else {
       setAccountID(event.target.value);
@@ -144,7 +159,7 @@ const Invoices: React.FC<InvoiceProps> = ({
   };
 
   const handleStatusChange = (event) => {
-    if (event.target.value === '0') {
+    if (event.target.value === "0") {
       setStatus(null);
     } else {
       setStatus(event.target.value);
@@ -169,10 +184,19 @@ const Invoices: React.FC<InvoiceProps> = ({
 
   useEffect(() => {
     dispatch(getInvoices(accountID, status, startDate, endDate));
-  }, [dispatch, accountID, status, startDate, endDate, invoiceCreateResponse, invoiceDeleteResponse, invoiceUpdateResponse]);
+  }, [
+    dispatch,
+    accountID,
+    status,
+    startDate,
+    endDate,
+    invoiceCreateResponse,
+    invoiceDeleteResponse,
+    invoiceUpdateResponse,
+  ]);
 
   useEffect(() => {
-    setAccountID(accountId)
+    setAccountID(accountId);
   }, [accountId]);
 
   useEffect(() => {
@@ -192,53 +216,92 @@ const Invoices: React.FC<InvoiceProps> = ({
 
   return (
     <div>
-        {isLoading && (
+      {isLoading && (
         <div className="spinner-backdrop">
-          <CSpinner size="sm"
+          <CSpinner
+            size="sm"
             color="white"
-            style={{ width: '5rem', height: '5rem', borderWidth: '0.60rem', zIndex: '9999' }}
+            style={{
+              width: "5rem",
+              height: "5rem",
+              borderWidth: "0.60rem",
+              zIndex: "9999",
+            }}
           />
         </div>
       )}
       <CCard className="d-flex flex-row justify-content-between m-1 p-2">
-        <div>
-          <label htmlFor="accountId" className="form-label fw-bold">Select Account</label>
-          <CFormSelect className="mb-0" aria-label="Select Account" onChange={handleAccountChange}>
+        <div style={{flex:'1',marginRight:'12px'}}>
+          <label htmlFor="accountId" className="form-label fw-bold">
+            Select Account
+          </label>
+          <CFormSelect
+            className="mb-0"
+            aria-label="Select Account"
+            onChange={handleAccountChange}
+          >
             <option value={0}>Select Account...</option>
-            {fetchedAccounts.map(fetchedAccount => (
-              <option key={fetchedAccount.id} value={fetchedAccount.id}>{fetchedAccount.accountName}</option>
+            {fetchedAccounts.map((fetchedAccount) => (
+              <option key={fetchedAccount.id} value={fetchedAccount.id}>
+                {fetchedAccount.accountName}
+              </option>
             ))}
           </CFormSelect>
         </div>
-        <div>
-          <label htmlFor="status" className="form-label fw-bold">Select Status</label>
-          <CFormSelect className="mb-0" aria-label="Select Status" onChange={handleStatusChange}>
+        <div style={{flex:'1',marginRight:'12px'}}>
+          <label htmlFor="status" className="form-label fw-bold">
+            Select Status
+          </label>
+          <CFormSelect
+            className="mb-0"
+            aria-label="Select Status"
+            onChange={handleStatusChange}
+          >
             <option value={0}>Select Status...</option>
-            {invoiceStatuses.map(invoiceStatus => (
-              <option key={invoiceStatus.value} value={invoiceStatus.value}>{invoiceStatus.name}</option>
+            {invoiceStatuses.map((invoiceStatus) => (
+              <option key={invoiceStatus.value} value={invoiceStatus.value}>
+                {invoiceStatus.name}
+              </option>
             ))}
           </CFormSelect>
         </div>
-        <div>
+        <div style={{flex:'1',marginRight:'12px'}}>
           <div>
-            <label htmlFor="startDate" className="form-label fw-bold">Start Date</label>
+            <label htmlFor="startDate" className="form-label fw-bold">
+              Start Date
+            </label>
           </div>
-          <div>
-            <ReactDatePicker selected={startDate} onChange={(date: Date) => setStartDate(date.toISOString()!)} className="form-control" />
+          <div className="datePicker">
+            <ReactDatePicker
+              selected={startDate}
+              onChange={(date: Date) => setStartDate(date.toISOString()!)}
+              className="form-control"
+            />
           </div>
         </div>
-        <div>
-          <div>
-            <label htmlFor="endDate" className="form-label fw-bold">End Date</label>
+        <div style={{flex:'1'}}>
+          <div >
+            <label htmlFor="endDate" className="form-label fw-bold">
+              End Date
+            </label>
           </div>
-          <div>
-            <ReactDatePicker selected={endDate} onChange={(date: Date) => setEndDate(date.toISOString())} className="form-control" />
+          <div className="datePicker">
+            <ReactDatePicker
+              selected={endDate}
+              onChange={(date: Date) => setEndDate(date.toISOString())}
+              className="form-control"
+            />
           </div>
         </div>
       </CCard>
       <div className="d-flex justify-content-around my-3">
-        <h4>Created + Pending : <span style={{ color: "red" }}>${createdAndPending}</span></h4>
-        <h4>Paid: <span style={{ color: "green" }}>${paid}</span></h4>
+        <h4>
+          Created + Pending :{" "}
+          <span style={{ color: "red" }}>${createdAndPending}</span>
+        </h4>
+        <h4>
+          Paid: <span style={{ color: "green" }}>${paid}</span>
+        </h4>
       </div>
       <ToastContainer />
       {showCreateInvoice ? (
@@ -285,7 +348,7 @@ const Invoices: React.FC<InvoiceProps> = ({
                 </div>
               </CCardHeader>
               <CCardBody>
-                <CTable>
+              <CTable responsive striped hover>
                   <CTableHead>
                     <CTableRow>
                       <CTableHeaderCell scope="col">Subject</CTableHeaderCell>
@@ -299,73 +362,88 @@ const Invoices: React.FC<InvoiceProps> = ({
                   </CTableHead>
 
                   <CTableBody>
-                    {invoices ? (invoices?.map((invoiceModel: any) => (
-                      <CTableRow key={invoiceModel.invoice?.id}>
-                        <CTableDataCell>
-                          {invoiceModel.invoice?.subject}
-                        </CTableDataCell>
-                        <CTableDataCell>
-                          {getInvoiceStatusValue(
-                            invoiceModel.invoice?.status
-                          )}
-                        </CTableDataCell>
-                        <CTableDataCell>
-                          {getDates(invoiceModel.invoice?.invoiceDate)}
-                        </CTableDataCell>
-                        <CTableDataCell>
-                          {/* {formatDate(
+                    {invoices ? (
+                      invoices?.map((invoiceModel: any) => (
+                        <CTableRow key={invoiceModel.invoice?.id}>
+                          <CTableDataCell>
+                            {invoiceModel.invoice?.subject}
+                          </CTableDataCell>
+                          <CTableDataCell>
+                            {getInvoiceStatusValue(
+                              invoiceModel.invoice?.status
+                            )}
+                          </CTableDataCell>
+                          <CTableDataCell>
+                            {getDates(invoiceModel.invoice?.invoiceDate)}
+                          </CTableDataCell>
+                          <CTableDataCell>
+                            {/* {formatDate(
                             invoiceModel.invoice?.dueDate,
                             "DD/MM/YYYY HH:mm",
                             timezone
                           )} */}
-                        {moment.utc(invoiceModel.invoice?.dueDate).tz(timezone).format('DD/MM/YYYY hh:mm A')}
-
-                        </CTableDataCell>
-                        <CTableDataCell>
-                          {invoiceModel.invoice?.status === 3 ? (<MdEditSquare
-                            style={{
-                              color: "green",
-                              marginRight: "10px",
-                              fontSize: "20px",
-                              opacity: "0.5",
-                              cursor: "not-allowed"
-                            }}
-                            title="Paid invoice is not editable"
-                          />) : (<Link to={`/invoices/editInvoice/${invoiceModel.invoice?.id}`}>
-                            <MdEditSquare
+                            {moment
+                              .utc(invoiceModel.invoice?.dueDate)
+                              .tz(timezone)
+                              .format("DD/MM/YYYY hh:mm A")}
+                          </CTableDataCell>
+                          <CTableDataCell>
+                            {invoiceModel.invoice?.status === 3 ? (
+                              <MdEditSquare
+                                style={{
+                                  color: "green",
+                                  marginRight: "10px",
+                                  fontSize: "20px",
+                                  opacity: "0.5",
+                                  cursor: "not-allowed",
+                                }}
+                                title="Paid invoice is not editable"
+                              />
+                            ) : (
+                              <Link
+                                to={`/invoices/editInvoice/${invoiceModel.invoice?.id}`}
+                              >
+                                <MdEdit
+                                  style={{
+                                    color: "green",
+                                    marginRight: "10px",
+                                    fontSize: "20px",
+                                  }}
+                                  className="mr-4 text-success"
+                                />
+                              </Link>
+                            )}
+                            <AiFillEye
+                              size={21}
                               style={{
-                                color: "green",
+                                color: "rgb(30, 30, 115)",
+                                marginRight: "7px",
+                                cursor: "pointer",
+                              }}
+                              className="mr-4 text-primary"
+                              onClick={() =>
+                                generateInvoicePDF(invoiceModel.invoice?.id)
+                              }
+                            />
+                            <MdDelete
+                              size={21}
+                              style={{
+                                color: "red",
                                 marginRight: "10px",
                                 fontSize: "20px",
+                                cursor: "pointer",
                               }}
+                              className="text-danger"
+                              onClick={() =>
+                                handleDeleteClick(invoiceModel.invoice?.id)
+                              }
                             />
-                          </Link>)}
-                          <AiFillEye
-                            size={21}
-                            style={{
-                              color: "rgb(30, 30, 115)",
-                              marginRight: "7px",
-                              cursor: "pointer",
-                            }}
-                            onClick={() =>
-                              generateInvoicePDF(invoiceModel.invoice?.id)
-                            }
-                          />
-                          <MdDelete
-                            size={21}
-                            style={{
-                              color: "red",
-                              marginRight: "10px",
-                              fontSize: "20px",
-                              cursor: "pointer",
-                            }}
-                            onClick={() =>
-                              handleDeleteClick(invoiceModel.invoice?.id)
-                            }
-                          />
-                        </CTableDataCell>
-                      </CTableRow>
-                    ))) : (<p>There is no invoice</p>)}
+                          </CTableDataCell>
+                        </CTableRow>
+                      ))
+                    ) : (
+                      <p>There is no invoice</p>
+                    )}
                   </CTableBody>
                 </CTable>
               </CCardBody>

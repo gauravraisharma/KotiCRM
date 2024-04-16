@@ -330,13 +330,6 @@ const CreateOrUpdateUser = () => {
                           name="employeeId"
                           className="form-control"
                           disabled
-                          style={{
-                            borderBottom: "1px solid gray",
-                            borderLeft: "none",
-                            borderRight: "none",
-                            borderTop: "none",
-                            height: "50%",
-                          }}
                         />
                         <ErrorMessage
                           name="employeeId"
@@ -360,13 +353,6 @@ const CreateOrUpdateUser = () => {
                               ? "is-invalid"
                               : ""
                           }`}
-                          style={{
-                            borderBottom: "1px solid gray",
-                            borderLeft: "none",
-                            borderRight: "none",
-                            borderTop: "none",
-                            height: "50%",
-                          }}
                         />
                         <ErrorMessage
                           name="joiningDate"
@@ -416,13 +402,6 @@ const CreateOrUpdateUser = () => {
                               : ""
                           }`}
                           disabled
-                          style={{
-                            borderBottom: "1px solid gray",
-                            borderLeft: "none",
-                            borderRight: "none",
-                            borderTop: "none",
-                            height: "50%",
-                          }}
                         />
                         <ErrorMessage
                           name="employeeCode"
@@ -460,14 +439,6 @@ const CreateOrUpdateUser = () => {
                             id="relievingDate"
                             name="relievingDate"
                             className="form-control"
-                            // Add validation rules for relievingDate if needed
-                            style={{
-                              borderBottom: "1px solid gray",
-                              borderLeft: "none",
-                              borderRight: "none",
-                              borderTop: "none",
-                              height: "50%",
-                            }}
                           />
                         )}
                         <ErrorMessage
@@ -496,13 +467,6 @@ const CreateOrUpdateUser = () => {
                             touched.name && errors.name ? "is-invalid" : ""
                           }`}
                           placeholder="Employee Name"
-                          style={{
-                            borderBottom: "1px solid gray",
-                            borderLeft: "none",
-                            borderRight: "none",
-                            borderTop: "none",
-                            height: "50%",
-                          }}
                         />
                         <ErrorMessage
                           name="name"
@@ -527,13 +491,6 @@ const CreateOrUpdateUser = () => {
                               : ""
                           }`}
                           placeholder="Pan Number"
-                          style={{
-                            borderBottom: "1px solid gray",
-                            borderLeft: "none",
-                            borderRight: "none",
-                            borderTop: "none",
-                            height: "50%",
-                          }}
                         />
                         <ErrorMessage
                           name="panNumber"
@@ -560,13 +517,6 @@ const CreateOrUpdateUser = () => {
                               : ""
                           }`}
                           placeholder="Father Name"
-                          style={{
-                            borderBottom: "1px solid gray",
-                            borderLeft: "none",
-                            borderRight: "none",
-                            borderTop: "none",
-                            height: "50%",
-                          }}
                         />
                         <ErrorMessage
                           name="fatherName"
@@ -591,13 +541,6 @@ const CreateOrUpdateUser = () => {
                               : ""
                           }`}
                           placeholder="Aadhar Number"
-                          style={{
-                            borderBottom: "1px solid gray",
-                            borderLeft: "none",
-                            borderRight: "none",
-                            borderTop: "none",
-                            height: "50%",
-                          }}
                         />
                         <ErrorMessage
                           name="adharCardNumber"
@@ -622,13 +565,6 @@ const CreateOrUpdateUser = () => {
                           //       ? "is-invalid"
                           //       : ""
                           //     }`}
-                          style={{
-                            borderBottom: "1px solid gray",
-                            borderLeft: "none",
-                            borderRight: "none",
-                            borderTop: "none",
-                            height: "50%",
-                          }}
                         />
                         <ErrorMessage
                           name="dateOfBirth"
@@ -679,13 +615,6 @@ const CreateOrUpdateUser = () => {
                           //       : ""
                           //     }`}
                           placeholder="Correspondence Address"
-                          style={{
-                            borderBottom: "1px solid gray",
-                            borderLeft: "none",
-                            borderRight: "none",
-                            borderTop: "none",
-                            height: "50%",
-                          }}
                         />
                         <ErrorMessage
                           name="correspondenceAddress"
@@ -712,13 +641,6 @@ const CreateOrUpdateUser = () => {
                               : ""
                           }`}
                           placeholder="Permanent Address"
-                          style={{
-                            borderBottom: "1px solid gray",
-                            borderLeft: "none",
-                            borderRight: "none",
-                            borderTop: "none",
-                            height: "50%",
-                          }}
                         />
                         <ErrorMessage
                           name="permanentAddress"
@@ -747,13 +669,6 @@ const CreateOrUpdateUser = () => {
                           //       : ""
                           //     }`}
                           placeholder="Guardian Name"
-                          style={{
-                            borderBottom: "1px solid gray",
-                            borderLeft: "none",
-                            borderRight: "none",
-                            borderTop: "none",
-                            height: "50%",
-                          }}
                         />
                         <ErrorMessage
                           name="guardianName"
@@ -778,13 +693,6 @@ const CreateOrUpdateUser = () => {
                               : ""
                           }`}
                           placeholder="Contact Number 1"
-                          style={{
-                            borderBottom: "1px solid gray",
-                            borderLeft: "none",
-                            borderRight: "none",
-                            borderTop: "none",
-                            height: "50%",
-                          }}
                         />
                         <ErrorMessage
                           name="contactNumber1"
@@ -809,13 +717,6 @@ const CreateOrUpdateUser = () => {
                               : ""
                           }`}
                           placeholder="Official Email"
-                          style={{
-                            borderBottom: "1px solid gray",
-                            borderLeft: "none",
-                            borderRight: "none",
-                            borderTop: "none",
-                            height: "50%",
-                          }}
                         />
                         <ErrorMessage
                           name="officialEmail"
@@ -843,13 +744,6 @@ const CreateOrUpdateUser = () => {
                           //       : ""
                           //     }`}
                           placeholder="Guardian Contact Number"
-                          style={{
-                            borderBottom: "1px solid gray",
-                            borderLeft: "none",
-                            borderRight: "none",
-                            borderTop: "none",
-                            height: "50%",
-                          }}
                         />
                         <ErrorMessage
                           name="guardianContactNumber"
@@ -873,13 +767,6 @@ const CreateOrUpdateUser = () => {
                           //       : ""
                           //     }`}
                           placeholder="Contact Number 2"
-                          style={{
-                            borderBottom: "1px solid gray",
-                            borderLeft: "none",
-                            borderRight: "none",
-                            borderTop: "none",
-                            height: "50%",
-                          }}
                         />
                         <ErrorMessage
                           name="contactNumber2"
@@ -907,13 +794,6 @@ const CreateOrUpdateUser = () => {
                               : ""
                           }`}
                           placeholder="Official Email Password"
-                          style={{
-                            borderBottom: "1px solid gray",
-                            borderLeft: "none",
-                            borderRight: "none",
-                            borderTop: "none",
-                            height: "50%",
-                          }}
                         />
                         <ErrorMessage
                           name="officialEmailPassword"
@@ -940,13 +820,6 @@ const CreateOrUpdateUser = () => {
                               : ""
                           }`}
                           placeholder="Personal Email"
-                          style={{
-                            borderBottom: "1px solid gray",
-                            borderLeft: "none",
-                            borderRight: "none",
-                            borderTop: "none",
-                            height: "50%",
-                          }}
                         />
                         <ErrorMessage
                           name="personalEmail"
@@ -971,13 +844,6 @@ const CreateOrUpdateUser = () => {
                               : ""
                           }`}
                           placeholder="Official Skype"
-                          style={{
-                            borderBottom: "1px solid gray",
-                            borderLeft: "none",
-                            borderRight: "none",
-                            borderTop: "none",
-                            height: "50%",
-                          }}
                         />
                         <ErrorMessage
                           name="skypeId"
@@ -1031,13 +897,6 @@ const CreateOrUpdateUser = () => {
                             touched.bank && errors.bank ? "is-invalid" : ""
                           }`}
                           placeholder="Bank"
-                          style={{
-                            borderBottom: "1px solid gray",
-                            borderLeft: "none",
-                            borderRight: "none",
-                            borderTop: "none",
-                            height: "50%",
-                          }}
                         />
                         <ErrorMessage
                           name="bank"
@@ -1091,13 +950,6 @@ const CreateOrUpdateUser = () => {
                               : ""
                           }`}
                           placeholder="Account Number"
-                          style={{
-                            borderBottom: "1px solid gray",
-                            borderLeft: "none",
-                            borderRight: "none",
-                            borderTop: "none",
-                            height: "50%",
-                          }}
                         />
                         <ErrorMessage
                           name="bankAccountNumber"
@@ -1122,13 +974,6 @@ const CreateOrUpdateUser = () => {
                             touched.ifsc && errors.ifsc ? "is-invalid" : ""
                           }`}
                           placeholder="IFSC Code"
-                          style={{
-                            borderBottom: "1px solid gray",
-                            borderLeft: "none",
-                            borderRight: "none",
-                            borderTop: "none",
-                            height: "50%",
-                          }}
                         />
                         <ErrorMessage
                           name="ifsc"
@@ -1181,13 +1026,6 @@ const CreateOrUpdateUser = () => {
                             touched.branch && errors.branch ? "is-invalid" : ""
                           }`}
                           placeholder="Branch"
-                          style={{
-                            borderBottom: "1px solid gray",
-                            borderLeft: "none",
-                            borderRight: "none",
-                            borderTop: "none",
-                            height: "50%",
-                          }}
                         />
                         <ErrorMessage
                           name="branch"
