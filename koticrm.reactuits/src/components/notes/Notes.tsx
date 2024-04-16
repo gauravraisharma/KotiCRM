@@ -138,13 +138,14 @@ import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { BsClockFill } from "react-icons/bs";
-import 'moment-timezone' 
 import {
   createNotesRequest,
   getNotes,
 } from "../../redux-saga/modules/notes/action";
 import { formatDate } from "../../utils/Shared/DateTransform";
 import moment from "moment";
+import 'moment-timezone' 
+
 
 interface NoteProps {
   getNotesCount: (data: string) => void;

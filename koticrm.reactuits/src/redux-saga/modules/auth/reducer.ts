@@ -1,5 +1,5 @@
 import { Reducer } from "react";
-import { LOGIN_SUCCESS, LOGOUT, START_LOADING, UPDATE_TIMEZONE_SUCCESS } from "../../../constants/reduxConstants";
+import { LOGIN_REQUEST, LOGIN_SUCCESS, LOGOUT, START_LOADING, UPDATE_TIMEZONE_SUCCESS } from "../../../constants/reduxConstants";
 import { authState } from "../../../models/reduxState/authState";
 import { AppAction } from "../../../models/redux/action/ActionModel";
 import { actionPayloadModel } from "../../../models/actionModel/actionModel";
@@ -21,7 +21,12 @@ const authReducer: Reducer<authState, AppAction> = (state: authState = INITIAL_S
         //  case UPDATE_TIMEZONE_SUCCESS: 
         // return {...state,
         //     timezone:(action as actionPayloadModel).payload,
-        //     }    
+        //     }  
+        case LOGIN_REQUEST:
+          return {
+            ...state,
+            isLoading :true
+          }  
         case LOGIN_SUCCESS:
             loginPayload = (action as actionPayloadModel).payload;
             if (loginPayload && loginPayload.status === 'SUCCEED') { // Simplify condition
@@ -34,6 +39,7 @@ const authReducer: Reducer<authState, AppAction> = (state: authState = INITIAL_S
                     userId: loginPayload.userId,
                     userType: loginPayload.userType,
                     loggedIn: true,
+                    isLoading :false
                 };
             }
             return {

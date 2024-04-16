@@ -5,5 +5,7 @@ export interface contactState {
     contact: Contact | null,
     createContactResponse: Contact | null,
     refreshList: boolean,
+    isLoading : boolean
+
 
 }

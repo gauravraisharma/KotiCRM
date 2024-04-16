@@ -4,6 +4,7 @@ import {
   CCardBody,
   CCardHeader,
   CFormSelect,
+  CSpinner,
   CTable,
   CTableBody,
   CTableDataCell,
@@ -36,6 +37,9 @@ import { formatDate } from "../../utils/Shared/DateTransform";
 import { Link } from "react-router-dom";
 import { getContacts } from "../../redux-saga/modules/contact/action";
 import ReactDatePicker from "react-datepicker";
+import moment from "moment";
+import 'moment-timezone' 
+
 
 interface InvoiceProps {
   getInvoiceCount: (data: string) => void;
@@ -74,11 +78,12 @@ const Invoices: React.FC<InvoiceProps> = ({
   const invoices = useSelector((state: any) => state.invoiceReducer.invoices);
   const invoiceStatuses = useSelector((state: any) => state.invoiceReducer.invoiceStatus);
   const fetchedAccounts = useSelector((state: any) => state.accountReducer.accounts);
-  const timezone = useSelector((state: any) => state.authReducer.timezone);
+  const timezone = useSelector((state: any) => state.sharedReducer.timezone);
   const invoiceStatus = useSelector((state: any) => state.invoiceReducer.invoiceStatus);
   const invoiceCreateResponse = useSelector((state: any) => state.invoiceReducer.createInvoiceResponse);
   const invoiceUpdateResponse = useSelector((state: any) => state.invoiceReducer.updateInvoiceResposne);
   const invoiceDeleteResponse = useSelector((state: any) => state.invoiceReducer.deleteInvoiceResponse);
+  const isLoading = useSelector((state:any)=> state.invoiceReducer.isLoading)
 
   let createdAndPending = 0, paid = 0;
   const invoiceCount = invoices?.length;
@@ -186,6 +191,14 @@ const Invoices: React.FC<InvoiceProps> = ({
 
   return (
     <div>
+        {isLoading && (
+        <div className="spinner-backdrop">
+          <CSpinner size="sm"
+            color="white"
+            style={{ width: '5rem', height: '5rem', borderWidth: '0.60rem', zIndex: '9999' }}
+          />
+        </div>
+      )}
       <CCard className="d-flex flex-row justify-content-between m-1 p-2">
         <div>
           <label htmlFor="accountId" className="form-label fw-bold">Select Account</label>
@@ -299,11 +312,13 @@ const Invoices: React.FC<InvoiceProps> = ({
                           {getDates(invoiceModel.invoice?.invoiceDate)}
                         </CTableDataCell>
                         <CTableDataCell>
-                          {formatDate(
+                          {/* {formatDate(
                             invoiceModel.invoice?.dueDate,
                             "DD/MM/YYYY HH:mm",
                             timezone
-                          )}
+                          )} */}
+                        {moment.utc(invoiceModel.invoice?.dueDate).tz(timezone).format('DD/MM/YYYY hh:mm A')}
+
                         </CTableDataCell>
                         <CTableDataCell>
                           {invoiceModel.invoice?.status === 3 ? (<MdEditSquare

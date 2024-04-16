@@ -16,6 +16,7 @@ import {
   CInputGroupText,
   CFormInput,
   CPaginationItem,
+  CSpinner,
 } from "@coreui/react";
 import "../../css/style.css";
 import { useDispatch, useSelector } from "react-redux";
@@ -57,6 +58,7 @@ const Contacts = ({ getContactsCount, accountId }: Props) => {
   const fetchedAccountOwner = useSelector(
     (state: any) => state.accountReducer.accountOwner
   );
+  const isLoading = useSelector((state:any)=> state.contactReducer.isLoading)
 
   const contactsCount = fetchedContactWithAccountNameListAndTotal.contactsCount;
 
@@ -113,6 +115,14 @@ const Contacts = ({ getContactsCount, accountId }: Props) => {
 
   return (
     <>
+     {isLoading && (
+        <div className="spinner-backdrop">
+          <CSpinner size="sm"
+            color="white"
+            style={{ width: '5rem', height: '5rem', borderWidth: '0.60rem', zIndex: '9999' }}
+          />
+        </div>
+      )}
       <ToastContainer />
       <CRow>
         <CCol xs={12}>

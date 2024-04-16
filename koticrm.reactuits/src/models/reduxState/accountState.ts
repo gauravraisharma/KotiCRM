@@ -9,5 +9,6 @@ export interface accountState {
     refreshList: boolean,
     accountOwner: any,
     accountStatus: any,
-    accountType: any
+    accountType: any,
+    isLoading : boolean
 }

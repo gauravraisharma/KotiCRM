@@ -20,7 +20,7 @@ import { useDispatch } from "react-redux";
 import { useState } from "react";
 import { UserLogin } from "../../../models/userAccount/login";
 import { ToastContainer } from "react-toastify";
-import { loginRequest, startLoading, workerLoader } from "../../../redux-saga/modules/auth/action";
+import { loginRequest } from "../../../redux-saga/modules/auth/action";
 import CIcon from "@coreui/icons-react";
 import "react-toastify/dist/ReactToastify.css";
 import "../../../css/style.css"
@@ -30,11 +30,7 @@ const Login = () => {
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
-  // const fetchLoader = useSelector(
-  //   (state: any) => state.authReducer.isLoading
-  // );
-  // console.log("", fetchLoader)
+  const isLoading = useSelector((state: any) => state.authReducer.isLoading);
 
   const [user, setUser] = useState({
     userName: "",
@@ -45,23 +41,31 @@ const Login = () => {
     setUser({ ...user, [e.target.name]: e.target.value });
   };
   const handleLoginClick = async () => {
-    setLoading(true);
-    const userLogin: UserLogin = {
+
+      const userLogin: UserLogin = {
       userName: user.userName,
       password: user.password,
       rememberMe: user.rememberMe,
     };
     try {
-      await dispatch(loginRequest(userLogin, navigate));
-      // await dispatch(workerLoader(true))
-    } finally {
-      setLoading(false); // Stop loading regardless of success or failure
+      dispatch(loginRequest(userLogin, navigate));
+    }
+    catch(ex){
+      console.log(ex)
     }
   };
 
 
   return (
     <div className="bg-light min-vh-100 d-flex flex-row align-items-center">
+      {isLoading && (
+        <div className="spinner-backdrop">
+          <CSpinner size="sm"
+            color="white"
+            style={{ width: '5rem', height: '5rem', borderWidth: '0.60rem', zIndex: '9999' }}
+          />
+        </div>
+      )}
       <ToastContainer />
       <CContainer>
         <CRow className="justify-content-center">

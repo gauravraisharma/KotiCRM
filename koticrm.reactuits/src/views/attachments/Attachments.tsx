@@ -5,6 +5,7 @@ import {
   CCardHeader,
   CCol,
   CRow,
+  CSpinner,
   CTable,
   CTableBody,
   CTableDataCell,
@@ -38,6 +39,9 @@ const Attachments = ({ accountId, getAttachmentsCount }: Props) => {
   const dispatch = useDispatch();
   const fetchedAttachments = useSelector((state: any) => state.attachmentReducer.attachments);
   const timezone = useSelector((state: any) => state.sharedReducer.timezone);
+  const isLoading = useSelector((state:any)=> state.attachmentReducer.isLoading)
+
+
   const [isModalVisible, setIsModalVisible] = useState(false);
   const accountOwner = useSelector(
     (state: any) => state.accountReducer.accountOwner
@@ -97,6 +101,15 @@ const Attachments = ({ accountId, getAttachmentsCount }: Props) => {
   };
 
   return (
+    <>
+      {isLoading && (
+        <div className="spinner-backdrop">
+          <CSpinner size="sm"
+            color="white"
+            style={{ width: '5rem', height: '5rem', borderWidth: '0.60rem', zIndex: '9999' }}
+          />
+        </div>
+      )}
     <CRow>
       <CCol xs={12}>
         <CreateNewAttachment
@@ -184,6 +197,7 @@ const Attachments = ({ accountId, getAttachmentsCount }: Props) => {
         </CCard>
       </CCol>
     </CRow>
+    </>
   );
 };
 

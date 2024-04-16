@@ -16,6 +16,7 @@ import {
   CInputGroup,
   CInputGroupText,
   CFormSelect,
+  CSpinner,
 } from "@coreui/react";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
@@ -92,6 +93,7 @@ const AccountList: React.FC = () => {
     setStateData(false);
     setOpenEditModal(false);
   };
+  
   //Fetching data from store
   const accounts = useSelector((state: any) => state.accountReducer.accounts);
   const refreshList = useSelector(
@@ -106,6 +108,7 @@ const AccountList: React.FC = () => {
   const updateResponse = useSelector(
     (state: any) => state.accountReducer.updateAccountResponse
   );
+  const isLoading = useSelector((state:any)=> state.accountReducer.isLoading)
 
   function getOwnerName(ownerId: string): string {
     const owner = accountOwner?.find((owner: any) => owner.id === ownerId);
@@ -135,6 +138,14 @@ const AccountList: React.FC = () => {
 
   return (
     <>
+    {isLoading && (
+        <div className="spinner-backdrop">
+          <CSpinner size="sm"
+            color="white"
+            style={{ width: '5rem', height: '5rem', borderWidth: '0.60rem', zIndex: '9999' }}
+          />
+        </div>
+      )}
       <ToastContainer />
       {!openCreateModal && !openEditModal && (
         <div className="head"style={{padding:'20px'}}>

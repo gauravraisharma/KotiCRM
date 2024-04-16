@@ -9,4 +9,5 @@ export interface invoiceState{
     deleteInvoiceResponse: Invoice | null,
     invoiceOwner: [],
    refreshList:boolean
+   isLoading: boolean
 }

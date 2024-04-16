@@ -1,5 +1,5 @@
 import { Reducer } from "react";
-import { CREATE_INVOICE_SUCCESS, DELETE_INVOICE_SUCCESS, GET_INVOICES_SUCCESS, GET_INVOICE_DETAIL_SUCCESS, GET_INVOICE_OWNER_SUCCESS, GET_INVOICE_STATUS_SUCCESS, UPDATE_INVOICE_SUCCESS } from "../../../constants/reduxConstants";
+import { CREATE_INVOICE_SUCCESS, DELETE_INVOICE_SUCCESS, GET_INVOICES_FETCH, GET_INVOICES_SUCCESS, GET_INVOICE_DETAIL_SUCCESS, GET_INVOICE_OWNER_SUCCESS, GET_INVOICE_STATUS_SUCCESS, UPDATE_INVOICE_SUCCESS } from "../../../constants/reduxConstants";
 import { Invoice } from "../../../models/invoice/Invoice";
 import { invoiceState } from "../../../models/reduxState/invoiceState";
 import { AppAction } from "../../../models/redux/action/ActionModel";
@@ -12,7 +12,9 @@ const INITIAL_STATE: invoiceState = {
     updateInvoiceResposne: null,
     deleteInvoiceResponse: null,
     invoiceOwner: [],
-    refreshList: false
+    refreshList: false,
+    isLoading: false
+
 };
 
 
@@ -23,10 +25,16 @@ const invoiceReducer: Reducer<invoiceState, AppAction> = (state: invoiceState = 
                 ...state,
                 invoiceStatus: (action as actionPayloadModel).payload,
             }
+        case GET_INVOICES_FETCH : 
+            return {
+                ...state,
+                isLoading: true
+            }
         case GET_INVOICES_SUCCESS:
             return {
                 ...state,
-                invoices: (action as actionPayloadModel).payload
+                invoices: (action as actionPayloadModel).payload,
+                isLoading: false
             }
         case GET_INVOICE_DETAIL_SUCCESS:
             return {
