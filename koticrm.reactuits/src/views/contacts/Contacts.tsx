@@ -77,17 +77,6 @@ const Contacts = ({ getContactsCount, accountId }: Props) => {
     }
   });
 
-  // // Filter based on search term
-  // let filteredContacts = fetchedContactWithAccountNameListAndTotal;
-  // if (searchTerm) {
-  //   filteredContacts = fetchedContactWithAccountNameListAndTotal.filter(
-  //     (contact: any) =>
-  //       contact.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-  //       contact.lastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-  //       contact.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-  //       contact.mobile.toLowerCase().includes(searchTerm.toLowerCase())
-  //   );
-  // }
 
   const handlePageChange = (pageNumber: number) => {
     setPageNumber(pageNumber);
@@ -126,9 +115,9 @@ const Contacts = ({ getContactsCount, accountId }: Props) => {
       <ToastContainer />
       <CRow>
         <CCol xs={12}>
-          <CCard>
+          
             <CRow className="align-items-center m-1">
-              <CCol xs={6} className="text-start">
+              <CCol xs={4} className="text-start">
                 <CInputGroup>
                   <CInputGroupText as="label" htmlFor="searchInput">
                     Search
@@ -143,13 +132,13 @@ const Contacts = ({ getContactsCount, accountId }: Props) => {
                   />
                 </CInputGroup>
               </CCol>
-              <CCol xs={6} className="text-end">
+              <CCol xs={8} className="text-end">
                 {
                   <Link to={`/contacts/createContact`}>
                     <CButton
                       component="input"
                       type="button"
-                      style={{ width: "100px", padding: "10px", fontSize: "18px" }}
+                      style={{ width: "80px", padding: "10px", fontSize: "17px" }}
                       color="primary"
                       value="+ New"
                       variant="outline"
@@ -159,7 +148,7 @@ const Contacts = ({ getContactsCount, accountId }: Props) => {
                 }
               </CCol>
             </CRow>
-          </CCard>
+          
         </CCol>
       </CRow>
       <DeleteConfirmationModal
@@ -252,53 +241,40 @@ const Contacts = ({ getContactsCount, accountId }: Props) => {
         </CCol>
       </CRow>
       <CRow>
-        <CCol xs={12}>
-          <CCard>
-            <CPagination
-              size="lg" // Change the size to "sm" (small)
-              align="end"
-              aria-label="Page navigation example"
-              className="m-auto"
-            >
-              <CPaginationItem
-                onClick={() => handlePageChange(pageNumber - 1)}
-                disabled={pageNumber === 1}
-                style={{
-                  margin: "0 2px",
-                  cursor: "pointer",
-                  // fontSize: "12px",
-                }} // Decrease font size
-              >
-                Previous
-              </CPaginationItem>
-              {Array.from({ length: totalPages }, (_, index) => (
-                <CPaginationItem
-                  key={index}
-                  active={pageNumber === index + 1}
-                  onClick={() => handlePageChange(index + 1)}
-                  style={{
-                    margin: "0 2px",
-                    cursor: "pointer",
-                    // fontSize: "12px",
-                  }} // Decrease font size
-                >
-                  {index + 1}
-                </CPaginationItem>
-              ))}
-              <CPaginationItem
-                onClick={() => handlePageChange(pageNumber + 1)}
-                disabled={pageNumber === totalPages}
-                style={{
-                  margin: "0 2px",
-                  cursor: "pointer",
-                  // fontSize: "12px",
-                }} // Decrease font size
-              >
-                Next
-              </CPaginationItem>
-            </CPagination>
-          </CCard>
-        </CCol>
+      <CCol xs={12}>
+  <CPagination
+    size="sm"
+    align="end"
+    aria-label="Page navigation example"
+    className="m-auto"
+  >
+    <CPaginationItem
+      onClick={() => handlePageChange(pageNumber - 1)}
+      disabled={pageNumber === 1}
+      style={{ margin: "0 2px", cursor: "pointer", fontSize: "12px" }}
+    >
+      Previous
+    </CPaginationItem>
+    {Array.from({ length: totalPages }, (_, index) => (
+      <CPaginationItem
+        key={index}
+        active={pageNumber === index + 1}
+        onClick={() => handlePageChange(index + 1)}
+        style={{ margin: "0 2px", cursor: "pointer", fontSize: "12px" }}
+      >
+        {index + 1}
+      </CPaginationItem>
+    ))}
+    <CPaginationItem
+      onClick={() => handlePageChange(pageNumber + 1)}
+      disabled={pageNumber === totalPages}
+      style={{ margin: "0 2px", cursor: "pointer", fontSize: "12px" }}
+    >
+      Next
+    </CPaginationItem>
+  </CPagination>
+</CCol>
+
       </CRow>
     </>
   );

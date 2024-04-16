@@ -37,8 +37,9 @@ import { formatDate } from "../../utils/Shared/DateTransform";
 import { Link } from "react-router-dom";
 import { getContacts } from "../../redux-saga/modules/contact/action";
 import ReactDatePicker from "react-datepicker";
-import moment from "moment";
-import 'moment-timezone' 
+// import moment from "moment";
+// import 'moment-timezone' 
+import moment from 'moment-timezone'
 
 
 interface InvoiceProps {

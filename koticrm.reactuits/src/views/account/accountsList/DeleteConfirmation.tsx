@@ -4,6 +4,8 @@ import { useDispatch } from "react-redux";
 import { deleteAccountRequest } from "../../../redux-saga/modules/account/action";
 import { deleteInvoiceRequest } from "../../../redux-saga/modules/invoice/action";
 import { deleteContact } from "../../../redux-saga/modules/contact/action";
+import { DeleteEmployee } from "../../../redux-saga/modules/userManagement/apiService";
+import { useNavigate } from "react-router-dom";
 
 interface DeleteConfirmationModalProps {
   isOpen: boolean;
@@ -12,6 +14,7 @@ interface DeleteConfirmationModalProps {
   accountId?: any;
   invoiceId?: any;
   contactId?:number;
+  userId?:string;
 }
 
 const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = ({
@@ -20,17 +23,22 @@ const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = ({
   onConfirm,
   accountId,
   invoiceId,
-  contactId
+  contactId,
+  userId,
 }) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     if (accountId != null) {
       dispatch(deleteAccountRequest(accountId));
     } else if (invoiceId != null) {
       dispatch(deleteInvoiceRequest(invoiceId));
     } else if (contactId) {
       dispatch(deleteContact(contactId));
+    }else if(userId){
+      await DeleteEmployee(userId);
+      navigate("/users");
     }
     onConfirm();
   };

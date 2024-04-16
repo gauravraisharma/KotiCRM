@@ -57,6 +57,10 @@ const Login = () => {
 
 
   return (
+    <>
+    {/* <div className="spinner-backdrop">
+    <CSpinner className="spinner" color="primary" />
+  </div> */}
     <div className="bg-light min-vh-100 d-flex flex-row align-items-center">
       {isLoading && (
         <div className="spinner-backdrop">
@@ -139,6 +143,7 @@ const Login = () => {
         </CRow>
       </CContainer>
     </div>
+    </>
   )
 }
 

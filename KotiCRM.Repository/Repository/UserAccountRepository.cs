@@ -772,6 +772,7 @@ namespace KotiCRM.Repository.Repository
                                    join department in _context.Departments on employee.DepartmentId equals department.DepartmentId
                                    join designation in _context.Designations on employee.DesignationId equals designation.DesignationId
                                    join shift in _context.Shifts on employee.ShiftId equals shift.ShiftId
+                                   where employee.IsActive == true
                                    select new GetEmployeesDTO
                                    {
                                        EmployeeId = employee.EmployeeId,
@@ -1159,6 +1160,7 @@ namespace KotiCRM.Repository.Repository
                 var existingEmployee = (from employee in _context.Employees
                   where employee.EmployeeId == employeeId
                   select employee).FirstOrDefault(employee => employee.IsActive == true);
+                
 
                 if (existingEmployee == null)
                 {
@@ -1169,7 +1171,10 @@ namespace KotiCRM.Repository.Repository
                     };
                 }
 
-                _context.Employees.Remove(existingEmployee);
+                existingEmployee.IsActive = false;
+                existingEmployee.UpdatedDate = DateTime.UtcNow;
+
+                _context.Employees.Update(existingEmployee);
                 _context.SaveChanges();
                 return new ResponseStatus
                 {

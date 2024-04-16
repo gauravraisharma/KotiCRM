@@ -1,4 +1,4 @@
-import React, { useEffect, useId, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   CButton,
   CCard,
@@ -15,29 +15,51 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import { Employee, EmployeeClass } from "../../models/userManagement/employee";
-import { CreateEmployee, GetEmployeeId } from "../../redux-saga/modules/userManagement/apiService";
-import { Department, Designation, Shift } from "../../models/commonModels/SharedModels";
-import { GetDepartments, GetDesignations, GetShifts } from "../../redux-saga/modules/shared/apiService";
-import * as Yup from 'yup';
+import {
+  CreateEmployee,
+  GetEmployeeId,
+} from "../../redux-saga/modules/userManagement/apiService";
+import {
+  Department,
+  Designation,
+  Shift,
+} from "../../models/commonModels/SharedModels";
+import {
+  GetDepartments,
+  GetDesignations,
+  GetShifts,
+} from "../../redux-saga/modules/shared/apiService";
+import * as Yup from "yup";
 
 const CreateOrUpdateUser = () => {
   //initial values
   const initialValues = {
-    employeeId: '',
-    joiningDate: '',
-    isRelieved: false,
-    employeeCode: '',
+    employeeId: "",
+    joiningDate: "",
+    employeeCode: "",
     isActive: false,
-    relievingDate: ''
+    isRelieved: false,
+    relievingDate: "",
+    employeeName: "",
+    fatherName: "",
+    panNumber: "",
+    adharNumber: "",
+    permanentAddress: "",
+    personalEmail: "",
+    contactNumber1: "",
+    officialSkype: "",
+    designation: "",
+    department: "",
+    ifscCode: "",
+    bankName: "",
+    accountNumber: "",
   };
-
 
   // Parameters
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const userId = useParams<{ userId: string }>();
-  const bloodGroups = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
-
+  const bloodGroups = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
 
   // States
   const [formData, setFormData] = useState<Employee>(new EmployeeClass());
@@ -46,14 +68,17 @@ const CreateOrUpdateUser = () => {
   const [isActiveChecked, setIsActiveChecked] = useState(true);
   const [isRelievedChecked, setIsRelievedChecked] = useState(false);
   const [relievingDateRequired, setRelievingDateRequired] = useState(false);
-  const [departmentList, setDepartmentList] = useState<Department[] | undefined>([]);
-  const [designationList, setDesignationList] = useState<Designation[] | undefined>([]);
+  const [departmentList, setDepartmentList] = useState<
+    Department[] | undefined
+  >([]);
+  const [designationList, setDesignationList] = useState<
+    Designation[] | undefined
+  >([]);
   const [shiftList, setShiftList] = useState<Shift[] | undefined>([]);
   const [bloodGroup, setBloodGroup] = useState("");
   const [departmentId, setDepartmentId] = useState(0);
   const [designationId, setDesignationId] = useState(0);
   const [shiftId, setShiftId] = useState(0);
-
 
   // Effects
   useEffect(() => {
@@ -61,20 +86,23 @@ const CreateOrUpdateUser = () => {
     getDepartmentList();
     getDesignationList();
     getShiftList();
-  },[]);
+  }, []);
 
   useEffect(() => {
     if (employeeId != null) {
-      const employeeCode = generateEmployeeCode("tech", departmentId, employeeId);
+      const employeeCode = generateEmployeeCode(
+        "tech",
+        departmentId,
+        employeeId
+      );
       formData.employeeCode = employeeCode;
     }
   }, [employeeId, departmentId]);
 
   useEffect(() => {
-    if(userId){
-
+    if (userId) {
     }
-  })
+  });
 
   // Handlers
   const handleCheckbox = (event: any) => {
@@ -120,9 +148,9 @@ const CreateOrUpdateUser = () => {
         setDepartmentList(response.data);
       })
       .catch((error) => {
-          console.error('Error getting department list:', error.statusText);
+        console.error("Error getting department list:", error.statusText);
       });
-  }
+  };
 
   // Designation list
   const getDesignationList = () => {
@@ -131,9 +159,9 @@ const CreateOrUpdateUser = () => {
         setDesignationList(response.data);
       })
       .catch((error) => {
-          console.error('Error getting designation list:', error.statusText);
+        console.error("Error getting designation list:", error.statusText);
       });
-  }
+  };
 
   // Shift list
   const getShiftList = () => {
@@ -142,9 +170,9 @@ const CreateOrUpdateUser = () => {
         setShiftList(response.data);
       })
       .catch((error) => {
-          console.error('Error getting shift list:', error.statusText);
+        console.error("Error getting shift list:", error.statusText);
       });
-  }
+  };
 
   // Submit
   const handleFormSubmit = async (
@@ -158,17 +186,17 @@ const CreateOrUpdateUser = () => {
       employee.designationId = designationId;
       employee.shiftId = shiftId;
       await CreateEmployee(employee)
-      .then((response) => {
-        // Handle success response
-        console.log("response", response);
-        console.log("employeeId", response.data?.employeeId);
-        toast.success("Employee created successfully");
-      })
-      .catch((error) => {
-        // Handle error response
-        toast.error("Employee creation failed");
-        console.error('Error creating employee:', error.statusText);
-      });
+        .then((response) => {
+          // Handle success response
+          console.log("response", response);
+          console.log("employeeId", response.data?.employeeId);
+          toast.success("Employee created successfully");
+        })
+        .catch((error) => {
+          // Handle error response
+          toast.error("Employee creation failed");
+          console.error("Error creating employee:", error.statusText);
+        });
     } catch (error) {
       console.log("error message:", error);
     } finally {
@@ -176,14 +204,32 @@ const CreateOrUpdateUser = () => {
       navigate("/users");
     }
   };
-
-  //validation schema 
   const validationSchema = Yup.object().shape({
-    employeeId: Yup.number().required('Employee ID is required'),
-    joiningDate: Yup.date().required('Joining Date is required'),
-    employeeCode: Yup.string().required('Employee Code is required'),
+    employeeId: Yup.number().required("Employee ID is required"),
+    joiningDate: Yup.date().required("Joining Date is required"),
+    employeeCode: Yup.string().required("Employee Code is required"),
     isActive: Yup.boolean(),
-
+    correspondenceAddress: Yup.string().required(
+      "Correspondence address is required"
+    ),
+    permanentAddress: Yup.string().required("Permanent address is required"),
+    guardianName: Yup.string().required("Guardian name is required"),
+    contactNumber1: Yup.string().required("Contact number 1 is required"),
+    officialEmail: Yup.string()
+      .email("Invalid email format")
+      .required("Official email is required"),
+    guardianContactNumber: Yup.string().required(
+      "Guardian contact number is required"
+    ),
+    contactNumber2: Yup.string(),
+    personalEmail: Yup.string().email("Invalid email format"),
+    skypeId: Yup.string(),
+    designationID: Yup.number().required("Designation is required"),
+    bank: Yup.string().required("Bank name is required"),
+    departmentID: Yup.number().required("Department is required"),
+    bankAccountNumber: Yup.string().required("Bank account number is required"),
+    ifsc: Yup.string().required("IFSC code is required"),
+    shiftID: Yup.number().required("Shift is required"),
   });
 
   return (
@@ -279,10 +325,11 @@ const CreateOrUpdateUser = () => {
                           id="joiningDate"
                           name="joiningDate"
                           // className="form-control"
-                            className={`form-control ${touched.joiningDate && errors.joiningDate
-                                ? "is-invalid"
-                                : ""
-                              }`}
+                          className={`form-control ${
+                            touched.joiningDate && errors.joiningDate
+                              ? "is-invalid"
+                              : ""
+                          }`}
                           style={{
                             borderBottom: "1px solid gray",
                             borderLeft: "none",
@@ -308,7 +355,7 @@ const CreateOrUpdateUser = () => {
                           label="isRelieved"
                           checked={isRelievedChecked}
                           onChange={handleCheckbox}
-                          disabled={!isActiveChecked} 
+                          disabled={!isActiveChecked}
                         />
                         <ErrorMessage
                           name="isRelieved"
@@ -333,11 +380,12 @@ const CreateOrUpdateUser = () => {
                           type="text"
                           id="employeeCode"
                           name="employeeCode"
-                          className="form-control"
-                          //   className={`form-control ${touched.employeeCode && errors.employeeCode
-                          //       ? "is-invalid"
-                          //       : ""
-                          //     }`}
+                          // className="form-control"
+                          className={`form-control ${
+                            touched.employeeCode && errors.employeeCode
+                              ? "is-invalid"
+                              : ""
+                          }`}
                           disabled
                           style={{
                             borderBottom: "1px solid gray",
@@ -414,10 +462,9 @@ const CreateOrUpdateUser = () => {
                           id="name"
                           name="name"
                           // className="form-control"
-                            className={`form-control ${touched.name && errors.name
-                                ? "is-invalid"
-                                : ""
-                              }`}
+                          className={`form-control ${
+                            touched.name && errors.name ? "is-invalid" : ""
+                          }`}
                           placeholder="Employee Name"
                           style={{
                             borderBottom: "1px solid gray",
@@ -444,10 +491,11 @@ const CreateOrUpdateUser = () => {
                           id="panNumber"
                           name="panNumber"
                           // className="form-control"
-                            className={`form-control ${touched.panNumber && errors.panNumber
-                                ? "is-invalid"
-                                : ""
-                              }`}
+                          className={`form-control ${
+                            touched.panNumber && errors.panNumber
+                              ? "is-invalid"
+                              : ""
+                          }`}
                           placeholder="Pan Number"
                           style={{
                             borderBottom: "1px solid gray",
@@ -476,10 +524,11 @@ const CreateOrUpdateUser = () => {
                           id="fatherName"
                           name="fatherName"
                           // className="form-control"
-                            className={`form-control ${touched.fatherName && errors.fatherName
-                                ? "is-invalid"
-                                : ""
-                              }`}
+                          className={`form-control ${
+                            touched.fatherName && errors.fatherName
+                              ? "is-invalid"
+                              : ""
+                          }`}
                           placeholder="Father Name"
                           style={{
                             borderBottom: "1px solid gray",
@@ -506,10 +555,11 @@ const CreateOrUpdateUser = () => {
                           id="adharCardNumber"
                           name="adharCardNumber"
                           // className="form-control"
-                            className={`form-control ${touched.adharCardNumber && errors.adharCardNumber
-                                ? "is-invalid"
-                                : ""
-                              }`}
+                          className={`form-control ${
+                            touched.adharCardNumber && errors.adharCardNumber
+                              ? "is-invalid"
+                              : ""
+                          }`}
                           placeholder="Aadhar Number"
                           style={{
                             borderBottom: "1px solid gray",
@@ -626,10 +676,11 @@ const CreateOrUpdateUser = () => {
                           id="permanentAddress"
                           name="permanentAddress"
                           // className="form-control"
-                            className={`form-control ${touched.permanentAddress && errors.permanentAddress
-                                ? "is-invalid"
-                                : ""
-                              }`}
+                          className={`form-control ${
+                            touched.permanentAddress && errors.permanentAddress
+                              ? "is-invalid"
+                              : ""
+                          }`}
                           placeholder="Permanent Address"
                           style={{
                             borderBottom: "1px solid gray",
@@ -691,10 +742,11 @@ const CreateOrUpdateUser = () => {
                           id="contactNumber1"
                           name="contactNumber1"
                           // className="form-control"
-                            className={`form-control ${touched.contactNumber1 && errors.contactNumber1
-                                ? "is-invalid"
-                                : ""
-                              }`}
+                          className={`form-control ${
+                            touched.contactNumber1 && errors.contactNumber1
+                              ? "is-invalid"
+                              : ""
+                          }`}
                           placeholder="Contact Number 1"
                           style={{
                             borderBottom: "1px solid gray",
@@ -721,10 +773,11 @@ const CreateOrUpdateUser = () => {
                           id="officialEmail"
                           name="officialEmail"
                           // className="form-control"
-                            className={`form-control ${touched.officialEmail && errors.officialEmail
-                                ? "is-invalid"
-                                : ""
-                              }`}
+                          className={`form-control ${
+                            touched.officialEmail && errors.officialEmail
+                              ? "is-invalid"
+                              : ""
+                          }`}
                           placeholder="Official Email"
                           style={{
                             borderBottom: "1px solid gray",
@@ -747,7 +800,9 @@ const CreateOrUpdateUser = () => {
                   <CCol xs={4}>
                     <CRow className="mb-3">
                       <CCol sm={12}>
-                        <label htmlFor="guardianContactNumber">Guardian Contact Number</label>
+                        <label htmlFor="guardianContactNumber">
+                          Guardian Contact Number
+                        </label>
                         <Field
                           type="text"
                           id="guardianContactNumber"
@@ -815,10 +870,12 @@ const CreateOrUpdateUser = () => {
                           id="officialEmailPassword"
                           name="officialEmailPassword"
                           // className="form-control"
-                            className={`form-control ${touched.officialEmailPassword && errors.officialEmailPassword
-                                ? "is-invalid"
-                                : ""
-                              }`}
+                          className={`form-control ${
+                            touched.officialEmailPassword &&
+                            errors.officialEmailPassword
+                              ? "is-invalid"
+                              : ""
+                          }`}
                           placeholder="Official Email Password"
                           style={{
                             borderBottom: "1px solid gray",
@@ -846,11 +903,12 @@ const CreateOrUpdateUser = () => {
                           type="text"
                           id="personalEmail"
                           name="personalEmail"
-                          className="form-control"
-                          //   className={`form-control ${touched.personalEmail && errors.personalEmail
-                          //       ? "is-invalid"
-                          //       : ""
-                          //     }`}
+                          // className="form-control"
+                          className={`form-control ${
+                            touched.personalEmail && errors.personalEmail
+                              ? "is-invalid"
+                              : ""
+                          }`}
                           placeholder="Personal Email"
                           style={{
                             borderBottom: "1px solid gray",
@@ -877,10 +935,11 @@ const CreateOrUpdateUser = () => {
                           id="skypeId"
                           name="skypeId"
                           // className="form-control"
-                            className={`form-control ${touched.skypeId && errors.skypeId
-                                ? "is-invalid"
-                                : ""
-                              }`}
+                          className={`form-control ${
+                            touched.skypeId && errors.skypeId
+                              ? "is-invalid"
+                              : ""
+                          }`}
                           placeholder="Official Skype"
                           style={{
                             borderBottom: "1px solid gray",
@@ -912,11 +971,16 @@ const CreateOrUpdateUser = () => {
                           name="designationID"
                           aria-label="Default select example"
                           value={designationId}
-                          onChange={(e) => setDesignationId(parseInt(e.target.value))}
+                          onChange={(e) =>
+                            setDesignationId(parseInt(e.target.value))
+                          }
                         >
                           <option value="">Select a Designation</option>
-                          {designationList?.map(designation => (
-                            <option key={designation.designationId} value={designation.designationId}>
+                          {designationList?.map((designation) => (
+                            <option
+                              key={designation.designationId}
+                              value={designation.designationId}
+                            >
                               {designation.name}
                             </option>
                           ))}
@@ -938,10 +1002,9 @@ const CreateOrUpdateUser = () => {
                           id="bank"
                           name="bank"
                           // className="form-control"
-                            className={`form-control ${touched.bank && errors.bank
-                                ? "is-invalid"
-                                : ""
-                              }`}
+                          className={`form-control ${
+                            touched.bank && errors.bank ? "is-invalid" : ""
+                          }`}
                           placeholder="Bank"
                           style={{
                             borderBottom: "1px solid gray",
@@ -970,11 +1033,16 @@ const CreateOrUpdateUser = () => {
                           name="departmentID"
                           aria-label="Default select example"
                           value={departmentId}
-                          onChange={(e) => setDepartmentId(parseInt(e.target.value))}
+                          onChange={(e) =>
+                            setDepartmentId(parseInt(e.target.value))
+                          }
                         >
                           <option value="">Select a Department</option>
-                          {departmentList?.map(department => (
-                            <option key={department.departmentId} value={department.departmentId}>
+                          {departmentList?.map((department) => (
+                            <option
+                              key={department.departmentId}
+                              value={department.departmentId}
+                            >
                               {department.name}
                             </option>
                           ))}
@@ -990,16 +1058,20 @@ const CreateOrUpdateUser = () => {
                     </CRow>
                     <CRow className="mb-3">
                       <CCol sm={12}>
-                        <label htmlFor="bankAccountNumber">Account Number</label>
+                        <label htmlFor="bankAccountNumber">
+                          Account Number
+                        </label>
                         <Field
                           type="text"
                           id="bankAccountNumber"
                           name="bankAccountNumber"
                           // className="form-control"
-                            className={`form-control ${touched.bankAccountNumber && errors.bankAccountNumber
-                                ? "is-invalid"
-                                : ""
-                              }`}
+                          className={`form-control ${
+                            touched.bankAccountNumber &&
+                            errors.bankAccountNumber
+                              ? "is-invalid"
+                              : ""
+                          }`}
                           placeholder="Account Number"
                           style={{
                             borderBottom: "1px solid gray",
@@ -1028,10 +1100,9 @@ const CreateOrUpdateUser = () => {
                           id="ifsc"
                           name="ifsc"
                           // className="form-control"
-                            className={`form-control ${touched.ifsc && errors.ifsc
-                                ? "is-invalid"
-                                : ""
-                              }`}
+                          className={`form-control ${
+                            touched.ifsc && errors.ifsc ? "is-invalid" : ""
+                          }`}
                           placeholder="IFSC Code"
                           style={{
                             borderBottom: "1px solid gray",
@@ -1061,7 +1132,7 @@ const CreateOrUpdateUser = () => {
                           onChange={(e) => setShiftId(parseInt(e.target.value))}
                         >
                           <option value="">Select a Shift</option>
-                          {shiftList?.map(shift => (
+                          {shiftList?.map((shift) => (
                             <option key={shift.shiftId} value={shift.shiftId}>
                               {shift.name}
                             </option>
@@ -1079,7 +1150,7 @@ const CreateOrUpdateUser = () => {
                   </CCol>
                 </CRow>
                 <CRow>
-                <CCol xs={4}>
+                  <CCol xs={4}>
                     <CRow className="mb-3">
                       <CCol sm={12}>
                         <label htmlFor="branch">Branch</label>
@@ -1088,10 +1159,9 @@ const CreateOrUpdateUser = () => {
                           id="branch"
                           name="branch"
                           // className="form-control"
-                            className={`form-control ${touched.branch && errors.branch
-                                ? "is-invalid"
-                                : ""
-                              }`}
+                          className={`form-control ${
+                            touched.branch && errors.branch ? "is-invalid" : ""
+                          }`}
                           placeholder="Branch"
                           style={{
                             borderBottom: "1px solid gray",
@@ -1110,32 +1180,6 @@ const CreateOrUpdateUser = () => {
                         />
                       </CCol>
                     </CRow>
-                    {/* <CRow className="mb-3">
-                      <CCol sm={12}>
-                        <label htmlFor="shiftID">Shift</label>
-                        <CFormSelect
-                          id="shiftID"
-                          name="shiftID"
-                          aria-label="Default select example"
-                          value={shiftID}
-                          onChange={(e) => setShiftID(parseInt(e.target.value))}
-                        >
-                          <option value="">Select a Shift</option>
-                          {shiftList?.map(shift => (
-                            <option key={shift.shiftId} value={shift.shiftId}>
-                              {shift.name}
-                            </option>
-                          ))}
-                        </CFormSelect>
-                        <ErrorMessage
-                          name="shiftID"
-                          className="invalid-feedback"
-                          render={(error) => (
-                            <label style={{ color: "#dc3545" }}>{error}</label>
-                          )}
-                        />
-                      </CCol>
-                    </CRow> */}
                   </CCol>
                 </CRow>
                 <CRow className="mb-3">

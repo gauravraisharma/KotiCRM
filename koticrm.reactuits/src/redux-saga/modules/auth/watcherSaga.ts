@@ -5,9 +5,6 @@ import {workerLoader, workerloginUser} from './workerSaga';
 function* authSaga() {
       yield takeEvery(LOGIN_REQUEST, workerloginUser);
       yield takeEvery(START_LOADING, workerLoader);
-
-
-  
   }
 
   export default authSaga
