@@ -227,7 +227,7 @@ namespace KotiCRM.Server.Controllers
             {
                 return BadRequest("Please pass the valid Input.");
             }
-            var responseStatus = await _accountService.CreateEmployee(createEmployeeDTO);
+            var responseStatus = await _accountService.UpdateEmployee(createEmployeeDTO);
 
             if (responseStatus.Status == "SUCCEED")
             {

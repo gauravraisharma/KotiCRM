@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useId, useState } from "react";
 import {
   CButton,
   CCard,
@@ -15,21 +15,10 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import { Employee, EmployeeClass } from "../../models/userManagement/employee";
-import {
-  CreateEmployee,
-  GetEmployeeId,
-} from "../../redux-saga/modules/userManagement/apiService";
-import {
-  Department,
-  Designation,
-  Shift,
-} from "../../models/commonModels/SharedModels";
-import {
-  GetDepartments,
-  GetDesignations,
-  GetShifts,
-} from "../../redux-saga/modules/shared/apiService";
-import * as Yup from "yup";
+import { CreateEmployee, GetEmployeeById, GetEmployeeId, UpdateEmployee } from "../../redux-saga/modules/userManagement/apiService";
+import { Department, Designation, Shift } from "../../models/commonModels/SharedModels";
+import { GetDepartments, GetDesignations, GetShifts } from "../../redux-saga/modules/shared/apiService";
+import * as Yup from 'yup';
 
 const CreateOrUpdateUser = () => {
   //initial values
@@ -58,51 +47,80 @@ const CreateOrUpdateUser = () => {
   // Parameters
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const userId = useParams<{ userId: string }>();
-  const bloodGroups = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
+  const {id} = useParams<{ id: string }>();
+  const bloodGroups = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
 
   // States
   const [formData, setFormData] = useState<Employee>(new EmployeeClass());
-  // const [employeeCount, setEmployeeCount] = useState(0);
-  const [employeeId, setEmployeeId] = useState("");
+  const [employeeID, setEmployeeID] = useState("");
   const [isActiveChecked, setIsActiveChecked] = useState(true);
   const [isRelievedChecked, setIsRelievedChecked] = useState(false);
   const [relievingDateRequired, setRelievingDateRequired] = useState(false);
-  const [departmentList, setDepartmentList] = useState<
-    Department[] | undefined
-  >([]);
-  const [designationList, setDesignationList] = useState<
-    Designation[] | undefined
-  >([]);
+  const [departmentList, setDepartmentList] = useState<Department[] | undefined>([]);
+  const [designationList, setDesignationList] = useState<Designation[] | undefined>([]);
   const [shiftList, setShiftList] = useState<Shift[] | undefined>([]);
   const [bloodGroup, setBloodGroup] = useState("");
   const [departmentId, setDepartmentId] = useState(0);
   const [designationId, setDesignationId] = useState(0);
   const [shiftId, setShiftId] = useState(0);
+  const [isCreate, setIsCreate] = useState(true);
 
   // Effects
   useEffect(() => {
-    getEmployeeId();
     getDepartmentList();
     getDesignationList();
     getShiftList();
-  }, []);
+  },[]);
+  
+  useEffect(() => {
+    if(id){
+      setIsCreate(false);
+      getEmployeeById(id);
+    }
+    else{
+      setIsCreate(true);
+      getEmployeeId();
+    }
+  },[id]);
 
   useEffect(() => {
-    if (employeeId != null) {
-      const employeeCode = generateEmployeeCode(
-        "tech",
-        departmentId,
-        employeeId
-      );
+    if (formData.employeeId) {
+      const employeeCode = generateEmployeeCode("tech", departmentId, formData.employeeId);
       formData.employeeCode = employeeCode;
+      // setFormData(prevState => ({ ...prevState, employeeCode: employeeCode }));
     }
-  }, [employeeId, departmentId]);
+  }, [formData.employeeId, departmentId]);
 
-  useEffect(() => {
-    if (userId) {
-    }
-  });
+  // Generate EmployeeId
+  const getEmployeeId = async () => {
+    const employeeId = await GetEmployeeId();
+    setEmployeeID(employeeId.data);
+    formData.employeeId = employeeId.data;
+  };
+
+  // Generate EmployeeCode
+  const generateEmployeeCode = (
+    organizationName: string,
+    departmentId: number,
+    employeeId: string
+  ) => {
+    const name = organizationName.toUpperCase();
+    return `${name}-EMP-${departmentId}-${employeeId}`;
+  };
+
+  const getEmployeeById = async (employeeId: string) => {
+    await GetEmployeeById(employeeId)
+    .then((response) => {
+      setFormData(response);
+      setDepartmentId(response.departmentId);
+      setDesignationId(response.designationId);
+      setShiftId(response.shiftId);
+    })
+    .catch((error) => {
+      toast.error("Fetch employee failed");
+      console.error('Error fetching employee:', error.statusText);
+    });
+  }
 
   // Handlers
   const handleCheckbox = (event: any) => {
@@ -124,22 +142,17 @@ const CreateOrUpdateUser = () => {
     }
   };
 
-  // Generate EmployeeId
-  const getEmployeeId = async () => {
-    const employeeId = await GetEmployeeId();
-    setEmployeeId(employeeId.data);
-    formData.employeeId = employeeId.data;
-  };
+  const handleDepartmentChange = (e : React.ChangeEvent<HTMLSelectElement>) => {
+    setDepartmentId(parseInt(e.target.value));
+  }
 
-  // Generate EmployeeCode
-  const generateEmployeeCode = (
-    organizationName: string,
-    departmentId: number,
-    employeeId: string
-  ) => {
-    const name = organizationName.toUpperCase();
-    return `${name}-EMP-${departmentId}-${employeeId}`;
-  };
+  const handleDesignationChange = (e : React.ChangeEvent<HTMLSelectElement>) => {
+    setDesignationId(parseInt(e.target.value));
+  }
+
+  const handleShiftChange = (e : React.ChangeEvent<HTMLSelectElement>) => {
+    setShiftId(parseInt(e.target.value));
+  }
 
   // Department list
   const getDepartmentList = () => {
@@ -180,12 +193,28 @@ const CreateOrUpdateUser = () => {
     { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }
   ) => {
     try {
-      employee.employeeId = employeeId;
-      employee.bloodGroup = bloodGroup;
+      // employee.employeeId = employeeID;
+      // employee.bloodGroup = bloodGroup;
       employee.departmentId = departmentId;
       employee.designationId = designationId;
       employee.shiftId = shiftId;
-      await CreateEmployee(employee)
+      employee.isActive = isActiveChecked;
+      if(id){
+        await UpdateEmployee(employee)
+        .then((response) => {
+          // Handle success response
+          toast.success("Employee updated successfully");
+        })
+        .catch((error) => {
+          // Handle error response
+          toast.error("Employee updation failed");
+          console.error('Error updating employee:', error.statusText);
+        });
+      }
+      else{
+        employee.employeeId = employeeID;
+        employee.bloodGroup = bloodGroup;
+        await CreateEmployee(employee)
         .then((response) => {
           // Handle success response
           console.log("response", response);
@@ -195,8 +224,9 @@ const CreateOrUpdateUser = () => {
         .catch((error) => {
           // Handle error response
           toast.error("Employee creation failed");
-          console.error("Error creating employee:", error.statusText);
+          console.error('Error creating employee:', error.statusText);
         });
+      }
     } catch (error) {
       console.log("error message:", error);
     } finally {
@@ -204,33 +234,33 @@ const CreateOrUpdateUser = () => {
       navigate("/users");
     }
   };
-  const validationSchema = Yup.object().shape({
-    employeeId: Yup.number().required("Employee ID is required"),
-    joiningDate: Yup.date().required("Joining Date is required"),
-    employeeCode: Yup.string().required("Employee Code is required"),
-    isActive: Yup.boolean(),
-    correspondenceAddress: Yup.string().required(
-      "Correspondence address is required"
-    ),
-    permanentAddress: Yup.string().required("Permanent address is required"),
-    guardianName: Yup.string().required("Guardian name is required"),
-    contactNumber1: Yup.string().required("Contact number 1 is required"),
-    officialEmail: Yup.string()
-      .email("Invalid email format")
-      .required("Official email is required"),
-    guardianContactNumber: Yup.string().required(
-      "Guardian contact number is required"
-    ),
-    contactNumber2: Yup.string(),
-    personalEmail: Yup.string().email("Invalid email format"),
-    skypeId: Yup.string(),
-    designationID: Yup.number().required("Designation is required"),
-    bank: Yup.string().required("Bank name is required"),
-    departmentID: Yup.number().required("Department is required"),
-    bankAccountNumber: Yup.string().required("Bank account number is required"),
-    ifsc: Yup.string().required("IFSC code is required"),
-    shiftID: Yup.number().required("Shift is required"),
-  });
+  // const validationSchema = Yup.object().shape({
+  //   employeeId: Yup.number().required("Employee ID is required"),
+  //   joiningDate: Yup.date().required("Joining Date is required"),
+  //   employeeCode: Yup.string().required("Employee Code is required"),
+  //   isActive: Yup.boolean(),
+  //   correspondenceAddress: Yup.string().required(
+  //     "Correspondence address is required"
+  //   ),
+  //   permanentAddress: Yup.string().required("Permanent address is required"),
+  //   guardianName: Yup.string().required("Guardian name is required"),
+  //   contactNumber1: Yup.string().required("Contact number 1 is required"),
+  //   officialEmail: Yup.string()
+  //     .email("Invalid email format")
+  //     .required("Official email is required"),
+  //   guardianContactNumber: Yup.string().required(
+  //     "Guardian contact number is required"
+  //   ),
+  //   contactNumber2: Yup.string(),
+  //   personalEmail: Yup.string().email("Invalid email format"),
+  //   skypeId: Yup.string(),
+  //   designationID: Yup.number().required("Designation is required"),
+  //   bank: Yup.string().required("Bank name is required"),
+  //   departmentID: Yup.number().required("Department is required"),
+  //   bankAccountNumber: Yup.string().required("Bank account number is required"),
+  //   ifsc: Yup.string().required("IFSC code is required"),
+  //   shiftID: Yup.number().required("Shift is required"),
+  // });
 
   return (
     <>
@@ -240,7 +270,7 @@ const CreateOrUpdateUser = () => {
           <div className="d-flex justify-content-between align-items-center">
             <div>
               <h5 className="mb-0">
-                {userId == null ? "Create" : "Update"} User
+                {id == null ? "Create" : "Update"} User
               </h5>
             </div>
             <div className="text-end">
@@ -259,7 +289,7 @@ const CreateOrUpdateUser = () => {
           <Formik
             initialValues={formData}
             enableReinitialize
-            validationSchema={validationSchema}
+            // validationSchema={validationSchema}
             onSubmit={handleFormSubmit}
           >
             {({ handleSubmit, isValid, isSubmitting, touched, errors }) => (
@@ -295,7 +325,7 @@ const CreateOrUpdateUser = () => {
                           </span>
                         </label>
                         <Field
-                          type="number"
+                          type="string"
                           id="employeeId"
                           name="employeeId"
                           className="form-control"
@@ -355,7 +385,6 @@ const CreateOrUpdateUser = () => {
                           label="isRelieved"
                           checked={isRelievedChecked}
                           onChange={handleCheckbox}
-                          disabled={!isActiveChecked}
                         />
                         <ErrorMessage
                           name="isRelieved"
@@ -410,6 +439,7 @@ const CreateOrUpdateUser = () => {
                           id="isActive"
                           label="Active"
                           checked={isActiveChecked}
+                          // value={isActiveChecked}
                           onChange={handleCheckbox}
                         />
                         <ErrorMessage
@@ -965,28 +995,23 @@ const CreateOrUpdateUser = () => {
                   <CCol xs={4}>
                     <CRow className="mb-3">
                       <CCol sm={12}>
-                        <label htmlFor="designationID">Designation</label>
+                        <label htmlFor="designationId">Designation</label>
                         <CFormSelect
-                          id="designationID"
-                          name="designationID"
-                          aria-label="Default select example"
+                          id="designationId"
+                          name="designationId"
                           value={designationId}
-                          onChange={(e) =>
-                            setDesignationId(parseInt(e.target.value))
-                          }
+                          aria-label="Default select example"
+                          onChange={handleDesignationChange}
                         >
                           <option value="">Select a Designation</option>
-                          {designationList?.map((designation) => (
-                            <option
-                              key={designation.designationId}
-                              value={designation.designationId}
-                            >
+                          {designationList?.map(designation => (
+                            <option key={designation.designationId} value={designation.designationId}>
                               {designation.name}
                             </option>
                           ))}
                         </CFormSelect>
                         <ErrorMessage
-                          name="designationID"
+                          name="designationId"
                           className="invalid-feedback"
                           render={(error) => (
                             <label style={{ color: "#dc3545" }}>{error}</label>
@@ -1027,28 +1052,23 @@ const CreateOrUpdateUser = () => {
                   <CCol xs={4}>
                     <CRow className="mb-3">
                       <CCol sm={12}>
-                        <label htmlFor="departmentID">Department</label>
+                        <label htmlFor="departmentId">Department</label>
                         <CFormSelect
-                          id="departmentID"
-                          name="departmentID"
-                          aria-label="Default select example"
+                          id="departmentId"
+                          name="departmentId"
                           value={departmentId}
-                          onChange={(e) =>
-                            setDepartmentId(parseInt(e.target.value))
-                          }
+                          aria-label="Default select example"
+                          onChange={handleDepartmentChange}
                         >
                           <option value="">Select a Department</option>
-                          {departmentList?.map((department) => (
-                            <option
-                              key={department.departmentId}
-                              value={department.departmentId}
-                            >
+                          {departmentList?.map(department => (
+                            <option key={department.departmentId} value={department.departmentId}>
                               {department.name}
                             </option>
                           ))}
                         </CFormSelect>
                         <ErrorMessage
-                          name="departmentID"
+                          name="departmentId"
                           className="invalid-feedback"
                           render={(error) => (
                             <label style={{ color: "#dc3545" }}>{error}</label>
@@ -1058,9 +1078,7 @@ const CreateOrUpdateUser = () => {
                     </CRow>
                     <CRow className="mb-3">
                       <CCol sm={12}>
-                        <label htmlFor="bankAccountNumber">
-                          Account Number
-                        </label>
+                        <label htmlFor="bankAccountNumber">Account Number</label>
                         <Field
                           type="text"
                           id="bankAccountNumber"
@@ -1123,13 +1141,13 @@ const CreateOrUpdateUser = () => {
                     </CRow>
                     <CRow className="mb-3">
                       <CCol sm={12}>
-                        <label htmlFor="shiftID">Shift</label>
+                        <label htmlFor="shiftId">Shift</label>
                         <CFormSelect
-                          id="shiftID"
-                          name="shiftID"
-                          aria-label="Default select example"
+                          id="shiftId"
+                          name="shiftId"
                           value={shiftId}
-                          onChange={(e) => setShiftId(parseInt(e.target.value))}
+                          aria-label="Default select example"
+                          onChange={handleShiftChange}
                         >
                           <option value="">Select a Shift</option>
                           {shiftList?.map((shift) => (
@@ -1139,7 +1157,7 @@ const CreateOrUpdateUser = () => {
                           ))}
                         </CFormSelect>
                         <ErrorMessage
-                          name="shiftID"
+                          name="shiftId"
                           className="invalid-feedback"
                           render={(error) => (
                             <label style={{ color: "#dc3545" }}>{error}</label>
@@ -1187,7 +1205,7 @@ const CreateOrUpdateUser = () => {
                     <button
                       type="submit"
                       className="btn btn-primary"
-                      disabled={isSubmitting || !isValid}
+                      disabled={isSubmitting}   // || !isValid
                     >
                       {isSubmitting ? "Submitting..." : "Submit"}
                     </button>

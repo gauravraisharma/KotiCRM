@@ -1,4 +1,5 @@
 ﻿using KotiCRM.Repository.Data;
+using KotiCRM.Repository.DTOs.Contact;
 using KotiCRM.Repository.DTOs.UserManagement;
 using KotiCRM.Repository.IRepository;
 using KotiCRM.Repository.Models;
@@ -11,6 +12,7 @@ using System.Collections.Generic;
 using System.Data.Common;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -226,10 +228,6 @@ namespace KotiCRM.Repository.Repository
                     Status = "FAILED",
                     Message = "Something went Wrong"
                 };
-            }
-            finally
-            {
-                _context.Dispose();
             }
         }
 
@@ -1021,10 +1019,9 @@ namespace KotiCRM.Repository.Repository
                     return new EmployeeResponseStatus
                     {
                         Status = "FAILED",
-                        Message = "Invalid payload"
+                        Message = "CreateEmployeeDTO is null. Please provide data for updating the employee."
                     };
                 }
-                var userId = "";
 
                 // For extract FirstName and LastName from Name
                 string[] nameParts = createEmployeeDTO.Name.Split(' ');
@@ -1038,95 +1035,99 @@ namespace KotiCRM.Repository.Repository
                 }
                 username = (nameParts.Length >= 2 ? firstName : createEmployeeDTO.Name);
 
+                Employee employee = _context.Employees.FirstOrDefault(x => x.EmployeeId == createEmployeeDTO.EmployeeId);
 
-                ApplicationUserModel user = new ApplicationUserModel
+                if (employee == null)
+                {
+                    return new EmployeeResponseStatus
+                    {
+                        Status = "FAILED",
+                        Message = "Employee not found"
+                    };
+                }
+
+                UpdateApplicationUserModel updateApplicationUser = new UpdateApplicationUserModel
                 {
                     FirstName = (nameParts.Length >= 2 ? firstName : createEmployeeDTO.Name),
                     LastName = lastName,
                     UserName = username,
                     Email = createEmployeeDTO.OfficialEmail,
                     PhoneNumber = createEmployeeDTO.ContactNumber1,
-                    UserType = "Employee",
                     Password = createEmployeeDTO.OfficialEmailPassword,
-                    CreatedBy = ""
                 };
 
-                var result = await CreateApplicationUser(user);
+                ResponseStatus response = await UpdateApplicationUser(updateApplicationUser);
 
-                if (result.Status == "FAILED")
+                if(response.Status == "FAILED")
                 {
                     return new EmployeeResponseStatus
                     {
                         Status = "FAILED",
-                        Message = result.Message
+                        Message = "User not updated"
                     };
                 }
-                var createdUser = await _userManager.FindByNameAsync(username);
-                userId = createdUser.Id;
 
-                Bank bank = new()
+                var bankResponse = _context.Banks.FirstOrDefault(x => x.BankId == employee.BankId);
+                if (bankResponse == null)
                 {
-                    Name = createEmployeeDTO.Bank,
-                    BankAccountNumber = createEmployeeDTO.BankAccountNumber,
-                    Branch = createEmployeeDTO.Branch,
-                    Ifsc = createEmployeeDTO.Ifsc,
-                    OrganizationId = createdUser.OrganizationId,
-                };
+                    return new EmployeeResponseStatus
+                    {
+                        Status = "FAILED",
+                        Message = "Bank not found"
+                    };
+                }
 
-                _context.Banks.Add(bank);
+                // Update bank
+                bankResponse.BankAccountNumber = createEmployeeDTO.BankAccountNumber;
+                bankResponse.Name = createEmployeeDTO.Name;
+                bankResponse.Branch = createEmployeeDTO.Branch;
+                bankResponse.Ifsc = createEmployeeDTO.Ifsc;
+
+                var updatedContact = _context.Banks.Update(bankResponse);
                 await _context.SaveChangesAsync();
 
-                _context.Entry(bank).GetDatabaseValues();
-                int newBankId = (int)bank.BankId;
+                // Update Employee
+                employee.EmployeeId = createEmployeeDTO.EmployeeId;
+                employee.EmpCode = createEmployeeDTO.EmployeeCode;
+                employee.UserId = employee.UserId;
+                employee.Name = createEmployeeDTO.Name;
+                employee.ProfilePictureURL = createEmployeeDTO.ProfilePictureURL;
+                employee.FatherName = createEmployeeDTO.FatherName;
+                employee.GuardianName = createEmployeeDTO.GuardianName;
+                employee.BloodGroup = createEmployeeDTO.BloodGroup;
+                employee.DateOfBirth = createEmployeeDTO.DateOfBirth;
+                employee.JoiningDate = createEmployeeDTO.JoiningDate;
+                employee.RelievingDate = createEmployeeDTO.RelievingDate;
+                employee.ContactNumber1 = createEmployeeDTO.ContactNumber1;           // Remove
+                employee.ContactNumber2 = createEmployeeDTO.ContactNumber2;
+                employee.GuardianContactNumber = createEmployeeDTO.GuardianContactNumber;
+                employee.PersonalEmailId = createEmployeeDTO.PersonalEmail;
+                employee.OfficialEmailId = createEmployeeDTO.OfficialEmail;               // Remove
+                employee.OfficialEmailPassword = createEmployeeDTO.OfficialEmailPassword; // Remove
+                employee.SkypeId = createEmployeeDTO.SkypeId;
+                employee.AdharCardNumber = createEmployeeDTO.AdharCardNumber;
+                employee.PanNumber = createEmployeeDTO.PanNumber;
+                employee.DepartmentId = createEmployeeDTO.DepartmentId;
+                employee.DesignationId = createEmployeeDTO.DesignationId;
+                employee.BankId = bankResponse.BankId;
+                employee.ShiftId = createEmployeeDTO.ShiftId;
+                employee.IsActive = createEmployeeDTO.IsActive;
+                employee.PermanentAddress = createEmployeeDTO.PermanentAddress;
+                employee.CorrespondenceAddress = createEmployeeDTO.CorrespondenceAddress;
+                employee.UpdatedBy = "";
+                employee.UpdatedDate = DateTime.UtcNow;
 
-
-                Employee employee = new()
-                {
-                    EmployeeId = createEmployeeDTO.EmployeeId,
-                    EmpCode = createEmployeeDTO.EmployeeCode,
-                    UserId = userId,
-                    Name = createEmployeeDTO.Name,
-                    ProfilePictureURL = createEmployeeDTO.ProfilePictureURL,
-                    FatherName = createEmployeeDTO.FatherName,
-                    GuardianName = createEmployeeDTO.GuardianName,
-                    BloodGroup = createEmployeeDTO.BloodGroup,
-                    DateOfBirth = createEmployeeDTO.DateOfBirth,
-                    JoiningDate = createEmployeeDTO.JoiningDate,
-                    RelievingDate = createEmployeeDTO.RelievingDate,
-                    ContactNumber1 = createEmployeeDTO.ContactNumber1,                // Remove
-                    ContactNumber2 = createEmployeeDTO.ContactNumber2,
-                    GuardianContactNumber = createEmployeeDTO.GuardianContactNumber,
-                    PersonalEmailId = createEmployeeDTO.PersonalEmail,
-                    OfficialEmailId = createEmployeeDTO.OfficialEmail,               // Remove
-                    OfficialEmailPassword = createEmployeeDTO.OfficialEmailPassword, // Remove
-                    SkypeId = createEmployeeDTO.SkypeId,
-                    AdharCardNumber = createEmployeeDTO.AdharCardNumber,
-                    PanNumber = createEmployeeDTO.PanNumber,
-                    DepartmentId = createEmployeeDTO.DepartmentId,
-                    DesignationId = createEmployeeDTO.DesignationId,
-                    BankId = newBankId,
-                    ShiftId = createEmployeeDTO.ShiftId,
-                    IsActive = createEmployeeDTO.IsActive,
-                    PermanentAddress = createEmployeeDTO.PermanentAddress,
-                    CorrespondenceAddress = createEmployeeDTO.CorrespondenceAddress,
-                    CreateBy = userId,
-                    CreatedDate = DateTime.UtcNow,
-                };
-
-                _context.Employees.Add(employee);
+                _context.Employees.Update(employee);
                 await _context.SaveChangesAsync();
-
-                _context.Entry(employee).GetDatabaseValues();
-                string employeeId = employee.EmployeeId;
 
                 // Commit transaction if everything succeeds
                 await transaction.CommitAsync();
 
                 return new EmployeeResponseStatus
                 {
-                    EmployeeId = employeeId,
+                    EmployeeId = createEmployeeDTO.EmployeeId,
                     Status = "SUCCEED",
-                    Message = "Employee successfully created"
+                    Message = "Employee updated successfully"
                 };
             }
             catch (Exception ex)
@@ -1137,7 +1138,7 @@ namespace KotiCRM.Repository.Repository
                 return new EmployeeResponseStatus
                 {
                     Status = "FAILED",
-                    Message = "Failed to create employee"
+                    Message = "Failed to update employee"
                 };
 
             }

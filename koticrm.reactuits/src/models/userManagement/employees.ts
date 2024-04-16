@@ -1,13 +1,13 @@
 export interface Employees
 {
-    EmployeeId?: string;
-    EmployeeCode?: string;
-    Name?: string;
-    OfficialEmail?: string;
-    ContactNumber1?: string;
-    JoiningDate?: Date;
-    Department?: string;
-    Designation?: string;
-    Shift?: string;
+    employeeId: string;
+    employeeCode?: string;
+    name?: string;
+    officialEmail?: string;
+    contactNumber1?: string;
+    joiningDate?: Date;
+    department?: string;
+    designation?: string;
+    shift?: string;
 
 }

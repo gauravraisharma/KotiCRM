@@ -31,10 +31,10 @@ export async function GetEmployeesList(){
     }
 }
 
-export async function GetEmployeeById(){
+export async function GetEmployeeById(employeeId: string){
     try {
-        const response = await axiosInstance.get(`/UserAccount/GetUsers`);
-        return response.data.result;
+        const response = await axiosInstance.get(`/UserAccount/GetEmployeeById/` + employeeId);
+        return response.data.employeeData;
     } catch (error: any) {
         const errorResponse: apiResponse<Employees[]> = {
             data: undefined,
@@ -58,6 +58,21 @@ export async function CreateEmployee(employee: Employee) {
         return errorResponse;
     }
 }
+
+export async function UpdateEmployee(employee: Employee) {
+    try {
+        const response = await axiosInstance.put<Employee>(`/UserAccount/UpdateEmployee`, employee);
+        return responseBody(response);
+    } catch (error: any) {
+        const errorResponse: apiResponse<Employee> = {
+            data: undefined,
+            status: 500,
+            statusText: error.message
+        };
+        return errorResponse;
+    }
+}
+
 export async function DeleteEmployee(employeeId: string) {
     try {
         const response = await axiosInstance.get(`/UserAccount/DeleteEmployee/${employeeId}`);
