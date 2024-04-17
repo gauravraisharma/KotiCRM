@@ -294,8 +294,8 @@ const Invoices: React.FC<InvoiceProps> = ({
           </div>
         </div>
       </CCard>
-      <div className="d-flex justify-content-around my-3">
-        <h4>
+      <div className="d-flex  my-3">
+        <h4 className="me-5">
           Created + Pending :{" "}
           <span style={{ color: "red" }}>${createdAndPending}</span>
         </h4>
@@ -328,7 +328,7 @@ const Invoices: React.FC<InvoiceProps> = ({
               onBackToListButtonClickHandler={backToInvoicesListFromPdf}
             />
           ) : (
-            <CCard className="mb-4">
+            <CCard className="mb-4 mx-1">
               <CCardHeader className="mb-3">
                 <div className="d-flex justify-content-between align-items-center">
                   <div>
@@ -389,7 +389,7 @@ const Invoices: React.FC<InvoiceProps> = ({
                           </CTableDataCell>
                           <CTableDataCell>
                             {invoiceModel.invoice?.status === 3 ? (
-                              <MdEditSquare
+                              <MdEdit
                                 style={{
                                   color: "green",
                                   marginRight: "10px",

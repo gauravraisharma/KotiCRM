@@ -447,7 +447,7 @@ const AccountList: React.FC = () => {
     : accounts;
 
   return (
-    <AccountListWrapper>
+    <>
       {isLoading && (
         <div className="spinner-backdrop">
           <CSpinner
@@ -484,6 +484,7 @@ const AccountList: React.FC = () => {
                   onClick={handleCreateNew}
                   type="button"
                   className="btn btn-primary"
+                  style={{padding:'6px 16px'}}
                 >
                   + New
                 </button>
@@ -515,7 +516,7 @@ const AccountList: React.FC = () => {
           ) : (
             <CRow>
               <CCol xs={12}>
-                <CCard className="mb-4">
+                <CCard className="mb-4 mt-2">
                   <CCardHeader>
                     <CRow>
                       <CCol xs={6} className="d-flex align-items-center">
@@ -595,7 +596,7 @@ const AccountList: React.FC = () => {
           )}
         </>
       )}
-    </AccountListWrapper>
+    </>
   );
 };
 
