@@ -103,7 +103,7 @@ const Users = () => {
               </CTableRow>
             </CTableHead>
             <CTableBody>
-              {employeesList.map((employee: Employees) => (
+              {employeesList?.map((employee: Employees) => (
                 <CTableRow key={employee.employeeId}>
                   <CTableDataCell>{employee.name}</CTableDataCell>
                   <CTableDataCell>{employee.contactNumber1}</CTableDataCell>

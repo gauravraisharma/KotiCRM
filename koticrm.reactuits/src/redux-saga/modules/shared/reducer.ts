@@ -17,7 +17,7 @@ const sharedReducer: Reducer<sharedState, AppAction> = (state: sharedState = INI
     switch (action.type) {
         case UPDATE_TIMEZONE_SUCCESS: 
         return {...state,
-            timezone: action.timeZone
+            timezone: action.timezone
             }    
     case GET_INDUSTRY_SUCCESS:
         return {

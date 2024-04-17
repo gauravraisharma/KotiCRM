@@ -20,9 +20,8 @@ import { useDispatch } from "react-redux";
 import { useState } from "react";
 import { UserLogin } from "../../../models/userAccount/login";
 import { ToastContainer } from "react-toastify";
-import { loginRequest } from "../../../redux-saga/modules/auth/action";
+import { loginRequest, loginSuccess } from "../../../redux-saga/modules/auth/action";
 import CIcon from "@coreui/icons-react";
-import "react-toastify/dist/ReactToastify.css";
 import "../../../css/style.css"
 import { useSelector } from "react-redux";
 
@@ -31,6 +30,7 @@ const Login = () => {
 
   const navigate = useNavigate();
   const isLoading = useSelector((state: any) => state.authReducer.isLoading);
+  const [loading, setLoading] = useState(false)
 
   const [user, setUser] = useState({
     userName: "",
@@ -41,19 +41,19 @@ const Login = () => {
     setUser({ ...user, [e.target.name]: e.target.value });
   };
   const handleLoginClick = async () => {
-
       const userLogin: UserLogin = {
       userName: user.userName,
       password: user.password,
       rememberMe: user.rememberMe,
     };
     try {
+      setLoading(true); 
       dispatch(loginRequest(userLogin, navigate));
     }
     catch(ex){
       console.log(ex)
     }
-  };
+}
 
 
   return (
@@ -62,7 +62,7 @@ const Login = () => {
     <CSpinner className="spinner" color="primary" />
   </div> */}
     <div className="bg-light min-vh-100 d-flex flex-row align-items-center">
-      {isLoading && (
+      {loading && isLoading && (
         <div className="spinner-backdrop">
           <CSpinner size="sm"
             color="white"

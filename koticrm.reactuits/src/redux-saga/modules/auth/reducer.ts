@@ -7,7 +7,6 @@ import { actionPayloadModel } from "../../../models/actionModel/actionModel";
 const INITIAL_STATE: authState = {
   token: null,
   modulePermission: null,
-  timezone: "",
   userType: null,
   userId: null,
   loggedIn: false,
@@ -18,15 +17,7 @@ const authReducer: Reducer<authState, AppAction> = (state: authState = INITIAL_S
     let loginPayload;
     
     switch (action.type) {
-        //  case UPDATE_TIMEZONE_SUCCESS: 
-        // return {...state,
-        //     timezone:(action as actionPayloadModel).payload,
-        //     }  
-        case LOGIN_REQUEST:
-          return {
-            ...state,
-            isLoading :true
-          }  
+       
         case LOGIN_SUCCESS:
             loginPayload = (action as actionPayloadModel).payload;
             if (loginPayload && loginPayload.status === 'SUCCEED') { // Simplify condition
@@ -35,11 +26,10 @@ const authReducer: Reducer<authState, AppAction> = (state: authState = INITIAL_S
                     ...state,
                     token: loginPayload.token,
                     modulePermission: loginPayload.modulePermission,
-                    timezone: loginPayload.timeZone,
                     userId: loginPayload.userId,
                     userType: loginPayload.userType,
                     loggedIn: true,
-                    isLoading :false
+                    isLoading :true
                 };
             }
             return {
@@ -47,6 +37,7 @@ const authReducer: Reducer<authState, AppAction> = (state: authState = INITIAL_S
                 token: null,
                 modulePermission: null,
                 loggedIn: false,
+                isLoading : false
             };
 
     case LOGOUT:

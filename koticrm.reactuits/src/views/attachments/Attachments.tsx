@@ -25,7 +25,8 @@ import { getAttachments } from "../../redux-saga/modules/attachment/action";
 import { IoMdDownload } from "react-icons/io";
 import { DownloadAttachmentAsync } from "../../redux-saga/modules/attachment/apiService";
 import moment from "moment";
-import 'moment-timezone' 
+import 'moment-timezone'
+import { ToastContainer } from "react-toastify";
 
 // import { GrDownload } from "react-icons/gr";
 
@@ -39,7 +40,7 @@ const Attachments = ({ accountId, getAttachmentsCount }: Props) => {
   const dispatch = useDispatch();
   const fetchedAttachments = useSelector((state: any) => state.attachmentReducer.attachments);
   const timezone = useSelector((state: any) => state.sharedReducer.timezone);
-  const isLoading = useSelector((state:any)=> state.attachmentReducer.isLoading)
+  const isLoading = useSelector((state: any) => state.attachmentReducer.isLoading)
 
 
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -110,93 +111,93 @@ const Attachments = ({ accountId, getAttachmentsCount }: Props) => {
           />
         </div>
       )}
-    <CRow>
-      <CCol xs={12}>
-        <CreateNewAttachment
-          accountId={accountId}
-          isVisible={isModalVisible}
-          handleClose={handleModalClose}
-        />
-        <CCard>
-          <CCardHeader className="mb-3">
-            {/* <CRow className="align-items-center"> */}
-            <div className="d-flex justify-content-between align-items-center">
-              <div>
-                <h5 className="mb-0">Attachments</h5>
+      <CRow>
+        <CCol xs={12}>
+          <CreateNewAttachment
+            accountId={accountId}
+            isVisible={isModalVisible}
+            handleClose={handleModalClose}
+          />
+          <CCard>
+            <CCardHeader className="mb-3">
+              {/* <CRow className="align-items-center"> */}
+              <div className="d-flex justify-content-between align-items-center">
+                <div>
+                  <h5 className="mb-0">Attachments</h5>
+                </div>
+                <div className="text-end">
+                  <CButton
+                    component="input"
+                    type="button"
+                    color="primary"
+                    value="Add Attachment"
+                    style={{ cursor: "pointer" }}
+                    onClick={handleModalOpen}
+                  // variant="outline"
+                  />
+                </div>
               </div>
-              <div className="text-end">
-                <CButton
-                  component="input"
-                  type="button"
-                  color="primary"
-                  value="Add Attachment"
-                  style={{ cursor: "pointer" }}
-                  onClick={handleModalOpen}
-                // variant="outline"
-                />
-              </div>
-            </div>
-            {/* </CRow> */}
-          </CCardHeader>
-          <CCardBody>
-            <CTable>
-              <CTableHead>
-                <CTableRow>
-                  <CTableHeaderCell scope="col">File Name</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Attached By</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Date Added</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Size</CTableHeaderCell>
-                  <CTableHeaderCell scope="col" className="text-center">Download</CTableHeaderCell>
-                </CTableRow>
-              </CTableHead>
-              <CTableBody>
-              {filteredAttachments && filteredAttachments.length > 0 ? (
-  filteredAttachments.map((attachment: any) => (
-    <CTableRow key={attachment.id}>
-      <CTableHeaderCell>
-        {attachment.fileExtension === ".pdf" ? (
-          <FaFilePdf className="pdf" />
-        ) : (
-          <IoDocumentTextSharp className="doc" />
-        )}
-        <CButton
-          className="link"
-          color="link"
-          onClick={() => handleDownloadClick(attachment.id, attachment.contentType, attachment.fileName)}>
-          {attachment.fileName}
-        </CButton>
-      </CTableHeaderCell>
-      <CTableDataCell>
-        {getOwnerName(attachment.userID)}
-      </CTableDataCell>
-      <CTableDataCell>
-        {/* {formatDate(attachment.dateAdded, 'DD/MM/YYYY HH:mm', timezone)} */}
-        {moment.utc(attachment.dateAdded).tz(timezone).format('DD/MM/YYYY hh:mm A')}
+              {/* </CRow> */}
+            </CCardHeader>
+            <CCardBody>
+              <CTable>
+                <CTableHead>
+                  <CTableRow>
+                    <CTableHeaderCell scope="col">File Name</CTableHeaderCell>
+                    <CTableHeaderCell scope="col">Attached By</CTableHeaderCell>
+                    <CTableHeaderCell scope="col">Date Added</CTableHeaderCell>
+                    <CTableHeaderCell scope="col">Size</CTableHeaderCell>
+                    <CTableHeaderCell scope="col" className="text-center">Download</CTableHeaderCell>
+                  </CTableRow>
+                </CTableHead>
+                <CTableBody>
+                  {filteredAttachments && filteredAttachments.length > 0 ? (
+                    filteredAttachments.map((attachment: any) => (
+                      <CTableRow key={attachment.id}>
+                        <CTableHeaderCell>
+                          {attachment.fileExtension === ".pdf" ? (
+                            <FaFilePdf className="pdf" />
+                          ) : (
+                            <IoDocumentTextSharp className="doc" />
+                          )}
+                          <CButton
+                            className="link"
+                            color="link"
+                            onClick={() => handleDownloadClick(attachment.id, attachment.contentType, attachment.fileName)}>
+                            {attachment.fileName}
+                          </CButton>
+                        </CTableHeaderCell>
+                        <CTableDataCell>
+                          {getOwnerName(attachment.userID)}
+                        </CTableDataCell>
+                        <CTableDataCell>
+                          {/* {formatDate(attachment.dateAdded, 'DD/MM/YYYY HH:mm', timezone)} */}
+                          {moment(attachment.dateAdded).tz(timezone)?.format('DD/MM/YYYY hh:mm A')}
 
-      </CTableDataCell>
-      <CTableDataCell>
-        {getFileSizeAndLabel(attachment.fileSize)}
-      </CTableDataCell>
-      <CTableDataCell className="text-center">
-        <IoMdDownload
-          style={{ color: "green", fontSize: "20px", cursor: "pointer" }}
-          onClick={() => handleDownloadClick(attachment.id, attachment.contentType, attachment.fileName)}
-        />
-      </CTableDataCell>
-    </CTableRow>
-  ))
-) : (
-  <div>
-    <p>No attachments found.</p>
-  </div>
-)}
+                        </CTableDataCell>
+                        <CTableDataCell>
+                          {getFileSizeAndLabel(attachment.fileSize)}
+                        </CTableDataCell>
+                        <CTableDataCell className="text-center">
+                          <IoMdDownload
+                            style={{ color: "green", fontSize: "20px", cursor: "pointer" }}
+                            onClick={() => handleDownloadClick(attachment.id, attachment.contentType, attachment.fileName)}
+                          />
+                        </CTableDataCell>
+                      </CTableRow>
+                    ))
+                  ) : (
+                    <div>
+                      <p>No attachments found.</p>
+                    </div>
+                  )}
 
-              </CTableBody>
-            </CTable>
-          </CCardBody>
-        </CCard>
-      </CCol>
-    </CRow>
+                </CTableBody>
+              </CTable>
+            </CCardBody>
+          </CCard>
+        </CCol>
+      </CRow>
     </>
   );
 };

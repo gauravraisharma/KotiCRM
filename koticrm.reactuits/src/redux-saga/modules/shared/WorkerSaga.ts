@@ -19,8 +19,8 @@ export function* workUpdateTimezone(action: actionPayloadModel) : Generator<any>
     if(response.status!=200){
       toast.error('Error fetching accounts')
     }else{
-      let timeZone: string =response.data.timeZone;
-      yield put({ type: UPDATE_TIMEZONE_SUCCESS, timeZone });
+      let timezone: string =response.data.timeZone;
+      yield put({ type: UPDATE_TIMEZONE_SUCCESS, timezone });
       toast.success('TimeZone Updated successfully ')
     }
     

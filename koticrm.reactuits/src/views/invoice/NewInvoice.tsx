@@ -157,7 +157,6 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
     toZipCode: "",
     toBillingCountry: "",
 
-    termsandConditions: "",
     description: "",
     subTotal: 0,
     discount: 0,
@@ -344,7 +343,7 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
       toBillingState: invoice.toBillingState,
       toZipCode: invoice.toZipCode,
       toBillingCountry: invoice.toBillingCountry,
-      termsAndConditions: invoice.termsandConditions,
+      termsAndConditions: termsAndConditions,
       description: invoice.description,
       isDelete: false,
       createdBy: userId,
@@ -399,7 +398,6 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
 
   return (
     <div>
-      <ToastContainer />
       <CCard>
         <CCardHeader className="mb-3">
           <div className="d-flex justify-content-between align-items-center">

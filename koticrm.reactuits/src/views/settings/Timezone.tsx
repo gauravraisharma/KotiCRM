@@ -8,7 +8,6 @@ import {
   CButton,
 } from "@coreui/react";
 import { OrganizationModel } from "../../models/commonModels/SharedModels";
-import TimezoneSelect from "react-timezone-select";
 import "../../css/style.css";
 
 
@@ -20,38 +19,30 @@ import 'moment-timezone';
 import Select from 'react-select'
 
 
+
 const Timezone: React.FC = () => {
   const dispatch = useDispatch();
   //Fetch data from redux
   const timeZone = useSelector((state: any) => state.sharedReducer.timezone);
+  console.log(timeZone)
   const organization = useSelector((state: any) => state.sharedReducer.organization);
-
 
   // const [selectedTimezone, setSelectedTimezone] = useState(
   //   Intl.DateTimeFormat().resolvedOptions().timeZone
   // );
 
 
-  const [timezone, setTimezone] = useState({ value: timeZone, label: timeZone })
+  const [timezone, setTimezone] = useState({ value: timeZone , label:  `(GMT ${moment.tz(timeZone).format('Z')}) ${timeZone} `})
 
   const handleTimezone = (selectedItem: any) => {
-    debugger
-    // const regex = /\+(\d{1,2}:\d{2})/;
-    // const match = regex.exec(selectedItem.label);
-
-    // if (match && match.length > 1) {
-    //   const extractedTimezone = match[0];
-      // setSelectedTimezone(selectedItem.value);
       setTimezone(selectedItem.value)
   }
 
   //All timezones
   const allTimeZones = moment.tz.names().map(timezone => ({
     value: timezone,
-    label: timezone
+    label: `(GMT ${moment.tz(timezone).format('Z')}) ${timezone} `
   }));
-
-
 
 
   var orgDetails: OrganizationModel | undefined;
@@ -63,7 +54,6 @@ const Timezone: React.FC = () => {
     }
   }
   const saveSettings = () => {
-    debugger
     if (orgDetails) {
       const organizationDetail: OrganizationModel = {
         id: orgDetails.id,

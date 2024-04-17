@@ -116,7 +116,6 @@ const Contacts = ({ getContactsCount, accountId }: Props) => {
           />
         </div>
       )}
-      <ToastContainer />
       <CRow>
         <CCol xs={12}>
           <CRow className="align-items-center m-1">

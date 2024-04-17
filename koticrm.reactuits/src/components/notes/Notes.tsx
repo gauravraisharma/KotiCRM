@@ -219,7 +219,7 @@ const Notes: React.FC<NoteProps> = ({
                       <BsClockFill color="#3c4b64" className="mx-1" />
                       <span className="mx-1">
                         {/* {formatDate(note.dateOfNote, "DD/MM/YYYY HH:mm", timezone)} */}
-                        {moment.utc(note.dateOfNote).tz(timezone).format('DD/MM/YYYY hh:mm A')}
+                        {moment.utc(note.dateOfNote).tz(timezone)?.format('DD/MM/YYYY hh:mm A')}
 
                       </span>
                       <span className="mx-1">by</span>

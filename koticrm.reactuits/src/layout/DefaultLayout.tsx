@@ -1,4 +1,6 @@
 import { AppSidebar, AppHeader, AppContent } from '../components/index'
+import "react-toastify/dist/ReactToastify.css";
+
 
 const DefaultLayout = () => {
 

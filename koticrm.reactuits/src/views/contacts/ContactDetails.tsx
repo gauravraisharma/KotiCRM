@@ -83,7 +83,7 @@ const ContactDetails = () => {
               <DetailRow
                 label="Date Of Birth"
                 // formatDate(fetchedContact.dateOfBirth, 'DD/MM/YYYY HH:mm', timezone)
-                value={moment.utc(fetchedContact.dateOfBirth).tz(timezone).format('DD/MM/YYYY hh:mm A')}
+                value={moment.utc(fetchedContact.dateOfBirth).tz(timezone)?.format('DD/MM/YYYY hh:mm A')}
 
               />
               <DetailRow label="Mobile" value={fetchedContact.mobile} />

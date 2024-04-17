@@ -1,4 +1,4 @@
-import { CRow, CCol, CCard, CCardHeader, CButton, CCardBody, } from "@coreui/react";
+import { CRow, CCol, CCard, CCardHeader, CButton, CCardBody, CSpinner, } from "@coreui/react";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -6,8 +6,10 @@ import { useSelector } from "react-redux";
 import { getAccountByIdRequest } from "../../../redux-saga/modules/account/action";
 import Notes from "../../../components/notes/Notes";
 import InvoiceComponent from "../../invoice/Invoices";
+import Invoices from "../../invoice/Invoices";
 import Contacts from "../../contacts/Contacts";
 import Attachments from "../../attachments/Attachments";
+import { ToastContainer } from "react-toastify";
 
 const AccountDetails = () => {
   const navigate = useNavigate();
@@ -22,7 +24,8 @@ const AccountDetails = () => {
   const account = useSelector((state: any) => state.accountReducer.account);
   const accountOwner = useSelector((state: any) => state.accountReducer.accountOwner);
   const industry = useSelector((state: any) => state.sharedReducer.industries);
-
+  const isLoading = useSelector((state:any)=> state.accountReducer.isLoading)
+ 
   const industryName =
     account && industry
       ? industry.find((industry: any) => industry.id === account.industryId)
@@ -55,6 +58,16 @@ const AccountDetails = () => {
   }, [dispatch, accountId]);
 
   return (
+    <>
+    <ToastContainer/>
+     {isLoading && (
+        <div className="spinner-backdrop">
+          <CSpinner size="sm"
+            color="white"
+            style={{ width: '5rem', height: '5rem', borderWidth: '0.60rem', zIndex: '9999' }}
+          />
+        </div>
+      )}
     <CRow>
       <CCol xs={12}>
         <CCard className="mb-4">
@@ -270,7 +283,7 @@ const AccountDetails = () => {
                 aria-labelledby="invoices-tab"
               >
                 <CCol xs={12}>
-                  <InvoiceComponent
+                  <Invoices
                     accountId={account?.id}
                     ownerId={account?.ownerId}
                     getInvoiceCount={getInvoiceCount}
@@ -282,6 +295,7 @@ const AccountDetails = () => {
         </CCard>
       </CCol>
     </CRow>
+    </>
   );
 };
 

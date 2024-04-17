@@ -12,14 +12,14 @@ export function* workGetAttachmentsFetch(): Generator<any> {
   try {
     const response: any = yield call(GetAttachmentsList);
     if (response.status != 200) {
-      toast.error('Error fetching accounts')
+      toast.error('Error fetching Attachments')
     } else {
       const attachments: Attachment[] = response.data;
       yield put({ type: GET_ATTACHMENTS_SUCCESS, payload: attachments });
     }
 
   } catch (error) {
-    toast.error('SomethingWent Wrong, Please try after sometime')
+    toast.error('Something went Wrong, Please try after sometime')
   }
 }
 
@@ -28,15 +28,15 @@ export function* workCreateAttachment(action: actionPayloadModel): Generator<any
   try {
     const response: any = yield call(CreateAttachment, action.payload);
     if (response.status != 200) {
-      toast.error('Error fetching accounts')
+      toast.error('Error adding attachment')
     } else {
       const dbResponse: DbResponse = response.data;
       yield put({ type: CREATE_ATTACHMENT_SUCCESS, dbResponse });
       yield put(getAttachments());
-      toast.success('Successfully create new attachment')
+      toast.success('Successfully created attachment')
     }
 
   } catch (error) {
-    toast.error('SomethingWent Wrong, Please try after sometime')
+    toast.error('Something went Wrong, Please try after sometime')
   }
 }

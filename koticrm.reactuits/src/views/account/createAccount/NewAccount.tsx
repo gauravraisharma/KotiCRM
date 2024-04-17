@@ -4,7 +4,6 @@ import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { Account } from "../../../models/account/Account";
 import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import {
   CButton,
   CCard,
@@ -177,7 +176,7 @@ const MyForm: React.FC<MyFormProps> = ({
 
   return (
     <div>
-      <ToastContainer />
+      {/* <ToastContainer /> */}
       <CCard>
         <CCardHeader className="mb-3">
           <div className="d-flex justify-content-between align-items-center">

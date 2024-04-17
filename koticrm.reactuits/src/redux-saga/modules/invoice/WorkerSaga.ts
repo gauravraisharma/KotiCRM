@@ -74,15 +74,15 @@ export function* workCreateInvoice(action: actionPayloadModel): Generator<any> {
   try {
     const response: any = yield call(CreateInvoice, action.payload);
     if (response.status != 200) {
-      toast.error('Error fetching accounts')
+      toast.error('Error creating invoice')
     } else {
       const invoice: InvoiceCreationModel = response.data;
       yield put({ type: CREATE_INVOICE_SUCCESS, payload: invoice });
-      toast.success('Created invoice succeffully')
+      toast.success('Invoice created successfully')
     }
 
   } catch (error) {
-    toast.error('SomethingWent Wrong, Please try after sometime')
+    toast.error('Something went wrong, Please try after sometime')
   }
 }
 
@@ -99,7 +99,7 @@ export function* workUpdateInvoice(action: actionPayloadModel): Generator<any> {
     }
 
   } catch (error) {
-    toast.error('SomethingWent Wrong, Please try after sometime')
+    toast.error('Something went wrong, Please try after sometime')
   }
 }
 
@@ -107,15 +107,15 @@ export function* workDeleteInvoice(action: actionPayloadModel): Generator<any> {
   try {
     const response: any = yield call(DeleteInvoice, action.payload);
     if (response.status != 200) {
-      toast.error('Error fetching accounts')
+      toast.error('Could not delete invoice, please try again later')
     } else {
       const invoice: Invoice = response.data;
       yield put({ type: DELETE_INVOICE_SUCCESS, payload: invoice });
-      toast.success('Delete invoice successfully')
+      toast.success('Invoice deleted successfully')
     }
 
   } catch (error) {
-    toast.error('SomethingWent Wrong, Please try after sometime')
+    toast.error('Something went wrong, Please try after sometime')
   }
 }
 
@@ -123,13 +123,13 @@ export function* workGetInvoiceOwnerFetch(): Generator<any> {
   try {
     const response: any = yield call(GetInvoiceOwnerList);
     if (response.status != 200) {
-      toast.error('Error fetching accounts')
+      toast.error('Error fetching Invoice Owners')
     } else {
       const invoiceOwners: SharedModel[] = response.data;
       yield put({ type: GET_INVOICE_OWNER_SUCCESS, payload: invoiceOwners });
     }
 
   } catch (error) {
-    toast.error('SomethingWent Wrong, Please try after sometime')
+    toast.error('Something went wrong, Please try after sometime')
   }
 }

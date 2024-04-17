@@ -20,8 +20,6 @@ import { AiFillEye } from "react-icons/ai";
 
 import { MdDelete, MdEdit, MdEditSquare } from "react-icons/md";
 import InvoiceTemplate from "../../pdf-template/InvoiceTemplate";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import DeleteConfirmationModal from "../account/accountsList/DeleteConfirmation";
 import {
   getAccountOwner,
@@ -37,9 +35,9 @@ import { formatDate } from "../../utils/Shared/DateTransform";
 import { Link } from "react-router-dom";
 import { getContacts } from "../../redux-saga/modules/contact/action";
 import ReactDatePicker from "react-datepicker";
-// import moment from "moment";
-// import 'moment-timezone'
-import moment from "moment-timezone";
+import moment from "moment";
+import 'moment-timezone' 
+import { ToastContainer } from "react-toastify";
 
 interface InvoiceProps {
   getInvoiceCount: (data: string) => void;
@@ -303,7 +301,6 @@ const Invoices: React.FC<InvoiceProps> = ({
           Paid: <span style={{ color: "green" }}>${paid}</span>
         </h4>
       </div>
-      <ToastContainer />
       {showCreateInvoice ? (
         <NewInvoice
           closeModal={closeCreateModal}

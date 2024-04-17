@@ -36,17 +36,18 @@ import { toast } from "react-toastify";
 import { LoginResponse } from "../../../models/userAccount/loginResponse";
 import { loginSuccess } from "./action";
 import { authAction } from "../../../models/actionModel/authAction";
-import { START_LOADING } from "../../../constants/reduxConstants";
+import { START_LOADING, UPDATE_TIMEZONE_SUCCESS } from "../../../constants/reduxConstants";
 
 export function* workerloginUser(action: authAction): Generator<any> {
   try {
     const response: any = yield call(loginUser, action.payload);
     if (response.status !== 200) {
-      toast.error('Error fetching accounts')
+      toast.error('Error logging in. Incorrect password!')
     }
     else {
       const userResponse: LoginResponse = response.data;
       yield put(loginSuccess(userResponse));
+      yield put({ type: UPDATE_TIMEZONE_SUCCESS,  timezone: userResponse && userResponse.timeZone });
       const isLoggedIn = yield select((state: any) => state.authReducer.loggedIn);
 
       if (isLoggedIn) {
