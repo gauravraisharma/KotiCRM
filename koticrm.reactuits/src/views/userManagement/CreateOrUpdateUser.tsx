@@ -12,12 +12,12 @@ import {
 } from "@coreui/react";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { useDispatch } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import { Employee, EmployeeClass } from "../../models/userManagement/employee";
 import { CreateEmployee, GetEmployeeById, GetEmployeeId, UpdateEmployee } from "../../redux-saga/modules/userManagement/apiService";
 import { Department, Designation, Shift } from "../../models/commonModels/SharedModels";
 import { GetDepartments, GetDesignations, GetShifts } from "../../redux-saga/modules/shared/apiService";
+import 'react-toastify/dist/ReactToastify.css';
 import * as Yup from 'yup';
 
 const CreateOrUpdateUser = () => {
@@ -26,7 +26,7 @@ const CreateOrUpdateUser = () => {
     employeeId: "",
     joiningDate: "",
     employeeCode: "",
-    isActive: false,
+    isActive: true,
     isRelieved: false,
     relievingDate: "",
     employeeName: "",
@@ -45,7 +45,6 @@ const CreateOrUpdateUser = () => {
   };
 
   // Parameters
-  const dispatch = useDispatch();
   const navigate = useNavigate();
   const {id} = useParams<{ id: string }>();
   const bloodGroups = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
@@ -53,6 +52,7 @@ const CreateOrUpdateUser = () => {
   // States
   const [formData, setFormData] = useState<Employee>(new EmployeeClass());
   const [employeeID, setEmployeeID] = useState("");
+  const [employeeCode, setEmployeeCode] = useState("");
   const [isActiveChecked, setIsActiveChecked] = useState(true);
   const [isRelievedChecked, setIsRelievedChecked] = useState(false);
   const [relievingDateRequired, setRelievingDateRequired] = useState(false);
@@ -63,7 +63,6 @@ const CreateOrUpdateUser = () => {
   const [departmentId, setDepartmentId] = useState(0);
   const [designationId, setDesignationId] = useState(0);
   const [shiftId, setShiftId] = useState(0);
-  const [isCreate, setIsCreate] = useState(true);
 
   // Effects
   useEffect(() => {
@@ -74,28 +73,19 @@ const CreateOrUpdateUser = () => {
   
   useEffect(() => {
     if(id){
-      setIsCreate(false);
       getEmployeeById(id);
     }
     else{
-      setIsCreate(true);
       getEmployeeId();
     }
   },[id]);
-
-  useEffect(() => {
-    if (formData.employeeId) {
-      const employeeCode = generateEmployeeCode("tech", departmentId, formData.employeeId);
-      formData.employeeCode = employeeCode;
-      // setFormData(prevState => ({ ...prevState, employeeCode: employeeCode }));
-    }
-  }, [formData.employeeId, departmentId]);
 
   // Generate EmployeeId
   const getEmployeeId = async () => {
     const employeeId = await GetEmployeeId();
     setEmployeeID(employeeId.data);
     formData.employeeId = employeeId.data;
+    generateEmployeeCode("tech", departmentId, formData.employeeId);
   };
 
   // Generate EmployeeCode
@@ -105,13 +95,15 @@ const CreateOrUpdateUser = () => {
     employeeId: string
   ) => {
     const name = organizationName.toUpperCase();
-    return `${name}-EMP-${departmentId}-${employeeId}`;
+    const employeeCode = `${name}-EMP-${departmentId}-${employeeId}`;
+    setEmployeeCode(employeeCode);
   };
 
   const getEmployeeById = async (employeeId: string) => {
     await GetEmployeeById(employeeId)
     .then((response) => {
       setFormData(response);
+      setEmployeeCode(response.employeeCode);
       setDepartmentId(response.departmentId);
       setDesignationId(response.designationId);
       setShiftId(response.shiftId);
@@ -142,14 +134,20 @@ const CreateOrUpdateUser = () => {
     }
   };
 
+  // Department change
   const handleDepartmentChange = (e : React.ChangeEvent<HTMLSelectElement>) => {
-    setDepartmentId(parseInt(e.target.value));
+    const changedDepartmentId = parseInt(e.target.value);
+    generateEmployeeCode("tech", changedDepartmentId, formData.employeeId);
+    setDepartmentId(changedDepartmentId);
+    formData.departmentId = changedDepartmentId;
   }
 
+  // Designation change
   const handleDesignationChange = (e : React.ChangeEvent<HTMLSelectElement>) => {
     setDesignationId(parseInt(e.target.value));
   }
 
+  // Shift change
   const handleShiftChange = (e : React.ChangeEvent<HTMLSelectElement>) => {
     setShiftId(parseInt(e.target.value));
   }
@@ -193,45 +191,41 @@ const CreateOrUpdateUser = () => {
     { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }
   ) => {
     try {
-      // employee.employeeId = employeeID;
-      // employee.bloodGroup = bloodGroup;
       employee.departmentId = departmentId;
       employee.designationId = designationId;
       employee.shiftId = shiftId;
       employee.isActive = isActiveChecked;
+      employee.employeeCode = employeeCode;
       if(id){
-        await UpdateEmployee(employee)
-        .then((response) => {
-          // Handle success response
+        const response = await UpdateEmployee(employee);
+        if(response.status == 200) {
           toast.success("Employee updated successfully");
-        })
-        .catch((error) => {
-          // Handle error response
+          setTimeout(() => {
+            navigate("/users");
+          }, 5000);
+        }
+        else {
           toast.error("Employee updation failed");
-          console.error('Error updating employee:', error.statusText);
-        });
+        };
       }
       else{
         employee.employeeId = employeeID;
         employee.bloodGroup = bloodGroup;
-        await CreateEmployee(employee)
-        .then((response) => {
-          // Handle success response
-          console.log("response", response);
-          console.log("employeeId", response.data?.employeeId);
+        const response = await CreateEmployee(employee);
+        if(response.status == 200) {
           toast.success("Employee created successfully");
-        })
-        .catch((error) => {
-          // Handle error response
+          setTimeout(() => {
+            navigate("/users");
+          }, 5000);
+        }
+        else {
           toast.error("Employee creation failed");
-          console.error('Error creating employee:', error.statusText);
-        });
+        };
       }
     } catch (error) {
       console.log("error message:", error);
     } finally {
       setSubmitting(false);
-      navigate("/users");
     }
   };
   // const validationSchema = Yup.object().shape({
@@ -395,6 +389,7 @@ const CreateOrUpdateUser = () => {
                           type="text"
                           id="employeeCode"
                           name="employeeCode"
+                          value={employeeCode}
                           // className="form-control"
                           className={`form-control ${
                             touched.employeeCode && errors.employeeCode
@@ -915,7 +910,7 @@ const CreateOrUpdateUser = () => {
                         <CFormSelect
                           id="departmentId"
                           name="departmentId"
-                          value={departmentId}
+                          value={formData.departmentId}
                           aria-label="Default select example"
                           onChange={handleDepartmentChange}
                         >

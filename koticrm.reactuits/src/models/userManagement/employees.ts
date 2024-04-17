@@ -5,7 +5,7 @@ export interface Employees
     name?: string;
     officialEmail?: string;
     contactNumber1?: string;
-    joiningDate?: Date;
+    joiningDate?: string;
     department?: string;
     designation?: string;
     shift?: string;
