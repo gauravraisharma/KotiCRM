@@ -165,7 +165,7 @@ const Users = () => {
                         className="mr-4 text-success"
                       />
                     </Link>
-                    <Link to={`/users/userDetails${employee.employeeId}`}>
+                    <Link to={`/users/userDetail/${employee.employeeId}`}>
                     <AiFillEye
                       style={{
                         color: "darkblue",

@@ -25,7 +25,6 @@ import { MdDelete, MdEdit } from "react-icons/md";
 import { AiFillEye } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import { getContacts } from "../../redux-saga/modules/contact/action";
-import { ToastContainer } from "react-toastify";
 import { ContactWithAccountName } from "../../models/contact/ContactWithAccountName";
 import DeleteConfirmationModal from "../account/accountsList/DeleteConfirmation";
 
