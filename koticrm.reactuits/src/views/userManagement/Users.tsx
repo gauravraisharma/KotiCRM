@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { AiFillEye } from "react-icons/ai";
 import { MdDelete, MdEdit } from "react-icons/md";
-import { ToastContainer, toast } from "react-toastify";
+import {  toast } from "react-toastify";
 import { GetEmployeesList } from "../../redux-saga/modules/userManagement/apiService";
 import { Employees } from "../../models/userManagement/employees";
 import DeleteConfirmationModal from "../account/accountsList/DeleteConfirmation";
@@ -20,6 +20,7 @@ import {
   CInputGroup,
   CInputGroupText,
   CRow,
+  CSpinner,
   CTable,
   CTableBody,
   CTableDataCell,
@@ -27,11 +28,12 @@ import {
   CTableRow,
 } from "@coreui/react";
 import "../../css/style.css";
-// import "../../../css/style.css"
+
 
 const Users = () => {
   const [employeesList, setEmployeesList] = useState<Employees[]>([]);
   const [userId, setUserId] = useState<string>("");
+  const [isLoading, setIsLoading] = useState(true);
   const [showDeleteConfirmation, setShowDeleteConfirmation] =
     useState<boolean>(false);
 
@@ -46,8 +48,12 @@ const Users = () => {
     } catch (error) {
       console.error("Error fetching employees:", error);
       toast.error("Failed to fetch employees. Please try again later.");
+    }finally{
+      setIsLoading(false);
     }
   };
+  // const isLoading = useSelector((state: any) => state.u.isLoading);
+
 
   const handleDeleteClick = (id: string) => {
     setUserId(id);
@@ -65,7 +71,21 @@ const Users = () => {
 
   return (
     <>
-      <ToastContainer />
+       {isLoading && (
+        <div className="spinner-backdrop">
+          <CSpinner
+            size="sm"
+            color="white"
+            style={{
+              width: "5rem",
+              height: "5rem",
+              borderWidth: "0.60rem",
+              zIndex: "9999",
+            }}
+          />
+        </div>
+      )}
+  
       <CRow className="mb-3">
       <CCol xs={12}>
             <CRow className="align-items-center m-1">
