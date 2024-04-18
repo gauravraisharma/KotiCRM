@@ -246,7 +246,9 @@ const Invoices: React.FC<InvoiceProps> = ({
           />
         </div>
       )}
-      <CCard className="d-flex flex-row justify-content-between m-1 p-2">
+   {showCreateInvoice ? '':( 
+    <>
+   <CCard className="d-flex flex-row justify-content-between m-1 p-2">
         <div style={{flex:'1',marginRight:'12px'}}>
           <label htmlFor="accountId" className="form-label fw-bold">
             Select Account
@@ -319,6 +321,8 @@ const Invoices: React.FC<InvoiceProps> = ({
           Paid: <span style={{ color: "green" }}>${paid}</span>
         </h5>
       </div>
+      </>
+      )}
       {showCreateInvoice ? (
         <NewInvoice
           closeModal={closeCreateModal}
