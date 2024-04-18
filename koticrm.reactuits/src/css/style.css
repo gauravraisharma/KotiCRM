@@ -193,3 +193,29 @@
  
   width: 100%;
 }
+.custom-dropdown .custom-toggle {
+  background-color: transparent !important;
+  border: none;
+  border: 1px solid #2b72be; /* light blue color */
+  color: #000; /* text color */
+  padding: 0.5rem 1rem; /* adjust padding as needed */
+}
+
+.custom-dropdown .custom-toggle:hover {
+  background-color: transparent !important;
+}
+
+.custom-dropdown .custom-menu {
+  background-color: #fff !important;
+  border: none;
+  z-index: 1000; /* set a higher z-index */
+}
+
+.custom-dropdown .custom-menu .dropdown-item {
+  color: #000; /* text color */
+}
+
+.custom-dropdown .custom-menu .dropdown-item:hover {
+  background-color: #59859e;
+  ; /* hover background color */
+}

@@ -48,15 +48,18 @@ const validationSchema = Yup.object().shape({
   type: Yup.number().required("Required (Type)"),
   status: Yup.number().required("Required (Status)"),
   accountName: Yup.string().required("Required (Account Name)"),
-  // annualRevenue: Yup.string().required("Required (Annual Revenue)"),
-  phone: Yup.string()
-    .required("Required (Phone)")
-    .matches(/^[0-9()-\s]+$/, "Phone number must be a number")
-    .min(10, "Phone number must be at least 10 digits")
-    .max(
-      13,
-      "Phone number must be at most 13 digits with country calling code"
-    ),
+  // phone: Yup.string()
+  //   .required("Required (Phone)")
+  //   .matches(/^[0-9()-\s]+$/, "Phone number must be a number")
+  //   .min(10, "Phone number must be at least 10 digits")
+  //   .max(
+  //     13,
+  //     "Phone number must be at most 13 digits with country calling code"
+  //   ),
+  phone: Yup
+  .string()
+  .matches(/^[0-9]{10}$/, 'Phone number must be exactly 10 digits')
+  .required('Required (Phone)'),
   
   billingStreet: Yup.string().required("Required (Billing Street)"),
   billingCity: Yup.string().required("Required (Billing City)"),
@@ -64,7 +67,7 @@ const validationSchema = Yup.object().shape({
   zipCode: Yup.string().required("Required (Zip Code)"),
 
   country: Yup.string().required("Required (Country)"),
-  // description:Yup.string().required("Required(Description)"),
+ 
 
 });
 

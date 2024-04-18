@@ -12,6 +12,10 @@ import {
   CCardBody,
   CCardHeader,
   CCol,
+  CDropdown,
+  CDropdownItem,
+  CDropdownMenu,
+  CDropdownToggle,
   CFormInput,
   CInputGroup,
   CInputGroupText,
@@ -22,6 +26,8 @@ import {
   CTableHead,
   CTableRow,
 } from "@coreui/react";
+import "../../css/style.css";
+// import "../../../css/style.css"
 
 const Users = () => {
   const [employeesList, setEmployeesList] = useState<Employees[]>([]);
@@ -61,26 +67,45 @@ const Users = () => {
     <>
       <ToastContainer />
       <CRow className="mb-3">
-        <CCol xs={6}>
-          <CInputGroup>
-            <CInputGroupText as="label" htmlFor="searchInput">
-              Search
-            </CInputGroupText>
-            <CFormInput
-              id="searchInput"
-              type="text"
-              placeholder="Search..."
-            />
-          </CInputGroup>
-        </CCol>
-        <CCol xs={6} className="text-end">
-          <Link to={`/users/createOrUpdateUser`}>
-            <CButton color="primary" variant="outline">
-              + New
-            </CButton>
-          </Link>
-        </CCol>
-      </CRow>
+      <CCol xs={12}>
+            <CRow className="align-items-center m-1">
+  <CCol xs={2}>
+    <CDropdown className="custom-dropdown">
+      <CDropdownToggle color="none" className="custom-toggle">Dropdown button</CDropdownToggle>
+      <CDropdownMenu className="custom-menu">
+        <CDropdownItem href="#">Name</CDropdownItem>
+        <CDropdownItem href="#">Emp code</CDropdownItem>
+        <CDropdownItem href="#">Blood Group</CDropdownItem>
+        <CDropdownItem href="#">Birthday</CDropdownItem>
+        <CDropdownItem href="#">RoleId</CDropdownItem>
+        <CDropdownItem href="#">Designation</CDropdownItem>
+      </CDropdownMenu>
+    </CDropdown>
+  </CCol>
+  <CCol xs={4}>
+    <CInputGroup>
+      <CInputGroupText htmlFor="searchInput">
+        Search
+      </CInputGroupText>
+      <CFormInput
+        id="searchInput"
+        type="text"
+        placeholder="Search by account name..."
+        className="border-bottom-0" 
+      />
+    </CInputGroup>
+  </CCol>
+  <CCol xs={6} className="text-end">
+    <Link to={`/users/createOrUpdateUser`}>
+      <CButton color="primary" variant="outline">
+        + New
+      </CButton>
+    </Link>
+  </CCol>
+  </CRow>
+  </CCol>
+</CRow>
+
       <DeleteConfirmationModal
         isOpen={showDeleteConfirmation}
         onConfirm={confirmDelete}
@@ -120,6 +145,7 @@ const Users = () => {
                         className="mr-4 text-success"
                       />
                     </Link>
+                    <Link to={`/users/userDetails${employee.employeeId}`}>
                     <AiFillEye
                       style={{
                         color: "darkblue",
@@ -128,6 +154,7 @@ const Users = () => {
                       }}
                       className="mr-4 text-primary"
                     />
+                    </Link>
                     <MdDelete
                       style={{
                         color: "red",

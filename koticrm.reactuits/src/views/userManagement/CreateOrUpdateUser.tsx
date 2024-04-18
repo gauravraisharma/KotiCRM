@@ -17,6 +17,7 @@ import { Employee, EmployeeClass } from "../../models/userManagement/employee";
 import { CreateEmployee, GetEmployeeById, GetEmployeeId, UpdateEmployee } from "../../redux-saga/modules/userManagement/apiService";
 import { Department, Designation, Shift } from "../../models/commonModels/SharedModels";
 import { GetDepartments, GetDesignations, GetShifts } from "../../redux-saga/modules/shared/apiService";
+import profile from '../userAuthentication/home/images/profile.avif';
 import 'react-toastify/dist/ReactToastify.css';
 import * as Yup from 'yup';
 
@@ -296,7 +297,7 @@ const CreateOrUpdateUser = () => {
                         <CImage
                           rounded
                           thumbnail
-                          src=""
+                          src={profile}
                           width={120}
                           height={120}
                           className="rounded-circle"

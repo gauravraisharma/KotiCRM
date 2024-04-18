@@ -149,12 +149,15 @@ const CreateOrEditContact = () => {
   };
 
   const validationSchema = Yup.object({
-    ownerId: Yup.string().required("Required (Owner ID)"),
-    firstName: Yup.string().required("Required (First Name)"),
-    lastName: Yup.string().required("Required (Last Name)"),
-    accountID: Yup.string().required("Required (Account Id)"),
-    email: Yup.string().required("Required (Email)"),
-    mobile: Yup.string().required("Required (Mobile)"),
+    firstName: Yup.string().required('Required (First Name)'),
+  lastName: Yup.string().required('Required (Last Name)'),
+  accountId: Yup.string().required('Required (Account ID)'),
+  email: Yup.string().email('Invalid email').required('Required (Email)'),
+  mobile: Yup
+  .string()
+  .matches(/^[0-9]{10}$/, 'Mobile number must be exactly 10 digits')
+  .required('Required (Mobile)'),
+  
   });
 
   return (
@@ -237,27 +240,6 @@ const CreateOrEditContact = () => {
                         />
                       </CCol>
                     </CRow>
-                    {/* <CRow className="mb-3">
-                    <CCol sm={4}>
-                      <label htmlFor="accountName" className="col-form-label">
-                        Account ID
-                      </label>
-                    </CCol>
-                    <CCol sm={8}>
-                      <Field
-                        type="number"
-                        id="accountID"
-                        name="accountID"
-                        className="form-control"
-                        style={{ height: "50px" }}
-                      />
-                      <ErrorMessage
-                        name="accountID"
-                        component="div"
-                        className="invalid-feedback"
-                      />
-                    </CCol>
-                  </CRow> */}
                     <CRow className="mb-3">
                       <CCol sm={4}>
                         <label htmlFor="phone" className="col-form-label">

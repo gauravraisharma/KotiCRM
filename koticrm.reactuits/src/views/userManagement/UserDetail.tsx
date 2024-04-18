@@ -6,7 +6,7 @@ import {
   CButton,
   CCardBody,
 } from "@coreui/react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate} from "react-router-dom";
 
 const userDetails = () => {
   const navigate = useNavigate();
@@ -28,7 +28,7 @@ const userDetails = () => {
                     component="input"
                     type="button"
                     color="secondary"
-                    value="Back To Account"
+                    value="Back To users"
                     onClick={() => navigate("/users")}
                   />
                 </div>
@@ -48,7 +48,7 @@ const userDetails = () => {
                   aria-controls="home"
                   aria-selected="true"
                 >
-                  Account Detail
+                  User Detail
                 </button>
               </li>
               <li className="nav-item" role="presentation">
@@ -62,8 +62,8 @@ const userDetails = () => {
                   aria-controls="contacts"
                   aria-selected="false"
                 >
-                  Contacts
-                  <strong>hello</strong>
+                  User Contacts
+              
                 </button>
               </li>
               <li className="nav-item" role="presentation">
@@ -77,7 +77,7 @@ const userDetails = () => {
                   aria-controls="notes"
                   aria-selected="false"
                 >
-                  Notes <strong>hii</strong>
+                 User Notes
                 </button>
               </li>
               <li className="nav-item" role="presentation">
@@ -91,24 +91,11 @@ const userDetails = () => {
                   aria-controls="attachments"
                   aria-selected="false"
                 >
-                  Attachments
-                  <strong>hllo</strong>
+                  User Attachments
+               
                 </button>
               </li>
-              <li className="nav-item" role="presentation">
-                <button
-                  className="nav-link"
-                  id="invoices-tab"
-                  data-bs-toggle="tab"
-                  data-bs-target="#invoices"
-                  type="button"
-                  role="tab"
-                  aria-controls="invoices"
-                  aria-selected="false"
-                >
-                  Invoices <strong>hii</strong>
-                </button>
-              </li>
+           
             </ul>
             <div className="tab-content" id="accountdetail">
               <div
@@ -118,7 +105,7 @@ const userDetails = () => {
                 aria-labelledby="home-tab"
               >
                 <div className="headings">
-                  <h5>Account information</h5>
+                  <h5>User information</h5>
                 </div>
                 <ul className="account-list">
                   <CRow></CRow>
@@ -148,20 +135,7 @@ const userDetails = () => {
                   </CCard>
                 </CCol>
               </div>
-              <div
-                className="tab-pane fade"
-                id="attachments"
-                role="tabpanel"
-                aria-labelledby="attachments-tab"
-              ></div>
-              <div
-                className="tab-pane fade"
-                id="invoices"
-                role="tabpanel"
-                aria-labelledby="invoices-tab"
-              >
-                <CCol xs={12}></CCol>
-              </div>
+           
             </div>
           </CCardBody>
         </CCard>
