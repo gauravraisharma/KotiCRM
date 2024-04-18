@@ -1,7 +1,9 @@
-﻿using KotiCRM.Repository.DTOs.Invoice;
+﻿using KotiCRM.Repository.DTOs.Contact;
+using KotiCRM.Repository.DTOs.Invoice;
 using KotiCRM.Repository.IRepository;
 using KotiCRM.Repository.Models;
 using KotiCRM.Services.IServices;
+using System.Drawing.Printing;
 
 namespace KotiCRM.Services.Services;
 
@@ -14,10 +16,64 @@ public class InvoiceService : IInvoiceService
         _invoiceRepository = invoiceRepository;
     }
 
-    public async Task<IEnumerable<InvoiceCreationModel>> GetInvoiceList(int? accountID = null, int? status = null, DateTime? startDate = null, DateTime? endDate = null)
+    public async Task<InvoiceWithInvoiceItemAndCount> GetInvoiceList(int? accountID = null, int? status = null, DateTime? startDate = null, DateTime? endDate = null, int? pageNumber = null, int? pageSize = null)
     {
-        return await _invoiceRepository.GetInvoiceList(accountID, status, startDate, endDate);
+            var invoiceList = (from invoices in await _invoiceRepository.GetInvoiceList(accountID, status, startDate, endDate)
+                               select new InvoiceWithItemsDTO
+                               {
+                                   Invoice = new InvoiceDTO
+                                   {
+                                       ID = invoices.Invoice.ID,
+                                       AccountID = invoices.Invoice.AccountID,
+                                       OwnerID = invoices.Invoice.OwnerID,
+                                       ContactID = invoices.Invoice.ContactID,
+                                       Subject = invoices.Invoice.Subject,
+                                       InvoiceDate = invoices.Invoice.InvoiceDate,
+                                       DueDate = invoices.Invoice.DueDate,
+                                       DealName = invoices.Invoice.DealName,
+                                       PurchaseOrder = invoices.Invoice.PurchaseOrder,
+                                       Status = invoices.Invoice.Status,
+                                       FromBillingCity = invoices.Invoice.FromBillingCity,
+                                       FromBillingCountry = invoices.Invoice.FromBillingCountry,
+                                       FromBillingStreet = invoices.Invoice.FromBillingStreet,
+                                       FromBillingState = invoices.Invoice.FromBillingState,
+                                       FromZipCode = invoices.Invoice.FromZipCode,
+                                       ToBillingCity = invoices.Invoice.ToBillingCity,
+                                       ToBillingStreet = invoices.Invoice.ToBillingStreet,
+                                       ToBillingState = invoices.Invoice.ToBillingState,
+                                       ToBillingCountry = invoices.Invoice.ToBillingCountry,
+                                       ToZipCode = invoices.Invoice.ToZipCode,
+                                       TermsAndConditions = invoices.Invoice.TermsAndConditions,
+                                       Description = invoices.Invoice.Description,
+                                       Isdelete = invoices.Invoice.Isdelete,
+                                       CreatedBy = invoices.Invoice.CreatedBy,
+                                       CreatedOn = invoices.Invoice.CreatedOn,
+                                       ModifiedBy = invoices.Invoice.ModifiedBy,
+                                       ModifiedOn = invoices.Invoice.ModifiedOn
+                                   },
+                                   InvoiceItems = (from item in invoices.InvoiceItems
+                                                   select new InvoiceItemDTO
+                                                   {
+                                                       ID = item.ID,
+                                                       InvoiceID = item.InvoiceID,
+                                                       Sno = item.Sno,
+                                                       ProductName = item.ProductName,
+                                                       Description = item.Description,
+                                                       Quantity = item.Quantity,
+                                                       Amount = item.Amount,
+                                                       Discount = item.Discount,
+                                                       Tax = item.Tax,
+                                                       Total = item.Total,
+                                                       IsDeleted = item.IsDeleted
+                                                   }).ToList()
+                               })
+                              .Skip(pageNumber.HasValue && pageSize.HasValue ? (pageNumber.Value - 1) * pageSize.Value : 0)
+                               .Take(pageNumber.HasValue && pageSize.HasValue ? pageSize.Value : int.MaxValue);
+        var invoice = await _invoiceRepository.GetInvoiceList(null, null, startDate, endDate);
+        int count = invoice.Count();
+        return new InvoiceWithInvoiceItemAndCount { Invoices = invoiceList, InvoiceCount = count };
     }
+
 
     public async Task<InvoiceCreationModel> GetInvoiceDetails(int id)
     {

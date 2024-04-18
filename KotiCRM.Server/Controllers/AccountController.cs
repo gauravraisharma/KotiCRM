@@ -1,4 +1,5 @@
 ﻿using Azure;
+using KotiCRM.Repository.DTOs.AccountDTO;
 using KotiCRM.Repository.Models;
 using KotiCRM.Services.IServices;
 using Microsoft.AspNetCore.Authorization;
@@ -21,9 +22,9 @@ namespace KotiCRM.Server.Controllers
 
         [HttpGet]
         [Route("GetAccountList")]
-        public async Task<IEnumerable<Account>> GetAccountList()
+        public async Task<AccountWithCountDTO> GetAccountList(string? searchQuery, int? pageNumber, int? pageSize)
         {
-            return await _accountService.GetAccountList();
+            return await _accountService.GetAccountList(searchQuery, pageNumber, pageSize);
         }
 
         [HttpGet("GetAccountDetails/{id}")]

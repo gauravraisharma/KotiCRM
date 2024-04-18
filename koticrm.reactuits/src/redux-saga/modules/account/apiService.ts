@@ -7,8 +7,13 @@ import {
 import { Account } from '../../../models/account/Account';
 import { SharedModel, SharedOwnerModel } from '../../../models/commonModels/SharedModels';
 
-export function GetAccountList(): Promise<apiResponse<Account[]>> {
-    return axiosInstance.get<Account[]>(`/Account/GetAccountList`).then((response: AxiosResponse<Account[]>) => responseBody(response)).
+export function GetAccountList(searchQuery?: string, pageNumber?: number, pageSize?: number): Promise<apiResponse<Account[]>> {
+    const params = new URLSearchParams();
+
+    if (searchQuery) params.append('searchQuery', searchQuery.toString());
+    if (pageNumber) params.append('pageNumber', pageNumber.toString());
+    if (pageSize) params.append('pageSize', pageSize.toString());
+    return axiosInstance.get<Account[]>(`/Account/GetAccountList?${params.toString()}`).then((response: AxiosResponse<Account[]>) => responseBody(response)).
         catch((error: AxiosError) => {
             const errorResponse: apiResponse<Account[]> = {
                 data: [],

@@ -34,6 +34,7 @@ const Users = () => {
   const [employeesList, setEmployeesList] = useState<Employees[]>([]);
   const [userId, setUserId] = useState<string>("");
   const [isLoading, setIsLoading] = useState(true);
+  const [dropdownValue, setDropdownValue] = useState("Select option")
   const [showDeleteConfirmation, setShowDeleteConfirmation] =
     useState<boolean>(false);
 
@@ -54,6 +55,10 @@ const Users = () => {
   };
   // const isLoading = useSelector((state: any) => state.u.isLoading);
 
+  //Handle dropdown change
+  const handleDropdownChange =(newValue:any)=>{
+    setDropdownValue(newValue)
+  }
 
   const handleDeleteClick = (id: string) => {
     setUserId(id);
@@ -90,17 +95,19 @@ const Users = () => {
       <CCol xs={12}>
             <CRow className="align-items-center m-1">
   <CCol xs={2}>
-    <CDropdown className="custom-dropdown">
-      <CDropdownToggle color="none" className="custom-toggle">Dropdown button</CDropdownToggle>
-      <CDropdownMenu className="custom-menu">
-        <CDropdownItem href="#">Name</CDropdownItem>
-        <CDropdownItem href="#">Emp code</CDropdownItem>
-        <CDropdownItem href="#">Blood Group</CDropdownItem>
-        <CDropdownItem href="#">Birthday</CDropdownItem>
-        <CDropdownItem href="#">RoleId</CDropdownItem>
-        <CDropdownItem href="#">Designation</CDropdownItem>
-      </CDropdownMenu>
-    </CDropdown>
+  <CDropdown className="custom-dropdown">
+            <CDropdownToggle color="none" className="custom-toggle">
+                {dropdownValue}
+            </CDropdownToggle>
+            <CDropdownMenu className="custom-menu">
+                <CDropdownItem onClick={() => handleDropdownChange('Name')}>Name</CDropdownItem>
+                <CDropdownItem onClick={() => handleDropdownChange('Emp code')}>Emp code</CDropdownItem>
+                <CDropdownItem onClick={() => handleDropdownChange('Blood Group')}>Blood Group</CDropdownItem>
+                <CDropdownItem onClick={() => handleDropdownChange('Birthday')}>Birthday</CDropdownItem>
+                <CDropdownItem onClick={() => handleDropdownChange('RoleId')}>RoleId</CDropdownItem>
+                <CDropdownItem onClick={() => handleDropdownChange('Designation')}>Designation</CDropdownItem>
+            </CDropdownMenu>
+        </CDropdown>
   </CCol>
   <CCol xs={4}>
     <CInputGroup>
@@ -110,7 +117,7 @@ const Users = () => {
       <CFormInput
         id="searchInput"
         type="text"
-        placeholder="Search by account name..."
+        placeholder= {`Search by ${dropdownValue}...`}
         className="border-bottom-0" 
       />
     </CInputGroup>

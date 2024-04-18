@@ -4,6 +4,8 @@ import {
   CCardBody,
   CCardHeader,
   CFormSelect,
+  CPagination,
+  CPaginationItem,
   CSpinner,
   CTable,
   CTableBody,
@@ -72,8 +74,11 @@ const Invoices: React.FC<InvoiceProps> = ({
   const [status, setStatus] = useState(null);
   const [startDate, setStartDate] = useState(getFirstDayOfMonth());
   const [endDate, setEndDate] = useState(getLastDayOfMonth());
+  const [pageNumber, setPageNumber] = useState<number>(1);
+
 
   const invoices = useSelector((state: any) => state.invoiceReducer.invoices);
+  console.log(invoices)
   const invoiceStatuses = useSelector(
     (state: any) => state.invoiceReducer.invoiceStatus
   );
@@ -97,8 +102,8 @@ const Invoices: React.FC<InvoiceProps> = ({
 
   let createdAndPending = 0,
     paid = 0;
-  const invoiceCount = invoices?.length;
-  invoices.map((invoiceWithItems) => {
+  const invoiceCount = invoices.invoices?.length;
+  invoices.invoices.map((invoiceWithItems) => {
     const currentInvoiceItem = invoiceWithItems.invoiceItems;
     if (
       invoiceWithItems.invoice.status === 1 ||
@@ -164,6 +169,7 @@ const Invoices: React.FC<InvoiceProps> = ({
     }
   };
 
+
   function getInvoiceStatusValue(statusValue: any): any {
     const iStatus = invoiceStatus?.find(
       (status: any) => status.value === statusValue
@@ -180,8 +186,18 @@ const Invoices: React.FC<InvoiceProps> = ({
     return `${day}/${month < 10 ? "0" : ""}${month}/${year}`;
   }
 
+    // Pagination
+    const pageSize = 5;
+    const totalCount = invoices.invoiceCount;
+    const totalPages = Math.ceil(totalCount / pageSize);
+  
+    //Handle page change
+    const handlePageChange = (pageNumber: number) => {
+      setPageNumber(pageNumber);
+    };
+
   useEffect(() => {
-    dispatch(getInvoices(accountID, status, startDate, endDate));
+    dispatch(getInvoices(accountID, status, startDate, endDate, pageNumber, pageSize));
   }, [
     dispatch,
     accountID,
@@ -191,6 +207,8 @@ const Invoices: React.FC<InvoiceProps> = ({
     invoiceCreateResponse,
     invoiceDeleteResponse,
     invoiceUpdateResponse,
+    pageNumber,
+    pageSize
   ]);
 
   useEffect(() => {
@@ -239,7 +257,7 @@ const Invoices: React.FC<InvoiceProps> = ({
             onChange={handleAccountChange}
           >
             <option value={0}>Select Account...</option>
-            {fetchedAccounts.map((fetchedAccount) => (
+            {fetchedAccounts.account?.map((fetchedAccount) => (
               <option key={fetchedAccount.id} value={fetchedAccount.id}>
                 {fetchedAccount.accountName}
               </option>
@@ -293,13 +311,13 @@ const Invoices: React.FC<InvoiceProps> = ({
         </div>
       </CCard>
       <div className="d-flex  my-3">
-        <h4 className="me-5">
+        <h5 className="me-5">
           Created + Pending :{" "}
           <span style={{ color: "red" }}>${createdAndPending}</span>
-        </h4>
-        <h4>
+        </h5>
+        <h5>
           Paid: <span style={{ color: "green" }}>${paid}</span>
-        </h4>
+        </h5>
       </div>
       {showCreateInvoice ? (
         <NewInvoice
@@ -360,7 +378,7 @@ const Invoices: React.FC<InvoiceProps> = ({
 
                   <CTableBody>
                     {invoices ? (
-                      invoices?.map((invoiceModel: any) => (
+                      invoices.invoices?.map((invoiceModel: any) => (
                         <CTableRow key={invoiceModel.invoice?.id}>
                           <CTableDataCell>
                             {invoiceModel.invoice?.subject}
@@ -443,6 +461,38 @@ const Invoices: React.FC<InvoiceProps> = ({
                     )}
                   </CTableBody>
                 </CTable>
+                <CPagination
+                      size="sm"
+                      align="end"
+                      aria-label="Page navigation example"
+                      className="m-auto"
+                    >
+                      <CPaginationItem
+                        onClick={() => handlePageChange(pageNumber - 1)}
+                        disabled={pageNumber === 1}
+                        style={{ margin: "0 2px", cursor: "pointer", fontSize: "12px" }}
+
+                      >
+                        <span aria-hidden="true">&laquo;</span>
+                      </CPaginationItem>
+                      {Array.from({ length: totalPages }, (_, index) => (
+                        <CPaginationItem
+                          key={index}
+                          active={pageNumber === index + 1}
+                          onClick={() => handlePageChange(index + 1)}
+                          style={{ margin: "0 2px", cursor: "pointer", fontSize: "12px" }}
+                        >
+                          {index + 1}
+                        </CPaginationItem>
+                      ))}
+                      <CPaginationItem
+                        onClick={() => handlePageChange(pageNumber + 1)}
+                        disabled={pageNumber === totalPages}
+                        style={{ margin: "0 2px", cursor: "pointer", fontSize: "12px" }}
+                      >
+                        <span aria-hidden="true">&raquo;</span>
+                      </CPaginationItem>
+                    </CPagination>
               </CCardBody>
             </CCard>
           )}

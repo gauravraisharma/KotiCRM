@@ -507,7 +507,7 @@ const CreateOrEditContact = () => {
                                 ? selectedAccount.accountName
                                 : "Select Account"}
                             </option>
-                            {fetchedAccounts.map((account: Account) => (
+                            {fetchedAccounts.account.map((account: Account) => (
                               <option key={account.id} value={account.id}>
                                 {account.accountName}
                               </option>

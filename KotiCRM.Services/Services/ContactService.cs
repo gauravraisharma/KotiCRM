@@ -2,6 +2,7 @@
 using KotiCRM.Repository.IRepository;
 using KotiCRM.Repository.Models;
 using KotiCRM.Services.IServices;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 
 namespace KotiCRM.Services.Services;
@@ -120,9 +121,15 @@ public class ContactService : IContactService
     public async Task<ContactWithAccountNameListAndTotalCountDTO> GetContactList(int? accountId, string? searchQuery, int? pageNumber, int? pageSize)
     {
         IEnumerable<ContactWithAccountNameDTO> contactWithAccountNameDTOs =
-        from contact in await _contactRepository.GetContactList()
+        (from contact in await _contactRepository.GetContactList()
         join account in await _accountRepository.GetAccountList()
         on contact.AccountID equals account.Id
+        where (string.IsNullOrEmpty(searchQuery) ||
+                  contact.FirstName.Contains(searchQuery, StringComparison.OrdinalIgnoreCase) ||
+                  contact.LastName.Contains(searchQuery, StringComparison.OrdinalIgnoreCase) ||
+                  contact.Email.Contains(searchQuery, StringComparison.OrdinalIgnoreCase) ||
+                  contact.Mobile.Contains(searchQuery, StringComparison.OrdinalIgnoreCase))
+                  && (!accountId.HasValue || contact.AccountID == accountId.Value)
         select new ContactWithAccountNameDTO
         {
             Id = contact.Id,
@@ -149,33 +156,36 @@ public class ContactService : IContactService
             ZipCode = contact.ZipCode,
             Country = contact.Country,
             Description = contact.Description
-        };
-        int count = contactWithAccountNameDTOs.Count();
+        }).Skip(pageNumber.HasValue && pageSize.HasValue ? (pageNumber.Value - 1) * pageSize.Value : 0)
+            .Take(pageNumber.HasValue && pageSize.HasValue ? pageSize.Value : 10);
+
+        IEnumerable<Contact> contacts = await _contactRepository.GetContactList();
+        int count = contacts.Count();
         // Apply search filter if searchQuery is provided
-        if (!string.IsNullOrEmpty(searchQuery))
-        {
-            contactWithAccountNameDTOs = contactWithAccountNameDTOs.Where(c =>
-                c.FirstName!.Contains(searchQuery, StringComparison.OrdinalIgnoreCase) ||
-                c.LastName!.Contains(searchQuery, StringComparison.OrdinalIgnoreCase) ||
-                c.Email!.Contains(searchQuery, StringComparison.OrdinalIgnoreCase) ||
-                c.Mobile!.Contains(searchQuery, StringComparison.OrdinalIgnoreCase));
-            count = contactWithAccountNameDTOs.Count();
-        }
+        //if (!string.IsNullOrEmpty(searchQuery))
+        //{
+        //    contactWithAccountNameDTOs = contactWithAccountNameDTOs.Where(c =>
+        //        c.FirstName!.Contains(searchQuery, StringComparison.OrdinalIgnoreCase) ||
+        //        c.LastName!.Contains(searchQuery, StringComparison.OrdinalIgnoreCase) ||
+        //        c.Email!.Contains(searchQuery, StringComparison.OrdinalIgnoreCase) ||
+        //        c.Mobile!.Contains(searchQuery, StringComparison.OrdinalIgnoreCase));
+        //    count = contactWithAccountNameDTOs.Count();
+        //}
 
         // Apply filter by accountId if provided
-        if (accountId.HasValue)
-        {
-            contactWithAccountNameDTOs = contactWithAccountNameDTOs.Where(c => c.AccountID == accountId.Value);
-            count = contactWithAccountNameDTOs.Count();
-        }
+        //if (accountId.HasValue)
+        //{
+        //    contactWithAccountNameDTOs = contactWithAccountNameDTOs.Where(c => c.AccountID == accountId.Value);
+        //    count = contactWithAccountNameDTOs.Count();
+        //}
 
         // Paginate the result
-        if (pageNumber.HasValue && pageSize.HasValue)
-        {
-            contactWithAccountNameDTOs = contactWithAccountNameDTOs
-            .Skip((pageNumber.Value - 1) * pageSize.Value)
-            .Take(pageSize.Value);
-        }
+        //if (pageNumber.HasValue && pageSize.HasValue)
+        //{
+        //    contactWithAccountNameDTOs = contactWithAccountNameDTOs
+        //    .Skip((pageNumber.Value - 1) * pageSize.Value)
+        //    .Take(pageSize.Value);
+        //}
         return new ContactWithAccountNameListAndTotalCountDTO { ContactsCount = count, ContactWithAccountNames = contactWithAccountNameDTOs };
     }
 

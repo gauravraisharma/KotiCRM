@@ -29,6 +29,8 @@ import {
   CFormInput,
   CInputGroup,
   CInputGroupText,
+  CPagination,
+  CPaginationItem,
   CRow,
   CSpinner,
   CTable,
@@ -55,6 +57,11 @@ const NewButton = styled.button`
 `;
 
 const AccountList: React.FC = () => {
+  //use hooks
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  //State declaration
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [accountId, setAccountId] = useState<number>();
   const [stateData, setStateData] = useState<boolean>(false);
@@ -62,10 +69,8 @@ const AccountList: React.FC = () => {
   const [openCreateModal, setCreateModal] = useState<boolean>(false);
   const [accountData, setAccountData] = useState<Account | null>(null);
   const [searchTerm, setSearchTerm] = useState<string>("");
+  const [pageNumber, setPageNumber] = useState<number>(1);
 
-  const dispatch = useDispatch();
-
-  const navigate = useNavigate();
 
   const showItems = (id: any) => {
     navigate(`/accounts/accountDetails/${id}`);
@@ -125,13 +130,35 @@ const AccountList: React.FC = () => {
   );
   const isLoading = useSelector((state: any) => state.accountReducer.isLoading);
 
+  //Get owner name
   function getOwnerName(ownerId: string): string {
     const owner = accountOwner?.find((owner: any) => owner.id === ownerId);
     return owner ? owner.label : "";
   }
 
+  // Pagination
+  const pageSize = 5;
+  const totalCount = accounts.accountCount;
+  const totalPages = Math.ceil(totalCount / pageSize);
+
+  //Handle page change
+  const handlePageChange = (pageNumber: number) => {
+    setPageNumber(pageNumber);
+  };
+
+  //Handle enter click to search account
+  const handleKeyDown = (e: any) => {
+    if (e.keyCode === 13) {
+      dispatch(getAccounts(searchTerm, pageNumber, pageSize));
+    }
+  }
+  //Focus out event to searchh
+  const handleBlur = () => {
+    dispatch(getAccounts(searchTerm, pageNumber, pageSize));
+  }
+  //Effects
   useEffect(() => {
-    dispatch(getAccounts());
+    dispatch(getAccounts(searchTerm, pageNumber, pageSize));
     dispatch(getAccountOwner());
     dispatch(getAccountStatus());
     dispatch(getAccountType());
@@ -141,14 +168,14 @@ const AccountList: React.FC = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    dispatch(getAccounts());
-  }, [dispatch, refreshList, createresponse, updateResponse]);
+    dispatch(getAccounts(searchTerm, pageNumber, pageSize));
+  }, [dispatch, refreshList, createresponse, updateResponse,pageNumber, pageSize]);
 
-  const filteredAccounts = searchTerm
-    ? accounts.filter((account: Account) =>
-        account.accountName.toLowerCase().includes(searchTerm.toLowerCase())
-      )
-    : accounts;
+  // const filteredAccounts = searchTerm
+  //   ? accounts.filter((account: Account) =>
+  //     account.accountName.toLowerCase().includes(searchTerm.toLowerCase())
+  //   )
+  //   : accounts;
 
   return (
     <>
@@ -166,7 +193,7 @@ const AccountList: React.FC = () => {
           />
         </div>
       )}
-      <ToastContainer />
+      {/* <ToastContainer /> */}
       {!openCreateModal && !openEditModal && (
         <CRow>
           <CCol xs={12}>
@@ -180,6 +207,10 @@ const AccountList: React.FC = () => {
                     id="searchInput"
                     type="text"
                     placeholder="Search by account name..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    onKeyDown={handleKeyDown}
+                    onBlur={handleBlur}
                   />
                 </CInputGroup>
               </CCol>
@@ -188,7 +219,7 @@ const AccountList: React.FC = () => {
                   onClick={handleCreateNew}
                   type="button"
                   className="btn btn-primary"
-                  style={{padding:'6px 16px'}}
+                  style={{ padding: '6px 16px' }}
                 >
                   + New
                 </button>
@@ -248,7 +279,7 @@ const AccountList: React.FC = () => {
                         </CTableRow>
                       </CTableHead>
                       <CTableBody>
-                        {filteredAccounts?.map((account: Account) => (
+                        {accounts.account?.map((account: Account) => (
                           <CTableRow key={account.id}>
                             <CTableDataCell>
                               {account.accountName}
@@ -293,6 +324,38 @@ const AccountList: React.FC = () => {
                         ))}
                       </CTableBody>
                     </CTable>
+                    <CPagination
+                      size="sm"
+                      align="end"
+                      aria-label="Page navigation example"
+                      className="m-auto"
+                    >
+                      <CPaginationItem
+                        onClick={() => handlePageChange(pageNumber - 1)}
+                        disabled={pageNumber === 1}
+                        style={{ margin: "0 2px", cursor: "pointer", fontSize: "12px" }}
+
+                      >
+                        <span aria-hidden="true">&laquo;</span>
+                      </CPaginationItem>
+                      {Array.from({ length: totalPages }, (_, index) => (
+                        <CPaginationItem
+                          key={index}
+                          active={pageNumber === index + 1}
+                          onClick={() => handlePageChange(index + 1)}
+                          style={{ margin: "0 2px", cursor: "pointer", fontSize: "12px" }}
+                        >
+                          {index + 1}
+                        </CPaginationItem>
+                      ))}
+                      <CPaginationItem
+                        onClick={() => handlePageChange(pageNumber + 1)}
+                        disabled={pageNumber === totalPages}
+                        style={{ margin: "0 2px", cursor: "pointer", fontSize: "12px" }}
+                      >
+                        <span aria-hidden="true">&raquo;</span>
+                      </CPaginationItem>
+                    </CPagination>
                   </CCardBody>
                 </CCard>
               </CCol>

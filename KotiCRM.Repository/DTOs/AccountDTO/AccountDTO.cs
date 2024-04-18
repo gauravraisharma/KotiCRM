@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KotiCRM.Repository.DTOs.Account
+namespace KotiCRM.Repository.DTOs.AccountDTO
 {
     public class AccountDTO
     {
@@ -23,7 +23,7 @@ namespace KotiCRM.Repository.DTOs.Account
 
         [ForeignKey("Industry")]
         [Required]
-        public string Industry { get; set; }
+        public int IndustryId { get; set; }
 
         [Column(TypeName = "nvarchar(200)")]
         public string AnnualRevenue { get; set; }

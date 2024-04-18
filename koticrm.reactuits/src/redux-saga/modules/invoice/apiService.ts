@@ -16,12 +16,14 @@ export function GetInvoiceStatus(): Promise<apiResponse<SharedModel[]>> {
         });
 }
 
-export function GetInvoiceList(accountID?: number | null, status?: number | null, startDate?: Date | null, endDate?: Date | null): Promise<apiResponse<InvoiceCreationModel[]>> {
+export function GetInvoiceList(accountID?: number | null, status?: number | null, startDate?: Date | null, endDate?: Date | null, pageNumber?: number, pageSize?: number): Promise<apiResponse<InvoiceCreationModel[]>> {
     const params = new URLSearchParams();
     if (accountID) params.append('accountID', accountID.toString());
     if (status) params.append('status', status.toString());
     if (startDate) params.append('startDate', startDate.toString());
     if (endDate) params.append('endDate', endDate.toString());
+    if (pageNumber) params.append('pageNumber', pageNumber.toString());
+    if (pageSize) params.append('pageSize', pageSize.toString());
 
     const getInvoiceListURL = `/Invoice/GetInvoiceList?${params.toString()}`;
 

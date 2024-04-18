@@ -18,6 +18,7 @@ import {
   CFormInput,
   CSpinner,
   CPaginationItem,
+
 } from "@coreui/react";
 import "../../css/style.css";
 import { useDispatch, useSelector } from "react-redux";
@@ -45,8 +46,7 @@ interface Props {
 const Contacts = ({ getContactsCount, accountId }: Props) => {
   const dispatch = useDispatch();
   const [contactId, setContactId] = useState<number>(0);
-  const [showDeleteConfirmation, setShowDeleteConfirmation] =
-    useState<boolean>(false);
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState<boolean>(false);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [pageNumber, setPageNumber] = useState<number>(1);
 
@@ -67,8 +67,9 @@ const Contacts = ({ getContactsCount, accountId }: Props) => {
 
   useEffect(() => {
     dispatch(getContacts(accountId, searchQuery, pageNumber, pageSize));
-  }, [dispatch, accountId, searchQuery, pageNumber, pageSize]);
+  }, [dispatch, accountId, pageNumber, pageSize]);
 
+  console.log(fetchedContactWithAccountNameListAndTotal)
   useEffect(() => {
     if (getContactsCount) {
       getContactsCount(contactsCount);
@@ -98,6 +99,17 @@ const Contacts = ({ getContactsCount, accountId }: Props) => {
   const cancelDelete = () => {
     setShowDeleteConfirmation(false);
   };
+
+  //Handle enter click to search account
+  const handleKeyDown = (e:any) => {
+    if (e.keyCode === 13) {
+      dispatch(getContacts(accountId, searchQuery, pageNumber, pageSize));
+    }
+  }
+  //Focus out event to searchh
+  const handleBlur = () => {
+    dispatch(getContacts(accountId, searchQuery, pageNumber, pageSize));
+  }
 
   return (
     <>
@@ -129,6 +141,8 @@ const Contacts = ({ getContactsCount, accountId }: Props) => {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search by name,email,mobile..."
+                  onKeyDown={handleKeyDown}
+                  onBlur={handleBlur}
                 />
               </CInputGroup>
             </CCol>
@@ -153,129 +167,137 @@ const Contacts = ({ getContactsCount, accountId }: Props) => {
         onCancel={cancelDelete}
         contactId={contactId}
       />
-     
-              <CRow>
-                <CCol xs={12}>
-                  <CCard className="mb-4 mt-2">
-                    <CCardHeader>
-                      <CCol xs={6} className="d-flex align-items-center">
-                        <h5>
-                          <strong>Contacts</strong>
-                        </h5>
-                      </CCol>
-                    </CCardHeader>
-                    <CCardBody>
-                      <CTable responsive striped hover>
-                        <CTableHead>
-                          <CTableRow>
-                            {tableHeader.map((header, index) => (
-                              <CTableHeaderCell key={index} scope="col">
-                                {header}
-                              </CTableHeaderCell>
-                            ))}
-                          </CTableRow>
-                        </CTableHead>
-                        <CTableBody>
-                          {fetchedContactWithAccountNameListAndTotal
-                            .contactWithAccountNames.length > 0 ? (
-                            fetchedContactWithAccountNameListAndTotal.contactWithAccountNames?.map(
-                              (
-                                contact: ContactWithAccountName,
-                                index: number
-                              ) => (
-                                <CTableRow key={index}>
-                                  <CTableDataCell>{`${contact?.firstName} ${contact?.lastName}`}</CTableDataCell>
-                                  <CTableDataCell>
-                                    {contact.accountName}
-                                  </CTableDataCell>
-                                  <CTableDataCell>{contact?.email}</CTableDataCell>
-                                  <CTableDataCell>{contact?.mobile}</CTableDataCell>
-                                  <CTableDataCell>
-                                    {getAccountOwnerName(contact?.ownerId)}
-                                  </CTableDataCell>
-                                  <CTableDataCell>
-                                    <Link to={`/contacts/editContact/${contact?.id}`}>
-                                      <MdEdit
-                                        style={{
-                                          color: "green",
-                                          marginRight: "10px",
-                                          fontSize: "20px",
-                                        }}
-                                        className="mr-4 text-success"
-                                      />
-                                    </Link>
-                                    <Link to={`/contacts/${contact?.id}`}>
-                                      <AiFillEye
-                                        style={{
-                                          color: "darkblue",
-                                          marginRight: "10px",
-                                          fontSize: "20px",
-                                        }}
-                                        className="mr-4 text-primary"
-                                      />
-                                    </Link>
-                                    <MdDelete
-                                      style={{
-                                        color: "red",
-                                        marginRight: "10px",
-                                        fontSize: "20px",
-                                        cursor: "pointer",
-                                      }}
-                                      className="text-danger"
-                                      onClick={() => handleDeleteClick(contact.id)}
-                                    />
-                                  </CTableDataCell>
-                                </CTableRow>
-                              )
-                            )
-                          ) : (
-                            <CTableRow>
-                              <div>
-                                <p>No contacts found.</p>
-                              </div>
-                            </CTableRow>
-                          )}
-                        </CTableBody>
-                      </CTable>
-                      <CPagination
-                        size="sm"
-                        align="end"
-                        aria-label="Page navigation example"
-                        className="m-auto"
-                      >
-                        <CPaginationItem
-                          onClick={() => handlePageChange(pageNumber - 1)}
-                          disabled={pageNumber === 1}
-                          style={{ margin: "0 2px", cursor: "pointer", fontSize: "12px" }}
-                        >
-                          &lt; {/* Left arrow */}
-                        </CPaginationItem>
-                        {Array.from({ length: totalPages }, (_, index) => (
-                          <CPaginationItem
-                            key={index}
-                            active={pageNumber === index + 1}
-                            onClick={() => handlePageChange(index + 1)}
-                            style={{ margin: "0 2px", cursor: "pointer", fontSize: "12px" }}
-                          >
-                            {index + 1}
-                          </CPaginationItem>
-                        ))}
-                        <CPaginationItem
-                          onClick={() => handlePageChange(pageNumber + 1)}
-                          disabled={pageNumber === totalPages}
-                          style={{ margin: "0 2px", cursor: "pointer", fontSize: "12px" }}
-                        >
-                          &gt; {/* Right arrow */}
-                        </CPaginationItem>
-                      </CPagination>
-                    </CCardBody>
-                  </CCard>
-                </CCol>
-              </CRow>
-         
-          
-      
-     
+
+      <CRow>
+        <CCol xs={12}>
+          <CCard className="mb-4 mt-2">
+            <CCardHeader>
+              <CCol xs={6} className="d-flex align-items-center">
+                <h5>
+                  <strong>Contacts</strong>
+                </h5>
+              </CCol>
+            </CCardHeader>
+            <CCardBody>
+              <CTable responsive striped hover>
+                <CTableHead>
+                  <CTableRow>
+                    {tableHeader.map((header, index) => (
+                      <CTableHeaderCell key={index} scope="col">
+                        {header}
+                      </CTableHeaderCell>
+                    ))}
+                  </CTableRow>
+                </CTableHead>
+                <CTableBody>
+                  {fetchedContactWithAccountNameListAndTotal
+                    .contactWithAccountNames.length > 0 ? (
+                    fetchedContactWithAccountNameListAndTotal.contactWithAccountNames?.map(
+                      (
+                        contact: ContactWithAccountName,
+                        index: number
+                      ) => (
+                        <CTableRow key={index}>
+                          <CTableDataCell>{`${contact?.firstName} ${contact?.lastName}`}</CTableDataCell>
+                          <CTableDataCell>
+                            {contact.accountName}
+                          </CTableDataCell>
+                          <CTableDataCell>{contact?.email}</CTableDataCell>
+                          <CTableDataCell>{contact?.mobile}</CTableDataCell>
+                          <CTableDataCell>
+                            {getAccountOwnerName(contact?.ownerId)}
+                          </CTableDataCell>
+                          <CTableDataCell>
+                            <Link to={`/contacts/editContact/${contact?.id}`}>
+                              <MdEdit
+                                style={{
+                                  color: "green",
+                                  marginRight: "10px",
+                                  fontSize: "20px",
+                                }}
+                                className="mr-4 text-success"
+                              />
+                            </Link>
+                            <Link to={`/contacts/${contact?.id}`}>
+                              <AiFillEye
+                                style={{
+                                  color: "darkblue",
+                                  marginRight: "10px",
+                                  fontSize: "20px",
+                                }}
+                                className="mr-4 text-primary"
+                              />
+                            </Link>
+                            <MdDelete
+                              style={{
+                                color: "red",
+                                marginRight: "10px",
+                                fontSize: "20px",
+                                cursor: "pointer",
+                              }}
+                              className="text-danger"
+                              onClick={() => handleDeleteClick(contact.id)}
+                            />
+                          </CTableDataCell>
+                        </CTableRow>
+                      )
+                    )
+                  ) : (
+                    <CTableRow>
+                      <div>
+                        <p>No contacts found.</p>
+                      </div>
+                    </CTableRow>
+                  )}
+                </CTableBody>
+              </CTable>
+              
+              <CPagination
+                size="sm"
+                align="end"
+                aria-label="Page navigation example"
+                className="m-auto"
+              >
+                <CPaginationItem
+                  onClick={() => handlePageChange(pageNumber - 1)}
+                  disabled={pageNumber === 1}
+                  style={{ margin: "0 2px", cursor: "pointer", fontSize: "12px" }}
+
+                >
+                  <span aria-hidden="true">&laquo;</span>
+                </CPaginationItem>
+                {Array.from({ length: totalPages }, (_, index) => (
+                  <CPaginationItem
+                    key={index}
+                    active={pageNumber === index + 1}
+                    onClick={() => handlePageChange(index + 1)}
+                    style={{ margin: "0 2px", cursor: "pointer", fontSize: "12px" }}
+                  >
+                    {index + 1}
+                  </CPaginationItem>
+                ))}
+                <CPaginationItem
+                  onClick={() => handlePageChange(pageNumber + 1)}
+                  disabled={pageNumber === totalPages}
+                  style={{ margin: "0 2px", cursor: "pointer", fontSize: "12px" }}
+                >
+                  <span aria-hidden="true">&raquo;</span>
+                </CPaginationItem>
+              </CPagination>
+              {/* <CPagination
+              size="sm"
+              align="end"
+              aria-label="Page navigation example"
+              className="m-auto"
+        activePage={pageNumber}
+        pages={totalPages}
+        onActivePageChange={(i:any) => setPageNumber(i)}
+        {...({} as any)}
+      ></CPagination> */}
+            </CCardBody>
+          </CCard>
+        </CCol>
+      </CRow >
     </>
   );
 };

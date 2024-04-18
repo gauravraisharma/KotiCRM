@@ -8,8 +8,9 @@ import { CREATE_ACCOUNT_REQUEST,
   UPDATE_ACCOUNT_REQUEST } from "../../../constants/reduxConstants";
 import { Account } from "../../../models/account/Account";
 
-export const getAccounts = () => ({
-  type: GET_ACCOUNTS_FETCH
+export const getAccounts = (searchQuery?: string, pageNumber?: number, pageSize?: number) => ({
+  type: GET_ACCOUNTS_FETCH,
+  payload : {searchQuery,pageNumber,pageSize}
 })
 
 export const createAccountRequest = (account: Account) => ({

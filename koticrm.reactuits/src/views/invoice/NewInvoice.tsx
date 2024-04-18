@@ -626,7 +626,7 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
                             <>
                               <Select
                                 name="accountName"
-                                options={accountNames?.map((name: any) => ({
+                                options={accountNames.account?.map((name: any) => ({
                                   key: name.id,
                                   value: name.accountName,
                                   label: (

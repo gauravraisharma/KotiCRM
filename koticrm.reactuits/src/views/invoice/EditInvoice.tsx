@@ -102,8 +102,8 @@ const EditInvoice: React.FC<newInvoiceProps> = () => {
   const contactWithAccountNameListAndTotalCount = useSelector((state: any) => state.contactReducer.contacts);
   const contacts = contactWithAccountNameListAndTotalCount.contactWithAccountNames;
   const fetchedInvoice = useSelector((state: any) => state.invoiceReducer.invoice);
-  const invoice = fetchedInvoice.invoice;
-  const invoiceItems = fetchedInvoice.invoiceItems;
+  const invoice = fetchedInvoice?.invoice;
+  const invoiceItems = fetchedInvoice?.invoiceItems;
   // const organization = useSelector((state: any) => state.sharedReducer.organization);
   const invoiceStatus = useSelector((state: any) => state.invoiceReducer.invoiceStatus);
   const invoiceOwners = useSelector((state: any) => state.invoiceReducer.invoiceOwner);
@@ -122,7 +122,7 @@ const EditInvoice: React.FC<newInvoiceProps> = () => {
 
   useEffect(() => {
     if (invoiceId) {
-      dispatch(getInvoiceByIdRequest(+invoiceId));
+      dispatch(getInvoiceByIdRequest(invoiceId));
     } else {
       setUpdateInvoice(new InvoiceClass());
       dispatch(clearInvoice());
@@ -152,9 +152,10 @@ const EditInvoice: React.FC<newInvoiceProps> = () => {
     }));
   }, [toAddress]);
 
-  const defaultOwner = invoiceOwners?.find(dOwner => dOwner.id === invoice.ownerID);
-  const defaultAccount = accountNames?.find(dAccount => dAccount.id === invoice.accountID);
-  const defaultContact = contacts?.find(dContact => dContact.id === invoice.contactID);
+  const defaultOwner = invoiceOwners?.find(dOwner => dOwner.id === invoice?.ownerID);
+  console.log(invoiceOwners)
+  const defaultAccount = accountNames.account?.find(dAccount => dAccount.id === invoice?.accountID);
+  const defaultContact = contacts?.find(dContact => dContact.id === invoice?.contactID);
 
   // useEffect(() => {
   //   dispatch(getOrganization());
@@ -423,7 +424,7 @@ const EditInvoice: React.FC<newInvoiceProps> = () => {
         <CCardHeader className="mb-3">
           <div className="d-flex justify-content-between align-items-center">
             <div>
-              <h5 className="mb-0">Create Invoice</h5>
+              <h5 className="mb-0">Edit Invoice</h5>
             </div>
             <div className="text-end">
               <CButton
@@ -474,7 +475,7 @@ const EditInvoice: React.FC<newInvoiceProps> = () => {
                                     </>
                                   ),
                                 }))}
-                                defaultValue={{ value: defaultOwner.firstName, label: `${defaultOwner.label} (${defaultOwner.email})` }}
+                                defaultValue={{ value: defaultOwner?.firstName, label: `${defaultOwner?.label} (${defaultOwner?.email})` }}
                                 isSearchable={true}
                                 isClearable={true}
                                 onChange={(e: any, selectedOption: any) => {
@@ -631,7 +632,7 @@ const EditInvoice: React.FC<newInvoiceProps> = () => {
                             <>
                               <Select
                                 name="accountID"
-                                options={accountNames?.map((name: any) => ({
+                                options={accountNames.account?.map((name: any) => ({
                                   key: name.id,
                                   value: name.id,
                                   label: (
@@ -645,7 +646,7 @@ const EditInvoice: React.FC<newInvoiceProps> = () => {
                                     </>
                                   ),
                                 }))}
-                                defaultValue={{ value: defaultAccount.id, label: `${defaultAccount.accountName} (${getAccountOwner(defaultAccount.ownerId)})` }}
+                                defaultValue={{ value: defaultAccount?.id, label: `${defaultAccount?.accountName} (${getAccountOwner(defaultAccount?.ownerId)})` }}
                                 isSearchable
                                 isClearable
                                 onChange={(e: any, selectedOption: any) => {

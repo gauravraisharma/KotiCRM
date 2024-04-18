@@ -27,9 +27,10 @@ import { actionPayloadModel } from '../../../models/actionModel/actionModel';
 import { SharedModel } from '../../../models/commonModels/SharedModels';
 import { getAccounts } from './action';
 
-export function* workGetAccountFetch(): Generator<any> {
+export function* workGetAccountFetch(action: actionPayloadModel): Generator<any> {
   try {
-    const response: any = yield call(GetAccountList);
+    const { searchQuery, pageNumber, pageSize } = action.payload;
+    const response: any = yield call(GetAccountList, searchQuery, pageNumber, pageSize);
     if (response.status != 200) {
       toast.error(response.statusText)
     } else {

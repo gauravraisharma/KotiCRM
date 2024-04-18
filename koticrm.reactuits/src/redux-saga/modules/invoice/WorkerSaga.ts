@@ -41,8 +41,8 @@ export function* workGetInvoiceStatusFetch(): Generator<any> {
 
 export function* workGetInvoicesFetch(action: actionPayloadModel): Generator<any> {
   try {
-    const { accountID, status, startDate, endDate } = action.payload;
-    const response: any = yield call(GetInvoiceList, accountID, status, startDate, endDate);
+    const { accountID, status, startDate, endDate,pageNumber, pageSize } = action.payload;
+    const response: any = yield call(GetInvoiceList, accountID, status, startDate, endDate, pageNumber, pageSize);
     if (response.status != 200) {
       toast.error('Error fetching invoices')
     } else {

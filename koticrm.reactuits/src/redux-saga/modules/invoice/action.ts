@@ -5,9 +5,9 @@ export const getInvoiceStatus = () => ({
   type: GET_INVOICE_STATUS_FETCH
 })
 
-export const getInvoices = (accountID?: number | null, status?: number | null, startDate?: string | null, endDate?: string | null) => ({
+export const getInvoices = (accountID?: number | null, status?: number | null, startDate?: string | null, endDate?: string | null, pageNumber?: number, pageSize?: number) => ({
   type: GET_INVOICES_FETCH,
-  payload: { accountID, status, startDate, endDate }
+  payload: { accountID, status, startDate, endDate, pageNumber, pageSize }
 })
 
 export const getInvoiceByIdRequest = (id: any) => ({
