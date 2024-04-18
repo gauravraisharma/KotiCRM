@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { AiFillEye } from "react-icons/ai";
 import { MdDelete, MdEdit } from "react-icons/md";
-import {  toast } from "react-toastify";
+import { toast } from "react-toastify";
 import { GetEmployeesList } from "../../redux-saga/modules/userManagement/apiService";
 import { Employees } from "../../models/userManagement/employees";
 import DeleteConfirmationModal from "../account/accountsList/DeleteConfirmation";
@@ -29,12 +29,11 @@ import {
 } from "@coreui/react";
 import "../../css/style.css";
 
-
 const Users = () => {
   const [employeesList, setEmployeesList] = useState<Employees[]>([]);
   const [userId, setUserId] = useState<string>("");
   const [isLoading, setIsLoading] = useState(true);
-  const [dropdownValue, setDropdownValue] = useState("Select option")
+  const [dropdownValue, setDropdownValue] = useState("Select option");
   const [showDeleteConfirmation, setShowDeleteConfirmation] =
     useState<boolean>(false);
 
@@ -49,16 +48,15 @@ const Users = () => {
     } catch (error) {
       console.error("Error fetching employees:", error);
       toast.error("Failed to fetch employees. Please try again later.");
-    }finally{
+    } finally {
       setIsLoading(false);
     }
   };
-  // const isLoading = useSelector((state: any) => state.u.isLoading);
 
   //Handle dropdown change
-  const handleDropdownChange =(newValue:any)=>{
-    setDropdownValue(newValue)
-  }
+  const handleDropdownChange = (newValue: any) => {
+    setDropdownValue(newValue);
+  };
 
   const handleDeleteClick = (id: string) => {
     setUserId(id);
@@ -76,7 +74,7 @@ const Users = () => {
 
   return (
     <>
-       {isLoading && (
+      {isLoading && (
         <div className="spinner-backdrop">
           <CSpinner
             size="sm"
@@ -90,48 +88,91 @@ const Users = () => {
           />
         </div>
       )}
-  
+
       <CRow className="mb-3">
-      <CCol xs={12}>
-            <CRow className="align-items-center m-1">
-  <CCol xs={2}>
-  <CDropdown className="custom-dropdown">
-            <CDropdownToggle color="none" className="custom-toggle">
-                {dropdownValue}
-            </CDropdownToggle>
-            <CDropdownMenu className="custom-menu">
-                <CDropdownItem onClick={() => handleDropdownChange('Name')}>Name</CDropdownItem>
-                <CDropdownItem onClick={() => handleDropdownChange('Emp code')}>Emp code</CDropdownItem>
-                <CDropdownItem onClick={() => handleDropdownChange('Blood Group')}>Blood Group</CDropdownItem>
-                <CDropdownItem onClick={() => handleDropdownChange('Birthday')}>Birthday</CDropdownItem>
-                <CDropdownItem onClick={() => handleDropdownChange('RoleId')}>RoleId</CDropdownItem>
-                <CDropdownItem onClick={() => handleDropdownChange('Designation')}>Designation</CDropdownItem>
-            </CDropdownMenu>
-        </CDropdown>
-  </CCol>
-  <CCol xs={4}>
-    <CInputGroup>
-      <CInputGroupText htmlFor="searchInput">
-        Search
-      </CInputGroupText>
-      <CFormInput
-        id="searchInput"
-        type="text"
-        placeholder= {`Search by ${dropdownValue}...`}
-        className="border-bottom-0" 
-      />
-    </CInputGroup>
-  </CCol>
-  <CCol xs={6} className="text-end">
-    <Link to={`/users/createOrUpdateUser`}>
-      <CButton color="primary" variant="outline">
-        + New
-      </CButton>
-    </Link>
-  </CCol>
-  </CRow>
-  </CCol>
-</CRow>
+        <CCol xs={12}>
+          <CRow className="align-items-center m-1">
+            {/* <CCol xs={2}>
+              <CDropdown className="custom-dropdown">
+                <CDropdownToggle color="none" className="custom-toggle">
+                  {dropdownValue}
+                </CDropdownToggle>
+                <CDropdownMenu className="custom-menu">
+                  <CDropdownItem onClick={() => handleDropdownChange("Name")}>
+                    Name
+                  </CDropdownItem>
+                  <CDropdownItem
+                    onClick={() => handleDropdownChange("Emp code")}
+                  >
+                    Emp code
+                  </CDropdownItem>
+                  <CDropdownItem
+                    onClick={() => handleDropdownChange("Blood Group")}
+                  >
+                    Blood Group
+                  </CDropdownItem>
+                  <CDropdownItem
+                    onClick={() => handleDropdownChange("Birthday")}
+                  >
+                    Birthday
+                  </CDropdownItem>
+                  <CDropdownItem onClick={() => handleDropdownChange("RoleId")}>
+                    RoleId
+                  </CDropdownItem>
+                  <CDropdownItem
+                    onClick={() => handleDropdownChange("Designation")}
+                  >
+                    Designation
+                  </CDropdownItem>
+                </CDropdownMenu>
+              </CDropdown>
+            </CCol>
+            <CCol xs={4}>
+              <CInputGroup>
+                <CInputGroupText htmlFor="searchInput">Search</CInputGroupText>
+                <CFormInput
+                  id="searchInput"
+                  type="text"
+                  placeholder={`Search by ${dropdownValue}...`}
+                  className="border-bottom-0"
+                />
+              </CInputGroup>
+            </CCol> */}
+          <CCol xs={2} md={2} lg={4}>
+
+            <div className="input-group mb-3">
+  <select
+    className="form-select"
+    id="searchInput"
+    onChange={(e) => handleDropdownChange(e.target.value)}
+  >
+    <option value="">Select an option</option>
+    <option value="Name">Name</option>
+    <option value="Emp code">Emp code</option>
+    <option value="Blood Group">Blood Group</option>
+    <option value="Birthday">Birthday</option>
+    <option value="RoleId">RoleId</option>
+    <option value="Designation">Designation</option>
+  </select>
+  <input
+    type="text"
+    className="form-control"
+    placeholder={`Enter ${dropdownValue}...`}
+  />
+</div>
+
+</CCol>
+
+            <CCol xs={8} className="text-end">
+              <Link to={`/users/createOrUpdateUser`}>
+                <CButton color="primary" variant="outline">
+                  + New
+                </CButton>
+              </Link>
+            </CCol>
+          </CRow>
+        </CCol>
+      </CRow>
 
       <DeleteConfirmationModal
         isOpen={showDeleteConfirmation}
@@ -173,14 +214,14 @@ const Users = () => {
                       />
                     </Link>
                     <Link to={`/users/userDetail/${employee.employeeId}`}>
-                    <AiFillEye
-                      style={{
-                        color: "darkblue",
-                        marginRight: "10px",
-                        fontSize: "20px",
-                      }}
-                      className="mr-4 text-primary"
-                    />
+                      <AiFillEye
+                        style={{
+                          color: "darkblue",
+                          marginRight: "10px",
+                          fontSize: "20px",
+                        }}
+                        className="mr-4 text-primary"
+                      />
                     </Link>
                     <MdDelete
                       style={{

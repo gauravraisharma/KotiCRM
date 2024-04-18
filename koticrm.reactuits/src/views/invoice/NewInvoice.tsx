@@ -31,7 +31,7 @@ import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import "react-datepicker/dist/react-datepicker.css";
 import { getOrganization } from "../../redux-saga/modules/shared/action";
 import { createInvoiceRequest } from "../../redux-saga/modules/invoice/action";
-import { ToastContainer, toast } from "react-toastify";
+import {  toast } from "react-toastify";
 
 const initialValues = {
   invoiceOwner: "",

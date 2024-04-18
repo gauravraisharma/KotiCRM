@@ -103,7 +103,7 @@ const Invoices: React.FC<InvoiceProps> = ({
   let createdAndPending = 0,
     paid = 0;
   const invoiceCount = invoices.invoices?.length;
-  invoices.invoices.map((invoiceWithItems) => {
+  invoices?.invoices?.map((invoiceWithItems) => {
     const currentInvoiceItem = invoiceWithItems.invoiceItems;
     if (
       invoiceWithItems.invoice.status === 1 ||
@@ -312,12 +312,12 @@ const Invoices: React.FC<InvoiceProps> = ({
           </div>
         </div>
       </CCard>
-      <div className="d-flex  my-3">
-        <h5 className="me-5">
-          Created + Pending :{" "}
+      <div className="d-flex  my-4 ">
+        <h5 style={{fontSize:"18px"}} className="me-5 ">
+            Created + Pending :{" "}
           <span style={{ color: "red" }}>${createdAndPending}</span>
         </h5>
-        <h5>
+        <h5  style={{fontSize:"18px"}}>
           Paid: <span style={{ color: "green" }}>${paid}</span>
         </h5>
       </div>
