@@ -24,6 +24,8 @@ import { loginRequest, loginSuccess } from "../../../redux-saga/modules/auth/act
 import CIcon from "@coreui/icons-react";
 import "../../../css/style.css"
 import { useSelector } from "react-redux";
+import "react-toastify/dist/ReactToastify.css";
+
 
 const Login = () => {
   const dispatch = useDispatch();

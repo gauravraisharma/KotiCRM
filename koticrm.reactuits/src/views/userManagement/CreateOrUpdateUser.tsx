@@ -433,9 +433,7 @@ const CreateOrUpdateUser = () => {
                       <CCol sm={12}>
                         <label htmlFor="relievingDate">
                           Relieving Date{" "}
-                          <span style={{ color: "red", fontSize: "25px" }}>
-                            *
-                          </span>
+                          
                           {isRelievedChecked && (
                             <span style={{ color: "red", fontSize: "25px" }}>
                               *
