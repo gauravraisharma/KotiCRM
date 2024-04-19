@@ -6,6 +6,7 @@ import { deleteInvoiceRequest } from "../../../redux-saga/modules/invoice/action
 import { deleteContact } from "../../../redux-saga/modules/contact/action";
 import { DeleteEmployee } from "../../../redux-saga/modules/userManagement/apiService";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 interface DeleteConfirmationModalProps {
   isOpen: boolean;
@@ -37,8 +38,12 @@ const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = ({
     } else if (contactId) {
       dispatch(deleteContact(contactId));
     }else if(userId){
-      await DeleteEmployee(userId);
-      navigate("/users");
+      try {
+        await DeleteEmployee(userId);
+        toast.success("Employee deleted successfully");
+    } catch (error) {
+        toast.error('Cannot delete employee, please try again later');
+    }      navigate("/users");
     }
     onConfirm();
   };

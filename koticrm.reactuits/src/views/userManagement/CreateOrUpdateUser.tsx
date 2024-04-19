@@ -212,12 +212,11 @@ const CreateOrUpdateUser = () => {
       setSubmitting(false);
     }
   };
-  const validationSchema = Yup.object().shape({
+  let validationSchema = Yup.object().shape({
     employeeId: Yup.number().required("Employee ID is required"),
     joiningDate: Yup.date().required("Joining Date is required"),
     // employeeCode: Yup.string().required("Employee Code is required"),
     isActive: Yup.boolean(),
-    relievingDate : isRelievedChecked ? Yup.string().required("Relieving date is required") : Yup.string(),
     correspondenceAddress: Yup.string().required(
       "Correspondence address is required"
     ),
@@ -253,7 +252,14 @@ const CreateOrUpdateUser = () => {
     branch: Yup.string()
     .required('Branch is required') 
   });
+  if (isRelievedChecked) {
+    validationSchema = validationSchema.concat(
+        Yup.object().shape({
+            relievingDate: Yup.string().required("Relieving date is required")
+        })
+    );
 
+  }
   return (
     <>
       <ToastContainer />

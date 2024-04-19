@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { AiFillEye } from "react-icons/ai";
 import { MdDelete, MdEdit } from "react-icons/md";
-import { toast } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import { GetEmployeesList } from "../../redux-saga/modules/userManagement/apiService";
 import {  Employees } from "../../models/userManagement/employees";
 import DeleteConfirmationModal from "../account/accountsList/DeleteConfirmation";
@@ -99,10 +99,12 @@ const Users = () => {
  //Effects
   useEffect(() => {
     GetEmployees();
-  }, [pageNumber, pageSize]);
+  }, [pageNumber, pageSize, showDeleteConfirmation]);
 
   return (
     <>
+    <ToastContainer/>
+
       {isLoading && (
         <div className="spinner-backdrop">
           <CSpinner
@@ -117,7 +119,6 @@ const Users = () => {
           />
         </div>
       )}
-
       <CRow className="mb-3">
         <CCol xs={12}>
           <CRow className="align-items-center m-1">

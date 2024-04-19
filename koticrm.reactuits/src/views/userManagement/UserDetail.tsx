@@ -78,7 +78,7 @@ const userDetails = () => {
                   User Detail
                 </button>
               </li>
-              <li className="nav-item" role="presentation">
+              {/* <li className="nav-item" role="presentation">
                 <button
                   className="nav-link"
                   id="contacts-tab"
@@ -119,7 +119,7 @@ const userDetails = () => {
                 >
                   User Attachments
                 </button>
-              </li>
+              </li> */}
             </ul>
 
             <div className="tab-content" id="accountdetail">
@@ -233,7 +233,7 @@ const userDetails = () => {
                 role="tabpanel"
                 aria-labelledby="invoices-tab"
               ></div>
-            </div>
+            </div> 
           </CCardBody>
         </CCard>
       </CCol>
