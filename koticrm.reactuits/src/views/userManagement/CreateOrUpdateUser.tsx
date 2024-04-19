@@ -22,28 +22,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import * as Yup from 'yup';
 
 const CreateOrUpdateUser = () => {
-  //initial values
-  const initialValues = {
-    employeeId: "",
-    joiningDate: "",
-    employeeCode: "",
-    isActive: true,
-    isRelieved: false,
-    relievingDate: "",
-    employeeName: "",
-    fatherName: "",
-    panNumber: "",
-    adharNumber: "",
-    permanentAddress: "",
-    personalEmail: "",
-    contactNumber1: "",
-    officialSkype: "",
-    designation: "",
-    department: "",
-    ifscCode: "",
-    bankName: "",
-    accountNumber: "",
-  };
+ 
 
   // Parameters
   const navigate = useNavigate();
@@ -185,10 +164,14 @@ const CreateOrUpdateUser = () => {
         console.error("Error getting shift list:", error.statusText);
       });
   };
+  const testhandler=()=>{
+    
+  }
 
   // Submit
   const handleFormSubmit = async (
     employee: Employee,
+  
     { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }
   ) => {
     try {
@@ -229,33 +212,33 @@ const CreateOrUpdateUser = () => {
       setSubmitting(false);
     }
   };
-  // const validationSchema = Yup.object().shape({
-  //   employeeId: Yup.number().required("Employee ID is required"),
-  //   joiningDate: Yup.date().required("Joining Date is required"),
-  //   employeeCode: Yup.string().required("Employee Code is required"),
-  //   isActive: Yup.boolean(),
-  //   correspondenceAddress: Yup.string().required(
-  //     "Correspondence address is required"
-  //   ),
-  //   permanentAddress: Yup.string().required("Permanent address is required"),
-  //   guardianName: Yup.string().required("Guardian name is required"),
-  //   contactNumber1: Yup.string().required("Contact number 1 is required"),
-  //   officialEmail: Yup.string()
-  //     .email("Invalid email format")
-  //     .required("Official email is required"),
-  //   guardianContactNumber: Yup.string().required(
-  //     "Guardian contact number is required"
-  //   ),
-  //   contactNumber2: Yup.string(),
-  //   personalEmail: Yup.string().email("Invalid email format"),
-  //   skypeId: Yup.string(),
-  //   designationID: Yup.number().required("Designation is required"),
-  //   bank: Yup.string().required("Bank name is required"),
-  //   departmentID: Yup.number().required("Department is required"),
-  //   bankAccountNumber: Yup.string().required("Bank account number is required"),
-  //   ifsc: Yup.string().required("IFSC code is required"),
-  //   shiftID: Yup.number().required("Shift is required"),
-  // });
+  const validationSchema = Yup.object().shape({
+    employeeId: Yup.number().required("Employee ID is required"),
+    joiningDate: Yup.date().required("Joining Date is required"),
+    employeeCode: Yup.string().required("Employee Code is required"),
+    isActive: Yup.boolean(),
+    correspondenceAddress: Yup.string().required(
+      "Correspondence address is required"
+    ),
+    permanentAddress: Yup.string().required("Permanent address is required"),
+    guardianName: Yup.string().required("Guardian name is required"),
+    contactNumber1: Yup.string().required("Contact number 1 is required"),
+    officialEmail: Yup.string()
+      .email("Invalid email format")
+      .required("Official email is required"),
+    guardianContactNumber: Yup.string().required(
+      "Guardian contact number is required"
+    ),
+    contactNumber2: Yup.string(),
+    personalEmail: Yup.string().email("Invalid email format"),
+    skypeId: Yup.string(),
+    designationID: Yup.number().required("Designation is required"),
+    bank: Yup.string().required("Bank name is required"),
+    departmentID: Yup.number().required("Department is required"),
+    bankAccountNumber: Yup.string().required("Bank account number is required"),
+    ifsc: Yup.string().required("IFSC code is required"),
+    shiftID: Yup.number().required("Shift is required"),
+  });
 
   return (
     <>
@@ -284,7 +267,7 @@ const CreateOrUpdateUser = () => {
           <Formik
             initialValues={formData}
             enableReinitialize
-            // validationSchema={validationSchema}
+           validationSchema={validationSchema}
             onSubmit={handleFormSubmit}
           >
             {({ handleSubmit, isValid, isSubmitting, touched, errors }) => (
@@ -342,7 +325,6 @@ const CreateOrUpdateUser = () => {
                           type="date"
                           id="joiningDate"
                           name="joiningDate"
-                          // className="form-control"
                           className={`form-control ${
                             touched.joiningDate && errors.joiningDate
                               ? "is-invalid"
@@ -605,11 +587,11 @@ const CreateOrUpdateUser = () => {
                           type="text"
                           id="correspondenceAddress"
                           name="correspondenceAddress"
-                          className="form-control"
-                          //   className={`form-control ${touched.correspondenceAddress && errors.correspondenceAddress
-                          //       ? "is-invalid"
-                          //       : ""
-                          //     }`}
+                          // className="form-control"
+                            className={`form-control ${touched.correspondenceAddress && errors.correspondenceAddress
+                                ? "is-invalid"
+                                : ""
+                              }`}
                           placeholder="Correspondence Address"
                         />
                         <ErrorMessage
@@ -659,11 +641,11 @@ const CreateOrUpdateUser = () => {
                           type="text"
                           id="guardianName"
                           name="guardianName"
-                          className="form-control"
-                          //   className={`form-control ${touched.guardianName && errors.guardianName
-                          //       ? "is-invalid"
-                          //       : ""
-                          //     }`}
+                          // className="form-control"
+                            className={`form-control ${touched.guardianName && errors.guardianName
+                                ? "is-invalid"
+                                : ""
+                              }`}
                           placeholder="Guardian Name"
                         />
                         <ErrorMessage
@@ -734,11 +716,11 @@ const CreateOrUpdateUser = () => {
                           type="text"
                           id="guardianContactNumber"
                           name="guardianContactNumber"
-                          className="form-control"
-                          //   className={`form-control ${touched.guardianContactNumber && errors.guardianContactNumber
-                          //       ? "is-invalid"
-                          //       : ""
-                          //     }`}
+                          // className="form-control"
+                            className={`form-control ${touched.guardianContactNumber && errors.guardianContactNumber
+                                ? "is-invalid"
+                                : ""
+                              }`}
                           placeholder="Guardian Contact Number"
                         />
                         <ErrorMessage
@@ -764,13 +746,13 @@ const CreateOrUpdateUser = () => {
                           //     }`}
                           placeholder="Contact Number 2"
                         />
-                        <ErrorMessage
+                        {/* <ErrorMessage
                           name="contactNumber2"
                           className="invalid-feedback"
                           render={(error) => (
                             <label style={{ color: "#dc3545" }}>{error}</label>
                           )}
-                        />
+                        /> */}
                       </CCol>
                     </CRow>
                     <CRow className="mb-3">
@@ -1039,7 +1021,7 @@ const CreateOrUpdateUser = () => {
                     <button
                       type="submit"
                       className="btn btn-primary"
-                      disabled={isSubmitting}   // || !isValid
+                      // disabled={isSubmitting}   // || !isValid
                     >
                       {isSubmitting ? "Submitting..." : "Submit"}
                     </button>
@@ -1051,6 +1033,13 @@ const CreateOrUpdateUser = () => {
                         value="cancel"
                       />
                     </Link>
+                    <CButton 
+                    type="button"
+                    value="test"
+                    onClick={testhandler}
+                    />
+
+                    
                   </CCol>
                 </CRow>
               </Form>
