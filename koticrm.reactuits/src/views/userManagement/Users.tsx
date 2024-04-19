@@ -168,34 +168,35 @@ const Users = () => {
                 />
               </CInputGroup>
             </CCol> */}
-            <CCol xs={2} md={2} lg={4}>
+<CCol xs={2} md={2} lg={4}>
+  <div className="input-group mb-3 custom-input-group">
+    <select
+      className="form-select custom-select"
+      id="searchInput"
+      onChange={(e) => handleDropdownChange(e.target.value)}
+      style={{ backgroundColor: '#f0f0f0', borderRadius: '8px', marginRight: '10px', border: '1px solid #ccc' }}
+    >
+      <option value="" disabled selected>Select an option</option>
+      <option value="Name">Name</option>
+      <option value="Emp code">Emp code</option>
+      <option value="Blood Group">Blood Group</option>
+      <option value="Birthday">Birthday</option>
+      <option value="RoleId">RoleId</option>
+      <option value="Designation">Designation</option>
+    </select>
+    <input
+      type="text"
+      className="form-control custom-input"
+      placeholder={`Enter ${dropdownValue}...`}
+      value={searchQuery}
+      onChange={(e) => setSearchQuery(e.target.value)}
+      onKeyDown={handleKeyDown}
+      onBlur={handleBlur}
+      style={{ borderRadius: '8px', border: '1px solid #ccc' }}
+    />
+  </div>
+</CCol>
 
-              <div className="input-group mb-3">
-                <select
-                  className="form-select"
-                  id="searchInput"
-                  onChange={(e) => handleDropdownChange(e.target.value)}
-                >
-                  <option value="">Select an option</option>
-                  <option value="Name">Name</option>
-                  <option value="Emp code">Emp code</option>
-                  <option value="Blood Group">Blood Group</option>
-                  <option value="Birthday">Birthday</option>
-                  <option value="RoleId">RoleId</option>
-                  <option value="Designation">Designation</option>
-                </select>
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder={`Enter ${dropdownValue}...`}
-                  value = {searchQuery}
-                  onChange= {(e)=> setSearchQuery(e.target.value)}
-                  onKeyDown={handleKeyDown}
-                  onBlur={handleBlur}
-                />
-              </div>
-
-            </CCol>
 
             <CCol xs={8} className="text-end">
               <Link to={`/users/createOrUpdateUser`}>
