@@ -149,15 +149,13 @@ const CreateOrEditContact = () => {
   };
 
   const validationSchema = Yup.object({
-    firstName: Yup.string().required('Required (First Name)'),
-  lastName: Yup.string().required('Required (Last Name)'),
-  accountId: Yup.string().required('Required (Account ID)'),
-  email: Yup.string().email('Invalid email').required('Required (Email)'),
-  mobile: Yup
-  .string()
-  .matches(/^[0-9]{10}$/, 'Mobile number must be exactly 10 digits')
-  .required('Required (Mobile)'),
-  
+    firstName: Yup.string().required("Required (First Name)"),
+    lastName: Yup.string().required("Required (Last Name)"),
+    accountId: Yup.string().required("Required (Account ID)"),
+    email: Yup.string().email("Invalid email").required("Required (Email)"),
+    mobile: Yup.string()
+      .matches(/^[0-9]{10}$/, "Mobile number must be exactly 10 digits")
+      .required("Required (Mobile)"),
   });
 
   return (
@@ -199,16 +197,12 @@ const CreateOrEditContact = () => {
                         />
                         <ErrorMessage
                           name="ownerId"
-                          // className="invalid-feedback"
-
                           render={(error) => (
                             <label style={{ color: "#dc3545" }}>{error}</label>
                           )}
                         />
                       </CCol>
                     </CRow>
-
-               
 
                     <CRow className="mb-3">
                       <CCol sm={4}>
@@ -224,10 +218,11 @@ const CreateOrEditContact = () => {
                           type="text"
                           id="firstName"
                           name="firstName"
-                          className={`form-control ${touched.firstName && errors.firstName
+                          className={`form-control ${
+                            touched.firstName && errors.firstName
                               ? "is-invalid"
                               : ""
-                            }`}
+                          }`}
                           placeholder="Enter your first name"
                           style={{ height: "50px" }}
                         />
@@ -276,10 +271,11 @@ const CreateOrEditContact = () => {
                           type="text"
                           id="mobile"
                           name="mobile"
-                          className={`form-control ${touched.firstName && errors.firstName
+                          className={`form-control ${
+                            touched.firstName && errors.firstName
                               ? "is-invalid"
                               : ""
-                            }`}
+                          }`}
                           placeholder="Enter your mobile number"
                           style={{ height: "50px" }}
                         />
@@ -314,8 +310,7 @@ const CreateOrEditContact = () => {
                         />
                       </CCol>
                     </CRow>
-               
-                        
+
                     <CRow className="mb-3">
                       <CCol sm={4}>
                         <label htmlFor="email" className="col-form-label">
@@ -330,10 +325,11 @@ const CreateOrEditContact = () => {
                           type="email"
                           id="email"
                           name="email"
-                          className={`form-control ${touched.firstName && errors.firstName
+                          className={`form-control ${
+                            touched.firstName && errors.firstName
                               ? "is-invalid"
                               : ""
-                            }`}
+                          }`}
                           placeholder="name@example.com"
                           style={{ height: "50px" }}
                         />
@@ -346,7 +342,7 @@ const CreateOrEditContact = () => {
                         />
                       </CCol>
                     </CRow>
-                   
+
                     <CRow className="mb-3">
                       <CCol sm={4}>
                         <label htmlFor="linkedinUrl" className="col-form-label">
@@ -369,8 +365,7 @@ const CreateOrEditContact = () => {
                         />
                       </CCol>
                     </CRow>
-                    
-                
+
                     <CRow className="mb-3">
                       <CCol sm={4}>
                         <label htmlFor="title" className="col-form-label">
@@ -482,7 +477,7 @@ const CreateOrEditContact = () => {
                   </CCol>
 
                   <CCol xs={6}>
-                  {!contact.id ? (
+                    {!contact.id ? (
                       <CRow className="mb-3">
                         <CCol sm={4}>
                           <label htmlFor="accountID" className="col-form-label">
@@ -494,10 +489,11 @@ const CreateOrEditContact = () => {
                             as="select"
                             id="accountID"
                             name="accountID"
-                            className={`form-control form-select${touched.accountID && errors.accountID
+                            className={`form-control form-select${
+                              touched.accountID && errors.accountID
                                 ? "is-invalid"
                                 : ""
-                              }`}
+                            }`}
                             onChange={handleAccountChange}
                             style={{ height: "50px" }}
                             hidden={contact.id ? "hidden" : ""}
@@ -534,8 +530,7 @@ const CreateOrEditContact = () => {
                         hidden
                       />
                     )}
-                
-              
+
                     <CRow className="mb-3">
                       <CCol sm={4}>
                         <label htmlFor="lastName" className="col-form-label">
@@ -550,10 +545,11 @@ const CreateOrEditContact = () => {
                           type="text"
                           id="lastName"
                           name="lastName"
-                          className={`form-control ${touched.firstName && errors.firstName
+                          className={`form-control ${
+                            touched.firstName && errors.firstName
                               ? "is-invalid"
                               : ""
-                            }`}
+                          }`}
                           placeholder="Enter your last name"
                           style={{ height: "50px" }}
                         />
@@ -611,8 +607,6 @@ const CreateOrEditContact = () => {
                       </CCol>
                     </CRow>
 
-
-                 
                     <CRow className="mb-3">
                       <CCol sm={4}>
                         <label htmlFor="dateOfBirth" className="col-form-label">
@@ -660,7 +654,7 @@ const CreateOrEditContact = () => {
                         />
                       </CCol>
                     </CRow>
-               
+
                     <CRow className="mb-3">
                       <CCol sm={4}>
                         <label htmlFor="twitterUrl" className="col-form-label">
@@ -752,7 +746,6 @@ const CreateOrEditContact = () => {
                         />
                       </CCol>
                     </CRow>
-                
                   </CCol>
                   <CRow className="mb-3">
                     <CCol sm={2}>

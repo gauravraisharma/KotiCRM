@@ -48,27 +48,16 @@ const validationSchema = Yup.object().shape({
   type: Yup.number().required("Required (Type)"),
   status: Yup.number().required("Required (Status)"),
   accountName: Yup.string().required("Required (Account Name)"),
-  // phone: Yup.string()
-  //   .required("Required (Phone)")
-  //   .matches(/^[0-9()-\s]+$/, "Phone number must be a number")
-  //   .min(10, "Phone number must be at least 10 digits")
-  //   .max(
-  //     13,
-  //     "Phone number must be at most 13 digits with country calling code"
-  //   ),
-  phone: Yup
-  .string()
-  .matches(/^[0-9]{10}$/, 'Phone number must be exactly 10 digits')
-  .required('Required (Phone)'),
-  
+  phone: Yup.string()
+    .matches(/^[0-9]{10}$/, "Phone number must be exactly 10 digits")
+    .required("Required (Phone)"),
+
   billingStreet: Yup.string().required("Required (Billing Street)"),
   billingCity: Yup.string().required("Required (Billing City)"),
   billingState: Yup.string().required("Required (Billing State)"),
   zipCode: Yup.string().required("Required (Zip Code)"),
 
   country: Yup.string().required("Required (Country)"),
- 
-
 });
 
 const MyForm: React.FC<MyFormProps> = ({
@@ -179,7 +168,6 @@ const MyForm: React.FC<MyFormProps> = ({
 
   return (
     <div>
-      {/* <ToastContainer /> */}
       <CCard>
         <CCardHeader className="mb-3">
           <div className="d-flex justify-content-between align-items-center">
@@ -273,7 +261,7 @@ const MyForm: React.FC<MyFormProps> = ({
                         />
                       </CCol>
                     </CRow>
-                      <CRow className="mb-3">
+                    <CRow className="mb-3">
                       <CCol sm={4}>
                         <label htmlFor="status">
                           Industry
@@ -451,10 +439,7 @@ const MyForm: React.FC<MyFormProps> = ({
 
                     <CRow className="mb-3">
                       <CCol xs={4}>
-                        <label htmlFor="annualRevenue">
-                          Annual Revenue
-                        
-                        </label>
+                        <label htmlFor="annualRevenue">Annual Revenue</label>
                       </CCol>
                       <CCol xs={8}>
                         <Field
@@ -468,7 +453,6 @@ const MyForm: React.FC<MyFormProps> = ({
                             handleChange(e);
                           }}
                         />
-                       
                       </CCol>
                     </CRow>
                   </CCol>
@@ -701,16 +685,11 @@ const MyForm: React.FC<MyFormProps> = ({
                     <CRow className="mb-3">
                       <CCol xs={2}>
                         <label htmlFor="description">Description</label>
-                      </CCol> 
+                      </CCol>
                       <CCol xs={10}>
                         <textarea
                           id="description"
                           name="description"
-                          // className={`form-control  form-select ${
-                          //   touched.description && errors.description
-                          //     ? "is-invalid"
-                          //     : ""
-                          // }`}
                           className="form-control"
                           style={{ height: "120px" }}
                           onChange={(e: any) => {

@@ -1,12 +1,10 @@
-
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { MdEdit, MdEditSquare } from "react-icons/md";
+import { MdEdit } from "react-icons/md";
 import { AiFillEye } from "react-icons/ai";
 import { MdDelete } from "react-icons/md";
-import { Link, useNavigate } from "react-router-dom";
+import {  useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { ToastContainer } from "react-toastify";
 import {
   getAccountOwner,
   getAccountStatus,
@@ -19,9 +17,8 @@ import { getContacts } from "../../../redux-saga/modules/contact/action";
 import DeleteConfirmationModal from "./DeleteConfirmation";
 import NewAccount from "../createAccount/NewAccount";
 import EditPage from "./EditAccountModal";
-import styled from "styled-components";
+
 import {
-  CButton,
   CCard,
   CCardBody,
   CCardHeader,
@@ -42,20 +39,6 @@ import {
 } from "@coreui/react";
 import { Account } from "../../../models/account/Account";
 
-const AccountListWrapper = styled.div`
-  padding: 20px;
-`;
-
-const SearchInput = styled.input`
-  height: 50px;
-`;
-
-const NewButton = styled.button`
-  width: 80px;
-  padding: 10px;
-  font-size: 17px;
-`;
-
 const AccountList: React.FC = () => {
   //use hooks
   const dispatch = useDispatch();
@@ -70,7 +53,6 @@ const AccountList: React.FC = () => {
   const [accountData, setAccountData] = useState<Account | null>(null);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [pageNumber, setPageNumber] = useState<number>(1);
-
 
   const showItems = (id: any) => {
     navigate(`/accounts/accountDetails/${id}`);
@@ -151,11 +133,11 @@ const AccountList: React.FC = () => {
     if (e.keyCode === 13) {
       dispatch(getAccounts(searchTerm, pageNumber, pageSize));
     }
-  }
+  };
   //Focus out event to searchh
   const handleBlur = () => {
     dispatch(getAccounts(searchTerm, pageNumber, pageSize));
-  }
+  };
   //Effects
   useEffect(() => {
     dispatch(getAccounts(searchTerm, pageNumber, pageSize));
@@ -169,13 +151,14 @@ const AccountList: React.FC = () => {
 
   useEffect(() => {
     dispatch(getAccounts(searchTerm, pageNumber, pageSize));
-  }, [dispatch, refreshList, createresponse, updateResponse,pageNumber, pageSize]);
-
-  // const filteredAccounts = searchTerm
-  //   ? accounts.filter((account: Account) =>
-  //     account.accountName.toLowerCase().includes(searchTerm.toLowerCase())
-  //   )
-  //   : accounts;
+  }, [
+    dispatch,
+    refreshList,
+    createresponse,
+    updateResponse,
+    pageNumber,
+    pageSize,
+  ]);
 
   return (
     <>
@@ -219,7 +202,7 @@ const AccountList: React.FC = () => {
                   onClick={handleCreateNew}
                   type="button"
                   className="btn btn-primary"
-                  style={{ padding: '6px 16px' }}
+                  style={{ padding: "6px 16px" }}
                 >
                   + New
                 </button>
@@ -333,8 +316,11 @@ const AccountList: React.FC = () => {
                       <CPaginationItem
                         onClick={() => handlePageChange(pageNumber - 1)}
                         disabled={pageNumber === 1}
-                        style={{ margin: "0 2px", cursor: "pointer", fontSize: "12px" }}
-
+                        style={{
+                          margin: "0 2px",
+                          cursor: "pointer",
+                          fontSize: "12px",
+                        }}
                       >
                         <span aria-hidden="true">&laquo;</span>
                       </CPaginationItem>
@@ -343,7 +329,11 @@ const AccountList: React.FC = () => {
                           key={index}
                           active={pageNumber === index + 1}
                           onClick={() => handlePageChange(index + 1)}
-                          style={{ margin: "0 2px", cursor: "pointer", fontSize: "12px" }}
+                          style={{
+                            margin: "0 2px",
+                            cursor: "pointer",
+                            fontSize: "12px",
+                          }}
                         >
                           {index + 1}
                         </CPaginationItem>
@@ -351,7 +341,11 @@ const AccountList: React.FC = () => {
                       <CPaginationItem
                         onClick={() => handlePageChange(pageNumber + 1)}
                         disabled={pageNumber === totalPages}
-                        style={{ margin: "0 2px", cursor: "pointer", fontSize: "12px" }}
+                        style={{
+                          margin: "0 2px",
+                          cursor: "pointer",
+                          fontSize: "12px",
+                        }}
                       >
                         <span aria-hidden="true">&raquo;</span>
                       </CPaginationItem>

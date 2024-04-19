@@ -10,9 +10,8 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { getContactById } from "../../redux-saga/modules/contact/action";
-import { formatDate } from "../../utils/Shared/DateTransform";
 import moment from "moment";
-import 'moment-timezone' 
+import "moment-timezone";
 
 interface DetailRowProps {
   label: string;
@@ -35,7 +34,9 @@ const DetailRow = ({ label, value }: DetailRowProps) => (
 
 const ContactDetails = () => {
   const dispatch = useDispatch();
-  const fetchedContact = useSelector((state: any) => state.contactReducer.contact);
+  const fetchedContact = useSelector(
+    (state: any) => state.contactReducer.contact
+  );
   const timezone = useSelector((state: any) => state.sharedReducer.timezone);
   const { contactId } = useParams();
 
@@ -82,9 +83,10 @@ const ContactDetails = () => {
               />
               <DetailRow
                 label="Date Of Birth"
-                // formatDate(fetchedContact.dateOfBirth, 'DD/MM/YYYY HH:mm', timezone)
-                value={moment.utc(fetchedContact.dateOfBirth).tz(timezone)?.format('DD/MM/YYYY hh:mm A')}
-
+                value={moment
+                  .utc(fetchedContact.dateOfBirth)
+                  .tz(timezone)
+                  ?.format("DD/MM/YYYY hh:mm A")}
               />
               <DetailRow label="Mobile" value={fetchedContact.mobile} />
               <DetailRow

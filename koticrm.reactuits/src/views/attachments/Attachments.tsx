@@ -20,15 +20,13 @@ import { FaFilePdf } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
 import CreateNewAttachment from "./CreateNewAttachment";
 import { getFileSizeAndLabel } from "../../utils/Shared/FileSizeAndLable";
-import { formatDate } from "../../utils/Shared/DateTransform";
+
 import { getAttachments } from "../../redux-saga/modules/attachment/action";
 import { IoMdDownload } from "react-icons/io";
 import { DownloadAttachmentAsync } from "../../redux-saga/modules/attachment/apiService";
 import moment from "moment";
-import 'moment-timezone'
+import "moment-timezone";
 import { ToastContainer } from "react-toastify";
-
-// import { GrDownload } from "react-icons/gr";
 
 interface Props {
   accountId: number;
@@ -38,10 +36,13 @@ interface Props {
 const Attachments = ({ accountId, getAttachmentsCount }: Props) => {
   // getAttachmentsCount,
   const dispatch = useDispatch();
-  const fetchedAttachments = useSelector((state: any) => state.attachmentReducer.attachments);
+  const fetchedAttachments = useSelector(
+    (state: any) => state.attachmentReducer.attachments
+  );
   const timezone = useSelector((state: any) => state.sharedReducer.timezone);
-  const isLoading = useSelector((state: any) => state.attachmentReducer.isLoading)
-
+  const isLoading = useSelector(
+    (state: any) => state.attachmentReducer.isLoading
+  );
 
   const [isModalVisible, setIsModalVisible] = useState(false);
   const accountOwner = useSelector(
@@ -50,7 +51,9 @@ const Attachments = ({ accountId, getAttachmentsCount }: Props) => {
 
   let filteredAttachments = fetchedAttachments;
   if (accountId) {
-    filteredAttachments = fetchedAttachments?.filter((attachment: any) => attachment.accountID === accountId);
+    filteredAttachments = fetchedAttachments?.filter(
+      (attachment: any) => attachment.accountID === accountId
+    );
   }
   const attachmentsCount = filteredAttachments.length;
 
@@ -75,7 +78,11 @@ const Attachments = ({ accountId, getAttachmentsCount }: Props) => {
     setIsModalVisible(false);
   };
 
-  const handleDownloadClick = async (attachmentId: number, contentType: string, fileName: string) => {
+  const handleDownloadClick = async (
+    attachmentId: number,
+    contentType: string,
+    fileName: string
+  ) => {
     const response = await DownloadAttachmentAsync(attachmentId, contentType);
 
     if (response.status === 200) {
@@ -84,7 +91,7 @@ const Attachments = ({ accountId, getAttachmentsCount }: Props) => {
       if (response.data) {
         const blob = new Blob([response.data], { type: contentType });
         const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
+        const a = document.createElement("a");
         a.href = url;
         a.download = fileName;
         document.body.appendChild(a);
@@ -92,22 +99,31 @@ const Attachments = ({ accountId, getAttachmentsCount }: Props) => {
         window.URL.revokeObjectURL(url);
         document.body.removeChild(a);
       } else {
-        console.error('Failed to download attachment: Response data is undefined');
+        console.error(
+          "Failed to download attachment: Response data is undefined"
+        );
         // Handle error
       }
     } else {
-      console.error('Failed to download attachment:', response.statusText);
+      console.error("Failed to download attachment:", response.statusText);
       // Handle error
     }
   };
 
   return (
     <>
+    <ToastContainer/>
       {isLoading && (
         <div className="spinner-backdrop">
-          <CSpinner size="sm"
+          <CSpinner
+            size="sm"
             color="white"
-            style={{ width: '5rem', height: '5rem', borderWidth: '0.60rem', zIndex: '9999' }}
+            style={{
+              width: "5rem",
+              height: "5rem",
+              borderWidth: "0.60rem",
+              zIndex: "9999",
+            }}
           />
         </div>
       )}
@@ -120,7 +136,6 @@ const Attachments = ({ accountId, getAttachmentsCount }: Props) => {
           />
           <CCard>
             <CCardHeader className="mb-3">
-              {/* <CRow className="align-items-center"> */}
               <div className="d-flex justify-content-between align-items-center">
                 <div>
                   <h5 className="mb-0">Attachments</h5>
@@ -133,11 +148,9 @@ const Attachments = ({ accountId, getAttachmentsCount }: Props) => {
                     value="Add Attachment"
                     style={{ cursor: "pointer" }}
                     onClick={handleModalOpen}
-                  // variant="outline"
                   />
                 </div>
               </div>
-              {/* </CRow> */}
             </CCardHeader>
             <CCardBody>
               <CTable>
@@ -147,7 +160,9 @@ const Attachments = ({ accountId, getAttachmentsCount }: Props) => {
                     <CTableHeaderCell scope="col">Attached By</CTableHeaderCell>
                     <CTableHeaderCell scope="col">Date Added</CTableHeaderCell>
                     <CTableHeaderCell scope="col">Size</CTableHeaderCell>
-                    <CTableHeaderCell scope="col" className="text-center">Download</CTableHeaderCell>
+                    <CTableHeaderCell scope="col" className="text-center">
+                      Download
+                    </CTableHeaderCell>
                   </CTableRow>
                 </CTableHead>
                 <CTableBody>
@@ -163,7 +178,14 @@ const Attachments = ({ accountId, getAttachmentsCount }: Props) => {
                           <CButton
                             className="link"
                             color="link"
-                            onClick={() => handleDownloadClick(attachment.id, attachment.contentType, attachment.fileName)}>
+                            onClick={() =>
+                              handleDownloadClick(
+                                attachment.id,
+                                attachment.contentType,
+                                attachment.fileName
+                              )
+                            }
+                          >
                             {attachment.fileName}
                           </CButton>
                         </CTableHeaderCell>
@@ -171,17 +193,27 @@ const Attachments = ({ accountId, getAttachmentsCount }: Props) => {
                           {getOwnerName(attachment.userID)}
                         </CTableDataCell>
                         <CTableDataCell>
-                          {/* {formatDate(attachment.dateAdded, 'DD/MM/YYYY HH:mm', timezone)} */}
-                          {moment(attachment.dateAdded).tz(timezone)?.format('DD/MM/YYYY hh:mm A')}
-
+                          {moment(attachment.dateAdded)
+                            .tz(timezone)
+                            ?.format("DD/MM/YYYY hh:mm A")}
                         </CTableDataCell>
                         <CTableDataCell>
                           {getFileSizeAndLabel(attachment.fileSize)}
                         </CTableDataCell>
                         <CTableDataCell className="text-center">
                           <IoMdDownload
-                            style={{ color: "green", fontSize: "20px", cursor: "pointer" }}
-                            onClick={() => handleDownloadClick(attachment.id, attachment.contentType, attachment.fileName)}
+                            style={{
+                              color: "green",
+                              fontSize: "20px",
+                              cursor: "pointer",
+                            }}
+                            onClick={() =>
+                              handleDownloadClick(
+                                attachment.id,
+                                attachment.contentType,
+                                attachment.fileName
+                              )
+                            }
                           />
                         </CTableDataCell>
                       </CTableRow>
@@ -191,7 +223,6 @@ const Attachments = ({ accountId, getAttachmentsCount }: Props) => {
                       <p>No attachments found.</p>
                     </div>
                   )}
-
                 </CTableBody>
               </CTable>
             </CCardBody>

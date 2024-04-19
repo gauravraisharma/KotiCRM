@@ -14,20 +14,31 @@ import { ErrorMessage, Field, Form, Formik } from "formik";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import { Employee, EmployeeClass } from "../../models/userManagement/employee";
-import { CreateEmployee, GetEmployeeById, GetEmployeeId, UpdateEmployee } from "../../redux-saga/modules/userManagement/apiService";
-import { Department, Designation, Shift } from "../../models/commonModels/SharedModels";
-import { GetDepartments, GetDesignations, GetShifts } from "../../redux-saga/modules/shared/apiService";
-import profile from '../userAuthentication/home/images/profile.avif';
-import 'react-toastify/dist/ReactToastify.css';
-import * as Yup from 'yup';
+import {
+  CreateEmployee,
+  GetEmployeeById,
+  GetEmployeeId,
+  UpdateEmployee,
+} from "../../redux-saga/modules/userManagement/apiService";
+import {
+  Department,
+  Designation,
+  Shift,
+} from "../../models/commonModels/SharedModels";
+import {
+  GetDepartments,
+  GetDesignations,
+  GetShifts,
+} from "../../redux-saga/modules/shared/apiService";
+import profile from "../userAuthentication/home/images/profile.avif";
+import "react-toastify/dist/ReactToastify.css";
+import * as Yup from "yup";
 
 const CreateOrUpdateUser = () => {
- 
-
   // Parameters
   const navigate = useNavigate();
-  const {id} = useParams<{ id: string }>();
-  const bloodGroups = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
+  const { id } = useParams<{ id: string }>();
+  const bloodGroups = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
 
   // States
   const [formData, setFormData] = useState<Employee>(new EmployeeClass());
@@ -36,8 +47,12 @@ const CreateOrUpdateUser = () => {
   const [isActiveChecked, setIsActiveChecked] = useState(true);
   const [isRelievedChecked, setIsRelievedChecked] = useState(false);
   const [relievingDateRequired, setRelievingDateRequired] = useState(false);
-  const [departmentList, setDepartmentList] = useState<Department[] | undefined>([]);
-  const [designationList, setDesignationList] = useState<Designation[] | undefined>([]);
+  const [departmentList, setDepartmentList] = useState<
+    Department[] | undefined
+  >([]);
+  const [designationList, setDesignationList] = useState<
+    Designation[] | undefined
+  >([]);
   const [shiftList, setShiftList] = useState<Shift[] | undefined>([]);
   const [bloodGroup, setBloodGroup] = useState("");
   const [departmentId, setDepartmentId] = useState(0);
@@ -49,16 +64,15 @@ const CreateOrUpdateUser = () => {
     getDepartmentList();
     getDesignationList();
     getShiftList();
-  },[]);
-  
+  }, []);
+
   useEffect(() => {
-    if(id){
+    if (id) {
       getEmployeeById(id);
-    }
-    else{
+    } else {
       getEmployeeId();
     }
-  },[id]);
+  }, [id]);
 
   // Generate EmployeeId
   const getEmployeeId = async () => {
@@ -81,18 +95,18 @@ const CreateOrUpdateUser = () => {
 
   const getEmployeeById = async (employeeId: string) => {
     await GetEmployeeById(employeeId)
-    .then((response) => {
-      setFormData(response);
-      setEmployeeCode(response.employeeCode);
-      setDepartmentId(response.departmentId);
-      setDesignationId(response.designationId);
-      setShiftId(response.shiftId);
-    })
-    .catch((error) => {
-      toast.error("Fetch employee failed");
-      console.error('Error fetching employee:', error.statusText);
-    });
-  }
+      .then((response) => {
+        setFormData(response);
+        setEmployeeCode(response.employeeCode);
+        setDepartmentId(response.departmentId);
+        setDesignationId(response.designationId);
+        setShiftId(response.shiftId);
+      })
+      .catch((error) => {
+        toast.error("Fetch employee failed");
+        console.error("Error fetching employee:", error.statusText);
+      });
+  };
 
   // Handlers
   const handleCheckbox = (event: any) => {
@@ -115,22 +129,22 @@ const CreateOrUpdateUser = () => {
   };
 
   // Department change
-  const handleDepartmentChange = (e : React.ChangeEvent<HTMLSelectElement>) => {
+  const handleDepartmentChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const changedDepartmentId = parseInt(e.target.value);
     generateEmployeeCode("tech", changedDepartmentId, formData.employeeId);
     setDepartmentId(changedDepartmentId);
     formData.departmentId = changedDepartmentId;
-  }
+  };
 
   // Designation change
-  const handleDesignationChange = (e : React.ChangeEvent<HTMLSelectElement>) => {
+  const handleDesignationChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setDesignationId(parseInt(e.target.value));
-  }
+  };
 
   // Shift change
-  const handleShiftChange = (e : React.ChangeEvent<HTMLSelectElement>) => {
+  const handleShiftChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setShiftId(parseInt(e.target.value));
-  }
+  };
 
   // Department list
   const getDepartmentList = () => {
@@ -164,47 +178,43 @@ const CreateOrUpdateUser = () => {
         console.error("Error getting shift list:", error.statusText);
       });
   };
-  const testhandler=()=>{
-    
-  }
+  // {console.log(errors)}
 
   // Submit
   const handleFormSubmit = async (
     employee: Employee,
-  
+
     { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }
   ) => {
     try {
+      debugger;
       employee.departmentId = departmentId;
       employee.designationId = designationId;
       employee.shiftId = shiftId;
       employee.isActive = isActiveChecked;
       employee.employeeCode = employeeCode;
-      if(id){
+      if (id) {
         const response = await UpdateEmployee(employee);
-        if(response.status == 200) {
+        if (response.status == 200) {
           toast.success("Employee updated successfully");
           setTimeout(() => {
             navigate("/users");
           }, 5000);
-        }
-        else {
+        } else {
           toast.error("Employee updation failed");
-        };
-      }
-      else{
+        }
+      } else {
         employee.employeeId = employeeID;
         employee.bloodGroup = bloodGroup;
         const response = await CreateEmployee(employee);
-        if(response.status == 200) {
+        if (response.status == 200) {
           toast.success("Employee created successfully");
           setTimeout(() => {
             navigate("/users");
           }, 5000);
-        }
-        else {
+        } else {
           toast.error("Employee creation failed");
-        };
+        }
       }
     } catch (error) {
       console.log("error message:", error);
@@ -215,14 +225,16 @@ const CreateOrUpdateUser = () => {
   let validationSchema = Yup.object().shape({
     employeeId: Yup.number().required("Employee ID is required"),
     joiningDate: Yup.date().required("Joining Date is required"),
-    // employeeCode: Yup.string().required("Employee Code is required"),
+
     isActive: Yup.boolean(),
     correspondenceAddress: Yup.string().required(
       "Correspondence address is required"
     ),
     permanentAddress: Yup.string().required("Permanent address is required"),
     guardianName: Yup.string().required("Guardian name is required"),
-    contactNumber1: Yup.string().required("Contact number 1 is required"),
+    contactNumber1: Yup.string()
+      .matches(/^\d{10}$/, "Contact number must be exactly 10 digits")
+      .required("Contact number 1 is required"),
     officialEmail: Yup.string()
       .email("Invalid email format")
       .required("Official email is required"),
@@ -236,29 +248,27 @@ const CreateOrUpdateUser = () => {
       .required("Aadhar Number is required")
       .matches(/^[0-9]{12}$/, "Aadhar Number must be 12 digits"),
     dateOfBirth: Yup.date().required("Date of Birth is required"),
-    // bloodGroup: Yup.string().required("Blood Group is required"),
+
     contactNumber2: Yup.string(),
     personalEmail: Yup.string()
-    .email('Invalid email address')
-    .required('Email is required'),
+      .email("Invalid email address")
+      .required("Email is required"),
 
     skypeId: Yup.string().required("Official Skype is required"),
-    designationId: Yup.string().required('Designation is required'),
+    designationId: Yup.string().required("Designation is required"),
     bank: Yup.string().required("Bank name is required"),
-    departmentId: Yup.string().required('Department is required'),
+    departmentId: Yup.string().required("Department is required"),
     bankAccountNumber: Yup.string().required("Bank account number is required"),
     ifsc: Yup.string().required("IFSC code is required"),
-    shiftId: Yup.string().required('Shift is required'),
-    branch: Yup.string()
-    .required('Branch is required') 
+    shiftId: Yup.string().required("Shift is required"),
+    branch: Yup.string().required("Branch is required"),
   });
   if (isRelievedChecked) {
     validationSchema = validationSchema.concat(
-        Yup.object().shape({
-            relievingDate: Yup.string().required("Relieving date is required")
-        })
+      Yup.object().shape({
+        relievingDate: Yup.string().required("Relieving date is required"),
+      })
     );
-
   }
   return (
     <>
@@ -267,9 +277,7 @@ const CreateOrUpdateUser = () => {
         <CCardHeader className="mb-3">
           <div className="d-flex justify-content-between align-items-center">
             <div>
-              <h5 className="mb-0">
-                {id == null ? "Create" : "Update"} User
-              </h5>
+              <h5 className="mb-0">{id == null ? "Create" : "Update"} User</h5>
             </div>
             <div className="text-end">
               <Link to={`/users`}>
@@ -287,10 +295,17 @@ const CreateOrUpdateUser = () => {
           <Formik
             initialValues={formData}
             enableReinitialize
-           validationSchema={validationSchema}
+            validationSchema={validationSchema}
             onSubmit={handleFormSubmit}
           >
-            {({ handleSubmit, isValid, isSubmitting, touched, errors }) => (
+            {({
+              handleSubmit,
+              isValid,
+              isSubmitting,
+              touched,
+              errors,
+              handleBlur,
+            }) => (
               <Form onSubmit={handleSubmit} autoComplete="off">
                 <CRow className="justify-content-between">
                   <h4>Employee Code</h4>
@@ -329,18 +344,16 @@ const CreateOrUpdateUser = () => {
                           className="form-control"
                           disabled
                         />
-                        <ErrorMessage
-                          name="employeeId"
-                          className="invalid-feedback"
-                          render={(error) => (
-                            <label style={{ color: "#dc3545" }}>{error}</label>
-                          )}
-                        />
                       </CCol>
                     </CRow>
                     <CRow className="mb-3">
                       <CCol sm={12}>
-                        <label htmlFor="joiningDate">Joining Date</label>
+                        <label htmlFor="joiningDate">
+                          Joining Date{" "}
+                          <span style={{ color: "red", fontSize: "25px" }}>
+                            *
+                          </span>
+                        </label>
                         <Field
                           type="date"
                           id="joiningDate"
@@ -393,20 +406,8 @@ const CreateOrUpdateUser = () => {
                           id="employeeCode"
                           name="employeeCode"
                           value={employeeCode}
-                          // className="form-control"
-                          className={`form-control ${
-                            touched.employeeCode && errors.employeeCode
-                              ? "is-invalid"
-                              : ""
-                          }`}
+                          className="form-control"
                           disabled
-                        />
-                        <ErrorMessage
-                          name="employeeCode"
-                          className="invalid-feedback"
-                          render={(error) => (
-                            <label style={{ color: "#dc3545" }}>{error}</label>
-                          )}
                         />
                       </CCol>
                     </CRow>
@@ -430,25 +431,35 @@ const CreateOrUpdateUser = () => {
                     </CRow>
                     <CRow className="mb-3">
                       <CCol sm={12}>
-                        <label htmlFor="relievingDate">Relieving Date
-                        {isRelievedChecked && (<span style={{ color: "red", fontSize: "25px" }}>
+                        <label htmlFor="relievingDate">
+                          Relieving Date{" "}
+                          <span style={{ color: "red", fontSize: "25px" }}>
                             *
-                          </span>)}
-                          </label>
-                          <Field
-                            type="date"
-                            id="relievingDate"
-                            name="relievingDate"
-                            className="form-control"
-                            disabled={!isRelievedChecked}
-                          />
-                        {isRelievedChecked && (<ErrorMessage
-                          name="relievingDate"
-                          className="invalid-feedback"
-                          render={(error) => (
-                            <label style={{ color: "#dc3545" }}>{error}</label>
+                          </span>
+                          {isRelievedChecked && (
+                            <span style={{ color: "red", fontSize: "25px" }}>
+                              *
+                            </span>
                           )}
-                        />)}
+                        </label>
+                        <Field
+                          type="date"
+                          id="relievingDate"
+                          name="relievingDate"
+                          className="form-control"
+                          disabled={!isRelievedChecked}
+                        />
+                        {isRelievedChecked && (
+                          <ErrorMessage
+                            name="relievingDate"
+                            className="invalid-feedback"
+                            render={(error) => (
+                              <label style={{ color: "#dc3545" }}>
+                                {error}
+                              </label>
+                            )}
+                          />
+                        )}
                       </CCol>
                     </CRow>
                   </CCol>
@@ -458,7 +469,12 @@ const CreateOrUpdateUser = () => {
                   <CCol xs={4}>
                     <CRow className="mb-3">
                       <CCol sm={12}>
-                        <label htmlFor="name">Employee Name</label>
+                        <label htmlFor="name">
+                          Employee Name{" "}
+                          <span style={{ color: "red", fontSize: "25px" }}>
+                            *
+                          </span>
+                        </label>
                         <Field
                           type="text"
                           id="name"
@@ -480,7 +496,12 @@ const CreateOrUpdateUser = () => {
                     </CRow>
                     <CRow className="mb-3">
                       <CCol sm={12}>
-                        <label htmlFor="panNumber">Pan Number</label>
+                        <label htmlFor="panNumber">
+                          Pan Number{" "}
+                          <span style={{ color: "red", fontSize: "25px" }}>
+                            *
+                          </span>
+                        </label>
                         <Field
                           type="text"
                           id="panNumber"
@@ -506,7 +527,12 @@ const CreateOrUpdateUser = () => {
                   <CCol xs={4}>
                     <CRow className="mb-3">
                       <CCol sm={12}>
-                        <label htmlFor="fatherName">Father Name</label>
+                        <label htmlFor="fatherName">
+                          Father Name{" "}
+                          <span style={{ color: "red", fontSize: "25px" }}>
+                            *
+                          </span>
+                        </label>
                         <Field
                           type="text"
                           id="fatherName"
@@ -530,7 +556,12 @@ const CreateOrUpdateUser = () => {
                     </CRow>
                     <CRow className="mb-3">
                       <CCol sm={12}>
-                        <label htmlFor="adharCardNumber">Aadhar Number</label>
+                        <label htmlFor="adharCardNumber">
+                          Aadhar Number{" "}
+                          <span style={{ color: "red", fontSize: "25px" }}>
+                            *
+                          </span>
+                        </label>
                         <Field
                           type="text"
                           id="adharCardNumber"
@@ -556,7 +587,12 @@ const CreateOrUpdateUser = () => {
                   <CCol xs={4}>
                     <CRow className="mb-3">
                       <CCol sm={12}>
-                        <label htmlFor="dateOfBirth">Date of Birth</label>
+                        <label htmlFor="dateOfBirth">
+                          Date of Birth{" "}
+                          <span style={{ color: "red", fontSize: "25px" }}>
+                            *
+                          </span>
+                        </label>
                         <Field
                           type="date"
                           id="dateOfBirth"
@@ -587,13 +623,6 @@ const CreateOrUpdateUser = () => {
                           options={bloodGroups}
                           onChange={(e) => setBloodGroup(e.target.value)}
                         />
-                        <ErrorMessage
-                          name="bloodGroup"
-                          className="invalid-feedback"
-                          render={(error) => (
-                            <label style={{ color: "#dc3545" }}>{error}</label>
-                          )}
-                        />
                       </CCol>
                     </CRow>
                   </CCol>
@@ -604,17 +633,22 @@ const CreateOrUpdateUser = () => {
                     <CRow className="mb-3">
                       <CCol sm={12}>
                         <label htmlFor="correspondenceAddress">
-                          Correspondence Address
+                          Correspondence Address{" "}
+                          <span style={{ color: "red", fontSize: "25px" }}>
+                            *
+                          </span>
                         </label>
                         <Field
                           type="text"
                           id="correspondenceAddress"
                           name="correspondenceAddress"
                           // className="form-control"
-                            className={`form-control ${touched.correspondenceAddress && errors.correspondenceAddress
-                                ? "is-invalid"
-                                : ""
-                              }`}
+                          className={`form-control ${
+                            touched.correspondenceAddress &&
+                            errors.correspondenceAddress
+                              ? "is-invalid"
+                              : ""
+                          }`}
                           placeholder="Correspondence Address"
                         />
                         <ErrorMessage
@@ -629,7 +663,10 @@ const CreateOrUpdateUser = () => {
                     <CRow className="mb-3">
                       <CCol sm={12}>
                         <label htmlFor="permanentAddress">
-                          Permanent Address
+                          Permanent Address{" "}
+                          <span style={{ color: "red", fontSize: "25px" }}>
+                            *
+                          </span>
                         </label>
                         <Field
                           type="text"
@@ -659,16 +696,22 @@ const CreateOrUpdateUser = () => {
                   <CCol xs={4}>
                     <CRow className="mb-3">
                       <CCol sm={12}>
-                        <label htmlFor="guardianName">Guardian Name</label>
+                        <label htmlFor="guardianName">
+                          Guardian Name{" "}
+                          <span style={{ color: "red", fontSize: "25px" }}>
+                            *
+                          </span>
+                        </label>
                         <Field
                           type="text"
                           id="guardianName"
                           name="guardianName"
                           // className="form-control"
-                            className={`form-control ${touched.guardianName && errors.guardianName
-                                ? "is-invalid"
-                                : ""
-                              }`}
+                          className={`form-control ${
+                            touched.guardianName && errors.guardianName
+                              ? "is-invalid"
+                              : ""
+                          }`}
                           placeholder="Guardian Name"
                         />
                         <ErrorMessage
@@ -682,7 +725,12 @@ const CreateOrUpdateUser = () => {
                     </CRow>
                     <CRow className="mb-3">
                       <CCol sm={12}>
-                        <label htmlFor="contactNumber1">Contact Number 1</label>
+                        <label htmlFor="contactNumber1">
+                          Contact Number 1{" "}
+                          <span style={{ color: "red", fontSize: "25px" }}>
+                            *
+                          </span>
+                        </label>
                         <Field
                           type="text"
                           id="contactNumber1"
@@ -706,7 +754,12 @@ const CreateOrUpdateUser = () => {
                     </CRow>
                     <CRow className="mb-3">
                       <CCol sm={12}>
-                        <label htmlFor="officialEmail">Official Email</label>
+                        <label htmlFor="officialEmail">
+                          Official Email{" "}
+                          <span style={{ color: "red", fontSize: "25px" }}>
+                            *
+                          </span>
+                        </label>
                         <Field
                           type="text"
                           id="officialEmail"
@@ -733,17 +786,22 @@ const CreateOrUpdateUser = () => {
                     <CRow className="mb-3">
                       <CCol sm={12}>
                         <label htmlFor="guardianContactNumber">
-                          Guardian Contact Number
+                          Guardian Contact Number{" "}
+                          <span style={{ color: "red", fontSize: "25px" }}>
+                            *
+                          </span>
                         </label>
                         <Field
                           type="text"
                           id="guardianContactNumber"
                           name="guardianContactNumber"
                           // className="form-control"
-                            className={`form-control ${touched.guardianContactNumber && errors.guardianContactNumber
-                                ? "is-invalid"
-                                : ""
-                              }`}
+                          className={`form-control ${
+                            touched.guardianContactNumber &&
+                            errors.guardianContactNumber
+                              ? "is-invalid"
+                              : ""
+                          }`}
                           placeholder="Guardian Contact Number"
                         />
                         <ErrorMessage
@@ -763,25 +821,17 @@ const CreateOrUpdateUser = () => {
                           id="contactNumber2"
                           name="contactNumber2"
                           className="form-control"
-                          //   className={`form-control ${touched.contactNumber2 && errors.contactNumber2
-                          //       ? "is-invalid"
-                          //       : ""
-                          //     }`}
                           placeholder="Contact Number 2"
                         />
-                        {/* <ErrorMessage
-                          name="contactNumber2"
-                          className="invalid-feedback"
-                          render={(error) => (
-                            <label style={{ color: "#dc3545" }}>{error}</label>
-                          )}
-                        /> */}
                       </CCol>
                     </CRow>
                     <CRow className="mb-3">
                       <CCol sm={12}>
                         <label htmlFor="officialEmailPassword">
-                          Official Email Password
+                          Official Email Password{" "}
+                          <span style={{ color: "red", fontSize: "25px" }}>
+                            *
+                          </span>
                         </label>
                         <Field
                           type="password"
@@ -809,7 +859,12 @@ const CreateOrUpdateUser = () => {
                   <CCol xs={4}>
                     <CRow className="mb-3">
                       <CCol sm={12}>
-                        <label htmlFor="personalEmail">Personal Email</label>
+                        <label htmlFor="personalEmail">
+                          Personal Email{" "}
+                          <span style={{ color: "red", fontSize: "25px" }}>
+                            *
+                          </span>
+                        </label>
                         <Field
                           type="text"
                           id="personalEmail"
@@ -833,7 +888,12 @@ const CreateOrUpdateUser = () => {
                     </CRow>
                     <CRow className="mb-3">
                       <CCol sm={12}>
-                        <label htmlFor="skypeId">Official Skype</label>
+                        <label htmlFor="skypeId">
+                          Official Skype{" "}
+                          <span style={{ color: "red", fontSize: "25px" }}>
+                            *
+                          </span>
+                        </label>
                         <Field
                           type="text"
                           id="skypeId"
@@ -862,17 +922,31 @@ const CreateOrUpdateUser = () => {
                   <CCol xs={4}>
                     <CRow className="mb-3">
                       <CCol sm={12}>
-                        <label htmlFor="designationId">Designation</label>
+                        <label htmlFor="designationId">
+                          Designation{" "}
+                          <span style={{ color: "red", fontSize: "25px" }}>
+                            *
+                          </span>
+                        </label>
                         <CFormSelect
                           id="designationId"
                           name="designationId"
                           value={designationId}
                           aria-label="Default select example"
                           onChange={handleDesignationChange}
+                          className={`form-control ${
+                            touched.designationId && errors.designationId
+                              ? "is-invalid"
+                              : ""
+                          }`}
+                          placeholder="designation"
                         >
                           <option value="">Select a Designation</option>
-                          {designationList?.map(designation => (
-                            <option key={designation.designationId} value={designation.designationId}>
+                          {designationList?.map((designation) => (
+                            <option
+                              key={designation.designationId}
+                              value={designation.designationId}
+                            >
                               {designation.name}
                             </option>
                           ))}
@@ -888,7 +962,12 @@ const CreateOrUpdateUser = () => {
                     </CRow>
                     <CRow className="mb-3">
                       <CCol sm={12}>
-                        <label htmlFor="bank">Bank Name</label>
+                        <label htmlFor="bank">
+                          Bank Name{" "}
+                          <span style={{ color: "red", fontSize: "25px" }}>
+                            *
+                          </span>
+                        </label>
                         <Field
                           type="text"
                           id="bank"
@@ -911,7 +990,7 @@ const CreateOrUpdateUser = () => {
                   </CCol>
                   <CCol xs={4}>
                     <CRow className="mb-3">
-                      <CCol sm={12}>
+                      {/* <CCol sm={12}>
                         <label htmlFor="departmentId">Department</label>
                         <CFormSelect
                           id="departmentId"
@@ -919,10 +998,17 @@ const CreateOrUpdateUser = () => {
                           value={formData.departmentId}
                           aria-label="Default select example"
                           onChange={handleDepartmentChange}
+                          className={`form-control ${
+                            touched.departmentId && errors.departmentId ? "is-invalid" : ""
+                          }`}
+                          placeholder="IFSC Code"
                         >
                           <option value="">Select a Department</option>
-                          {departmentList?.map(department => (
-                            <option key={department.departmentId} value={department.departmentId}>
+                          {departmentList?.map((department) => (
+                            <option
+                              key={department.departmentId}
+                              value={department.departmentId}
+                            >
                               {department.name}
                             </option>
                           ))}
@@ -934,16 +1020,50 @@ const CreateOrUpdateUser = () => {
                             <label style={{ color: "#dc3545" }}>{error}</label>
                           )}
                         />
+                      </CCol> */}
+                      <CCol sm={12}>
+                        <label htmlFor="departmentId">Department <span style={{ color: "red", fontSize: "25px" }}>
+                          *
+                        </span></label>
+                        <Field
+                          as="select"
+                          id="departmentId"
+                          name="departmentId"
+                          onChange={handleDepartmentChange}
+                          className={`form-control ${
+                            touched.departmentId && errors.departmentId
+                              ? "is-invalid"
+                              : ""
+                          }`}
+                        >
+                          <option value="">Select a Department</option>
+                          {departmentList?.map((department) => (
+                            <option
+                              key={department.departmentId}
+                              value={department.departmentId}
+                            >
+                              {department.name}
+                            </option>
+                          ))}
+                        </Field>
+                        <ErrorMessage
+                          name="departmentId"
+                          component="div"
+                          className="invalid-feedback"
+                        />
                       </CCol>
                     </CRow>
                     <CRow className="mb-3">
                       <CCol sm={12}>
-                        <label htmlFor="bankAccountNumber">Account Number</label>
+                        <label htmlFor="bankAccountNumber">
+                          Account Number <span style={{ color: "red", fontSize: "25px" }}>
+                          *
+                        </span>
+                        </label>
                         <Field
                           type="text"
                           id="bankAccountNumber"
                           name="bankAccountNumber"
-                          // className="form-control"
                           className={`form-control ${
                             touched.bankAccountNumber &&
                             errors.bankAccountNumber
@@ -965,12 +1085,16 @@ const CreateOrUpdateUser = () => {
                   <CCol xs={4}>
                     <CRow className="mb-3">
                       <CCol sm={12}>
-                        <label htmlFor="ifsc">IFSC Code</label>
+                        <label htmlFor="ifsc">
+                          IFSC Code{" "}
+                          <span style={{ color: "red", fontSize: "25px" }}>
+                            *
+                          </span>
+                        </label>
                         <Field
                           type="text"
                           id="ifsc"
                           name="ifsc"
-                          // className="form-control"
                           className={`form-control ${
                             touched.ifsc && errors.ifsc ? "is-invalid" : ""
                           }`}
@@ -985,7 +1109,7 @@ const CreateOrUpdateUser = () => {
                         />
                       </CCol>
                     </CRow>
-                    <CRow className="mb-3">
+                    {/* <CRow className="mb-3">
                       <CCol sm={12}>
                         <label htmlFor="shiftId">Shift</label>
                         <CFormSelect
@@ -994,6 +1118,12 @@ const CreateOrUpdateUser = () => {
                           value={shiftId}
                           aria-label="Default select example"
                           onChange={handleShiftChange}
+                          className={`form-control ${
+                            touched.shiftId && errors.shiftId
+                              ? "is-invalid"
+                              : ""
+                          }`}
+                          placeholder="Shift"
                         >
                           <option value="">Select a Shift</option>
                           {shiftList?.map((shift) => (
@@ -1010,19 +1140,62 @@ const CreateOrUpdateUser = () => {
                           )}
                         />
                       </CCol>
-                    </CRow>
+                    </CRow> */}
+                    <div className="form-group row">
+                      <label
+                        htmlFor="shiftId"
+                        className="col-sm-4 col-form-label"
+                      >
+                        shiftId
+                        <span style={{ color: "red", fontSize: "25px" }}>
+                          *
+                        </span>
+                      </label>
+                      <div className="col-sm-6">
+                        <Field
+                          as="select"
+                          name="shiftId"
+                          className={`form-control ${
+                            touched.shiftId && errors.shiftId
+                              ? "is-invalid"
+                              : ""
+                          }`}
+                          style={{ height: "50px" }}
+                          onChange={handleShiftChange}
+                        >
+                          placeholder="Shift"
+                          <option value="">Select....</option>
+                          {shiftList?.map((shift: any) => (
+                            <option key={shift.shiftId} value={shift.shiftId}>
+                              {shift.name}
+                            </option>
+                          ))}
+                        </Field>
+                        <ErrorMessage
+                          name="shiftId"
+                          className="invalid-feedback"
+                          render={(error) => (
+                            <label style={{ color: "#dc3545" }}>{error}</label>
+                          )}
+                        />
+                      </div>
+                    </div>
                   </CCol>
                 </CRow>
                 <CRow>
                   <CCol xs={4}>
                     <CRow className="mb-3">
                       <CCol sm={12}>
-                        <label htmlFor="branch">Branch</label>
+                        <label htmlFor="branch">
+                          Branch{" "}
+                          <span style={{ color: "red", fontSize: "25px" }}>
+                            *
+                          </span>
+                        </label>
                         <Field
                           type="text"
                           id="branch"
                           name="branch"
-                          // className="form-control"
                           className={`form-control ${
                             touched.branch && errors.branch ? "is-invalid" : ""
                           }`}
@@ -1044,7 +1217,7 @@ const CreateOrUpdateUser = () => {
                     <button
                       type="submit"
                       className="btn btn-primary"
-                      // disabled={isSubmitting}   // || !isValid
+                      disabled={isSubmitting}
                     >
                       {isSubmitting ? "Submitting..." : "Submit"}
                     </button>
@@ -1056,13 +1229,6 @@ const CreateOrUpdateUser = () => {
                         value="cancel"
                       />
                     </Link>
-                    {/* <CButton 
-                    type="button"
-                    value="test"
-                    onClick={testhandler}
-                    /> */}
-
-                    
                   </CCol>
                 </CRow>
               </Form>

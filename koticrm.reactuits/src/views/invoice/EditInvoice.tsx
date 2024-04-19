@@ -30,7 +30,6 @@ import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 
 import "react-datepicker/dist/react-datepicker.css";
 import { clearInvoice, getInvoiceByIdRequest, updateInvoiceRequest } from "../../redux-saga/modules/invoice/action";
-import { ToastContainer } from "react-toastify";
 import { useNavigate, useParams } from "react-router-dom";
 import * as Yup from "yup";
 
@@ -161,18 +160,18 @@ const EditInvoice: React.FC<newInvoiceProps> = () => {
   //   dispatch(getOrganization());
   // }, [dispatch]);
 
-  // const handleAddRow = () => {
-  //   const newRow: InvoiceItem = {
-  //     sNo: rows.length + 1,
-  //     productName: "",
-  //     description: "",
-  //     quantity: 0,
-  //     discount: 0,
-  //     amount: 0,
-  //     total: 0,
-  //   };
-  //   setRows([...rows, newRow]);
-  // };
+  const handleAddRow = () => {
+    const newRow: InvoiceItem = {
+      sNo: rows.length + 1,
+      productName: "",
+      description: "",
+      quantity: 0,
+      discount: 0,
+      amount: 0,
+      total: 0,
+    };
+    setRows([...rows, newRow]);
+  };
 
   const handleEditorChange = (event: any, editor: any) => {
     const data = editor.getData();
@@ -210,7 +209,7 @@ const EditInvoice: React.FC<newInvoiceProps> = () => {
   //   }
   // }
 
-  let grandTotalValue = 0;
+   let grandTotalValue = 0;
 
   // const [updateInvoice, setUpdateInvoice] = useState({
   //   subject: "",

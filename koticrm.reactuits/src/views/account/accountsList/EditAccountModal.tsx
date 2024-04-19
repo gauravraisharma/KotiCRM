@@ -118,9 +118,6 @@ const EditPage: React.FC<EditModalProps> = ({
     accountName: touchedFields.accountName
       ? Yup.string().required("Required (Account Name)")
       : Yup.string(),
-    // annualRevenue: touchedFields.annualRevenue
-    //   ? Yup.string().required("Required (Annual Revenue)")
-    //   : Yup.string(),
     phone: touchedFields.phone
       ? Yup.string()
           .required("Required (Phone)")
@@ -146,9 +143,6 @@ const EditPage: React.FC<EditModalProps> = ({
     country: touchedFields.country
       ? Yup.string().required("Required (Country)")
       : Yup.string(),
-      // description:touchedFields.description
-      // ? Yup.string().required("Required(Description)")
-      // :Yup.string(),
   });
 
   const handleInputChange = (fieldName: keyof typeof touchedFields) => {
