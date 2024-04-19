@@ -8,7 +8,7 @@ export interface Employee {
     bloodGroup: string;
     dateOfBirth: string;
     joiningDate: string;
-    relievingDate: string;
+    relievingDate: string | null;
     contactNumber1: string;
     contactNumber2: string | null;
     guardianContactNumber: string;
@@ -43,7 +43,7 @@ export class EmployeeClass implements Employee{
     bloodGroup: string;
     dateOfBirth: string;
     joiningDate: string;
-    relievingDate: string;
+    relievingDate: string | null;
     contactNumber1: string;
     contactNumber2: string | null;
     guardianContactNumber: string;
@@ -75,7 +75,7 @@ export class EmployeeClass implements Employee{
         this.bloodGroup = "",
         this.dateOfBirth = "",
         this.joiningDate = "",
-        this.relievingDate = "",
+        this.relievingDate = null,
         this.contactNumber1 = "",
         this.contactNumber2 = "",
         this.guardianContactNumber = "",

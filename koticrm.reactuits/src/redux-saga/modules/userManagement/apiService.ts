@@ -17,9 +17,9 @@ export async function GetEmployeeId(){
     }
 }
 
-export async function GetEmployeesList(){
+export async function GetEmployeesList(searchQuery: string, pageNumber: number, pageSize: number){
     try {
-        const response = await axiosInstance.get(`/UserAccount/GetUsers`);
+        const response = await axiosInstance.get(`/UserAccount/GetUsers?searchQuery=${searchQuery}&pageNumber=${pageNumber}&pageSize=${pageSize}`);
         return response;
     } catch (error: any) {
         const errorResponse: apiResponse<Employees[]> = {

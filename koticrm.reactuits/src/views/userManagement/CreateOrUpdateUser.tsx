@@ -215,8 +215,9 @@ const CreateOrUpdateUser = () => {
   const validationSchema = Yup.object().shape({
     employeeId: Yup.number().required("Employee ID is required"),
     joiningDate: Yup.date().required("Joining Date is required"),
-    employeeCode: Yup.string().required("Employee Code is required"),
+    // employeeCode: Yup.string().required("Employee Code is required"),
     isActive: Yup.boolean(),
+    relievingDate : isRelievedChecked ? Yup.string().required("Relieving date is required") : Yup.string(),
     correspondenceAddress: Yup.string().required(
       "Correspondence address is required"
     ),
@@ -236,7 +237,7 @@ const CreateOrUpdateUser = () => {
       .required("Aadhar Number is required")
       .matches(/^[0-9]{12}$/, "Aadhar Number must be 12 digits"),
     dateOfBirth: Yup.date().required("Date of Birth is required"),
-    bloodGroup: Yup.string().required("Blood Group is required"),
+    // bloodGroup: Yup.string().required("Blood Group is required"),
     contactNumber2: Yup.string(),
     personalEmail: Yup.string()
     .email('Invalid email address')
@@ -423,22 +424,25 @@ const CreateOrUpdateUser = () => {
                     </CRow>
                     <CRow className="mb-3">
                       <CCol sm={12}>
-                        <label htmlFor="relievingDate">Relieving Date</label>
-                        {isRelievedChecked && ( // Render relievingDate field only if isRelieved is checked
+                        <label htmlFor="relievingDate">Relieving Date
+                        {isRelievedChecked && (<span style={{ color: "red", fontSize: "25px" }}>
+                            *
+                          </span>)}
+                          </label>
                           <Field
                             type="date"
                             id="relievingDate"
                             name="relievingDate"
                             className="form-control"
+                            disabled={!isRelievedChecked}
                           />
-                        )}
-                        <ErrorMessage
+                        {isRelievedChecked && (<ErrorMessage
                           name="relievingDate"
                           className="invalid-feedback"
                           render={(error) => (
                             <label style={{ color: "#dc3545" }}>{error}</label>
                           )}
-                        />
+                        />)}
                       </CCol>
                     </CRow>
                   </CCol>
@@ -1046,11 +1050,11 @@ const CreateOrUpdateUser = () => {
                         value="cancel"
                       />
                     </Link>
-                    <CButton 
+                    {/* <CButton 
                     type="button"
                     value="test"
                     onClick={testhandler}
-                    />
+                    /> */}
 
                     
                   </CCol>

@@ -18,5 +18,7 @@ namespace KotiCRM.Repository.DTOs.UserManagement
         public string? Designation { get; set; }
         public string? Shift { get; set; }
         public int? DepartmentId { get; internal set; }
+        public string? BloodGroup { get; set; }
+        public DateOnly? BirthDate {  get; set; }
     }
 }

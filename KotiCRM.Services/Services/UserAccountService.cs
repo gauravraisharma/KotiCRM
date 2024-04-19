@@ -4,6 +4,8 @@ using KotiCRM.Services.IServices;
 using Microsoft.Extensions.Configuration;
 using KotiCRM.Repository.IRepository;
 using KotiCRM.Repository.DTOs.UserManagement;
+using KotiCRM.Repository.DTOs.AccountDTO;
+using System.Drawing.Printing;
 
 namespace KotiCRM.Services.Services
 {
@@ -88,10 +90,24 @@ namespace KotiCRM.Services.Services
         }
 
         // For Employee
-        public async Task<IEnumerable<GetEmployeesDTO>> GetEmployees()
+        public async Task<EmployeeWithCountDTO> GetEmployees(string? searchQuery, int? pageNumber, int? pageSize)
         {
+            var usersList = (from userAccount in await _accountRepository.GetEmployees()
+                               where (string.IsNullOrEmpty(searchQuery) ||
+                               userAccount.Name.Contains(searchQuery, StringComparison.OrdinalIgnoreCase) ||
+                               userAccount.EmployeeCode.Contains(searchQuery, StringComparison.OrdinalIgnoreCase) ||
+                               userAccount.BloodGroup.Contains(searchQuery, StringComparison.OrdinalIgnoreCase) ||
+                               userAccount.BirthDate.HasValue && userAccount.BirthDate.Value.ToString() == searchQuery ||
+                               userAccount.Designation.Contains(searchQuery, StringComparison.OrdinalIgnoreCase)
+
+                               )
+                             select userAccount)
+                            .Skip(pageNumber.HasValue && pageSize.HasValue ? (pageNumber.Value - 1) * pageSize.Value : 0)
+                            .Take(pageNumber.HasValue && pageSize.HasValue ? pageSize.Value : 10);
+
             var users = await _accountRepository.GetEmployees();
-            return users;
+            int count = users.Count();
+            return new EmployeeWithCountDTO { Employee = usersList, UserCount = count };
         }
         public EmployeeResponse GetEmployeeById(string employeeId)
         {

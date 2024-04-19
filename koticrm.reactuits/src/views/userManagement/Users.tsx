@@ -4,7 +4,7 @@ import { AiFillEye } from "react-icons/ai";
 import { MdDelete, MdEdit } from "react-icons/md";
 import { toast } from "react-toastify";
 import { GetEmployeesList } from "../../redux-saga/modules/userManagement/apiService";
-import { Employees } from "../../models/userManagement/employees";
+import {  Employees } from "../../models/userManagement/employees";
 import DeleteConfirmationModal from "../account/accountsList/DeleteConfirmation";
 import {
   CButton,
@@ -19,6 +19,8 @@ import {
   CFormInput,
   CInputGroup,
   CInputGroupText,
+  CPagination,
+  CPaginationItem,
   CRow,
   CSpinner,
   CTable,
@@ -34,16 +36,17 @@ const Users = () => {
   const [userId, setUserId] = useState<string>("");
   const [isLoading, setIsLoading] = useState(true);
   const [dropdownValue, setDropdownValue] = useState("Select option");
-  const [showDeleteConfirmation, setShowDeleteConfirmation] =
-    useState<boolean>(false);
+  const [showDeleteConfirmation, setShowDeleteConfirmation] =useState<boolean>(false);
+  const [searchQuery, setSearchQuery] = useState('')
 
-  useEffect(() => {
-    GetEmployees();
-  }, []);
+  const [pageNumber, setPageNumber] = useState<number>(1);
+
+    console.log(employeesList)
+
 
   const GetEmployees = async () => {
     try {
-      const response = await GetEmployeesList();
+      const response = await GetEmployeesList(searchQuery, pageNumber, pageSize);
       setEmployeesList(response.data);
     } catch (error) {
       console.error("Error fetching employees:", error);
@@ -52,6 +55,7 @@ const Users = () => {
       setIsLoading(false);
     }
   };
+
 
   //Handle dropdown change
   const handleDropdownChange = (newValue: any) => {
@@ -71,6 +75,31 @@ const Users = () => {
   const cancelDelete = () => {
     setShowDeleteConfirmation(false);
   };
+
+   // Pagination
+   const pageSize = 5;
+   const totalCount = employeesList.userCount
+   const totalPages = Math.ceil(totalCount / pageSize);
+ 
+   //Handle page change
+   const handlePageChange = (pageNumber: number) => {
+     setPageNumber(pageNumber);
+   };
+
+     //Handle enter click to search account
+  const handleKeyDown = (e: any) => {
+    if (e.keyCode === 13) {
+      GetEmployees()
+    }
+  }
+  //Focus out event to searchh
+  const handleBlur = () => {
+    GetEmployees()
+  }
+ //Effects
+  useEffect(() => {
+    GetEmployees();
+  }, [pageNumber, pageSize]);
 
   return (
     <>
@@ -138,30 +167,34 @@ const Users = () => {
                 />
               </CInputGroup>
             </CCol> */}
-          <CCol xs={2} md={2} lg={4}>
+            <CCol xs={2} md={2} lg={4}>
 
-            <div className="input-group mb-3">
-  <select
-    className="form-select"
-    id="searchInput"
-    onChange={(e) => handleDropdownChange(e.target.value)}
-  >
-    <option value="">Select an option</option>
-    <option value="Name">Name</option>
-    <option value="Emp code">Emp code</option>
-    <option value="Blood Group">Blood Group</option>
-    <option value="Birthday">Birthday</option>
-    <option value="RoleId">RoleId</option>
-    <option value="Designation">Designation</option>
-  </select>
-  <input
-    type="text"
-    className="form-control"
-    placeholder={`Enter ${dropdownValue}...`}
-  />
-</div>
+              <div className="input-group mb-3">
+                <select
+                  className="form-select"
+                  id="searchInput"
+                  onChange={(e) => handleDropdownChange(e.target.value)}
+                >
+                  <option value="">Select an option</option>
+                  <option value="Name">Name</option>
+                  <option value="Emp code">Emp code</option>
+                  <option value="Blood Group">Blood Group</option>
+                  <option value="Birthday">Birthday</option>
+                  <option value="RoleId">RoleId</option>
+                  <option value="Designation">Designation</option>
+                </select>
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder={`Enter ${dropdownValue}...`}
+                  value = {searchQuery}
+                  onChange= {(e)=> setSearchQuery(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                  onBlur={handleBlur}
+                />
+              </div>
 
-</CCol>
+            </CCol>
 
             <CCol xs={8} className="text-end">
               <Link to={`/users/createOrUpdateUser`}>
@@ -196,7 +229,7 @@ const Users = () => {
               </CTableRow>
             </CTableHead>
             <CTableBody>
-              {employeesList?.map((employee: Employees) => (
+              {employeesList.employee?.map((employee: Employees) => (
                 <CTableRow key={employee.employeeId}>
                   <CTableDataCell>{employee.name}</CTableDataCell>
                   <CTableDataCell>{employee.contactNumber1}</CTableDataCell>
@@ -238,6 +271,38 @@ const Users = () => {
               ))}
             </CTableBody>
           </CTable>
+          <CPagination
+            size="sm"
+            align="end"
+            aria-label="Page navigation example"
+            className="m-auto"
+          >
+            <CPaginationItem
+              onClick={() => handlePageChange(pageNumber - 1)}
+              disabled={pageNumber === 1}
+              style={{ margin: "0 2px", cursor: "pointer", fontSize: "12px" }}
+
+            >
+              <span aria-hidden="true">&laquo;</span>
+            </CPaginationItem>
+            {Array.from({ length: totalPages }, (_, index) => (
+              <CPaginationItem
+                key={index}
+                active={pageNumber === index + 1}
+                onClick={() => handlePageChange(index + 1)}
+                style={{ margin: "0 2px", cursor: "pointer", fontSize: "12px" }}
+              >
+                {index + 1}
+              </CPaginationItem>
+            ))}
+            <CPaginationItem
+              onClick={() => handlePageChange(pageNumber + 1)}
+              disabled={pageNumber === totalPages}
+              style={{ margin: "0 2px", cursor: "pointer", fontSize: "12px" }}
+            >
+              <span aria-hidden="true">&raquo;</span>
+            </CPaginationItem>
+          </CPagination>
         </CCardBody>
       </CCard>
     </>

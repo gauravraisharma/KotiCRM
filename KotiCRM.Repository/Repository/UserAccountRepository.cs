@@ -782,6 +782,9 @@ namespace KotiCRM.Repository.Repository
                                        Department = department.Name,
                                        Designation = designation.Name,
                                        Shift = shift.Name,
+                                       BirthDate = employee.DateOfBirth,
+                                       BloodGroup = employee.BloodGroup
+
                                    })
                                    .OrderByDescending(u => u.Name) // Order by Name in descending order
                                    .ToListAsync();

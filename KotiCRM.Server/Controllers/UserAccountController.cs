@@ -181,9 +181,9 @@ namespace KotiCRM.Server.Controllers
         //This method is used to get List of Employees
         [HttpGet]
         [Route("GetUsers")]
-        public async Task<IEnumerable<GetEmployeesDTO>> GetEmployees()
+        public async Task<EmployeeWithCountDTO> GetEmployees(string? searchQuery, int? pageNumber, int? pageSize)
         {
-            var users = await _accountService.GetEmployees();
+            var users = await _accountService.GetEmployees(searchQuery, pageNumber, pageSize);
 
             return users;
         }
