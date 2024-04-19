@@ -55,7 +55,7 @@ const AccountList: React.FC = () => {
   const [pageNumber, setPageNumber] = useState<number>(1);
 
   const showItems = (id: any) => {
-    navigate(`/accounts/accountDetails/${id}`);
+    navigate(`/accountsList/accountDetails/${id}`);
   };
 
   const handleEditClick = (data: any) => {

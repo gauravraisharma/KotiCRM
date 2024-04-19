@@ -142,6 +142,24 @@ public class InvoiceService : IInvoiceService
                 existingItem.Total = item.Total;
                 existingItem.IsDeleted = item.IsDeleted;
             }
+            else
+            {
+                invoiceCreationModel.InvoiceItems.Add(new InvoiceItem
+                {
+                    // Populate properties from item
+                    ID = item.ID,
+                    ProductName = item.ProductName,
+                    Description = item.Description,
+                    Quantity = item.Quantity,
+                    Amount = item.Amount,
+                    Discount = item.Discount,
+                    Tax = item.Tax,
+                    Total = item.Total,
+                    IsDeleted = item.IsDeleted,
+                    InvoiceID = item.InvoiceID,
+                    Sno = item.Sno,
+                });
+            }
         }
 
         DbResponse dbResponse= await _invoiceRepository.UpdateInvoiceAsync(invoiceCreationModel);

@@ -40,7 +40,7 @@ const ContactDetails = () => {
   const timezone = useSelector((state: any) => state.sharedReducer.timezone);
   const { contactId } = useParams();
 
-  useEffect(() => {
+    useEffect(() => {
     if (contactId) {
       dispatch(getContactById(+contactId));
     }
@@ -61,50 +61,49 @@ const ContactDetails = () => {
             <CCol xs={6}>
               <DetailRow
                 label="Name"
-                value={`${fetchedContact.firstName} ${fetchedContact.lastName}`}
+                value={`${fetchedContact?.firstName} ${fetchedContact?.lastName}`}
               />
-              <DetailRow label="Skype ID" value={fetchedContact.skypeID} />
-              <DetailRow label="Title" value={fetchedContact.title} />
+              <DetailRow label="Skype ID" value={fetchedContact?.skypeID} />
+              <DetailRow label="Title" value={fetchedContact?.title} />
               <DetailRow
                 label="Account Name"
-                value={fetchedContact.accountName}
+                value={fetchedContact?.accountName}
               />
-              <DetailRow label="Phone" value={fetchedContact.phone} />
-              <DetailRow label="Email" value={fetchedContact.email} />
-              <DetailRow label="City" value={fetchedContact.city} />
-              <DetailRow label="Country" value={fetchedContact.country} />
-              <DetailRow label="ZIP" value={fetchedContact.zip} />
+              <DetailRow label="Phone" value={fetchedContact?.phone} />
+              <DetailRow label="Email" value={fetchedContact?.email} />
+              <DetailRow label="City" value={fetchedContact?.city} />
+              <DetailRow label="Country" value={fetchedContact?.country} />
+              <DetailRow label="ZIP" value={fetchedContact?.zip} />
             </CCol>
             <CCol xs={6}>
-              <DetailRow label="Department" value={fetchedContact.department} />
+              <DetailRow label="Department" value={fetchedContact?.department} />
               <DetailRow
                 label="Twitter URL"
-                value={fetchedContact.twitterURL}
+                value={fetchedContact?.twitterURL}
               />
               <DetailRow
                 label="Date Of Birth"
-                value={moment
-                  .utc(fetchedContact.dateOfBirth)
-                  .tz(timezone)
-                  ?.format("DD/MM/YYYY hh:mm A")}
+                // formatDate(fetchedContact.dateOfBirth, 'DD/MM/YYYY HH:mm', timezone)
+                value={moment.utc(fetchedContact?.dateOfBirth).tz(timezone)?.format('DD/MM/YYYY hh:mm A')}
+
               />
-              <DetailRow label="Mobile" value={fetchedContact.mobile} />
+              <DetailRow label="Mobile" value={fetchedContact?.mobile} />
               <DetailRow
                 label="Other Phone"
-                value={fetchedContact.otherPhone}
+                value={fetchedContact?.otherPhone}
               />
               <DetailRow
                 label="Secondary Email"
-                value={fetchedContact.secondaryEmail}
+                value={fetchedContact?.secondaryEmail}
               />
               <DetailRow
                 label="Mailing Street"
-                value={fetchedContact.mailingStreet}
+                value={fetchedContact?.mailingStreet}
               />
-              <DetailRow label="State" value={fetchedContact.state} />
+              <DetailRow label="State" value={fetchedContact?.state} />
               <DetailRow
                 label="Description"
-                value={fetchedContact.description}
+                value={fetchedContact?.description}
               />
             </CCol>
           </CRow>

@@ -22,9 +22,9 @@ export interface Employee {
     bank: string;
     branch: string;
     ifsc: string;
-    departmentId: number;
-    designationId: number;
-    shiftId: number;
+    departmentId: number |null ;
+    designationId: number |null;
+    shiftId: number | null;
     isActive: boolean;
     permanentAddress: string;
     correspondenceAddress: string;
@@ -57,9 +57,9 @@ export class EmployeeClass implements Employee{
     bank: string;
     branch: string;
     ifsc: string;
-    departmentId: number;
-    designationId: number;
-    shiftId: number;
+    departmentId: number | null;
+    designationId: number |null;
+    shiftId: number |null;
     isActive: boolean;
     permanentAddress: string;
     correspondenceAddress: string;
@@ -89,9 +89,9 @@ export class EmployeeClass implements Employee{
         this.bank = "",
         this.branch = "",
         this.ifsc = "",
-        this.departmentId = 0,
-        this.designationId = 0,
-        this.shiftId = 0,
+        this.departmentId = -1,
+        this.designationId = -1,
+        this.shiftId = -1,
         this.isActive = false,
         this.permanentAddress = "",
         this.correspondenceAddress = ""

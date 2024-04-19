@@ -127,15 +127,20 @@ namespace KotiCRM.Repository.Repository
                 foreach (var invoiceItem in invoiceCreationModel.InvoiceItems)
                 {
                     // Check if the invoice item is already tracked by the context
-                    if (_context.Entry(invoiceItem).State == EntityState.Detached)
+                    var existingItem = _context.InvoiceItems.Find(invoiceItem.ID);
+                    if (existingItem != null)
                     {
-                        // If it's detached, attach it to the context
-                        _context.Attach(invoiceItem);
+                        // If the item exists in the database, update it if it hasn't been modified by another process
+                        _context.Entry(existingItem).CurrentValues.SetValues(invoiceItem);
                     }
-                    _context.Entry(invoiceItem).State = EntityState.Modified;
+                    else
+                    {
+                        // If the item doesn't exist, add it to the context
+                        _context.InvoiceItems.AddRange(invoiceItem);
+                    }
                 }
 
-                await _context.SaveChangesAsync();
+                    await _context.SaveChangesAsync();
 
                 return new DbResponse()
                 {

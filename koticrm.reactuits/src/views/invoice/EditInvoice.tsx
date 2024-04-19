@@ -156,26 +156,33 @@ const EditInvoice: React.FC<newInvoiceProps> = () => {
   const defaultAccount = accountNames.account?.find(dAccount => dAccount.id === invoice?.accountID);
   const defaultContact = contacts?.find(dContact => dContact.id === invoice?.contactID);
 
+  console.log(invoice)
   // useEffect(() => {
   //   dispatch(getOrganization());
   // }, [dispatch]);
 
   const handleAddRow = () => {
+    const currentLength = invoiceItems?.length;
+
     const newRow: InvoiceItem = {
-      sNo: rows.length + 1,
+      sno: currentLength +1,
       productName: "",
       description: "",
       quantity: 0,
       discount: 0,
       amount: 0,
       total: 0,
+      tax :0,
+      invoiceID :invoice?.id,
+      id :0,
     };
     setRows([...rows, newRow]);
   };
 
-  const handleEditorChange = (event: any, editor: any) => {
+  const handleEditorChange = (e: any, editor: any) => {
     const data = editor.getData();
-    setTermsAndConditions(data);
+    setUpdateInvoice({ ...updateInvoice, termsAndConditions: data });
+
   };
 
   const [touchedFields, setTouchedFields] = useState({
@@ -302,7 +309,7 @@ const EditInvoice: React.FC<newInvoiceProps> = () => {
     if (e != null) {
       setDropdownItems({ ...dropdownItems, [selectedOption.name]: e.key });
       if (selectedOption.name == "accountID") {
-        const accountAddress = accountNames?.find(
+        const accountAddress = accountNames.account?.find(
           (account: any) => account.id == e.key
         );
         if (accountAddress) {
@@ -343,7 +350,7 @@ const EditInvoice: React.FC<newInvoiceProps> = () => {
     setUpdateInvoice({ ...updateInvoice, [e.target.name]: e.target.value });
   };
 
-  const handleCreateInvoiceClick = () => {
+  const handleUpdateInvoiceClick = () => {
     const invoiceDetails: Invoice = {
       id: updateInvoice.id,
       accountID: dropdownItems.accountID,
@@ -373,7 +380,7 @@ const EditInvoice: React.FC<newInvoiceProps> = () => {
       modifiedBy: userId,
       modifiedOn: formattedDateTime,
     };
-
+    
     const invoiceItemsDetails: InvoiceItem[] = rows.map((row) => ({
       id: row.id,
       invoiceID: row.invoiceID,
@@ -409,13 +416,6 @@ const EditInvoice: React.FC<newInvoiceProps> = () => {
     return ((amount - discount) * quantity);
   };
 
-  // const { handleSubmit } = useFormik({
-  //   enableReinitialize: true,
-  //   initialValues: initialValues,
-  //   validationSchema: validationSchema,
-  //   onSubmit: handleCreateInvoiceClick,
-  // });
-
   return (
     <div>
       {/* <ToastContainer /> */}
@@ -441,7 +441,7 @@ const EditInvoice: React.FC<newInvoiceProps> = () => {
             initialValues={updateInvoice}
             enableReinitialize
             validationSchema={validationSchema}
-            onSubmit={handleCreateInvoiceClick}
+            onSubmit={handleUpdateInvoiceClick}
           >
             {({ handleSubmit, handleChange, touched, errors, handleBlur }) => (
               <Form onSubmit={handleSubmit}>
@@ -1188,7 +1188,7 @@ const EditInvoice: React.FC<newInvoiceProps> = () => {
                         </CTableHead>
                         {rows.map((row, index) => (
                           <CTableRow key={index}>
-                            <CTableDataCell>{row.id}</CTableDataCell>
+                            <CTableDataCell>{row.sno}</CTableDataCell>
                             <CTableDataCell width={250}>
                               <div style={{ margin: "5px" }}>
                                 <input
@@ -1287,7 +1287,7 @@ const EditInvoice: React.FC<newInvoiceProps> = () => {
                     </CCardBody>
                   </CCard>
 
-                  {/* <div className="col-sm-4 ">
+                  <div className="col-sm-4 ">
                     <CButton
                       color="primary"
                       variant="outline"
@@ -1296,7 +1296,7 @@ const EditInvoice: React.FC<newInvoiceProps> = () => {
                     >
                       + Add Row
                     </CButton>
-                  </div> */}
+                  </div>
                   <div>
                     <CCard
                       className="rounded col-4 offset-md-7"
@@ -1415,7 +1415,7 @@ const EditInvoice: React.FC<newInvoiceProps> = () => {
                     <div className="col-sm-9">
                       <CKEditor
                         editor={ClassicEditor}
-                        data={termsAndConditions}
+                        data={updateInvoice?.termsAndConditions}
                         onChange={handleEditorChange}
                       />
                     </div>

@@ -178,7 +178,6 @@ const CreateOrUpdateUser = () => {
         console.error("Error getting shift list:", error.statusText);
       });
   };
-  // {console.log(errors)}
 
   // Submit
   const handleFormSubmit = async (
@@ -187,13 +186,13 @@ const CreateOrUpdateUser = () => {
     { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }
   ) => {
     try {
-      debugger;
       employee.departmentId = departmentId;
       employee.designationId = designationId;
       employee.shiftId = shiftId;
       employee.isActive = isActiveChecked;
       employee.employeeCode = employeeCode;
-      if (id) {
+      employee.relievingDate = isRelievedChecked ? employee.relievingDate : null
+      if(id){
         const response = await UpdateEmployee(employee);
         if (response.status == 200) {
           toast.success("Employee updated successfully");
@@ -222,8 +221,8 @@ const CreateOrUpdateUser = () => {
       setSubmitting(false);
     }
   };
+  
   let validationSchema = Yup.object().shape({
-    employeeId: Yup.number().required("Employee ID is required"),
     joiningDate: Yup.date().required("Joining Date is required"),
 
     isActive: Yup.boolean(),
@@ -248,20 +247,21 @@ const CreateOrUpdateUser = () => {
       .required("Aadhar Number is required")
       .matches(/^[0-9]{12}$/, "Aadhar Number must be 12 digits"),
     dateOfBirth: Yup.date().required("Date of Birth is required"),
-
-    contactNumber2: Yup.string(),
+    // bloodGroup: Yup.string().required("Blood Group is required"),
+    // contactNumber2: Yup.string(),
     personalEmail: Yup.string()
       .email("Invalid email address")
       .required("Email is required"),
 
     skypeId: Yup.string().required("Official Skype is required"),
-    designationId: Yup.string().required("Designation is required"),
+    // designationId:  Yup.number().positive().required('Designation is required') ,
     bank: Yup.string().required("Bank name is required"),
-    departmentId: Yup.string().required("Department is required"),
+    // departmentId:    Yup.number().positive().required('Department is required'),
     bankAccountNumber: Yup.string().required("Bank account number is required"),
     ifsc: Yup.string().required("IFSC code is required"),
-    shiftId: Yup.string().required("Shift is required"),
-    branch: Yup.string().required("Branch is required"),
+    // shiftId:   Yup.number().positive().required('Shift is required') ,
+    branch: Yup.string()
+    .required('Branch is required') 
   });
   if (isRelievedChecked) {
     validationSchema = validationSchema.concat(
@@ -924,9 +924,9 @@ const CreateOrUpdateUser = () => {
                       <CCol sm={12}>
                         <label htmlFor="designationId">
                           Designation{" "}
-                          <span style={{ color: "red", fontSize: "25px" }}>
+                          {/* <span style={{ color: "red", fontSize: "25px" }}>
                             *
-                          </span>
+                          </span> */}
                         </label>
                         <CFormSelect
                           id="designationId"
@@ -939,7 +939,6 @@ const CreateOrUpdateUser = () => {
                               ? "is-invalid"
                               : ""
                           }`}
-                          placeholder="designation"
                         >
                           <option value="">Select a Designation</option>
                           {designationList?.map((designation) => (
@@ -990,13 +989,17 @@ const CreateOrUpdateUser = () => {
                   </CCol>
                   <CCol xs={4}>
                     <CRow className="mb-3">
-                      {/* <CCol sm={12}>
+                    <CCol sm={12}>
                         <label htmlFor="departmentId">Department</label>
                         <CFormSelect
                           id="departmentId"
                           name="departmentId"
                           value={formData.departmentId}
                           aria-label="Default select example"
+                            className={`form-control form-select ${touched.departmentId && errors.departmentId
+                            ? "is-invalid"
+                            : ""
+                            }`}
                           onChange={handleDepartmentChange}
                           className={`form-control ${
                             touched.departmentId && errors.departmentId ? "is-invalid" : ""
@@ -1017,40 +1020,9 @@ const CreateOrUpdateUser = () => {
                           name="departmentId"
                           className="invalid-feedback"
                           render={(error) => (
-                            <label style={{ color: "#dc3545" }}>{error}</label>
+                            <label style={{ color: "#dc3545" }}>{error}</label> 
                           )}
-                        />
-                      </CCol> */}
-                      <CCol sm={12}>
-                        <label htmlFor="departmentId">Department <span style={{ color: "red", fontSize: "25px" }}>
-                          *
-                        </span></label>
-                        <Field
-                          as="select"
-                          id="departmentId"
-                          name="departmentId"
-                          onChange={handleDepartmentChange}
-                          className={`form-control ${
-                            touched.departmentId && errors.departmentId
-                              ? "is-invalid"
-                              : ""
-                          }`}
-                        >
-                          <option value="">Select a Department</option>
-                          {departmentList?.map((department) => (
-                            <option
-                              key={department.departmentId}
-                              value={department.departmentId}
-                            >
-                              {department.name}
-                            </option>
-                          ))}
-                        </Field>
-                        <ErrorMessage
-                          name="departmentId"
-                          component="div"
-                          className="invalid-feedback"
-                        />
+                        />             
                       </CCol>
                     </CRow>
                     <CRow className="mb-3">
@@ -1109,7 +1081,7 @@ const CreateOrUpdateUser = () => {
                         />
                       </CCol>
                     </CRow>
-                    {/* <CRow className="mb-3">
+                   <CRow className="mb-3">
                       <CCol sm={12}>
                         <label htmlFor="shiftId">Shift</label>
                         <CFormSelect
@@ -1117,6 +1089,10 @@ const CreateOrUpdateUser = () => {
                           name="shiftId"
                           value={shiftId}
                           aria-label="Default select example"
+                          className={`form-control form-select ${touched.shiftId && errors.shiftId
+                            ? "is-invalid"
+                            : ""
+                            }`}
                           onChange={handleShiftChange}
                           className={`form-control ${
                             touched.shiftId && errors.shiftId
@@ -1140,46 +1116,7 @@ const CreateOrUpdateUser = () => {
                           )}
                         />
                       </CCol>
-                    </CRow> */}
-                    <div className="form-group row">
-                      <label
-                        htmlFor="shiftId"
-                        className="col-sm-4 col-form-label"
-                      >
-                        shiftId
-                        <span style={{ color: "red", fontSize: "25px" }}>
-                          *
-                        </span>
-                      </label>
-                      <div className="col-sm-6">
-                        <Field
-                          as="select"
-                          name="shiftId"
-                          className={`form-control ${
-                            touched.shiftId && errors.shiftId
-                              ? "is-invalid"
-                              : ""
-                          }`}
-                          style={{ height: "50px" }}
-                          onChange={handleShiftChange}
-                        >
-                          placeholder="Shift"
-                          <option value="">Select....</option>
-                          {shiftList?.map((shift: any) => (
-                            <option key={shift.shiftId} value={shift.shiftId}>
-                              {shift.name}
-                            </option>
-                          ))}
-                        </Field>
-                        <ErrorMessage
-                          name="shiftId"
-                          className="invalid-feedback"
-                          render={(error) => (
-                            <label style={{ color: "#dc3545" }}>{error}</label>
-                          )}
-                        />
-                      </div>
-                    </div>
+                    </CRow>
                   </CCol>
                 </CRow>
                 <CRow>

@@ -238,7 +238,7 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
     if (e != null) {
       setDropdownItems({ ...dropdownItems, [selectedOption.name]: e.key });
       if (selectedOption.name == "accountName") {
-        const accountAddress = accountNames?.find(
+        const accountAddress = accountNames.account?.find(
           (account: any) => account.id == e.key
         );
         if (accountAddress) {
