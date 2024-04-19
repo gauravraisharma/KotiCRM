@@ -229,15 +229,28 @@ const CreateOrUpdateUser = () => {
     guardianContactNumber: Yup.string().required(
       "Guardian contact number is required"
     ),
+    name: Yup.string().required("Employee Name is required"),
+    panNumber: Yup.string().required("Pan Number is required"),
+    fatherName: Yup.string().required("Father Name is required"),
+    adharCardNumber: Yup.string()
+      .required("Aadhar Number is required")
+      .matches(/^[0-9]{12}$/, "Aadhar Number must be 12 digits"),
+    dateOfBirth: Yup.date().required("Date of Birth is required"),
+    bloodGroup: Yup.string().required("Blood Group is required"),
     contactNumber2: Yup.string(),
-    personalEmail: Yup.string().email("Invalid email format"),
-    skypeId: Yup.string(),
-    designationID: Yup.number().required("Designation is required"),
+    personalEmail: Yup.string()
+    .email('Invalid email address')
+    .required('Email is required'),
+
+    skypeId: Yup.string().required("Official Skype is required"),
+    designationId: Yup.string().required('Designation is required'),
     bank: Yup.string().required("Bank name is required"),
-    departmentID: Yup.number().required("Department is required"),
+    departmentId: Yup.string().required('Department is required'),
     bankAccountNumber: Yup.string().required("Bank account number is required"),
     ifsc: Yup.string().required("IFSC code is required"),
-    shiftID: Yup.number().required("Shift is required"),
+    shiftId: Yup.string().required('Shift is required'),
+    branch: Yup.string()
+    .required('Branch is required') 
   });
 
   return (

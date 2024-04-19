@@ -51,8 +51,6 @@ const initialValues = {
   toBillingState: "",
   toZipCode: "",
   toBillingCountry: "",
-  // termsandConditions: "",
-  // description: "",
   tax: "",
   adjustments: "",
 };

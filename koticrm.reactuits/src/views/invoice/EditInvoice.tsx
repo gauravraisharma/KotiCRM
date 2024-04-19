@@ -34,29 +34,29 @@ import { ToastContainer } from "react-toastify";
 import { useNavigate, useParams } from "react-router-dom";
 import * as Yup from "yup";
 
-// const initialValues = {
-//   invoiceOwner: "",
-//   subject: "",
-//   dueDate: "",
-//   accountID: "",
-//   contacts: "",
-//   purchaseOrder: "",
-//   status: "",
-//   fromBillingStreet: "",
-//   fromBillingCity: "",
-//   fromBillingState: "",
-//   fromZipCode: "",
-//   fromBillingCountry: "",
-//   toBillingStreet: "",
-//   toBillingCity: "",
-//   toBillingState: "",
-//   toZipCode: "",
-//   toBillingCountry: "",
-//   termsandConditions: "",
-//   description: "",
-//   tax: "",
-//   adjustments: "",
-// };
+const initialValues = {
+  invoiceOwner: "",
+  subject: "",
+  dueDate: "",
+  accountID: "",
+  contacts: "",
+  purchaseOrder: "",
+  status: "",
+  fromBillingStreet: "",
+  fromBillingCity: "",
+  fromBillingState: "",
+  fromZipCode: "",
+  fromBillingCountry: "",
+  toBillingStreet: "",
+  toBillingCity: "",
+  toBillingState: "",
+  toZipCode: "",
+  toBillingCountry: "",
+  termsandConditions: "",
+  description: "",
+  tax: "",
+  adjustments: "",
+};
 
 interface newInvoiceProps {
   accountId: any;
@@ -68,15 +68,15 @@ const EditInvoice: React.FC<newInvoiceProps> = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  // interface Row {
-  //   sNo: number;
-  //   productName: string;
-  //   description: string;
-  //   quantity: number;
-  //   discount: number;
-  //   amount: number;
-  //   total: number;
-  // }
+  interface Row {
+    sNo: number;
+    productName: string;
+    description: string;
+    quantity: number;
+    discount: number;
+    amount: number;
+    total: number;
+  }
 
   const [updateInvoice, setUpdateInvoice] = useState<Invoice>(new InvoiceClass());
   const [termsAndConditions, setTermsAndConditions] = useState("");
@@ -179,26 +179,26 @@ const EditInvoice: React.FC<newInvoiceProps> = () => {
     setTermsAndConditions(data);
   };
 
-  // const [touchedFields, setTouchedFields] = useState({
-  //   fromBillingStreet: false,
-  //   fromBillingCity: false,
-  //   fromBillingState: false,
-  //   fromZipCode: false,
-  //   fromBillingCountry: false,
-  //   toBillingStreet: false,
-  //   toBillingCity: false,
-  //   toBillingState: false,
-  //   toZipCode: false,
-  //   toBillingCountry: false,
-  //   dueDate: false,
-  //   invoiceDate: false,
-  // });
-  // const handleInputChange = (fieldName: any) => {
-  //   setTouchedFields((prevFields) => ({
-  //     ...prevFields,
-  //     [fieldName]: true, // Mark the field as touched
-  //   }));
-  // };
+  const [touchedFields, setTouchedFields] = useState({
+    fromBillingStreet: false,
+    fromBillingCity: false,
+    fromBillingState: false,
+    fromZipCode: false,
+    fromBillingCountry: false,
+    toBillingStreet: false,
+    toBillingCity: false,
+    toBillingState: false,
+    toZipCode: false,
+    toBillingCountry: false,
+    dueDate: false,
+    invoiceDate: false,
+  });
+  const handleInputChange = (fieldName: any) => {
+    setTouchedFields((prevFields) => ({
+      ...prevFields,
+      [fieldName]: true, // Mark the field as touched
+    }));
+  };
 
   // var orgDetails;
   // if (organization) {
