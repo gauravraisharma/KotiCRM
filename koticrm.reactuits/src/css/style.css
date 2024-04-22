@@ -219,3 +219,30 @@
   background-color: #59859e;
   ; /* hover background color */
 }
+.profile-info label{
+  margin-bottom: 8px;
+  
+
+}
+/* Add this CSS to your existing stylesheet or create a new one */
+
+.headings {
+  color: #131212; /* Darker color for headings */
+  font-weight: bolder; /* Make headings bold */
+}
+
+.value {
+  color: #777; /* Lighter color for values */
+}
+.account-list li p {
+  font-weight: 500;
+  margin-top: 4px;
+}
+.user-list li p {
+  font-weight: 500;
+  margin-top: 4px;
+}
+.contact-list li p {
+  font-weight: 500;
+  margin-top: 4px;
+}

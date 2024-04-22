@@ -44,7 +44,11 @@ const Users = () => {
 
   const GetEmployees = async () => {
     try {
-      const response = await GetEmployeesList(searchQuery, pageNumber, pageSize);
+      const response = await GetEmployeesList(
+        searchQuery,
+        pageNumber,
+        pageSize
+      );
       setEmployeesList(response.data);
     } catch (error) {
       console.error("Error fetching employees:", error);
@@ -53,7 +57,6 @@ const Users = () => {
       setIsLoading(false);
     }
   };
-
 
   //Handle dropdown change
   const handleDropdownChange = (newValue: any) => {
@@ -87,9 +90,9 @@ const Users = () => {
   //Handle enter click to search account
   const handleKeyDown = (e: any) => {
     if (e.keyCode === 13) {
-      GetEmployees()
+      GetEmployees();
     }
-  }
+  };
   //Focus out event to searchh
   const handleBlur = () => {
     GetEmployees()
@@ -166,15 +169,23 @@ const Users = () => {
                 />
               </CInputGroup>
             </CCol> */}
-            <CCol xs={2} md={2} lg={4}>
-              <div className="input-group mb-3 custom-input-group">
+            <CCol xs={2} md={2} lg={6}>
+              <div className="custom-input-group d-flex">
                 <select
                   className="form-select custom-select"
                   id="searchInput"
                   onChange={(e) => handleDropdownChange(e.target.value)}
-                  style={{ backgroundColor: '#f0f0f0', borderRadius: '8px', marginRight: '10px', border: '1px solid #ccc' }}
+                  style={{
+                    backgroundColor: "#f0f0f0",
+                    borderRadius: "8px",
+                    marginRight: "10px",
+                    border: "1px solid #ccc",
+                    width: "160px",
+                  }}
                 >
-                  {/* <option value="" disabled selected>Select an option</option> */}
+                  <option value="" disabled selected>
+                    Name
+                  </option>
                   <option value="Name">Name</option>
                   <option value="Emp code">Emp code</option>
                   <option value="Blood Group">Blood Group</option>
@@ -190,13 +201,16 @@ const Users = () => {
                   onChange={(e) => setSearchQuery(e.target.value)}
                   onKeyDown={handleKeyDown}
                   onBlur={handleBlur}
-                  style={{ borderRadius: '8px', border: '1px solid #ccc' }}
+                  style={{
+                    borderRadius: "8px",
+                    border: "1px solid #ccc",
+                    width: "300px",
+                  }}
                 />
               </div>
             </CCol>
 
-
-            <CCol xs={8} className="text-end">
+            <CCol xs={6} className="text-end">
               <Link to={`/users/createOrUpdateUser`}>
                 <CButton color="primary" variant="outline">
                   + New
@@ -213,9 +227,9 @@ const Users = () => {
         onCancel={cancelDelete}
         userId={userId}
       />
-      <CCard>
+      <CCard  className="mb-4 mt-2">
         <CCardHeader>
-          <h5 className="mb-0">Users</h5>
+          <h5 className="mb-0"><strong>Users</strong></h5>
         </CCardHeader>
         <CCardBody>
           <CTable responsive striped hover>
@@ -281,7 +295,6 @@ const Users = () => {
               onClick={() => handlePageChange(pageNumber - 1)}
               disabled={pageNumber === 1}
               style={{ margin: "0 2px", cursor: "pointer", fontSize: "12px" }}
-
             >
               <span aria-hidden="true">&laquo;</span>
             </CPaginationItem>

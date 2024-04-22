@@ -87,7 +87,7 @@ const _nav:NavItem[] = [
   },
   {
     component: CNavItem,
-    name: 'ManageUsers',
+    name: 'Manage Users',
     to: '/users',
     icon: <CIcon icon={cilUser} customClassName="nav-icon" />,
     moduleName : 'ManageUsers'

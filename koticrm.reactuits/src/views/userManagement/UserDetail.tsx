@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 import { Employee, EmployeeClass } from "../../models/userManagement/employee";
 import { toast } from "react-toastify";
 import { Employees } from "../../models/userManagement/employees";
+import '../../../src/css/style.css'
 
 const userDetails = () => {
   const { id } = useParams<{ id: string }>();
@@ -78,48 +79,6 @@ const userDetails = () => {
                   User Detail
                 </button>
               </li>
-              {/* <li className="nav-item" role="presentation">
-                <button
-                  className="nav-link"
-                  id="contacts-tab"
-                  data-bs-toggle="tab"
-                  data-bs-target="#contacts"
-                  type="button"
-                  role="tab"
-                  aria-controls="contacts"
-                  aria-selected="false"
-                >
-                  User Contacts
-                </button>
-              </li>
-              <li className="nav-item" role="presentation">
-                <button
-                  className="nav-link"
-                  id="notes-tab"
-                  data-bs-toggle="tab"
-                  data-bs-target="#notes"
-                  type="button"
-                  role="tab"
-                  aria-controls="notes"
-                  aria-selected="false"
-                >
-                  User Notes
-                </button>
-              </li>
-              <li className="nav-item" role="presentation">
-                <button
-                  className="nav-link"
-                  id="attachments-tab"
-                  data-bs-toggle="tab"
-                  data-bs-target="#attachments"
-                  type="button"
-                  role="tab"
-                  aria-controls="attachments"
-                  aria-selected="false"
-                >
-                  User Attachments
-                </button>
-              </li> */}
             </ul>
 
             <div className="tab-content" id="accountdetail">
@@ -132,107 +91,96 @@ const userDetails = () => {
                 <div className="headings">
                   <h5>User information</h5>
                 </div>
-                <ul className="account-list">
+                <ul className="user-list">
                   <CRow>
                     <CCol xs={3}>
                       <li>
-                        Employee Code: <p>{formData.employeeCode}</p>
+                      Employee Code:
+                    <p>{formData.employeeCode}</p>
+                      </li>
+                    
+                    </CCol>
+                    <CCol xs={3}>
+                      <li>
+                     Employee Name:
+                      <p>{formData.name}</p>
                       </li>
                     </CCol>
                     <CCol xs={3}>
                       <li>
-                        Employee Name: <p>{formData.name}</p>
+                       Father Name:
+                       <p>{formData.fatherName}</p>
                       </li>
                     </CCol>
                     <CCol xs={3}>
                       <li>
-                        Father Name: <p>{formData.fatherName}</p>
+                        Contact Number:
+                        <p>{formData.contactNumber1}</p>
                       </li>
                     </CCol>
                     <CCol xs={3}>
                       <li>
-                        Contact Number: <p>{formData.contactNumber1}</p>
+                     Date of Birth:
+                       <p>{formData.dateOfBirth}</p>
                       </li>
                     </CCol>
                     <CCol xs={3}>
                       <li>
-                        Date of Birth : <p>{formData.dateOfBirth}</p>
+                      Official Email:
+                      <p>{formData.officialEmail}</p>
                       </li>
                     </CCol>
                     <CCol xs={3}>
                       <li>
-                        Official Email: <p>{formData.officialEmail}</p>
+                        Personal Email:
+                    <p>{formData.personalEmail}</p>
                       </li>
                     </CCol>
                     <CCol xs={3}>
                       <li>
-                        Personal Email: <p>{formData.personalEmail}</p>
+                       Skype Id:
+                        <p>{formData.skypeId}</p>
                       </li>
                     </CCol>
                     <CCol xs={3}>
                       <li>
-                        Skype Id: <p>{formData.skypeId}</p>
+                       Designation:
+                       <p>{formData.designationId}</p>
                       </li>
                     </CCol>
                     <CCol xs={3}>
                       <li>
-                        Designation :<p>{formData.designationId}</p>
+                        Department:
+                        <p>{formData.departmentId}</p>
                       </li>
                     </CCol>
                     <CCol xs={3}>
                       <li>
-                        Department :<p>{formData.departmentId}</p>
+                        Aadhar Number:
+                        <p>{formData.adharCardNumber}</p>
                       </li>
                     </CCol>
                     <CCol xs={3}>
                       <li>
-                        Aadhar Number: <p>{formData.adharCardNumber}</p>
+                        Branch of bank:
+                     <p>{formData.branch}</p>
                       </li>
                     </CCol>
                     <CCol xs={3}>
                       <li>
-                        Branch of bank: <p>{formData.branch}</p>
+                       Account Number:
+                      <p>{formData.bankAccountNumber}</p>
                       </li>
                     </CCol>
                     <CCol xs={3}>
                       <li>
-                        Account Number: <p>{formData.bankAccountNumber}</p>
-                      </li>
-                    </CCol>
-                    <CCol xs={3}>
-                      <li>
-                        IFSC code: <p>{formData.ifsc}</p>
+                      IFSC code:
+                       <p>{formData.ifsc}</p>
                       </li>
                     </CCol>
                   </CRow>
                 </ul>
               </div>
-              <div
-                className="tab-pane fade"
-                id="contacts"
-                role="tabpanel"
-                aria-labelledby="contacts-tab"
-              ></div>
-              <div
-                className="tab-pane fade"
-                id="notes"
-                role="tabpanel"
-                aria-labelledby="notes-tab"
-              >
-                <CCol xs={12}></CCol>
-              </div>
-              <div
-                className="tab-pane fade"
-                id="attachments"
-                role="tabpanel"
-                aria-labelledby="attachments-tab"
-              ></div>
-              <div
-                className="tab-pane fade"
-                id="invoices"
-                role="tabpanel"
-                aria-labelledby="invoices-tab"
-              ></div>
             </div> 
           </CCardBody>
         </CCard>

@@ -1,99 +1,183 @@
-import {
-  CButton,
-  CCard,
-  CCardBody,
-  CCardHeader,
-  CCol,
-  CRow,
-} from "@coreui/react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import { ErrorMessage, Field, Form, Formik } from "formik";
-import { ChangeEvent, useEffect, useState } from "react";
 import * as Yup from "yup";
 import { Contact, ContactClass } from "../../models/contact/Contact";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import SearchDropdown from "../../components/base/select/SearchDropdown";
-// Import countries data
 import Countries from "../../constants/country-state/countries+states.json";
 import { Country, State } from "../../models/Country-State/CountryState";
-
-// Import actions from Redux saga
-import {
-  clearContact,
-  createContact,
-  getContactById,
-  updateContact,
-} from "../../redux-saga/modules/contact/action";
-
-// Import ToastContainer
+import { clearContact, createContact, getContactById, updateContact } from "../../redux-saga/modules/contact/action";
 import { ToastContainer } from "react-toastify";
 import { Account } from "../../models/account/Account";
+import { CButton, CCard, CCardBody, CCardHeader, CCol, CRow } from "@coreui/react";
+
 
 const CreateOrEditContact = () => {
+  // const { contactId } = useParams<{ contactId: string }>();
+  // const [contact, setContact] = useState<Contact>(new ContactClass());
+  // const dispatch = useDispatch();
+  // const navigate = useNavigate();
+  // const fetchedContact = useSelector(
+  //   (state: any) => state.contactReducer.contact
+  // );
+  // const fetchedAccountOwners = useSelector(
+  //   (state: any) => state.accountReducer.accountOwner
+  // );
+  // const fetchedAccounts = useSelector(
+  //   (state: any) => state.accountReducer.accounts
+  // );
+  // const fetchedAccount = useSelector(
+  //   (state: any) => state.accountReducer.account
+  // );
   const { contactId } = useParams<{ contactId: string }>();
+  const [selectedCountry, setSelectedCountry] = useState<string>("");
+  const [selectedState, setSelectedState] = useState<string>("");
+  const [states, setStates] = useState<State[]>([]);
   const [contact, setContact] = useState<Contact>(new ContactClass());
   const dispatch = useDispatch();
+  const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const fetchedContact = useSelector(
-    (state: any) => state.contactReducer.contact
-  );
-  const fetchedAccountOwners = useSelector(
-    (state: any) => state.accountReducer.accountOwner
-  );
-  const fetchedAccounts = useSelector(
-    (state: any) => state.accountReducer.accounts
-  );
-  const fetchedAccount = useSelector(
-    (state: any) => state.accountReducer.account
-  );
-
-  const mappedFetchedAccountOwners = fetchedAccountOwners.map(
-    (fetchedAccountOwner) => ({
-      ...fetchedAccountOwner,
-      value: fetchedAccountOwner.id,
-      label1: `${fetchedAccountOwner.firstName} ${fetchedAccountOwner.lastName}`,
-      label2: fetchedAccountOwner.email,
-    })
-  );
+  const fetchedContact = useSelector((state: any) => state.contactReducer.contact);
+  const fetchedAccountOwners = useSelector((state: any) => state.accountReducer.accountOwner);
+  const fetchedAccounts = useSelector((state: any) => state.accountReducer.accounts);
+  const fetchedAccount = useSelector((state: any) => state.accountReducer.account);
+  // const mappedFetchedAccountOwners = fetchedAccountOwners.map(
+  //   (fetchedAccountOwner) => ({
+  //     ...fetchedAccountOwner,
+  //     value: fetchedAccountOwner.id,
+  //     label1: `${fetchedAccountOwner.firstName} ${fetchedAccountOwner.lastName}`,
+  //     label2: fetchedAccountOwner.email,
+  //   })
+  // );
+  const mappedFetchedAccountOwners = fetchedAccountOwners.map((fetchedAccountOwner) => ({
+    ...fetchedAccountOwner,
+    value: fetchedAccountOwner.id,
+    label1: `${fetchedAccountOwner.firstName} ${fetchedAccountOwner.lastName}`,
+    label2: fetchedAccountOwner.email,
+  }));
 
   // Country-State
   const countries: Country[] = Countries;
   const [selectedAccount, setSelectedAccount] = useState<Account | null>(null);
-  const [selectedCountry, setSelectedCountry] = useState<string>("");
-  const [selectedState, setSelectedState] = useState<string>("");
-  const [states, setStates] = useState<State[]>([]);
+  // const [selectedCountry, setSelectedCountry] = useState<string>("");
+  // const [selectedState, setSelectedState] = useState<string>("");
+  // const [states, setStates] = useState<State[]>([]);
 
-  useEffect(() => {
-    if (contactId) {
-      dispatch(getContactById(+contactId));
-    } else {
-      setContact(new ContactClass());
-      dispatch(clearContact());
-    }
-  }, [dispatch, contactId]);
+  // useEffect(() => {
+  //   if (contactId) {
+  //     dispatch(getContactById(+contactId));
+  //   } else {
+  //     setContact(new ContactClass());
+  //     dispatch(clearContact());
+  //   }
+  // }, [dispatch, contactId]);
 
-  useEffect(() => {
-    if (contactId) {
-      setContact(fetchedContact);
-    }
-  }, [contactId, fetchedContact]);
+  // useEffect(() => {
+  //   if (contactId) {
+  //     setContact(fetchedContact);
+  //   }
+  // }, [contactId, fetchedContact]);
 
-  useEffect(() => {
-    const selectedCountryObject = countries.find(
-      (country) => country.name === contact.country
-    );
+  // useEffect(() => {
+  //   const selectedCountryObject = countries.find(
+  //     (country) => country.name === contact.country
+  //   );
 
-    setSelectedAccount(fetchedAccount);
+  //   setSelectedAccount(fetchedAccount);
 
-    if (selectedCountryObject) {
-      setStates(selectedCountryObject.states);
-    } else {
-      setStates([]);
-    }
-  }, [contact.id, selectedCountry]);
+  //   if (selectedCountryObject) {
+  //     setStates(selectedCountryObject.states);
+  //   } else {
+  //     setStates([]);
+  //   }
+  // }, [contact.id, selectedCountry]);
+
+ // Inside handleCountryChange function
+// const handleCountryChange = (e: ChangeEvent<HTMLSelectElement>) => {
+//   const selectedCountry = e.target.value;
+//   setSelectedCountry(selectedCountry);
+
+//   // Update the contact's country when it's changed
+//   setContact({ ...contact, country: selectedCountry });
+
+//   if (selectedCountry) {
+//     const selectedCountryObject = countries.find(
+//       (country) => country.name === selectedCountry
+//     );
+//     if (selectedCountryObject) {
+//       setStates(selectedCountryObject.states);
+//       setSelectedState(""); // Reset selected state when changing country
+//     } else {
+//       setStates([]);
+//     }
+//   }
+// };
+
+//   const handleStateChange = (e: ChangeEvent<HTMLSelectElement>) => {
+//     const selectedState = e.target.value;
+//     setSelectedState(selectedState);
+//   };
+
+//   const handleAccountChange = (e: ChangeEvent<HTMLSelectElement>) => {
+//     const accountId = parseInt(e.target.value);
+//     const selectedAccount = fetchedAccounts.find(
+//       (account: Account) => account.id === accountId
+//     );
+//     setSelectedAccount(selectedAccount);
+//   };
+
+//   const handleFormSubmit = async (
+//     contact: Contact,
+//     { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }
+//   ) => {
+//     try {
+//       // Assuming fetchedAccount.id is available
+//       contact.country = selectedCountry;
+//       contact.state = selectedState;
+//       if (!contact.id) {
+//         contact.accountID = selectedAccount!.id;
+//         console.log("Create new contact:", contact);
+//         dispatch(createContact(contact));
+//       } else {
+//         dispatch(updateContact(contact));
+//       }
+//     } catch (error) {
+//       console.log("error message:", error);
+//     } finally {
+//       setSubmitting(false);
+//       navigate("/contacts");
+//     }
+//   };
+// const countries: Country[] = Countries;
+
+useEffect(() => {
+  if (contactId) {
+    dispatch(getContactById(+contactId));
+  } else {
+    setContact(new ContactClass());
+    dispatch(clearContact());
+  }
+}, [dispatch, contactId]);
+
+useEffect(() => {
+  if (contactId) {
+    setContact(fetchedContact);
+  }
+}, [contactId, fetchedContact]);
+
+useEffect(() => {
+  const selectedCountryObject = countries.find((country) => country.name === contact.country);
+
+  if (selectedCountryObject) {
+    setStates(selectedCountryObject.states);
+  } else {
+    setStates([]);
+  }
+}, [contact.country]);
 
   const handleCountryChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    debugger
+   
     const selectedCountry = e.target.value;
     setSelectedCountry(selectedCountry);
 
@@ -113,13 +197,13 @@ const CreateOrEditContact = () => {
     }
   };
 
-  const handleStateChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    const selectedState = e.target.value;
-    setSelectedState(selectedState);
-  };
+const handleStateChange = (e: ChangeEvent<HTMLSelectElement>) => {
+  const selectedState = e.target.value;
+  setSelectedState(selectedState);
+};
 
   const handleAccountChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    debugger
+   
     const accountId = parseInt(e.target.value);
     const selectedAccount = fetchedAccounts.account.find(
       (account: Account) => account.id === accountId
@@ -127,28 +211,26 @@ const CreateOrEditContact = () => {
     setSelectedAccount(selectedAccount);
   };
 
-  const handleFormSubmit = async (
-    contact: Contact,
-    { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }
-  ) => {
-    try {
-      // Assuming fetchedAccount.id is available
-      contact.country = selectedCountry;
-      contact.state = selectedState;
-      if (!contact.id) {
-        contact.accountID = selectedAccount!.id;
-        console.log("Create new contact:", contact);
-        dispatch(createContact(contact));
-      } else {
-        dispatch(updateContact(contact));
-      }
-    } catch (error) {
-      console.log("error message:", error);
-    } finally {
-      setSubmitting(false);
-      navigate("/contacts");
+const handleFormSubmit = async (
+  contact: Contact,
+  { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }
+) => {
+  try {
+    contact.country = selectedCountry;
+    contact.state = selectedState;
+    if (!contact.id) {
+      // Handle creating a new contact
+    } else {
+      // Handle updating existing contact
     }
-  };
+  } catch (error) {
+    console.log("error message:", error);
+  } finally {
+    setSubmitting(false);
+    navigate("/contacts");
+  }
+};
+
 
   const validationSchema = Yup.object({
     firstName: Yup.string().required("Required (First Name)"),
@@ -167,9 +249,20 @@ const CreateOrEditContact = () => {
         <CCardHeader className="mb-3">
           <div className="d-flex justify-content-between align-items-center">
             <div>
-              <h5 className="mb-0">Create Or Edit Contact</h5>
+              {/* <h5 className="mb-0">Create Or Edit Contact</h5> */}
+              <h5 className="mb-0">{id == null ? "Create" : "Update"} Contact</h5>
             </div>
-            <div className="text-end"></div>
+            <div className="text-end">
+            <Link to={`/contacts`}>
+              <CButton
+                component="input"
+                type="button"
+                color="secondary"
+                value="Back To Contacts"
+            
+              />
+              </Link>
+            </div>
           </div>
         </CCardHeader>
         <CCardBody>
@@ -252,11 +345,6 @@ const CreateOrEditContact = () => {
                           placeholder="Enter your phone number"
                           style={{ height: "50px" }}
                         />
-                        <ErrorMessage
-                          name="phone"
-                          component="div"
-                          className="invalid-feedback"
-                        />
                       </CCol>
                     </CRow>
                     <CRow className="mb-3">
@@ -304,11 +392,6 @@ const CreateOrEditContact = () => {
                           className="form-control"
                           placeholder="Enter department"
                           style={{ height: "50px" }}
-                        />
-                        <ErrorMessage
-                          name="department"
-                          component="div"
-                          className="invalid-feedback"
                         />
                       </CCol>
                     </CRow>
@@ -359,11 +442,6 @@ const CreateOrEditContact = () => {
                           className="form-control"
                           placeholder="Enter your LinkedIn URL"
                           style={{ height: "50px" }}
-                        />
-                        <ErrorMessage
-                          name="linkedinURL"
-                          component="div"
-                          className="invalid-feedback"
                         />
                       </CCol>
                     </CRow>
@@ -469,11 +547,6 @@ const CreateOrEditContact = () => {
                             </option>
                           ))}
                         </Field>
-                        <ErrorMessage
-                          name="state"
-                          component="div"
-                          className="invalid-feedback"
-                        />
                       </CCol>
                     </CRow>
                   </CCol>
@@ -577,11 +650,6 @@ const CreateOrEditContact = () => {
                           placeholder="Enter your second phone number"
                           style={{ height: "50px" }}
                         />
-                        <ErrorMessage
-                          name="otherPhone"
-                          component="div"
-                          className="invalid-feedback"
-                        />
                       </CCol>
                     </CRow>
                     <CRow className="mb-3">
@@ -598,11 +666,6 @@ const CreateOrEditContact = () => {
                           className="form-control"
                           placeholder="Home phone"
                           style={{ height: "50px" }}
-                        />
-                        <ErrorMessage
-                          name="homePhone"
-                          component="div"
-                          className="invalid-feedback"
                         />
                       </CCol>
                     </CRow>
@@ -621,11 +684,6 @@ const CreateOrEditContact = () => {
                           className="form-control"
                           placeholder="Enter DOB"
                           style={{ height: "50px" }}
-                        />
-                        <ErrorMessage
-                          name="dateOfBirth"
-                          component="div"
-                          className="invalid-feedback"
                         />
                       </CCol>
                     </CRow>
@@ -647,11 +705,6 @@ const CreateOrEditContact = () => {
                           placeholder="name@example.com"
                           style={{ height: "50px" }}
                         />
-                        <ErrorMessage
-                          name="secondaryEmail"
-                          component="div"
-                          className="invalid-feedback"
-                        />
                       </CCol>
                     </CRow>
 
@@ -670,11 +723,6 @@ const CreateOrEditContact = () => {
                           placeholder="Enter your Twitter URL"
                           style={{ height: "50px" }}
                         />
-                        <ErrorMessage
-                          name="twitterURL"
-                          component="div"
-                          className="invalid-feedback"
-                        />
                       </CCol>
                     </CRow>
                     <CRow className="mb-3">
@@ -692,11 +740,6 @@ const CreateOrEditContact = () => {
                           placeholder="Skype ID"
                           style={{ height: "50px" }}
                         />
-                        <ErrorMessage
-                          name="skypeId"
-                          component="div"
-                          className="invalid-feedback"
-                        />
                       </CCol>
                     </CRow>
                     <CRow className="mb-3">
@@ -713,11 +756,6 @@ const CreateOrEditContact = () => {
                           className="form-control"
                           placeholder="Enter your zip code"
                           style={{ height: "50px" }}
-                        />
-                        <ErrorMessage
-                          name="zipCode"
-                          component="div"
-                          className="invalid-feedback"
                         />
                       </CCol>
                     </CRow>
@@ -738,11 +776,6 @@ const CreateOrEditContact = () => {
                           className="form-control"
                           placeholder="Enter your Mailing Street"
                           style={{ height: "50px" }}
-                        />
-                        <ErrorMessage
-                          name="mailingStreet"
-                          component="div"
-                          className="invalid-feedback"
                         />
                       </CCol>
                     </CRow>

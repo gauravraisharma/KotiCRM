@@ -30,6 +30,7 @@ import {
   GetDesignations,
   GetShifts,
 } from "../../redux-saga/modules/shared/apiService";
+import "../../../src/css/style.css";
 import profile from "../userAuthentication/home/images/profile.avif";
 import "react-toastify/dist/ReactToastify.css";
 import * as Yup from "yup";
@@ -192,8 +193,10 @@ const CreateOrUpdateUser = () => {
       employee.shiftId = shiftId;
       employee.isActive = isActiveChecked;
       employee.employeeCode = employeeCode;
-      employee.relievingDate = isRelievedChecked ? employee.relievingDate : null
-      if(id){
+      employee.relievingDate = isRelievedChecked
+        ? employee.relievingDate
+        : null;
+      if (id) {
         const response = await UpdateEmployee(employee);
         if (response.status == 200) {
           toast.success("Employee updated successfully");
@@ -224,7 +227,7 @@ const CreateOrUpdateUser = () => {
       setSubmitting(false);
     }
   };
-  
+
   let validationSchema = Yup.object().shape({
     joiningDate: Yup.date().required("Joining Date is required"),
 
@@ -301,176 +304,209 @@ const CreateOrUpdateUser = () => {
             validationSchema={validationSchema}
             onSubmit={handleFormSubmit}
           >
-            {({
-              handleSubmit,
-              isSubmitting,
-              touched,
-              errors,
-            }) => (
-              <Form onSubmit={handleSubmit} autoComplete="off">
-                <CRow className="justify-content-between">
-                  <h4>Employee Code</h4>
-                  <CCol xs={4}>
-                    <CRow className="mb-3">
-                      <CCol sm={12}>
-                        <CImage
-                          rounded
-                          thumbnail
-                          src={profile}
-                          width={120}
-                          height={120}
-                          className="rounded-circle"
-                          style={{
-                            borderRadius: "50%",
-                            marginLeft: "5rem",
-                            marginTop: "2rem",
-                          }}
-                        />
-                      </CCol>
-                    </CRow>
-                  </CCol>
-                  <CCol xs={4}>
-                    <CRow className="mb-3">
-                      <CCol sm={12}>
-                        <label htmlFor="employeeId">
-                          Id
-                          <span style={{ color: "red", fontSize: "25px" }}>
-                            *
-                          </span>
-                        </label>
-                        <Field
-                          type="string"
-                          id="employeeId"
-                          name="employeeId"
-                          className="form-control"
-                          disabled
-                        />
-                      </CCol>
-                    </CRow>
-                    <CRow className="mb-3">
-                      <CCol sm={12}>
-                        <label htmlFor="joiningDate">
-                          Joining Date{" "}
-                          <span style={{ color: "red", fontSize: "25px" }}>
-                            *
-                          </span>
-                        </label>
-                        <Field
-                          type="date"
-                          id="joiningDate"
-                          name="joiningDate"
-                          className={`form-control ${
-                            touched.joiningDate && errors.joiningDate
-                              ? "is-invalid"
-                              : ""
-                          }`}
-                        />
-                        <ErrorMessage
-                          name="joiningDate"
-                          className="invalid-feedback"
-                          render={(error) => (
-                            <label style={{ color: "#dc3545" }}>{error}</label>
-                          )}
-                        />
-                      </CCol>
-                    </CRow>
-                    <CRow className="mb-3">
-                      <CCol sm={12}>
-                        <CFormCheck
-                          id="isRelieved"
-                          name="isRelieved"
-                          label="isRelieved"
-                          checked={isRelievedChecked}
-                          onChange={handleCheckbox}
-                        />
-                        <ErrorMessage
-                          name="isRelieved"
-                          className="invalid-feedback"
-                          render={(error) => (
-                            <label style={{ color: "#dc3545" }}>{error}</label>
-                          )}
-                        />
-                      </CCol>
-                    </CRow>
-                  </CCol>
-                  <CCol xs={4}>
-                    <CRow className="mb-3">
-                      <CCol sm={12}>
-                        <label htmlFor="employeeCode">
-                          Employee Code
-                          <span style={{ color: "red", fontSize: "25px" }}>
-                            *
-                          </span>
-                        </label>
-                        <Field
-                          type="text"
-                          id="employeeCode"
-                          name="employeeCode"
-                          value={employeeCode}
-                          className="form-control"
-                          disabled
-                        />
-                      </CCol>
-                    </CRow>
-                    <CRow className="mb-3">
-                      <CCol sm={12}>
-                        <CFormCheck
-                          id="isActive"
-                          label="Active"
-                          checked={isActiveChecked}
-                          // value={isActiveChecked}
-                          onChange={handleCheckbox}
-                        />
-                        <ErrorMessage
-                          name="isActive"
-                          className="invalid-feedback"
-                          render={(error) => (
-                            <label style={{ color: "#dc3545" }}>{error}</label>
-                          )}
-                        />
-                      </CCol>
-                    </CRow>
-                    <CRow className="mb-3">
-                      <CCol sm={12}>
-                        <label htmlFor="relievingDate">
-                          Relieving Date{" "}
-                          
-                          {isRelievedChecked && (
-                            <span style={{ color: "red", fontSize: "25px" }}>
-                              *
-                            </span>
-                          )}
-                        </label>
-                        <Field
-                          type="date"
-                          id="relievingDate"
-                          name="relievingDate"
-                          className="form-control"
-                          disabled={!isRelievedChecked}
-                        />
-                        {isRelievedChecked && (
-                          <ErrorMessage
-                            name="relievingDate"
-                            className="invalid-feedback"
-                            render={(error) => (
-                              <label style={{ color: "#dc3545" }}>
-                                {error}
-                              </label>
+            {({ handleSubmit, isSubmitting, touched, errors }) => (
+              <Form
+                className="profile-info"
+                onSubmit={handleSubmit}
+                autoComplete="off"
+              >
+                <div className="heading">
+                  <h5>Employee Code</h5>
+
+                  <CRow className="justify-content-between">
+                    <CCol xs={4}>
+                      <CImage
+                        rounded
+                        thumbnail
+                        src={profile}
+                        width={120}
+                        height={120}
+                        className="rounded-circle"
+                        style={{
+                          borderRadius: "50%",
+                          marginLeft: "5rem",
+                          marginTop: "2rem",
+                        }}
+                      />
+                    </CCol>
+                    <CCol xs={8}>
+                      <CRow>
+                        <CCol xs={6}>
+                          <div className="form-group">
+                            <label htmlFor="employeeId">
+                              Id
+                              <span
+                                style={{
+                                  color: "red",
+                                  fontSize: "25px",
+                                  lineHeight: "0",
+                                }}
+                              >
+                                *
+                              </span>
+                            </label>
+                            <Field
+                              type="string"
+                              id="employeeId"
+                              name="employeeId"
+                              className="form-control"
+                              disabled
+                            />
+                          </div>
+                        </CCol>
+                        <CCol sm={6}>
+                          <div className="form-group">
+                            <label htmlFor="employeeCode">
+                              Employee Code
+                              <span
+                                style={{
+                                  color: "red",
+                                  fontSize: "25px",
+                                  lineHeight: "0",
+                                }}
+                              >
+                                *
+                              </span>
+                            </label>
+                            <Field
+                              type="text"
+                              id="employeeCode"
+                              name="employeeCode"
+                              value={employeeCode}
+                              className="form-control"
+                              disabled
+                            />
+                          </div>
+                        </CCol>
+                        <CCol sm={6}>
+                          <div className="form-group">
+                            <label htmlFor="joiningDate">
+                              Joining Date{" "}
+                              <span
+                                style={{
+                                  color: "red",
+                                  fontSize: "25px",
+                                  lineHeight: "0",
+                                }}
+                              >
+                                *
+                              </span>
+                            </label>
+                            <Field
+                              type="date"
+                              id="joiningDate"
+                              name="joiningDate"
+                              className={`form-control ${
+                                touched.joiningDate && errors.joiningDate
+                                  ? "is-invalid"
+                                  : ""
+                              }`}
+                            />
+                            <ErrorMessage
+                              name="joiningDate"
+                              className="invalid-feedback"
+                              render={(error) => (
+                                <label style={{ color: "#dc3545" }}>
+                                  {error}
+                                </label>
+                              )}
+                            />
+                          </div>
+                        </CCol>
+                        <CCol sm={6}>
+                          <div className="form-group">
+                            <label htmlFor="relievingDate">
+                              Relieving Date{" "}
+                              {isRelievedChecked && (
+                                <span
+                                  style={{
+                                    color: "red",
+                                    fontSize: "25px",
+                                    lineHeight: "0",
+                                  }}
+                                >
+                                  *
+                                </span>
+                              )}
+                            </label>
+                            <Field
+                              type="date"
+                              id="relievingDate"
+                              name="relievingDate"
+                              className="form-control"
+                              disabled={!isRelievedChecked}
+                            />
+                            {isRelievedChecked && (
+                              <ErrorMessage
+                                name="relievingDate"
+                                className="invalid-feedback"
+                                render={(error) => (
+                                  <label style={{ color: "#dc3545" }}>
+                                    {error}
+                                  </label>
+                                )}
+                              />
                             )}
-                          />
-                        )}
-                      </CCol>
-                    </CRow>
-                  </CCol>
-                </CRow>
-                <CRow>
-                  <h4 className="mt-4">Demographic Detail</h4>
-                  <CCol xs={4}>
-                    <CRow className="mb-3">
-                      <CCol sm={12}>
+                          </div>
+                        </CCol>
+                        <CCol xs={6} className="align-self-center">
+                          <div className="form-group">
+                            <CFormCheck
+                              id="isActive"
+                              label="Active"
+                              checked={isActiveChecked}
+                              // value={isActiveChecked}
+                              onChange={handleCheckbox}
+                            />
+                            <ErrorMessage
+                              name="isActive"
+                              className="invalid-feedback"
+                              render={(error) => (
+                                <label style={{ color: "#dc3545" }}>
+                                  {error}
+                                </label>
+                              )}
+                            />
+                          </div>
+                        </CCol>
+                        <CCol sm={6} className="align-self-center">
+                          <div className="form-group">
+                            <CFormCheck
+                              id="isRelieved"
+                              name="isRelieved"
+                              label="isRelieved"
+                              checked={isRelievedChecked}
+                              onChange={handleCheckbox}
+                            />
+                            <ErrorMessage
+                              name="isRelieved"
+                              className="invalid-feedback"
+                              render={(error) => (
+                                <label style={{ color: "#dc3545" }}>
+                                  {error}
+                                </label>
+                              )}
+                            />
+                          </div>
+                        </CCol>
+                      </CRow>
+                    </CCol>
+                  </CRow>
+                </div>
+                <div>
+                  <h5 className="mt-4">Demographic Detail</h5>
+                  <CRow>
+                    <CCol sm={4}>
+                      <div className="form-group">
                         <label htmlFor="name">
-                          Employee Name{" "}
-                          <span style={{ color: "red", fontSize: "25px" }}>
+                          Employee Name
+                          <span
+                            style={{
+                              color: "red",
+                              fontSize: "25px",
+                              lineHeight: "0",
+                            }}
+                          >
                             *
                           </span>
                         </label>
@@ -491,10 +527,10 @@ const CreateOrUpdateUser = () => {
                             <label style={{ color: "#dc3545" }}>{error}</label>
                           )}
                         />
-                      </CCol>
-                    </CRow>
-                    <CRow className="mb-3">
-                      <CCol sm={12}>
+                      </div>
+                    </CCol>
+                    <CCol sm={4}>
+                      <div className="form-group">
                         <label htmlFor="panNumber">
                           Pan Number{" "}
                           <span style={{ color: "red", fontSize: "25px" }}>
@@ -520,12 +556,11 @@ const CreateOrUpdateUser = () => {
                             <label style={{ color: "#dc3545" }}>{error}</label>
                           )}
                         />
-                      </CCol>
-                    </CRow>
-                  </CCol>
-                  <CCol xs={4}>
-                    <CRow className="mb-3">
-                      <CCol sm={12}>
+                      </div>
+                    </CCol>
+
+                    <CCol sm={4}>
+                      <div className="form-group">
                         <label htmlFor="fatherName">
                           Father Name{" "}
                           <span style={{ color: "red", fontSize: "25px" }}>
@@ -551,10 +586,10 @@ const CreateOrUpdateUser = () => {
                             <label style={{ color: "#dc3545" }}>{error}</label>
                           )}
                         />
-                      </CCol>
-                    </CRow>
-                    <CRow className="mb-3">
-                      <CCol sm={12}>
+                      </div>
+                    </CCol>
+                    <CCol sm={4}>
+                      <div className="form-group">
                         <label htmlFor="adharCardNumber">
                           Aadhar Number{" "}
                           <span style={{ color: "red", fontSize: "25px" }}>
@@ -580,12 +615,11 @@ const CreateOrUpdateUser = () => {
                             <label style={{ color: "#dc3545" }}>{error}</label>
                           )}
                         />
-                      </CCol>
-                    </CRow>
-                  </CCol>
-                  <CCol xs={4}>
-                    <CRow className="mb-3">
-                      <CCol sm={12}>
+                      </div>
+                    </CCol>
+
+                    <CCol sm={4}>
+                      <div className="form-group">
                         <label htmlFor="dateOfBirth">
                           Date of Birth{" "}
                           <span style={{ color: "red", fontSize: "25px" }}>
@@ -597,10 +631,6 @@ const CreateOrUpdateUser = () => {
                           id="dateOfBirth"
                           name="dateOfBirth"
                           className="form-control"
-                          //   className={`form-control ${touched.dateOfBirth && errors.dateOfBirth
-                          //       ? "is-invalid"
-                          //       : ""
-                          //     }`}
                         />
                         <ErrorMessage
                           name="dateOfBirth"
@@ -609,10 +639,11 @@ const CreateOrUpdateUser = () => {
                             <label style={{ color: "#dc3545" }}>{error}</label>
                           )}
                         />
-                      </CCol>
-                    </CRow>
-                    <CRow className="mb-3">
-                      <CCol sm={12}>
+                      </div>
+                    </CCol>
+
+                    <CCol sm={4}>
+                      <div className="form-group">
                         <label htmlFor="bloodGroup">Blood Group</label>
                         <CFormSelect
                           id="bloodGroup"
@@ -622,535 +653,536 @@ const CreateOrUpdateUser = () => {
                           options={bloodGroups}
                           onChange={(e) => setBloodGroup(e.target.value)}
                         />
-                      </CCol>
-                    </CRow>
-                  </CCol>
-                </CRow>
-                <CRow>
+                      </div>
+                    </CCol>
+                  </CRow>
+                </div>
+                <div>
                   <h4 className="mt-4">Contact Detail</h4>
-                  <CCol xs={12}>
-                    <CRow className="mb-3">
-                      <CCol sm={12}>
-                        <label htmlFor="correspondenceAddress">
-                          Correspondence Address{" "}
-                          <span style={{ color: "red", fontSize: "25px" }}>
-                            *
-                          </span>
-                        </label>
-                        <Field
-                          type="text"
-                          id="correspondenceAddress"
-                          name="correspondenceAddress"
-                          // className="form-control"
-                          className={`form-control ${
-                            touched.correspondenceAddress &&
-                            errors.correspondenceAddress
-                              ? "is-invalid"
-                              : ""
-                          }`}
-                          placeholder="Correspondence Address"
-                        />
-                        <ErrorMessage
-                          name="correspondenceAddress"
-                          className="invalid-feedback"
-                          render={(error) => (
-                            <label style={{ color: "#dc3545" }}>{error}</label>
-                          )}
-                        />
-                      </CCol>
-                    </CRow>
-                    <CRow className="mb-3">
-                      <CCol sm={12}>
-                        <label htmlFor="permanentAddress">
-                          Permanent Address{" "}
-                          <span style={{ color: "red", fontSize: "25px" }}>
-                            *
-                          </span>
-                        </label>
-                        <Field
-                          type="text"
-                          id="permanentAddress"
-                          name="permanentAddress"
-                          // className="form-control"
-                          className={`form-control ${
-                            touched.permanentAddress && errors.permanentAddress
-                              ? "is-invalid"
-                              : ""
-                          }`}
-                          placeholder="Permanent Address"
-                        />
-                        <ErrorMessage
-                          name="permanentAddress"
-                          className="invalid-feedback"
-                          render={(error) => (
-                            <label style={{ color: "#dc3545" }}>{error}</label>
-                          )}
-                        />
-                      </CCol>
-                    </CRow>
-                  </CCol>
-                </CRow>
-                <CRow>
-                  <span className="mt-4"></span>
-                  <CCol xs={4}>
-                    <CRow className="mb-3">
-                      <CCol sm={12}>
-                        <label htmlFor="guardianName">
-                          Guardian Name{" "}
-                          <span style={{ color: "red", fontSize: "25px" }}>
-                            *
-                          </span>
-                        </label>
-                        <Field
-                          type="text"
-                          id="guardianName"
-                          name="guardianName"
-                          // className="form-control"
-                          className={`form-control ${
-                            touched.guardianName && errors.guardianName
-                              ? "is-invalid"
-                              : ""
-                          }`}
-                          placeholder="Guardian Name"
-                        />
-                        <ErrorMessage
-                          name="guardianName"
-                          className="invalid-feedback"
-                          render={(error) => (
-                            <label style={{ color: "#dc3545" }}>{error}</label>
-                          )}
-                        />
-                      </CCol>
-                    </CRow>
-                    <CRow className="mb-3">
-                      <CCol sm={12}>
-                        <label htmlFor="contactNumber1">
-                          Contact Number 1{" "}
-                          <span style={{ color: "red", fontSize: "25px" }}>
-                            *
-                          </span>
-                        </label>
-                        <Field
-                          type="text"
-                          id="contactNumber1"
-                          name="contactNumber1"
-                          // className="form-control"
-                          className={`form-control ${
-                            touched.contactNumber1 && errors.contactNumber1
-                              ? "is-invalid"
-                              : ""
-                          }`}
-                          placeholder="Contact Number 1"
-                        />
-                        <ErrorMessage
-                          name="contactNumber1"
-                          className="invalid-feedback"
-                          render={(error) => (
-                            <label style={{ color: "#dc3545" }}>{error}</label>
-                          )}
-                        />
-                      </CCol>
-                    </CRow>
-                    <CRow className="mb-3">
-                      <CCol sm={12}>
-                        <label htmlFor="officialEmail">
-                          Official Email{" "}
-                          <span style={{ color: "red", fontSize: "25px" }}>
-                            *
-                          </span>
-                        </label>
-                        <Field
-                          type="text"
-                          id="officialEmail"
-                          name="officialEmail"
-                          // className="form-control"
-                          className={`form-control ${
-                            touched.officialEmail && errors.officialEmail
-                              ? "is-invalid"
-                              : ""
-                          }`}
-                          placeholder="Official Email"
-                        />
-                        <ErrorMessage
-                          name="officialEmail"
-                          className="invalid-feedback"
-                          render={(error) => (
-                            <label style={{ color: "#dc3545" }}>{error}</label>
-                          )}
-                        />
-                      </CCol>
-                    </CRow>
-                  </CCol>
-                  <CCol xs={4}>
-                    <CRow className="mb-3">
-                      <CCol sm={12}>
-                        <label htmlFor="guardianContactNumber">
-                          Guardian Contact Number{" "}
-                          <span style={{ color: "red", fontSize: "25px" }}>
-                            *
-                          </span>
-                        </label>
-                        <Field
-                          type="text"
-                          id="guardianContactNumber"
-                          name="guardianContactNumber"
-                          // className="form-control"
-                          className={`form-control ${
-                            touched.guardianContactNumber &&
-                            errors.guardianContactNumber
-                              ? "is-invalid"
-                              : ""
-                          }`}
-                          placeholder="Guardian Contact Number"
-                        />
-                        <ErrorMessage
-                          name="guardianContactNumber"
-                          className="invalid-feedback"
-                          render={(error) => (
-                            <label style={{ color: "#dc3545" }}>{error}</label>
-                          )}
-                        />
-                      </CCol>
-                    </CRow>
-                    <CRow className="mb-3">
-                      <CCol sm={12}>
-                        <label htmlFor="contactNumber2">Contact Number 2</label>
-                        <Field
-                        autoComplete="Contact Number 2" 
-                          type="text"
-                          id="contactNumber2"
-                          name="contactNumber2"
-                          className="form-control"
-                          placeholder="Contact Number 2"
-                        />
-                      </CCol>
-                    </CRow>
-                    <CRow className="mb-3">
-                      <CCol sm={12}>
-                        <label htmlFor="officialEmailPassword">
-                          Official Email Password{" "}
-                          <span style={{ color: "red", fontSize: "25px" }}>
-                            *
-                          </span>
-                        </label>
-                        <Field
-                        autoComplete="Official Email Password" 
-                          type="password"
-                          id="officialEmailPassword"
-                          name="officialEmailPassword"
-                          // className="form-control"
-                          className={`form-control ${
-                            touched.officialEmailPassword &&
-                            errors.officialEmailPassword
-                              ? "is-invalid"
-                              : ""
-                          }`}
-                          placeholder="Official Email Password"
-                        />
-                        <ErrorMessage
-                          name="officialEmailPassword"
-                          className="invalid-feedback"
-                          render={(error) => (
-                            <label style={{ color: "#dc3545" }}>{error}</label>
-                          )}
-                        />
-                      </CCol>
-                    </CRow>
-                  </CCol>
-                  <CCol xs={4}>
-                    <CRow className="mb-3">
-                      <CCol sm={12}>
-                        <label htmlFor="personalEmail">
-                          Personal Email{" "}
-                          <span style={{ color: "red", fontSize: "25px" }}>
-                            *
-                          </span>
-                        </label>
-                        <Field
-                          type="text"
-                          id="personalEmail"
-                          name="personalEmail"
-                          // className="form-control"
-                          className={`form-control ${
-                            touched.personalEmail && errors.personalEmail
-                              ? "is-invalid"
-                              : ""
-                          }`}
-                          placeholder="Personal Email"
-                        />
-                        <ErrorMessage
-                          name="personalEmail"
-                          className="invalid-feedback"
-                          render={(error) => (
-                            <label style={{ color: "#dc3545" }}>{error}</label>
-                          )}
-                        />
-                      </CCol>
-                    </CRow>
-                    <CRow className="mb-3">
-                      <CCol sm={12}>
-                        <label htmlFor="skypeId">
-                          Official Skype{" "}
-                          <span style={{ color: "red", fontSize: "25px" }}>
-                            *
-                          </span>
-                        </label>
-                        <Field
-                          type="text"
-                          id="skypeId"
-                          name="skypeId"
-                          // className="form-control"
-                          className={`form-control ${
-                            touched.skypeId && errors.skypeId
-                              ? "is-invalid"
-                              : ""
-                          }`}
-                          placeholder="Official Skype"
-                        />
-                        <ErrorMessage
-                          name="skypeId"
-                          className="invalid-feedback"
-                          render={(error) => (
-                            <label style={{ color: "#dc3545" }}>{error}</label>
-                          )}
-                        />
-                      </CCol>
-                    </CRow>
-                  </CCol>
-                </CRow>
-                <CRow>
-                  <h4 className="mt-4">Company Detail</h4>
-                  <CCol xs={4}>
-                    <CRow className="mb-3">
-                      <CCol sm={12}>
-                        <label htmlFor="designationId">
-                          Designation{" "}
-                          {/* <span style={{ color: "red", fontSize: "25px" }}>
-                            *
-                          </span> */}
-                        </label>
-                        <CFormSelect
-                          id="designationId"
-                          name="designationId"
-                          value={designationId}
-                          aria-label="Default select example"
-                          onChange={handleDesignationChange}
-                          className={`form-control ${
-                            touched.designationId && errors.designationId
-                              ? "is-invalid"
-                              : ""
-                          }`}
-                        >
-                          <option value="">Select a Designation</option>
-                          {designationList?.map((designation) => (
-                            <option
-                              key={designation.designationId}
-                              value={designation.designationId}
-                            >
-                              {designation.name}
-                            </option>
-                          ))}
-                        </CFormSelect>
-                        <ErrorMessage
-                          name="designationId"
-                          className="invalid-feedback"
-                          render={(error) => (
-                            <label style={{ color: "#dc3545" }}>{error}</label>
-                          )}
-                        />
-                      </CCol>
-                    </CRow>
-                    <CRow className="mb-3">
-                      <CCol sm={12}>
-                        <label htmlFor="bank">
-                          Bank Name{" "}
-                          <span style={{ color: "red", fontSize: "25px" }}>
-                            *
-                          </span>
-                        </label>
-                        <Field
-                          type="text"
-                          id="bank"
-                          name="bank"
-                          // className="form-control"
-                          className={`form-control ${
-                            touched.bank && errors.bank ? "is-invalid" : ""
-                          }`}
-                          placeholder="Bank"
-                        />
-                        <ErrorMessage
-                          name="bank"
-                          className="invalid-feedback"
-                          render={(error) => (
-                            <label style={{ color: "#dc3545" }}>{error}</label>
-                          )}
-                        />
-                      </CCol>
-                    </CRow>
-                  </CCol>
-                  <CCol xs={4}>
-                    <CRow className="mb-3">
-                    <CCol sm={12}>
-                        <label htmlFor="departmentId">Department</label>
-                        <CFormSelect
-                          id="departmentId"
-                          name="departmentId"
-                          value={formData.departmentId}
-                          aria-label="Default select example"
-                            className={`form-control form-select ${touched.departmentId && errors.departmentId
-                            ? "is-invalid"
-                            : ""
-                            }`}
-                          onChange={handleDepartmentChange}
-                          className={`form-control ${
-                            touched.departmentId && errors.departmentId ? "is-invalid" : ""
-                          }`}
-                          placeholder="IFSC Code"
-                        >
-                          <option value="">Select a Department</option>
-                          {departmentList?.map((department) => (
-                            <option
-                              key={department.departmentId}
-                              value={department.departmentId}
-                            >
-                              {department.name}
-                            </option>
-                          ))}
-                        </CFormSelect>
-                        <ErrorMessage
-                          name="departmentId"
-                          className="invalid-feedback"
-                          render={(error) => (
-                            <label style={{ color: "#dc3545" }}>{error}</label> 
-                          )}
-                        />             
-                      </CCol>
-                    </CRow>
-                    <CRow className="mb-3">
-                      <CCol sm={12}>
-                        <label htmlFor="bankAccountNumber">
-                          Account Number <span style={{ color: "red", fontSize: "25px" }}>
+
+                  <CCol sm={12}>
+                    <div className="form-group">
+                      <label htmlFor="correspondenceAddress">
+                        Correspondence Address{" "}
+                        <span style={{ color: "red", fontSize: "25px" }}>
                           *
                         </span>
-                        </label>
-                        <Field
-                          type="text"
-                          id="bankAccountNumber"
-                          name="bankAccountNumber"
-                          className={`form-control ${
-                            touched.bankAccountNumber &&
-                            errors.bankAccountNumber
-                              ? "is-invalid"
-                              : ""
-                          }`}
-                          placeholder="Account Number"
-                        />
-                        <ErrorMessage
-                          name="bankAccountNumber"
-                          className="invalid-feedback"
-                          render={(error) => (
-                            <label style={{ color: "#dc3545" }}>{error}</label>
-                          )}
-                        />
-                      </CCol>
-                    </CRow>
-                  </CCol>
-                  <CCol xs={4}>
-                    <CRow className="mb-3">
-                      <CCol sm={12}>
-                        <label htmlFor="ifsc">
-                          IFSC Code{" "}
-                          <span style={{ color: "red", fontSize: "25px" }}>
-                            *
-                          </span>
-                        </label>
-                        <Field
-                          type="text"
-                          id="ifsc"
-                          name="ifsc"
-                          className={`form-control ${
-                            touched.ifsc && errors.ifsc ? "is-invalid" : ""
-                          }`}
-                          placeholder="IFSC Code"
-                        />
-                        <ErrorMessage
-                          name="ifsc"
-                          className="invalid-feedback"
-                          render={(error) => (
-                            <label style={{ color: "#dc3545" }}>{error}</label>
-                          )}
-                        />
-                      </CCol>
-                    </CRow>
-                   <CRow className="mb-3">
-                      <CCol sm={12}>
-                        <label htmlFor="shiftId">Shift</label>
-                        <CFormSelect
-                          id="shiftId"
-                          name="shiftId"
-                          value={shiftId}
-                          aria-label="Default select example"
-                          className={`form-control form-select ${touched.shiftId && errors.shiftId
+                      </label>
+                      <Field
+                        type="text"
+                        id="correspondenceAddress"
+                        name="correspondenceAddress"
+                        className={`form-control ${
+                          touched.correspondenceAddress &&
+                          errors.correspondenceAddress
                             ? "is-invalid"
                             : ""
-                            }`}
-                          onChange={handleShiftChange}
-                          className={`form-control ${
-                            touched.shiftId && errors.shiftId
-                              ? "is-invalid"
-                              : ""
-                          }`}
-                          placeholder="Shift"
-                        >
-                          <option value="">Select a Shift</option>
-                          {shiftList?.map((shift) => (
-                            <option key={shift.shiftId} value={shift.shiftId}>
-                              {shift.name}
-                            </option>
-                          ))}
-                        </CFormSelect>
-                        <ErrorMessage
-                          name="shiftId"
-                          className="invalid-feedback"
-                          render={(error) => (
-                            <label style={{ color: "#dc3545" }}>{error}</label>
-                          )}
-                        />
-                      </CCol>
-                    </CRow>
+                        }`}
+                        placeholder="Correspondence Address"
+                      />
+                      <ErrorMessage
+                        name="correspondenceAddress"
+                        className="invalid-feedback"
+                        render={(error) => (
+                          <label style={{ color: "#dc3545" }}>{error}</label>
+                        )}
+                      />
+                    </div>
+                  </CCol>
+
+                  <CCol sm={12}>
+                    <div className="form-group">
+                      <label htmlFor="permanentAddress">
+                        Permanent Address{" "}
+                        <span style={{ color: "red", fontSize: "25px" }}>
+                          *
+                        </span>
+                      </label>
+                      <Field
+                        type="text"
+                        id="permanentAddress"
+                        name="permanentAddress"
+                        // className="form-control"
+                        className={`form-control ${
+                          touched.permanentAddress && errors.permanentAddress
+                            ? "is-invalid"
+                            : ""
+                        }`}
+                        placeholder="Permanent Address"
+                      />
+                      <ErrorMessage
+                        name="permanentAddress"
+                        className="invalid-feedback"
+                        render={(error) => (
+                          <label style={{ color: "#dc3545" }}>{error}</label>
+                        )}
+                      />
+                    </div>
+                  </CCol>
+                </div>
+
+                <CRow>
+                  <CCol sm={4}>
+                    <div className="form-group">
+                      <label htmlFor="guardianName">
+                        Guardian Name{" "}
+                        <span style={{ color: "red", fontSize: "25px" }}>
+                          *
+                        </span>
+                      </label>
+                      <Field
+                        type="text"
+                        id="guardianName"
+                        name="guardianName"
+                        className={`form-control ${
+                          touched.guardianName && errors.guardianName
+                            ? "is-invalid"
+                            : ""
+                        }`}
+                        placeholder="Guardian Name"
+                      />
+                      <ErrorMessage
+                        name="guardianName"
+                        className="invalid-feedback"
+                        render={(error) => (
+                          <label style={{ color: "#dc3545" }}>{error}</label>
+                        )}
+                      />
+                    </div>
+                  </CCol>
+                  <CCol sm={4}>
+                    <div className="form-group">
+                      <label htmlFor="contactNumber1">
+                        Contact Number 1{" "}
+                        <span style={{ color: "red", fontSize: "25px" }}>
+                          *
+                        </span>
+                      </label>
+                      <Field
+                        type="text"
+                        id="contactNumber1"
+                        name="contactNumber1"
+                        className={`form-control ${
+                          touched.contactNumber1 && errors.contactNumber1
+                            ? "is-invalid"
+                            : ""
+                        }`}
+                        placeholder="Contact Number 1"
+                      />
+                      <ErrorMessage
+                        name="contactNumber1"
+                        className="invalid-feedback"
+                        render={(error) => (
+                          <label style={{ color: "#dc3545" }}>{error}</label>
+                        )}
+                      />
+                    </div>
+                  </CCol>
+
+                  <CCol sm={4}>
+                    <div className="form-group">
+                      <label htmlFor="officialEmail">
+                        Official Email{" "}
+                        <span style={{ color: "red", fontSize: "25px" }}>
+                          *
+                        </span>
+                      </label>
+                      <Field
+                        type="text"
+                        id="officialEmail"
+                        name="officialEmail"
+                        // className="form-control"
+                        className={`form-control ${
+                          touched.officialEmail && errors.officialEmail
+                            ? "is-invalid"
+                            : ""
+                        }`}
+                        placeholder="Official Email"
+                      />
+                      <ErrorMessage
+                        name="officialEmail"
+                        className="invalid-feedback"
+                        render={(error) => (
+                          <label style={{ color: "#dc3545" }}>{error}</label>
+                        )}
+                      />
+                    </div>
+                  </CCol>
+
+                  <CCol xs={4}>
+                    <div className="form-group">
+                      <label htmlFor="guardianContactNumber">
+                        Guardian Contact Number
+                        <span style={{ color: "red", fontSize: "25px" }}>
+                          *
+                        </span>
+                      </label>
+                      <Field
+                        type="text"
+                        id="guardianContactNumber"
+                        name="guardianContactNumber"
+                        // className="form-control"
+                        className={`form-control ${
+                          touched.guardianContactNumber &&
+                          errors.guardianContactNumber
+                            ? "is-invalid"
+                            : ""
+                        }`}
+                        placeholder="Guardian Contact Number"
+                      />
+                      <ErrorMessage
+                        name="guardianContactNumber"
+                        className="invalid-feedback"
+                        render={(error) => (
+                          <label style={{ color: "#dc3545" }}>{error}</label>
+                        )}
+                      />
+                    </div>
+                  </CCol>
+                  <CCol sm={4}>
+                    <div className="form-group">
+                      <label htmlFor="contactNumber2">Contact Number 2</label>
+                      <Field
+                        type="text"
+                        id="contactNumber2"
+                        name="contactNumber2"
+                        className="form-control"
+                        placeholder="Contact Number 2"
+                      />
+                    </div>
+                  </CCol>
+                  <CCol sm={4}>
+                    <div className="form-group">
+                      <label htmlFor="officialEmailPassword">
+                        Official Email Password{" "}
+                        <span style={{ color: "red", fontSize: "25px" }}>
+                          *
+                        </span>
+                      </label>
+                      <Field
+                        type="password"
+                        id="officialEmailPassword"
+                        name="officialEmailPassword"
+                        // className="form-control"
+                        className={`form-control ${
+                          touched.officialEmailPassword &&
+                          errors.officialEmailPassword
+                            ? "is-invalid"
+                            : ""
+                        }`}
+                        placeholder="Official Email Password"
+                      />
+                      <ErrorMessage
+                        name="officialEmailPassword"
+                        className="invalid-feedback"
+                        render={(error) => (
+                          <label style={{ color: "#dc3545" }}>{error}</label>
+                        )}
+                      />
+                    </div>
+                  </CCol>
+
+                  <CCol xs={4}>
+                    <div className="form-group">
+                      <label htmlFor="personalEmail">
+                        Personal Email{" "}
+                        <span style={{ color: "red", fontSize: "25px" }}>
+                          *
+                        </span>
+                      </label>
+                      <Field
+                        type="text"
+                        id="personalEmail"
+                        name="personalEmail"
+                        // className="form-control"
+                        className={`form-control ${
+                          touched.personalEmail && errors.personalEmail
+                            ? "is-invalid"
+                            : ""
+                        }`}
+                        placeholder="Personal Email"
+                      />
+                      <ErrorMessage
+                        name="personalEmail"
+                        className="invalid-feedback"
+                        render={(error) => (
+                          <label style={{ color: "#dc3545" }}>{error}</label>
+                        )}
+                      />
+                    </div>
+                  </CCol>
+                  <CCol xs={4}>
+                    <div className="form-group">
+                      <label htmlFor="skypeId">
+                        Official Skype{" "}
+                        <span style={{ color: "red", fontSize: "25px" }}>
+                          *
+                        </span>
+                      </label>
+                      <Field
+                        type="text"
+                        id="skypeId"
+                        name="skypeId"
+                        // className="form-control"
+                        className={`form-control ${
+                          touched.skypeId && errors.skypeId ? "is-invalid" : ""
+                        }`}
+                        placeholder="Official Skype"
+                      />
+                      <ErrorMessage
+                        name="skypeId"
+                        className="invalid-feedback"
+                        render={(error) => (
+                          <label style={{ color: "#dc3545" }}>{error}</label>
+                        )}
+                      />
+                    </div>
                   </CCol>
                 </CRow>
+
+                <CRow>
+                  <h5 className="mt-4">Company Detail</h5>
+                  <CCol sm={4}>
+                    <div className="form-group">
+                      <label htmlFor="designationId">Designation </label>
+                      <CFormSelect
+                        id="designationId"
+                        name="designationId"
+                        value={designationId}
+                        aria-label="Default select example"
+                        onChange={handleDesignationChange}
+                        className={`form-control ${
+                          touched.designationId && errors.designationId
+                            ? "is-invalid"
+                            : ""
+                        }`}
+                      >
+                        <option value="">Select a Designation</option>
+                        {designationList?.map((designation) => (
+                          <option
+                            key={designation.designationId}
+                            value={designation.designationId}
+                          >
+                            {designation.name}
+                          </option>
+                        ))}
+                      </CFormSelect>
+                      <ErrorMessage
+                        name="designationId"
+                        className="invalid-feedback"
+                        render={(error) => (
+                          <label style={{ color: "#dc3545" }}>{error}</label>
+                        )}
+                      />
+                    </div>
+                  </CCol>
+
+                  <CCol sm={4}>
+                    <div className="form-group">
+                      <label htmlFor="bank">
+                        Bank Name{" "}
+                        <span
+                          style={{
+                            color: "red",
+                            fontSize: "25px",
+                            lineHeight: 0,
+                          }}
+                        >
+                          *
+                        </span>
+                      </label>
+                      <Field
+                        type="text"
+                        id="bank"
+                        name="bank"
+                        // className="form-control"
+                        className={`form-control ${
+                          touched.bank && errors.bank ? "is-invalid" : ""
+                        }`}
+                        placeholder="Bank"
+                      />
+                      <ErrorMessage
+                        name="bank"
+                        className="invalid-feedback"
+                        render={(error) => (
+                          <label style={{ color: "#dc3545" }}>{error}</label>
+                        )}
+                      />
+                    </div>
+                  </CCol>
+
+                  <CCol sm={4}>
+                    <div className="form-group">
+                      <label htmlFor="departmentId">Department</label>
+                      <CFormSelect
+                        id="departmentId"
+                        name="departmentId"
+                        aria-label="Default select example"
+                        className={`form-control form-select ${
+                          touched.departmentId && errors.departmentId
+                            ? "is-invalid"
+                            : ""
+                        }`}
+                      >
+                        <option value="">Select a Department</option>
+                        {departmentList?.map((department) => (
+                          <option
+                            key={department.departmentId}
+                            value={department.departmentId}
+                          >
+                            {department.name}
+                          </option>
+                        ))}
+                      </CFormSelect>
+                      <ErrorMessage
+                        name="departmentId"
+                        className="invalid-feedback"
+                        render={(error) => (
+                          <label style={{ color: "#dc3545" }}>{error}</label>
+                        )}
+                      />
+                    </div>
+                  </CCol>
+
+                  <CCol sm={4}>
+                    <div className="form-group">
+                      <label htmlFor="bankAccountNumber">
+                        Account Number{" "}
+                        <span
+                          style={{
+                            color: "red",
+                            fontSize: "25px",
+                            lineHeight: 0,
+                          }}
+                        >
+                          *
+                        </span>
+                      </label>
+                      <Field
+                        type="text"
+                        id="bankAccountNumber"
+                        name="bankAccountNumber"
+                        className={`form-control ${
+                          touched.bankAccountNumber && errors.bankAccountNumber
+                            ? "is-invalid"
+                            : ""
+                        }`}
+                        placeholder="Account Number"
+                      />
+                      <ErrorMessage
+                        name="bankAccountNumber"
+                        className="invalid-feedback"
+                        render={(error) => (
+                          <label style={{ color: "#dc3545" }}>{error}</label>
+                        )}
+                      />
+                    </div>
+                  </CCol>
+
+                  <CCol sm={4}>
+                    <div className="form-group">
+                      <label htmlFor="ifsc">
+                        IFSC Code{" "}
+                        <span
+                          style={{
+                            color: "red",
+                            fontSize: "25px",
+                            lineHeight: 0,
+                          }}
+                        >
+                          *
+                        </span>
+                      </label>
+                      <Field
+                        type="text"
+                        id="ifsc"
+                        name="ifsc"
+                        className={`form-control ${
+                          touched.ifsc && errors.ifsc ? "is-invalid" : ""
+                        }`}
+                        placeholder="IFSC Code"
+                      />
+                      <ErrorMessage
+                        name="ifsc"
+                        className="invalid-feedback"
+                        render={(error) => (
+                          <label style={{ color: "#dc3545" }}>{error}</label>
+                        )}
+                      />
+                    </div>
+                  </CCol>
+
+                  <CCol sm={4}>
+                    <div className="form-group">
+                      <label htmlFor="shiftId">Shift</label>
+                      <CFormSelect
+                        id="shiftId"
+                        name="shiftId"
+                        value={shiftId}
+                        aria-label="Default select example"
+                        className={`form-control form-select ${
+                          touched.shiftId && errors.shiftId ? "is-invalid" : ""
+                        }`}
+                        onChange={handleShiftChange}
+                        className={`form-control ${
+                          touched.shiftId && errors.shiftId ? "is-invalid" : ""
+                        }`}
+                        placeholder="Shift"
+                      >
+                        <option value="">Select a Shift</option>
+                        {shiftList?.map((shift) => (
+                          <option key={shift.shiftId} value={shift.shiftId}>
+                            {shift.name}
+                          </option>
+                        ))}
+                      </CFormSelect>
+                      <ErrorMessage
+                        name="shiftId"
+                        className="invalid-feedback"
+                        render={(error) => (
+                          <label style={{ color: "#dc3545" }}>{error}</label>
+                        )}
+                      />
+                    </div>
+                  </CCol>
+                </CRow>
+
                 <CRow>
                   <CCol xs={4}>
-                    <CRow className="mb-3">
-                      <CCol sm={12}>
-                        <label htmlFor="branch">
-                          Branch{" "}
-                          <span style={{ color: "red", fontSize: "25px" }}>
-                            *
-                          </span>
-                        </label>
-                        <Field
-                          type="text"
-                          id="branch"
-                          name="branch"
-                          className={`form-control ${
-                            touched.branch && errors.branch ? "is-invalid" : ""
-                          }`}
-                          placeholder="Branch"
-                        />
-                        <ErrorMessage
-                          name="branch"
-                          className="invalid-feedback"
-                          render={(error) => (
-                            <label style={{ color: "#dc3545" }}>{error}</label>
-                          )}
-                        />
-                      </CCol>
-                    </CRow>
+                    <div className="form-group">
+                      <label htmlFor="branch">
+                        Branch{" "}
+                        <span
+                          style={{
+                            color: "red",
+                            fontSize: "25px",
+                            lineHeight: 0,
+                          }}
+                        >
+                          *
+                        </span>
+                      </label>
+                      <Field
+                        type="text"
+                        id="branch"
+                        name="branch"
+                        className={`form-control ${
+                          touched.branch && errors.branch ? "is-invalid" : ""
+                        }`}
+                        placeholder="Branch"
+                      />
+                      <ErrorMessage
+                        name="branch"
+                        className="invalid-feedback"
+                        render={(error) => (
+                          <label style={{ color: "#dc3545" }}>{error}</label>
+                        )}
+                      />
+                    </div>
                   </CCol>
                 </CRow>
-                <CRow className="mb-3">
+
+                <CRow>
                   <CCol sm={12} className="text-end">
                     <button
                       type="submit"
