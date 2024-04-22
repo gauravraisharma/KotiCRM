@@ -89,9 +89,9 @@ export class EmployeeClass implements Employee{
         this.bank = "",
         this.branch = "",
         this.ifsc = "",
-        this.departmentId = -1,
-        this.designationId = -1,
-        this.shiftId = -1,
+        this.departmentId = null,
+        this.designationId = null,
+        this.shiftId = null,
         this.isActive = false,
         this.permanentAddress = "",
         this.correspondenceAddress = ""

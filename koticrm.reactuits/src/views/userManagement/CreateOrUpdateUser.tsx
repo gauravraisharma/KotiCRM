@@ -66,19 +66,20 @@ const CreateOrUpdateUser = () => {
     getShiftList();
   }, []);
 
-  useEffect(() => {
-    if (id) {
-      getEmployeeById(id);
-    } else {
-      getEmployeeId();
-    }
-  }, [id]);
+    useEffect(() => {
+      if (id) {
+        getEmployeeById(id);
+      } else {
+        getEmployeeId();
+      }
+    }, [id]);
 
   // Generate EmployeeId
   const getEmployeeId = async () => {
     const employeeId = await GetEmployeeId();
-    setEmployeeID(employeeId.data);
-    formData.employeeId = employeeId.data;
+    const employeeIdData = employeeId.data;
+    setEmployeeID(employeeIdData);
+    formData.employeeId = employeeIdData;
     generateEmployeeCode("tech", departmentId, formData.employeeId);
   };
 
@@ -208,6 +209,8 @@ const CreateOrUpdateUser = () => {
         const response = await CreateEmployee(employee);
         if (response.status == 200) {
           toast.success("Employee created successfully");
+          navigate("/users");
+
           setTimeout(() => {
             navigate("/users");
           }, 5000);
@@ -254,12 +257,12 @@ const CreateOrUpdateUser = () => {
       .required("Email is required"),
 
     skypeId: Yup.string().required("Official Skype is required"),
-    // designationId:  Yup.number().positive().required('Designation is required') ,
+    // designationId:  Yup.number().required('Designation is required') ,
     bank: Yup.string().required("Bank name is required"),
-    // departmentId:    Yup.number().positive().required('Department is required'),
+    // departmentId:    Yup.number().required('Department is required'),
     bankAccountNumber: Yup.string().required("Bank account number is required"),
     ifsc: Yup.string().required("IFSC code is required"),
-    // shiftId:   Yup.number().positive().required('Shift is required') ,
+    // shiftId:   Yup.number().required('Shift is required') ,
     branch: Yup.string()
     .required('Branch is required') 
   });
@@ -300,11 +303,9 @@ const CreateOrUpdateUser = () => {
           >
             {({
               handleSubmit,
-              isValid,
               isSubmitting,
               touched,
               errors,
-              handleBlur,
             }) => (
               <Form onSubmit={handleSubmit} autoComplete="off">
                 <CRow className="justify-content-between">
@@ -815,6 +816,7 @@ const CreateOrUpdateUser = () => {
                       <CCol sm={12}>
                         <label htmlFor="contactNumber2">Contact Number 2</label>
                         <Field
+                        autoComplete="Contact Number 2" 
                           type="text"
                           id="contactNumber2"
                           name="contactNumber2"
@@ -832,6 +834,7 @@ const CreateOrUpdateUser = () => {
                           </span>
                         </label>
                         <Field
+                        autoComplete="Official Email Password" 
                           type="password"
                           id="officialEmailPassword"
                           name="officialEmailPassword"

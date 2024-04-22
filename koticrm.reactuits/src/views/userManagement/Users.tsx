@@ -4,7 +4,7 @@ import { AiFillEye } from "react-icons/ai";
 import { MdDelete, MdEdit } from "react-icons/md";
 import { ToastContainer, toast } from "react-toastify";
 import { GetEmployeesList } from "../../redux-saga/modules/userManagement/apiService";
-import {  Employees } from "../../models/userManagement/employees";
+import { Employees } from "../../models/userManagement/employees";
 import DeleteConfirmationModal from "../account/accountsList/DeleteConfirmation";
 import {
   CButton,
@@ -35,13 +35,11 @@ const Users = () => {
   const [employeesList, setEmployeesList] = useState<Employees[]>([]);
   const [userId, setUserId] = useState<string>("");
   const [isLoading, setIsLoading] = useState(true);
-  const [dropdownValue, setDropdownValue] = useState("Select option");
-  const [showDeleteConfirmation, setShowDeleteConfirmation] =useState<boolean>(false);
+  const [dropdownValue, setDropdownValue] = useState("Name");
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState<boolean>(false);
   const [searchQuery, setSearchQuery] = useState('')
 
   const [pageNumber, setPageNumber] = useState<number>(1);
-
-    console.log(employeesList)
 
 
   const GetEmployees = async () => {
@@ -76,17 +74,17 @@ const Users = () => {
     setShowDeleteConfirmation(false);
   };
 
-   // Pagination
-   const pageSize = 5;
-   const totalCount = employeesList.userCount
-   const totalPages = Math.ceil(totalCount / pageSize);
- 
-   //Handle page change
-   const handlePageChange = (pageNumber: number) => {
-     setPageNumber(pageNumber);
-   };
+  // Pagination
+  const pageSize = 5;
+  const totalCount = employeesList.userCount
+  const totalPages = Math.ceil(totalCount / pageSize);
 
-     //Handle enter click to search account
+  //Handle page change
+  const handlePageChange = (pageNumber: number) => {
+    setPageNumber(pageNumber);
+  };
+
+  //Handle enter click to search account
   const handleKeyDown = (e: any) => {
     if (e.keyCode === 13) {
       GetEmployees()
@@ -96,14 +94,14 @@ const Users = () => {
   const handleBlur = () => {
     GetEmployees()
   }
- //Effects
+  //Effects
   useEffect(() => {
     GetEmployees();
   }, [pageNumber, pageSize, showDeleteConfirmation]);
 
   return (
     <>
-    <ToastContainer/>
+      <ToastContainer />
 
       {isLoading && (
         <div className="spinner-backdrop">
@@ -168,34 +166,34 @@ const Users = () => {
                 />
               </CInputGroup>
             </CCol> */}
-<CCol xs={2} md={2} lg={4}>
-  <div className="input-group mb-3 custom-input-group">
-    <select
-      className="form-select custom-select"
-      id="searchInput"
-      onChange={(e) => handleDropdownChange(e.target.value)}
-      style={{ backgroundColor: '#f0f0f0', borderRadius: '8px', marginRight: '10px', border: '1px solid #ccc' }}
-    >
-      <option value="" disabled selected>Select an option</option>
-      <option value="Name">Name</option>
-      <option value="Emp code">Emp code</option>
-      <option value="Blood Group">Blood Group</option>
-      <option value="Birthday">Birthday</option>
-      <option value="RoleId">RoleId</option>
-      <option value="Designation">Designation</option>
-    </select>
-    <input
-      type="text"
-      className="form-control custom-input"
-      placeholder={`Enter ${dropdownValue}...`}
-      value={searchQuery}
-      onChange={(e) => setSearchQuery(e.target.value)}
-      onKeyDown={handleKeyDown}
-      onBlur={handleBlur}
-      style={{ borderRadius: '8px', border: '1px solid #ccc' }}
-    />
-  </div>
-</CCol>
+            <CCol xs={2} md={2} lg={4}>
+              <div className="input-group mb-3 custom-input-group">
+                <select
+                  className="form-select custom-select"
+                  id="searchInput"
+                  onChange={(e) => handleDropdownChange(e.target.value)}
+                  style={{ backgroundColor: '#f0f0f0', borderRadius: '8px', marginRight: '10px', border: '1px solid #ccc' }}
+                >
+                  {/* <option value="" disabled selected>Select an option</option> */}
+                  <option value="Name">Name</option>
+                  <option value="Emp code">Emp code</option>
+                  <option value="Blood Group">Blood Group</option>
+                  <option value="Birthday">Birthday</option>
+                  <option value="RoleId">RoleId</option>
+                  <option value="Designation">Designation</option>
+                </select>
+                <input
+                  type="text"
+                  className="form-control custom-input"
+                  placeholder={`Enter ${dropdownValue}...`}
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                  onBlur={handleBlur}
+                  style={{ borderRadius: '8px', border: '1px solid #ccc' }}
+                />
+              </div>
+            </CCol>
 
 
             <CCol xs={8} className="text-end">

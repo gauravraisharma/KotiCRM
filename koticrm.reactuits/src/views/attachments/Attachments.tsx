@@ -112,8 +112,7 @@ const Attachments = ({ accountId, getAttachmentsCount }: Props) => {
 
   return (
     <>
-    <ToastContainer/>
-      {isLoading && (
+    {isLoading && (
         <div className="spinner-backdrop">
           <CSpinner
             size="sm"

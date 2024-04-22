@@ -33,30 +33,6 @@ import { clearInvoice, getInvoiceByIdRequest, updateInvoiceRequest } from "../..
 import { useNavigate, useParams } from "react-router-dom";
 import * as Yup from "yup";
 
-const initialValues = {
-  invoiceOwner: "",
-  subject: "",
-  dueDate: "",
-  accountID: "",
-  contacts: "",
-  purchaseOrder: "",
-  status: "",
-  fromBillingStreet: "",
-  fromBillingCity: "",
-  fromBillingState: "",
-  fromZipCode: "",
-  fromBillingCountry: "",
-  toBillingStreet: "",
-  toBillingCity: "",
-  toBillingState: "",
-  toZipCode: "",
-  toBillingCountry: "",
-  termsandConditions: "",
-  description: "",
-  tax: "",
-  adjustments: "",
-};
-
 interface newInvoiceProps {
   accountId: any;
   ownerId: any;
@@ -79,6 +55,7 @@ const EditInvoice: React.FC<newInvoiceProps> = () => {
 
   const [updateInvoice, setUpdateInvoice] = useState<Invoice>(new InvoiceClass());
   const [termsAndConditions, setTermsAndConditions] = useState("");
+
   const [extraFields, setExtraFields] = useState({
     tax: 0,
     adjustments: 0
@@ -251,7 +228,7 @@ const EditInvoice: React.FC<newInvoiceProps> = () => {
     accountID: Yup.string().required("Required (Account)"),
     ownerID: Yup.string().required("Required (Invoice Owner)"),
     subject: Yup.string().required("Required(Subject)"),
-    contactID: Yup.string().required("Required (Contacts)"),
+    contactID: Yup.number().required("Required (Contacts)"),
     // invoiceDate: touchedFields.invoiceDate
     //   ? Yup.string().required("Required (Due Date)")
     //   : Yup.string(),

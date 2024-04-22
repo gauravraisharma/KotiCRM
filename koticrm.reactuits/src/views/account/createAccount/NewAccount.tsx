@@ -293,7 +293,7 @@ const MyForm: React.FC<MyFormProps> = ({
                           ))}
                         </Field>
                         <ErrorMessage
-                          name="status"
+                          name="industry"
                           component="div"
                           className="error form-error"
                         />
@@ -340,7 +340,7 @@ const MyForm: React.FC<MyFormProps> = ({
                     </CRow>
                     <CRow className="mb-3">
                       <CCol sm={4}>
-                        <label htmlFor="status">
+                        <label htmlFor="type">
                           Type
                           <span style={{ color: "red", fontSize: "25px" }}>
                             *
@@ -368,7 +368,7 @@ const MyForm: React.FC<MyFormProps> = ({
                           ))}
                         </Field>
                         <ErrorMessage
-                          name="status"
+                          name="type"
                           component="div"
                           className="error form-error"
                         />

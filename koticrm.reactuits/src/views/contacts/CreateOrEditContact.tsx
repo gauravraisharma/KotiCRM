@@ -93,11 +93,12 @@ const CreateOrEditContact = () => {
   }, [contact.id, selectedCountry]);
 
   const handleCountryChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    debugger
     const selectedCountry = e.target.value;
     setSelectedCountry(selectedCountry);
 
     // Update the contact's country when it's changed
-    setContact({ ...contact, country: e.target.value });
+    // setContact({ ...contact, country: e.target.value });
 
     if (selectedCountry) {
       const selectedCountryObject = countries.find(
@@ -118,8 +119,9 @@ const CreateOrEditContact = () => {
   };
 
   const handleAccountChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    debugger
     const accountId = parseInt(e.target.value);
-    const selectedAccount = fetchedAccounts.find(
+    const selectedAccount = fetchedAccounts.account.find(
       (account: Account) => account.id === accountId
     );
     setSelectedAccount(selectedAccount);
@@ -151,7 +153,7 @@ const CreateOrEditContact = () => {
   const validationSchema = Yup.object({
     firstName: Yup.string().required("Required (First Name)"),
     lastName: Yup.string().required("Required (Last Name)"),
-    accountId: Yup.string().required("Required (Account ID)"),
+     accountID: Yup.number().required("Required (Account ID)"),
     email: Yup.string().email("Invalid email").required("Required (Email)"),
     mobile: Yup.string()
       .matches(/^[0-9]{10}$/, "Mobile number must be exactly 10 digits")
@@ -489,10 +491,8 @@ const CreateOrEditContact = () => {
                             as="select"
                             id="accountID"
                             name="accountID"
-                            className={`form-control form-select${
-                              touched.accountID && errors.accountID
-                                ? "is-invalid"
-                                : ""
+                            className={`form-control form-select ${
+                              touched.accountID && errors.accountID ? "is-invalid" : ""
                             }`}
                             onChange={handleAccountChange}
                             style={{ height: "50px" }}
@@ -774,7 +774,7 @@ const CreateOrEditContact = () => {
                       <button
                         type="submit"
                         className="btn btn-primary"
-                        disabled={isSubmitting || !isValid}
+                        // disabled={isSubmitting || !isValid}
                       >
                         {isSubmitting ? "Submitting..." : "Submit"}
                       </button>

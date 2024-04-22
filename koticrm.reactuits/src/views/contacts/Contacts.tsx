@@ -27,6 +27,7 @@ import { Link } from "react-router-dom";
 import { getContacts } from "../../redux-saga/modules/contact/action";
 import { ContactWithAccountName } from "../../models/contact/ContactWithAccountName";
 import DeleteConfirmationModal from "../account/accountsList/DeleteConfirmation";
+import { ToastContainer } from "react-toastify";
 
 const tableHeader = [
   "Contact Name",
@@ -127,6 +128,7 @@ const Contacts = ({ getContactsCount, accountId }: Props) => {
           />
         </div>
       )}
+      <ToastContainer/>
       <CRow>
         <CCol xs={12}>
           <CRow className="align-items-center m-1">

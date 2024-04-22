@@ -10,7 +10,8 @@ import {
   CTableHeaderCell,
   CTableRow,
 } from "@coreui/react";
-import { Formik, Form, Field, ErrorMessage, useFormik } from "formik";
+import { Formik, Form, Field, ErrorMessage, useFormik,validateField } from "formik";
+import { MdDelete } from "react-icons/md";
 
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -31,7 +32,7 @@ import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import "react-datepicker/dist/react-datepicker.css";
 import { getOrganization } from "../../redux-saga/modules/shared/action";
 import { createInvoiceRequest } from "../../redux-saga/modules/invoice/action";
-import {  toast } from "react-toastify";
+import { toast } from "react-toastify";
 
 const initialValues = {
   invoiceOwner: "",
@@ -53,6 +54,7 @@ const initialValues = {
   toBillingCountry: "",
   tax: "",
   adjustments: "",
+  rows: []
 };
 
 interface newInvoiceProps {
@@ -87,13 +89,8 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
   const currentDate: Date = new Date();
   const formattedDateTime: string = currentDate.toISOString().slice(0, -1);
 
-  const invoiceDate = new Date().toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "long",
-    day: "2-digit",
-  });
-
   const [termsAndConditions, setTermsAndConditions] = useState("");
+  const [rows, setRows] = useState<Row[]>([]);
 
   const handleEditorChange = (event: any, editor: any) => {
     const data = editor.getData();
@@ -168,9 +165,11 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
     invoiceDate: touchedFields.invoiceDate
       ? Yup.string().required("Required (Due Date)")
       : Yup.string(),
-    dueDate: touchedFields.dueDate
-      ? Yup.string().required("Required (Due Date)")
-      : Yup.string(),
+      dueDate: Yup.string().when('invoiceDate', (invoiceDate, schema) => {
+        return schema.test('due-date', 'Due date cannot be older than invoice date', function(value) {
+          return !invoiceDate || !value || new Date(value) >= new Date(invoice.invoiceDate);
+        });
+      }).required("Required (Due Date)"),
     accountName: Yup.string().required("Required (Account)"),
     contacts: Yup.string().required("Required (Contacts)"),
     status: Yup.string().required("Required (Status)"),
@@ -218,6 +217,7 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
         : touchedFields.toBillingCountry
           ? Yup.string().required("Required (Billing Country)")
           : Yup.string(),
+    rows: rows.length === 0 ? Yup.array().min(1, 'No invoice items added. Please add at least one item to continue.') : Yup.array(),
   });
 
   const [toAddress, setToAddress] = useState({
@@ -256,6 +256,16 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
     }
   };
 
+  //Handle delete invoice items
+  const handleDeleteClick =(sNo:any)=>{
+    const updatedRows = rows.filter((row) => row.sNo !== sNo);
+    const updatedRowsWithSNo = updatedRows.map((row, index) => ({
+      ...row,
+      sNo: index + 1,
+    }));
+    setRows(updatedRowsWithSNo);
+  }
+
   useEffect(() => {
     setInvoice((prevInvoice) => ({
       ...prevInvoice,
@@ -281,7 +291,6 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
     total: number;
   }
 
-  const [rows, setRows] = useState<Row[]>([]);
 
   const handleAddRow = () => {
     const newRow: Row = {
@@ -320,6 +329,7 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
   };
 
   const handleCreateInvoiceClick = () => {
+
     const invoiceDetails: Invoice = {
       id: 0,
       ownerID: dropdownItems.invoiceOwner,
@@ -393,6 +403,8 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
     validationSchema: validationSchema,
     onSubmit: handleCreateInvoiceClick,
   });
+
+
 
   return (
     <div>
@@ -1211,6 +1223,8 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
                             <CTableHeaderCell>Discount</CTableHeaderCell>
                             <CTableHeaderCell>Amount</CTableHeaderCell>
                             <CTableHeaderCell>Total</CTableHeaderCell>
+                            <CTableHeaderCell>Actions</CTableHeaderCell>
+
                           </CTableRow>
                         </CTableHead>
                         {rows.map((row, index) => (
@@ -1308,13 +1322,26 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
                                 />
                               </div>
                             </CTableDataCell>
+                            <CTableDataCell>
+                            <MdDelete
+                                style={{
+                                  color: "red",
+                                  fontSize: "40px",
+                                  cursor: "pointer",
+                                 marginLeft:"10px"
+                                }}
+                                className="text-danger"
+                                onClick={() => handleDeleteClick(row.sNo)}
+                              />
+                              </CTableDataCell>
                           </CTableRow>
                         ))}
                       </CTable>
+
                     </CCardBody>
 
                   </CCard>
-
+                  {rows.length === 0 && <div className="error form-error mb-1 mx-3">{errors.rows}</div>}
                   <div className="col-sm-4 ">
                     <CButton
                       color="primary"
@@ -1324,6 +1351,7 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
                     >
                       + Add Row
                     </CButton>
+
                   </div>
                   <div>
                     <CCard

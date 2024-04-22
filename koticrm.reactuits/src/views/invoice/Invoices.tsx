@@ -246,6 +246,7 @@ const Invoices: React.FC<InvoiceProps> = ({
           />
         </div>
       )}
+      <ToastContainer/>
    {showCreateInvoice ? '':( 
     <>
    <CCard className="d-flex flex-row justify-content-between m-1 p-2">
