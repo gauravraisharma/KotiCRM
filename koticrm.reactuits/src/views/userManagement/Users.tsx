@@ -123,52 +123,6 @@ const Users = () => {
       <CRow className="mb-3">
         <CCol xs={12}>
           <CRow className="align-items-center m-1">
-            {/* <CCol xs={2}>
-              <CDropdown className="custom-dropdown">
-                <CDropdownToggle color="none" className="custom-toggle">
-                  {dropdownValue}
-                </CDropdownToggle>
-                <CDropdownMenu className="custom-menu">
-                  <CDropdownItem onClick={() => handleDropdownChange("Name")}>
-                    Name
-                  </CDropdownItem>
-                  <CDropdownItem
-                    onClick={() => handleDropdownChange("Emp code")}
-                  >
-                    Emp code
-                  </CDropdownItem>
-                  <CDropdownItem
-                    onClick={() => handleDropdownChange("Blood Group")}
-                  >
-                    Blood Group
-                  </CDropdownItem>
-                  <CDropdownItem
-                    onClick={() => handleDropdownChange("Birthday")}
-                  >
-                    Birthday
-                  </CDropdownItem>
-                  <CDropdownItem onClick={() => handleDropdownChange("RoleId")}>
-                    RoleId
-                  </CDropdownItem>
-                  <CDropdownItem
-                    onClick={() => handleDropdownChange("Designation")}
-                  >
-                    Designation
-                  </CDropdownItem>
-                </CDropdownMenu>
-              </CDropdown>
-            </CCol>
-            <CCol xs={4}>
-              <CInputGroup>
-                <CInputGroupText htmlFor="searchInput">Search</CInputGroupText>
-                <CFormInput
-                  id="searchInput"
-                  type="text"
-                  placeholder={`Search by ${dropdownValue}...`}
-                  className="border-bottom-0"
-                />
-              </CInputGroup>
-            </CCol> */}
             <CCol xs={2} md={2} lg={6}>
               <div className="custom-input-group d-flex">
                 <select
@@ -195,7 +149,7 @@ const Users = () => {
                 <input
                   type="text"
                   className="form-control custom-input"
-                  placeholder={`Enter ${dropdownValue}...`}
+                  placeholder={`Enter by ${dropdownValue}...`}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   onKeyDown={handleKeyDown}

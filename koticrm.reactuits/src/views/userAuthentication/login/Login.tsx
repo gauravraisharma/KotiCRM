@@ -20,18 +20,30 @@ import { useDispatch } from "react-redux";
 import { useState } from "react";
 import { UserLogin } from "../../../models/userAccount/login";
 import { ToastContainer } from "react-toastify";
-import { loginRequest, loginSuccess } from "../../../redux-saga/modules/auth/action";
+import {
+  loginRequest,
+  loginSuccess,
+} from "../../../redux-saga/modules/auth/action";
 import CIcon from "@coreui/icons-react";
-import "../../../css/style.css"
+import "../../../css/style.css";
 import { useSelector } from "react-redux";
 import "react-toastify/dist/ReactToastify.css";
-
 
 const Login = () => {
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
   const isLoading = useSelector((state: any) => state.authReducer.isLoading);
+
+  const [isHovered, setIsHovered] = useState(false);
+
+  const handleMouseEnter = () => {
+    setIsHovered(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+  };
 
   const [user, setUser] = useState({
     userName: "",
@@ -55,7 +67,6 @@ const Login = () => {
       console.log(ex)
     } 
   }
-
 
   return (
     <>
@@ -95,7 +106,7 @@ const Login = () => {
                         onChange={handleChange}
                       />
                     </CInputGroup>
-                    <CInputGroup className="mb-4">
+                    {/* <CInputGroup className="mb-4">
                       <CFormCheck
                         type="checkbox"
                         id="rememberMe"
@@ -104,46 +115,75 @@ const Login = () => {
                         checked={user.rememberMe}
                         onChange={(e) => setUser({ ...user, rememberMe: e.target.checked })}
                       />
-                    </CInputGroup>
-                    <CRow>
-                      <CCol xs={12}>
-                        <CButtonGroup>
-                          <CButton color="primary" className="px-4" onClick={handleLoginClick}>Login</CButton>
-                          <CButton color="secondary" className="px-4" onClick={() => navigate('/')}>Cancel</CButton>
-                        </CButtonGroup>
-                      </CCol>
-                      <CCol xs={12} className="text-right">
-                        <CButton color="link" className="px-0">
-                          Forgot password?
+                    </CInputGroup>  */}
+                      <CRow>
+                        <CCol xs={12}>
+                          <CButtonGroup>
+                            <CButton
+                              color="primary"
+                              className="px-4"
+                              onClick={handleLoginClick}
+                            >
+                              Login
+                            </CButton>
+                            <CButton
+                              color="secondary"
+                              className="px-4"
+                              onClick={() => navigate("/")}
+                            >
+                              Cancel
+                            </CButton>
+                          </CButtonGroup>
+                        </CCol>
+                        <CCol xs={12} className="text-right">
+                          <CButton
+                            color="link"
+                            className="px-0"
+                            style={{
+                              textDecoration: isHovered ? "underline" : "none",
+                            }}
+                            onMouseEnter={handleMouseEnter}
+                            onMouseLeave={handleMouseLeave}
+                          >
+                            Forgot password?
+                          </CButton>
+                        </CCol>
+                      </CRow>
+                    </CForm>
+                  </CCardBody>
+                </CCard>
+                <CCard
+                  className="text-white bg-primary py-5"
+                  style={{ width: "44%" }}
+                >
+                  <CCardBody className="text-center">
+                    <div>
+                      <h2>Sign up</h2>
+                      <p>
+                        Lorem ipsum dolor sit amet, consectetur adipisicing
+                        elit, sed do eiusmod tempor incididunt ut labore et
+                        dolore magna aliqua.
+                      </p>
+                      <Link to="/register">
+                        <CButton
+                          color="primary"
+                          className="mt-3"
+                          active
+                          tabIndex={-1}
+                        >
+                          Register Now!
                         </CButton>
-                      </CCol>
-                    </CRow>
-                  </CForm>
-                </CCardBody>
-              </CCard>
-              <CCard className="text-white bg-primary py-5" style={{ width: '44%' }}>
-                <CCardBody className="text-center">
-                  <div>
-                    <h2>Sign up</h2>
-                    <p>
-                      Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                      tempor incididunt ut labore et dolore magna aliqua.
-                    </p>
-                    <Link to="/register">
-                      <CButton color="primary" className="mt-3" active tabIndex={-1}>
-                        Register Now!
-                      </CButton>
-                    </Link>
-                  </div>
-                </CCardBody>
-              </CCard>
-            </CCardGroup>
-          </CCol>
-        </CRow>
-      </CContainer>
-    </div>
+                      </Link>
+                    </div>
+                  </CCardBody>
+                </CCard>
+              </CCardGroup>
+            </CCol>
+          </CRow>
+        </CContainer>
+      </div>
     </>
-  )
-}
+  );
+};
 
 export default Login;

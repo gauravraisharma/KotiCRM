@@ -243,9 +243,9 @@ const CreateOrUpdateUser = () => {
 
     fatherName: Yup.string().required("Father Name is required"),
 
-    // designationId:  Yup.number().required('Designation is required') ,
+    designationId: Yup.number().required("Designation is required"),
 
-    // departmentId:    Yup.number().required('Department is required'),
+    departmentId: Yup.number().required("Department is required"),
     Id: Yup.string().required("ID is required"),
     employeeCode: Yup.string().required("Employee code is required"),
 
@@ -286,7 +286,7 @@ const CreateOrUpdateUser = () => {
             validationSchema={validationSchema}
             onSubmit={handleFormSubmit}
           >
-            {({ handleSubmit, isSubmitting, touched, errors }) => (
+            {({ handleSubmit, isSubmitting, touched, errors, values }) => (
               <Form
                 className="profile-info"
                 onSubmit={handleSubmit}
@@ -486,6 +486,7 @@ const CreateOrUpdateUser = () => {
                               color: "red",
                               fontSize: "25px",
                               lineHeight: "0",
+                            
                             }}
                           >
                             *
@@ -495,6 +496,7 @@ const CreateOrUpdateUser = () => {
                           type="text"
                           id="name"
                           name="name"
+                          autoComplete="off"
                           className={`form-control ${
                             touched.name && errors.name ? "is-invalid" : ""
                           }`}
@@ -526,7 +528,13 @@ const CreateOrUpdateUser = () => {
                       <div className="form-group">
                         <label htmlFor="fatherName">
                           Father Name{" "}
-                          <span style={{ color: "red", fontSize: "25px",lineHeight:"0" }}>
+                          <span
+                            style={{
+                              color: "red",
+                              fontSize: "25px",
+                              lineHeight: "0",
+                            }}
+                          >
                             *
                           </span>
                         </label>
@@ -567,9 +575,15 @@ const CreateOrUpdateUser = () => {
                       <div className="form-group">
                         <label htmlFor="dateOfBirth">
                           Date of Birth{" "}
-                          <span style={{ color: "red", fontSize: "25px",lineHeight:"0" }}>
-                          *
-                        </span>
+                          <span
+                            style={{
+                              color: "red",
+                              fontSize: "25px",
+                              lineHeight: "0",
+                            }}
+                          >
+                            *
+                          </span>
                         </label>
                         <Field
                           type="date"
@@ -613,7 +627,6 @@ const CreateOrUpdateUser = () => {
                     <div className="form-group">
                       <label htmlFor="correspondenceAddress">
                         Correspondence Address
-                     
                       </label>
                       <Field
                         type="text"
@@ -690,7 +703,13 @@ const CreateOrUpdateUser = () => {
                     <div className="form-group">
                       <label htmlFor="officialEmail">
                         Official Email{" "}
-                        <span style={{ color: "red", fontSize: "25px",lineHeight:"0" }}>
+                        <span
+                          style={{
+                            color: "red",
+                            fontSize: "25px",
+                            lineHeight: "0",
+                          }}
+                        >
                           *
                         </span>
                       </label>
@@ -719,17 +738,14 @@ const CreateOrUpdateUser = () => {
                     <div className="form-group">
                       <label htmlFor="guardianContactNumber">
                         Guardian Contact Number
-                     
                       </label>
                       <Field
                         type="text"
                         id="guardianContactNumber"
                         name="guardianContactNumber"
-                       className="form-control"
-                     
+                        className="form-control"
                         placeholder="Guardian Contact Number"
                       />
-                   
                     </div>
                   </CCol>
                   <CCol sm={4}>
@@ -750,6 +766,7 @@ const CreateOrUpdateUser = () => {
                         Official Email Password{" "}
                       </label>
                       <Field
+                        autoComplete="off"
                         type="password"
                         id="officialEmailPassword"
                         name="officialEmailPassword"
@@ -763,7 +780,13 @@ const CreateOrUpdateUser = () => {
                     <div className="form-group">
                       <label htmlFor="personalEmail">
                         Personal Email{" "}
-                        <span style={{ color: "red", fontSize: "25px",lineHeight:"0" }}>
+                        <span
+                          style={{
+                            color: "red",
+                            fontSize: "25px",
+                            lineHeight: "0",
+                          }}
+                        >
                           *
                         </span>
                       </label>
@@ -786,22 +809,21 @@ const CreateOrUpdateUser = () => {
                         className="form-control"
                         placeholder="Official Skype"
                       />
-                 
                     </div>
                   </CCol>
                 </CRow>
 
                 <CRow>
                   <h5 className="mt-4">Company Detail</h5>
+
                   <CCol sm={4}>
                     <div className="form-group">
-                      <label htmlFor="designationId">Designation </label>
-                      <CFormSelect
+                      <label htmlFor="designationId">Designation</label>
+                      <Field
+                        as="select"
                         id="designationId"
                         name="designationId"
-                        value={designationId}
                         aria-label="Default select example"
-                        onChange={handleDesignationChange}
                         className={`form-control ${
                           touched.designationId && errors.designationId
                             ? "is-invalid"
@@ -817,17 +839,15 @@ const CreateOrUpdateUser = () => {
                             {designation.name}
                           </option>
                         ))}
-                      </CFormSelect>
+                      </Field>
                       <ErrorMessage
                         name="designationId"
+                        component="div"
                         className="invalid-feedback"
-                        render={(error) => (
-                          <label style={{ color: "#dc3545" }}>{error}</label>
-                        )}
+                        style={{ color: "#dc3545" }}
                       />
                     </div>
                   </CCol>
-
                   <CCol sm={4}>
                     <div className="form-group">
                       <label htmlFor="bank">Bank Name</label>
@@ -844,7 +864,8 @@ const CreateOrUpdateUser = () => {
                   <CCol sm={4}>
                     <div className="form-group">
                       <label htmlFor="departmentId">Department</label>
-                      <CFormSelect
+                      <Field
+                         as="select"
                         id="departmentId"
                         name="departmentId"
                         aria-label="Default select example"
@@ -863,7 +884,7 @@ const CreateOrUpdateUser = () => {
                             {department.name}
                           </option>
                         ))}
-                      </CFormSelect>
+                      </Field>
                       <ErrorMessage
                         name="departmentId"
                         className="invalid-feedback"
@@ -873,6 +894,9 @@ const CreateOrUpdateUser = () => {
                       />
                     </div>
                   </CCol>
+
+          
+                  
 
                   <CCol sm={4}>
                     <div className="form-group">

@@ -261,9 +261,10 @@ const MyForm: React.FC<MyFormProps> = ({
                         />
                       </CCol>
                     </CRow>
-                    <CRow className="mb-3">
+               
+                       <CRow className="mb-3">
                       <CCol sm={4}>
-                        <label htmlFor="status">
+                        <label htmlFor="industry">
                           Industry
                           <span style={{ color: "red", fontSize: "25px" }}>
                             *
@@ -285,9 +286,9 @@ const MyForm: React.FC<MyFormProps> = ({
                             handleChange(e);
                           }}
                         >
-                          <option value="">Select Industry...</option>
+                          <option value="">Select industry...</option>
                           {industry?.map((industry: any) => (
-                            <option key={industry.id} value={industry.id}>
+                            <option key={industry.id} value={industry.id} >
                               {industry.name}
                             </option>
                           ))}

@@ -226,6 +226,7 @@ const AccountDetails = () => {
                         Zip Code: <p>{account?.zipCode}</p>
                       </li>
                     </CCol>
+                    
                   </CRow>
                 </ul>
               </div>
