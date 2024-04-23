@@ -1,4 +1,4 @@
-import { LOGIN_REQUEST, LOGIN_SUCCESS, LOGOUT } from "../../../constants/reduxConstants";
+import { LOGIN_FAILURE, LOGIN_REQUEST, LOGIN_SUCCESS, LOGOUT } from "../../../constants/reduxConstants";
 import { UserLogin } from "../../../models/userAccount/login";
 import { LoginResponse } from "../../../models/userAccount/loginResponse";
 
@@ -8,6 +8,9 @@ export const loginSuccess = (response: LoginResponse) => ({
     payload: response,
   });
   
+  export const loginFailure = () => ({
+    type: LOGIN_FAILURE,
+  });
 
   export const logout = () => ({
     type: LOGOUT

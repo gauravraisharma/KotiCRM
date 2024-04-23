@@ -185,7 +185,7 @@ const Users = () => {
                   }}
                 > 
                  
-                  <option data-display="Search By Name" value="Name">Name</option>
+                  <option value="Name">Name</option>
                   <option value="Emp code">Emp code</option>
                   <option value="Blood Group">Blood Group</option>
                   <option value="Birthday">Birthday</option>

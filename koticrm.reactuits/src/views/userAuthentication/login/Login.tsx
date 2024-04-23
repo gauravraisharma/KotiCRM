@@ -32,7 +32,6 @@ const Login = () => {
 
   const navigate = useNavigate();
   const isLoading = useSelector((state: any) => state.authReducer.isLoading);
-  const [loading, setLoading] = useState(false)
 
   const [user, setUser] = useState({
     userName: "",
@@ -43,32 +42,32 @@ const Login = () => {
     setUser({ ...user, [e.target.name]: e.target.value });
   };
   const handleLoginClick = async () => {
+
       const userLogin: UserLogin = {
       userName: user.userName,
       password: user.password,
       rememberMe: user.rememberMe,
     };
     try {
-      setLoading(true); 
-      dispatch(loginRequest(userLogin, navigate));
+      await dispatch(loginRequest(userLogin, navigate));
     }
     catch(ex){
       console.log(ex)
-    }
-}
+    } 
+  }
 
 
   return (
     <>
     <div className="bg-light min-vh-100 d-flex flex-row align-items-center">
-      {loading && isLoading && (
-        <div className="spinner-backdrop">
-          <CSpinner size="sm"
-            color="white"
-            style={{ width: '5rem', height: '5rem', borderWidth: '0.60rem', zIndex: '9999' }}
-          />
-        </div>
-      )}
+        {isLoading   && (
+          <div className="spinner-backdrop">
+            <CSpinner size="sm"
+              color="white"
+              style={{ width: '5rem', height: '5rem', borderWidth: '0.60rem', zIndex: '9999' }}
+            />
+          </div>
+        )}
       <ToastContainer />
       <CContainer>
         <CRow className="justify-content-center">

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { MdEdit } from "react-icons/md";
 import { AiFillEye } from "react-icons/ai";
@@ -163,6 +163,7 @@ const AccountList: React.FC = () => {
 
   return (
     <>
+
       {isLoading && (
         <div className="spinner-backdrop">
           <CSpinner

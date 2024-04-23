@@ -9,6 +9,7 @@ import {
   CCol,
   CProgress,
   CRow,
+  CSpinner,
   CTable,
   CTableBody,
   CTableDataCell,
