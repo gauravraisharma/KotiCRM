@@ -62,7 +62,7 @@ const Contacts = ({ getContactsCount, accountId }: Props) => {
   const contactsCount = fetchedContactWithAccountNameListAndTotal.contactsCount;
 
   // Pagination
-  const pageSize = 5;
+  const pageSize = 10;
   const totalCount = fetchedContactWithAccountNameListAndTotal.contactsCount;
   const totalPages = Math.ceil(totalCount / pageSize);
 

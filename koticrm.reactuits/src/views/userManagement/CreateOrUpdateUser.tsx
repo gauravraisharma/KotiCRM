@@ -77,11 +77,15 @@ const CreateOrUpdateUser = () => {
 
   // Generate EmployeeId
   const getEmployeeId = async () => {
+    debugger
     const employeeId = await GetEmployeeId();
     const employeeIdData = employeeId.data;
     setEmployeeID(employeeIdData);
-    formData.employeeId = employeeIdData;
-    generateEmployeeCode("tech", departmentId, formData.employeeId);
+    setFormData(prevFormData => ({
+      ...prevFormData,
+      employeeId: employeeIdData
+    }));
+    generateEmployeeCode("tech", departmentId, employeeIdData);
   };
 
   // Generate EmployeeCode

@@ -92,7 +92,6 @@ const handleStateChange = (e: ChangeEvent<HTMLSelectElement>) => {
 };
 
   const handleAccountChange = (e: ChangeEvent<HTMLSelectElement>) => {
-   
     const accountId = parseInt(e.target.value);
     const selectedAccount = fetchedAccounts.account.find(
       (account: Account) => account.id === accountId
@@ -100,25 +99,34 @@ const handleStateChange = (e: ChangeEvent<HTMLSelectElement>) => {
     setSelectedAccount(selectedAccount);
   };
 
-const handleFormSubmit = async (
-  contact: Contact,
-  { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }
-) => {
-  try {
-    contact.country = selectedCountry;
-    contact.state = selectedState;
-    if (!contact.id) {
-      // Handle creating a new contact
-    } else {
-      // Handle updating existing contact
+  const handleFormSubmit = async (
+    contact: Contact,
+    { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }
+  ) => {
+    try {
+      // Assuming fetchedAccount.id is available
+      contact.country = selectedCountry;
+      contact.state = selectedState;
+      if (!contact.id) {
+        contact.mobile = contact.mobile?.toString()
+        contact.phone = contact.phone?.toString()
+        contact.otherPhone = contact.otherPhone?.toString()
+        contact.homePhone = contact.homePhone?.toString()
+
+        contact.accountID = selectedAccount!.id;
+        console.log("Create new contact:", contact);
+        dispatch(createContact(contact));
+      } else {
+        dispatch(updateContact(contact));
+      }
+    } catch (error) {
+      console.log("error message:", error);
+    } finally {
+      setSubmitting(false);
+      navigate("/contacts");
     }
-  } catch (error) {
-    console.log("error message:", error);
-  } finally {
-    setSubmitting(false);
-    navigate("/contacts");
-  }
-};
+  };
+
 
 
   const validationSchema = Yup.object({
@@ -131,14 +139,13 @@ const handleFormSubmit = async (
     .required("Required (Mobile)"),
   phone: Yup.string()
     .matches(/^[0-9]{10}$/, "Phone number must be exactly 10 digits")
-    .required("Required (Phone)"),
+   ,
   otherPhone: Yup.string()
     .matches(/^[0-9]{10}$/, "Other phone number must be exactly 10 digits")
-    .required("Required (Other Phone)"),
+   ,
   homePhone: Yup.string()
     .matches(/^[0-9]{10}$/, "Home phone number must be exactly 10 digits")
-    .required("Required (Home Phone)"),
-
+    
   });
 
   return (
@@ -243,6 +250,13 @@ const handleFormSubmit = async (
                           className="form-control"
                           placeholder="Enter your phone number"
                           style={{ height: "50px" }}
+                        />
+                         <ErrorMessage
+                          name="phone"
+                          className="invalid-feedback"
+                          render={(error) => (
+                            <label style={{ color: "#dc3545" }}>{error}</label>
+                          )}
                         />
                       </CCol>
                     </CRow>
@@ -549,6 +563,13 @@ const handleFormSubmit = async (
                           placeholder="Enter your second phone number"
                           style={{ height: "50px" }}
                         />
+                         <ErrorMessage
+                          name="otherPhone"
+                          className="invalid-feedback"
+                          render={(error) => (
+                            <label style={{ color: "#dc3545" }}>{error}</label>
+                          )}
+                        />
                       </CCol>
                     </CRow>
                     <CRow className="mb-3">
@@ -565,6 +586,13 @@ const handleFormSubmit = async (
                           className="form-control"
                           placeholder="Home phone"
                           style={{ height: "50px" }}
+                        />
+                         <ErrorMessage
+                          name="homePhone"
+                          className="invalid-feedback"
+                          render={(error) => (
+                            <label style={{ color: "#dc3545" }}>{error}</label>
+                          )}
                         />
                       </CCol>
                     </CRow>

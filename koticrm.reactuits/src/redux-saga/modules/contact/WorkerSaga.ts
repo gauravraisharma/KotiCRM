@@ -46,7 +46,7 @@ export function* workCreateContact(action: actionPayloadModel): Generator<any> {
   try {
     const response: any = yield call(CreateContact, action.payload);
     if (response.status != 200) {
-      toast.error('Error fetching accounts')
+      toast.error('Could not create contact. Please try again')
     }
     else {
       const contact: Contact = response.data;

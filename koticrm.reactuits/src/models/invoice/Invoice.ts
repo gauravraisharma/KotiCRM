@@ -99,6 +99,7 @@ export interface InvoiceItem {
   discount: number;
   tax: number;
   total: number;
+  isDeleted : boolean
 }
 
 export class InvoiceItemClass implements InvoiceItem {
@@ -112,6 +113,7 @@ export class InvoiceItemClass implements InvoiceItem {
   discount: number;
   tax: number;
   total: number;
+  isDeleted: boolean;
 
   constructor() {
     this.id = 0;
@@ -124,6 +126,7 @@ export class InvoiceItemClass implements InvoiceItem {
     this.discount = 0;
     this.tax = 0;
     this.total = 0;
+    this.isDeleted = false
   }
 }
 

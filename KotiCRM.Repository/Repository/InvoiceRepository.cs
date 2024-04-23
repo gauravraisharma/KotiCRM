@@ -61,7 +61,7 @@ namespace KotiCRM.Repository.Repository
                     throw new Exception($"Invoice with ID {id} was not found.");
                 }
                 var invoiceItems = await _context.InvoiceItems
-                .Where(item => item.InvoiceID == id && !invoice.Isdelete)
+                .Where(item => item.InvoiceID == id && !invoice.Isdelete && !item.IsDeleted)
                 .ToListAsync();
                 var invoiceCreationModels = new InvoiceCreationModel
                 {

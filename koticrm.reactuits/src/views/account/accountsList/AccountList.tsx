@@ -38,6 +38,7 @@ import {
   CTableRow,
 } from "@coreui/react";
 import { Account } from "../../../models/account/Account";
+import { ToastContainer } from "react-toastify";
 
 const AccountList: React.FC = () => {
   //use hooks
@@ -119,7 +120,7 @@ const AccountList: React.FC = () => {
   }
 
   // Pagination
-  const pageSize = 5;
+  const pageSize = 10;
   const totalCount = accounts.accountCount;
   const totalPages = Math.ceil(totalCount / pageSize);
 
@@ -176,7 +177,7 @@ const AccountList: React.FC = () => {
           />
         </div>
       )}
-      {/* <ToastContainer /> */}
+      <ToastContainer />
       {!openCreateModal && !openEditModal && (
         <CRow>
           <CCol xs={12}>

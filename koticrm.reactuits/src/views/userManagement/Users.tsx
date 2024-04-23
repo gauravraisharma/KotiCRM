@@ -78,7 +78,7 @@ const Users = () => {
   };
 
   // Pagination
-  const pageSize = 5;
+  const pageSize = 10;
   const totalCount = employeesList.userCount
   const totalPages = Math.ceil(totalCount / pageSize);
 
@@ -174,6 +174,7 @@ const Users = () => {
                 <select
                   className="form-select custom-select"
                   id="searchInput"
+                  value={`Search by ${dropdownValue}`}
                   onChange={(e) => handleDropdownChange(e.target.value)}
                   style={{
                     backgroundColor: "#f0f0f0",
@@ -182,11 +183,9 @@ const Users = () => {
                     border: "1px solid #ccc",
                     width: "160px",
                   }}
-                >
-                  <option value="" disabled selected>
-                    Name
-                  </option>
-                  <option value="Name">Name</option>
+                > 
+                 
+                  <option data-display="Search By Name" value="Name">Name</option>
                   <option value="Emp code">Emp code</option>
                   <option value="Blood Group">Blood Group</option>
                   <option value="Birthday">Birthday</option>

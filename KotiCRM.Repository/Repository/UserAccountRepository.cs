@@ -281,7 +281,7 @@ namespace KotiCRM.Repository.Repository
         {
             try
             {
-                var user = await _userManager.FindByNameAsync(userModel.Username);
+                var user = await _userManager.FindByEmailAsync(userModel.Username);
                 if (user == null)
                 {
                     return new LoginStatus

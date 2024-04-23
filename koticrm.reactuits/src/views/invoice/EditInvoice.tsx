@@ -32,6 +32,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { clearInvoice, getInvoiceByIdRequest, updateInvoiceRequest } from "../../redux-saga/modules/invoice/action";
 import { useNavigate, useParams } from "react-router-dom";
 import * as Yup from "yup";
+import { MdDelete } from "react-icons/md";
 
 interface newInvoiceProps {
   accountId: any;
@@ -74,10 +75,13 @@ const EditInvoice: React.FC<newInvoiceProps> = () => {
   });
 
   const [rows, setRows] = useState<InvoiceItem[]>([]);
+  const [allRows, setAllRows] = useState<InvoiceItem[]>([]);
+
 
   const contactWithAccountNameListAndTotalCount = useSelector((state: any) => state.contactReducer.contacts);
   const contacts = contactWithAccountNameListAndTotalCount.contactWithAccountNames;
   const fetchedInvoice = useSelector((state: any) => state.invoiceReducer.invoice);
+  console.log(fetchedInvoice)
   const invoice = fetchedInvoice?.invoice;
   const invoiceItems = fetchedInvoice?.invoiceItems;
   // const organization = useSelector((state: any) => state.sharedReducer.organization);
@@ -114,6 +118,7 @@ const EditInvoice: React.FC<newInvoiceProps> = () => {
     if (invoiceId) {
       setUpdateInvoice(invoice);
       setRows(invoiceItems);
+      setAllRows(invoiceItems)
     }
   }, [invoiceId, invoice, invoiceItems]);
 
@@ -139,10 +144,11 @@ const EditInvoice: React.FC<newInvoiceProps> = () => {
   // }, [dispatch]);
 
   const handleAddRow = () => {
-    const currentLength = invoiceItems?.length;
+    debugger
+    const maxSno = Math.max(...rows.map(row => row.sno));
 
     const newRow: InvoiceItem = {
-      sno: currentLength +1,
+      sno: maxSno + 1,
       productName: "",
       description: "",
       quantity: 0,
@@ -152,6 +158,7 @@ const EditInvoice: React.FC<newInvoiceProps> = () => {
       tax :0,
       invoiceID :invoice?.id,
       id :0,
+      isDeleted : false
     };
     setRows([...rows, newRow]);
   };
@@ -327,6 +334,16 @@ const EditInvoice: React.FC<newInvoiceProps> = () => {
     setUpdateInvoice({ ...updateInvoice, [e.target.name]: e.target.value });
   };
 
+    //handle delete invoice item
+    const handleDeleteClick =( invoiceItemId :any)=>{
+      debugger
+     const updatedRows = rows.map((row) =>
+        row.id === invoiceItemId ? { ...row, isDeleted: true } : row
+      );
+      setAllRows(updatedRows)
+      setRows(updatedRows.filter((row) => row.id !== invoiceItemId));
+  
+    }
   const handleUpdateInvoiceClick = () => {
     const invoiceDetails: Invoice = {
       id: updateInvoice.id,
@@ -357,8 +374,8 @@ const EditInvoice: React.FC<newInvoiceProps> = () => {
       modifiedBy: userId,
       modifiedOn: formattedDateTime,
     };
-    
-    const invoiceItemsDetails: InvoiceItem[] = rows.map((row) => ({
+    debugger
+    const invoiceItemsDetails: InvoiceItem[] = allRows.map((row) => ({
       id: row.id,
       invoiceID: row.invoiceID,
       sno: row.sno,
@@ -368,7 +385,8 @@ const EditInvoice: React.FC<newInvoiceProps> = () => {
       amount: row.amount,
       discount: row.discount,
       tax: row.tax,
-      total: row.total
+      total: row.total,
+      isDeleted : row.isDeleted
     }));
 
     const invoiceModel: InvoiceCreationModel = {
@@ -392,6 +410,8 @@ const EditInvoice: React.FC<newInvoiceProps> = () => {
     const quantity = row.quantity || 0;
     return ((amount - discount) * quantity);
   };
+
+
 
   return (
     <div>
@@ -1161,6 +1181,7 @@ const EditInvoice: React.FC<newInvoiceProps> = () => {
                             <CTableHeaderCell>Discount</CTableHeaderCell>
                             <CTableHeaderCell>Amount</CTableHeaderCell>
                             <CTableHeaderCell>Total</CTableHeaderCell>
+                            <CTableHeaderCell>Actions</CTableHeaderCell>
                           </CTableRow>
                         </CTableHead>
                         {rows.map((row, index) => (
@@ -1178,6 +1199,7 @@ const EditInvoice: React.FC<newInvoiceProps> = () => {
                                     updatedRows[index].productName =
                                       e.target.value;
                                     setRows(updatedRows);
+                                    setAllRows(updatedRows)
                                   }}
                                 />
 
@@ -1190,6 +1212,8 @@ const EditInvoice: React.FC<newInvoiceProps> = () => {
                                     updatedRows[index].description =
                                       e.target.value;
                                     setRows(updatedRows);
+                                   setAllRows(updatedRows)
+
                                   }}
                                 />
                               </div>
@@ -1209,6 +1233,7 @@ const EditInvoice: React.FC<newInvoiceProps> = () => {
                                       updatedRows[index].total = calculateTotal(updatedRows[index]);
                                       // console.log("Updated rows:", updatedRows); // Log updated rows
                                       setRows(updatedRows);
+                                      setAllRows(updatedRows)
                                     } else {
                                       console.error("Invalid input value:", e.target.value);
                                     }
@@ -1227,6 +1252,7 @@ const EditInvoice: React.FC<newInvoiceProps> = () => {
                                     updatedRows[index].discount = parseFloat(e.target.value);
                                     updatedRows[index].total = calculateTotal(updatedRows[index]);
                                     setRows(updatedRows);
+                                    setAllRows(updatedRows)
                                   }}
                                 />
                               </div>
@@ -1244,6 +1270,7 @@ const EditInvoice: React.FC<newInvoiceProps> = () => {
                                       updatedRows[index]
                                     );
                                     setRows(updatedRows);
+                                    setAllRows(updatedRows)
                                   }}
                                 />
                               </div>
@@ -1258,6 +1285,18 @@ const EditInvoice: React.FC<newInvoiceProps> = () => {
                                 />
                               </div>
                             </CTableDataCell>
+                            <CTableDataCell>
+                            <MdDelete
+                                style={{
+                                  color: "red",
+                                  fontSize: "40px",
+                                  cursor: "pointer",
+                                 marginLeft:"10px"
+                                }}
+                                className="text-danger"
+                                onClick={() => handleDeleteClick( row.id)}
+                              />
+                              </CTableDataCell>
                           </CTableRow>
                         ))}
                       </CTable>

@@ -169,7 +169,7 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
         return schema.test('due-date', 'Due date cannot be older than invoice date', function(value) {
           return !invoiceDate || !value || new Date(value) >= new Date(invoice.invoiceDate);
         });
-      }).required("Required (Due Date)"),
+      }),
     accountName: Yup.string().required("Required (Account)"),
     contacts: Yup.string().required("Required (Contacts)"),
     status: Yup.string().required("Required (Status)"),
@@ -397,12 +397,12 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
     return (amount * quantity - discount);
   };
 
-  const { handleSubmit } = useFormik({
-    enableReinitialize: true,
-    initialValues: initialValues,
-    validationSchema: validationSchema,
-    onSubmit: handleCreateInvoiceClick,
-  });
+  // const { handleSubmit } = useFormik({
+  //   enableReinitialize: true,
+  //   initialValues: initialValues,
+  //   validationSchema: validationSchema,
+  //   onSubmit: handleCreateInvoiceClick,
+  // });
 
 
 
@@ -432,8 +432,8 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
             validationSchema={validationSchema}
             onSubmit={handleCreateInvoiceClick}
           >
-            {({ handleChange, touched, errors, handleBlur }) => (
-              <Form>
+            {({ handleSubmit,handleChange, touched, errors, handleBlur }) => (
+              <Form  onSubmit={handleSubmit}>
                 <div className="label-form">Invoice Information</div>
                 <div className="row">
                   <div className="col-md-6">
@@ -1508,7 +1508,7 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
                   <button
                     type="submit"
                     className="btn btn-primary"
-                    onClick={() => handleSubmit}
+                    // onClick={() => handleSubmit}
                   >
                     Create Invoice
                   </button>

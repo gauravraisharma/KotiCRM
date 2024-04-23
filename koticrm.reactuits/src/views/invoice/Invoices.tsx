@@ -187,7 +187,7 @@ const Invoices: React.FC<InvoiceProps> = ({
   }
 
     // Pagination
-    const pageSize = 5;
+    const pageSize = 10;
     const totalCount = invoices.invoiceCount;
     const totalPages = Math.ceil(totalCount / pageSize);
   
