@@ -59,7 +59,7 @@ const Contacts = ({ getContactsCount, accountId }: Props) => {
   );
   const isLoading = useSelector((state: any) => state.contactReducer.isLoading);
 
-  const contactsCount = fetchedContactWithAccountNameListAndTotal.contactsCount;
+  const contactsCount = fetchedContactWithAccountNameListAndTotal.contactWithAccountNames?.length;
 
   // Pagination
   const pageSize = 10;
@@ -70,13 +70,12 @@ const Contacts = ({ getContactsCount, accountId }: Props) => {
     dispatch(getContacts(accountId, searchQuery, pageNumber, pageSize));
   }, [dispatch, accountId, pageNumber, pageSize]);
 
-  console.log(fetchedContactWithAccountNameListAndTotal);
+console.log(fetchedContactWithAccountNameListAndTotal)
   useEffect(() => {
     if (getContactsCount) {
       getContactsCount(contactsCount);
-    }
-  }, [getContactsCount, contactsCount]);
-
+    } else return;
+  });
   const handlePageChange = (pageNumber: number) => {
     setPageNumber(pageNumber);
   };
