@@ -46,10 +46,10 @@ const AppHeader = () => {
             </CNavLink>
           </CNavItem>
           <CNavItem>
-            <CNavLink href="#">Users</CNavLink>
+            <CNavLink><Link to="/users" style={{color:'grey',textDecoration:'none'}}>Users</Link></CNavLink>
           </CNavItem>
           <CNavItem>
-            <CNavLink href="#">Settings</CNavLink>
+            <CNavLink><Link to="/settings" style={{color:'grey',textDecoration:'none'}}>Settings</Link></CNavLink>
           </CNavItem>
         </CHeaderNav>
         <CHeaderNav>

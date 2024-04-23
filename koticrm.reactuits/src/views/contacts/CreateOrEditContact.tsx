@@ -14,42 +14,19 @@ import { CButton, CCard, CCardBody, CCardHeader, CCol, CRow } from "@coreui/reac
 
 
 const CreateOrEditContact = () => {
-  // const { contactId } = useParams<{ contactId: string }>();
-  // const [contact, setContact] = useState<Contact>(new ContactClass());
-  // const dispatch = useDispatch();
-  // const navigate = useNavigate();
-  // const fetchedContact = useSelector(
-  //   (state: any) => state.contactReducer.contact
-  // );
-  // const fetchedAccountOwners = useSelector(
-  //   (state: any) => state.accountReducer.accountOwner
-  // );
-  // const fetchedAccounts = useSelector(
-  //   (state: any) => state.accountReducer.accounts
-  // );
-  // const fetchedAccount = useSelector(
-  //   (state: any) => state.accountReducer.account
-  // );
   const { contactId } = useParams<{ contactId: string }>();
   const [selectedCountry, setSelectedCountry] = useState<string>("");
   const [selectedState, setSelectedState] = useState<string>("");
   const [states, setStates] = useState<State[]>([]);
   const [contact, setContact] = useState<Contact>(new ContactClass());
   const dispatch = useDispatch();
-  const { id } = useParams<{ id: string }>();
+
   const navigate = useNavigate();
   const fetchedContact = useSelector((state: any) => state.contactReducer.contact);
   const fetchedAccountOwners = useSelector((state: any) => state.accountReducer.accountOwner);
   const fetchedAccounts = useSelector((state: any) => state.accountReducer.accounts);
   const fetchedAccount = useSelector((state: any) => state.accountReducer.account);
-  // const mappedFetchedAccountOwners = fetchedAccountOwners.map(
-  //   (fetchedAccountOwner) => ({
-  //     ...fetchedAccountOwner,
-  //     value: fetchedAccountOwner.id,
-  //     label1: `${fetchedAccountOwner.firstName} ${fetchedAccountOwner.lastName}`,
-  //     label2: fetchedAccountOwner.email,
-  //   })
-  // );
+
   const mappedFetchedAccountOwners = fetchedAccountOwners.map((fetchedAccountOwner) => ({
     ...fetchedAccountOwner,
     value: fetchedAccountOwner.id,
@@ -60,96 +37,8 @@ const CreateOrEditContact = () => {
   // Country-State
   const countries: Country[] = Countries;
   const [selectedAccount, setSelectedAccount] = useState<Account | null>(null);
-  // const [selectedCountry, setSelectedCountry] = useState<string>("");
-  // const [selectedState, setSelectedState] = useState<string>("");
-  // const [states, setStates] = useState<State[]>([]);
 
-  // useEffect(() => {
-  //   if (contactId) {
-  //     dispatch(getContactById(+contactId));
-  //   } else {
-  //     setContact(new ContactClass());
-  //     dispatch(clearContact());
-  //   }
-  // }, [dispatch, contactId]);
-
-  // useEffect(() => {
-  //   if (contactId) {
-  //     setContact(fetchedContact);
-  //   }
-  // }, [contactId, fetchedContact]);
-
-  // useEffect(() => {
-  //   const selectedCountryObject = countries.find(
-  //     (country) => country.name === contact.country
-  //   );
-
-  //   setSelectedAccount(fetchedAccount);
-
-  //   if (selectedCountryObject) {
-  //     setStates(selectedCountryObject.states);
-  //   } else {
-  //     setStates([]);
-  //   }
-  // }, [contact.id, selectedCountry]);
-
- // Inside handleCountryChange function
-// const handleCountryChange = (e: ChangeEvent<HTMLSelectElement>) => {
-//   const selectedCountry = e.target.value;
-//   setSelectedCountry(selectedCountry);
-
-//   // Update the contact's country when it's changed
-//   setContact({ ...contact, country: selectedCountry });
-
-//   if (selectedCountry) {
-//     const selectedCountryObject = countries.find(
-//       (country) => country.name === selectedCountry
-//     );
-//     if (selectedCountryObject) {
-//       setStates(selectedCountryObject.states);
-//       setSelectedState(""); // Reset selected state when changing country
-//     } else {
-//       setStates([]);
-//     }
-//   }
-// };
-
-//   const handleStateChange = (e: ChangeEvent<HTMLSelectElement>) => {
-//     const selectedState = e.target.value;
-//     setSelectedState(selectedState);
-//   };
-
-//   const handleAccountChange = (e: ChangeEvent<HTMLSelectElement>) => {
-//     const accountId = parseInt(e.target.value);
-//     const selectedAccount = fetchedAccounts.find(
-//       (account: Account) => account.id === accountId
-//     );
-//     setSelectedAccount(selectedAccount);
-//   };
-
-//   const handleFormSubmit = async (
-//     contact: Contact,
-//     { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }
-//   ) => {
-//     try {
-//       // Assuming fetchedAccount.id is available
-//       contact.country = selectedCountry;
-//       contact.state = selectedState;
-//       if (!contact.id) {
-//         contact.accountID = selectedAccount!.id;
-//         console.log("Create new contact:", contact);
-//         dispatch(createContact(contact));
-//       } else {
-//         dispatch(updateContact(contact));
-//       }
-//     } catch (error) {
-//       console.log("error message:", error);
-//     } finally {
-//       setSubmitting(false);
-//       navigate("/contacts");
-//     }
-//   };
-// const countries: Country[] = Countries;
+ 
 
 useEffect(() => {
   if (contactId) {
@@ -238,8 +127,18 @@ const handleFormSubmit = async (
      accountID: Yup.number().required("Required (Account ID)"),
     email: Yup.string().email("Invalid email").required("Required (Email)"),
     mobile: Yup.string()
-      .matches(/^[0-9]{10}$/, "Mobile number must be exactly 10 digits")
-      .required("Required (Mobile)"),
+    .matches(/^[0-9]{10}$/, "Mobile number must be exactly 10 digits")
+    .required("Required (Mobile)"),
+  phone: Yup.string()
+    .matches(/^[0-9]{10}$/, "Phone number must be exactly 10 digits")
+    .required("Required (Phone)"),
+  otherPhone: Yup.string()
+    .matches(/^[0-9]{10}$/, "Other phone number must be exactly 10 digits")
+    .required("Required (Other Phone)"),
+  homePhone: Yup.string()
+    .matches(/^[0-9]{10}$/, "Home phone number must be exactly 10 digits")
+    .required("Required (Home Phone)"),
+
   });
 
   return (
@@ -249,8 +148,8 @@ const handleFormSubmit = async (
         <CCardHeader className="mb-3">
           <div className="d-flex justify-content-between align-items-center">
             <div>
-              {/* <h5 className="mb-0">Create Or Edit Contact</h5> */}
-              <h5 className="mb-0">{id == null ? "Create" : "Update"} Contact</h5>
+         
+              <h5 className="mb-0">{contactId == null ? "Create" : "Update"} Contact</h5>
             </div>
             <div className="text-end">
             <Link to={`/contacts`}>
@@ -272,7 +171,7 @@ const handleFormSubmit = async (
             validationSchema={validationSchema}
             onSubmit={handleFormSubmit}
           >
-            {({ handleSubmit, isValid, isSubmitting, touched, errors }) => (
+            {({ handleSubmit, isSubmitting, touched, errors }) => (
               <Form onSubmit={handleSubmit} autoComplete="off">
                 <CRow className="justify-content-between">
                   <CCol xs={6}>
@@ -338,7 +237,7 @@ const handleFormSubmit = async (
                       </CCol>
                       <CCol sm={8}>
                         <Field
-                          type="text"
+                          type="number"
                           id="phone"
                           name="phone"
                           className="form-control"
@@ -358,7 +257,7 @@ const handleFormSubmit = async (
                       </CCol>
                       <CCol sm={8}>
                         <Field
-                          type="text"
+                          type="number"
                           id="mobile"
                           name="mobile"
                           className={`form-control ${
@@ -643,7 +542,7 @@ const handleFormSubmit = async (
                       </CCol>
                       <CCol sm={8}>
                         <Field
-                          type="text"
+                          type="number"
                           id="otherPhone"
                           name="otherPhone"
                           className="form-control"
@@ -660,7 +559,7 @@ const handleFormSubmit = async (
                       </CCol>
                       <CCol sm={8}>
                         <Field
-                          type="text"
+                          type="number"
                           id="homePhone"
                           name="homePhone"
                           className="form-control"

@@ -67,13 +67,13 @@ const CreateOrUpdateUser = () => {
     getShiftList();
   }, []);
 
-    useEffect(() => {
-      if (id) {
-        getEmployeeById(id);
-      } else {
-        getEmployeeId();
-      }
-    }, [id]);
+  useEffect(() => {
+    if (id) {
+      getEmployeeById(id);
+    } else {
+      getEmployeeId();
+    }
+  }, [id]);
 
   // Generate EmployeeId
   const getEmployeeId = async () => {
@@ -231,43 +231,21 @@ const CreateOrUpdateUser = () => {
   let validationSchema = Yup.object().shape({
     joiningDate: Yup.date().required("Joining Date is required"),
 
-    isActive: Yup.boolean(),
-    correspondenceAddress: Yup.string().required(
-      "Correspondence address is required"
-    ),
-    permanentAddress: Yup.string().required("Permanent address is required"),
-    guardianName: Yup.string().required("Guardian name is required"),
-    contactNumber1: Yup.string()
-      .matches(/^\d{10}$/, "Contact number must be exactly 10 digits")
-      .required("Contact number 1 is required"),
     officialEmail: Yup.string()
       .email("Invalid email format")
       .required("Official email is required"),
-    guardianContactNumber: Yup.string().required(
-      "Guardian contact number is required"
-    ),
-    name: Yup.string().required("Employee Name is required"),
-    panNumber: Yup.string().required("Pan Number is required"),
-    fatherName: Yup.string().required("Father Name is required"),
-    adharCardNumber: Yup.string()
-      .required("Aadhar Number is required")
-      .matches(/^[0-9]{12}$/, "Aadhar Number must be 12 digits"),
-    dateOfBirth: Yup.date().required("Date of Birth is required"),
-    // bloodGroup: Yup.string().required("Blood Group is required"),
-    // contactNumber2: Yup.string(),
-    personalEmail: Yup.string()
-      .email("Invalid email address")
-      .required("Email is required"),
 
-    skypeId: Yup.string().required("Official Skype is required"),
+    name: Yup.string().required("Employee Name is required"),
+
+    fatherName: Yup.string().required("Father Name is required"),
+
     // designationId:  Yup.number().required('Designation is required') ,
-    bank: Yup.string().required("Bank name is required"),
+
     // departmentId:    Yup.number().required('Department is required'),
-    bankAccountNumber: Yup.string().required("Bank account number is required"),
-    ifsc: Yup.string().required("IFSC code is required"),
-    // shiftId:   Yup.number().required('Shift is required') ,
-    branch: Yup.string()
-    .required('Branch is required') 
+    Id: Yup.string().required("ID is required"),
+    employeeCode: Yup.string().required("Employee code is required"),
+
+    dateOfBirth: Yup.date().required("Date of birth is required"),
   });
   if (isRelievedChecked) {
     validationSchema = validationSchema.concat(
@@ -311,7 +289,7 @@ const CreateOrUpdateUser = () => {
                 autoComplete="off"
               >
                 <div className="heading">
-                  <h5>Employee Code</h5>
+                  <h5>User Code</h5>
 
                   <CRow className="justify-content-between">
                     <CCol xs={4}>
@@ -357,7 +335,7 @@ const CreateOrUpdateUser = () => {
                         <CCol sm={6}>
                           <div className="form-group">
                             <label htmlFor="employeeCode">
-                              Employee Code
+                              User Code
                               <span
                                 style={{
                                   color: "red",
@@ -455,7 +433,6 @@ const CreateOrUpdateUser = () => {
                               id="isActive"
                               label="Active"
                               checked={isActiveChecked}
-                              // value={isActiveChecked}
                               onChange={handleCheckbox}
                             />
                             <ErrorMessage
@@ -499,7 +476,7 @@ const CreateOrUpdateUser = () => {
                     <CCol sm={4}>
                       <div className="form-group">
                         <label htmlFor="name">
-                          Employee Name
+                          User Name
                           <span
                             style={{
                               color: "red",
@@ -514,7 +491,6 @@ const CreateOrUpdateUser = () => {
                           type="text"
                           id="name"
                           name="name"
-                          // className="form-control"
                           className={`form-control ${
                             touched.name && errors.name ? "is-invalid" : ""
                           }`}
@@ -531,30 +507,13 @@ const CreateOrUpdateUser = () => {
                     </CCol>
                     <CCol sm={4}>
                       <div className="form-group">
-                        <label htmlFor="panNumber">
-                          Pan Number{" "}
-                          <span style={{ color: "red", fontSize: "25px" }}>
-                            *
-                          </span>
-                        </label>
+                        <label htmlFor="panNumber">Pan Number</label>
                         <Field
                           type="text"
                           id="panNumber"
                           name="panNumber"
-                          // className="form-control"
-                          className={`form-control ${
-                            touched.panNumber && errors.panNumber
-                              ? "is-invalid"
-                              : ""
-                          }`}
+                          className="form-control"
                           placeholder="Pan Number"
-                        />
-                        <ErrorMessage
-                          name="panNumber"
-                          className="invalid-feedback"
-                          render={(error) => (
-                            <label style={{ color: "#dc3545" }}>{error}</label>
-                          )}
                         />
                       </div>
                     </CCol>
@@ -563,7 +522,7 @@ const CreateOrUpdateUser = () => {
                       <div className="form-group">
                         <label htmlFor="fatherName">
                           Father Name{" "}
-                          <span style={{ color: "red", fontSize: "25px" }}>
+                          <span style={{ color: "red", fontSize: "25px",lineHeight:"0" }}>
                             *
                           </span>
                         </label>
@@ -571,7 +530,6 @@ const CreateOrUpdateUser = () => {
                           type="text"
                           id="fatherName"
                           name="fatherName"
-                          // className="form-control"
                           className={`form-control ${
                             touched.fatherName && errors.fatherName
                               ? "is-invalid"
@@ -590,30 +548,13 @@ const CreateOrUpdateUser = () => {
                     </CCol>
                     <CCol sm={4}>
                       <div className="form-group">
-                        <label htmlFor="adharCardNumber">
-                          Aadhar Number{" "}
-                          <span style={{ color: "red", fontSize: "25px" }}>
-                            *
-                          </span>
-                        </label>
+                        <label htmlFor="adharCardNumber">Aadhar Number</label>
                         <Field
                           type="text"
                           id="adharCardNumber"
                           name="adharCardNumber"
-                          // className="form-control"
-                          className={`form-control ${
-                            touched.adharCardNumber && errors.adharCardNumber
-                              ? "is-invalid"
-                              : ""
-                          }`}
+                          className="form-control"
                           placeholder="Aadhar Number"
-                        />
-                        <ErrorMessage
-                          name="adharCardNumber"
-                          className="invalid-feedback"
-                          render={(error) => (
-                            <label style={{ color: "#dc3545" }}>{error}</label>
-                          )}
                         />
                       </div>
                     </CCol>
@@ -622,15 +563,19 @@ const CreateOrUpdateUser = () => {
                       <div className="form-group">
                         <label htmlFor="dateOfBirth">
                           Date of Birth{" "}
-                          <span style={{ color: "red", fontSize: "25px" }}>
-                            *
-                          </span>
+                          <span style={{ color: "red", fontSize: "25px",lineHeight:"0" }}>
+                          *
+                        </span>
                         </label>
                         <Field
                           type="date"
                           id="dateOfBirth"
                           name="dateOfBirth"
-                          className="form-control"
+                          className={`form-control ${
+                            touched.dateOfBirth && errors.dateOfBirth
+                              ? "is-invalid"
+                              : ""
+                          }`}
                         />
                         <ErrorMessage
                           name="dateOfBirth"
@@ -663,10 +608,8 @@ const CreateOrUpdateUser = () => {
                   <CCol sm={12}>
                     <div className="form-group">
                       <label htmlFor="correspondenceAddress">
-                        Correspondence Address{" "}
-                        <span style={{ color: "red", fontSize: "25px" }}>
-                          *
-                        </span>
+                        Correspondence Address
+                     
                       </label>
                       <Field
                         type="text"
@@ -693,29 +636,14 @@ const CreateOrUpdateUser = () => {
                   <CCol sm={12}>
                     <div className="form-group">
                       <label htmlFor="permanentAddress">
-                        Permanent Address{" "}
-                        <span style={{ color: "red", fontSize: "25px" }}>
-                          *
-                        </span>
+                        Permanent Address
                       </label>
                       <Field
                         type="text"
                         id="permanentAddress"
                         name="permanentAddress"
-                        // className="form-control"
-                        className={`form-control ${
-                          touched.permanentAddress && errors.permanentAddress
-                            ? "is-invalid"
-                            : ""
-                        }`}
+                        className="form-control"
                         placeholder="Permanent Address"
-                      />
-                      <ErrorMessage
-                        name="permanentAddress"
-                        className="invalid-feedback"
-                        render={(error) => (
-                          <label style={{ color: "#dc3545" }}>{error}</label>
-                        )}
                       />
                     </div>
                   </CCol>
@@ -724,49 +652,24 @@ const CreateOrUpdateUser = () => {
                 <CRow>
                   <CCol sm={4}>
                     <div className="form-group">
-                      <label htmlFor="guardianName">
-                        Guardian Name{" "}
-                        <span style={{ color: "red", fontSize: "25px" }}>
-                          *
-                        </span>
-                      </label>
+                      <label htmlFor="guardianName">Guardian Name</label>
                       <Field
                         type="text"
                         id="guardianName"
                         name="guardianName"
-                        className={`form-control ${
-                          touched.guardianName && errors.guardianName
-                            ? "is-invalid"
-                            : ""
-                        }`}
                         placeholder="Guardian Name"
-                      />
-                      <ErrorMessage
-                        name="guardianName"
-                        className="invalid-feedback"
-                        render={(error) => (
-                          <label style={{ color: "#dc3545" }}>{error}</label>
-                        )}
+                        className="form-control"
                       />
                     </div>
                   </CCol>
                   <CCol sm={4}>
                     <div className="form-group">
-                      <label htmlFor="contactNumber1">
-                        Contact Number 1{" "}
-                        <span style={{ color: "red", fontSize: "25px" }}>
-                          *
-                        </span>
-                      </label>
+                      <label htmlFor="contactNumber1">Contact Number 1</label>
                       <Field
                         type="text"
                         id="contactNumber1"
                         name="contactNumber1"
-                        className={`form-control ${
-                          touched.contactNumber1 && errors.contactNumber1
-                            ? "is-invalid"
-                            : ""
-                        }`}
+                        className="form-control"
                         placeholder="Contact Number 1"
                       />
                       <ErrorMessage
@@ -783,7 +686,7 @@ const CreateOrUpdateUser = () => {
                     <div className="form-group">
                       <label htmlFor="officialEmail">
                         Official Email{" "}
-                        <span style={{ color: "red", fontSize: "25px" }}>
+                        <span style={{ color: "red", fontSize: "25px",lineHeight:"0" }}>
                           *
                         </span>
                       </label>
@@ -791,7 +694,6 @@ const CreateOrUpdateUser = () => {
                         type="text"
                         id="officialEmail"
                         name="officialEmail"
-                        // className="form-control"
                         className={`form-control ${
                           touched.officialEmail && errors.officialEmail
                             ? "is-invalid"
@@ -809,34 +711,21 @@ const CreateOrUpdateUser = () => {
                     </div>
                   </CCol>
 
-                  <CCol xs={4}>
+                  <CCol sm={4}>
                     <div className="form-group">
                       <label htmlFor="guardianContactNumber">
                         Guardian Contact Number
-                        <span style={{ color: "red", fontSize: "25px" }}>
-                          *
-                        </span>
+                     
                       </label>
                       <Field
                         type="text"
                         id="guardianContactNumber"
                         name="guardianContactNumber"
-                        // className="form-control"
-                        className={`form-control ${
-                          touched.guardianContactNumber &&
-                          errors.guardianContactNumber
-                            ? "is-invalid"
-                            : ""
-                        }`}
+                       className="form-control"
+                     
                         placeholder="Guardian Contact Number"
                       />
-                      <ErrorMessage
-                        name="guardianContactNumber"
-                        className="invalid-feedback"
-                        render={(error) => (
-                          <label style={{ color: "#dc3545" }}>{error}</label>
-                        )}
-                      />
+                   
                     </div>
                   </CCol>
                   <CCol sm={4}>
@@ -855,38 +744,22 @@ const CreateOrUpdateUser = () => {
                     <div className="form-group">
                       <label htmlFor="officialEmailPassword">
                         Official Email Password{" "}
-                        <span style={{ color: "red", fontSize: "25px" }}>
-                          *
-                        </span>
                       </label>
                       <Field
                         type="password"
                         id="officialEmailPassword"
                         name="officialEmailPassword"
-                        // className="form-control"
-                        className={`form-control ${
-                          touched.officialEmailPassword &&
-                          errors.officialEmailPassword
-                            ? "is-invalid"
-                            : ""
-                        }`}
+                        className="form-control"
                         placeholder="Official Email Password"
-                      />
-                      <ErrorMessage
-                        name="officialEmailPassword"
-                        className="invalid-feedback"
-                        render={(error) => (
-                          <label style={{ color: "#dc3545" }}>{error}</label>
-                        )}
                       />
                     </div>
                   </CCol>
 
-                  <CCol xs={4}>
+                  <CCol sm={4}>
                     <div className="form-group">
                       <label htmlFor="personalEmail">
                         Personal Email{" "}
-                        <span style={{ color: "red", fontSize: "25px" }}>
+                        <span style={{ color: "red", fontSize: "25px",lineHeight:"0" }}>
                           *
                         </span>
                       </label>
@@ -894,48 +767,22 @@ const CreateOrUpdateUser = () => {
                         type="text"
                         id="personalEmail"
                         name="personalEmail"
-                        // className="form-control"
-                        className={`form-control ${
-                          touched.personalEmail && errors.personalEmail
-                            ? "is-invalid"
-                            : ""
-                        }`}
+                        className="form-control"
                         placeholder="Personal Email"
-                      />
-                      <ErrorMessage
-                        name="personalEmail"
-                        className="invalid-feedback"
-                        render={(error) => (
-                          <label style={{ color: "#dc3545" }}>{error}</label>
-                        )}
                       />
                     </div>
                   </CCol>
-                  <CCol xs={4}>
+                  <CCol sm={4}>
                     <div className="form-group">
-                      <label htmlFor="skypeId">
-                        Official Skype{" "}
-                        <span style={{ color: "red", fontSize: "25px" }}>
-                          *
-                        </span>
-                      </label>
+                      <label htmlFor="skypeId">Official Skype</label>
                       <Field
                         type="text"
                         id="skypeId"
                         name="skypeId"
-                        // className="form-control"
-                        className={`form-control ${
-                          touched.skypeId && errors.skypeId ? "is-invalid" : ""
-                        }`}
+                        className="form-control"
                         placeholder="Official Skype"
                       />
-                      <ErrorMessage
-                        name="skypeId"
-                        className="invalid-feedback"
-                        render={(error) => (
-                          <label style={{ color: "#dc3545" }}>{error}</label>
-                        )}
-                      />
+                 
                     </div>
                   </CCol>
                 </CRow>
@@ -979,34 +826,13 @@ const CreateOrUpdateUser = () => {
 
                   <CCol sm={4}>
                     <div className="form-group">
-                      <label htmlFor="bank">
-                        Bank Name{" "}
-                        <span
-                          style={{
-                            color: "red",
-                            fontSize: "25px",
-                            lineHeight: 0,
-                          }}
-                        >
-                          *
-                        </span>
-                      </label>
+                      <label htmlFor="bank">Bank Name</label>
                       <Field
                         type="text"
                         id="bank"
                         name="bank"
-                        // className="form-control"
-                        className={`form-control ${
-                          touched.bank && errors.bank ? "is-invalid" : ""
-                        }`}
+                        className="form-control"
                         placeholder="Bank"
-                      />
-                      <ErrorMessage
-                        name="bank"
-                        className="invalid-feedback"
-                        render={(error) => (
-                          <label style={{ color: "#dc3545" }}>{error}</label>
-                        )}
                       />
                     </div>
                   </CCol>
@@ -1046,68 +872,26 @@ const CreateOrUpdateUser = () => {
 
                   <CCol sm={4}>
                     <div className="form-group">
-                      <label htmlFor="bankAccountNumber">
-                        Account Number{" "}
-                        <span
-                          style={{
-                            color: "red",
-                            fontSize: "25px",
-                            lineHeight: 0,
-                          }}
-                        >
-                          *
-                        </span>
-                      </label>
+                      <label htmlFor="bankAccountNumber">Account Number</label>
                       <Field
                         type="text"
                         id="bankAccountNumber"
                         name="bankAccountNumber"
-                        className={`form-control ${
-                          touched.bankAccountNumber && errors.bankAccountNumber
-                            ? "is-invalid"
-                            : ""
-                        }`}
+                        className="form-control"
                         placeholder="Account Number"
-                      />
-                      <ErrorMessage
-                        name="bankAccountNumber"
-                        className="invalid-feedback"
-                        render={(error) => (
-                          <label style={{ color: "#dc3545" }}>{error}</label>
-                        )}
                       />
                     </div>
                   </CCol>
 
                   <CCol sm={4}>
                     <div className="form-group">
-                      <label htmlFor="ifsc">
-                        IFSC Code{" "}
-                        <span
-                          style={{
-                            color: "red",
-                            fontSize: "25px",
-                            lineHeight: 0,
-                          }}
-                        >
-                          *
-                        </span>
-                      </label>
+                      <label htmlFor="ifsc">IFSC Code</label>
                       <Field
                         type="text"
                         id="ifsc"
                         name="ifsc"
-                        className={`form-control ${
-                          touched.ifsc && errors.ifsc ? "is-invalid" : ""
-                        }`}
+                        className="form-control"
                         placeholder="IFSC Code"
-                      />
-                      <ErrorMessage
-                        name="ifsc"
-                        className="invalid-feedback"
-                        render={(error) => (
-                          <label style={{ color: "#dc3545" }}>{error}</label>
-                        )}
                       />
                     </div>
                   </CCol>
@@ -1120,13 +904,8 @@ const CreateOrUpdateUser = () => {
                         name="shiftId"
                         value={shiftId}
                         aria-label="Default select example"
-                        className={`form-control form-select ${
-                          touched.shiftId && errors.shiftId ? "is-invalid" : ""
-                        }`}
+                        className="form-control"
                         onChange={handleShiftChange}
-                        className={`form-control ${
-                          touched.shiftId && errors.shiftId ? "is-invalid" : ""
-                        }`}
                         placeholder="Shift"
                       >
                         <option value="">Select a Shift</option>
@@ -1136,13 +915,6 @@ const CreateOrUpdateUser = () => {
                           </option>
                         ))}
                       </CFormSelect>
-                      <ErrorMessage
-                        name="shiftId"
-                        className="invalid-feedback"
-                        render={(error) => (
-                          <label style={{ color: "#dc3545" }}>{error}</label>
-                        )}
-                      />
                     </div>
                   </CCol>
                 </CRow>
@@ -1150,33 +922,13 @@ const CreateOrUpdateUser = () => {
                 <CRow>
                   <CCol xs={4}>
                     <div className="form-group">
-                      <label htmlFor="branch">
-                        Branch{" "}
-                        <span
-                          style={{
-                            color: "red",
-                            fontSize: "25px",
-                            lineHeight: 0,
-                          }}
-                        >
-                          *
-                        </span>
-                      </label>
+                      <label htmlFor="branch">Branch</label>
                       <Field
                         type="text"
                         id="branch"
                         name="branch"
-                        className={`form-control ${
-                          touched.branch && errors.branch ? "is-invalid" : ""
-                        }`}
+                        className="form-control"
                         placeholder="Branch"
-                      />
-                      <ErrorMessage
-                        name="branch"
-                        className="invalid-feedback"
-                        render={(error) => (
-                          <label style={{ color: "#dc3545" }}>{error}</label>
-                        )}
                       />
                     </div>
                   </CCol>

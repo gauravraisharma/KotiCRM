@@ -419,6 +419,7 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
                 component="input"
                 type="button"
                 color="secondary"
+                
                 value="Back To Invoices"
                 onClick={onBackToListButtonClickHandler}
               />

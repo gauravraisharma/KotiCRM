@@ -85,14 +85,14 @@ const _nav:NavItem[] = [
     moduleName : 'Settings'
 
   },
-  {
-    component: CNavItem,
-    name: 'Manage Users',
-    to: '/users',
-    icon: <CIcon icon={cilUser} customClassName="nav-icon" />,
-    moduleName : 'ManageUsers'
+  // {
+  //   component: CNavItem,
+  //   name: 'Users',
+  //   to: '/users',
+  //   icon: <CIcon icon={cilUser} customClassName="nav-icon" />,
+  //   moduleName : 'ManageUsers'
 
-  },
+  // },
   ]
 
 export default _nav

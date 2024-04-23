@@ -20,7 +20,7 @@ import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { AiFillEye } from "react-icons/ai";
 
-import { MdDelete, MdEdit, MdEditSquare } from "react-icons/md";
+import { MdDelete, MdEdit, } from "react-icons/md";
 import InvoiceTemplate from "../../pdf-template/InvoiceTemplate";
 import DeleteConfirmationModal from "../account/accountsList/DeleteConfirmation";
 import {
@@ -247,7 +247,7 @@ const Invoices: React.FC<InvoiceProps> = ({
         </div>
       )}
       <ToastContainer/>
-   {showCreateInvoice ? '':( 
+   {showCreateInvoice  ? '':( 
     <>
    <CCard className="d-flex flex-row justify-content-between m-1 p-2">
         <div style={{flex:'1',marginRight:'12px'}}>

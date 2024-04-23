@@ -60,9 +60,6 @@ const Login = () => {
 
   return (
     <>
-    {/* <div className="spinner-backdrop">
-    <CSpinner className="spinner" color="primary" />
-  </div> */}
     <div className="bg-light min-vh-100 d-flex flex-row align-items-center">
       {loading && isLoading && (
         <div className="spinner-backdrop">
@@ -86,7 +83,8 @@ const Login = () => {
                       <CInputGroupText>
                         <CIcon icon={cilUser} />
                       </CInputGroupText>
-                      <CFormInput placeholder="Username" autoComplete="username" name="userName"
+                      <CFormInput placeholder="Email" type="email" autoComplete="username" name="userName"
+
                         onChange={handleChange}
                       />
                     </CInputGroup>
