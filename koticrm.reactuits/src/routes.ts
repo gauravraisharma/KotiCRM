@@ -22,6 +22,7 @@ const Typography = lazy(() => import('./theme/typography/Typography'))
 const AccountList = lazy(() => import('./views/account/accountsList/AccountList'))
 const AccountDetails = lazy(() => import('./views/account/accountDetails/AccountDetails'))
 const NewAccount = lazy(() => import('./views/account/createAccount/NewAccount'))
+const EditAccount = lazy(()=> import('./views/account/accountsList/EditAccountModal'))
 // Contact routes
 const Contacts = lazy(() => import('./views/contacts/Contacts'))
 const contactDetails = lazy(() => import('./views/contacts/ContactDetails'))
@@ -31,6 +32,7 @@ const CreateContact = lazy(() => import('./views/contacts/CreateOrEditContact'))
 const Invoices = lazy(() => import('./views/invoice/Invoices'))
 const CreateInvoice = lazy(() => import('./views/invoice/NewInvoice'))
 const EditInvoice = lazy(() => import('./views/invoice/EditInvoice'))
+const InvoicePDF = lazy(()=> import('./pdf-template/InvoiceTemplate'))
 
 //Manage Users Routes
 const Users = lazy(() => import('./views/userManagement/Users'))
@@ -142,16 +144,20 @@ const routes: Route[] = [
     { path: '/widgets', name: 'Widgets', element: Widgets, isAuth: false },
     { path: '/accountsList', name: 'Account List', element: AccountList, isAuth: true, modulePermission: 'Accounts' },
     { path: '/accountsList/accountDetails/:accountId', name: 'Account Details', element: AccountDetails, isAuth: true, modulePermission: 'Accounts' },
-    { path: '/account', name: 'Account', element: NewAccount, isAuth: true, modulePermission: 'Accounts' },
+    // { path: '/account', name: 'Account', element: NewAccount, isAuth: true, modulePermission: 'Accounts' },
 
     { path: '/contacts', name: 'Contacts', element: Contacts, isAuth: true, modulePermission: 'Contacts' },
     { path: '/contacts/:contactId', name: 'contactDetails', element: contactDetails, isAuth: true, modulePermission: 'Contacts' },
     { path: '/contacts/createContact', name: 'CreateContact', element: CreateContact, isAuth: true, modulePermission: 'Contacts' },
     { path: '/contacts/editContact/:contactId', name: 'CreateContact', element: CreateContact, isAuth: true, modulePermission: 'Contacts' },
-    { path: '/newAccount', name: 'NewAccount', element: NewAccount, isAuth: true, modulePermission: 'Accounts' },
+    { path: '/accountsList/createAccount', name: 'CreateAccount', element: NewAccount, isAuth: true, modulePermission: 'Accounts' },
+    { path: '/accountsList/editAccount/:accountId', name: 'EditAccount', element: EditAccount, isAuth: true, modulePermission: 'Accounts' },
+
     { path: '/invoices', name: 'Invoices', element: Invoices, isAuth: true, modulePermission: 'Invoices' },
     { path: '/invoices/createInvoice', name: 'CreateInvoice', element: CreateInvoice, isAuth: true, modulePermission: 'Invoices' },
     { path: '/invoices/editInvoice/:invoiceId', name: 'EditInvoice', element: EditInvoice, isAuth: true, modulePermission: 'Invoices' },
+    { path: '/invoices/viewInvoicePdf/:invoiceId', name: 'ViewInvoicePDF', element: InvoicePDF, isAuth: true, modulePermission: 'Invoices' },
+
     { path: '/settings', name: 'Settings', element: Settings, isAuth: true },
 
     { path: '/users', name: 'Users', element: Users, isAuth: true, modulePermission: 'ManageUsers' },

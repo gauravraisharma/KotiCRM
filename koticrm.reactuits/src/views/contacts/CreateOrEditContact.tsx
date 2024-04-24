@@ -63,7 +63,7 @@ useEffect(() => {
   } else {
     setStates([]);
   }
-}, [contact.country]);
+}, [contact?.country]);
 
   const handleCountryChange = (e: ChangeEvent<HTMLSelectElement>) => {
    

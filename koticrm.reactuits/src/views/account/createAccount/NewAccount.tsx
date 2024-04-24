@@ -18,6 +18,7 @@ import * as Yup from "yup";
 import "../../../css/style.css";
 import Select from "react-select";
 import { createAccountRequest } from "../../../redux-saga/modules/account/action";
+import { Link, useNavigate } from "react-router-dom";
 
 const initialValues = {
   accountOwner: "",
@@ -37,11 +38,6 @@ const initialValues = {
   description: "",
 };
 
-interface MyFormProps {
-  closeModal: () => void;
-  onBackToListButtonClickHandler: () => void;
-}
-
 const validationSchema = Yup.object().shape({
   accountOwner: Yup.string().required("Required (Account Owner)"),
   industry: Yup.number().required("Required (Industry)"),
@@ -60,10 +56,7 @@ const validationSchema = Yup.object().shape({
   country: Yup.string().required("Required (Country)"),
 });
 
-const MyForm: React.FC<MyFormProps> = ({
-  closeModal,
-  onBackToListButtonClickHandler,
-}) => {
+const MyForm = () => {
   // Country-State
   const countries: Country[] = Countries;
   const [selectedAccountOwner, setSelectedAccountOwner] = useState("");
@@ -86,6 +79,7 @@ const MyForm: React.FC<MyFormProps> = ({
   };
   const userId = useSelector((state: any) => state.authReducer.userId);
   const dispatch = useDispatch();
+  const navigate  = useNavigate();
 
   const [account, setAccount] = useState({
     accountOwner: "",
@@ -143,7 +137,7 @@ const MyForm: React.FC<MyFormProps> = ({
     accountDetail.currency = selectedCurrency;
 
     dispatch(createAccountRequest(accountDetail));
-    closeModal();
+    navigate('/accountsList')
   };
 
   const accountOwner = useSelector(
@@ -175,13 +169,14 @@ const MyForm: React.FC<MyFormProps> = ({
               <h5 className="mb-0">Create Account</h5>
             </div>
             <div className="text-end">
+              <Link to ={`/accountsList`}>
               <CButton
                 component="input"
                 type="button"
                 color="secondary"
                 value="Back To Accounts"
-                onClick={onBackToListButtonClickHandler}
               />
+              </Link>
             </div>
           </div>
         </CCardHeader>
@@ -711,13 +706,9 @@ const MyForm: React.FC<MyFormProps> = ({
                     >
                       Submit
                     </button>
-                    <button
-                      type="button"
-                      className="btn btn-secondary"
-                      onClick={() => onBackToListButtonClickHandler()}
-                    >
-                      Cancel
-                    </button>
+                    <Link to ={`/accountsList`}>
+                    <button type="button" className="btn btn-secondary">Cancel</button>
+                    </Link>
                   </CCol>
                 </CRow>
               </Form>

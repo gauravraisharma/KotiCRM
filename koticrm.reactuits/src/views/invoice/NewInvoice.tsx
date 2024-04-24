@@ -33,6 +33,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { getOrganization } from "../../redux-saga/modules/shared/action";
 import { createInvoiceRequest } from "../../redux-saga/modules/invoice/action";
 import { toast } from "react-toastify";
+import { Link, useNavigate } from "react-router-dom";
 
 const initialValues = {
   invoiceOwner: "",
@@ -57,18 +58,11 @@ const initialValues = {
   rows: []
 };
 
-interface newInvoiceProps {
-  onBackToListButtonClickHandler: () => void;
-  closeModal: () => void;
-  accountId: any;
-  ownerId: any;
-}
 
-const NewInvoice: React.FC<newInvoiceProps> = ({
-  closeModal,
-  onBackToListButtonClickHandler,
-}) => {
+
+const NewInvoice = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const contactWithAccountNameListAndTotalCount = useSelector((state: any) => state.contactReducer.contacts);
   const contacts = contactWithAccountNameListAndTotalCount.contactWithAccountNames;
@@ -382,8 +376,8 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
       invoiceItems: invoiceItemDetails,
     };
     dispatch(createInvoiceRequest(invoiceModel));
-    closeModal();
-  };
+    navigate('/invoices')
+    };
 
   const getAccountOwner = (ownerId: any) => {
     const owner = accountOwner?.find((owner: any) => owner.id === ownerId);
@@ -397,13 +391,6 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
     return (amount * quantity - discount);
   };
 
-  // const { handleSubmit } = useFormik({
-  //   enableReinitialize: true,
-  //   initialValues: initialValues,
-  //   validationSchema: validationSchema,
-  //   onSubmit: handleCreateInvoiceClick,
-  // });
-
 
 
   return (
@@ -415,14 +402,15 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
               <h5 className="mb-0">Create Invoice</h5>
             </div>
             <div className="text-end">
+              <Link to ={`/invoices`}>
               <CButton
                 component="input"
                 type="button"
                 color="secondary"
                 
                 value="Back To Invoices"
-                onClick={onBackToListButtonClickHandler}
               />
+              </Link>
             </div>
           </div>
         </CCardHeader>
@@ -1512,14 +1500,14 @@ const NewInvoice: React.FC<newInvoiceProps> = ({
                   >
                     Create Invoice
                   </button>
-
+                  <Link to ={`/invoices`}>
                   <button
                     type="button"
                     className="btn btn-secondary"
-                    onClick={() => onBackToListButtonClickHandler()}
                   >
                     Cancel
                   </button>
+                  </Link>
                 </div>
               </Form>
             )}

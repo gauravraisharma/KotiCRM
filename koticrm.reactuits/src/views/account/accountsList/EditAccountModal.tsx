@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import * as Yup from "yup";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { Account } from "../../../models/account/Account";
@@ -12,16 +12,12 @@ import {
 } from "@coreui/react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
-import { updateAccountRequest } from "../../../redux-saga/modules/account/action";
+import { getAccountByIdRequest, updateAccountRequest } from "../../../redux-saga/modules/account/action";
 import { Country } from "../../../models/Country-State/CountryState";
 import Countries from "../../../constants/country-state/countries+states.json";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
-// Interfaces
-interface EditModalProps {
-  closeModal: () => void;
-  accountData: any;
-  onBackToListButtonClickHandler: () => void;
-}
+
 
 const initialValues = {
   accountOwner: "",
@@ -41,13 +37,16 @@ const initialValues = {
   description: "",
 };
 
-const EditPage: React.FC<EditModalProps> = ({
-  closeModal,
-  accountData,
-  onBackToListButtonClickHandler,
-}) => {
+const EditPage = () => {
+  //useParam hook to get account Id
+  const { accountId } = useParams<{ accountId: string }>();
+  console.log(accountId)
+  //Fetch data from Redux store
+  const accountData = useSelector((state:any)=> state.accountReducer.account)
   // State declaration
+
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const countries: Country[] = Countries;
   const [selectedCountry, setSelectedCountry] = useState<string>("");
   const [updateAccount, setUpdateAccount] = useState({
@@ -190,8 +189,15 @@ const EditPage: React.FC<EditModalProps> = ({
       currency: "",
     };
     dispatch(updateAccountRequest(accountDetail, accountData.id));
-    closeModal();
+    navigate('/accountsList')
   };
+
+  //Effects
+  useEffect(()=>{
+    if(accountId){
+    dispatch(getAccountByIdRequest(+accountId))
+    }
+  },[dispatch, accountId])
 
   return (
     <div>
@@ -204,13 +210,14 @@ const EditPage: React.FC<EditModalProps> = ({
               </h5>
             </div>
             <div className="text-end">
+            <Link to ={`/accountsList`}>
               <CButton
                 component="input"
                 type="button"
                 color="secondary"
                 value="Back To Account"
-                onClick={onBackToListButtonClickHandler}
               />
+              </Link>
             </div>
           </div>
         </CCardHeader>
@@ -740,13 +747,14 @@ const EditPage: React.FC<EditModalProps> = ({
                     >
                       Update
                     </button>
+                    <Link to ={`/accountsList`}>
                     <button
                       type="button"
                       className="btn btn-secondary"
-                      onClick={() => onBackToListButtonClickHandler()}
                     >
                       Cancel
                     </button>
+                    </Link>
                   </CCol>
                 </CRow>
               </Form>

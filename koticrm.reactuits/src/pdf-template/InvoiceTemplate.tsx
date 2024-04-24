@@ -8,20 +8,15 @@ import html2canvas from 'html2canvas';
 import { getAccountByIdRequest } from "../redux-saga/modules/account/action";
 import { getInvoiceByIdRequest } from "../redux-saga/modules/invoice/action";
 import { getOrganization } from "../redux-saga/modules/shared/action";
+import { Link, useParams } from "react-router-dom";
 
 
-interface InvoicePdfTemplateProps {
-	closeInvoicePdfModal: () => void;
-	invoiceId: any;
-	onBackToListButtonClickHandler: () => void;
-}
 
-const InvoiceTemplate: React.FC<InvoicePdfTemplateProps> = ({
-	invoiceId,
-	onBackToListButtonClickHandler
-}) => {
+const InvoiceTemplate= () => {
 
 	const dispatch = useDispatch()
+	const {invoiceId} = useParams();
+
 	function getDateTime(date: any) {
 		const formattedDate = new Date(date).toLocaleDateString('en-US', {
 			year: 'numeric',
@@ -80,13 +75,14 @@ const InvoiceTemplate: React.FC<InvoicePdfTemplateProps> = ({
 						value="Download PDF"
 						onClick={handleDownloadPDF}>
 					</CButton>
+					<Link to ={`/invoices`}>
 					<CButton
 						component="input"
 						type="button"
 						color="secondary"
 						value="Cancel"
-						onClick={onBackToListButtonClickHandler}
 					/>
+					</Link>
 				</div>
 			</CCardHeader>
 			<div id="invoice-pdf">

@@ -121,10 +121,7 @@ const ContactDetails = () => {
                 <li>
                   Date Of Birth:
                   <p>
-                    {moment
-                      .utc(fetchedContact?.dateOfBirth)
-                      .tz(timezone)
-                      ?.format("DD/MM/YYYY hh:mm A")}
+                   {moment(fetchedContact?.dateOfBirth).format('DD MMMM YYYY')}
                   </p>
                 </li>
               </CCol>

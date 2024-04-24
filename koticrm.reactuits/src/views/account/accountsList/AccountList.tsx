@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { MdEdit } from "react-icons/md";
 import { AiFillEye } from "react-icons/ai";
 import { MdDelete } from "react-icons/md";
-import {  useNavigate } from "react-router-dom";
+import {  Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import {
   getAccountOwner,
@@ -15,8 +15,6 @@ import { getIndustry } from "../../../redux-saga/modules/shared/action";
 import { getNotes } from "../../../redux-saga/modules/notes/action";
 import { getContacts } from "../../../redux-saga/modules/contact/action";
 import DeleteConfirmationModal from "./DeleteConfirmation";
-import NewAccount from "../createAccount/NewAccount";
-import EditPage from "./EditAccountModal";
 
 import {
   CCard,
@@ -48,24 +46,11 @@ const AccountList: React.FC = () => {
   //State declaration
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [accountId, setAccountId] = useState<number>();
-  const [stateData, setStateData] = useState<boolean>(false);
-  const [openEditModal, setOpenEditModal] = useState<boolean>(false);
-  const [openCreateModal, setCreateModal] = useState<boolean>(false);
-  const [accountData, setAccountData] = useState<Account | null>(null);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [pageNumber, setPageNumber] = useState<number>(1);
 
   const showItems = (id: any) => {
     navigate(`/accountsList/accountDetails/${id}`);
-  };
-
-  const handleEditClick = (data: any) => {
-    setAccountData(data);
-    setOpenEditModal(true);
-  };
-
-  const closeEditModal = () => {
-    setOpenEditModal(false);
   };
 
   const handleDeleteClick = (id: any) => {
@@ -81,20 +66,8 @@ const AccountList: React.FC = () => {
     setShowDeleteConfirmation(false);
   };
 
-  const handleCreateNew = () => {
-    setStateData(true);
-    setCreateModal(true);
-  };
 
-  const closeCreateModal = () => {
-    setStateData(false);
-  };
 
-  const backToAccountList = () => {
-    setCreateModal(false);
-    setStateData(false);
-    setOpenEditModal(false);
-  };
 
   //Fetching data from store
   const accounts = useSelector((state: any) => state.accountReducer.accounts);
@@ -179,7 +152,6 @@ const AccountList: React.FC = () => {
         </div>
       )}
       <ToastContainer />
-      {!openCreateModal && !openEditModal && (
         <CRow>
           <CCol xs={12}>
             <CRow className="align-items-center m-1">
@@ -200,25 +172,21 @@ const AccountList: React.FC = () => {
                 </CInputGroup>
               </CCol>
               <CCol xs={8} className="text-end">
+              <Link to = {`/accountsList/createAccount`}>
+
                 <button
-                  onClick={handleCreateNew}
                   type="button"
                   className="btn btn-primary"
                   style={{ padding: "6px 16px" }}
                 >
                   + New
                 </button>
+                </Link>
+
               </CCol>
             </CRow>
           </CCol>
         </CRow>
-      )}
-      {stateData ? (
-        <NewAccount
-          closeModal={closeCreateModal}
-          onBackToListButtonClickHandler={backToAccountList}
-        />
-      ) : (
         <>
           <DeleteConfirmationModal
             isOpen={showDeleteConfirmation}
@@ -227,13 +195,6 @@ const AccountList: React.FC = () => {
             accountId={accountId}
             invoiceId={null}
           />
-          {openEditModal ? (
-            <EditPage
-              closeModal={closeEditModal}
-              accountData={accountData}
-              onBackToListButtonClickHandler={backToAccountList}
-            />
-          ) : (
             <CRow>
               <CCol xs={12}>
                 <CCard className="mb-4 mt-2">
@@ -275,16 +236,16 @@ const AccountList: React.FC = () => {
                             <CTableDataCell>{account.phone}</CTableDataCell>
                             <CTableDataCell>{account.country}</CTableDataCell>
                             <CTableDataCell>
+                              <Link to ={`/accountsList/editAccount/${account.id}`}>
                               <MdEdit
                                 style={{
                                   color: "green",
                                   marginRight: "10px",
                                   fontSize: "20px",
                                 }}
-                                onClick={() => handleEditClick(account)}
                                 className="mr-4 text-success"
                               />
-
+                              </Link>
                               <AiFillEye
                                 style={{
                                   color: "darkblue",
@@ -356,9 +317,9 @@ const AccountList: React.FC = () => {
                 </CCard>
               </CCol>
             </CRow>
-          )}
+          
         </>
-      )}
+      
     </>
   );
 };

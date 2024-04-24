@@ -247,7 +247,6 @@ const Invoices: React.FC<InvoiceProps> = ({
         </div>
       )}
       <ToastContainer/>
-   {showCreateInvoice  ? '':( 
     <>
    <CCard className="d-flex flex-row justify-content-between m-1 p-2">
         <div style={{flex:'1',marginRight:'12px'}}>
@@ -323,15 +322,7 @@ const Invoices: React.FC<InvoiceProps> = ({
         </h5>
       </div>
       </>
-      )}
-      {showCreateInvoice ? (
-        <NewInvoice
-          closeModal={closeCreateModal}
-          onBackToListButtonClickHandler={backToInvoiceList}
-          accountId={accountId}
-          ownerId={ownerId}
-        />
-      ) : (
+      
         <>
           <DeleteConfirmationModal
             isOpen={showDeleteConfirmation}
@@ -340,14 +331,6 @@ const Invoices: React.FC<InvoiceProps> = ({
             accountId={null}
             invoiceId={invoiceId}
           />
-
-          {openPreviewModal ? (
-            <InvoiceTemplate
-              invoiceId={invoiceId}
-              closeInvoicePdfModal={closeInvoicePdfModal}
-              onBackToListButtonClickHandler={backToInvoicesListFromPdf}
-            />
-          ) : (
             <CCard className="mb-4 mx-1">
               <CCardHeader className="mb-3">
                 <div className="d-flex justify-content-between align-items-center">
@@ -357,13 +340,14 @@ const Invoices: React.FC<InvoiceProps> = ({
                     </h5>
                   </div>
                   <div className="text-end">
+                    <Link to = {`/invoices/createInvoice`}>
                     <CButton
                       component="input"
                       type="button"
                       color="primary"
-                      value="New"
-                      onClick={handleCreateNewInvoice}
-                    />
+                      value="+ New"
+                      />
+                    </Link>
                   </div>
                 </div>
               </CCardHeader>
@@ -433,6 +417,7 @@ const Invoices: React.FC<InvoiceProps> = ({
                                 />
                               </Link>
                             )}
+                            <Link to ={`/invoices/viewInvoicePdf/${invoiceModel.invoice?.id}`}>
                             <AiFillEye
                               size={21}
                               style={{
@@ -441,10 +426,8 @@ const Invoices: React.FC<InvoiceProps> = ({
                                 cursor: "pointer",
                               }}
                               className="mr-4 text-primary"
-                              onClick={() =>
-                                generateInvoicePDF(invoiceModel.invoice?.id)
-                              }
                             />
+                            </Link>
                             <MdDelete
                               size={21}
                               style={{
@@ -500,9 +483,9 @@ const Invoices: React.FC<InvoiceProps> = ({
                     </CPagination>
               </CCardBody>
             </CCard>
-          )}
+          
         </>
-      )}
+    
     </div>
   );
 };

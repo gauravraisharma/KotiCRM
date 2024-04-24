@@ -43,25 +43,15 @@ interface newInvoiceProps {
   ownerId: any;
 }
 
-const EditInvoice: React.FC<newInvoiceProps> = () => {
+const EditInvoice = () => {
   const { invoiceId } = useParams<{ invoiceId: string }>();
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  interface Row {
-    sNo: number;
-    productName: string;
-    description: string;
-    quantity: number;
-    discount: number;
-    amount: number;
-    total: number;
-  }
 
   const [updateInvoice, setUpdateInvoice] = useState<Invoice>(
     new InvoiceClass()
   );
-  const [termsAndConditions, setTermsAndConditions] = useState("");
 
   const [extraFields, setExtraFields] = useState({
     tax: 0,
@@ -74,6 +64,7 @@ const EditInvoice: React.FC<newInvoiceProps> = () => {
     zipCode: "",
     billingCountry: "",
   });
+
   const [dropdownItems, setDropdownItems] = useState({
     contactID: 0,
     accountID: 0,
@@ -125,9 +116,9 @@ const EditInvoice: React.FC<newInvoiceProps> = () => {
 
   useEffect(() => {
     setDropdownItems({
-      contactID: invoice.contactID,
-      ownerID: invoice.ownerID,
-      accountID: invoice.accountID,
+      contactID: invoice?.contactID,
+      ownerID: invoice?.ownerID,
+      accountID: invoice?.accountID,
     });
     if (invoiceId) {
       setUpdateInvoice(invoice);
@@ -150,7 +141,6 @@ const EditInvoice: React.FC<newInvoiceProps> = () => {
   const defaultOwner = invoiceOwners?.find(
     (dOwner) => dOwner.id === invoice?.ownerID
   );
-  console.log(invoiceOwners);
   const defaultAccount = accountNames.account?.find(
     (dAccount) => dAccount.id === invoice?.accountID
   );
@@ -208,16 +198,6 @@ const EditInvoice: React.FC<newInvoiceProps> = () => {
       [fieldName]: true, // Mark the field as touched
     }));
   };
-
-  // var orgDetails;
-  // if (organization) {
-  //   const activeOrg = organization.filter(
-  //     (org: any) => org.organizationResponse?.isActive === true
-  //   );
-  //   if (activeOrg && activeOrg.length > 0) {
-  //     orgDetails = activeOrg[0]?.organizationResponse;
-  //   }
-  // }
 
   let grandTotalValue = 0;
 
@@ -352,7 +332,6 @@ const EditInvoice: React.FC<newInvoiceProps> = () => {
 
     //handle delete invoice item
     const handleDeleteClick =( invoiceItemId :any)=>{
-      debugger
      const updatedRows = rows.map((row) =>
         row.id === invoiceItemId ? { ...row, isDeleted: true } : row
       );
@@ -736,13 +715,15 @@ const EditInvoice: React.FC<newInvoiceProps> = () => {
                     </div>
                   </div>
                   <div className="col-md-6">
-                    {/* <div className="form-group row">
+                    <div className="form-group row">
                       <label
                         htmlFor="contactID"
                         className="col-sm-4 col-form-label"
                       >
                         Contacts
-                        <span style={{ color: "red", fontSize: "25px" }}>*</span>
+                        <span style={{ color: "red", fontSize: "25px" }}>
+                          *
+                        </span>
                       </label>
                       <div className="col-sm-6">
                         <Field name="contactID">
@@ -750,7 +731,7 @@ const EditInvoice: React.FC<newInvoiceProps> = () => {
                             <>
                               <Select
                                 name="contactID"
-                                options={contacts?.map((contact: any) => ({
+                                options={contacts?.map((contact:any) => ({
                                   key: contact.id,
                                   value: contact.firstName,
                                   label: (
@@ -775,73 +756,12 @@ const EditInvoice: React.FC<newInvoiceProps> = () => {
                                     true
                                   );
                                 }}
-                                onBlur={handleBlur("accountName")}
+                                onBlur={handleBlur("contactID")}
                                 placeholder="Select contact..."
                                 className={`form-control ${touched.contactID && errors.contactID
                                   ? "border-danger"
                                   : ""
                                   }`}
-                                styles={{
-                                  control: (provided) => ({
-                                    ...provided,
-                                    outline: "none",
-                                    border: "none",
-                                  }),
-                                }}
-                              />
-                            </>
-                          )}
-                        </Field>
-                        <ErrorMessage
-                          name="contactID"
-                          component="div"
-                          className="error form-error"
-                        />
-                      </div>
-                    </div> */}
-                    <div className="form-group row">
-                      <label
-                        htmlFor="contactID"
-                        className="col-sm-4 col-form-label"
-                      >
-                        Contacts
-                        <span style={{ color: "red", fontSize: "25px" }}>
-                          *
-                        </span>
-                      </label>
-                      <div className="col-sm-6">
-                        <Field name="contactID">
-                          {({ field, form }) => (
-                            <>
-                              <Select
-                                name="contactID"
-                                options={contacts?.map((contact) => ({
-                                  value: contact.id,
-                                  label: `${contact.firstName} ${contact.lastName}`,
-                                }))}
-                                defaultValue={{
-                                  value: defaultContact?.id,
-                                  label: `${defaultContact?.firstName} ${defaultContact?.lastName}`,
-                                }}
-                                isSearchable
-                                isClearable
-                                onChange={(selectedOption, actionMeta) => {
-                                  handleDropdownChange(
-                                    selectedOption,
-                                    actionMeta
-                                  );
-                                  form.setFieldValue(
-                                    "contactID",
-                                    selectedOption?.value
-                                  );
-                                }}
-                                onBlur={handleBlur("contactID")}
-                                placeholder="Select contact..."
-                                className={`form-control ${
-                                  touched.contactID && errors.contactID
-                                    ? "border-danger"
-                                    : ""
-                                }`}
                                 styles={{
                                   control: (provided) => ({
                                     ...provided,
