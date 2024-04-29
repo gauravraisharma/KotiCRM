@@ -59,6 +59,44 @@ const CreateOrUpdateUser = () => {
   const [departmentId, setDepartmentId] = useState(0);
   const [designationId, setDesignationId] = useState(0);
   const [shiftId, setShiftId] = useState(0);
+  const [selectedImage, setSelectedImage] = useState(null);
+
+  // const handleFileSelect = (event) => {
+  //   const file = event.target.files[0];
+  //   if (file) {
+  //     const reader = new FileReader();
+  //     reader.onloadend = () => {
+  //       setSelectedImage(reader.result);
+  //     };
+  //     reader.readAsDataURL(file);
+  //   }
+  // };
+
+  const handleFileSelect = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const formData = new FormData();
+      formData.append('image', file);
+  
+      // Send the file to the server for upload
+      fetch('/upload', {
+        method: 'POST',
+        body: formData,
+      })
+      .then(response => response.json())
+      .then(data => {
+        // Assuming the server responds with the URL of the uploaded image
+        const imageUrl = data.imageUrl;
+  
+        // Save the URL in the database
+        // saveImageUrlToDatabase(imageUrl);
+      })
+      .catch(error => {
+        console.error('Error uploading file:', error);
+      });
+    }
+  };
+  
 
   // Effects
   useEffect(() => {
@@ -265,7 +303,7 @@ const CreateOrUpdateUser = () => {
         <CCardHeader className="mb-3">
           <div className="d-flex justify-content-between align-items-center">
             <div>
-              <h5 className="mb-0">{id == null ? "Create" : "Update"} User</h5>
+              <h4 className="mb-0">{id == null ? "Create" : "Update"} User</h4>
             </div>
             <div className="text-end">
               <Link to={`/users`}>
@@ -296,7 +334,7 @@ const CreateOrUpdateUser = () => {
                   <h5>User Code</h5>
 
                   <CRow className="justify-content-between">
-                    <CCol xs={4}>
+                    {/* <CCol xs={4}>
                       <CImage
                         rounded
                         thumbnail
@@ -310,7 +348,33 @@ const CreateOrUpdateUser = () => {
                           marginTop: "2rem",
                         }}
                       />
+                    </CCol> */}
+                    <CCol xs={4}>
+                      <label htmlFor="profile-photo-upload">
+                        <CImage
+                          rounded
+                          thumbnail
+                          src={selectedImage || profile} // Assuming profile is your default profile photo
+                          width={120}
+                          height={120}
+                          className="rounded-circle"
+                          style={{
+                            borderRadius: "50%",
+                            marginLeft: "5rem",
+                            marginTop: "2rem",
+                            cursor: "pointer", // Add cursor pointer to indicate it's clickable
+                          }}
+                        />
+                      </label>
+                      <input
+                        id="profile-photo-upload"
+                        type="file"
+                        accept="image/*"
+                        style={{ display: "none" }} // Hide the input element
+                        onChange={handleFileSelect}
+                      />
                     </CCol>
+
                     <CCol xs={8}>
                       <CRow>
                         <CCol xs={6}>
@@ -470,12 +534,113 @@ const CreateOrUpdateUser = () => {
                             />
                           </div>
                         </CCol>
+             
                       </CRow>
                     </CCol>
                   </CRow>
+                  <CRow>
+                  <CCol sm={4}>
+                        <div className="form-group">
+                      <label htmlFor="designationId">Designation</label>
+                      <Field
+                        as="select"
+                        id="designationId"
+                        name="designationId"
+                        aria-label="Default select example"
+                        className={`form-control form-select ${
+                          touched.designationId && errors.designationId
+                            ? "is-invalid"
+                            : ""
+                        }`}
+                      >
+                        <option value="">Select a Designation</option>
+                        {designationList?.map((designation) => (
+                          <option
+                            key={designation.designationId}
+                            value={designation.designationId}
+                          >
+                            {designation.name}
+                          </option>
+                        ))}
+                      </Field>
+                      <ErrorMessage
+                        name="designationId"
+                        component="div"
+                        className="invalid-feedback"
+                        style={{ color: "#dc3545" }}
+                      />
+                    </div>
+                  </CCol>
+                  <CCol sm={4}>
+                    <div className="form-group">
+                      <label htmlFor="departmentId">Department</label>
+                      <Field
+                         as="select"
+                        id="departmentId"
+                        name="departmentId"
+                        aria-label="Default select example"
+                        className={`form-control form-select ${
+                          touched.departmentId && errors.departmentId
+                            ? "is-invalid"
+                            : ""
+                        }`}
+                      >
+                        <option value="">Select a Department</option>
+                        {departmentList?.map((department) => (
+                          <option
+                            key={department.departmentId}
+                            value={department.departmentId}
+                          >
+                            {department.name}
+                          </option>
+                        ))}
+                      </Field>
+                      <ErrorMessage
+                        name="departmentId"
+                        className="invalid-feedback"
+                        render={(error) => (
+                          <label style={{ color: "#dc3545" }}>{error}</label>
+                        )}
+                      />
+                    </div>
+                  </CCol>
+                  <CCol sm={4}>
+                    <div className="form-group">
+                      <label htmlFor="departmentId">Role</label>
+                      <Field
+                         as="select"
+                        id="departmentId"
+                        name="departmentId"
+                        aria-label="Default select example"
+                        className={`form-control form-select ${
+                          touched.departmentId && errors.departmentId
+                            ? "is-invalid"
+                            : ""
+                        }`}
+                      >
+                        <option value="">Select role</option>
+                        {departmentList?.map((department) => (
+                          <option
+                            key={department.departmentId}
+                            value={department.departmentId}
+                          >
+                            {department.name}
+                          </option>
+                        ))}
+                      </Field>
+                      <ErrorMessage
+                        name="departmentId"
+                        className="invalid-feedback"
+                        render={(error) => (
+                          <label style={{ color: "#dc3545" }}>{error}</label>
+                        )}
+                      />
+                    </div>
+                  </CCol>
+                  </CRow>
                 </div>
                 <div>
-                  <h5 className="mt-4">Demographic Detail</h5>
+                  <h4 className="mt-4">Demographic Detail</h4>
                   <CRow>
                     <CCol sm={4}>
                       <div className="form-group">
@@ -776,7 +941,7 @@ const CreateOrUpdateUser = () => {
                     </div>
                   </CCol>
 
-                  <CCol sm={4}>
+                  {/* <CCol sm={4}>
                     <div className="form-group">
                       <label htmlFor="personalEmail">
                         Personal Email{" "}
@@ -798,7 +963,7 @@ const CreateOrUpdateUser = () => {
                         placeholder="Personal Email"
                       />
                     </div>
-                  </CCol>
+                  </CCol> */}
                   <CCol sm={4}>
                     <div className="form-group">
                       <label htmlFor="skypeId">Official Skype</label>
@@ -814,40 +979,7 @@ const CreateOrUpdateUser = () => {
                 </CRow>
 
                 <CRow>
-                  <h5 className="mt-4">Company Detail</h5>
-
-                  <CCol sm={4}>
-                    <div className="form-group">
-                      <label htmlFor="designationId">Designation</label>
-                      <Field
-                        as="select"
-                        id="designationId"
-                        name="designationId"
-                        aria-label="Default select example"
-                        className={`form-control ${
-                          touched.designationId && errors.designationId
-                            ? "is-invalid"
-                            : ""
-                        }`}
-                      >
-                        <option value="">Select a Designation</option>
-                        {designationList?.map((designation) => (
-                          <option
-                            key={designation.designationId}
-                            value={designation.designationId}
-                          >
-                            {designation.name}
-                          </option>
-                        ))}
-                      </Field>
-                      <ErrorMessage
-                        name="designationId"
-                        component="div"
-                        className="invalid-feedback"
-                        style={{ color: "#dc3545" }}
-                      />
-                    </div>
-                  </CCol>
+                  <h4 className="mt-4">Bank Detail</h4>
                   <CCol sm={4}>
                     <div className="form-group">
                       <label htmlFor="bank">Bank Name</label>
@@ -861,39 +993,7 @@ const CreateOrUpdateUser = () => {
                     </div>
                   </CCol>
 
-                  <CCol sm={4}>
-                    <div className="form-group">
-                      <label htmlFor="departmentId">Department</label>
-                      <Field
-                         as="select"
-                        id="departmentId"
-                        name="departmentId"
-                        aria-label="Default select example"
-                        className={`form-control form-select ${
-                          touched.departmentId && errors.departmentId
-                            ? "is-invalid"
-                            : ""
-                        }`}
-                      >
-                        <option value="">Select a Department</option>
-                        {departmentList?.map((department) => (
-                          <option
-                            key={department.departmentId}
-                            value={department.departmentId}
-                          >
-                            {department.name}
-                          </option>
-                        ))}
-                      </Field>
-                      <ErrorMessage
-                        name="departmentId"
-                        className="invalid-feedback"
-                        render={(error) => (
-                          <label style={{ color: "#dc3545" }}>{error}</label>
-                        )}
-                      />
-                    </div>
-                  </CCol>
+              
 
           
                   
@@ -945,9 +1045,6 @@ const CreateOrUpdateUser = () => {
                       </CFormSelect>
                     </div>
                   </CCol>
-                </CRow>
-
-                <CRow>
                   <CCol xs={4}>
                     <div className="form-group">
                       <label htmlFor="branch">Branch</label>

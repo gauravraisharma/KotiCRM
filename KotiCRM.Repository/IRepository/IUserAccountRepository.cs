@@ -28,5 +28,13 @@ namespace KotiCRM.Repository.IRepository
         Task<EmployeeResponseStatus> CreateEmployee(CreateEmployeeDTO createEmployeeDTO);
         Task<EmployeeResponseStatus> UpdateEmployee(CreateEmployeeDTO createEmployeeDTO);
         ResponseStatus DeleteEmployee(string employeeId);
+
+        //For Employee Password
+     
+        Task<ChangePasswordDbResponse> ChangePassword(ChangePasswordRequest passwordData);
+        
+        //Task<string> SendEmailPassword(string );
+
+
     }
 }

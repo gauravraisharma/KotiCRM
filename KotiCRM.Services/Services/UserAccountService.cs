@@ -6,6 +6,7 @@ using KotiCRM.Repository.IRepository;
 using KotiCRM.Repository.DTOs.UserManagement;
 using KotiCRM.Repository.DTOs.AccountDTO;
 using System.Drawing.Printing;
+using ApplicationService.Utilities;
 
 namespace KotiCRM.Services.Services
 {
@@ -93,14 +94,14 @@ namespace KotiCRM.Services.Services
         public async Task<EmployeeWithCountDTO> GetEmployees(string? searchQuery, int? pageNumber, int? pageSize)
         {
             var usersList = (from userAccount in await _accountRepository.GetEmployees()
-                               where (string.IsNullOrEmpty(searchQuery) ||
-                               userAccount.Name.Contains(searchQuery, StringComparison.OrdinalIgnoreCase) ||
-                               userAccount.EmployeeCode.Contains(searchQuery, StringComparison.OrdinalIgnoreCase) ||
-                               userAccount.BloodGroup.Contains(searchQuery, StringComparison.OrdinalIgnoreCase) ||
-                               userAccount.BirthDate.HasValue && userAccount.BirthDate.Value.ToString() == searchQuery ||
-                               userAccount.Designation.Contains(searchQuery, StringComparison.OrdinalIgnoreCase)
+                             where (string.IsNullOrEmpty(searchQuery) ||
+                             userAccount.Name.Contains(searchQuery, StringComparison.OrdinalIgnoreCase) ||
+                             userAccount.EmployeeCode.Contains(searchQuery, StringComparison.OrdinalIgnoreCase) ||
+                             userAccount.BloodGroup.Contains(searchQuery, StringComparison.OrdinalIgnoreCase) ||
+                             userAccount.BirthDate.HasValue && userAccount.BirthDate.Value.ToString() == searchQuery ||
+                             userAccount.Designation.Contains(searchQuery, StringComparison.OrdinalIgnoreCase)
 
-                               )
+                             )
                              select userAccount)
                             .Skip(pageNumber.HasValue && pageSize.HasValue ? (pageNumber.Value - 1) * pageSize.Value : 0)
                             .Take(pageNumber.HasValue && pageSize.HasValue ? pageSize.Value : 10);
@@ -125,5 +126,25 @@ namespace KotiCRM.Services.Services
         {
             return _accountRepository.DeleteEmployee(employeeId);
         }
+
+        //public async Task<string> ChangePassword(Password userID, Password newPassword)
+        //{
+        //    return await _accountRepository.ChangePassword(userID, newPassword);
+
+        //}
+        public async Task<ChangePasswordDbResponse> ChangePassword(ChangePasswordRequest passwordData)
+        {
+            var result = await _accountRepository.ChangePassword(passwordData);
+
+            if (passwordData.isEmailSent == true)
+            {
+                MailOperation.SendEmailAsync(new List<string> { result.Email }, "This is test subject", "<h1>Email</h1>", _config, null, null);
+            }
+            
+
+            return result;
+        }
+
+     
     }
 }

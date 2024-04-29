@@ -4,6 +4,7 @@ using KotiCRM.Repository.DTOs.UserManagement;
 using KotiCRM.Repository.IRepository;
 using KotiCRM.Repository.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -14,11 +15,13 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Reflection.Emit;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace KotiCRM.Repository.Repository
 {
+
     public class UserAccountRepository : IUserAccountRepository
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -773,6 +776,7 @@ namespace KotiCRM.Repository.Repository
                                    where employee.IsActive == true
                                    select new GetEmployeesDTO
                                    {
+                                       UserId = employee.UserId,
                                        EmployeeId = employee.EmployeeId,
                                        EmployeeCode = employee.EmpCode,
                                        Name = user.FirstName + " " + user.LastName,
@@ -1197,6 +1201,87 @@ namespace KotiCRM.Repository.Repository
             }
 
         }
+
+        //for getEmployee password
+
+        //    public string GetOldPassword(string employeeeId)
+        //    {
+        //        var user = _userManager.Users.FirstOrDefault(x => x.Id == employeeeId);
+        //        var password = user.PasswordHash;
+        //        var pass = DecryptPassword(password);
+        //        return pass.ToString();
+
+        //    }
+
+        //    private const string EncryptionKey = "YourEncryptionKey";
+
+        //    public static string DecryptPassword(string encryptedPassword)
+        //{
+        //    using (Aes aesAlg = Aes.Create())
+        //    {
+        //        // Set the encryption key
+        //        aesAlg.Key = Encoding.UTF8.GetBytes(EncryptionKey);
+
+        //        // Create a decryptor to perform the stream transform
+        //        ICryptoTransform decryptor = aesAlg.CreateDecryptor(aesAlg.Key, aesAlg.IV);
+
+        //        // Convert the encrypted password from Base64 to byte array
+        //        byte[] encryptedBytes = Convert.FromBase64String(encryptedPassword);
+
+        //        // Create the streams used for decryption
+        //        using (MemoryStream msDecrypt = new MemoryStream(encryptedBytes))
+        //        {
+        //            using (CryptoStream csDecrypt = new CryptoStream(msDecrypt, decryptor, CryptoStreamMode.Read))
+        //            {
+        //                using (StreamReader srDecrypt = new StreamReader(csDecrypt))
+        //                {
+        //                    // Read the decrypted bytes from the decrypting stream
+        //                    // and place them in a string
+        //                    return srDecrypt.ReadToEnd();
+        //                }
+        //            }
+        //        }
+        //    }
+        //}
+
+
+
+        public async Task<ChangePasswordDbResponse> ChangePassword(ChangePasswordRequest passwordData )
+        {
+            ApplicationUser cUser = await _userManager.FindByIdAsync(passwordData.userID);
+            //ApplicationUser cUserEmail = await _userManager.FindByEmailAsync(email);
+
+            if (cUser == null )
+            {
+                // User not found
+                return  new ChangePasswordDbResponse { 
+                    status=500,
+                    Message= "Something went wrong"
+                };
+            }
+            var token = await _userManager.GeneratePasswordResetTokenAsync(cUser);
+
+            var result = await _userManager.ResetPasswordAsync(cUser, token , passwordData.newPassword);
+            if (!result.Succeeded)
+            {
+                return new ChangePasswordDbResponse
+                {
+                    status = 400,
+                    Message = "Something went wrong"
+                }; 
+
+            }
+
+            return new ChangePasswordDbResponse
+            {
+                status = 200,
+                Message = "Password changed successfully",
+                Email= cUser.Email
+            }; ;
+        }
+
+
+
 
     }
 }

@@ -8,6 +8,7 @@ namespace KotiCRM.Repository.DTOs.UserManagement
 {
     public class GetEmployeesDTO
     {
+        public string? UserId { get; set; }
         public string? EmployeeId { get; set; }
         public string? EmployeeCode { get; set; }
         public string? Name { get; set; }

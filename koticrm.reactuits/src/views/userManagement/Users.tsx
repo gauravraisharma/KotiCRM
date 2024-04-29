@@ -102,6 +102,8 @@ const Users = () => {
     GetEmployees();
   }, [pageNumber, pageSize, showDeleteConfirmation]);
 
+  console.log(employeesList)
+
   return (
     <>
       <ToastContainer />
@@ -213,7 +215,7 @@ const Users = () => {
                         className="mr-4 text-success"
                       />
                     </Link>
-                    <Link to={`/users/userDetail/${employee.employeeId}`}>
+                    <Link to={`/users/userDetail/${employee.userId}/${employee.employeeId}`}>
                       <AiFillEye
                         style={{
                           color: "darkblue",

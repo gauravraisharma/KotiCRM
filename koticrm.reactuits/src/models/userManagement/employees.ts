@@ -1,5 +1,6 @@
 export interface Employees
 {
+    userId:string;
     employeeId: string;
     employeeCode?: string;
     name?: string;

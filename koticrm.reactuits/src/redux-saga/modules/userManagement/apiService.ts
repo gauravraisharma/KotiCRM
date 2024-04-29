@@ -87,3 +87,17 @@ export async function DeleteEmployee(employeeId: string) {
     }
 }
 
+export async function ChangePassword(userId: string, newPassword:string ) {
+    try {
+        const response = await axiosInstance.post(`/UserAccount/ChangePassword?userID=${userId}&newPassword=${newPassword}`);
+        return responseBody(response);
+    } catch (error: any) {
+        const errorResponse: apiResponse<Employee> = {
+            data: undefined,
+            status: 500,
+            statusText: error.message
+        };
+        return errorResponse;
+    }
+}
+

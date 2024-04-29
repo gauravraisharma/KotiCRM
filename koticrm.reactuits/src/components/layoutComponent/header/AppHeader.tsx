@@ -16,10 +16,15 @@ import { AppBreadcrumb } from "../../index";
 import { AppHeaderDropdown } from "./index";
 import { logo } from "../../../assets/brand/logo";
 import { SIDEBAR_TOGGLE } from "../../../constants/reduxConstants";
+import { useState } from "react";
+import "../../../css/style.css";
 
 const AppHeader = () => {
+  const [activeLink, setActiveLink] = useState(null);
   const dispatch = useDispatch();
-
+  const handleClick = (link) => {
+    setActiveLink(link);
+  };
   const sidebarShow = useSelector(
     (state: any) => state.sharedReducer.sidebarToggle
   );
@@ -41,17 +46,31 @@ const AppHeader = () => {
         </CHeaderBrand>
         <CHeaderNav className="d-none d-md-flex me-auto">
           <CNavItem>
-            <CNavLink to="/dashboard" component={NavLink}>
+            <CNavLink
+              to="/dashboard"
+              component={NavLink}
+              activeClassName="active"
+              onClick={() => handleClick("/dashboard")}
+            >
               Dashboard
             </CNavLink>
           </CNavItem>
           <CNavItem>
-            <CNavLink><Link to="/users" style={{color:'grey',textDecoration:'none'}}>Users</Link></CNavLink>
+            <CNavLink>
+              <Link to="/users" onClick={() => handleClick("/users")}>
+                Users
+              </Link>
+            </CNavLink>
           </CNavItem>
           <CNavItem>
-            <CNavLink><Link to="/settings" style={{color:'grey',textDecoration:'none'}}>Settings</Link></CNavLink>
+            <CNavLink>
+              <Link to="/settings" onClick={() => handleClick("/settings")}>
+                Settings
+              </Link>
+            </CNavLink>
           </CNavItem>
         </CHeaderNav>
+
         <CHeaderNav>
           <CNavItem>
             <CNavLink href="#">

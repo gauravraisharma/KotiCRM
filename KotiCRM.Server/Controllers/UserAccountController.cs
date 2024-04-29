@@ -2,6 +2,7 @@
 using KotiCRM.Repository.Models;
 using KotiCRM.Server.Authentication;
 using KotiCRM.Services.IServices;
+using KotiCRM.Services.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -58,6 +59,7 @@ namespace KotiCRM.Server.Controllers
 
 
             var responseStatus = await _accountService.CreateApplicationUser(userModel);
+
 
             if (responseStatus.Status == "SUCCEED")
             {
@@ -251,5 +253,55 @@ namespace KotiCRM.Server.Controllers
             }
             return Ok(dbResponse);
         }
+
+
+        //[HttpPost]
+        //[Route("ChangePassword")]
+        //public async Task<ActionResult<string>> ChangePassword(Password userID, Password newPassword)
+        //{
+        //    var isPasswordChange = await _accountService.ChangePassword(userID, newPassword);
+
+        //    if (password == null || string.IsNullOrEmpty(password.userID) || string.IsNullOrEmpty(password.newPassword))
+        //    {
+        //        return BadRequest("Invalid input");
+        //    }
+        //    var result = await _accountService.ChangePassword(password.userID, password.newPassword);
+
+        //    if (result == null)
+        //    {
+        //        return NotFound("Could not change password");
+        //    }
+
+        //    return Ok(result);
+
+        //if (isPasswordChange == false)
+        //{
+        //    return NotFound("could not change password");
+        //}
+        //return Ok(isPasswordChange);
+
+
+        [HttpPost]
+        [Route("ChangePassword")]
+        public async Task<ActionResult<string>> ChangePassword(ChangePasswordRequest passwordData)
+        {
+            if (passwordData == null || string.IsNullOrEmpty(passwordData.userID) || string.IsNullOrEmpty(passwordData.newPassword))
+            {
+                return BadRequest("Invalid input");
+            }
+
+            var result = await _accountService.ChangePassword(passwordData);
+
+            if (result== null)
+            {
+                return NotFound("Could not change password");
+            }
+
+            return Ok("Password changed successfully");
+        }
+
+
     }
 }
+
+
