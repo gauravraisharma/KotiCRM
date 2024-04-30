@@ -164,23 +164,22 @@ namespace KotiCRM.Services.Services
 
             if (passwordData.isEmailSent == true)
             {
+                
+                
                 var emailMessage = new EmailMessage
                 {
-                    Subject = "Change Password",
+
+                    Subject = "New Password generated",
                     Recipients = new List<System.Net.Mail.MailAddress>
                     {
-                        new System.Net.Mail.MailAddress(result.Email ,passwordData.newPassword)
+                        new System.Net.Mail.MailAddress(result.Email)
                     },
                     Template = Repository.Enums.EmailTemplate.ChangePasswordTemplate,
                     TemplateDynamicPlaceholders = new Dictionary<string, string>
                     {
-                        {"##Subject##", "Change Password"},
-                        {"##Heading##", "Your password is changed!" },
-                        {"##Content##", "we've made a small update to your account to keep everything secure. Your password has been reset by one of our admins. No worries, it's all in the name of beefing up security!" },
-                        {"##ContentMid##","Here are your new login details:&nbsp;" },
-                        {"##Password##",passwordData.newPassword},
-                        {"##ContentBottom##" ,"Remember to keep this info safe and sound. We recommend giving your password a personal touch as soon as you log back in. You can tweak it in your account settings hassle-free."},
-                        {"##Name##", result.Email }
+                        {"##UserFullName##",result.UserFullName},
+                        {"##Email##", result.Email },
+                        {"##NewPassword##", result.NewPassword},
                        
                     }
                 };
@@ -188,8 +187,7 @@ namespace KotiCRM.Services.Services
                 try
                 {
                     await _emailService.SendMailAsync(emailMessage);
-                    //MailOperation.SendEmailAsync(new List<string> { "mailto:manishbhatia.techbit@outlook.com" }, "Test subject", "This is test template", _config, null, null);
-
+                   
                 }
                 catch (Exception ex)
                 {

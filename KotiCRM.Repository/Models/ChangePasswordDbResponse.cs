@@ -11,5 +11,7 @@ namespace KotiCRM.Repository.Models
         public int status { get; set; }
         public string Message  { get; set; }
         public string Email  { get; set; }
+        public string UserFullName { get; set; }
+        public string NewPassword { get; set; }
     }
 }

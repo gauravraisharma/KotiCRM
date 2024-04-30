@@ -1563,7 +1563,10 @@ namespace KotiCRM.Repository.Repository
             {
                 status = 200,
                 Message = "Password changed successfully",
-                Email= cUser.Email
+                Email= cUser.Email,
+                UserFullName= cUser.FirstName+" "+cUser.LastName,
+                //NewPassword=cUser.
+               
             }; ;
         }
 
