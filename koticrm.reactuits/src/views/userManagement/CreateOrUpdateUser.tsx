@@ -661,7 +661,7 @@ const CreateOrUpdateUser = () => {
                           type="text"
                           id="name"
                           name="name"
-                          autoComplete="off"
+                          autoComplete="new-password"
                           className={`form-control ${
                             touched.name && errors.name ? "is-invalid" : ""
                           }`}
@@ -931,7 +931,7 @@ const CreateOrUpdateUser = () => {
                         Official Email Password{" "}
                       </label>
                       <Field
-                        autoComplete="off"
+                        autoComplete="new-password"
                         type="password"
                         id="officialEmailPassword"
                         name="officialEmailPassword"

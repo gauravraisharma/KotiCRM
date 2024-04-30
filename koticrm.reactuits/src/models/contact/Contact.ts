@@ -10,7 +10,7 @@ export interface Contact {
   mobile: string | null;
   title: string | null;
   department: string | null;
-  dateOfBirth: Date | null;
+  dateOfBirth: string | null;
   homePhone: string | null;
   skypeID: string;
   linkedinURL: string | null;
@@ -36,7 +36,7 @@ export class ContactClass implements Contact {
   mobile: string | null;
   title: string | null;
   department: string | null;
-  dateOfBirth: Date | null;
+  dateOfBirth: string | null;
   homePhone: string | null;
   skypeID: string;
   linkedinURL: string | null;
@@ -61,7 +61,7 @@ export class ContactClass implements Contact {
     this.mobile = '';
     this.title = '';
     this.department = '';
-    this.dateOfBirth = null;
+    this.dateOfBirth = '';
     this.homePhone = '';
     this.skypeID = '';
     this.linkedinURL = '';

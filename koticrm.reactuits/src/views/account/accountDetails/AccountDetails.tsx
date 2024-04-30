@@ -59,7 +59,6 @@ const AccountDetails = () => {
 
   return (
     <>
-    <ToastContainer/>
      {isLoading && (
         <div className="spinner-backdrop">
           <CSpinner size="sm"

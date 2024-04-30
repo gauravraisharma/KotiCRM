@@ -107,12 +107,11 @@ const handleStateChange = (e: ChangeEvent<HTMLSelectElement>) => {
       // Assuming fetchedAccount.id is available
       contact.country = selectedCountry;
       contact.state = selectedState;
+      contact.mobile = contact.mobile?.toString()
+      contact.phone = contact.phone?.toString()
+      contact.otherPhone = contact.otherPhone?.toString()
+      contact.homePhone = contact.homePhone?.toString()
       if (!contact.id) {
-        contact.mobile = contact.mobile?.toString()
-        contact.phone = contact.phone?.toString()
-        contact.otherPhone = contact.otherPhone?.toString()
-        contact.homePhone = contact.homePhone?.toString()
-
         contact.accountID = selectedAccount!.id;
         console.log("Create new contact:", contact);
         dispatch(createContact(contact));
@@ -147,6 +146,11 @@ const handleStateChange = (e: ChangeEvent<HTMLSelectElement>) => {
     .matches(/^[0-9]{10}$/, "Home phone number must be exactly 10 digits")
     
   });
+  //Initial contact
+  const initialContact = {
+    ...contact,
+    dateOfBirth: contact.dateOfBirth ? contact.dateOfBirth.split('T')[0] : ''
+  };
 
   return (
     <>
@@ -173,7 +177,7 @@ const handleStateChange = (e: ChangeEvent<HTMLSelectElement>) => {
         </CCardHeader>
         <CCardBody>
           <Formik
-            initialValues={contact}
+            initialValues={initialContact}
             enableReinitialize
             validationSchema={validationSchema}
             onSubmit={handleFormSubmit}
@@ -611,7 +615,7 @@ const handleStateChange = (e: ChangeEvent<HTMLSelectElement>) => {
                           className="form-control"
                           placeholder="Enter DOB"
                           style={{ height: "50px" }}
-                        />
+                         />
                       </CCol>
                     </CRow>
                     <CRow className="mb-3">
