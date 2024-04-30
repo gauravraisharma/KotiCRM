@@ -39,7 +39,6 @@ namespace KotiCRM.Services.IServices
         //For Employee Password
 
         //Task<string> ChangePassword(Password userID, Password newPassword);
-        //Task<bool> SendPasswordChangeEmail(UserDataResponse userEmail);
         Task<ChangePasswordDbResponse> ChangePassword(ChangePasswordRequest passwordData);
 
     }

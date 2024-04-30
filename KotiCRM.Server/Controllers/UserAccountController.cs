@@ -341,32 +341,6 @@ namespace KotiCRM.Server.Controllers
         }
 
 
-        //[HttpPost]
-        //[Route("ChangePassword")]
-        //public async Task<ActionResult<string>> ChangePassword(Password userID, Password newPassword)
-        //{
-        //    var isPasswordChange = await _accountService.ChangePassword(userID, newPassword);
-
-        //    if (password == null || string.IsNullOrEmpty(password.userID) || string.IsNullOrEmpty(password.newPassword))
-        //    {
-        //        return BadRequest("Invalid input");
-        //    }
-        //    var result = await _accountService.ChangePassword(password.userID, password.newPassword);
-
-        //    if (result == null)
-        //    {
-        //        return NotFound("Could not change password");
-        //    }
-
-        //    return Ok(result);
-
-        //if (isPasswordChange == false)
-        //{
-        //    return NotFound("could not change password");
-        //}
-        //return Ok(isPasswordChange);
-
-
         [HttpPost]
         [Route("ChangePassword")]
         public async Task<ActionResult<string>> ChangePassword(ChangePasswordRequest passwordData)
@@ -380,10 +354,16 @@ namespace KotiCRM.Server.Controllers
 
             if (result== null)
             {
-                return NotFound("Could not change password");
+                return NotFound("Password change failed: User not found or unable to change password.");
             }
-
-            return Ok("Password changed successfully");
+            if (passwordData.isEmailSent)
+            {
+                return Ok("Your Password has been changed successfully. Email sent: true");
+            }
+            else
+            {
+                return Ok("Your Password has been changed successfully. Email sent: false");
+            }
         }
 
 

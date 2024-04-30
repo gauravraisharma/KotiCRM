@@ -18,4 +18,10 @@
     <ProjectReference Include="..\KotiCRM.Repository\KotiCRM.Repository.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="EmailTemplates\ChangePassword.Template.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

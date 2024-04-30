@@ -62,8 +62,13 @@ const UserDetails = () => {
   // };
   const handleSubmit = async (values, { setSubmitting, setValues }) => {
     if (values.newPassword === values.confirmPassword) {
-      // Assuming ChangePassword function returns a promise
-      const result = await ChangePassword(userId, values.newPassword);
+
+      const passwordRequestModal = {
+        newPassword : values.newPassword,
+        userId: userId,
+        isEmailSent : false
+      }
+      const result = await ChangePassword(passwordRequestModal);
       if (result.status === 200) {
         toast.success("Password changed successfully");
         // Reset form values upon successful password change
@@ -256,91 +261,7 @@ const UserDetails = () => {
                   role="tabpanel"
                   aria-labelledby="manageuser-tab"
                 >
-                  {/* <form onSubmit={handleSubmit}>
-                    <div className="headings">
-                      <h5>Change Password</h5>
-                    </div>
-
-                    <CCard>
-                      <CCardBody>
-                        <CForm>
-                          <div
-                            className="mb-3"
-                            style={{
-                              display: "flex",
-                              flexDirection: "row",
-                              margin: "20px",
-                            }}
-                          >
-                            <CCol sm={4}>
-                              <label htmlFor="newPassword">New Password:</label>
-                            </CCol>
-                            <CCol sm={8}>
-                              <input
-                                type="password"
-                                id="newPassword"
-                                name="newPassword"
-                                className="form-control password newPassword-input"
-                                style={{ height: "50px" }}
-                                placeholder="Enter new password "
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                              />
-                            </CCol>
-                          </div>
-                          <div
-                            className="mb-3"
-                            style={{
-                              display: "flex",
-                              flexDirection: "row",
-                              margin: "20px",
-                            }}
-                          >
-                            <CCol sm={4}>
-                              <label htmlFor="confirmPassword">
-                                Confirm New Password:
-                              </label>
-                            </CCol>
-                            <CCol sm={8}>
-                              <input
-                                type="password"
-                                id="confirmPassword"
-                                name="confirmPassword"
-                                style={{ height: "50px" }}
-                                className="form-control password1 confirmPassword-input"
-                                placeholder="Confirm new password "
-                                value={confirmPassword}
-                                onChange={(e) =>
-                                  setConfirmPassword(e.target.value)
-                                }
-                                onBlur={handleBlur}
-                              />
-                            </CCol>
-                          </div>
-                        </CForm>
-                      </CCardBody>
-                    </CCard>
-                    <CRow>
-                      <CCol sm={12} className="text-end">
-                        <button
-                          type="button"
-                          className="btn btn-primary"
-                          color="secondary"
-                          onClick={() => {
-                            // Handle email password logic here
-                          }}
-                        >
-                          Email Password
-                        </button>
-                        <CButton
-                          component="input"
-                          type="submit"
-                          className="btn btn-primary"
-                          value="Save"
-                        />
-                      </CCol>
-                    </CRow>
-                  </form> */}
+                  
                   <Formik
                     initialValues={{
                       newPassword: "",
@@ -448,7 +369,7 @@ const UserDetails = () => {
                             </button>
                             <button type="submit" 
                             className="btn btn-primary"
-                            // onClick={handleMale}
+                            // onClick={handleEmail}
                             >
                               Email Password
                             </button>

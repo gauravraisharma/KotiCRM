@@ -15,11 +15,13 @@ namespace KotiCRM.Services.Services
     {
         private readonly IUserAccountRepository _accountRepository;
         private readonly IConfiguration _config;
+        private readonly IEmailService _emailService;
 
-        public UserAccountService(IUserAccountRepository accountRepository, IConfiguration config)
+        public UserAccountService(IUserAccountRepository accountRepository, IConfiguration config, IEmailService emailService)
         {
             _accountRepository = accountRepository;
             _config = config;
+            _emailService = emailService;
         }
 
         public async Task<ResponseStatus> CreateApplicationUser(ApplicationUserModel userModel)
@@ -40,6 +42,7 @@ namespace KotiCRM.Services.Services
                 }
                 catch (Exception e)
                 {
+                    Console.WriteLine(e.Message);
 
                 }
             return response;
@@ -161,7 +164,38 @@ namespace KotiCRM.Services.Services
 
             if (passwordData.isEmailSent == true)
             {
-                MailOperation.SendEmailAsync(new List<string> { result.Email }, "This is test subject", "<h1>Email</h1>", _config, null, null);
+                var emailMessage = new EmailMessage
+                {
+                    Subject = "Change Password",
+                    Recipients = new List<System.Net.Mail.MailAddress>
+                    {
+                        new System.Net.Mail.MailAddress(result.Email ,passwordData.newPassword)
+                    },
+                    Template = Repository.Enums.EmailTemplate.ChangePasswordTemplate,
+                    TemplateDynamicPlaceholders = new Dictionary<string, string>
+                    {
+                        {"##Subject##", "Change Password"},
+                        {"##Heading##", "Your password is changed!" },
+                        {"##Content##", "we've made a small update to your account to keep everything secure. Your password has been reset by one of our admins. No worries, it's all in the name of beefing up security!" },
+                        {"##ContentMid##","Here are your new login details:&nbsp;" },
+                        {"##Password##",passwordData.newPassword},
+                        {"##ContentBottom##" ,"Remember to keep this info safe and sound. We recommend giving your password a personal touch as soon as you log back in. You can tweak it in your account settings hassle-free."},
+                        {"##Name##", result.Email }
+                       
+                    }
+                };
+
+                try
+                {
+                    await _emailService.SendMailAsync(emailMessage);
+                    //MailOperation.SendEmailAsync(new List<string> { "mailto:manishbhatia.techbit@outlook.com" }, "Test subject", "This is test template", _config, null, null);
+
+                }
+                catch (Exception ex)
+                {
+                   Console.WriteLine(ex.ToString());
+                }
+
             }
             
 

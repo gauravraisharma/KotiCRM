@@ -9,11 +9,11 @@ namespace ApplicationService.Utilities
     {
         public static Task SendEmailAsync(List<string> email, string subject, string message, IConfiguration _config, Dictionary<string, string> subjectVariables, Dictionary<string, string> contentVariables)
         {
-            var fromMail = _config["SMTP_Mail"];
-            var password = _config["SMTP_Password"];
-            var SMTP_client = _config["SMTP_client"];
-            var SMTP_port = _config["SMTP_port"];
-            var SMTP_EnableSsl = _config["SMTP_EnableSsl"];
+            var fromMail = _config["smtp:SMTP_Mail"];
+            var password = _config["smtp:SMTP_Password"];
+            var SMTP_client = _config["smtp:SMTP_client"];
+            var SMTP_port = _config["smtp:SMTP_port"];
+            var SMTP_EnableSsl = _config["smtp:SMTP_EnableSsl"];
 
 
 

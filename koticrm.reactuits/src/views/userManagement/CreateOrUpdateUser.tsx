@@ -119,10 +119,10 @@ const CreateOrUpdateUser = () => {
     const employeeId = await GetEmployeeId();
     const employeeIdData = employeeId.data;
     setEmployeeID(employeeIdData);
-    setFormData(prevFormData => ({
-      ...prevFormData,
-      employeeId: employeeIdData
-    }));
+    // setFormData(prevFormData => ({
+    //   ...prevFormData,
+    //   employeeId: employeeIdData
+    // }));
     generateEmployeeCode("tech", departmentId, employeeIdData);
   };
 

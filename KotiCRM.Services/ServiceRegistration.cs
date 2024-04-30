@@ -29,6 +29,8 @@ namespace KotiCRM.Services
             services.AddTransient<ISharedService, SharedService>();
             services.AddTransient<IUserAccountService, UserAccountService>();
 
+            services.AddSingleton<IEmailService, EmailService>();
+
         }
     }
 }
