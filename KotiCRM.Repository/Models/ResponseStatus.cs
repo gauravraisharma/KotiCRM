@@ -1,4 +1,5 @@
 ﻿using KotiCRM.Repository.DTOs.UserManagement;
+using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 
 namespace KotiCRM.Repository.Models
@@ -17,6 +18,20 @@ namespace KotiCRM.Repository.Models
     {
         public string Status { get; set; }
         public string Message { get; set; }
+    }
+
+    public class RolesResponseStatus
+    {
+        public string Status { get; set; }
+        public string Message { get; set; }
+        public List<ApplicationRole> Roles { get; set; }
+    }
+
+    public class RoleResponseStatus
+    {
+        public string Status { get; set; }
+        public string Message { get; set; }
+        public ApplicationRole Role { get; set; }
     }
 
     public class EmployeeResponseStatus
@@ -83,6 +98,7 @@ namespace KotiCRM.Repository.Models
     public class ModulePermission
     {
         public int ModuleId { get; set; }
+        public int PermissionId { get; set; }
         public string ModuleName { get; set; }
         public bool IsView { get; set; }
         public bool IsEdit { get; set; }

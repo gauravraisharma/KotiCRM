@@ -7,6 +7,7 @@ import { deleteContact } from "../../../redux-saga/modules/contact/action";
 import { DeleteEmployee } from "../../../redux-saga/modules/userManagement/apiService";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { DeleteRole } from "../../../redux-saga/modules/permissionManagement/apiService";
 
 interface DeleteConfirmationModalProps {
   isOpen: boolean;
@@ -16,6 +17,7 @@ interface DeleteConfirmationModalProps {
   invoiceId?: any;
   contactId?:number;
   userId?:string;
+  roleId?:string;
 }
 
 const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = ({
@@ -26,6 +28,7 @@ const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = ({
   invoiceId,
   contactId,
   userId,
+  roleId
 }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -44,6 +47,21 @@ const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = ({
     } catch (error) {
         toast.error('Cannot delete employee, please try again later');
     }      navigate("/users");
+    }
+    else if(roleId){
+      try {
+        const response = await DeleteRole(roleId);
+        if (response.status == 200) {
+          toast.success("Role deleted successfully");
+          onConfirm();
+          return true;
+        } else {
+          toast.warn("Role is assigned to user, can not be deleted");
+        }
+      } 
+      catch (error) {
+        toast.error('Cannot delete role, please try again later');
+      }      
     }
     onConfirm();
   };

@@ -1,5 +1,6 @@
 ﻿
 
+using KotiCRM.Repository.DTOs.RoleManagement;
 using KotiCRM.Repository.DTOs.UserManagement;
 using KotiCRM.Repository.Models;
 using System;
@@ -16,11 +17,17 @@ namespace KotiCRM.Services.IServices
         Task<ResponseStatus> CreateApplicationUser(ApplicationUserModel userModel);
         Task<ResponseStatus> UpdateApplicationUser(UpdateApplicationUserModel userModel);
         Task<ResponseStatus> GetRoleName(string roleId);
-        Task<ResponseStatus> CreateNewRole(string roleName);
+        Task<RolesResponseStatus> GetRoles();
+        Task<RoleResponseStatus> GetRole(string roleId);
+        Task<ResponseStatus> CreateNewRole(CreateUpdateRoleDTO createUpdateRoleDTO);
+        Task<RoleResponseStatus> UpdateRole(CreateUpdateRoleDTO createUpdateRoleDTO);
+        Task<ResponseStatus> DeleteRole(string roleId);
         DDListResponse GetUserTypeListDD();
         IEnumerable<ResponseApplicationUserModel> GetUserList();
         ResponseStatus DeleteUser(string userId);
+        Task<ModulePermissionResponse> GetModulePermissions(string userType);
         Task<ModulePermissionResponse> GetModulePermission(string userId);
+        Task<ResponseStatus> UpdateModulePermission(List<UpdateModulePermissionDTO> updateModulePermissions);
         UserDataResponse GetUserDataById(string userId);
 
         // For Employee

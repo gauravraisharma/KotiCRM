@@ -1,5 +1,6 @@
 ﻿using KotiCRM.Repository.Data;
 using KotiCRM.Repository.DTOs.Contact;
+using KotiCRM.Repository.DTOs.RoleManagement;
 using KotiCRM.Repository.DTOs.UserManagement;
 using KotiCRM.Repository.IRepository;
 using KotiCRM.Repository.Models;
@@ -10,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.Common;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
@@ -386,24 +388,63 @@ namespace KotiCRM.Repository.Repository
                 _context.Dispose();
             }
         }
-        public async Task<ResponseStatus> CreateNewRole(string roleName)
+
+        public async Task<RolesResponseStatus> GetRoles() 
+        {
+            var roles = _context.Roles.Where(x => x.Isdelete == false).ToList();
+            if (roles == null)
+            {
+                return new RolesResponseStatus
+                {
+                    Status = "SUCCEED",
+                    Message = "No role found",
+                };
+            }
+            return new RolesResponseStatus
+            {
+                Status = "SUCCEED",
+                Message = "Roles get successfully",
+                Roles = roles
+            };
+        }
+
+        public async Task<RoleResponseStatus> GetRole(string roleId)
+        {
+            if (roleId == null)
+            {
+                return new RoleResponseStatus
+                {
+                    Status = "FAILED",
+                    Message = "Invalid RoleId",
+                };
+            }
+            var role = _context.Roles.FirstOrDefault(role => role.Id == roleId);
+            return new RoleResponseStatus
+            {
+                Status = "SUCCEED",
+                Message = "Role get successfully",
+                Role = role
+            };
+        }
+
+        public async Task<ResponseStatus> CreateNewRole(CreateUpdateRoleDTO createUpdateRoleDTO)
         {
             try
             {
-                if (string.IsNullOrEmpty(roleName))
+                if (createUpdateRoleDTO == null)
                 {
                     return new ResponseStatus
                     {
                         Status = "FAILED",
-                        Message = "Role name is required"
+                        Message = "Invalid model"
                     };
                 }
 
-                ApplicationRole role = new ApplicationRole
+                var role = new ApplicationRole
                 {
-                    Name = roleName,
+                    Name = createUpdateRoleDTO.Name,
                     CreatedOn = DateTime.UtcNow,
-                    Isactive = true,
+                    Isactive = createUpdateRoleDTO.Isactive,
                     IsDefault = true,
                     Isdelete = false,
                     ModifiedBy = "1",
@@ -441,6 +482,142 @@ namespace KotiCRM.Repository.Repository
             finally
             {
                 _context.Dispose();
+            }
+        }
+
+        public async Task<RoleResponseStatus> UpdateRole(CreateUpdateRoleDTO createUpdateRoleDTO)
+        {
+            using var transaction = _context.Database.BeginTransaction(); // Begin transaction
+            try
+            {
+                //Check if createUpdateRoleDTO is null
+                if (createUpdateRoleDTO == null)
+                {
+                    return new RoleResponseStatus
+                    {
+                        Status = "FAILED",
+                        Message = "UpdateRoleDTO is null."
+                    };
+                }
+                var role = _context.Roles.FirstOrDefault(x => x.Id == createUpdateRoleDTO.Id);
+
+                if (role == null)
+                {
+                    return new RoleResponseStatus
+                    {
+                        Status = "FAILED",
+                        Message = "Role not found"
+                    };
+                }
+
+                role.Name = createUpdateRoleDTO.Name;
+                role.Isactive = createUpdateRoleDTO.Isactive;
+                role.ModifiedOn = DateTime.UtcNow;
+
+                _context.Roles.Update(role);
+                await _context.SaveChangesAsync();
+
+                // Commit transaction if everything succeeds
+                await transaction.CommitAsync();
+
+                return new RoleResponseStatus
+                {
+                    Status = "SUCCEED",
+                    Message = "Employee updated successfully",
+                    Role = role
+                };
+            }
+            catch (Exception ex)
+            {
+                // Rollback transaction if an exception occurs
+                await transaction.RollbackAsync();
+
+                return new RoleResponseStatus
+                {
+                    Status = "FAILED",
+                    Message = "Failed to update role"
+                };
+
+            }
+        }
+
+        public async Task<ResponseStatus> DeleteRole(string roleId)
+        {
+            // Check if the context is null
+            if (_context == null)
+            {
+                return new ResponseStatus
+                {
+                    Status = "FAILED",
+                    Message = "Db Context is null"
+                };
+            }
+
+            try
+            {
+                // Find the role by roleId
+                var role = await _context.Roles.FirstOrDefaultAsync(x => x.Id == roleId).ConfigureAwait(false);
+                // If role not found, return failure
+                if (role == null)
+                {
+                    return new ResponseStatus
+                    {
+                        Status = "FAILED",
+                        Message = "Role not found"
+                    };
+                }
+
+                // Check if the role is Administrator, deletion not allowed
+                if (role.NormalizedName == "ADMINISTRATOR")
+                {
+                    return new ResponseStatus
+                    {
+                        Status = "FAILED",
+                        Message = "Role deletion not allowed"
+                    };
+                }
+
+                // If the role is already marked as deleted, return success
+                if (role.Isdelete)
+                {
+                    return new ResponseStatus
+                    {
+                        Status = "SUCCEED",
+                        Message = "Role already deleted."
+                    };
+                }
+
+                // Check if the role is assigned to any user
+                var userAssignedToRole = await _context.UserRoles.AnyAsync(x => x.RoleId == roleId).ConfigureAwait(false);
+                // If assigned to a user, return failure
+                if (userAssignedToRole)
+                {
+                    return new ResponseStatus
+                    {
+                        Status = "FAILED",
+                        Message = "Role is assigned to user, can not be deleted"
+                    };
+                }
+
+                // Mark the role as deleted
+                role.Isdelete = true;
+                _context.Roles.Update(role);
+                // Save changes
+                await _context.SaveChangesAsync().ConfigureAwait(false);
+
+                return new ResponseStatus
+                {
+                    Status = "SUCCEED",
+                    Message = "Role deleted successfully"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ResponseStatus
+                {
+                    Status = "FAILED",
+                    Message = "Something went wrong: " + ex.Message
+                };
             }
         }
 
@@ -641,7 +818,51 @@ namespace KotiCRM.Repository.Repository
 
 
         }
+        public async Task<ModulePermissionResponse> GetModulePermissions(string userType)
+        {
+            try
+            {
+                if (_context == null)
+                {
+                    return new ModulePermissionResponse
+                    {
+                        Status = "FAILED",
+                        Message = "Db Context is null"
+                    };
+                }
 
+                var modulePermissionList = (from permission in _context.Permissions
+                                            join module in _context.Modules on permission.ModuleID equals module.Id
+                                            where permission.RoleID == userType
+                                            select new ModulePermission
+                                            {
+                                                ModuleId = module.Id,
+                                                PermissionId = permission.PermissionId,
+                                                ModuleName = module.Name,
+                                                IsAdd = permission.Add,
+                                                IsEdit = permission.Edit,
+                                                IsView = permission.View,
+                                                IsDelete = permission.Delete,
+                                            }).ToList();
+                return new ModulePermissionResponse
+                {
+                    Status = "SUCCEED",
+                    Message = "User Modules with permissions get successfully ",
+                    ModulePermissions = modulePermissionList
+                };
+
+            }
+            catch (Exception ex)
+            {
+                return new ModulePermissionResponse
+                {
+                    Status = "FAILED",
+                    Message = "Something went wrong" + ex.Message
+                };
+            }
+
+
+        }
         public async Task<ModulePermissionResponse> GetModulePermission(string userId)
         {
             try
@@ -712,6 +933,72 @@ namespace KotiCRM.Repository.Repository
 
 
         }
+        public async Task<ResponseStatus> UpdateModulePermission(List<UpdateModulePermissionDTO> updateModulePermissions)
+        {
+            try
+            {
+                // Check if updateModulePermissions is null or empty
+                if (updateModulePermissions == null || !updateModulePermissions.Any())
+                {
+                    return new ResponseStatus
+                    {
+                        Status = "FAILED",
+                        Message = "No permissions provided."
+                    };
+                }
+                bool permissionsUpdated = false;
+
+                foreach (var updateModulePermissionDTO in updateModulePermissions)
+                {
+                    if (updateModulePermissionDTO.RoleId == null) continue;
+                    var permission = _context.Permissions.FirstOrDefault(x => x.PermissionId == updateModulePermissionDTO.PermissionId && x.RoleID == updateModulePermissionDTO.RoleId);
+
+                    if (permission == null)
+                    {
+                        return new ResponseStatus
+                        {
+                            Status = "FAILED",
+                            Message = $"Permission with ID {updateModulePermissionDTO.PermissionId} not found."
+                        };
+                    }
+
+                    permission.View = updateModulePermissionDTO.IsView;
+                    permission.Add = updateModulePermissionDTO.IsAdd;
+                    permission.Edit = updateModulePermissionDTO.IsEdit;
+                    permission.Delete = updateModulePermissionDTO.IsDelete;
+
+                    _context.Permissions.Update(permission);
+                    permissionsUpdated = true;
+                }
+                if (permissionsUpdated)
+                {
+                    await _context.SaveChangesAsync();
+
+                    return new ResponseStatus
+                    {
+                        Status = "SUCCEED",
+                        Message = "Permissions updated successfully",
+                    };
+                }
+                else
+                {
+                    return new ResponseStatus
+                    {
+                        Status = "SUCCEED",
+                        Message = "No permissions were updated",
+                    };
+                }
+            }
+            catch (Exception ex)
+            {
+                return new ResponseStatus
+                {
+                    Status = "FAILED",
+                    Message = "Failed to update permissions"
+                };
+            }
+        }
+       
         public UserDataResponse GetUserDataById(string userId)
         {
             try

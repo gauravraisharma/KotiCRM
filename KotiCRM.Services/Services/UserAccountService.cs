@@ -7,6 +7,7 @@ using KotiCRM.Repository.DTOs.UserManagement;
 using KotiCRM.Repository.DTOs.AccountDTO;
 using System.Drawing.Printing;
 using ApplicationService.Utilities;
+using KotiCRM.Repository.DTOs.RoleManagement;
 
 namespace KotiCRM.Services.Services
 {
@@ -48,12 +49,26 @@ namespace KotiCRM.Services.Services
             return _accountRepository.UpdateApplicationUser(userModel);
         }
 
-        public Task<ResponseStatus> CreateNewRole(string roleName)
+        public async Task<RolesResponseStatus> GetRoles()
         {
-            return _accountRepository.CreateNewRole(roleName);
+            return await _accountRepository.GetRoles();
         }
-
-
+        public async Task<RoleResponseStatus> GetRole(string roleId)
+        {
+            return await _accountRepository.GetRole(roleId);
+        }
+        public Task<ResponseStatus> CreateNewRole(CreateUpdateRoleDTO createUpdateRoleDTO)
+        {
+            return _accountRepository.CreateNewRole(createUpdateRoleDTO);
+        }
+        public async Task<RoleResponseStatus> UpdateRole(CreateUpdateRoleDTO createUpdateRoleDTO)
+        {
+            return await _accountRepository.UpdateRole(createUpdateRoleDTO);
+        }
+        public async Task<ResponseStatus> DeleteRole(string roleId)
+        {
+            return await _accountRepository.DeleteRole(roleId);
+        }
         public Task<ResponseStatus> GetRoleName(string roleId)
         {
             return _accountRepository.GetRoleNameAsync(roleId);
@@ -80,9 +95,17 @@ namespace KotiCRM.Services.Services
         {
             return _accountRepository.DeleteUser(userId);
         }
+        public Task<ModulePermissionResponse> GetModulePermissions(string userType)
+        {
+            return _accountRepository.GetModulePermissions(userType);
+        }
         public Task<ModulePermissionResponse> GetModulePermission(string userId)
         {
             return _accountRepository.GetModulePermission(userId);
+        }
+        public async Task<ResponseStatus> UpdateModulePermission(List<UpdateModulePermissionDTO> updateModulePermissions)
+        {
+            return await _accountRepository.UpdateModulePermission(updateModulePermissions);
         }
 
         public UserDataResponse GetUserDataById(string userId)

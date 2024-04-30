@@ -1,4 +1,5 @@
-﻿using KotiCRM.Repository.DTOs.UserManagement;
+﻿using KotiCRM.Repository.DTOs.RoleManagement;
+using KotiCRM.Repository.DTOs.UserManagement;
 using KotiCRM.Repository.Models;
 using KotiCRM.Server.Authentication;
 using KotiCRM.Services.IServices;
@@ -96,18 +97,42 @@ namespace KotiCRM.Server.Controllers
 
         }
 
+        // Role Management
+
+        [HttpGet("GetRoles")]
+        public async Task<ActionResult> GetRoles()
+        {
+            var dbResponse = await _accountService.GetRoles();
+            if (dbResponse.Status == "FAILED")
+            {
+                return BadRequest();
+            }
+            return Ok(dbResponse);
+        }
+
+        [HttpGet("GetRole/{roleId}")]
+        public async Task<ActionResult> GetRole(string roleId)
+        {
+            var dbResponse = await _accountService.GetRole(roleId);
+            if (dbResponse.Status == "FAILED")
+            {
+                return BadRequest();
+            }
+            return Ok(dbResponse);
+        }
 
         //It will create the application Role
-        [Authorize(Roles = "Administrator")]
-        [HttpGet("CreateNewRole/{roleName}")]
-        public async Task<IActionResult> CreateNewRole(string roleName)
+        //[Authorize(Roles = "Administrator")]
+        [HttpPost]
+        [Route("CreateNewRole")]
+        public async Task<IActionResult> CreateNewRole(CreateUpdateRoleDTO createUpdateRoleDTO)
         {
-            if (string.IsNullOrEmpty(roleName))
+            if (!ModelState.IsValid)
             {
                 return BadRequest("Please pass the valid Input.");
             }
 
-            var responseStatus = await _accountService.CreateNewRole(roleName);
+            var responseStatus = await _accountService.CreateNewRole(createUpdateRoleDTO);
 
             if (responseStatus.Status == "SUCCEED")
             {
@@ -119,7 +144,37 @@ namespace KotiCRM.Server.Controllers
             }
 
         }
-        //This method is used to get List of department 
+
+        [HttpPut]
+        [Route("UpdateRole")]
+        public async Task<ActionResult> UpdateRole(CreateUpdateRoleDTO createUpdateRoleDTO)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest("Please pass the valid Input.");
+            }
+            var responseStatus = await _accountService.UpdateRole(createUpdateRoleDTO);
+
+            if (responseStatus.Status == "SUCCEED")
+            {
+                return Ok(responseStatus);
+            }
+            else
+            {
+                return BadRequest(responseStatus.Message);
+            }
+        }
+
+        [HttpGet("DeleteRole/{roleId}")]
+        public async Task<ActionResult> DeleteRole(string roleId)
+        {
+            var dbResponse = await _accountService.DeleteRole(roleId);
+            if (dbResponse.Status == "FAILED")
+            {
+                return BadRequest();
+            }
+            return Ok(dbResponse);
+        }
 
 
         //This method is used to get List of Roles 
@@ -167,6 +222,17 @@ namespace KotiCRM.Server.Controllers
             return Ok(dbResponse);
         }
 
+        [HttpGet("GetModulePermissions/{userType}")]
+        public async Task<ActionResult> GetModulePermissions(string userType)
+        {
+            var dbResponse = await _accountService.GetModulePermissions(userType);
+            if (dbResponse.Status == "FAILED")
+            {
+                return BadRequest();
+            }
+            return Ok(dbResponse);
+        }
+
         [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpGet("GetModulePermission/{userId}")]
         public async Task<ActionResult> GetModulePermission(string userId)
@@ -177,6 +243,26 @@ namespace KotiCRM.Server.Controllers
                 return BadRequest();
             }
             return Ok(dbResponse);
+        }
+
+        [HttpPut]
+        [Route("UpdateModulePermission")]
+        public async Task<ActionResult> UpdateModulePermission(List<UpdateModulePermissionDTO> updateModulePermissions)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest("Please pass the valid Input.");
+            }
+            var responseStatus = await _accountService.UpdateModulePermission(updateModulePermissions);
+
+            if (responseStatus.Status == "SUCCEED")
+            {
+                return Ok(responseStatus);
+            }
+            else
+            {
+                return BadRequest(responseStatus.Message);
+            }
         }
 
 
