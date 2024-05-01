@@ -100,9 +100,9 @@ namespace KotiCRM.Server.Controllers
         // Role Management
 
         [HttpGet("GetRoles")]
-        public async Task<ActionResult> GetRoles()
+        public async Task<ActionResult> GetRoles(string? searchQuery, int? pageNumber, int? pageSize)
         {
-            var dbResponse = await _accountService.GetRoles();
+            var dbResponse = await _accountService.GetRoles(searchQuery, pageNumber, pageSize);
             if (dbResponse.Status == "FAILED")
             {
                 return BadRequest();

@@ -42,7 +42,6 @@ const CreateOrUpdateUser = lazy(() => import('./views/userManagement/CreateOrUpd
 //Manage Permissions and Roles
 const Roles = lazy(() => import('./views/roleManagement/Roles'))
 const CreateOrUpdateRole = lazy(() => import('./views/roleManagement/CreateOrUpdateRole'))
-const ManagePermission = lazy(() => import('./views/roleManagement/ManagePermission'))
 
 // Base
 const Accordion = lazy(() => import('./components/base/accordion/Accordion'))
@@ -173,7 +172,6 @@ const routes: Route[] = [
     { path: '/roles', name: 'Roles', element: Roles, isAuth: true, modulePermission: 'ManagePermission' },
     { path: '/roles/createRole', name: 'CreateRole', element: CreateOrUpdateRole, isAuth: true, modulePermission: 'ManagePermission' },
     { path: '/roles/updateRole/:id', name: 'UpdateRole', element: CreateOrUpdateRole, isAuth: true, modulePermission: 'ManagePermission' },
-    { path: '/roles/managePermission', name: 'ManagePermission', element: ManagePermission, isAuth: true, modulePermission: 'ManagePermission' },
 ]
 
 export default routes

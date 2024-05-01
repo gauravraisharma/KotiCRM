@@ -30,9 +30,13 @@ export async function UpdatePermission(permission: Permission[]) {
     }
 }
 
-export async function GetRolesList(){
+export async function GetRolesList(searchQuery?: string, pageNumber?: number, pageSize?: number){
     try {
-        const response = await axiosInstance.get(`/UserAccount/GetRoles`);
+        const params = new URLSearchParams();
+        if (searchQuery) params.append('searchQuery', searchQuery.toString());
+        if (pageNumber) params.append('pageNumber', pageNumber.toString());
+        if (pageSize) params.append('pageSize', pageSize.toString());
+        const response = await axiosInstance.get(`/UserAccount/GetRoles?${params.toString()}`);
         return response.data;
     } catch (error: any) {
         const errorResponse: apiResponse<Role[]> = {

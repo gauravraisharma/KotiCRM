@@ -52,9 +52,9 @@ namespace KotiCRM.Services.Services
             return _accountRepository.UpdateApplicationUser(userModel);
         }
 
-        public async Task<RolesResponseStatus> GetRoles()
+        public async Task<RolesResponseStatus> GetRoles(string? searchQuery, int? pageNumber, int? pageSize)
         {
-            return await _accountRepository.GetRoles();
+            return await _accountRepository.GetRoles(searchQuery, pageNumber, pageSize);
         }
         public async Task<RoleResponseStatus> GetRole(string roleId)
         {

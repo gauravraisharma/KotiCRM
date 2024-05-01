@@ -17,7 +17,7 @@ namespace KotiCRM.Services.IServices
         Task<ResponseStatus> CreateApplicationUser(ApplicationUserModel userModel);
         Task<ResponseStatus> UpdateApplicationUser(UpdateApplicationUserModel userModel);
         Task<ResponseStatus> GetRoleName(string roleId);
-        Task<RolesResponseStatus> GetRoles();
+        Task<RolesResponseStatus> GetRoles(string? searchQuery, int? pageNumber, int? pageSize);
         Task<RoleResponseStatus> GetRole(string roleId);
         Task<ResponseStatus> CreateNewRole(CreateUpdateRoleDTO createUpdateRoleDTO);
         Task<RoleResponseStatus> UpdateRole(CreateUpdateRoleDTO createUpdateRoleDTO);

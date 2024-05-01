@@ -9,6 +9,11 @@ import {
   CCardHeader,
   CCol,
   CFormCheck,
+  CFormInput,
+  CInputGroup,
+  CInputGroupText,
+  CPagination,
+  CPaginationItem,
   CRow,
   CSpinner,
   CTable,
@@ -26,12 +31,12 @@ import DeleteConfirmationModal from "../account/accountsList/DeleteConfirmation"
 import { color } from "html2canvas/dist/types/css/types/color";
 
 const Roles = () => {
-    const [isLoading, setIsLoading] = useState(true);
-    const [roleList, setRoleList] = useState<RoleList[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [roleList, setRoleList] = useState<RoleList[]>([]);
   const [roleId, setRoleId] = useState<string>("");
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState<boolean>(false);
-//   const [searchQuery, setSearchQuery] = useState('')
-//   const [pageNumber, setPageNumber] = useState<number>(1);
+  const [searchQuery, setSearchQuery] = useState('')
+  const [pageNumber, setPageNumber] = useState<number>(1);
 
 const userType = useSelector((state: any) => state.authReducer.userType);
 const timezone = useSelector((state: any) => state.sharedReducer.timezone);
@@ -66,33 +71,36 @@ const timezone = useSelector((state: any) => state.sharedReducer.timezone);
     setShowDeleteConfirmation(false);
   };
 
-//   // Pagination
-//   const pageSize = 10;
-//   const totalCount = employeesList.userCount
-//   const totalPages = Math.ceil(totalCount / pageSize);
+  // Pagination
+  const pageSize = 5;
+  const totalCount = roleList.length
+  const totalPages = Math.ceil(totalCount / pageSize);
+  const startIndex = (pageNumber - 1) * pageSize;
+  const endIndex = Math.min(startIndex + pageSize, totalCount);
+  const displayedRoles = roleList.slice(startIndex, endIndex);
 
-//   //Handle page change
-//   const handlePageChange = (pageNumber: number) => {
-//     setPageNumber(pageNumber);
-//   };
+  //Handle page change
+  const handlePageChange = (pageNumber: number) => {
+    setPageNumber(pageNumber);
+  };
 
-//   //Handle enter click to search account
-//   const handleKeyDown = (e: any) => {
-//     if (e.keyCode === 13) {
-//       GetEmployees();
-//     }
-//   };
-//   //Focus out event to searchh
-//   const handleBlur = () => {
-//     GetEmployees()
-//   }
+  //Handle enter click to search role
+  const handleKeyDown = async (e: any) => {
+    if (e.keyCode === 13) {
+      const response = await GetRolesList(searchQuery, pageNumber, pageSize);
+      setRoleList(response.roles);
+    }
+  };
+  //Focus out event to searchh
+  const handleBlur = async () => {
+    const response = await GetRolesList(searchQuery, pageNumber, pageSize);
+      setRoleList(response.roles);
+  }
 
   //Effects
   
   return (
     <>
-      <ToastContainer />
-
       {isLoading && (
         <div className="spinner-backdrop">
           <CSpinner
@@ -107,22 +115,41 @@ const timezone = useSelector((state: any) => state.sharedReducer.timezone);
           />
         </div>
       )}
-      <CRow className="mb-3">
+      <ToastContainer />
+      <CRow>
         <CCol xs={12}>
           <CRow className="align-items-center m-1">
-            <CCol xs={2} md={2} lg={6}>
+            <CCol xs={4} className="text-start">
+              <CInputGroup>
+                <CInputGroupText as="label" htmlFor="searchInput">
+                  Search
+                </CInputGroupText>
+                <CFormInput
+                  id="searchInput"
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Search by name,email,mobile..."
+                  onKeyDown={handleKeyDown}
+                  onBlur={handleBlur}
+                />
+              </CInputGroup>
             </CCol>
-            <CCol xs={6} className="text-end">
+            <CCol xs={8} className="text-end">
               <Link to={`/roles/createRole`}>
-                <CButton color="primary" variant="outline">
-                  + New
-                </CButton>
+                <CButton
+                  component="input"
+                  type="button"
+                  style={{ padding: "6px 16px" }}
+                  color="primary"
+                  value="+ New"
+                  variant="outline"
+                />
               </Link>
             </CCol>
           </CRow>
         </CCol>
       </CRow>
-
       <DeleteConfirmationModal
         isOpen={showDeleteConfirmation}
         onConfirm={confirmDelete}
@@ -144,14 +171,13 @@ const timezone = useSelector((state: any) => state.sharedReducer.timezone);
               </CTableRow>
             </CTableHead>
             <CTableBody>
-              {roleList?.map((role: RoleList) => (
+              {displayedRoles?.map((role: RoleList) => (
                 <CTableRow key={role.id}>
                   <CTableDataCell>{role.name}</CTableDataCell>
                   <CTableDataCell>{role.isactive ? (<span style={{color: "green"}}>Yes</span>) : (<span style={{color: "red"}}>No</span>)}</CTableDataCell>
                   <CTableDataCell>
                     {moment.utc(role.createdOn).tz(timezone)?.format('DD/MM/YYYY hh:mm A')}
                   </CTableDataCell>
-
                   <CTableDataCell>
                     {role.name.toLocaleLowerCase() === "administrator" ? (
                       <>
@@ -206,7 +232,7 @@ const timezone = useSelector((state: any) => state.sharedReducer.timezone);
               ))}
             </CTableBody>
           </CTable>
-          {/* <CPagination
+          <CPagination
             size="sm"
             align="end"
             aria-label="Page navigation example"
@@ -236,7 +262,7 @@ const timezone = useSelector((state: any) => state.sharedReducer.timezone);
             >
               <span aria-hidden="true">&raquo;</span>
             </CPaginationItem>
-          </CPagination> */}
+          </CPagination>
         </CCardBody>
       </CCard>
     </>

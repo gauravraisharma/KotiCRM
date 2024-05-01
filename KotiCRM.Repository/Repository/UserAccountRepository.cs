@@ -389,10 +389,28 @@ namespace KotiCRM.Repository.Repository
             }
         }
 
-        public async Task<RolesResponseStatus> GetRoles() 
+        public async Task<RolesResponseStatus> GetRoles(string? searchQuery, int? pageNumber, int? pageSize) 
         {
-            var roles = _context.Roles.Where(x => x.Isdelete == false).ToList();
-            if (roles == null)
+            IQueryable<ApplicationRole> rolesQuery = _context.Roles.Where(x => !x.Isdelete);
+
+            // Exclude roles with the name "Administrator"
+            rolesQuery = rolesQuery.Where(x => x.Name != "Administrator");
+
+            // Apply search filter if searchQuery is provided
+            if (!string.IsNullOrEmpty(searchQuery))
+            {
+                rolesQuery = rolesQuery.Where(x => x.Name.Contains(searchQuery));
+            }
+
+            // Paginate the results if pageNumber and pageSize are provided
+            if (pageNumber.HasValue && pageSize.HasValue)
+            {
+                rolesQuery = rolesQuery.Skip((pageNumber.Value - 1) * pageSize.Value).Take(pageSize.Value);
+            }
+
+            var roles = await rolesQuery.ToListAsync();
+
+            if (roles == null || roles.Count == 0)
             {
                 return new RolesResponseStatus
                 {
@@ -400,6 +418,7 @@ namespace KotiCRM.Repository.Repository
                     Message = "No role found",
                 };
             }
+
             return new RolesResponseStatus
             {
                 Status = "SUCCEED",
