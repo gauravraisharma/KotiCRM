@@ -48,7 +48,7 @@ const CreateOrUpdateRole = () => {
         }
       };
 
-    const handleIsActiveChange = (e) => {
+    const handleIsActiveChange = (e:any) => {
         setIsActive(e.target.checked);
     };
 

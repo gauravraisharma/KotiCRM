@@ -70,7 +70,7 @@ const UserDetails = () => {
       }
       const result = await ChangePassword(passwordRequestModal);
       if (result.status === 200) {
-        toast.success("Password changed successfully");
+        toast.success("Your Password has been changed successfully");
         // Reset form values upon successful password change
         setValues({
           newPassword: "",
