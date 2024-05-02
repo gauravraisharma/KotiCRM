@@ -28,6 +28,7 @@ import { getContacts } from "../../redux-saga/modules/contact/action";
 import { ContactWithAccountName } from "../../models/contact/ContactWithAccountName";
 import DeleteConfirmationModal from "../account/accountsList/DeleteConfirmation";
 import { ToastContainer } from "react-toastify";
+import GetModulePermissions from "../../utils/Shared/GetModulePermissions";
 
 const tableHeader = [
   "Contact Name",
@@ -50,6 +51,9 @@ const Contacts = ({ getContactsCount, accountId }: Props) => {
     useState<boolean>(false);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [pageNumber, setPageNumber] = useState<number>(1);
+
+  const contactsPermissions = GetModulePermissions('Contacts');
+
 
   const fetchedContactWithAccountNameListAndTotal = useSelector(
     (state: any) => state.contactReducer.contacts
@@ -148,7 +152,7 @@ console.log(fetchedContactWithAccountNameListAndTotal)
               </CInputGroup>
             </CCol>
             <CCol xs={8} className="text-end">
-              <Link to={`/contacts/createContact`}>
+              {contactsPermissions.isAdd && <Link to={`/contacts/createContact`}>
                 <CButton
                   component="input"
                   type="button"
@@ -157,7 +161,7 @@ console.log(fetchedContactWithAccountNameListAndTotal)
                   value="+ New"
                   variant="outline"
                 />
-              </Link>
+              </Link>}
             </CCol>
           </CRow>
         </CCol>
@@ -204,7 +208,7 @@ console.log(fetchedContactWithAccountNameListAndTotal)
                             {getAccountOwnerName(contact?.ownerId)}
                           </CTableDataCell>
                           <CTableDataCell>
-                            <Link to={`/contacts/editContact/${contact?.id}`}>
+                            {contactsPermissions.isEdit && <Link to={`/contacts/editContact/${contact?.id}`}>
                               <MdEdit
                                 style={{
                                   color: "green",
@@ -213,7 +217,7 @@ console.log(fetchedContactWithAccountNameListAndTotal)
                                 }}
                                 className="mr-4 text-success"
                               />
-                            </Link>
+                            </Link>}
                             <Link to={`/contacts/${contact?.id}`}>
                               <AiFillEye
                                 style={{
@@ -224,7 +228,7 @@ console.log(fetchedContactWithAccountNameListAndTotal)
                                 className="mr-4 text-primary"
                               />
                             </Link>
-                            <MdDelete
+                            {contactsPermissions.isDelete && <MdDelete
                               style={{
                                 color: "red",
                                 marginRight: "10px",
@@ -233,7 +237,7 @@ console.log(fetchedContactWithAccountNameListAndTotal)
                               }}
                               className="text-danger"
                               onClick={() => handleDeleteClick(contact.id)}
-                            />
+                            />}
                           </CTableDataCell>
                         </CTableRow>
                       )

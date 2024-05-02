@@ -27,7 +27,7 @@ const AppSidebar = () => {
         // Check if corresponding permission object exists in `modulePermissions`
         if (modulePermissions) {
             return allowedItems.includes(item.moduleName) ||
-                modulePermissions.some((permission: any) => permission.moduleName === item.moduleName && permission.isAdd);
+                modulePermissions.some((permission: any) => permission.moduleName === item.moduleName && permission.isView);
         } else {
             return null;
         }
