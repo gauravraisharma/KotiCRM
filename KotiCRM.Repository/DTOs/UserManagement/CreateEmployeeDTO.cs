@@ -1,4 +1,5 @@
 ﻿using KotiCRM.Repository.Models;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,7 @@ namespace KotiCRM.Repository.DTOs.UserManagement
         public string? EmployeeId { get; set; }
         public string? EmployeeCode { get; set; }
         public string? Name { get; set; }
-        public string? ProfilePictureURL { get; set; }
+        public IFormFile? ProfilePictureURL { get; set; }
         public string? FatherName { get; set; }
         public string? GuardianName { get; set; }
         public string? BloodGroup { get; set; }
@@ -38,6 +39,9 @@ namespace KotiCRM.Repository.DTOs.UserManagement
         public bool IsActive { get; set; }
         public string? PermanentAddress { get; set; }
         public string? CorrespondenceAddress { get; set; }
+
+        // Add property for profile picture
+        //public IFormFile ProfilePicture { get; set; }
 
         // public int CompanyId { get; set; }
         // public int organizationID { get; set; }

@@ -288,12 +288,21 @@ namespace KotiCRM.Server.Controllers
         // This method is used to create Employee
         [HttpPost]
         [Route("CreateEmployee")]
-        public async Task<ActionResult> CreateEmployee(CreateEmployeeDTO createEmployeeDTO)
+        public async Task<ActionResult> CreateEmployee([FromForm] CreateEmployeeDTO createEmployeeDTO)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest("Please pass the valid Input.");
             }
+            //Handle profile picture upload
+            string profilePictureUrl = null;
+            if (createEmployeeDTO.ProfilePictureURL != null && createEmployeeDTO.ProfilePictureURL.Length>0) 
+            {
+                profilePictureUrl = (createEmployeeDTO.ProfilePictureURL);
+            }
+            //set the profile picture url in the DTO
+            createEmployeeDTO.ProfilePictureURL = profilePictureUrl;
+
             var responseStatus = await _accountService.CreateEmployee(createEmployeeDTO);
 
             if (responseStatus.Status == "SUCCEED")
