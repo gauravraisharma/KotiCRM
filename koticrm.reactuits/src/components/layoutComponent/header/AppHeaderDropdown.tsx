@@ -5,6 +5,8 @@ import {
   CDropdownItem,
   CDropdownMenu,
   CDropdownToggle,
+  CNavItem,
+  CNavLink,
 } from '@coreui/react'
 import {
   cilAccountLogout,
@@ -29,6 +31,9 @@ const AppHeaderDropdown = () => {
     dispatch(logout());
     navigate('/login')
   }
+  const handleClick = (link) => {
+    setActiveLink(link);
+  };
   return (
     <CDropdown variant="nav-item">
       <CDropdownToggle className="py-0" caret={false}>
@@ -37,7 +42,13 @@ const AppHeaderDropdown = () => {
       <CDropdownMenu className="pt-0">
         <CDropdownItem href="javascript:;">
           <CIcon icon={cilUser} className="me-2" />
-          Profile
+          
+            {/* <CNavLink> */}
+              <Link to="/users" onClick={() => handleClick("/users")}>
+                Users
+              </Link>
+            {/* </CNavLink> */}
+    
         </CDropdownItem>
         <CDropdownItem >
           <CIcon icon={cilSettings} className="me-2" />

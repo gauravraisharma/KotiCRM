@@ -317,7 +317,6 @@ const Invoices: React.FC<InvoiceProps> = ({
         </h5>
       </div>
       </>
-      
         <>
           <DeleteConfirmationModal
             isOpen={showDeleteConfirmation}
@@ -401,6 +400,7 @@ const Invoices: React.FC<InvoiceProps> = ({
                                 title="Paid invoice is not editable"
                               />
                             ) : (
+                          
                               <Link
                                 to={`/invoices/editInvoice/${invoiceModel.invoice?.id}`}
                               >
@@ -425,6 +425,7 @@ const Invoices: React.FC<InvoiceProps> = ({
                               className="mr-4 text-primary"
                             />
                             </Link>
+                            {invoicePermissions.isDelete &&
                             <MdDelete
                               size={21}
                               style={{
@@ -437,7 +438,7 @@ const Invoices: React.FC<InvoiceProps> = ({
                               onClick={() =>
                                 handleDeleteClick(invoiceModel.invoice?.id)
                               }
-                            />
+                            />}
                           </CTableDataCell>
                         </CTableRow>
                       ))

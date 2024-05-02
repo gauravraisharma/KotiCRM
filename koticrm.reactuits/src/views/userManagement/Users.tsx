@@ -30,6 +30,7 @@ import {
   CTableRow,
 } from "@coreui/react";
 import "../../css/style.css";
+import GetModulePermissions from "../../utils/Shared/GetModulePermissions";
 
 const Users = () => {
   const [employeesList, setEmployeesList] = useState<Employees[]>([]);
@@ -40,7 +41,7 @@ const Users = () => {
   const [searchQuery, setSearchQuery] = useState('')
 
   const [pageNumber, setPageNumber] = useState<number>(1);
-
+  const employeePermissions = GetModulePermissions('Employees');
 
   const GetEmployees = async () => {
     try {
@@ -164,13 +165,22 @@ const Users = () => {
                 />
               </div>
             </CCol>
+            <CCol xs={6} className="text-end">
+        
+              <Link to={`/roles/createRole`}>
+                <CButton color="primary" variant="outline">
+                  Manage Roles
+                </CButton>
+              </Link>
+            </CCol>
 
             <CCol xs={6} className="text-end">
+              {employeePermissions.isAdd &&
               <Link to={`/users/createOrUpdateUser`}>
                 <CButton color="primary" variant="outline">
                   + New
                 </CButton>
-              </Link>
+              </Link>}
             </CCol>
           </CRow>
         </CCol>
@@ -205,6 +215,7 @@ const Users = () => {
                   <CTableDataCell>{employee.officialEmail}</CTableDataCell>
                   <CTableDataCell>{employee.joiningDate}</CTableDataCell>
                   <CTableDataCell>
+                    {employeePermissions.isEdit && 
                     <Link to={`/users/updateUser/${employee.employeeId}`}>
                       <MdEdit
                         style={{
@@ -214,7 +225,8 @@ const Users = () => {
                         }}
                         className="mr-4 text-success"
                       />
-                    </Link>
+                    </Link>}
+                 
                     <Link to={`/users/userDetail/${employee.userId}/${employee.employeeId}`}>
                       <AiFillEye
                         style={{
@@ -225,6 +237,7 @@ const Users = () => {
                         className="mr-4 text-primary"
                       />
                     </Link>
+                    {employeePermissions.isDelete &&
                     <MdDelete
                       style={{
                         color: "red",
@@ -234,7 +247,7 @@ const Users = () => {
                       }}
                       className="text-danger"
                       onClick={() => handleDeleteClick(employee.employeeId)}
-                    />
+                    />}
                   </CTableDataCell>
                 </CTableRow>
               ))}

@@ -57,10 +57,12 @@ const CreateOrUpdateUser = () => {
   const [departmentId, setDepartmentId] = useState(0);
   const [designationId, setDesignationId] = useState(0);
   const [shiftId, setShiftId] = useState(0);
-  const [newProfilePicture, setNewProfilePicture] = useState<UploadProfilePicture>(new CreateAttachmentClass());
+  // const [newProfilePicture, setNewProfilePicture] = useState<UploadProfilePicture>(new CreateAttachmentClass());
 
 
   const [selectedImage, setSelectedImage] = useState(null);
+ 
+
 
   const handleFileSelect = (event) => {
     const file = event.target.files[0];
