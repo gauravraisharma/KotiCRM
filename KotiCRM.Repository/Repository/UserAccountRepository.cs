@@ -1187,7 +1187,7 @@ namespace KotiCRM.Repository.Repository
         }
 
         //for create Employee
-        public async Task<EmployeeResponseStatus> CreateEmployee(CreateEmployeeDTO createEmployeeDTO)
+        public async Task<EmployeeResponseStatus> CreateEmployee(CreateEmployeeDTO createEmployeeDTO  )
         {
             using var transaction = _context.Database.BeginTransaction(); // Begin transaction
             try
@@ -1263,19 +1263,19 @@ namespace KotiCRM.Repository.Repository
                     EmpCode = createEmployeeDTO.EmployeeCode,
                     UserId = userId,
                     Name = createEmployeeDTO.Name,
-                    ProfilePictureURL = createEmployeeDTO.ProfilePictureURL,
+                    ProfilePictureURL = createEmployeeDTO.ProfilePicturePath,
                     FatherName = createEmployeeDTO.FatherName,
                     GuardianName = createEmployeeDTO.GuardianName,
                     BloodGroup = createEmployeeDTO.BloodGroup,
                     DateOfBirth = createEmployeeDTO.DateOfBirth,
                     JoiningDate = createEmployeeDTO.JoiningDate,
                     RelievingDate = createEmployeeDTO.RelievingDate,
-                    ContactNumber1 = createEmployeeDTO.ContactNumber1,                // Remove
+                    ContactNumber1 = createEmployeeDTO.ContactNumber1,               
                     ContactNumber2 = createEmployeeDTO.ContactNumber2,
                     GuardianContactNumber = createEmployeeDTO.GuardianContactNumber,
                     PersonalEmailId = createEmployeeDTO.PersonalEmail,
-                    OfficialEmailId = createEmployeeDTO.OfficialEmail,               // Remove
-                    OfficialEmailPassword = createEmployeeDTO.OfficialEmailPassword, // Remove
+                    OfficialEmailId = createEmployeeDTO.OfficialEmail,              
+                    OfficialEmailPassword = createEmployeeDTO.OfficialEmailPassword, 
                     SkypeId = createEmployeeDTO.SkypeId,
                     AdharCardNumber = createEmployeeDTO.AdharCardNumber,
                     PanNumber = createEmployeeDTO.PanNumber,
@@ -1321,7 +1321,7 @@ namespace KotiCRM.Repository.Repository
         }
 
         // for Update employee
-        public async Task<EmployeeResponseStatus> UpdateEmployee(CreateEmployeeDTO createEmployeeDTO)
+        public async Task<EmployeeResponseStatus> UpdateEmployee(CreateEmployeeDTO createEmployeeDTO )
         {
             using var transaction = _context.Database.BeginTransaction(); // Begin transaction
             try
@@ -1404,7 +1404,7 @@ namespace KotiCRM.Repository.Repository
                 employee.EmpCode = createEmployeeDTO.EmployeeCode;
                 employee.UserId = employee.UserId;
                 employee.Name = createEmployeeDTO.Name;
-                employee.ProfilePictureURL = createEmployeeDTO.ProfilePictureURL;
+                employee.ProfilePictureURL = createEmployeeDTO.ProfilePicturePath;
                 employee.FatherName = createEmployeeDTO.FatherName;
                 employee.GuardianName = createEmployeeDTO.GuardianName;
                 employee.BloodGroup = createEmployeeDTO.BloodGroup;
@@ -1506,52 +1506,9 @@ namespace KotiCRM.Repository.Repository
                 };
             }
 
-        }
-
+        } 
+        
         //for getEmployee password
-
-        //    public string GetOldPassword(string employeeeId)
-        //    {
-        //        var user = _userManager.Users.FirstOrDefault(x => x.Id == employeeeId);
-        //        var password = user.PasswordHash;
-        //        var pass = DecryptPassword(password);
-        //        return pass.ToString();
-
-        //    }
-
-        //    private const string EncryptionKey = "YourEncryptionKey";
-
-        //    public static string DecryptPassword(string encryptedPassword)
-        //{
-        //    using (Aes aesAlg = Aes.Create())
-        //    {
-        //        // Set the encryption key
-        //        aesAlg.Key = Encoding.UTF8.GetBytes(EncryptionKey);
-
-        //        // Create a decryptor to perform the stream transform
-        //        ICryptoTransform decryptor = aesAlg.CreateDecryptor(aesAlg.Key, aesAlg.IV);
-
-        //        // Convert the encrypted password from Base64 to byte array
-        //        byte[] encryptedBytes = Convert.FromBase64String(encryptedPassword);
-
-        //        // Create the streams used for decryption
-        //        using (MemoryStream msDecrypt = new MemoryStream(encryptedBytes))
-        //        {
-        //            using (CryptoStream csDecrypt = new CryptoStream(msDecrypt, decryptor, CryptoStreamMode.Read))
-        //            {
-        //                using (StreamReader srDecrypt = new StreamReader(csDecrypt))
-        //                {
-        //                    // Read the decrypted bytes from the decrypting stream
-        //                    // and place them in a string
-        //                    return srDecrypt.ReadToEnd();
-        //                }
-        //            }
-        //        }
-        //    }
-        //}
-
-
-
         public async Task<ChangePasswordDbResponse> ChangePassword(ChangePasswordRequest passwordData )
         {
             ApplicationUser cUser = await _userManager.FindByIdAsync(passwordData.userID);
@@ -1588,9 +1545,6 @@ namespace KotiCRM.Repository.Repository
                
             }; ;
         }
-
-
-
 
     }
 }

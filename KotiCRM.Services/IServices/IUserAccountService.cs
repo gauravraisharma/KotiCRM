@@ -3,6 +3,7 @@
 using KotiCRM.Repository.DTOs.RoleManagement;
 using KotiCRM.Repository.DTOs.UserManagement;
 using KotiCRM.Repository.Models;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -40,6 +41,7 @@ namespace KotiCRM.Services.IServices
 
         //Task<string> ChangePassword(Password userID, Password newPassword);
         Task<ChangePasswordDbResponse> ChangePassword(ChangePasswordRequest passwordData);
-
+        //string? CreateEmployee(IFormFile profilePictureURL);
+        Task<string> UploadProfilePicture(IFormFile profilePicture);
     }
 }

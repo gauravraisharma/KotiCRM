@@ -13,7 +13,7 @@ import {
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
-import { Employee, EmployeeClass } from "../../models/userManagement/employee";
+import { Employee, EmployeeClass, UploadProfilePicture } from "../../models/userManagement/employee";
 import {
   CreateEmployee,
   GetEmployeeById,
@@ -34,7 +34,7 @@ import "../../../src/css/style.css";
 import profile from "../../assets/images/profile.avif";
 import "react-toastify/dist/ReactToastify.css";
 import * as Yup from "yup";
-import Roles from "../roleManagement/Roles";
+
 
 const CreateOrUpdateUser = () => {
   // Parameters
@@ -49,54 +49,29 @@ const CreateOrUpdateUser = () => {
   const [isActiveChecked, setIsActiveChecked] = useState(true);
   const [isRelievedChecked, setIsRelievedChecked] = useState(false);
   const [relievingDateRequired, setRelievingDateRequired] = useState(false);
-  const [departmentList, setDepartmentList] = useState<
-    Department[] | undefined
-  >([]);
-  const [designationList, setDesignationList] = useState<
-    Designation[] | undefined
-  >([]);
+  const [departmentList, setDepartmentList] = useState<Department[] | undefined>([]);
+  const [designationList, setDesignationList] = useState<Designation[] | undefined>([]);
   // const [Roles, setRoles] = useState([]);
   const [shiftList, setShiftList] = useState<Shift[] | undefined>([]);
   const [bloodGroup, setBloodGroup] = useState("");
   const [departmentId, setDepartmentId] = useState(0);
   const [designationId, setDesignationId] = useState(0);
   const [shiftId, setShiftId] = useState(0);
-  // const [roleId, setRoleId] = useState<string>("");
-  // console.log(roleId);
+  const [newProfilePicture, setNewProfilePicture] = useState<UploadProfilePicture>(new CreateAttachmentClass());
+
 
   const [selectedImage, setSelectedImage] = useState(null);
-
-  // const handleFileSelect = (event) => {
-  //   const file = event.target.files[0];
-  //   if (file) {
-  //     const reader = new FileReader();
-  //     reader.onloadend = () => {
-  //       setSelectedImage(reader.result);
-  //     };
-  //     reader.readAsDataURL(file);
-  //   }
-  // };
 
   const handleFileSelect = (event) => {
     const file = event.target.files[0];
     if (file) {
-      const formData = new FormData();
-      formData.append("image", file);
-
-      fetch("/upload", {
-        method: "POST",
-        body: formData,
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          const imageUrl = data.imageUrl;
-        })
-        .catch((error) => {
-          console.error("Error uploading file:", error);
-        });
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setSelectedImage(reader.result);
+      };
+      reader.readAsDataURL(file);
     }
   };
-
   // Effects
   useEffect(() => {
     getDepartmentList();
@@ -230,43 +205,78 @@ const CreateOrUpdateUser = () => {
   // Submit
   const handleFormSubmit = async (
     employee: Employee,
-
     { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }
   ) => {
     try {
-      employee.departmentId = departmentId;
-      employee.designationId = designationId;
-      employee.shiftId = shiftId;
-      employee.isActive = isActiveChecked;
-      employee.employeeCode = employeeCode;
-      employee.relievingDate = isRelievedChecked
-        ? employee.relievingDate
-        : null;
-      if (id) {
-        const response = await UpdateEmployee(employee);
-        if (response.status == 200) {
-          toast.success("Employee updated successfully");
-          setTimeout(() => {
-            navigate("/users");
-          }, 5000);
-        } else {
-          toast.error("Employee updation failed");
-        }
-      } else {
-        employee.employeeId = employeeID;
-        employee.bloodGroup = bloodGroup;
-        const response = await CreateEmployee(employee);
-        if (response.status == 200) {
-          toast.success("Employee created successfully");
-          navigate("/users");
+      const formData = new FormData()
 
-          setTimeout(() => {
-            navigate("/users");
-          }, 5000);
-        } else {
-          toast.error("Employee creation failed");
-        }
+      if (employee.designationId !== null) {
+        formData.append("designationId", employee.designationId.toString());
       }
+      if (employee.shiftId !== null) {
+        formData.append("shiftId", employee.shiftId.toString());
+      }
+      formData.append("isActive", employee.isActive.toString());
+      formData.append("employeeCode", employee.employeeCode);
+      formData.append("relievingDate", employee.relievingDate ? employee.relievingDate.toString() : "");
+      if (employeeID) {
+      formData.append("employeeId", employee.employeeId.toString());
+      formData.append("bloodGroup", employee.bloodGroup);
+    }
+    formData.append("name", employee.name.toString());
+    formData.append("fatherName", employee.fatherName.toString());
+    formData.append("guardianName", employee.guardianName.toString());
+    formData.append("guardianContactNumber", employee.guardianContactNumber.toString());
+    formData.append("dateOfBirth", employee.dateOfBirth.toString());
+    formData.append("contactNumber 1", employee.contactNumber1.toString());
+    formData.append("contactNumber 2", employee.contactNumber2.toString());
+    formData.append("correspondenceAddress", employee.correspondenceAddress.toString());
+    formData.append("bank", employee.bank.toString());
+    formData.append("branch", employee.branch.toString());
+    formData.append("panNumber", employee.panNumber.toString());
+    formData.append("adharCardNumber", employee.adharCardNumber.toString());
+    formData.append("ifsc", employee.ifsc.toString());
+    formData.append("permanentAddress", employee.permanentAddress.toString());
+    formData.append("personalEmail", employee.personalEmail.toString());
+    formData.append("skypeId", employee.skypeId.toString());
+    formData.append("officialEmailPassword", employee.officialEmailPassword.toString());
+  
+
+    console.log("formData:", formData);
+ 
+    //   employee.departmentId=departmentId;
+    //   employee.designationId = designationId;
+    //   employee.shiftId = shiftId;
+    //   employee.isActive = isActiveChecked;
+    //   employee.employeeCode = employeeCode;
+    //   employee.relievingDate = isRelievedChecked
+    //     ? employee.relievingDate
+    //     : null;
+    //   if (id) {
+    //     const response = await UpdateEmployee(employee);
+    //     if (response.status == 200) {
+    //       toast.success("Employee updated successfully");
+    //       setTimeout(() => {
+    //         navigate("/users");
+    //       }, 5000);
+    //     } else {
+    //       toast.error("Employee updation failed");
+    //     }
+    //   } else {
+    //     employee.employeeId = employeeID;
+    //     employee.bloodGroup = bloodGroup;
+    //     const response = await CreateEmployee(employee);
+    //     if (response.status == 200) {
+    //       toast.success("Employee created successfully");
+    //       navigate("/users");
+
+    //       setTimeout(() => {
+    //         navigate("/users");
+    //       }, 5000);
+    //     } else {
+    //       toast.error("Employee creation failed");
+    //     }
+    //   }
     } catch (error) {
       console.log("error message:", error);
     } finally {

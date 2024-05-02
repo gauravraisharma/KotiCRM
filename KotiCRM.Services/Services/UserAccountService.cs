@@ -8,6 +8,7 @@ using KotiCRM.Repository.DTOs.AccountDTO;
 using System.Drawing.Printing;
 using ApplicationService.Utilities;
 using KotiCRM.Repository.DTOs.RoleManagement;
+using Microsoft.AspNetCore.Http;
 
 namespace KotiCRM.Services.Services
 {
@@ -16,12 +17,14 @@ namespace KotiCRM.Services.Services
         private readonly IUserAccountRepository _accountRepository;
         private readonly IConfiguration _config;
         private readonly IEmailService _emailService;
+        private readonly IProfilePictureService _profilePictureService;
 
-        public UserAccountService(IUserAccountRepository accountRepository, IConfiguration config, IEmailService emailService)
+        public UserAccountService(IUserAccountRepository accountRepository, IConfiguration config, IEmailService emailService, IProfilePictureService profilePictureService)
         {
             _accountRepository = accountRepository;
             _config = config;
             _emailService = emailService;
+            _profilePictureService = profilePictureService;
         }
 
         public async Task<ResponseStatus> CreateApplicationUser(ApplicationUserModel userModel)
@@ -52,7 +55,7 @@ namespace KotiCRM.Services.Services
             return _accountRepository.UpdateApplicationUser(userModel);
         }
 
-        public async Task<RolesResponseStatus> GetRoles(string? searchQuery, int? pageNumber, int? pageSize)
+        public async Task<RolesResponseStatus> GetRoles(string? searchQuery, int? pageNumber, int? pageSize )
         {
             return await _accountRepository.GetRoles(searchQuery, pageNumber, pageSize);
         }
@@ -142,7 +145,21 @@ namespace KotiCRM.Services.Services
         }
         public async Task<EmployeeResponseStatus> CreateEmployee(CreateEmployeeDTO createEmployeeDTO)
         {
-            return await _accountRepository.CreateEmployee(createEmployeeDTO);
+           
+            if (createEmployeeDTO.ProfilePicture != null)
+            {
+                try
+                {
+                   createEmployeeDTO.ProfilePicturePath = await _profilePictureService.UploadProfilePicture(createEmployeeDTO.ProfilePicture);
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("profile picture");
+                }
+            }
+
+            var dbResponse =   await _accountRepository.CreateEmployee(createEmployeeDTO);
+            return dbResponse;
         }
         public async Task<EmployeeResponseStatus> UpdateEmployee(CreateEmployeeDTO createEmployeeDTO)
         {
@@ -153,11 +170,6 @@ namespace KotiCRM.Services.Services
             return _accountRepository.DeleteEmployee(employeeId);
         }
 
-        //public async Task<string> ChangePassword(Password userID, Password newPassword)
-        //{
-        //    return await _accountRepository.ChangePassword(userID, newPassword);
-
-        //}
         public async Task<ChangePasswordDbResponse> ChangePassword(ChangePasswordRequest passwordData)
         {
             var result = await _accountRepository.ChangePassword(passwordData);
@@ -200,6 +212,9 @@ namespace KotiCRM.Services.Services
             return result;
         }
 
-     
+        public Task<string> UploadProfilePicture(IFormFile profilePicture)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

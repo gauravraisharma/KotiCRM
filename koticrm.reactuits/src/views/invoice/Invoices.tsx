@@ -40,6 +40,7 @@ import ReactDatePicker from "react-datepicker";
 import moment from "moment";
 import 'moment-timezone' 
 import { ToastContainer } from "react-toastify";
+import GetModulePermissions from "../../utils/Shared/GetModulePermissions";
 
 interface InvoiceProps {
   getInvoiceCount: (data: string) => void;
@@ -75,6 +76,8 @@ const Invoices: React.FC<InvoiceProps> = ({
   const [startDate, setStartDate] = useState(getFirstDayOfMonth());
   const [endDate, setEndDate] = useState(getLastDayOfMonth());
   const [pageNumber, setPageNumber] = useState<number>(1);
+  const invoicePermissions = GetModulePermissions("Invoices");
+
 
 
   const invoices = useSelector((state: any) => state.invoiceReducer.invoices);
@@ -86,18 +89,10 @@ const Invoices: React.FC<InvoiceProps> = ({
     (state: any) => state.accountReducer.accounts
   );
   const timezone = useSelector((state: any) => state.sharedReducer.timezone);
-  const invoiceStatus = useSelector(
-    (state: any) => state.invoiceReducer.invoiceStatus
-  );
-  const invoiceCreateResponse = useSelector(
-    (state: any) => state.invoiceReducer.createInvoiceResponse
-  );
-  const invoiceUpdateResponse = useSelector(
-    (state: any) => state.invoiceReducer.updateInvoiceResposne
-  );
-  const invoiceDeleteResponse = useSelector(
-    (state: any) => state.invoiceReducer.deleteInvoiceResponse
-  );
+  const invoiceStatus = useSelector((state: any) => state.invoiceReducer.invoiceStatus);
+  const invoiceCreateResponse = useSelector((state: any) => state.invoiceReducer.createInvoiceResponse);
+  const invoiceUpdateResponse = useSelector((state: any) => state.invoiceReducer.updateInvoiceResposne);
+  const invoiceDeleteResponse = useSelector((state: any) => state.invoiceReducer.deleteInvoiceResponse);
   const isLoading = useSelector((state: any) => state.invoiceReducer.isLoading);
 
   let createdAndPending = 0,
@@ -340,14 +335,16 @@ const Invoices: React.FC<InvoiceProps> = ({
                     </h5>
                   </div>
                   <div className="text-end">
-                    <Link to = {`/invoices/createInvoice`}>
+                  {invoicePermissions.isAdd && (
+                <Link to={`/invoices/createInvoice`}>
+                    {/* <Link to = {`/invoices/createInvoice`}> */}
                     <CButton
                       component="input"
                       type="button"
                       color="primary"
                       value="+ New"
                       />
-                    </Link>
+                    </Link>)}
                   </div>
                 </div>
               </CCardHeader>
@@ -483,9 +480,7 @@ const Invoices: React.FC<InvoiceProps> = ({
                     </CPagination>
               </CCardBody>
             </CCard>
-          
-        </>
-    
+        </> 
     </div>
   );
 };

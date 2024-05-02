@@ -13,7 +13,9 @@ namespace KotiCRM.Repository.DTOs.UserManagement
         public string? EmployeeId { get; set; }
         public string? EmployeeCode { get; set; }
         public string? Name { get; set; }
-        public IFormFile? ProfilePictureURL { get; set; }
+        public IFormFile? ProfilePicture { get; set; }
+        public string? ProfilePicturePath { get; set; }
+
         public string? FatherName { get; set; }
         public string? GuardianName { get; set; }
         public string? BloodGroup { get; set; }

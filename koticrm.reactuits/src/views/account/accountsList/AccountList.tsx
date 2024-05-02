@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { MdEdit } from "react-icons/md";
 import { AiFillEye } from "react-icons/ai";
 import { MdDelete } from "react-icons/md";
-import {  Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import {
   getAccountOwner,
@@ -37,6 +37,7 @@ import {
 } from "@coreui/react";
 import { Account } from "../../../models/account/Account";
 import { ToastContainer } from "react-toastify";
+import GetModulePermissions from "../../../utils/Shared/GetModulePermissions";
 
 const AccountList: React.FC = () => {
   //use hooks
@@ -48,6 +49,7 @@ const AccountList: React.FC = () => {
   const [accountId, setAccountId] = useState<number>();
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [pageNumber, setPageNumber] = useState<number>(1);
+  const accountsPermissions = GetModulePermissions("Accounts");
 
   const showItems = (id: any) => {
     navigate(`/accountsList/accountDetails/${id}`);
@@ -65,9 +67,6 @@ const AccountList: React.FC = () => {
   const cancelDelete = () => {
     setShowDeleteConfirmation(false);
   };
-
-
-
 
   //Fetching data from store
   const accounts = useSelector((state: any) => state.accountReducer.accounts);
@@ -136,7 +135,6 @@ const AccountList: React.FC = () => {
 
   return (
     <>
-
       {isLoading && (
         <div className="spinner-backdrop">
           <CSpinner
@@ -152,91 +150,88 @@ const AccountList: React.FC = () => {
         </div>
       )}
       <ToastContainer />
+      <CRow>
+        <CCol xs={12}>
+          <CRow className="align-items-center m-1">
+            <CCol xs={4} className="text-start">
+              <CInputGroup>
+                <CInputGroupText htmlFor="searchInput">Search</CInputGroupText>
+                <CFormInput
+                  id="searchInput"
+                  type="text"
+                  placeholder="Search by account name..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                  onBlur={handleBlur}
+                />
+              </CInputGroup>
+            </CCol>
+            <CCol xs={8} className="text-end">
+              {accountsPermissions.isAdd && (
+                <Link to={`/accountsList/createAccount`}>
+                  {/* <Link to = {`/accountsList/createAccount`}> */}
+                  <button
+                    type="button"
+                    className="btn btn-primary"
+                    style={{ padding: "6px 16px" }}
+                  >
+                    + New
+                  </button>
+                </Link>
+              )}
+            </CCol>
+          </CRow>
+        </CCol>
+      </CRow>
+      <>
+        <DeleteConfirmationModal
+          isOpen={showDeleteConfirmation}
+          onCancel={cancelDelete}
+          onConfirm={confirmDelete}
+          accountId={accountId}
+          invoiceId={null}
+        />
         <CRow>
           <CCol xs={12}>
-            <CRow className="align-items-center m-1">
-              <CCol xs={4} className="text-start">
-                <CInputGroup>
-                  <CInputGroupText htmlFor="searchInput">
-                    Search
-                  </CInputGroupText>
-                  <CFormInput
-                    id="searchInput"
-                    type="text"
-                    placeholder="Search by account name..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    onKeyDown={handleKeyDown}
-                    onBlur={handleBlur}
-                  />
-                </CInputGroup>
-              </CCol>
-              <CCol xs={8} className="text-end">
-              <Link to = {`/accountsList/createAccount`}>
-
-                <button
-                  type="button"
-                  className="btn btn-primary"
-                  style={{ padding: "6px 16px" }}
-                >
-                  + New
-                </button>
-                </Link>
-
-              </CCol>
-            </CRow>
-          </CCol>
-        </CRow>
-        <>
-          <DeleteConfirmationModal
-            isOpen={showDeleteConfirmation}
-            onCancel={cancelDelete}
-            onConfirm={confirmDelete}
-            accountId={accountId}
-            invoiceId={null}
-          />
-            <CRow>
-              <CCol xs={12}>
-                <CCard className="mb-4 mt-2">
-                  <CCardHeader>
-                    <CRow>
-                      <CCol xs={6} className="d-flex align-items-center">
-                        <h5>
-                          <strong>Accounts</strong>
-                        </h5>
-                      </CCol>
-                    </CRow>
-                  </CCardHeader>
-                  <CCardBody>
-                    <CTable responsive striped hover>
-                      <CTableHead>
-                        <CTableRow>
-                          <CTableHeaderCell scope="col">
-                            Account Name
-                          </CTableHeaderCell>
-                          <CTableHeaderCell scope="col">Owner</CTableHeaderCell>
-                          <CTableHeaderCell scope="col">Phone</CTableHeaderCell>
-                          <CTableHeaderCell scope="col">
-                            Country
-                          </CTableHeaderCell>
-                          <CTableHeaderCell scope="col">
-                            Actions
-                          </CTableHeaderCell>
-                        </CTableRow>
-                      </CTableHead>
-                      <CTableBody>
-                        {accounts.account?.map((account: Account) => (
-                          <CTableRow key={account.id}>
-                            <CTableDataCell>
-                              {account.accountName}
-                            </CTableDataCell>
-                            <CTableDataCell>
-                              {getOwnerName(account.ownerId)}
-                            </CTableDataCell>
-                            <CTableDataCell>{account.phone}</CTableDataCell>
-                            <CTableDataCell>{account.country}</CTableDataCell>
-                            <CTableDataCell>
-                              <Link to ={`/accountsList/editAccount/${account.id}`}>
+            <CCard className="mb-4 mt-2">
+              <CCardHeader>
+                <CRow>
+                  <CCol xs={6} className="d-flex align-items-center">
+                    <h5>
+                      <strong>Accounts</strong>
+                    </h5>
+                  </CCol>
+                </CRow>
+              </CCardHeader>
+              <CCardBody>
+                <CTable responsive striped hover>
+                  <CTableHead>
+                    <CTableRow>
+                      <CTableHeaderCell scope="col">
+                        Account Name
+                      </CTableHeaderCell>
+                      <CTableHeaderCell scope="col">Owner</CTableHeaderCell>
+                      <CTableHeaderCell scope="col">Phone</CTableHeaderCell>
+                      <CTableHeaderCell scope="col">Country</CTableHeaderCell>
+                      <CTableHeaderCell scope="col">Actions</CTableHeaderCell>
+                    </CTableRow>
+                  </CTableHead>
+                  <CTableBody>
+                    {accounts.account?.map((account: Account) => (
+                      <CTableRow key={account.id}>
+                        <CTableDataCell>{account.accountName}</CTableDataCell>
+                        <CTableDataCell>
+                          {getOwnerName(account.ownerId)}
+                        </CTableDataCell>
+                        <CTableDataCell>{account.phone}</CTableDataCell>
+                        <CTableDataCell>{account.country}</CTableDataCell>
+                        <CTableDataCell>
+                          {accountsPermissions.isEdit && (
+                            <Link
+                              to={`/accountsList/editAccount/${account.id}`}
+                            >
+                              {/* <Link to ={`/accountsList/editAccount/${account.id}`}> */}
                               <MdEdit
                                 style={{
                                   color: "green",
@@ -245,81 +240,82 @@ const AccountList: React.FC = () => {
                                 }}
                                 className="mr-4 text-success"
                               />
-                              </Link>
-                              <AiFillEye
-                                style={{
-                                  color: "darkblue",
-                                  marginRight: "10px",
-                                  fontSize: "20px",
-                                }}
-                                className="mr-4 text-primary"
-                                onClick={() => showItems(account?.id)}
-                              />
-                              <MdDelete
-                                style={{
-                                  color: "red",
-                                  marginRight: "10px",
-                                  fontSize: "20px",
-                                  cursor: "pointer",
-                                }}
-                                className="text-danger"
-                                onClick={() => handleDeleteClick(account.id)}
-                              />
-                            </CTableDataCell>
-                          </CTableRow>
-                        ))}
-                      </CTableBody>
-                    </CTable>
-                    <CPagination
-                      size="sm"
-                      align="end"
-                      aria-label="Page navigation example"
-                      className="m-auto"
+                            </Link>
+                          )}
+                          <AiFillEye
+                            style={{
+                              color: "darkblue",
+                              marginRight: "10px",
+                              fontSize: "20px",
+                            }}
+                            className="mr-4 text-primary"
+                            onClick={() => showItems(account?.id)}
+                          />
+                          {accountsPermissions.isDelete && (
+                            <MdDelete
+                              style={{
+                                color: "red",
+                                marginRight: "10px",
+                                fontSize: "20px",
+                                cursor: "pointer",
+                              }}
+                              className="text-danger"
+                              onClick={() => handleDeleteClick(account.id)}
+                            />
+                          )}
+                        </CTableDataCell>
+                      </CTableRow>
+                    ))}
+                  </CTableBody>
+                </CTable>
+                <CPagination
+                  size="sm"
+                  align="end"
+                  aria-label="Page navigation example"
+                  className="m-auto"
+                >
+                  <CPaginationItem
+                    onClick={() => handlePageChange(pageNumber - 1)}
+                    disabled={pageNumber === 1}
+                    style={{
+                      margin: "0 2px",
+                      cursor: "pointer",
+                      fontSize: "12px",
+                    }}
+                  >
+                    <span aria-hidden="true">&laquo;</span>
+                  </CPaginationItem>
+                  {Array.from({ length: totalPages }, (_, index) => (
+                    <CPaginationItem
+                      key={index}
+                      active={pageNumber === index + 1}
+                      onClick={() => handlePageChange(index + 1)}
+                      style={{
+                        margin: "0 2px",
+                        cursor: "pointer",
+                        fontSize: "12px",
+                      }}
                     >
-                      <CPaginationItem
-                        onClick={() => handlePageChange(pageNumber - 1)}
-                        disabled={pageNumber === 1}
-                        style={{
-                          margin: "0 2px",
-                          cursor: "pointer",
-                          fontSize: "12px",
-                        }}
-                      >
-                        <span aria-hidden="true">&laquo;</span>
-                      </CPaginationItem>
-                      {Array.from({ length: totalPages }, (_, index) => (
-                        <CPaginationItem
-                          key={index}
-                          active={pageNumber === index + 1}
-                          onClick={() => handlePageChange(index + 1)}
-                          style={{
-                            margin: "0 2px",
-                            cursor: "pointer",
-                            fontSize: "12px",
-                          }}
-                        >
-                          {index + 1}
-                        </CPaginationItem>
-                      ))}
-                      <CPaginationItem
-                        onClick={() => handlePageChange(pageNumber + 1)}
-                        disabled={pageNumber === totalPages}
-                        style={{
-                          margin: "0 2px",
-                          cursor: "pointer",
-                          fontSize: "12px",
-                        }}
-                      >
-                        <span aria-hidden="true">&raquo;</span>
-                      </CPaginationItem>
-                    </CPagination>
-                  </CCardBody>
-                </CCard>
-              </CCol>
-            </CRow>
-          
-        </>
-      
+                      {index + 1}
+                    </CPaginationItem>
+                  ))}
+                  <CPaginationItem
+                    onClick={() => handlePageChange(pageNumber + 1)}
+                    disabled={pageNumber === totalPages}
+                    style={{
+                      margin: "0 2px",
+                      cursor: "pointer",
+                      fontSize: "12px",
+                    }}
+                  >
+                    <span aria-hidden="true">&raquo;</span>
+                  </CPaginationItem>
+                </CPagination>
+              </CCardBody>
+            </CCard>
+          </CCol>
+        </CRow>
+      </>
     </>
   );
 };

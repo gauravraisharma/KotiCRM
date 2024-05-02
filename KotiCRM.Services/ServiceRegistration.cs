@@ -31,6 +31,8 @@ namespace KotiCRM.Services
 
             services.AddSingleton<IEmailService, EmailService>();
 
+            services.AddSingleton<IProfilePictureService, ProfilePictureService>();
+
         }
     }
 }

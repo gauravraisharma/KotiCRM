@@ -31,7 +31,10 @@ export interface Employee {
 
     // organizationID: string;
 }
-
+export interface UploadProfilePicture {
+    userID: string;
+    file: File | null;
+}
 
 export class EmployeeClass implements Employee{
     employeeId: string;
