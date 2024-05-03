@@ -70,6 +70,7 @@ const CreateOrUpdateUser = () => {
       const reader = new FileReader();
       reader.onloadend = () => {
         setSelectedImage(reader.result);
+        formData.profilePictureURL = file;
       };
       reader.readAsDataURL(file);
     }
@@ -91,10 +92,10 @@ const CreateOrUpdateUser = () => {
 
   // Generate EmployeeId
   const getEmployeeId = async () => {
-    debugger;
     const employeeId = await GetEmployeeId();
     const employeeIdData = employeeId.data;
     setEmployeeID(employeeIdData);
+    formData.employeeId = employeeIdData;
     // setFormData(prevFormData => ({
     //   ...prevFormData,
     //   employeeId: employeeIdData
@@ -159,7 +160,9 @@ const CreateOrUpdateUser = () => {
 
   // Designation change
   const handleDesignationChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setDesignationId(parseInt(e.target.value));
+    const changedDesignationId = parseInt(e.target.value);
+    setDesignationId(changedDesignationId);
+    formData.designationId = changedDesignationId;
   };
 
   // Shift change
@@ -204,81 +207,123 @@ const CreateOrUpdateUser = () => {
       });
   };
 
+  // const formData2: Employee = {
+  //   employeeId: "12345",
+  //   employeeCode: "EMP001",
+  //   name: "John Doe",
+  //   profilePictureURL: "https://example.com/profile.jpg",
+  //   fatherName: "Michael Doe",
+  //   guardianName: "Jane Doe",
+  //   bloodGroup: "AB+",
+  //   dateOfBirth: "1990-01-01",
+  //   joiningDate: "2020-01-01",
+  //   relievingDate: null,
+  //   contactNumber1: "1234567890",
+  //   contactNumber2: null,
+  //   guardianContactNumber: "9876543210",
+  //   email: "john.doe@example.com",
+  //   password: "password123",
+  //   skypeId: "john_doe_skype",
+  //   adharCardNumber: "1234 5678 9012",
+  //   panNumber: "ABCDE1234F",
+  //   bankAccountNumber: "1234567890123456",
+  //   bank: "Example Bank",
+  //   branch: "Main Branch",
+  //   ifsc: "ABC1234567",
+  //   departmentId: null,
+  //   designationId: null,
+  //   shiftId: null,
+  //   isActive: true,
+  //   permanentAddress: "123 Main St, City",
+  //   correspondenceAddress: "456 Side St, Town"
+  // };
+
+  const mapEmployeeToFormData = (employee: Employee): FormData => {
+    const formData = new FormData();
+  
+      formData.append("employeeId", employee.employeeId);
+      formData.append("employeeCode", employee.employeeCode);
+      formData.append("name", employee.name);
+      formData.append("profilePictureURL", employee.profilePictureURL);
+      formData.append("fatherName", employee.fatherName);
+      formData.append("guardianName", employee.guardianName);
+      formData.append("bloodGroup", employee.bloodGroup);
+      formData.append("dateOfBirth", employee.dateOfBirth);
+      formData.append("joiningDate", employee.joiningDate);
+      formData.append("relievingDate", employee.relievingDate !== null ? employee.relievingDate : "");
+      formData.append("contactNumber1", employee.contactNumber1);
+      if (employee.contactNumber2 !== null) {
+          formData.append("contactNumber2", employee.contactNumber2);
+      }
+      formData.append("guardianContactNumber", employee.guardianContactNumber);
+      formData.append("email", employee.email);
+      formData.append("password", employee.password);
+      formData.append("skypeId", employee.skypeId);
+      formData.append("adharCardNumber", employee.adharCardNumber);
+      formData.append("panNumber", employee.panNumber);
+      formData.append("bankAccountNumber", employee.bankAccountNumber);
+      formData.append("bank", employee.bank);
+      formData.append("branch", employee.branch);
+      formData.append("ifsc", employee.ifsc);
+      if (employee.departmentId !== null) {
+          formData.append("departmentId", employee.departmentId.toString());
+      }
+      if (employee.designationId !== null) {
+          formData.append("designationId", employee.designationId.toString());
+      }
+      if (employee.shiftId !== null) {
+          formData.append("shiftId", employee.shiftId.toString());
+      }
+      formData.append("roleId", employee.roleId.toString());
+      formData.append("isActive", employee.isActive.toString());
+      formData.append("permanentAddress", employee.permanentAddress);
+      formData.append("correspondenceAddress", employee.correspondenceAddress);
+  
+      return formData;
+  }
+
   // Submit
   const handleFormSubmit = async (
     employee: Employee,
     { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }
   ) => {
     try {
-      const formData = new FormData()
-
-      if (employee.designationId !== null) {
-        formData.append("designationId", employee.designationId.toString());
-      }
-      if (employee.shiftId !== null) {
-        formData.append("shiftId", employee.shiftId.toString());
-      }
-      formData.append("isActive", employee.isActive.toString());
-      formData.append("employeeCode", employee.employeeCode);
-      formData.append("relievingDate", employee.relievingDate ? employee.relievingDate.toString() : "");
-      if (employeeID) {
-      formData.append("employeeId", employee.employeeId.toString());
-      formData.append("bloodGroup", employee.bloodGroup);
-    }
-    formData.append("name", employee.name.toString());
-    formData.append("fatherName", employee.fatherName.toString());
-    formData.append("guardianName", employee.guardianName.toString());
-    formData.append("guardianContactNumber", employee.guardianContactNumber.toString());
-    formData.append("dateOfBirth", employee.dateOfBirth.toString());
-    formData.append("contactNumber 1", employee.contactNumber1.toString());
-    formData.append("contactNumber 2", employee.contactNumber2.toString());
-    formData.append("correspondenceAddress", employee.correspondenceAddress.toString());
-    formData.append("bank", employee.bank.toString());
-    formData.append("branch", employee.branch.toString());
-    formData.append("panNumber", employee.panNumber.toString());
-    formData.append("adharCardNumber", employee.adharCardNumber.toString());
-    formData.append("ifsc", employee.ifsc.toString());
-    formData.append("permanentAddress", employee.permanentAddress.toString());
-    formData.append("personalEmail", employee.personalEmail.toString());
-    formData.append("skypeId", employee.skypeId.toString());
-    formData.append("officialEmailPassword", employee.officialEmailPassword.toString());
-  
-
-    console.log("formData:", formData);
  
-    //   employee.departmentId=departmentId;
-    //   employee.designationId = designationId;
-    //   employee.shiftId = shiftId;
-    //   employee.isActive = isActiveChecked;
-    //   employee.employeeCode = employeeCode;
-    //   employee.relievingDate = isRelievedChecked
-    //     ? employee.relievingDate
-    //     : null;
-    //   if (id) {
-    //     const response = await UpdateEmployee(employee);
-    //     if (response.status == 200) {
-    //       toast.success("Employee updated successfully");
-    //       setTimeout(() => {
-    //         navigate("/users");
-    //       }, 5000);
-    //     } else {
-    //       toast.error("Employee updation failed");
-    //     }
-    //   } else {
-    //     employee.employeeId = employeeID;
-    //     employee.bloodGroup = bloodGroup;
-    //     const response = await CreateEmployee(employee);
-    //     if (response.status == 200) {
-    //       toast.success("Employee created successfully");
-    //       navigate("/users");
+      employee.departmentId=departmentId;
+      employee.designationId = designationId;
+      employee.shiftId = shiftId;
+      employee.isActive = isActiveChecked;
+      employee.employeeCode = employeeCode;
+      employee.relievingDate = isRelievedChecked
+        ? employee.relievingDate
+        : null;
+      if (id) {
+        const data = mapEmployeeToFormData(employee);
+        const response = await UpdateEmployee(data);
+        if (response.status == 200) {
+          toast.success("Employee updated successfully");
+          setTimeout(() => {
+            navigate("/users");
+          }, 5000);
+        } else {
+          toast.error("Employee updation failed");
+        }
+      } else {
+        employee.employeeId = employeeID;
+        employee.bloodGroup = bloodGroup;
+        const data = mapEmployeeToFormData(employee);
+        const response = await CreateEmployee(data);
+        if (response.status == 200) {
+          toast.success("Employee created successfully");
+          navigate("/users");
 
-    //       setTimeout(() => {
-    //         navigate("/users");
-    //       }, 5000);
-    //     } else {
-    //       toast.error("Employee creation failed");
-    //     }
-    //   }
+          setTimeout(() => {
+            navigate("/users");
+          }, 5000);
+        } else {
+          toast.error("Employee creation failed");
+        }
+      }
     } catch (error) {
       console.log("error message:", error);
     } finally {
@@ -287,18 +332,18 @@ const CreateOrUpdateUser = () => {
   };
 
   let validationSchema = Yup.object().shape({
-    joiningDate: Yup.date().required("Joining Date is required"),
-    officialEmail: Yup.string()
-      .email("Invalid email format")
-      .required("email is required"),
-    name: Yup.string().required("User Name is required"),
-    fatherName: Yup.string().required("Father Name is required"),
-    designationId: Yup.number().required("Designation is required"),
-    departmentId: Yup.number().required("Department is required"),
-    Id: Yup.string().required("ID is required"),
-    employeeCode: Yup.string().required("Employee code is required"),
-    role: Yup.string().required("Role is required"),
-    dateOfBirth: Yup.date().required("Date of birth is required"),
+    // joiningDate: Yup.date().required("Joining Date is required"),
+    // email: Yup.string()
+    //   .email("Invalid email format")
+    //   .required("email is required"),
+    // name: Yup.string().required("User Name is required"),
+    // fatherName: Yup.string().required("Father Name is required"),
+    // designationId: Yup.number().required("Designation is required"),
+    // departmentId: Yup.number().required("Department is required"),
+    // Id: Yup.string().required("ID is required"),
+    // employeeCode: Yup.string().required("Employee code is required"),
+    // role: Yup.string().required("Role is required"),
+    // dateOfBirth: Yup.date().required("Date of birth is required"),
   });
   if (isRelievedChecked) {
     validationSchema = validationSchema.concat(
@@ -556,6 +601,7 @@ const CreateOrUpdateUser = () => {
                           as="select"
                           id="designationId"
                           name="designationId"
+                          onChange={handleDesignationChange}
                           aria-label="Default select example"
                           className={`form-control form-select ${
                             touched.designationId && errors.designationId
@@ -588,6 +634,7 @@ const CreateOrUpdateUser = () => {
                           as="select"
                           id="departmentId"
                           name="departmentId"
+                          onChange={handleDepartmentChange}
                           aria-label="Default select example"
                           className={`form-control form-select ${
                             touched.departmentId && errors.departmentId
@@ -749,17 +796,17 @@ const CreateOrUpdateUser = () => {
                         </label>
                         <Field
                           type="text"
-                          id="Email"
-                          name="Email"
+                          id="email"
+                          name="email"
                           className={`form-control ${
-                            touched.officialEmail && errors.officialEmail
+                            touched.email && errors.email
                               ? "is-invalid"
                               : ""
                           }`}
-                          placeholder=" Email"
+                          placeholder="Email"
                         />
                         <ErrorMessage
-                          name="officialEmail"
+                          name="email"
                           className="invalid-feedback"
                           render={(error) => (
                             <label style={{ color: "#dc3545" }}>{error}</label>
@@ -769,7 +816,7 @@ const CreateOrUpdateUser = () => {
                     </CCol>
                     <CCol sm={4}>
                       <div className="form-group">
-                        <label htmlFor="Password">
+                        <label htmlFor="password">
                           Password
                           {/* <span
                           style={{
@@ -782,9 +829,9 @@ const CreateOrUpdateUser = () => {
                         </span> */}
                         </label>
                         <Field
-                          type="text"
-                          id="Password"
-                          name="Password"
+                          type="password"
+                          id="password"
+                          name="password"
                           className="form-control"
                           // className={`form-control ${
                           //   touched.officialEmail && errors.officialEmail
@@ -794,7 +841,7 @@ const CreateOrUpdateUser = () => {
                           placeholder=" Password"
                         />
                         {/* <ErrorMessage
-                        name="Password"
+                        name="password"
                         className="invalid-feedback"
                         render={(error) => (
                           <label style={{ color: "#dc3545" }}>{error}</label>

@@ -41,7 +41,7 @@ const Users = () => {
   const [searchQuery, setSearchQuery] = useState('')
 
   const [pageNumber, setPageNumber] = useState<number>(1);
-  const employeePermissions = GetModulePermissions('Employees');
+  const employeePermissions = GetModulePermissions("ManageUsers");
 
   const GetEmployees = async () => {
     try {

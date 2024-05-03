@@ -45,7 +45,7 @@ export async function GetEmployeeById(employeeId: string){
     }
 }
   
-export async function CreateEmployee(employee: Employee) {
+export async function CreateEmployee(employee: FormData) {
     try {
         const response = await axiosInstance.post<Employee>(`/UserAccount/CreateEmployee`, employee);
         return responseBody(response);
@@ -59,7 +59,7 @@ export async function CreateEmployee(employee: Employee) {
     }
 }
 
-export async function UpdateEmployee(employee: Employee) {
+export async function UpdateEmployee(employee: FormData) {
     try {
         const response = await axiosInstance.put<Employee>(`/UserAccount/UpdateEmployee`, employee);
         return responseBody(response);

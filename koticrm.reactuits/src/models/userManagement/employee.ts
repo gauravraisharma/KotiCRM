@@ -12,9 +12,8 @@ export interface Employee {
     contactNumber1: string;
     contactNumber2: string | null;
     guardianContactNumber: string;
-    personalEmail: string;
-    officialEmail: string;
-    officialEmailPassword: string;
+    email: string;
+    password: string;
     skypeId: string;
     adharCardNumber: string;
     panNumber: string;
@@ -24,6 +23,7 @@ export interface Employee {
     ifsc: string;
     departmentId: number |null ;
     designationId: number |null;
+    roleId: string;
     shiftId: number | null;
     isActive: boolean;
     permanentAddress: string;
@@ -50,9 +50,8 @@ export class EmployeeClass implements Employee{
     contactNumber1: string;
     contactNumber2: string | null;
     guardianContactNumber: string;
-    personalEmail: string;
-    officialEmail: string;
-    officialEmailPassword: string;
+    email: string;
+    password: string;
     skypeId: string;
     adharCardNumber: string;
     panNumber: string;
@@ -62,6 +61,7 @@ export class EmployeeClass implements Employee{
     ifsc: string;
     departmentId: number | null;
     designationId: number |null;
+    roleId: string;
     shiftId: number |null;
     isActive: boolean;
     permanentAddress: string;
@@ -82,9 +82,8 @@ export class EmployeeClass implements Employee{
         this.contactNumber1 = "",
         this.contactNumber2 = "",
         this.guardianContactNumber = "",
-        this.personalEmail = "",
-        this.officialEmail = "",
-        this.officialEmailPassword = "",
+        this.email = "",
+        this.password = "",
         this.skypeId = "",
         this.adharCardNumber = "",
         this.panNumber = "",
@@ -94,6 +93,7 @@ export class EmployeeClass implements Employee{
         this.ifsc = "",
         this.departmentId = null,
         this.designationId = null,
+        this.roleId = "",
         this.shiftId = null,
         this.isActive = false,
         this.permanentAddress = "",
