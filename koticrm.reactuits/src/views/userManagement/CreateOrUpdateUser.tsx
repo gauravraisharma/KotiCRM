@@ -254,14 +254,7 @@ const CreateOrUpdateUser = () => {
   //   permanentAddress: "123 Main St, City",
   //   correspondenceAddress: "456 Side St, Town"
   // };
-  // Submit
-  const handleFormSubmit = async (
-    employee: Employee,
-    { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }
-  ) => {
-    debugger;
-    try {
-      const formData = new FormData()
+
 
   const mapEmployeeToFormData = (employee: Employee): FormData => {
     const formData = new FormData();
@@ -310,55 +303,56 @@ const CreateOrUpdateUser = () => {
   
       return formData;
   }
-
   // Submit
-  const handleFormSubmit = async (
-    employee: Employee,
-    { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }
-  ) => {
-    try {
+      const handleFormSubmit = async (
+        employee: Employee,
+        { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }
+      ) => {
+        try {
+     
+          employee.departmentId=departmentId;
+          employee.designationId = designationId;
+          employee.shiftId = shiftId;
+          employee.isActive = isActiveChecked;
+          employee.employeeCode = employeeCode;
+          employee.relievingDate = isRelievedChecked
+            ? employee.relievingDate
+            : null;
+          if (id) {
+            const data = mapEmployeeToFormData(employee);
+            const response = await UpdateEmployee(data);
+            if (response.status == 200) {
+              toast.success("Employee updated successfully");
+              setTimeout(() => {
+                navigate("/users");
+              }, 5000);
+            } else {
+              toast.error("Employee updation failed");
+            }
+          } else {
+            employee.employeeId = employeeID;
+            employee.bloodGroup = bloodGroup;
+            const data = mapEmployeeToFormData(employee);
+            const response = await CreateEmployee(data);
+            if (response.status == 200) {
+              toast.success("Employee created successfully");
+              navigate("/users");
+    
+              setTimeout(() => {
+                navigate("/users");
+              }, 5000);
+            } else {
+              toast.error("Employee creation failed");
+            }
+          }
+        } catch (error) {
+          console.log("error message:", error);
+        } finally {
+          setSubmitting(false);
+        }
+      };
  
-      employee.departmentId=departmentId;
-      employee.designationId = designationId;
-      employee.shiftId = shiftId;
-      employee.isActive = isActiveChecked;
-      employee.employeeCode = employeeCode;
-      employee.relievingDate = isRelievedChecked
-        ? employee.relievingDate
-        : null;
-      if (id) {
-        const data = mapEmployeeToFormData(employee);
-        const response = await UpdateEmployee(data);
-        if (response.status == 200) {
-          toast.success("Employee updated successfully");
-          setTimeout(() => {
-            navigate("/users");
-          }, 5000);
-        } else {
-          toast.error("Employee updation failed");
-        }
-      } else {
-        employee.employeeId = employeeID;
-        employee.bloodGroup = bloodGroup;
-        const data = mapEmployeeToFormData(employee);
-        const response = await CreateEmployee(data);
-        if (response.status == 200) {
-          toast.success("Employee created successfully");
-          navigate("/users");
 
-          setTimeout(() => {
-            navigate("/users");
-          }, 5000);
-        } else {
-          toast.error("Employee creation failed");
-        }
-      }
-    } catch (error) {
-      console.log("error message:", error);
-    } finally {
-      setSubmitting(false);
-    }
-  };
 
   let validationSchema = Yup.object().shape({
     // joiningDate: Yup.date().required("Joining Date is required"),
@@ -702,14 +696,14 @@ const CreateOrUpdateUser = () => {
                           }`}
                         >
                           <option value="">Select role</option>
-                          {roleList?.map((role) => (
+                          {/* {roleList?.map((role) => (
                           <option
                             key={role.id}
                             value={role.id}
                           >
                             {role.name}
                           </option>
-                        ))}
+                        ))} */}
                         </Field>
                         <ErrorMessage
                           name="role"
