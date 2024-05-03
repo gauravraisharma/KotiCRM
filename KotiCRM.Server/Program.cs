@@ -35,6 +35,7 @@ builder.Services.AddAuthentication(auth =>
         ValidateAudience = false,
         ValidateIssuerSigningKey = true,
         ValidateLifetime = true,
+        ClockSkew = TimeSpan.Zero,
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
     };
     options.MapInboundClaims = false;
