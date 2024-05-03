@@ -28,6 +28,7 @@ export interface Employee {
     isActive: boolean;
     permanentAddress: string;
     correspondenceAddress: string;
+    roleId:number| null;
 
     // organizationID: string;
 }

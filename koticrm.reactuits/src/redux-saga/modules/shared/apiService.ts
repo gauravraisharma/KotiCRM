@@ -1,6 +1,7 @@
 import { AxiosError, AxiosResponse } from 'axios';
 import { apiResponse, axiosInstance,responseBody } from '../../../apiInterceptor/axiosInterceptor';
 import { Bank, BankModel, Department, Designation, OrganizationBankModel, OrganizationModel, SharedModel, Shift } from '../../../models/commonModels/SharedModels';
+import { Role } from '../../../models/permissionManagement/Role';
 
 
  export function updateTimeZone(id : number,organization: OrganizationModel): Promise<apiResponse<OrganizationModel>>{ 
@@ -91,6 +92,19 @@ export async function GetShifts(): Promise<apiResponse<Shift[]>> {
         return responseBody(response);
     } catch (error) {
         const errorResponse: apiResponse<Shift[]> = {
+            data: undefined,
+            status: 500,
+            statusText: error.message
+        };
+        return errorResponse;
+    }
+}
+export async function GetRoles(): Promise<apiResponse<Role[]>> {
+    try {
+        const response = await axiosInstance.get<Role[]>('/UserAccount/GetRoles');
+        return responseBody(response);
+    } catch (error) {
+        const errorResponse: apiResponse<Role[]> = {
             data: undefined,
             status: 500,
             statusText: error.message

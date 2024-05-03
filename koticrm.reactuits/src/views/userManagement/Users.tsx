@@ -126,7 +126,7 @@ const Users = () => {
       <CRow className="mb-3">
         <CCol xs={12}>
           <CRow className="align-items-center m-1">
-            <CCol xs={2} md={2} lg={6}>
+            <CCol xs={2} md={2} lg={8}>
               <div className="custom-input-group d-flex">
                 <select
                   className="form-select custom-select"
@@ -165,23 +165,24 @@ const Users = () => {
                 />
               </div>
             </CCol>
-            <CCol xs={6} className="text-end">
+            <CCol xs={4} className="text-end">
         
-              <Link to={`/roles/createRole`}>
+              <Link to={`/roles`}>
                 <CButton color="primary" variant="outline">
                   Manage Roles
                 </CButton>
               </Link>
-            </CCol>
-
-            <CCol xs={6} className="text-end">
-              {employeePermissions.isAdd &&
               <Link to={`/users/createOrUpdateUser`}>
-                <CButton color="primary" variant="outline">
+                <CButton color="primary">
                   + New
                 </CButton>
-              </Link>}
+              </Link>
             </CCol>
+
+            {/* <CCol xs={2} className="text-end"> */}
+              {/* {employeePermissions.isAdd && */}
+          
+            {/* </CCol> */}
           </CRow>
         </CCol>
       </CRow>
@@ -215,7 +216,7 @@ const Users = () => {
                   <CTableDataCell>{employee.officialEmail}</CTableDataCell>
                   <CTableDataCell>{employee.joiningDate}</CTableDataCell>
                   <CTableDataCell>
-                    {employeePermissions.isEdit && 
+                    {/* {employeePermissions.isEdit &&  */}
                     <Link to={`/users/updateUser/${employee.employeeId}`}>
                       <MdEdit
                         style={{
@@ -225,7 +226,7 @@ const Users = () => {
                         }}
                         className="mr-4 text-success"
                       />
-                    </Link>}
+                    </Link>
                  
                     <Link to={`/users/userDetail/${employee.userId}/${employee.employeeId}`}>
                       <AiFillEye
@@ -237,7 +238,7 @@ const Users = () => {
                         className="mr-4 text-primary"
                       />
                     </Link>
-                    {employeePermissions.isDelete &&
+                    {/* {employeePermissions.isDelete && */}
                     <MdDelete
                       style={{
                         color: "red",
@@ -247,7 +248,7 @@ const Users = () => {
                       }}
                       className="text-danger"
                       onClick={() => handleDeleteClick(employee.employeeId)}
-                    />}
+                    />
                   </CTableDataCell>
                 </CTableRow>
               ))}

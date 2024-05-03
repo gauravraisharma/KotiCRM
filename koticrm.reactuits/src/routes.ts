@@ -100,6 +100,7 @@ export const appRoutes: Route[] = [
 ]
 
 const routes: Route[] = [
+    
     // { path: '/', name: 'Home', element: null, isAuth: false},
     { path: '/dashboard', name: 'Dashboard', element: Dashboard, isAuth: true },
     // { path: '/dashboard', name: 'Dashboard', element: Dashboard, isAuth: true },

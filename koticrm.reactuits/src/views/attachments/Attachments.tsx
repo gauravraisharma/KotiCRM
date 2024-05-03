@@ -27,6 +27,7 @@ import { DownloadAttachmentAsync } from "../../redux-saga/modules/attachment/api
 import moment from "moment";
 import "moment-timezone";
 import { ToastContainer } from "react-toastify";
+import GetModulePermissions from "../../utils/Shared/GetModulePermissions";
 
 interface Props {
   accountId: number;
@@ -48,7 +49,7 @@ const Attachments = ({ accountId, getAttachmentsCount }: Props) => {
   const accountOwner = useSelector(
     (state: any) => state.accountReducer.accountOwner
   );
-
+  const accountsPermissions = GetModulePermissions("Accounts");
   let filteredAttachments = fetchedAttachments;
   if (accountId) {
     filteredAttachments = fetchedAttachments?.filter(
@@ -140,6 +141,7 @@ const Attachments = ({ accountId, getAttachmentsCount }: Props) => {
                   <h5 className="mb-0">Attachments</h5>
                 </div>
                 <div className="text-end">
+                  {accountsPermissions.isAdd &&
                   <CButton
                     component="input"
                     type="button"
@@ -147,7 +149,7 @@ const Attachments = ({ accountId, getAttachmentsCount }: Props) => {
                     value="Add Attachment"
                     style={{ cursor: "pointer" }}
                     onClick={handleModalOpen}
-                  />
+                  />}
                 </div>
               </div>
             </CCardHeader>

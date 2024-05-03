@@ -28,12 +28,16 @@ import {
 import {
   GetDepartments,
   GetDesignations,
+  GetRoles,
   GetShifts,
 } from "../../redux-saga/modules/shared/apiService";
 import "../../../src/css/style.css";
 import profile from "../../assets/images/profile.avif";
 import "react-toastify/dist/ReactToastify.css";
 import * as Yup from "yup";
+import Roles from "../roleManagement/Roles";
+import { RoleList } from "../../models/permissionManagement/RoleList";
+import { Role } from "../../models/permissionManagement/Role";
 
 
 const CreateOrUpdateUser = () => {
@@ -51,16 +55,16 @@ const CreateOrUpdateUser = () => {
   const [relievingDateRequired, setRelievingDateRequired] = useState(false);
   const [departmentList, setDepartmentList] = useState<Department[] | undefined>([]);
   const [designationList, setDesignationList] = useState<Designation[] | undefined>([]);
-  // const [Roles, setRoles] = useState([]);
+  const [roleList, setRoleList] = useState<Role[] | undefined>([]);
+
+ // const [Roles, setRoles] = useState([]);
   const [shiftList, setShiftList] = useState<Shift[] | undefined>([]);
   const [bloodGroup, setBloodGroup] = useState("");
   const [departmentId, setDepartmentId] = useState(0);
   const [designationId, setDesignationId] = useState(0);
   const [shiftId, setShiftId] = useState(0);
-  // const [newProfilePicture, setNewProfilePicture] = useState<UploadProfilePicture>(new CreateAttachmentClass());
-
-
-  const [selectedImage, setSelectedImage] = useState(null);
+  const [roleId, setRoleId] = useState(0);
+  const [Image, setImage] = useState(null);
  
 
 
@@ -80,6 +84,7 @@ const CreateOrUpdateUser = () => {
     getDepartmentList();
     getDesignationList();
     getShiftList();
+    getRoleList();
   }, []);
 
   useEffect(() => {
@@ -122,7 +127,7 @@ const CreateOrUpdateUser = () => {
         setDepartmentId(response.departmentId);
         setDesignationId(response.designationId);
         setShiftId(response.shiftId);
-        // setRoleId(response.roleId);
+        setRoleId(response.roleId);
       })
       .catch((error) => {
         toast.error("Fetch employee failed");
@@ -169,10 +174,22 @@ const CreateOrUpdateUser = () => {
   const handleShiftChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setShiftId(parseInt(e.target.value));
   };
-  //  // role change
-  //   const handleRoleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-  //     setRoleId(parseInt(e.target.value));
-  //   };
+   // role change
+    const handleRoleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+      setRoleId(parseInt(e.target.value));
+    };
+  //role list
+
+  const getRoleList = () => {
+    GetRoles()
+      .then((response) => {
+        setRoleList(response.data);
+        console.log(response)
+      })
+      .catch((error) => {
+        console.error("Error getting role list:", error.statusText);
+      });
+  };
 
   // Department list
   const getDepartmentList = () => {
@@ -237,6 +254,14 @@ const CreateOrUpdateUser = () => {
   //   permanentAddress: "123 Main St, City",
   //   correspondenceAddress: "456 Side St, Town"
   // };
+  // Submit
+  const handleFormSubmit = async (
+    employee: Employee,
+    { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }
+  ) => {
+    debugger;
+    try {
+      const formData = new FormData()
 
   const mapEmployeeToFormData = (employee: Employee): FormData => {
     const formData = new FormData();
@@ -268,6 +293,10 @@ const CreateOrUpdateUser = () => {
       if (employee.departmentId !== null) {
           formData.append("departmentId", employee.departmentId.toString());
       }
+      if (Image) {
+        formData.append("image", Image);
+      }
+  
       if (employee.designationId !== null) {
           formData.append("designationId", employee.designationId.toString());
       }
@@ -390,27 +419,12 @@ const CreateOrUpdateUser = () => {
                   <h4>User Code</h4>
 
                   <CRow className="justify-content-between">
-                    {/* <CCol xs={4}>
-                      <CImage
-                        rounded
-                        thumbnail
-                        src={profile}
-                        width={120}
-                        height={120}
-                        className="rounded-circle"
-                        style={{
-                          borderRadius: "50%",
-                          marginLeft: "5rem",
-                          marginTop: "2rem",
-                        }}
-                      />
-                    </CCol> */}
                     <CCol xs={4}>
                       <label htmlFor="profile-photo-upload">
                         <CImage
                           rounded
                           thumbnail
-                          src={selectedImage || profile}
+                          src={Image || profile}
                           width={120}
                           height={120}
                           className="rounded-circle"
@@ -679,23 +693,23 @@ const CreateOrUpdateUser = () => {
                           as="select"
                           id="roleId"
                           name="roleId"
-                          // value={roleId}
+                           value={roleId}
                           aria-label="Default select example"
                           className={`form-control form-select ${
-                            touched.departmentId && errors.departmentId
+                            touched.roleId && errors.roleId
                               ? "is-invalid"
                               : ""
                           }`}
                         >
                           <option value="">Select role</option>
-                          {/* {Roles?.map((role) => (
+                          {roleList?.map((role) => (
                           <option
-                            key={role.roleId}
-                            value={role.roleId}
+                            key={role.id}
+                            value={role.id}
                           >
-                            {role.roleId}
+                            {role.name}
                           </option>
-                        ))} */}
+                        ))}
                         </Field>
                         <ErrorMessage
                           name="role"
@@ -818,15 +832,7 @@ const CreateOrUpdateUser = () => {
                       <div className="form-group">
                         <label htmlFor="password">
                           Password
-                          {/* <span
-                          style={{
-                            color: "red",
-                            fontSize: "25px",
-                            lineHeight: "0",
-                          }}
-                        >
-                          *
-                        </span> */}
+                        
                         </label>
                         <Field
                           type="password"
@@ -972,7 +978,7 @@ const CreateOrUpdateUser = () => {
                         Guardian Contact Number
                       </label>
                       <Field
-                        type="text"
+                        type="number"
                         id="guardianContactNumber"
                         name="guardianContactNumber"
                         className="form-control"
@@ -1067,7 +1073,7 @@ const CreateOrUpdateUser = () => {
                     <div className="form-group">
                       <label htmlFor="bankAccountNumber">Account Number</label>
                       <Field
-                        type="text"
+                        type="number"
                         id="bankAccountNumber"
                         name="bankAccountNumber"
                         className="form-control"

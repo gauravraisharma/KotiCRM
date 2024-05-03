@@ -17,6 +17,7 @@ import {
 import { FormEvent, useState } from "react";
 import { useDispatch } from "react-redux";
 import { createAttachment } from "../../redux-saga/modules/attachment/action";
+import GetModulePermissions from "../../utils/Shared/GetModulePermissions";
 
 interface Props {
   accountId: number;
@@ -30,6 +31,7 @@ const CreateNewAttachment = ({ accountId, isVisible, handleClose }: Props) => {
     new CreateAttachmentClass()
   );
   const [submitting, setSubmitting] = useState(false);
+  const accountsPermissions = GetModulePermissions("Accounts");
 
   const resetForm = () => {
     setNewAttachment(new CreateAttachmentClass());

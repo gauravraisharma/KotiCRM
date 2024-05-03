@@ -28,15 +28,17 @@ const AppHeader = () => {
   const sidebarShow = useSelector(
     (state: any) => state.sharedReducer.sidebarToggle
   );
+
+  const toggleSidebar = () => {
+    dispatch({ type: SIDEBAR_TOGGLE, sidebarShow: !sidebarShow });
+  };
   return (
     <CHeader position="sticky" className="mb-4">
       <CContainer fluid>
         <CHeaderToggler
           className="ps-1"
-          onClick={() => {
-            dispatch({ type: SIDEBAR_TOGGLE, sidebarShow: !sidebarShow });
-          }}
-        >
+          onClick={toggleSidebar}>
+    
           <CIcon icon={cilMenu} size="lg" />
         </CHeaderToggler>
         <CHeaderBrand className="mx-auto d-md-none">

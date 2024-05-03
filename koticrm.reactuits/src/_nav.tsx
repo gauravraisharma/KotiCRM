@@ -61,14 +61,14 @@ const _nav:NavItem[] = [
     moduleName : 'Leaves'
 
   },
-  {
-    component: CNavItem,
-    name: 'Payroll',
-    to: '/theme/typography',
-    icon: <CIcon icon={cibPaypal} customClassName="nav-icon" />,
-    moduleName : 'Payroll'
+  // {
+  //   component: CNavItem,
+  //   name: 'Payroll',
+  //   to: '/theme/typography',
+  //   icon: <CIcon icon={cibPaypal} customClassName="nav-icon" />,
+  //   moduleName : 'Payroll'
 
-  },
+  // },
   {
     component: CNavItem,
     name: 'Attendance',
@@ -85,14 +85,14 @@ const _nav:NavItem[] = [
     moduleName : 'Settings'
 
   },
-  {
-    component: CNavItem,
-    name: 'Manage Roles',
-    to: '/roles',
-    icon: <CIcon icon={cilUser} customClassName="nav-icon" />,
-    moduleName : 'ManagePermission'
+  // {
+  //   component: CNavItem,
+  //   name: 'Manage Roles',
+  //   to: '/roles',
+  //   icon: <CIcon icon={cilUser} customClassName="nav-icon" />,
+  //   moduleName : 'ManagePermission'
 
-  },
+  // },
   ]
 
 export default _nav

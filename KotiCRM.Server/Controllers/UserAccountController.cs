@@ -30,6 +30,7 @@ namespace KotiCRM.Server.Controllers
 
         //LoginUser method is used to check user credential and allow login into application 
         //It will return the token in response if user is valid
+
         [AllowAnonymous]
         [HttpPost("LoginUser")]
         public async Task<IActionResult> LoginUser(UserLoginModel userModel)

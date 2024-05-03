@@ -17,6 +17,7 @@ import {
 import "../../../src/css/style.css";
 import {  Field, Formik } from "formik";
 import * as Yup from "yup";
+import GetModulePermissions from "../../utils/Shared/GetModulePermissions";
 
 const UserDetails = () => {
   const data = useParams<{}>();
@@ -30,6 +31,7 @@ const UserDetails = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const [formData, setFormData] = useState<Employee>(new EmployeeClass());
+  // const managePermissions = GetModulePermissions("Accounts");
 
   useEffect(() => {
     if (employeeId) {
@@ -261,7 +263,6 @@ const UserDetails = () => {
                   role="tabpanel"
                   aria-labelledby="manageuser-tab"
                 >
-                  
                   <Formik
                     initialValues={{
                       newPassword: "",
@@ -364,6 +365,7 @@ const UserDetails = () => {
                             >
                               Reset
                             </button>
+                            {/* {managePermissions.isAdd &&   */}
                             <button type="submit" className="btn btn-primary">
                               Save
                             </button>
