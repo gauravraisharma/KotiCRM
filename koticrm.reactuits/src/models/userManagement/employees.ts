@@ -4,8 +4,8 @@ export interface Employees
     employeeId: string;
     employeeCode?: string;
     name?: string;
-    officialEmail?: string;
-    contactNumber1?: string;
+    email?: string;
+    contactNumber?: string;
     joiningDate?: string;
     department?: string;
     designation?: string;

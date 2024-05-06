@@ -50,7 +50,7 @@ const Users = () => {
         pageNumber,
         pageSize
       );
-      setEmployeesList(response.data);
+      setEmployeesList(response.data.employee);
     } catch (error) {
       console.error("Error fetching employees:", error);
       toast.error("Failed to fetch employees. Please try again later.");
@@ -80,7 +80,7 @@ const Users = () => {
 
   // Pagination
   const pageSize = 10;
-  const totalCount = employeesList.userCount
+  const totalCount = employeesList.length;
   const totalPages = Math.ceil(totalCount / pageSize);
 
   //Handle page change
@@ -203,17 +203,17 @@ const Users = () => {
               <CTableRow>
                 <CTableDataCell scope="col">UserName</CTableDataCell>
                 <CTableDataCell scope="col">Contact No.</CTableDataCell>
-                <CTableDataCell scope="col">Official Email</CTableDataCell>
+                <CTableDataCell scope="col">Email</CTableDataCell>
                 <CTableDataCell scope="col">Joining Date</CTableDataCell>
                 <CTableDataCell scope="col">Actions</CTableDataCell>
               </CTableRow>
             </CTableHead>
             <CTableBody>
-              {employeesList.employee?.map((employee: Employees) => (
+              {employeesList?.map((employee: Employees) => (
                 <CTableRow key={employee.employeeId}>
                   <CTableDataCell>{employee.name}</CTableDataCell>
-                  <CTableDataCell>{employee.contactNumber1}</CTableDataCell>
-                  <CTableDataCell>{employee.officialEmail}</CTableDataCell>
+                  <CTableDataCell>{employee.contactNumber}</CTableDataCell>
+                  <CTableDataCell>{employee.email}</CTableDataCell>
                   <CTableDataCell>{employee.joiningDate}</CTableDataCell>
                   <CTableDataCell>
                     {/* {employeePermissions.isEdit &&  */}

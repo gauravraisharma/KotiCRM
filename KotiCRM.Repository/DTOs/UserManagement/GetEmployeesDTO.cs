@@ -12,8 +12,8 @@ namespace KotiCRM.Repository.DTOs.UserManagement
         public string? EmployeeId { get; set; }
         public string? EmployeeCode { get; set; }
         public string? Name { get; set; }
-        public string? OfficialEmail { get; set; }
-        public string? ContactNumber1 { get; set; }
+        public string? Email { get; set; }
+        public string? ContactNumber { get; set; }
         public DateOnly? JoiningDate { get; set; }
         public string? Department { get; set; }
         public string? Designation { get; set; }
