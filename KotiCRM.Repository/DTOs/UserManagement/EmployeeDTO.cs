@@ -18,12 +18,9 @@ namespace KotiCRM.Repository.DTOs.UserManagement
         public DateOnly? DateOfBirth { get; set; }
         public DateOnly? JoiningDate { get; set; }
         public DateOnly? RelievingDate { get; set; }
-        public string? ContactNumber1 { get; set; }
-        public string? ContactNumber2 { get; set; }
+        public string? ContactNumber { get; set; }
         public string? GuardianContactNumber { get; set; }
-        public string? PersonalEmail { get; set; }
-        public string? OfficialEmail { get; set; }
-        // public string? OfficialEmailPassword { get; set; }
+        public string? Email { get; set; }
         public string? SkypeId { get; set; }
         public string? AdharCardNumber { get; set; }
         public string? PanNumber { get; set; }
@@ -34,6 +31,7 @@ namespace KotiCRM.Repository.DTOs.UserManagement
         public int? DepartmentId { get; set; }
         public int? DesignationId { get; set; }
         public int? ShiftId { get; set; }
+        public string? RoleId { get; set; }
         public bool IsActive { get; set; }
         public string? PermanentAddress { get; set; }
         public string? CorrespondenceAddress { get; set; }

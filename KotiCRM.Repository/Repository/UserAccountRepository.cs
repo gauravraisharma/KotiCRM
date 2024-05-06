@@ -1127,6 +1127,7 @@ namespace KotiCRM.Repository.Repository
                                     join designation in _context.Designations on employee.DesignationId equals designation.DesignationId
                                     join shift in _context.Shifts on employee.ShiftId equals shift.ShiftId
                                     join bank in _context.Banks on employee.BankId equals bank.BankId
+                                    join role in _context.UserRoles on employee.UserId equals role.UserId
                                     where employee.EmployeeId == employeeId
                                     select new EmployeeDTO
                                     {
@@ -1140,11 +1141,9 @@ namespace KotiCRM.Repository.Repository
                                         DateOfBirth = employee.DateOfBirth,
                                         JoiningDate = employee.JoiningDate,
                                         RelievingDate = employee.RelievingDate,
-                                        ContactNumber1 = employee.ContactNumber1,
-                                        ContactNumber2 = employee.ContactNumber2,
+                                        ContactNumber = user.PhoneNumber,
                                         GuardianContactNumber = employee.GuardianContactNumber,
-                                        PersonalEmail = employee.PersonalEmailId,
-                                        OfficialEmail = employee.OfficialEmailId,
+                                        Email = user.Email,
                                         SkypeId = employee.SkypeId,
                                         AdharCardNumber = employee.AdharCardNumber,
                                         PanNumber = employee.PanNumber,
@@ -1155,6 +1154,7 @@ namespace KotiCRM.Repository.Repository
                                         DepartmentId = employee.DepartmentId,
                                         DesignationId = employee.DesignationId,
                                         ShiftId = employee.ShiftId,
+                                        RoleId = role.RoleId,
                                         IsActive = employee.IsActive,
                                         PermanentAddress = employee.PermanentAddress,
                                         CorrespondenceAddress = employee.CorrespondenceAddress
