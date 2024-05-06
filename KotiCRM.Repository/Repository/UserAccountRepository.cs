@@ -72,7 +72,7 @@ namespace KotiCRM.Repository.Repository
                 }
 
 
-                var roleResponse = await GetRoleNameAsync(userModel.UserType);
+                var roleResponse = await GetRoleNameAsync(userModel.RoleId);
                 if (roleResponse.Status == "FAILED")
                 {
                     return new ResponseStatus
@@ -166,7 +166,7 @@ namespace KotiCRM.Repository.Repository
 
                 //Update the user role 
                 var currentRoles = await _userManager.GetRolesAsync(userFound);
-                var roleFound = await _roleManager.FindByIdAsync(userModel.UserType);
+                var roleFound = await _roleManager.FindByIdAsync(userModel.RoleId);
                 if (roleFound != null)
                 {
                     var IsRoleAlreadyPresent = false;
@@ -713,7 +713,7 @@ namespace KotiCRM.Repository.Repository
         //    }
         //}
 
-        public async Task<ResponseStatus> GetRoleNameAsync(string roleName)
+        public async Task<ResponseStatus> GetRoleNameAsync(string roleId)
         {
             try
             {
@@ -726,7 +726,7 @@ namespace KotiCRM.Repository.Repository
                     };
                 }
 
-                var role = await _context.Roles.FirstOrDefaultAsync(r => r.Name == roleName);
+                var role = await _context.Roles.FirstOrDefaultAsync(r => r.Id == roleId);
 
                 if (role == null)
                 {
@@ -1221,10 +1221,10 @@ namespace KotiCRM.Repository.Repository
                     FirstName = (nameParts.Length >= 2 ? firstName : createEmployeeDTO.Name),
                     LastName = lastName,
                     UserName = username,
-                    Email = createEmployeeDTO.OfficialEmail,
-                    PhoneNumber = createEmployeeDTO.ContactNumber1,
-                    UserType = "Employee",
-                    Password = createEmployeeDTO.OfficialEmailPassword,
+                    Email = createEmployeeDTO.Email,
+                    PhoneNumber = createEmployeeDTO.ContactNumber,
+                    RoleId = createEmployeeDTO.RoleId,
+                    Password = createEmployeeDTO.Password,
                     CreatedBy = ""
                 };
 
@@ -1270,12 +1270,7 @@ namespace KotiCRM.Repository.Repository
                     DateOfBirth = createEmployeeDTO.DateOfBirth,
                     JoiningDate = createEmployeeDTO.JoiningDate,
                     RelievingDate = createEmployeeDTO.RelievingDate,
-                    ContactNumber1 = createEmployeeDTO.ContactNumber1,               
-                    ContactNumber2 = createEmployeeDTO.ContactNumber2,
                     GuardianContactNumber = createEmployeeDTO.GuardianContactNumber,
-                    PersonalEmailId = createEmployeeDTO.PersonalEmail,
-                    OfficialEmailId = createEmployeeDTO.OfficialEmail,              
-                    OfficialEmailPassword = createEmployeeDTO.OfficialEmailPassword, 
                     SkypeId = createEmployeeDTO.SkypeId,
                     AdharCardNumber = createEmployeeDTO.AdharCardNumber,
                     PanNumber = createEmployeeDTO.PanNumber,
@@ -1364,9 +1359,10 @@ namespace KotiCRM.Repository.Repository
                     FirstName = (nameParts.Length >= 2 ? firstName : createEmployeeDTO.Name),
                     LastName = lastName,
                     UserName = username,
-                    Email = createEmployeeDTO.OfficialEmail,
-                    PhoneNumber = createEmployeeDTO.ContactNumber1,
-                    Password = createEmployeeDTO.OfficialEmailPassword,
+                    Email = createEmployeeDTO.Email,
+                    Password = createEmployeeDTO.Password,
+                    PhoneNumber = createEmployeeDTO.ContactNumber,
+                    RoleId = createEmployeeDTO.RoleId,
                 };
 
                 ResponseStatus response = await UpdateApplicationUser(updateApplicationUser);
@@ -1411,12 +1407,7 @@ namespace KotiCRM.Repository.Repository
                 employee.DateOfBirth = createEmployeeDTO.DateOfBirth;
                 employee.JoiningDate = createEmployeeDTO.JoiningDate;
                 employee.RelievingDate = createEmployeeDTO.RelievingDate;
-                employee.ContactNumber1 = createEmployeeDTO.ContactNumber1;           // Remove
-                employee.ContactNumber2 = createEmployeeDTO.ContactNumber2;
                 employee.GuardianContactNumber = createEmployeeDTO.GuardianContactNumber;
-                employee.PersonalEmailId = createEmployeeDTO.PersonalEmail;
-                employee.OfficialEmailId = createEmployeeDTO.OfficialEmail;               // Remove
-                employee.OfficialEmailPassword = createEmployeeDTO.OfficialEmailPassword; // Remove
                 employee.SkypeId = createEmployeeDTO.SkypeId;
                 employee.AdharCardNumber = createEmployeeDTO.AdharCardNumber;
                 employee.PanNumber = createEmployeeDTO.PanNumber;

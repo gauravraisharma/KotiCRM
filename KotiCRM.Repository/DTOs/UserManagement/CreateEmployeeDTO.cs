@@ -15,19 +15,16 @@ namespace KotiCRM.Repository.DTOs.UserManagement
         public string? Name { get; set; }
         public IFormFile? ProfilePicture { get; set; }
         public string? ProfilePicturePath { get; set; }
-
         public string? FatherName { get; set; }
         public string? GuardianName { get; set; }
         public string? BloodGroup { get; set; }
         public DateOnly? DateOfBirth { get; set; }
         public DateOnly? JoiningDate { get; set; }
         public DateOnly? RelievingDate { get; set; }
-        public string? ContactNumber1 { get; set; }     
-        public string? ContactNumber2 { get; set; }
+        public string? ContactNumber { get; set; }     
         public string? GuardianContactNumber { get; set; }
-        public string? PersonalEmail { get; set; }
-        public string? OfficialEmail { get; set; }
-        public string? OfficialEmailPassword { get; set; }
+        public string? Email { get; set; }
+        public string? Password { get; set; }
         public string? SkypeId { get; set; }
         public string? AdharCardNumber { get; set; }
         public string? PanNumber { get; set; }
@@ -37,6 +34,7 @@ namespace KotiCRM.Repository.DTOs.UserManagement
         public string? Ifsc { get; set; }
         public int? DepartmentId { get; set; }
         public int? DesignationId { get; set; }
+        public string? RoleId { get; set; }
         public int? ShiftId { get; set; }
         public bool IsActive { get; set; }
         public string? PermanentAddress { get; set; }

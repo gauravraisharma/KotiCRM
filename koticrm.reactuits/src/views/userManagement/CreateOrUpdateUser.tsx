@@ -63,22 +63,22 @@ const CreateOrUpdateUser = () => {
   const [departmentId, setDepartmentId] = useState(0);
   const [designationId, setDesignationId] = useState(0);
   const [shiftId, setShiftId] = useState(0);
-  const [roleId, setRoleId] = useState(0);
-  const [Image, setImage] = useState(null);
- 
+  const [roleId, setRoleId] = useState("");
+  const [image, setImage] = useState(null);
 
-
+  // File
   const handleFileSelect = (event) => {
     const file = event.target.files[0];
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setSelectedImage(reader.result);
-        formData.profilePictureURL = file;
+        setImage(reader.result);
+        formData.profilePicture = file;
       };
       reader.readAsDataURL(file);
     }
   };
+
   // Effects
   useEffect(() => {
     getDepartmentList();
@@ -174,17 +174,17 @@ const CreateOrUpdateUser = () => {
   const handleShiftChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setShiftId(parseInt(e.target.value));
   };
-   // role change
-    const handleRoleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-      setRoleId(parseInt(e.target.value));
-    };
-  //role list
+  
+  // role change
+  const handleRoleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setRoleId(e.target.value);
+  };  
 
-  const getRoleList = () => {
-    GetRoles()
+  //role list
+  const getRoleList = async () => {
+    await GetRoles()
       .then((response) => {
-        setRoleList(response.data);
-        console.log(response)
+        setRoleList(response.data.roles);
       })
       .catch((error) => {
         console.error("Error getting role list:", error.statusText);
@@ -224,55 +224,22 @@ const CreateOrUpdateUser = () => {
       });
   };
 
-  // const formData2: Employee = {
-  //   employeeId: "12345",
-  //   employeeCode: "EMP001",
-  //   name: "John Doe",
-  //   profilePictureURL: "https://example.com/profile.jpg",
-  //   fatherName: "Michael Doe",
-  //   guardianName: "Jane Doe",
-  //   bloodGroup: "AB+",
-  //   dateOfBirth: "1990-01-01",
-  //   joiningDate: "2020-01-01",
-  //   relievingDate: null,
-  //   contactNumber1: "1234567890",
-  //   contactNumber2: null,
-  //   guardianContactNumber: "9876543210",
-  //   email: "john.doe@example.com",
-  //   password: "password123",
-  //   skypeId: "john_doe_skype",
-  //   adharCardNumber: "1234 5678 9012",
-  //   panNumber: "ABCDE1234F",
-  //   bankAccountNumber: "1234567890123456",
-  //   bank: "Example Bank",
-  //   branch: "Main Branch",
-  //   ifsc: "ABC1234567",
-  //   departmentId: null,
-  //   designationId: null,
-  //   shiftId: null,
-  //   isActive: true,
-  //   permanentAddress: "123 Main St, City",
-  //   correspondenceAddress: "456 Side St, Town"
-  // };
-
-
   const mapEmployeeToFormData = (employee: Employee): FormData => {
     const formData = new FormData();
   
       formData.append("employeeId", employee.employeeId);
       formData.append("employeeCode", employee.employeeCode);
       formData.append("name", employee.name);
-      formData.append("profilePictureURL", employee.profilePictureURL);
-      formData.append("fatherName", employee.fatherName);
+      // if (employee.profilePicture) {
+      //   formData.append("profilePicture", employee.profilePicture);
+      // }
+      formData.append("fatherName", employee.fatherName); 
       formData.append("guardianName", employee.guardianName);
       formData.append("bloodGroup", employee.bloodGroup);
       formData.append("dateOfBirth", employee.dateOfBirth);
       formData.append("joiningDate", employee.joiningDate);
       formData.append("relievingDate", employee.relievingDate !== null ? employee.relievingDate : "");
-      formData.append("contactNumber1", employee.contactNumber1);
-      if (employee.contactNumber2 !== null) {
-          formData.append("contactNumber2", employee.contactNumber2);
-      }
+      formData.append("contactNumber", employee.contactNumber);
       formData.append("guardianContactNumber", employee.guardianContactNumber);
       formData.append("email", employee.email);
       formData.append("password", employee.password);
@@ -286,8 +253,8 @@ const CreateOrUpdateUser = () => {
       if (employee.departmentId !== null) {
           formData.append("departmentId", employee.departmentId.toString());
       }
-      if (Image) {
-        formData.append("image", Image);
+      if (image) {
+        formData.append("profilePicture", image);
       }
   
       if (employee.designationId !== null) {
@@ -303,56 +270,56 @@ const CreateOrUpdateUser = () => {
   
       return formData;
   }
-  // Submit
-      const handleFormSubmit = async (
-        employee: Employee,
-        { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }
-      ) => {
-        try {
-     
-          employee.departmentId=departmentId;
-          employee.designationId = designationId;
-          employee.shiftId = shiftId;
-          employee.isActive = isActiveChecked;
-          employee.employeeCode = employeeCode;
-          employee.relievingDate = isRelievedChecked
-            ? employee.relievingDate
-            : null;
-          if (id) {
-            const data = mapEmployeeToFormData(employee);
-            const response = await UpdateEmployee(data);
-            if (response.status == 200) {
-              toast.success("Employee updated successfully");
-              setTimeout(() => {
-                navigate("/users");
-              }, 5000);
-            } else {
-              toast.error("Employee updation failed");
-            }
-          } else {
-            employee.employeeId = employeeID;
-            employee.bloodGroup = bloodGroup;
-            const data = mapEmployeeToFormData(employee);
-            const response = await CreateEmployee(data);
-            if (response.status == 200) {
-              toast.success("Employee created successfully");
-              navigate("/users");
-    
-              setTimeout(() => {
-                navigate("/users");
-              }, 5000);
-            } else {
-              toast.error("Employee creation failed");
-            }
-          }
-        } catch (error) {
-          console.log("error message:", error);
-        } finally {
-          setSubmitting(false);
-        }
-      };
- 
 
+  // Submit
+  const handleFormSubmit = async (
+    employee: Employee,
+    { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }
+  ) => {
+    try {
+ 
+      employee.departmentId=departmentId;
+      employee.designationId = designationId;
+      employee.shiftId = shiftId;
+      employee.isActive = isActiveChecked;
+      employee.employeeCode = employeeCode;
+      employee.relievingDate = isRelievedChecked
+        ? employee.relievingDate
+        : null;
+      employee.roleId = roleId
+      if (id) {
+        const data = mapEmployeeToFormData(employee);
+        const response = await UpdateEmployee(data);
+        if (response.status == 200) {
+          toast.success("Employee updated successfully");
+          setTimeout(() => {
+            navigate("/users");
+          }, 5000);
+        } else {
+          toast.error("Employee updation failed");
+        }
+      } else {
+        employee.employeeId = employeeID;
+        employee.bloodGroup = bloodGroup;
+        const data = mapEmployeeToFormData(employee);
+        const response = await CreateEmployee(data);
+        if (response.status == 200) {
+          toast.success("Employee created successfully");
+          navigate("/users");
+
+          setTimeout(() => {
+            navigate("/users");
+          }, 5000);
+        } else {
+          toast.error("Employee creation failed");
+        }
+      }
+    } catch (error) {
+      console.log("error message:", error);
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   let validationSchema = Yup.object().shape({
     // joiningDate: Yup.date().required("Joining Date is required"),
@@ -368,6 +335,7 @@ const CreateOrUpdateUser = () => {
     // role: Yup.string().required("Role is required"),
     // dateOfBirth: Yup.date().required("Date of birth is required"),
   });
+
   if (isRelievedChecked) {
     validationSchema = validationSchema.concat(
       Yup.object().shape({
@@ -375,6 +343,7 @@ const CreateOrUpdateUser = () => {
       })
     );
   }
+
   return (
     <>
       <ToastContainer />
@@ -687,7 +656,8 @@ const CreateOrUpdateUser = () => {
                           as="select"
                           id="roleId"
                           name="roleId"
-                           value={roleId}
+                          value={roleId}
+                          onChange={handleRoleChange}
                           aria-label="Default select example"
                           className={`form-control form-select ${
                             touched.roleId && errors.roleId
@@ -696,14 +666,14 @@ const CreateOrUpdateUser = () => {
                           }`}
                         >
                           <option value="">Select role</option>
-                          {/* {roleList?.map((role) => (
-                          <option
-                            key={role.id}
-                            value={role.id}
-                          >
-                            {role.name}
-                          </option>
-                        ))} */}
+                          {roleList?.map((role) => (
+                            <option
+                              key={role.id}
+                              value={role.id}
+                            >
+                              {role.name}
+                            </option>
+                          ))}
                         </Field>
                         <ErrorMessage
                           name="role"
@@ -898,16 +868,16 @@ const CreateOrUpdateUser = () => {
                     </CCol>
                     <CCol sm={4}>
                       <div className="form-group">
-                        <label htmlFor="contactNumber1">Contact Number </label>
+                        <label htmlFor="contactNumber">Contact Number </label>
                         <Field
                           type="text"
-                          id="contactNumber1"
-                          name="contactNumber1"
+                          id="contactNumber"
+                          name="contactNumber"
                           className="form-control"
                           placeholder="Contact Number "
                         />
                         <ErrorMessage
-                          name="contactNumber1"
+                          name="contactNumber"
                           className="invalid-feedback"
                           render={(error) => (
                             <label style={{ color: "#dc3545" }}>{error}</label>

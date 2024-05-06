@@ -99,9 +99,9 @@ export async function GetShifts(): Promise<apiResponse<Shift[]>> {
         return errorResponse;
     }
 }
-export async function GetRoles(): Promise<apiResponse<Role[]>> {
+export async function GetRoles() {
     try {
-        const response = await axiosInstance.get<Role[]>('/UserAccount/GetRoles');
+        const response = await axiosInstance.get('/UserAccount/GetRoles');
         return responseBody(response);
     } catch (error) {
         const errorResponse: apiResponse<Role[]> = {

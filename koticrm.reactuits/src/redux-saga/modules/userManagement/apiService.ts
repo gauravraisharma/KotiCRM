@@ -1,3 +1,4 @@
+import axios from "axios";
 import { apiResponse, axiosInstance, responseBody } from "../../../apiInterceptor/axiosInterceptor";
 import { Employee } from "../../../models/userManagement/employee";
 import { Employees } from "../../../models/userManagement/employees";
@@ -49,6 +50,12 @@ export async function CreateEmployee(employee: FormData) {
     try {
         const response = await axiosInstance.post<Employee>(`/UserAccount/CreateEmployee`, employee);
         return responseBody(response);
+        // const response = await axios.post<Employee>(`/UserAccount/CreateEmployee`, employee, {
+        //     headers: {
+        //     'Content-Type': 'multipart/form-data'
+        //     }
+        // });
+        // return responseBody(response);
     } catch (error: any) {
         const errorResponse: apiResponse<Employee> = {
             data: undefined,

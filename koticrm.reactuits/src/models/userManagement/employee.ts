@@ -2,15 +2,14 @@ export interface Employee {
     employeeId: string;
     employeeCode: string;
     name: string;
-    profilePictureURL: string;
+    profilePicture: File | null;
     fatherName: string;
     guardianName: string;
     bloodGroup: string;
     dateOfBirth: string;
     joiningDate: string;
     relievingDate: string | null;
-    contactNumber1: string;
-    contactNumber2: string | null;
+    contactNumber: string;
     guardianContactNumber: string;
     email: string;
     password: string;
@@ -28,7 +27,6 @@ export interface Employee {
     isActive: boolean;
     permanentAddress: string;
     correspondenceAddress: string;
-    roleId:number| null;
 
     // organizationID: string;
 }
@@ -41,15 +39,14 @@ export class EmployeeClass implements Employee{
     employeeId: string;
     employeeCode: string;
     name: string;
-    profilePictureURL: string;
+    profilePicture: File | null;
     fatherName: string;
     guardianName: string;
     bloodGroup: string;
     dateOfBirth: string;
     joiningDate: string;
     relievingDate: string | null;
-    contactNumber1: string;
-    contactNumber2: string | null;
+    contactNumber: string;
     guardianContactNumber: string;
     email: string;
     password: string;
@@ -73,15 +70,14 @@ export class EmployeeClass implements Employee{
         this.employeeId = "",
         this.employeeCode = "",
         this.name = "",
-        this.profilePictureURL = "",
+        this.profilePicture = null,
         this.fatherName = "",
         this.guardianName = "",
         this.bloodGroup = "",
         this.dateOfBirth = "",
         this.joiningDate = "",
         this.relievingDate = null,
-        this.contactNumber1 = "",
-        this.contactNumber2 = "",
+        this.contactNumber = "",
         this.guardianContactNumber = "",
         this.email = "",
         this.password = "",
