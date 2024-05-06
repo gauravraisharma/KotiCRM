@@ -31,7 +31,8 @@ const sharedReducer: Reducer<sharedState, AppAction> = (state: sharedState = INI
     case SIDEBAR_TOGGLE:
         return {
         ...state,
-            sidebarToggle: (action as actionPayloadModel).payload
+        sidebarToggle: action.sidebarShow
+
     }
       default:
         return state;

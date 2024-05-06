@@ -61,6 +61,7 @@ export interface Designation {
     organization?: OrganizationModel | null;
 }
 
+
 export interface Bank {
     bankId: number;
     bankAccountNumber?: string | null;

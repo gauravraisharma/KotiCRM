@@ -13,7 +13,11 @@ import {
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
-import { Employee, EmployeeClass, UploadProfilePicture } from "../../models/userManagement/employee";
+import {
+  Employee,
+  EmployeeClass,
+  UploadProfilePicture,
+} from "../../models/userManagement/employee";
 import {
   CreateEmployee,
   GetEmployeeById,
@@ -39,7 +43,6 @@ import Roles from "../roleManagement/Roles";
 import { RoleList } from "../../models/permissionManagement/RoleList";
 import { Role } from "../../models/permissionManagement/Role";
 
-
 const CreateOrUpdateUser = () => {
   // Parameters
   const navigate = useNavigate();
@@ -53,11 +56,15 @@ const CreateOrUpdateUser = () => {
   const [isActiveChecked, setIsActiveChecked] = useState(true);
   const [isRelievedChecked, setIsRelievedChecked] = useState(false);
   const [relievingDateRequired, setRelievingDateRequired] = useState(false);
-  const [departmentList, setDepartmentList] = useState<Department[] | undefined>([]);
-  const [designationList, setDesignationList] = useState<Designation[] | undefined>([]);
+  const [departmentList, setDepartmentList] = useState<
+    Department[] | undefined
+  >([]);
+  const [designationList, setDesignationList] = useState<
+    Designation[] | undefined
+  >([]);
   const [roleList, setRoleList] = useState<Role[] | undefined>([]);
 
- // const [Roles, setRoles] = useState([]);
+  // const [Roles, setRoles] = useState([]);
   const [shiftList, setShiftList] = useState<Shift[] | undefined>([]);
   const [bloodGroup, setBloodGroup] = useState("");
   const [departmentId, setDepartmentId] = useState(0);
@@ -174,11 +181,11 @@ const CreateOrUpdateUser = () => {
   const handleShiftChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setShiftId(parseInt(e.target.value));
   };
-  
+
   // role change
   const handleRoleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setRoleId(e.target.value);
-  };  
+  };
 
   //role list
   const getRoleList = async () => {
@@ -226,50 +233,53 @@ const CreateOrUpdateUser = () => {
 
   const mapEmployeeToFormData = (employee: Employee): FormData => {
     const formData = new FormData();
-  
-      formData.append("employeeId", employee.employeeId);
-      formData.append("employeeCode", employee.employeeCode);
-      formData.append("name", employee.name);
-      // if (employee.profilePicture) {
-      //   formData.append("profilePicture", employee.profilePicture);
-      // }
-      formData.append("fatherName", employee.fatherName); 
-      formData.append("guardianName", employee.guardianName);
-      formData.append("bloodGroup", employee.bloodGroup);
-      formData.append("dateOfBirth", employee.dateOfBirth);
-      formData.append("joiningDate", employee.joiningDate);
-      formData.append("relievingDate", employee.relievingDate !== null ? employee.relievingDate : "");
-      formData.append("contactNumber", employee.contactNumber);
-      formData.append("guardianContactNumber", employee.guardianContactNumber);
-      formData.append("email", employee.email);
-      formData.append("password", employee.password);
-      formData.append("skypeId", employee.skypeId);
-      formData.append("adharCardNumber", employee.adharCardNumber);
-      formData.append("panNumber", employee.panNumber);
-      formData.append("bankAccountNumber", employee.bankAccountNumber);
-      formData.append("bank", employee.bank);
-      formData.append("branch", employee.branch);
-      formData.append("ifsc", employee.ifsc);
-      if (employee.departmentId !== null) {
-          formData.append("departmentId", employee.departmentId.toString());
-      }
-      if (image) {
-        formData.append("profilePicture", image);
-      }
-  
-      if (employee.designationId !== null) {
-          formData.append("designationId", employee.designationId.toString());
-      }
-      if (employee.shiftId !== null) {
-          formData.append("shiftId", employee.shiftId.toString());
-      }
-      formData.append("roleId", employee.roleId.toString());
-      formData.append("isActive", employee.isActive.toString());
-      formData.append("permanentAddress", employee.permanentAddress);
-      formData.append("correspondenceAddress", employee.correspondenceAddress);
-  
-      return formData;
-  }
+
+    formData.append("employeeId", employee.employeeId);
+    formData.append("employeeCode", employee.employeeCode);
+    formData.append("name", employee.name);
+    // if (employee.profilePicture) {
+    //   formData.append("profilePicture", employee.profilePicture);
+    // }
+    formData.append("fatherName", employee.fatherName);
+    formData.append("guardianName", employee.guardianName);
+    formData.append("bloodGroup", employee.bloodGroup);
+    formData.append("dateOfBirth", employee.dateOfBirth);
+    formData.append("joiningDate", employee.joiningDate);
+    formData.append(
+      "relievingDate",
+      employee.relievingDate !== null ? employee.relievingDate : ""
+    );
+    formData.append("contactNumber", employee.contactNumber);
+    formData.append("guardianContactNumber", employee.guardianContactNumber);
+    formData.append("email", employee.email);
+    formData.append("password", employee.password);
+    formData.append("skypeId", employee.skypeId);
+    formData.append("adharCardNumber", employee.adharCardNumber);
+    formData.append("panNumber", employee.panNumber);
+    formData.append("bankAccountNumber", employee.bankAccountNumber);
+    formData.append("bank", employee.bank);
+    formData.append("branch", employee.branch);
+    formData.append("ifsc", employee.ifsc);
+    if (employee.departmentId !== null) {
+      formData.append("departmentId", employee.departmentId.toString());
+    }
+    if (image) {
+      formData.append("profilePicture", image);
+    }
+
+    if (employee.designationId !== null) {
+      formData.append("designationId", employee.designationId.toString());
+    }
+    if (employee.shiftId !== null) {
+      formData.append("shiftId", employee.shiftId.toString());
+    }
+    formData.append("roleId", employee.roleId.toString());
+    formData.append("isActive", employee.isActive.toString());
+    formData.append("permanentAddress", employee.permanentAddress);
+    formData.append("correspondenceAddress", employee.correspondenceAddress);
+
+    return formData;
+  };
 
   // Submit
   const handleFormSubmit = async (
@@ -277,8 +287,7 @@ const CreateOrUpdateUser = () => {
     { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }
   ) => {
     try {
- 
-      employee.departmentId=departmentId;
+      employee.departmentId = departmentId;
       employee.designationId = designationId;
       employee.shiftId = shiftId;
       employee.isActive = isActiveChecked;
@@ -286,7 +295,7 @@ const CreateOrUpdateUser = () => {
       employee.relievingDate = isRelievedChecked
         ? employee.relievingDate
         : null;
-      employee.roleId = roleId
+      employee.roleId = roleId;
       if (id) {
         const data = mapEmployeeToFormData(employee);
         const response = await UpdateEmployee(data);
@@ -322,18 +331,19 @@ const CreateOrUpdateUser = () => {
   };
 
   let validationSchema = Yup.object().shape({
-    // joiningDate: Yup.date().required("Joining Date is required"),
-    // email: Yup.string()
-    //   .email("Invalid email format")
-    //   .required("email is required"),
-    // name: Yup.string().required("User Name is required"),
-    // fatherName: Yup.string().required("Father Name is required"),
-    // designationId: Yup.number().required("Designation is required"),
-    // departmentId: Yup.number().required("Department is required"),
-    // Id: Yup.string().required("ID is required"),
-    // employeeCode: Yup.string().required("Employee code is required"),
-    // role: Yup.string().required("Role is required"),
-    // dateOfBirth: Yup.date().required("Date of birth is required"),
+    joiningDate: Yup.date().required("Joining Date is required"),
+    email: Yup.string()
+      .email("Invalid email format")
+      .required("email is required"),
+    password: Yup.string().required(" User Password is required"),
+    name: Yup.string().required("User Name is required"),
+    fatherName: Yup.string().required("Father Name is required"),
+    designationId: Yup.number().required("Designation is required"),
+    departmentId: Yup.number().required("Department is required"),
+    Id: Yup.string().required("ID is required"),
+    employeeCode: Yup.string().required("Employee code is required"),
+    roleId: Yup.string().required("Role is required"),
+    dateOfBirth: Yup.date().required("Date of birth is required"),
   });
 
   if (isRelievedChecked) {
@@ -640,7 +650,7 @@ const CreateOrUpdateUser = () => {
                     </CCol>
                     <CCol sm={4}>
                       <div className="form-group">
-                        <label htmlFor="departmentId">
+                        <label htmlFor="roleId">
                           Role
                           <span
                             style={{
@@ -660,23 +670,18 @@ const CreateOrUpdateUser = () => {
                           onChange={handleRoleChange}
                           aria-label="Default select example"
                           className={`form-control form-select ${
-                            touched.roleId && errors.roleId
-                              ? "is-invalid"
-                              : ""
+                            touched.roleId && errors.roleId ? "is-invalid" : ""
                           }`}
                         >
                           <option value="">Select role</option>
                           {roleList?.map((role) => (
-                            <option
-                              key={role.id}
-                              value={role.id}
-                            >
+                            <option key={role.id} value={role.id}>
                               {role.name}
                             </option>
                           ))}
                         </Field>
                         <ErrorMessage
-                          name="role"
+                          name="roleId"
                           className="invalid-feedback"
                           render={(error) => (
                             <label style={{ color: "#dc3545" }}>{error}</label>
@@ -743,7 +748,7 @@ const CreateOrUpdateUser = () => {
                           type="text"
                           id="name"
                           name="name"
-                          autoComplete="new-password"
+                          autoComplete="new-user"
                           className={`form-control ${
                             touched.name && errors.name ? "is-invalid" : ""
                           }`}
@@ -777,9 +782,7 @@ const CreateOrUpdateUser = () => {
                           id="email"
                           name="email"
                           className={`form-control ${
-                            touched.email && errors.email
-                              ? "is-invalid"
-                              : ""
+                            touched.email && errors.email ? "is-invalid" : ""
                           }`}
                           placeholder="Email"
                         />
@@ -794,35 +797,32 @@ const CreateOrUpdateUser = () => {
                     </CCol>
                     <CCol sm={4}>
                       <div className="form-group">
-                        <label htmlFor="password">
-                          Password
-                        
-                        </label>
+                        <label htmlFor="password">Password</label>
                         <Field
                           type="password"
                           id="password"
                           name="password"
-                          className="form-control"
-                          // className={`form-control ${
-                          //   touched.officialEmail && errors.officialEmail
-                          //     ? "is-invalid"
-                          //     : ""
-                          // }`}
+                          autoComplete="new-password"
+                          className={`form-control ${
+                            touched.password && errors.password
+                              ? "is-invalid"
+                              : ""
+                          }`}
                           placeholder=" Password"
                         />
-                        {/* <ErrorMessage
-                        name="password"
-                        className="invalid-feedback"
-                        render={(error) => (
-                          <label style={{ color: "#dc3545" }}>{error}</label>
-                        )}
-                      /> */}
+                        <ErrorMessage
+                          name="password"
+                          className="invalid-feedback"
+                          render={(error) => (
+                            <label style={{ color: "#dc3545" }}>{error}</label>
+                          )}
+                        />
                       </div>
                     </CCol>
                     <CCol sm={4}>
                       <div className="form-group">
                         <label htmlFor="dateOfBirth">
-                          Date of Birth{" "}
+                          Date of Birth
                           <span
                             style={{
                               color: "red",
@@ -852,7 +852,6 @@ const CreateOrUpdateUser = () => {
                         />
                       </div>
                     </CCol>
-
                     <CCol sm={4}>
                       <div className="form-group">
                         <label htmlFor="bloodGroup">Blood Group</label>
