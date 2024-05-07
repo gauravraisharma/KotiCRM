@@ -185,6 +185,7 @@ const CreateOrUpdateUser = () => {
   // role change
   const handleRoleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setRoleId(e.target.value);
+    formData.roleId= e.target.value;
   };
 
   //role list
@@ -339,8 +340,8 @@ const CreateOrUpdateUser = () => {
     fatherName: Yup.string().required("Father Name is required"),
     designationId: Yup.number().required("Designation is required"),
     departmentId: Yup.number().required("Department is required"),
-    Id: Yup.string().required("ID is required"),
-    employeeCode: Yup.string().required("Employee code is required"),
+    // Id: Yup.string().required("ID is required"),
+    // employeeCode: Yup.string().required("Employee code is required"),
     roleId: Yup.string().required("Role is required"),
     dateOfBirth: Yup.date().required("Date of birth is required"),
   });
@@ -582,11 +583,23 @@ const CreateOrUpdateUser = () => {
                   <CRow>
                     <CCol sm={4}>
                       <div className="form-group">
-                        <label htmlFor="designationId">Designation</label>
+                        <label htmlFor="designationId">
+                          Designation
+                          <span
+                            style={{
+                              color: "red",
+                              fontSize: "25px",
+                              lineHeight: "0",
+                            }}
+                          >
+                            *
+                          </span>
+                        </label>
                         <Field
                           as="select"
                           id="designationId"
                           name="designationId"
+                          value={designationId}
                           onChange={handleDesignationChange}
                           aria-label="Default select example"
                           className={`form-control form-select ${
@@ -649,24 +662,13 @@ const CreateOrUpdateUser = () => {
                     </CCol>
                     <CCol sm={4}>
                       <div className="form-group">
-                        <label htmlFor="roleId">
-                          Role
-                          <span
-                            style={{
-                              color: "red",
-                              fontSize: "25px",
-                              lineHeight: "0",
-                            }}
-                          >
-                            *
-                          </span>
-                        </label>
+                        <label htmlFor="roleId">Role</label>
                         <Field
                           as="select"
                           id="roleId"
                           name="roleId"
-                          value={roleId}
                           onChange={handleRoleChange}
+                          value={roleId}
                           aria-label="Default select example"
                           className={`form-control form-select ${
                             touched.roleId && errors.roleId ? "is-invalid" : ""
