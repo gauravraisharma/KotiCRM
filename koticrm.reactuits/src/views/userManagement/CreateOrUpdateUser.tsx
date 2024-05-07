@@ -173,7 +173,7 @@ const CreateOrUpdateUser = () => {
   // Shift change
   const handleShiftChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setShiftId(parseInt(e.target.value));
-    formData.shiftId= e.target.value;
+    formData.shiftId= parseInt(e.target.value);
   };
 
   // role change
