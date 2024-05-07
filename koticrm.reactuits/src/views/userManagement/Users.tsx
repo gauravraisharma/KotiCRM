@@ -30,7 +30,6 @@ import {
   CTableRow,
 } from "@coreui/react";
 import "../../css/style.css";
-import GetModulePermissions from "../../utils/Shared/GetModulePermissions";
 
 const Users = () => {
   const [employeesList, setEmployeesList] = useState<Employees[]>([]);
@@ -41,7 +40,7 @@ const Users = () => {
   const [searchQuery, setSearchQuery] = useState('')
 
   const [pageNumber, setPageNumber] = useState<number>(1);
-  const employeePermissions = GetModulePermissions("ManageUsers");
+
 
   const GetEmployees = async () => {
     try {
@@ -179,10 +178,6 @@ const Users = () => {
               </Link>
             </CCol>
 
-            {/* <CCol xs={2} className="text-end"> */}
-              {/* {employeePermissions.isAdd && */}
-          
-            {/* </CCol> */}
           </CRow>
         </CCol>
       </CRow>
@@ -216,7 +211,7 @@ const Users = () => {
                   <CTableDataCell>{employee.email}</CTableDataCell>
                   <CTableDataCell>{employee.joiningDate}</CTableDataCell>
                   <CTableDataCell>
-                    {/* {employeePermissions.isEdit &&  */}
+                
                     <Link to={`/users/updateUser/${employee.employeeId}`}>
                       <MdEdit
                         style={{
@@ -238,7 +233,7 @@ const Users = () => {
                         className="mr-4 text-primary"
                       />
                     </Link>
-                    {/* {employeePermissions.isDelete && */}
+           
                     <MdDelete
                       style={{
                         color: "red",

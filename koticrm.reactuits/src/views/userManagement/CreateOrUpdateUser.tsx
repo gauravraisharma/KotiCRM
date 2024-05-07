@@ -69,7 +69,7 @@ const CreateOrUpdateUser = () => {
   const [bloodGroup, setBloodGroup] = useState("");
   const [departmentId, setDepartmentId] = useState(0);
   const [designationId, setDesignationId] = useState(0);
-  const [shiftId, setShiftId] = useState(0);
+   const [shiftId, setShiftId] = useState(0);
   const [roleId, setRoleId] = useState("");
   const [image, setImage] = useState(null);
 
@@ -180,6 +180,7 @@ const CreateOrUpdateUser = () => {
   // Shift change
   const handleShiftChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setShiftId(parseInt(e.target.value));
+    formData.shiftId= e.target.value;
   };
 
   // role change
@@ -335,7 +336,13 @@ const CreateOrUpdateUser = () => {
     email: Yup.string()
       .email("Invalid email format")
       .required("email is required"),
-    password: Yup.string().required(" User Password is required"),
+      password: Yup.string()
+      .required('User Password is required')
+      .min(8, 'Password must be at least 8 characters long')
+      .matches(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/,
+        'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character'
+      ),
     name: Yup.string().required("User Name is required"),
     fatherName: Yup.string().required("Father Name is required"),
     designationId: Yup.number().required("Designation is required"),
@@ -344,6 +351,7 @@ const CreateOrUpdateUser = () => {
     // employeeCode: Yup.string().required("Employee code is required"),
     roleId: Yup.string().required("Role is required"),
     dateOfBirth: Yup.date().required("Date of birth is required"),
+    shiftId:Yup.string().required("Shift is required")
   });
 
   if (isRelievedChecked) {
@@ -695,13 +703,17 @@ const CreateOrUpdateUser = () => {
                     <CCol sm={4}>
                       <div className="form-group">
                         <label htmlFor="shiftId">Shift</label>
-                        <CFormSelect
+                        <Field
+                          as="select" 
                           id="shiftId"
                           name="shiftId"
-                          value={shiftId}
+                          value={shiftId ?? ''}
                           aria-label="Default select example"
-                          className="form-control"
+                          // className="form-control"
                           onChange={handleShiftChange}
+                          className={`form-control form-select ${
+                            touched.shiftId && errors.shiftId ? "is-invalid" : ""
+                          }`}
                           placeholder="Shift"
                         >
                           <option value="">Select a Shift</option>
@@ -710,7 +722,15 @@ const CreateOrUpdateUser = () => {
                               {shift.name}
                             </option>
                           ))}
-                        </CFormSelect>
+
+                        </Field>
+                        <ErrorMessage
+                          name="shiftId"
+                          className="invalid-feedback"
+                          render={(error) => (
+                            <label style={{ color: "#dc3545" }}>{error}</label>
+                          )}
+                        />
                       </div>
                     </CCol>
 
@@ -809,7 +829,7 @@ const CreateOrUpdateUser = () => {
                               ? "is-invalid"
                               : ""
                           }`}
-                          placeholder=" Password"
+                          placeholder="Password"
                         />
                         <ErrorMessage
                           name="password"
