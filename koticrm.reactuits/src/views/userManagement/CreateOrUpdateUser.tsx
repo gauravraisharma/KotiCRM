@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect, useId, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   CButton,
   CCard,
@@ -16,7 +16,6 @@ import { ToastContainer, toast } from "react-toastify";
 import {
   Employee,
   EmployeeClass,
-  UploadProfilePicture,
 } from "../../models/userManagement/employee";
 import {
   CreateEmployee,
@@ -39,8 +38,6 @@ import "../../../src/css/style.css";
 import profile from "../../assets/images/profile.avif";
 import "react-toastify/dist/ReactToastify.css";
 import * as Yup from "yup";
-import Roles from "../roleManagement/Roles";
-import { RoleList } from "../../models/permissionManagement/RoleList";
 import { Role } from "../../models/permissionManagement/Role";
 
 const CreateOrUpdateUser = () => {
@@ -108,10 +105,6 @@ const CreateOrUpdateUser = () => {
     const employeeIdData = employeeId.data;
     setEmployeeID(employeeIdData);
     formData.employeeId = employeeIdData;
-    // setFormData(prevFormData => ({
-    //   ...prevFormData,
-    //   employeeId: employeeIdData
-    // }));
     generateEmployeeCode("tech", departmentId, employeeIdData);
   };
 
@@ -239,18 +232,12 @@ const CreateOrUpdateUser = () => {
     formData.append("employeeId", employee.employeeId);
     formData.append("employeeCode", employee.employeeCode);
     formData.append("name", employee.name);
-    // if (employee.profilePicture) {
-    //   formData.append("profilePicture", employee.profilePicture);
-    // }
     formData.append("fatherName", employee.fatherName);
     formData.append("guardianName", employee.guardianName);
     formData.append("bloodGroup", employee.bloodGroup);
     formData.append("dateOfBirth", employee.dateOfBirth);
     formData.append("joiningDate", employee.joiningDate);
-    formData.append(
-      "relievingDate",
-      employee.relievingDate !== null ? employee.relievingDate : ""
-    );
+    formData.append( "relievingDate", employee.relievingDate !== null ? employee.relievingDate : "");
     formData.append("contactNumber", employee.contactNumber);
     formData.append("guardianContactNumber", employee.guardianContactNumber);
     formData.append("email", employee.email);
@@ -293,20 +280,18 @@ const CreateOrUpdateUser = () => {
       employee.shiftId = shiftId;
       employee.isActive = isActiveChecked;
       employee.employeeCode = employeeCode;
-      employee.relievingDate = isRelievedChecked
-        ? employee.relievingDate
-        : null;
+      employee.relievingDate = isRelievedChecked ? employee.relievingDate : null;
       employee.roleId = roleId;
       if (id) {
         const data = mapEmployeeToFormData(employee);
         const response = await UpdateEmployee(data);
         if (response.status == 200) {
-          toast.success("Employee updated successfully");
+          toast.success((response.data as any).message);
           setTimeout(() => {
             navigate("/users");
           }, 5000);
         } else {
-          toast.error("Employee updation failed");
+          toast.error((response.data as any).message);
         }
       } else {
         employee.employeeId = employeeID;
@@ -314,14 +299,13 @@ const CreateOrUpdateUser = () => {
         const data = mapEmployeeToFormData(employee);
         const response = await CreateEmployee(data);
         if (response.status == 200) {
-          toast.success("Employee created successfully");
+          toast.success((response.data as any).message);
           navigate("/users");
-
           setTimeout(() => {
             navigate("/users");
           }, 5000);
         } else {
-          toast.error("Employee creation failed");
+          toast.error((response.data as any).message);
         }
       }
     } catch (error) {

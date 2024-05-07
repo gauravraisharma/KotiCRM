@@ -1094,7 +1094,6 @@ namespace KotiCRM.Repository.Repository
                                        Shift = shift.Name,
                                        BirthDate = employee.DateOfBirth,
                                        BloodGroup = employee.BloodGroup
-
                                    })
                                    .OrderByDescending(u => u.Name) // Order by Name in descending order
                                    .ToListAsync();
@@ -1372,7 +1371,7 @@ namespace KotiCRM.Repository.Repository
                     return new EmployeeResponseStatus
                     {
                         Status = "FAILED",
-                        Message = "User not updated"
+                        Message = response.Message
                     };
                 }
 
