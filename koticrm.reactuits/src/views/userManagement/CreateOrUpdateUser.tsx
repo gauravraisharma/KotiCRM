@@ -74,16 +74,16 @@ const CreateOrUpdateUser = () => {
   const [image, setImage] = useState(null);
 
   // File
-  const handleFileSelect = (event) => {
+  const handleFileSelect = (event: any) => {
     const file = event.target.files[0];
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
         setImage(reader.result);
-        formData.profilePicture = file;
       };
       reader.readAsDataURL(file);
     }
+    formData.profilePicture = file;
   };
 
   // Effects
@@ -263,10 +263,9 @@ const CreateOrUpdateUser = () => {
     if (employee.departmentId !== null) {
       formData.append("departmentId", employee.departmentId.toString());
     }
-    if (image) {
-      formData.append("profilePicture", image);
+    if (employee.profilePicture) {
+      formData.append("profilePicture", employee.profilePicture);
     }
-
     if (employee.designationId !== null) {
       formData.append("designationId", employee.designationId.toString());
     }
@@ -397,7 +396,7 @@ const CreateOrUpdateUser = () => {
                         <CImage
                           rounded
                           thumbnail
-                          src={Image || profile}
+                          src={image || profile}
                           width={120}
                           height={120}
                           className="rounded-circle"
