@@ -9,6 +9,7 @@ const INITIAL_STATE: authState = {
   modulePermission: null,
   userType: null,
   userId: null,
+  organizationId:null,
   loggedIn: false,
   isLoading: false,
 };
@@ -32,6 +33,7 @@ const authReducer: Reducer<authState, AppAction> = (state: authState = INITIAL_S
                     modulePermission: loginPayload.modulePermission,
                     userId: loginPayload.userId,
                     userType: loginPayload.userType,
+                    organizationId:loginPayload.organizationId,
                     loggedIn: true,
                     isLoading :false
                 };

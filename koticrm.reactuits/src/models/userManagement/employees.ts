@@ -1,6 +1,7 @@
 export interface Employees
 {
     userId:string;
+    profilePicturePath: string;
     employeeId: string;
     employeeCode?: string;
     name?: string;

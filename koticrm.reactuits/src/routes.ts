@@ -12,8 +12,7 @@ const Page404 = lazy(() => import('./views/userAuthentication/page404/Page404'))
 const Page500 = lazy(() => import('./views/userAuthentication/page500/Page500'))
 
 
-//settings
-
+//setting
 const Settings = lazy(() => import('./views/settings/Settings'))
 const Dashboard = lazy(() => import('./views/dashboard/Dashboard'))
 const Colors = lazy(() => import('./theme/colors/Colors'))

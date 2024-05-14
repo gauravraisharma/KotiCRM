@@ -28,6 +28,7 @@ namespace KotiCRM.Services
             services.AddTransient<IOrganizationService, OrganizationService>();
             services.AddTransient<ISharedService, SharedService>();
             services.AddTransient<IUserAccountService, UserAccountService>();
+            services.AddTransient<IProfilePictureRepository, ProfilePictureRepository>();
 
             services.AddSingleton<IEmailService, EmailService>();
 

@@ -57,6 +57,7 @@
 
   <ItemGroup>
     <Folder Include="Contents\" />
+    <Folder Include="wwwroot\" />
   </ItemGroup>
 
 </Project>

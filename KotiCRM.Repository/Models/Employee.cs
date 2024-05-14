@@ -37,4 +37,7 @@ public partial class Employee : BaseEntity
     public virtual Designation? Designation { get; set; }
     public virtual Shift? Shift { get; set; }
     public virtual Bank? Bank { get; set; }
+    //public string CreatedBy { get; set; }
+
+   
 }

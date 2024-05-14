@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
@@ -101,7 +102,14 @@ builder.Services.AddIdentity<ApplicationUser, ApplicationRole>().AddEntityFramew
 var app = builder.Build();
 
 app.UseDefaultFiles();
-app.UseStaticFiles();
+// Configure the static file middleware to serve static files from the repository project
+app.UseStaticFiles(new StaticFileOptions
+{
+    // Set the file provider to the directory where the repository project's static files are located
+    FileProvider = new PhysicalFileProvider(
+        Path.Combine(app.Environment.ContentRootPath, "../KotiCRM.Repository/Uploads/ProfilePictures")),
+    RequestPath = "/Uploads/ProfilePictures" // URL prefix to access the files
+});
 
 app.UseCors("defaultCorsPolicy");
 app.UseAuthentication();

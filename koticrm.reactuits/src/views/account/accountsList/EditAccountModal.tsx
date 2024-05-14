@@ -578,7 +578,7 @@ const EditPage = () => {
                           type="text"
                           name="billingCity"
                           className={`form-control ${
-                            touched.phone && errors.phone ? "border-danger" : ""
+                            touched.billingCity && errors.billingCity ? "border-danger" : ""
                           }`}
                           value={updateAccount.billingCity}
                           style={{ height: "50px" }}
@@ -608,10 +608,8 @@ const EditPage = () => {
                         <Field
                           type="text"
                           name="billingState"
-                          className={`form-control${
-                            touched.billingState && errors.billingState
-                              ? "border-danger"
-                              : ""
+                          className={`form-control ${
+                            touched.billingState && errors.billingState ? "border-danger" : ""
                           }`}
                           value={updateAccount.billingState}
                           style={{ height: "50px" }}

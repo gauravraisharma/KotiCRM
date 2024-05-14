@@ -8,7 +8,6 @@ import {
   CCardBody,
   CCardHeader,
   CCol,
-  CFormCheck,
   CFormInput,
   CInputGroup,
   CInputGroupText,
@@ -143,9 +142,18 @@ const timezone = useSelector((state: any) => state.sharedReducer.timezone);
                   style={{ padding: "6px 16px" }}
                   color="primary"
                   value="+ New"
-                  variant="outline"
                 />
               </Link>
+              <Link to={`/users`}>
+                <CButton
+                  component="input"
+                  type="button"
+                  color="secondary"
+                  value="Back to Users"
+                  style={{ padding: "6px 16px" }}
+                  variant="outline"
+                />
+          </Link>
             </CCol>
           </CRow>
         </CCol>
@@ -238,6 +246,7 @@ const timezone = useSelector((state: any) => state.sharedReducer.timezone);
             aria-label="Page navigation example"
             className="m-auto"
           >
+            
             <CPaginationItem
               onClick={() => handlePageChange(pageNumber - 1)}
               disabled={pageNumber === 1}
@@ -255,6 +264,7 @@ const timezone = useSelector((state: any) => state.sharedReducer.timezone);
                 {index + 1}
               </CPaginationItem>
             ))}
+          
             <CPaginationItem
               onClick={() => handlePageChange(pageNumber + 1)}
               disabled={pageNumber === totalPages}
@@ -263,6 +273,9 @@ const timezone = useSelector((state: any) => state.sharedReducer.timezone);
               <span aria-hidden="true">&raquo;</span>
             </CPaginationItem>
           </CPagination>
+          
+        
+       
         </CCardBody>
       </CCard>
     </>

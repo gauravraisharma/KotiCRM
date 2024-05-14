@@ -47,7 +47,7 @@ namespace KotiCRM.Server.Controllers
             }
             else
             {
-                return BadRequest(loginStatus.Message);
+                return BadRequest(loginStatus);
             }
         }
 
@@ -273,7 +273,7 @@ namespace KotiCRM.Server.Controllers
         [HttpGet]
         [Route("GetUsers")]
         public async Task<EmployeeWithCountDTO> GetEmployees(string? searchQuery, int? pageNumber, int? pageSize)
-        {
+       {
             var users = await _accountService.GetEmployees(searchQuery, pageNumber, pageSize);
 
             return users;
@@ -303,6 +303,7 @@ namespace KotiCRM.Server.Controllers
 
             if (responseStatus.Status == "SUCCEED")
             {
+
                 return Ok(responseStatus);
             }
             else
@@ -314,16 +315,18 @@ namespace KotiCRM.Server.Controllers
         // This method is used to update Employee
         [HttpPut]
         [Route("UpdateEmployee")]
-        public async Task<ActionResult> UpdateEmployee(CreateEmployeeDTO createEmployeeDTO)
+        public async Task<ActionResult> UpdateEmployee([FromForm]CreateEmployeeDTO createEmployeeDTO )
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest("Please pass the valid Input.");
             }
-            var responseStatus = await _accountService.UpdateEmployee(createEmployeeDTO);
+
+             var responseStatus = await _accountService.UpdateEmployee(createEmployeeDTO);
 
             if (responseStatus.Status == "SUCCEED")
             {
+               
                 return Ok(responseStatus);
             }
             else

@@ -1,103 +1,72 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import {
-  ChangePassword,
-  GetEmployeeById,
-} from "../../redux-saga/modules/userManagement/apiService";
+import { ChangePassword, GetEmployeeById } from "../../redux-saga/modules/userManagement/apiService";
 import { Employee, EmployeeClass } from "../../models/userManagement/employee";
 import { ToastContainer, toast } from "react-toastify";
-import {
-  CRow,
-  CCol,
-  CCard,
-  CCardHeader,
-  CButton,
-  CCardBody,
-} from "@coreui/react";
-import "../../../src/css/style.css";
-import {  Field, Formik } from "formik";
+import { CRow, CCol, CCard, CCardHeader, CButton, CCardBody } from "@coreui/react";
 import * as Yup from "yup";
-import GetModulePermissions from "../../utils/Shared/GetModulePermissions";
+import { Formik, Field, ErrorMessage } from "formik";
+import "react-toastify/dist/ReactToastify.css";
 
 const UserDetails = () => {
-  const data = useParams<{}>();
-  // const email = data.email;
-  const employeeId = data.employeeId;
-  const userId = data.userId;
-  console.log(employeeId);
-  console.log(userId);
+  const { employeeId, userId } = useParams();
   const navigate = useNavigate();
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-
   const [formData, setFormData] = useState<Employee>(new EmployeeClass());
-  // const managePermissions = GetModulePermissions("Accounts");
 
   useEffect(() => {
+    const getEmployeeById = async (employeeId: string) => {
+      try {
+        const response = await GetEmployeeById(employeeId);
+        setFormData(response);
+      } catch (error) {
+        toast.error("Fetch User failed");
+      }
+    };
+
     if (employeeId) {
       getEmployeeById(employeeId);
     }
   }, [employeeId]);
 
-  const getEmployeeById = async (employeeId: string) => {
-    try {
-      const response = await GetEmployeeById(employeeId);
-      setFormData(response);
-      console.log(response);
-    } catch (error) {
-      toast.error("Fetch User failed");
-    }
-  };
-
-  // const handleSubmit = async () => {
-  //   debugger;
-
-  //   if (password === confirmPassword) {
-  //     const result = await ChangePassword(userId, password);
-
-  //     if (result.status == 200) {
-  //       toast.success("Password changed successfully");
-  //     }
-  //   } else {
-  //     toast.error("Failed to change password");
-  //   }
-  // };
-  const handleSubmit = async (values, { setSubmitting, setValues }) => {
+  const handleSubmit = async (values, { setSubmitting, resetForm }) => {
     if (values.newPassword === values.confirmPassword) {
-
       const passwordRequestModal = {
-        newPassword : values.newPassword,
+        newPassword: values.newPassword,
         userId: userId,
-        isEmailSent : false
-      }
+        isEmailSent: false
+      };
       const result = await ChangePassword(passwordRequestModal);
       if (result.status === 200) {
         toast.success("Your Password has been changed successfully");
-        // Reset form values upon successful password change
-        setValues({
-          newPassword: "",
-          confirmPassword: "",
-        });
+        resetForm();
       }
     } else {
-      toast.error("Failed to change password");
+      toast.error("Passwords do not match");
     }
     setSubmitting(false);
   };
 
-  const handleBlur = () => {
-    if (password !== confirmPassword) {
-      toast.error("Passwords do not match");
+  const handleSaveClick = (formik:any) => {
+    // Check if the form is valid
+    if (formik.isValid) {
+      // If valid, navigate to the "/users" page
+      window.location.href = '/users';
+    } else {
+   
+      console.log('Please fill out the form');
     }
   };
 
-  const validationSchema = Yup.object({
+  const validationSchema = Yup.object().shape({
     newPassword: Yup.string()
-    .required("New password is required")
-    .matches(/^(?=.*[0-9])(?=.*[^a-zA-Z0-9])(?=.*[a-zA-Z])[a-zA-Z0-9!@#$%^&*]{8,}$/, "Password must contain at least one non-alphanumeric character and one letter"),
+      .required("New password is required")
+      .matches(
+        /^(?=.*[0-9])(?=.*[^a-zA-Z0-9])(?=.*[a-zA-Z])[a-zA-Z0-9!@#$%^&*]{8,}$/,
+        "Password must contain at least one non-alphanumeric character and one letter"
+      ),
     confirmPassword: Yup.string()
       .required("Confirm password is required")
-      .oneOf([Yup.ref("newPassword"), null], "Passwords must match"),
+      .oneOf([Yup.ref("newPassword"), null], "Passwords must match")
   });
 
   return (
@@ -191,7 +160,7 @@ const UserDetails = () => {
                       <CCol xs={3}>
                         <li>
                           Contact Number:
-                          <p>{formData.contactNumber1}</p>
+                          <p>{formData.contactNumber}</p>
                         </li>
                       </CCol>
                       <CCol xs={3}>
@@ -202,14 +171,8 @@ const UserDetails = () => {
                       </CCol>
                       <CCol xs={3}>
                         <li>
-                          Official Email:
-                          <p>{formData.officialEmail}</p>
-                        </li>
-                      </CCol>
-                      <CCol xs={3}>
-                        <li>
-                          Personal Email:
-                          <p>{formData.personalEmail}</p>
+                          Email:
+                          <p>{formData.email}</p>
                         </li>
                       </CCol>
                       <CCol xs={3}>
@@ -228,6 +191,12 @@ const UserDetails = () => {
                         <li>
                           Department:
                           <p>{formData.departmentId}</p>
+                        </li>
+                      </CCol>
+                      <CCol xs={3}>
+                        <li>
+                          Role:
+                          <p>{formData.roleId}</p>
                         </li>
                       </CCol>
                       <CCol xs={3}>
@@ -339,7 +308,7 @@ const UserDetails = () => {
                                     ? "border border-danger"
                                     : ""
                                 }`}
-                                onClick={handleBlur}
+                              
                                 style={{ height: "50px" }}
                                 placeholder="Confirm new password"
                                 
@@ -358,20 +327,15 @@ const UserDetails = () => {
                         <div className="row">
                           <div className="col-sm-12 text-end">
                             <button
-                              type="button"
-                              className="btn btn-primary"
-                              color="secondary"
-                              onClick={formik.handleReset}
-                            >
-                              Reset
-                            </button>
-                            {/* {managePermissions.isAdd &&   */}
-                            <button type="submit" className="btn btn-primary">
+                             type="submit"
+                             className="btn btn-primary"
+                             onClick={handleSaveClick}
+                             >
                               Save
                             </button>
                             <button type="submit" 
                             className="btn btn-primary"
-                            // onClick={handleEmail}
+                        
                             >
                               Email Password
                             </button>

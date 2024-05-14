@@ -118,7 +118,7 @@ const CreateOrUpdateRole = () => {
         if(permissionList.length > 0){
             const permissionresponse = await UpdatePermission(permissionList);
             if (permissionresponse.status == 200) {
-                toast.success("Permissions updated successfully");
+                console.log("Permissions updated successfully");
                 setTimeout(() => {
                     navigate("/roles");
                 }, 5000);

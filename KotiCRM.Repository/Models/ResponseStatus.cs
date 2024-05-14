@@ -12,6 +12,7 @@ namespace KotiCRM.Repository.Models
         public string? UserType { get; set; }
         public string? UserId { get; set; }
         public string? TimeZone { get; set; }
+        public int? OrganizationId { get; set; }
         public List<ModulePermission>? ModulePermission { get; set; }
     }
     public class ResponseStatus

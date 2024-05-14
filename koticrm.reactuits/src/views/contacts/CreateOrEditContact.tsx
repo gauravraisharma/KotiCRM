@@ -140,11 +140,12 @@ const handleStateChange = (e: ChangeEvent<HTMLSelectElement>) => {
     .matches(/^[0-9]{10}$/, "Phone number must be exactly 10 digits")
    ,
   otherPhone: Yup.string()
-    .matches(/^[0-9]{10}$/, "Other phone number must be exactly 10 digits")
-   ,
+  .matches(/^\d{10}$/, "otherPhone  must be exactly 10 digits"),
   homePhone: Yup.string()
-    .matches(/^[0-9]{10}$/, "Home phone number must be exactly 10 digits")
-    
+  .matches(/^\d{10}$/, "homePhone  must be exactly 10 digits"),
+  dateOfBirth: Yup.date()
+  .required('Date of birth is required')
+  .max(new Date(), 'Date of birth cannot be in the future'),
   });
   //Initial contact
   const initialContact = {
@@ -612,10 +613,21 @@ const handleStateChange = (e: ChangeEvent<HTMLSelectElement>) => {
                           type="date"
                           id="dateOfBirth"
                           name="dateOfBirth"
-                          className="form-control"
+                          className={`form-control ${
+                            touched.dateOfBirth && errors.dateOfBirth
+                              ? "is-invalid"
+                              : ""
+                          }`}
                           placeholder="Enter DOB"
                           style={{ height: "50px" }}
                          />
+                          <ErrorMessage
+                          name="dateOfBirth"
+                          className="invalid-feedback"
+                          render={(error) => (
+                            <label style={{ color: "#dc3545" }}>{error}</label>
+                          )}
+                        />
                       </CCol>
                     </CRow>
                     <CRow className="mb-3">

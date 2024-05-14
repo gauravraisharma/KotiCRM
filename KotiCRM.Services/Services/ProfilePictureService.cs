@@ -35,4 +35,5 @@ public class ProfilePictureService : IProfilePictureService
 
         return filePath;
     }
+
 }

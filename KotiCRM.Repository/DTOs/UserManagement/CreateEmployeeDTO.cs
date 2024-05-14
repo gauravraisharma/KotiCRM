@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,6 +13,7 @@ namespace KotiCRM.Repository.DTOs.UserManagement
     {
         public string? EmployeeId { get; set; }
         public string? EmployeeCode { get; set; }
+        //[Required(ErrorMessage ="employee name is required")]
         public string? Name { get; set; }
         public IFormFile? ProfilePicture { get; set; }
         public string? ProfilePicturePath { get; set; }
@@ -39,13 +41,10 @@ namespace KotiCRM.Repository.DTOs.UserManagement
         public bool IsActive { get; set; }
         public string? PermanentAddress { get; set; }
         public string? CorrespondenceAddress { get; set; }
+        public int? OrganizationId { get; set; }
 
         // Add property for profile picture
         //public IFormFile ProfilePicture { get; set; }
 
-        // public int CompanyId { get; set; }
-        // public int organizationID { get; set; }
-        // public int? StatusId { get; set; }
-        // public int? BankId { get; set; }
     }
 }

@@ -22,13 +22,14 @@ export interface Employee {
     ifsc: string;
     departmentId: number |null ;
     designationId: number |null;
-    roleId: string;
+    roleId: string | null;
     shiftId: number | null;
     isActive: boolean;
     permanentAddress: string;
     correspondenceAddress: string;
+    organizationId : number | null;
 
-    // organizationID: string;
+
 }
 export interface UploadProfilePicture {
     userID: string;
@@ -64,36 +65,38 @@ export class EmployeeClass implements Employee{
     isActive: boolean;
     permanentAddress: string;
     correspondenceAddress: string;
+    organizationId : number | null;
 
-
-    constructor (){
-        this.employeeId = "",
-        this.employeeCode = "",
-        this.name = "",
-        this.profilePicture = null,
-        this.fatherName = "",
-        this.guardianName = "",
-        this.bloodGroup = "",
-        this.dateOfBirth = "",
-        this.joiningDate = "",
-        this.relievingDate = null,
-        this.contactNumber = "",
-        this.guardianContactNumber = "",
-        this.email = "",
-        this.password = "",
-        this.skypeId = "",
-        this.adharCardNumber = "",
-        this.panNumber = "",
-        this.bankAccountNumber = "",
-        this.bank = "",
-        this.branch = "",
-        this.ifsc = "",
-        this.departmentId = null,
-        this.designationId = null,
-        this.roleId = "",
-        this.shiftId = null,
-        this.isActive = false,
-        this.permanentAddress = "",
-        this.correspondenceAddress = ""
+    constructor() {
+        this.employeeId = "";
+        this.employeeCode = "";
+        this.name = "";
+        this.profilePicture = null;
+        this.fatherName = "";
+        this.guardianName = "";
+        this.bloodGroup = "";
+        this.dateOfBirth = "";
+        this.joiningDate = "";
+        this.relievingDate = null;
+        this.contactNumber = "";
+        this.guardianContactNumber = "";
+        this.email = "";
+        this.password = "";
+        this.skypeId = "";
+        this.adharCardNumber = "";
+        this.panNumber = "";
+        this.bankAccountNumber = "";
+        this.bank = "";
+        this.branch = "";
+        this.ifsc = "";
+        this.departmentId = null;
+        this.designationId = null;
+        this.roleId = "";
+        this.shiftId = null;
+        this.isActive = false;
+        this.permanentAddress = "";
+        this.correspondenceAddress = "";
+        this.organizationId = null;
     }
-} 
+    
+}

@@ -5,5 +5,6 @@ export interface authState{
     loggedIn: boolean,
     userId:string | null,
     userType:string | null,
+    organizationId: number| null,
     isLoading:boolean
 }

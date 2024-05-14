@@ -17,14 +17,14 @@ namespace KotiCRM.Services.Services
         private readonly IUserAccountRepository _accountRepository;
         private readonly IConfiguration _config;
         private readonly IEmailService _emailService;
-        private readonly IProfilePictureService _profilePictureService;
+        private readonly IProfilePictureRepository _profilePictureRepository;
 
-        public UserAccountService(IUserAccountRepository accountRepository, IConfiguration config, IEmailService emailService, IProfilePictureService profilePictureService)
+        public UserAccountService(IUserAccountRepository accountRepository, IConfiguration config, IEmailService emailService, IProfilePictureRepository profilePictureRepository)
         {
             _accountRepository = accountRepository;
             _config = config;
             _emailService = emailService;
-            _profilePictureService = profilePictureService;
+            _profilePictureRepository = profilePictureRepository;
         }
 
         public async Task<ResponseStatus> CreateApplicationUser(ApplicationUserModel userModel)
@@ -118,27 +118,35 @@ namespace KotiCRM.Services.Services
         {
             return _accountRepository.GetUserDataById(userId);
         }
-
         // For Employee
         public async Task<EmployeeWithCountDTO> GetEmployees(string? searchQuery, int? pageNumber, int? pageSize)
         {
-            var usersList = (from userAccount in await _accountRepository.GetEmployees()
-                             where (string.IsNullOrEmpty(searchQuery) ||
-                             userAccount.Name.Contains(searchQuery, StringComparison.OrdinalIgnoreCase) ||
-                             userAccount.EmployeeCode.Contains(searchQuery, StringComparison.OrdinalIgnoreCase) ||
-                             userAccount.BloodGroup.Contains(searchQuery, StringComparison.OrdinalIgnoreCase) ||
-                             userAccount.BirthDate.HasValue && userAccount.BirthDate.Value.ToString() == searchQuery ||
-                             userAccount.Designation.Contains(searchQuery, StringComparison.OrdinalIgnoreCase)
 
-                             )
-                             select userAccount)
-                            .Skip(pageNumber.HasValue && pageSize.HasValue ? (pageNumber.Value - 1) * pageSize.Value : 0)
-                            .Take(pageNumber.HasValue && pageSize.HasValue ? pageSize.Value : 10);
-
-            var users = await _accountRepository.GetEmployees();
-            int count = users.Count();
-            return new EmployeeWithCountDTO { Employee = usersList, UserCount = count };
+            var users = await _accountRepository.GetEmployees(searchQuery, pageNumber, pageSize);
+            return users;
         }
+
+
+        //public async Task<EmployeeWithCountDTO> GetEmployees(string? searchQuery, int? pageNumber, int? pageSize)
+        //{
+        //    var usersList = (from userAccount in await _accountRepository.GetEmployees()
+        //                     where (string.IsNullOrEmpty(searchQuery) ||
+        //                     userAccount.Name.Contains(searchQuery, StringComparison.OrdinalIgnoreCase) ||
+        //                     userAccount.EmployeeCode.Contains(searchQuery, StringComparison.OrdinalIgnoreCase) ||
+        //                     (userAccount.BloodGroup != null && userAccount.BloodGroup.Contains(searchQuery, StringComparison.OrdinalIgnoreCase)) ||
+        //                     (userAccount.BirthDate.HasValue && userAccount.BirthDate.Value.ToString() == searchQuery) ||
+        //                     userAccount.Designation.Contains(searchQuery, StringComparison.OrdinalIgnoreCase)
+
+        //                     )
+        //                     select userAccount)
+        //                    .Skip(pageNumber.HasValue && pageSize.HasValue ? (pageNumber.Value - 1) * pageSize.Value : 0)
+        //                    .Take(pageNumber.HasValue && pageSize.HasValue ? pageSize.Value : 10);
+
+        //    var users = await _accountRepository.GetEmployees();
+        //    int count = users.Count();
+        //    return new EmployeeWithCountDTO { Employee = usersList, UserCount = count };
+        //}
+
         public EmployeeResponse GetEmployeeById(string employeeId)
         {
             return _accountRepository.GetEmployeeById(employeeId);
@@ -150,7 +158,7 @@ namespace KotiCRM.Services.Services
             {
                 try
                 {
-                   createEmployeeDTO.ProfilePicturePath = await _profilePictureService.UploadProfilePicture(createEmployeeDTO.ProfilePicture);
+                   createEmployeeDTO.ProfilePicturePath = await _profilePictureRepository.UploadProfilePicture(createEmployeeDTO.ProfilePicture, createEmployeeDTO.EmployeeId);
                 }
                 catch (Exception ex)
                 {

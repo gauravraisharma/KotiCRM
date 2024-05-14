@@ -10,7 +10,7 @@ export function  loginUser(userLogin: UserLogin): Promise<apiResponse<UserLogin>
         const errorResponse: apiResponse<UserLogin> = {
             data: undefined,
             status: 500,
-            statusText: error.message
+            statusText: (error.response?.data!=undefined &&  error.response?.data.message)?error.response?.data.message:error.message
         };
         return errorResponse;
     });

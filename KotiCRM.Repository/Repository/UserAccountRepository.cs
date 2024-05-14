@@ -1,4 +1,5 @@
-﻿using KotiCRM.Repository.Data;
+﻿using Azure;
+using KotiCRM.Repository.Data;
 using KotiCRM.Repository.DTOs.Contact;
 using KotiCRM.Repository.DTOs.RoleManagement;
 using KotiCRM.Repository.DTOs.UserManagement;
@@ -89,6 +90,7 @@ namespace KotiCRM.Repository.Repository
                     PhoneNumber = userModel.PhoneNumber,
                     FirstName = userModel.FirstName,
                     LastName = userModel.LastName,
+                    OrganizationId = (int)userModel.OrganizationId,
                     CreatedBy = userModel.CreatedBy,
                     CreatedOn = DateTime.UtcNow
                 };
@@ -205,18 +207,18 @@ namespace KotiCRM.Repository.Repository
                         Message = errors
                     };
                 }
-                if (!string.IsNullOrEmpty(userModel.Password))
-                {
-                    var token = await _userManager.GeneratePasswordResetTokenAsync(userFound);
-                    var resetPasswordResult = await _userManager.ResetPasswordAsync(userFound, token, userModel.Password);
-                    var errors = string.Join(" and ", resetPasswordResult.Errors.Select(e => e.Description).ToArray());
-                    if (!resetPasswordResult.Succeeded)
-                        return new ResponseStatus
-                        {
-                            Status = "FAILED",
-                            Message = errors
-                        };
-                }
+                //if (!string.IsNullOrEmpty(userModel.Password))
+                //{
+                //    var token = await _userManager.GeneratePasswordResetTokenAsync(userFound);
+                //    var resetPasswordResult = await _userManager.ResetPasswordAsync(userFound, token, userModel.Password);
+                //    var errors = string.Join(" and ", resetPasswordResult.Errors.Select(e => e.Description).ToArray());
+                //    if (!resetPasswordResult.Succeeded)
+                //        return new ResponseStatus
+                //        {
+                //            Status = "FAILED",
+                //            Message = errors
+                //        };
+                //}
 
 
 
@@ -308,9 +310,6 @@ namespace KotiCRM.Repository.Repository
                 if (signInResult.Succeeded)
                 {
                     var userRoles = await _userManager.GetRolesAsync(user);
-
-
-
                     var token = await GenerateToken(user, userModel.RememberMe);
 
                     var role = await _roleManager.FindByNameAsync(userRoles[0]);
@@ -353,7 +352,7 @@ namespace KotiCRM.Repository.Repository
                         UserType = userRoles[0],
                         TimeZone = timeZone,
                         UserId = user.Id,
-
+                        OrganizationId = user.OrganizationId,
                         ModulePermission = ModulePermissionList
                     };
 
@@ -1068,19 +1067,57 @@ namespace KotiCRM.Repository.Repository
 
         }
 
-
         // for get employee list
-        public async Task<IEnumerable<GetEmployeesDTO>> GetEmployees()
+        public async Task<EmployeeWithCountDTO> GetEmployees(string? searchQuery, int? pageNumber, int? pageSize)
         {
+
             try
+            
             {
-                var users = await (from user in _context.Users
+
+                var usersList = (from user in _context.Users
+                                 join employee in _context.Employees on user.Id equals employee.UserId
+                                 join department in _context.Departments on employee.DepartmentId equals department.DepartmentId
+                                 join designation in _context.Designations on employee.DesignationId equals designation.DesignationId
+                                 join shift in _context.Shifts on employee.ShiftId equals shift.ShiftId
+                                 where String.IsNullOrEmpty(employee.DeletedBy) &&
+                                       employee.IsActive == true &&
+                                       (string.IsNullOrEmpty(searchQuery) ||
+                                       EF.Functions.Like(user.FirstName, $"%{searchQuery}%") ||
+                                       EF.Functions.Like(user.LastName, $"%{searchQuery}%") ||
+                                       EF.Functions.Like(employee.EmpCode, $"%{searchQuery}%") ||
+                                       EF.Functions.Like(employee.BloodGroup, $"%{searchQuery}%") ||
+                                       employee.DateOfBirth.HasValue && employee.DateOfBirth.Value.ToString() == searchQuery ||
+                                       EF.Functions.Like(designation.Name, $"%{searchQuery}%"))
+                                 select new GetEmployeesDTO
+                                 {
+                                     UserId = employee.UserId,
+                                     EmployeeId = employee.EmployeeId,
+                                     EmployeeCode = employee.EmpCode,
+                                     Name = user.FirstName + " " + user.LastName,
+                                     Email = user.Email,
+                                     ContactNumber = user.PhoneNumber,
+                                     JoiningDate = employee.JoiningDate,
+                                     Department = department.Name,
+                                     Designation = designation.Name,
+                                     Shift = shift.Name,
+                                     BirthDate = employee.DateOfBirth,
+                                     BloodGroup = employee.BloodGroup,
+                                     ProfilePicturePath=employee.ProfilePictureURL
+                                 })
+                            .Skip(pageNumber.HasValue && pageSize.HasValue ? (pageNumber.Value - 1) * pageSize.Value : 0)
+                            .Take(pageNumber.HasValue && pageSize.HasValue ? pageSize.Value : 10);
+
+
+
+                var usersCount = await (from user in _context.Users
                                    join employee in _context.Employees on user.Id equals employee.UserId
                                    join department in _context.Departments on employee.DepartmentId equals department.DepartmentId
                                    join designation in _context.Designations on employee.DesignationId equals designation.DesignationId
                                    join shift in _context.Shifts on employee.ShiftId equals shift.ShiftId
-                                   where employee.IsActive == true
-                                   select new GetEmployeesDTO
+                                   where String.IsNullOrEmpty(employee.DeletedBy) &&
+                                       employee.IsActive == true
+                                        select new GetEmployeesDTO
                                    {
                                        UserId = employee.UserId,
                                        EmployeeId = employee.EmployeeId,
@@ -1096,9 +1133,12 @@ namespace KotiCRM.Repository.Repository
                                        BloodGroup = employee.BloodGroup
                                    })
                                    .OrderByDescending(u => u.Name) // Order by Name in descending order
-                                   .ToListAsync();
+                                   .CountAsync();
 
-                return users;
+
+                
+
+                return new EmployeeWithCountDTO { Employee = usersList, UserCount = usersCount }; ;
             }
             catch (Exception ex)
             {
@@ -1224,7 +1264,8 @@ namespace KotiCRM.Repository.Repository
                     PhoneNumber = createEmployeeDTO.ContactNumber,
                     RoleId = createEmployeeDTO.RoleId,
                     Password = createEmployeeDTO.Password,
-                    CreatedBy = ""
+                    CreatedBy = "",
+                    OrganizationId = createEmployeeDTO.OrganizationId,
                 };
 
                 var result = await CreateApplicationUser(user);
@@ -1452,14 +1493,6 @@ namespace KotiCRM.Repository.Repository
         {
             try
             {
-                if (_context == null)
-                {
-                    return new ResponseStatus
-                    {
-                        Status = "FAILED",
-                        Message = "Db Context is null"
-                    };
-                }
 
                 var existingEmployee = (from employee in _context.Employees
                   where employee.EmployeeId == employeeId

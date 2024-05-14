@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { AiFillEye } from "react-icons/ai";
@@ -12,13 +13,6 @@ import {
   CCardBody,
   CCardHeader,
   CCol,
-  CDropdown,
-  CDropdownItem,
-  CDropdownMenu,
-  CDropdownToggle,
-  CFormInput,
-  CInputGroup,
-  CInputGroupText,
   CPagination,
   CPaginationItem,
   CRow,
@@ -29,27 +23,47 @@ import {
   CTableHead,
   CTableRow,
 } from "@coreui/react";
-import "../../css/style.css";
+const apiUrl = import.meta.env.VITE_API_URL;
+// import profile from "../../assets/images/profile.avif";
+import profile from "../../assets/brand/profile.avif";
 
+
+
+import "../../css/style.css";
 const Users = () => {
-  const [employeesList, setEmployeesList] = useState<Employees[]>([]);
+  //  const [employeesList, setEmployeesList] = useState<Employees[]>([]);
+  const [userList, setUserList] = useState<Employees[]>([]);
+
   const [userId, setUserId] = useState<string>("");
   const [isLoading, setIsLoading] = useState(true);
   const [dropdownValue, setDropdownValue] = useState("Name");
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState<boolean>(false);
-  const [searchQuery, setSearchQuery] = useState('')
-
+  const [searchQuery, setSearchQuery] = useState('');
   const [pageNumber, setPageNumber] = useState<number>(1);
+  const [totalUserCount, setTotalUserCount] = useState(0)
+  const pageSize = 10;
 
+  
+  console.log(profile)
 
   const GetEmployees = async () => {
+    debugger
     try {
       const response = await GetEmployeesList(
         searchQuery,
         pageNumber,
         pageSize
       );
-      setEmployeesList(response.data.employee);
+
+      const serverBaseUrl = apiUrl.replace("/api","")
+      response.data.employee = response.data.employee.map((x: any) => {
+        x.profilePicturePath = serverBaseUrl + x.profilePicturePath
+        return x;
+      })
+debugger;
+      setUserList(response.data.employee);
+      debugger
+      setTotalUserCount(response.data.userCount)
     } catch (error) {
       console.error("Error fetching employees:", error);
       toast.error("Failed to fetch employees. Please try again later.");
@@ -78,31 +92,36 @@ const Users = () => {
   };
 
   // Pagination
-  const pageSize = 10;
-  const totalCount = employeesList.length;
+
+  const totalCount = totalUserCount
   const totalPages = Math.ceil(totalCount / pageSize);
+  const startIndex = (pageNumber - 1) * pageSize;
+  const endIndex = Math.min(startIndex + pageSize, totalCount);
+  const employeesList = userList.slice(startIndex, endIndex);
+
+
+  console.log(userList)
 
   //Handle page change
   const handlePageChange = (pageNumber: number) => {
     setPageNumber(pageNumber);
   };
-
   //Handle enter click to search account
   const handleKeyDown = (e: any) => {
     if (e.keyCode === 13) {
       GetEmployees();
     }
   };
-  //Focus out event to searchh
+
+  //Focus out event to search
   const handleBlur = () => {
     GetEmployees()
-  }
-  //Effects
+  };
+
+  // Effects
   useEffect(() => {
     GetEmployees();
-  }, [pageNumber, pageSize, showDeleteConfirmation]);
-
-  console.log(employeesList)
+  }, [pageNumber, pageSize,showDeleteConfirmation]);
 
   return (
     <>
@@ -130,7 +149,6 @@ const Users = () => {
                 <select
                   className="form-select custom-select"
                   id="searchInput"
-                  value={`Search by ${dropdownValue}`}
                   onChange={(e) => handleDropdownChange(e.target.value)}
                   style={{
                     backgroundColor: "#f0f0f0",
@@ -140,7 +158,6 @@ const Users = () => {
                     width: "160px",
                   }}
                 > 
-                 
                   <option value="Name">Name</option>
                   <option value="Emp code">Emp code</option>
                   <option value="Blood Group">Blood Group</option>
@@ -165,7 +182,6 @@ const Users = () => {
               </div>
             </CCol>
             <CCol xs={4} className="text-end">
-        
               <Link to={`/roles`}>
                 <CButton color="primary" variant="outline">
                   Manage Roles
@@ -177,7 +193,6 @@ const Users = () => {
                 </CButton>
               </Link>
             </CCol>
-
           </CRow>
         </CCol>
       </CRow>
@@ -188,67 +203,80 @@ const Users = () => {
         onCancel={cancelDelete}
         userId={userId}
       />
-      <CCard  className="mb-4 mt-2">
+      <CCard className="mb-4 mt-2">
         <CCardHeader>
           <h5 className="mb-0"><strong>Users</strong></h5>
         </CCardHeader>
         <CCardBody>
-          <CTable responsive striped hover>
-            <CTableHead>
-              <CTableRow>
-                <CTableDataCell scope="col">UserName</CTableDataCell>
-                <CTableDataCell scope="col">Contact No.</CTableDataCell>
-                <CTableDataCell scope="col">Email</CTableDataCell>
-                <CTableDataCell scope="col">Joining Date</CTableDataCell>
-                <CTableDataCell scope="col">Actions</CTableDataCell>
-              </CTableRow>
-            </CTableHead>
-            <CTableBody>
-              {employeesList?.map((employee: Employees) => (
-                <CTableRow key={employee.employeeId}>
-                  <CTableDataCell>{employee.name}</CTableDataCell>
-                  <CTableDataCell>{employee.contactNumber}</CTableDataCell>
-                  <CTableDataCell>{employee.email}</CTableDataCell>
-                  <CTableDataCell>{employee.joiningDate}</CTableDataCell>
-                  <CTableDataCell>
-                
-                    <Link to={`/users/updateUser/${employee.employeeId}`}>
-                      <MdEdit
-                        style={{
-                          color: "green",
-                          marginRight: "10px",
-                          fontSize: "20px",
-                        }}
-                        className="mr-4 text-success"
-                      />
-                    </Link>
-                 
-                    <Link to={`/users/userDetail/${employee.userId}/${employee.employeeId}`}>
-                      <AiFillEye
-                        style={{
-                          color: "darkblue",
-                          marginRight: "10px",
-                          fontSize: "20px",
-                        }}
-                        className="mr-4 text-primary"
-                      />
-                    </Link>
-           
-                    <MdDelete
-                      style={{
-                        color: "red",
-                        marginRight: "10px",
-                        fontSize: "20px",
-                        cursor: "pointer",
-                      }}
-                      className="text-danger"
-                      onClick={() => handleDeleteClick(employee.employeeId)}
-                    />
-                  </CTableDataCell>
+          {userList.length === 0 ? (
+            <p>No Users record found</p>
+          ) : (
+            <CTable responsive striped hover>
+              <CTableHead>
+                <CTableRow>
+                  <CTableDataCell scope="col">UserName</CTableDataCell>
+                  <CTableDataCell scope="col">Contact No.</CTableDataCell>
+                  <CTableDataCell scope="col">Email</CTableDataCell>
+                  <CTableDataCell scope="col">Joining Date</CTableDataCell>
+                  <CTableDataCell scope="col">Profile Picture</CTableDataCell>
+                  <CTableDataCell scope="col">Actions</CTableDataCell>
                 </CTableRow>
-              ))}
-            </CTableBody>
-          </CTable>
+              </CTableHead>
+              <CTableBody>
+                {userList.map((employee: Employees) => (
+                  <CTableRow key={employee.employeeId}>
+                    <CTableDataCell>{employee.name}</CTableDataCell>
+                    <CTableDataCell>{employee.contactNumber}</CTableDataCell>
+                    <CTableDataCell>{employee.email}</CTableDataCell>
+                    <CTableDataCell>{employee.joiningDate}</CTableDataCell>
+                    {/* <CTableDataCell>
+                    <img
+                    src={employee.profilePicturePath || profile}
+                    className="profile-picture"
+                    alt="Profile"
+                    />
+                    </CTableDataCell> */}
+                    <CTableDataCell>
+    <img src={employee.profilePicturePath ? employee.profilePicturePath : profile} className="profile-picture"/>
+</CTableDataCell>
+
+                    <CTableDataCell>
+                      <Link to={`/users/updateUser/${employee.employeeId}`}>
+                        <MdEdit
+                          style={{
+                            color: "green",
+                            marginRight: "10px",
+                            fontSize: "20px",
+                          }}
+                          className="mr-4 text-success"
+                        />
+                      </Link>
+                      <Link to={`/users/userDetail/${employee.userId}/${employee.employeeId}`}>
+                        <AiFillEye
+                          style={{
+                            color: "darkblue",
+                            marginRight: "10px",
+                            fontSize: "20px",
+                          }}
+                          className="mr-4 text-primary"
+                        />
+                      </Link>
+                      <MdDelete
+                        style={{
+                          color: "red",
+                          marginRight: "10px",
+                          fontSize: "20px",
+                          cursor: "pointer",
+                        }}
+                        className="text-danger"
+                        onClick={() => handleDeleteClick(employee.employeeId)}
+                      />
+                    </CTableDataCell>
+                  </CTableRow>
+                ))}
+              </CTableBody>
+            </CTable>
+          )}
           <CPagination
             size="sm"
             align="end"
@@ -287,3 +315,4 @@ const Users = () => {
 };
 
 export default Users;
+

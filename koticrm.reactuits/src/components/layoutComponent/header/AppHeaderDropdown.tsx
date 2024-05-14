@@ -36,9 +36,7 @@ const AppHeaderDropdown = () => {
     dispatch(logout());
     navigate("/login");
   };
-  const handleClick = (link) => {
-    setActiveLink(link);
-  };
+
 
   const modulePermissions = useSelector(
     (state: any) => state.authReducer.modulePermission
@@ -55,13 +53,7 @@ const AppHeaderDropdown = () => {
         <CDropdownItem href="javascript:;">
           <CIcon icon={cilUser} className="me-2" />
 
-         {/* if {modulePermissions && (
-            <Link to="/users" onClick={() => handleClick("/users")}>
-              Users
-            </Link>
-          )} */}
-
-        <Link to="/users" onClick={() => handleClick("/users")}>
+        <Link to="/users">
         Users
         </Link>
      

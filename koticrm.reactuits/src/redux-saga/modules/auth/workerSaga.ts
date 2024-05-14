@@ -42,7 +42,7 @@ export function* workerloginUser(action: authAction): Generator<any> {
   try {
     const response: any = yield call(loginUser, action.payload);
     if (response.status !== 200) {
-      toast.error('Error logging in. Incorrect password!')
+      toast.error(response.statusText)
       yield put(loginFailure());
     }
     else {

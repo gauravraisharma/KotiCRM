@@ -11,7 +11,7 @@ import {
   CRow,
 } from "@coreui/react";
 import { ErrorMessage, Field, Form, Formik } from "formik";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link,useNavigate, useParams } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import {
   Employee,
@@ -35,10 +35,11 @@ import {
   GetShifts,
 } from "../../redux-saga/modules/shared/apiService";
 import "../../../src/css/style.css";
-import profile from "../../assets/images/profile.avif";
+import profile from "../../assets/brand/profile.avif";
 import "react-toastify/dist/ReactToastify.css";
 import * as Yup from "yup";
 import { Role } from "../../models/permissionManagement/Role";
+import { useSelector } from "react-redux";
 
 const CreateOrUpdateUser = () => {
   // Parameters
@@ -53,22 +54,23 @@ const CreateOrUpdateUser = () => {
   const [isActiveChecked, setIsActiveChecked] = useState(true);
   const [isRelievedChecked, setIsRelievedChecked] = useState(false);
   const [relievingDateRequired, setRelievingDateRequired] = useState(false);
-  const [departmentList, setDepartmentList] = useState<
-    Department[] | undefined
-  >([]);
-  const [designationList, setDesignationList] = useState<
-    Designation[] | undefined
-  >([]);
+  const [departmentList, setDepartmentList] = useState<Department[] | undefined>([]);
+  const [designationList, setDesignationList] = useState<Designation[] | undefined>([]);
   const [roleList, setRoleList] = useState<Role[] | undefined>([]);
 
-  // const [Roles, setRoles] = useState([]);
   const [shiftList, setShiftList] = useState<Shift[] | undefined>([]);
   const [bloodGroup, setBloodGroup] = useState("");
   const [departmentId, setDepartmentId] = useState(0);
   const [designationId, setDesignationId] = useState(0);
-   const [shiftId, setShiftId] = useState(0);
-  const [roleId, setRoleId] = useState("");
+  const [shiftId, setShiftId] = useState(0);
+  const [roleId, setRoleId] = useState<string>("");
   const [image, setImage] = useState(null);
+  const [isNewUserPage, setIsNewUserPage] = useState(false);
+
+//Get organizationId
+  const organizationId = useSelector((state: any) => state.authReducer.organizationId);
+  console.log(organizationId)
+
 
   // File
   const handleFileSelect = (event: any) => {
@@ -89,7 +91,11 @@ const CreateOrUpdateUser = () => {
     getDesignationList();
     getShiftList();
     getRoleList();
+    const isNewUserUrl = location.pathname.toLowerCase().includes('createorupdateuser');
+    setIsNewUserPage(isNewUserUrl);
   }, []);
+
+
 
   useEffect(() => {
     if (id) {
@@ -127,7 +133,7 @@ const CreateOrUpdateUser = () => {
         setDepartmentId(response.departmentId);
         setDesignationId(response.designationId);
         setShiftId(response.shiftId);
-        setRoleId(response.roleId);
+        setRoleId(response.roleId)
       })
       .catch((error) => {
         toast.error("Fetch employee failed");
@@ -156,30 +162,29 @@ const CreateOrUpdateUser = () => {
   };
 
   // Department change
-  const handleDepartmentChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const changedDepartmentId = parseInt(e.target.value);
-    generateEmployeeCode("tech", changedDepartmentId, formData.employeeId);
-    setDepartmentId(changedDepartmentId);
-    formData.departmentId = changedDepartmentId;
+  const handleDepartmentChange = (value: number, fieldSetterCallback: any) =>  {
+    generateEmployeeCode("tech", value, formData.employeeId);
+    fieldSetterCallback('departmentId',value);
+    formData.departmentId = value;
   };
 
   // Designation change
-  const handleDesignationChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const changedDesignationId = parseInt(e.target.value);
-    setDesignationId(changedDesignationId);
-    formData.designationId = changedDesignationId;
+  const handleDesignationChange = (value: number, fieldSetterCallback: any) => {
+    fieldSetterCallback('designationId',value);
+    formData.designationId = value;
   };
 
   // Shift change
-  const handleShiftChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setShiftId(parseInt(e.target.value));
-    formData.shiftId= e.target.value;
+  const handleShiftChange = (value: number, fieldSetterCallback: any) => {
+    fieldSetterCallback("shiftId", value)
+    formData.shiftId= value;
   };
 
   // role change
-  const handleRoleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setRoleId(e.target.value);
-    formData.roleId= e.target.value;
+  const handleRoleChange = (value: string, fieldSetterCallback:any) => {
+  // const handleRoleChange = (value: string, fieldSetterCallback: (field: string, value: string | null) => void) => {
+    fieldSetterCallback("roleId", value)
+    formData.roleId= value;
   };
 
   //role list
@@ -192,6 +197,7 @@ const CreateOrUpdateUser = () => {
         console.error("Error getting role list:", error.statusText);
       });
   };
+  console.log(roleId)
 
   // Department list
   const getDepartmentList = () => {
@@ -227,8 +233,9 @@ const CreateOrUpdateUser = () => {
   };
 
   const mapEmployeeToFormData = (employee: Employee): FormData => {
+    debugger;
+    employee.organizationId=organizationId
     const formData = new FormData();
-
     formData.append("employeeId", employee.employeeId);
     formData.append("employeeCode", employee.employeeCode);
     formData.append("name", employee.name);
@@ -261,7 +268,15 @@ const CreateOrUpdateUser = () => {
     if (employee.shiftId !== null) {
       formData.append("shiftId", employee.shiftId.toString());
     }
-    formData.append("roleId", employee.roleId.toString());
+
+    if (employee.roleId !== null) {
+      formData.append("roleId", employee.roleId.toString());
+    }
+    
+    if (employee.organizationId !== null) {
+      formData.append("organizationId",employee.organizationId.toString());
+    }
+
     formData.append("isActive", employee.isActive.toString());
     formData.append("permanentAddress", employee.permanentAddress);
     formData.append("correspondenceAddress", employee.correspondenceAddress);
@@ -275,13 +290,9 @@ const CreateOrUpdateUser = () => {
     { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }
   ) => {
     try {
-      employee.departmentId = departmentId;
-      employee.designationId = designationId;
-      employee.shiftId = shiftId;
       employee.isActive = isActiveChecked;
       employee.employeeCode = employeeCode;
       employee.relievingDate = isRelievedChecked ? employee.relievingDate : null;
-      employee.roleId = roleId;
       if (id) {
         const data = mapEmployeeToFormData(employee);
         const response = await UpdateEmployee(data);
@@ -300,7 +311,7 @@ const CreateOrUpdateUser = () => {
         const response = await CreateEmployee(data);
         if (response.status == 200) {
           toast.success((response.data as any).message);
-          navigate("/users");
+  
           setTimeout(() => {
             navigate("/users");
           }, 5000);
@@ -320,22 +331,26 @@ const CreateOrUpdateUser = () => {
     email: Yup.string()
       .email("Invalid email format")
       .required("email is required"),
-      password: Yup.string()
+      password: isNewUserPage? Yup.string()
       .required('User Password is required')
       .min(8, 'Password must be at least 8 characters long')
       .matches(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/,
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?#&]+$/,
         'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character'
-      ),
+      ): "",
     name: Yup.string().required("User Name is required"),
     fatherName: Yup.string().required("Father Name is required"),
     designationId: Yup.number().required("Designation is required"),
     departmentId: Yup.number().required("Department is required"),
-    // Id: Yup.string().required("ID is required"),
-    // employeeCode: Yup.string().required("Employee code is required"),
     roleId: Yup.string().required("Role is required"),
+    shiftId: Yup.string().required("Shift is required"),
     dateOfBirth: Yup.date().required("Date of birth is required"),
-    shiftId:Yup.string().required("Shift is required")
+    // contactNumber: Yup.string()
+    // .required('Contact number is required')
+    // .matches(/^\d{10}$/, 'Contact number must be exactly 10 digits'),
+    // contactNumber: Yup.string().required('Contact number is required'),
+  
+
   });
 
   if (isRelievedChecked) {
@@ -374,10 +389,13 @@ const CreateOrUpdateUser = () => {
             validationSchema={validationSchema}
             onSubmit={handleFormSubmit}
           >
-            {({ handleSubmit, isSubmitting, touched, errors, values }) => (
+            {({ handleSubmit, isSubmitting, touched, errors, setFieldValue }) => {
+              {console.log(errors)}
+              return (
+              
               <Form
                 className="profile-info"
-                onSubmit={handleSubmit}
+                // onSubmit={handleSubmit}
                 autoComplete="off"
               >
                 <div className="heading">
@@ -385,6 +403,7 @@ const CreateOrUpdateUser = () => {
 
                   <CRow className="justify-content-between">
                     <CCol xs={4}>
+                      
                       <label htmlFor="profile-photo-upload">
                         <CImage
                           rounded
@@ -591,8 +610,7 @@ const CreateOrUpdateUser = () => {
                           as="select"
                           id="designationId"
                           name="designationId"
-                          value={designationId}
-                          onChange={handleDesignationChange}
+                          onChange={(e: any) =>handleDesignationChange(e.target.value, setFieldValue)}
                           aria-label="Default select example"
                           className={`form-control form-select ${
                             touched.designationId && errors.designationId
@@ -620,12 +638,22 @@ const CreateOrUpdateUser = () => {
                     </CCol>
                     <CCol sm={4}>
                       <div className="form-group">
-                        <label htmlFor="departmentId">Department</label>
+                        <label htmlFor="departmentId">Department
+                        <span
+                            style={{
+                              color: "red",
+                              fontSize: "25px",
+                              lineHeight: "0",
+                            }}
+                          >
+                            *
+                          </span>
+                        </label>
                         <Field
                           as="select"
                           id="departmentId"
                           name="departmentId"
-                          onChange={handleDepartmentChange}
+                          onChange={(e: any) =>handleDepartmentChange(e.target.value, setFieldValue)}
                           aria-label="Default select example"
                           className={`form-control form-select ${
                             touched.departmentId && errors.departmentId
@@ -645,22 +673,31 @@ const CreateOrUpdateUser = () => {
                         </Field>
                         <ErrorMessage
                           name="departmentId"
+                          component="div"
                           className="invalid-feedback"
-                          render={(error) => (
-                            <label style={{ color: "#dc3545" }}>{error}</label>
-                          )}
+                          style={{ color: "#dc3545" }}
                         />
                       </div>
                     </CCol>
                     <CCol sm={4}>
                       <div className="form-group">
-                        <label htmlFor="roleId">Role</label>
+                        <label htmlFor="roleId">Role
+                        <span
+                            style={{
+                              color: "red",
+                              fontSize: "25px",
+                              lineHeight: "0",
+                            }}
+                          >
+                            *
+                          </span>
+
+                        </label>
                         <Field
                           as="select"
                           id="roleId"
                           name="roleId"
-                          onChange={handleRoleChange}
-                          value={roleId}
+                          onChange={(e: any) =>handleRoleChange(e.target.value, setFieldValue)}
                           aria-label="Default select example"
                           className={`form-control form-select ${
                             touched.roleId && errors.roleId ? "is-invalid" : ""
@@ -686,15 +723,24 @@ const CreateOrUpdateUser = () => {
                   <CRow>
                     <CCol sm={4}>
                       <div className="form-group">
-                        <label htmlFor="shiftId">Shift</label>
+                        <label htmlFor="shiftId">Shift
+                        <span
+                            style={{
+                              color: "red",
+                              fontSize: "25px",
+                              lineHeight: "0",
+                            }}
+                          >
+                            *
+                          </span>
+                        </label>
                         <Field
                           as="select" 
                           id="shiftId"
                           name="shiftId"
-                          value={shiftId ?? ''}
                           aria-label="Default select example"
                           // className="form-control"
-                          onChange={handleShiftChange}
+                          onChange={(e: any) =>handleShiftChange(e.target.value, setFieldValue)}
                           className={`form-control form-select ${
                             touched.shiftId && errors.shiftId ? "is-invalid" : ""
                           }`}
@@ -800,9 +846,20 @@ const CreateOrUpdateUser = () => {
                         />
                       </div>
                     </CCol>
+                    {isNewUserPage && (
                     <CCol sm={4}>
                       <div className="form-group">
-                        <label htmlFor="password">Password</label>
+                        <label htmlFor="password">Password
+                        <span
+                            style={{
+                              color: "red",
+                              fontSize: "25px",
+                              lineHeight: "0",
+                            }}
+                          >
+                            *
+                          </span>
+                        </label>
                         <Field
                           type="password"
                           id="password"
@@ -824,6 +881,7 @@ const CreateOrUpdateUser = () => {
                         />
                       </div>
                     </CCol>
+                    )}
                     <CCol sm={4}>
                       <div className="form-group">
                         <label htmlFor="dateOfBirth">
@@ -874,24 +932,28 @@ const CreateOrUpdateUser = () => {
                       <div className="form-group">
                         <label htmlFor="contactNumber">Contact Number </label>
                         <Field
-                          type="text"
+                          type="number"
                           id="contactNumber"
                           name="contactNumber"
                           className="form-control"
+                          // className={`form-control ${
+                          //   touched.contactNumber && errors.contactNumber
+                          //     ? "is-invalid"
+                          //     : ""
+                          // }`}
                           placeholder="Contact Number "
                         />
-                        <ErrorMessage
+                        {/* <ErrorMessage
                           name="contactNumber"
                           className="invalid-feedback"
                           render={(error) => (
                             <label style={{ color: "#dc3545" }}>{error}</label>
                           )}
-                        />
+                        /> */}
                       </div>
                     </CCol>
                   </CRow>
                 </div>
-
                 <CRow>
                   <CCol sm={4}>
                     <div className="form-group">
@@ -952,6 +1014,7 @@ const CreateOrUpdateUser = () => {
                         className="form-control"
                         placeholder="Guardian Contact Number"
                       />
+                   
                     </div>
                   </CCol>
                   <CCol sm={6}>
@@ -1096,7 +1159,7 @@ const CreateOrUpdateUser = () => {
                   </CCol>
                 </CRow>
               </Form>
-            )}
+            )}}
           </Formik>
         </CCardBody>
       </CCard>

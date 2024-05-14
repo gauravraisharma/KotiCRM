@@ -279,3 +279,13 @@
   background-color: #3498db;
   color: #fff;
 } */
+/* style.css */
+
+.profile-picture{
+  width: 44px; /* Set your desired width */
+  height: 44px; /* Maintain aspect ratio */
+  border-radius: 50%; /* Make it a circle */
+  border: 2px solid #ccc; /* Add a border */
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); 
+  margin-right: 20px;
+}

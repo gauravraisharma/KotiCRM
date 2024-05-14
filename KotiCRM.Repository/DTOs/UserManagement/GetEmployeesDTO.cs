@@ -21,5 +21,7 @@ namespace KotiCRM.Repository.DTOs.UserManagement
         public int? DepartmentId { get; internal set; }
         public string? BloodGroup { get; set; }
         public DateOnly? BirthDate {  get; set; }
+        public DateTime? CreatedDate { get; set; }
+        public string ProfilePicturePath { get; set; }
     }
 }

@@ -87,12 +87,12 @@ const AccountList: React.FC = () => {
 
   //Get owner name
   function getOwnerName(ownerId: string): string {
-    const owner = accountOwner?.find((owner: any) => owner.id === ownerId);
+    const  owner = accountOwner?.find((owner: any) => owner.id === ownerId);
     return owner ? owner.label : "";
   }
 
   // Pagination
-  const pageSize = 10;
+  const pageSize = 5;
   const totalCount = accounts.accountCount;
   const totalPages = Math.ceil(totalCount / pageSize);
 
