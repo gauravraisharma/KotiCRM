@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import {
   CButton,
   CCard,
@@ -916,18 +916,20 @@ const CreateOrUpdateUser = () => {
                       </div>
                     </CCol>
                     <CCol sm={4}>
-                      <div className="form-group">
-                        <label htmlFor="bloodGroup">Blood Group</label>
-                        <CFormSelect
-                          id="bloodGroup"
-                          name="bloodGroup"
-                          aria-label="Default select example"
-                          value={bloodGroup}
-                          options={bloodGroups}
-                          onChange={(e) => setBloodGroup(e.target.value)}
-                        />
-                      </div>
-                    </CCol>
+  <div className="form-group">
+    <label htmlFor="bloodGroup">Blood Group</label>
+    <CFormSelect
+      id="bloodGroup"
+      name="bloodGroup"
+      aria-label="Default select example"
+      placeholder={bloodGroup ? bloodGroup : "Select blood group"}
+      value={bloodGroup}
+      options={bloodGroups}
+      onChange={(e) => setBloodGroup(e.target.value)}
+    />
+  </div>
+</CCol>
+
                     <CCol sm={4}>
                       <div className="form-group">
                         <label htmlFor="contactNumber">Contact Number </label>

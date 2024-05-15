@@ -191,7 +191,7 @@ const CreateOrUpdateRole = () => {
                               ? "is-invalid"
                               : ""
                           }`}
-                          placeholder="Enter your first name"
+                          placeholder="Enter role here"
                           style={{ height: "50px" }}
                         />
                         <ErrorMessage

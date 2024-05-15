@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { AiFillEye } from "react-icons/ai";
 import { MdDelete, MdEdit } from "react-icons/md";
@@ -49,18 +49,22 @@ const Users = () => {
   const GetEmployees = async () => {
     debugger
     try {
+      // let searchField = dropdownValue.toLowerCase().replace(' ', '');
+
       const response = await GetEmployeesList(
         searchQuery,
         pageNumber,
-        pageSize
+        pageSize,
+        // searchField
+
       );
 
-      const serverBaseUrl = apiUrl.replace("/api","")
-      response.data.employee = response.data.employee.map((x: any) => {
-        x.profilePicturePath = serverBaseUrl + x.profilePicturePath
-        return x;
-      })
-debugger;
+      //const serverBaseUrl = apiUrl.replace("/api","")
+      //response.data.employee = response.data.employee.map((x: any) => {
+      //  x.profilePicturePath = serverBaseUrl + x.profilePicturePath
+      //  return x;
+      //})
+/*debugger;*/
       setUserList(response.data.employee);
       debugger
       setTotalUserCount(response.data.userCount)
@@ -237,8 +241,8 @@ debugger;
                     />
                     </CTableDataCell> */}
                     <CTableDataCell>
-    <img src={employee.profilePicturePath ? employee.profilePicturePath : profile} className="profile-picture"/>
-</CTableDataCell>
+                    <img src={employee.profilePicturePath ? employee.profilePicturePath : profile} className="profile-picture"/>
+                    </CTableDataCell>
 
                     <CTableDataCell>
                       <Link to={`/users/updateUser/${employee.employeeId}`}>

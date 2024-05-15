@@ -10,6 +10,8 @@ namespace KotiCRM.Services.IServices
     public interface IProfilePictureService
     {
         Task<string> UploadProfilePicture(IFormFile profilePicture);
-     
+        //Task<string> UpdateProfilePicture(string employeeId, IFormFile updatedProfilePicture);
+
+
     }
 }

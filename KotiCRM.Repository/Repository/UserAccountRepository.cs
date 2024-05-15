@@ -5,6 +5,7 @@ using KotiCRM.Repository.DTOs.RoleManagement;
 using KotiCRM.Repository.DTOs.UserManagement;
 using KotiCRM.Repository.IRepository;
 using KotiCRM.Repository.Models;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -19,6 +20,7 @@ using System.Linq;
 using System.Reflection.Emit;
 using System.Security.Claims;
 using System.Security.Cryptography;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -1070,75 +1072,48 @@ namespace KotiCRM.Repository.Repository
         // for get employee list
         public async Task<EmployeeWithCountDTO> GetEmployees(string? searchQuery, int? pageNumber, int? pageSize)
         {
-
             try
-            
             {
-
-                var usersList = (from user in _context.Users
-                                 join employee in _context.Employees on user.Id equals employee.UserId
-                                 join department in _context.Departments on employee.DepartmentId equals department.DepartmentId
-                                 join designation in _context.Designations on employee.DesignationId equals designation.DesignationId
-                                 join shift in _context.Shifts on employee.ShiftId equals shift.ShiftId
-                                 where String.IsNullOrEmpty(employee.DeletedBy) &&
-                                       employee.IsActive == true &&
-                                       (string.IsNullOrEmpty(searchQuery) ||
-                                       EF.Functions.Like(user.FirstName, $"%{searchQuery}%") ||
-                                       EF.Functions.Like(user.LastName, $"%{searchQuery}%") ||
-                                       EF.Functions.Like(employee.EmpCode, $"%{searchQuery}%") ||
-                                       EF.Functions.Like(employee.BloodGroup, $"%{searchQuery}%") ||
-                                       employee.DateOfBirth.HasValue && employee.DateOfBirth.Value.ToString() == searchQuery ||
-                                       EF.Functions.Like(designation.Name, $"%{searchQuery}%"))
-                                 select new GetEmployeesDTO
-                                 {
-                                     UserId = employee.UserId,
-                                     EmployeeId = employee.EmployeeId,
-                                     EmployeeCode = employee.EmpCode,
-                                     Name = user.FirstName + " " + user.LastName,
-                                     Email = user.Email,
-                                     ContactNumber = user.PhoneNumber,
-                                     JoiningDate = employee.JoiningDate,
-                                     Department = department.Name,
-                                     Designation = designation.Name,
-                                     Shift = shift.Name,
-                                     BirthDate = employee.DateOfBirth,
-                                     BloodGroup = employee.BloodGroup,
+                var query = (from user in _context.Users
+                             join employee in _context.Employees on user.Id equals employee.UserId
+                             join department in _context.Departments on employee.DepartmentId equals department.DepartmentId
+                             join designation in _context.Designations on employee.DesignationId equals designation.DesignationId
+                             join shift in _context.Shifts on employee.ShiftId equals shift.ShiftId
+                             where String.IsNullOrEmpty(employee.DeletedBy) &&
+                                   employee.IsActive == true &&
+                                   (string.IsNullOrEmpty(searchQuery) ||
+                                   EF.Functions.Like(user.FirstName, $"%{searchQuery}%") ||
+                                   EF.Functions.Like(user.LastName, $"%{searchQuery}%") ||
+                                   EF.Functions.Like(employee.EmpCode, $"%{searchQuery}%") ||
+                                   EF.Functions.Like(employee.BloodGroup, $"%{searchQuery}%") ||
+                                   employee.DateOfBirth.HasValue && employee.DateOfBirth.Value.ToString() == searchQuery)
+                             select new GetEmployeesDTO
+                             {
+                                 UserId = employee.UserId,
+                                 EmployeeId = employee.EmployeeId,
+                                 EmployeeCode = employee.EmpCode,
+                                 Name = user.FirstName + " " + user.LastName,
+                                 Email = user.Email,
+                                 ContactNumber = user.PhoneNumber,
+                                 JoiningDate = employee.JoiningDate,
+                                 Department = department.Name,
+                                 Designation = designation.Name,
+                                 Shift = shift.Name,
+                                 BirthDate = employee.DateOfBirth,
+                                 BloodGroup = employee.BloodGroup,
                                      ProfilePicturePath=employee.ProfilePictureURL
-                                 })
-                            .Skip(pageNumber.HasValue && pageSize.HasValue ? (pageNumber.Value - 1) * pageSize.Value : 0)
-                            .Take(pageNumber.HasValue && pageSize.HasValue ? pageSize.Value : 10);
+                             });
 
+                // Count the total number of records
+                var usersCount = await query.CountAsync();
 
+                // Apply pagination
+                var usersList = await query.OrderByDescending(u => u.EmployeeId) // Order by EmployeeId in descending order
+                                           .Skip(pageNumber.HasValue && pageSize.HasValue ? (pageNumber.Value - 1) * pageSize.Value : 0)
+                                           .Take(pageNumber.HasValue && pageSize.HasValue ? pageSize.Value : 10)
+                                           .ToListAsync();
 
-                var usersCount = await (from user in _context.Users
-                                   join employee in _context.Employees on user.Id equals employee.UserId
-                                   join department in _context.Departments on employee.DepartmentId equals department.DepartmentId
-                                   join designation in _context.Designations on employee.DesignationId equals designation.DesignationId
-                                   join shift in _context.Shifts on employee.ShiftId equals shift.ShiftId
-                                   where String.IsNullOrEmpty(employee.DeletedBy) &&
-                                       employee.IsActive == true
-                                        select new GetEmployeesDTO
-                                   {
-                                       UserId = employee.UserId,
-                                       EmployeeId = employee.EmployeeId,
-                                       EmployeeCode = employee.EmpCode,
-                                       Name = user.FirstName + " " + user.LastName,
-                                       Email = user.Email,
-                                       ContactNumber = user.PhoneNumber,
-                                       JoiningDate = employee.JoiningDate,
-                                       Department = department.Name,
-                                       Designation = designation.Name,
-                                       Shift = shift.Name,
-                                       BirthDate = employee.DateOfBirth,
-                                       BloodGroup = employee.BloodGroup
-                                   })
-                                   .OrderByDescending(u => u.Name) // Order by Name in descending order
-                                   .CountAsync();
-
-
-                
-
-                return new EmployeeWithCountDTO { Employee = usersList, UserCount = usersCount }; ;
+                return new EmployeeWithCountDTO { Employee = usersList, UserCount = usersCount };
             }
             catch (Exception ex)
             {

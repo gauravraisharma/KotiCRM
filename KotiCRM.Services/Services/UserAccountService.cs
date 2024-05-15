@@ -19,6 +19,7 @@ namespace KotiCRM.Services.Services
         private readonly IEmailService _emailService;
         private readonly IProfilePictureRepository _profilePictureRepository;
 
+
         public UserAccountService(IUserAccountRepository accountRepository, IConfiguration config, IEmailService emailService, IProfilePictureRepository profilePictureRepository)
         {
             _accountRepository = accountRepository;
@@ -151,6 +152,7 @@ namespace KotiCRM.Services.Services
         {
             return _accountRepository.GetEmployeeById(employeeId);
         }
+        // for create Employee
         public async Task<EmployeeResponseStatus> CreateEmployee(CreateEmployeeDTO createEmployeeDTO)
         {
            
@@ -169,10 +171,33 @@ namespace KotiCRM.Services.Services
             var dbResponse =   await _accountRepository.CreateEmployee(createEmployeeDTO);
             return dbResponse;
         }
+        //public async Task<EmployeeResponseStatus> UpdateEmployee(CreateEmployeeDTO createEmployeeDTO)
+        //{
+        //    return await _accountRepository.UpdateEmployee(createEmployeeDTO);
+        //}
+
+       //for update employee
         public async Task<EmployeeResponseStatus> UpdateEmployee(CreateEmployeeDTO createEmployeeDTO)
         {
-            return await _accountRepository.UpdateEmployee(createEmployeeDTO);
+            try
+            {
+                if (createEmployeeDTO.ProfilePicture != null)
+                {
+                    createEmployeeDTO.ProfilePicturePath = await _profilePictureRepository.UploadProfilePicture(createEmployeeDTO.ProfilePicture, createEmployeeDTO.EmployeeId);
+                }
+
+                // Update employee details
+                var dbResponse = await _accountRepository.UpdateEmployee(createEmployeeDTO);
+
+                return dbResponse;
+            }
+            catch (Exception ex)
+            {
+                // Handle exception accordingly, maybe log it or throw a more specific exception
+                throw new Exception("Failed to update employee", ex);
+            }
         }
+
         public ResponseStatus DeleteEmployee(string employeeId)
         {
             return _accountRepository.DeleteEmployee(employeeId);

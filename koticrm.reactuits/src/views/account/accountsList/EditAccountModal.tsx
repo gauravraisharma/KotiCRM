@@ -43,6 +43,7 @@ const EditPage = () => {
   console.log(accountId)
   //Fetch data from Redux store
   const accountData = useSelector((state:any)=> state.accountReducer.account)
+  console.log(accountData)
   // State declaration
 
   const dispatch = useDispatch();
@@ -50,21 +51,21 @@ const EditPage = () => {
   const countries: Country[] = Countries;
   const [selectedCountry, setSelectedCountry] = useState<string>("");
   const [updateAccount, setUpdateAccount] = useState({
-    accountOwner: accountData.ownerId,
-    industry: accountData.industryId,
-    type: accountData.type,
-    status: accountData.status,
-    accountName: accountData.accountName,
-    annualRevenue: accountData.annualRevenue,
-    phone: accountData.phone,
-    fax: accountData.fax,
-    website: accountData.webSite,
-    billingStreet: accountData.billingStreet,
-    billingCity: accountData.billingCity,
-    billingState: accountData.billingState,
-    zipCode: accountData.zipCode,
-    country: accountData.country,
-    description: accountData.description,
+    accountOwner: accountData?.ownerId,
+    industry: accountData?.industryId,
+    type: accountData?.type,
+    status: accountData?.status,
+    accountName: accountData?.accountName,
+    annualRevenue: accountData?.annualRevenue,
+    phone: accountData?.phone,
+    fax: accountData?.fax,
+    website: accountData?.webSite,
+    billingStreet: accountData?.billingStreet,
+    billingCity: accountData?.billingCity,
+    billingState: accountData?.billingState,
+    zipCode: accountData?.zipCode,
+    country: accountData?.country,
+    description: accountData?.description,
   });
   const [touchedFields, setTouchedFields] = useState({
     accountOwner: false,
@@ -164,7 +165,7 @@ const EditPage = () => {
 
   const handleEditClick = () => {
     const accountDetail: Account = {
-      id: accountData.id,
+      id: accountData?.id,
       ownerId: updateAccount.accountOwner,
       industryId: parseInt(updateAccount.industry.toString(), 10),
       type: parseInt(updateAccount.type.toString(), 10),
@@ -180,15 +181,15 @@ const EditPage = () => {
       zipCode: updateAccount.zipCode,
       country: updateAccount.country,
       description: updateAccount.description,
-      createdBy: accountData.createdBy,
-      createdOn: accountData.createdOn,
+      createdBy: accountData?.createdBy,
+      createdOn: accountData?.createdOn,
       modifiedBy: updateAccount.accountOwner,
       modifiedOn: formattedDateTime,
       isactive: true,
       isdelete: false,
       currency: "",
     };
-    dispatch(updateAccountRequest(accountDetail, accountData.id));
+    dispatch(updateAccountRequest(accountDetail, accountData?.id));
     navigate('/accountsList')
   };
 

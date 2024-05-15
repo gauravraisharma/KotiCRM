@@ -92,7 +92,7 @@ const AccountList: React.FC = () => {
   }
 
   // Pagination
-  const pageSize = 5;
+  const pageSize = 10;
   const totalCount = accounts.accountCount;
   const totalPages = Math.ceil(totalCount / pageSize);
 

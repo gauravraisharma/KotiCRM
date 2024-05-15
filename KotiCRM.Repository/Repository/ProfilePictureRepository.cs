@@ -83,5 +83,23 @@ namespace KotiCRM.Repository.Repository
         //    }
 
         //}
+
+        //public async Task<string> GetImagePathByEmployeeId(string employeeId)
+        //{
+
+        //    var employee = await _profilePicturePath.Employees.FindAsync(employeeId);
+
+        //    if (employee != null)
+        //    {
+
+        //        return employee.ImagePath;
+        //    }
+        //    else
+        //    {
+
+        //        return null;
+        //    }
+        //}
+
     }
 }
