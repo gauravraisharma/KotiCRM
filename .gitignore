@@ -20,3 +20,5 @@
 /KotiCRM.Server/bin/Release/net8.0
 /KotiCRM.Services/bin/Release/net8.0
 /publish
+config.bat
+node_modules

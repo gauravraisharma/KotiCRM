@@ -102,7 +102,7 @@ const CreateOrUpdateRole = () => {
             navigate("/roles");
         }, 5000);
         } else {
-          toast.error("Role creation failed");
+          toast.error("You are not allowed to add roles. Please contact your administrator.");
         }
       } 
       else {

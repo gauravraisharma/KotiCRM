@@ -128,7 +128,7 @@ const timezone = useSelector((state: any) => state.sharedReducer.timezone);
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search by name,email,mobile..."
+                  placeholder="Search by name.."
                   onKeyDown={handleKeyDown}
                   onBlur={handleBlur}
                 />
@@ -173,7 +173,7 @@ const timezone = useSelector((state: any) => state.sharedReducer.timezone);
             <CTableHead>
               <CTableRow>
                 <CTableDataCell scope="col">Role Name</CTableDataCell>
-                <CTableDataCell scope="col">IsActive</CTableDataCell>
+                <CTableDataCell scope="col">IsActive</CTableDataCell> 
                 <CTableDataCell scope="col">Created Date</CTableDataCell>
                 <CTableDataCell scope="col">Actions</CTableDataCell>
               </CTableRow>
