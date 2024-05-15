@@ -12,10 +12,12 @@ namespace KotiCRM.Repository.Repository
     public class ProfilePictureRepository : IProfilePictureRepository
     {
         private readonly string _profilePicturePath;
+        private readonly string _profilePictureLink;
 
         public ProfilePictureRepository(IConfiguration configuration)
         {
             _profilePicturePath = configuration.GetSection("ProfileFileConfig:Path").Value;
+            _profilePictureLink = configuration.GetSection("ProfileFileConfig:Link").Value;
         }
 
         public async Task<string> UploadProfilePicture(IFormFile profilePicture, string fileName)
@@ -23,22 +25,22 @@ namespace KotiCRM.Repository.Repository
             if (profilePicture == null || profilePicture.Length == 0)
                 throw new ArgumentNullException(nameof(profilePicture), "Profile picture is required");
 
-            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "ProfileImage");
+
 
             try
             {
-                if (!Directory.Exists(filePath))
-                    Directory.CreateDirectory(filePath);
+                if (!Directory.Exists(_profilePicturePath))
+                    Directory.CreateDirectory(_profilePicturePath);
 
                 string name = String.Concat(DateTime.Now.ToString("MM_dd_yyyy_HH_mm"), "_", fileName, Path.GetExtension(ContentDispositionHeaderValue.Parse(profilePicture.ContentDisposition).FileName.Trim('"')));
-                string fullPath = Path.Combine(filePath, name);
+                string fullPath = Path.Combine(_profilePicturePath, name);
 
                 using (var stream = new FileStream(fullPath, FileMode.Create))
                 {
                     await profilePicture.CopyToAsync(stream);
                 }
 
-                return fullPath;
+                return name;
             }
             catch (Exception ex)
             {
@@ -84,22 +86,11 @@ namespace KotiCRM.Repository.Repository
 
         //}
 
-        //public async Task<string> GetImagePathByEmployeeId(string employeeId)
-        //{
+        public string GetImagePathByEmployeeId(string profilePic)
+        {
+            return Path.Combine(_profilePictureLink, profilePic);
 
-        //    var employee = await _profilePicturePath.Employees.FindAsync(employeeId);
-
-        //    if (employee != null)
-        //    {
-
-        //        return employee.ImagePath;
-        //    }
-        //    else
-        //    {
-
-        //        return null;
-        //    }
-        //}
+        }
 
     }
 }

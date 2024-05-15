@@ -123,7 +123,15 @@ namespace KotiCRM.Services.Services
         public async Task<EmployeeWithCountDTO> GetEmployees(string? searchQuery, int? pageNumber, int? pageSize)
         {
 
-            var users = await _accountRepository.GetEmployees(searchQuery, pageNumber, pageSize);
+            EmployeeWithCountDTO users = await _accountRepository.GetEmployees(searchQuery, pageNumber, pageSize);
+
+            foreach (var user in users.Employee)
+            {
+                if (!String.IsNullOrEmpty(user.ProfilePicturePath))
+                {
+                    _profilePictureRepository.GetImagePathByEmployeeId(user.ProfilePicturePath);
+                }
+            }
             return users;
         }
 

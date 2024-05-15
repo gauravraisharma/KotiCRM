@@ -6,6 +6,7 @@ namespace KotiCRM.Repository.IRepository
     {
         Task<string> UploadProfilePicture(IFormFile profilePicture, string fileName);
         //Task<string> GetImagePathByEmployeeId(string employeeId);
+        string GetImagePathByEmployeeId(string profileImage);
 
     }
 }
