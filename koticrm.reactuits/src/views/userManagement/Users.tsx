@@ -30,6 +30,8 @@ import profile from "../../assets/brand/profile.avif";
 
 
 import "../../css/style.css";
+import moment from "moment";
+import { useSelector } from "react-redux";
 const Users = () => {
   //  const [employeesList, setEmployeesList] = useState<Employees[]>([]);
   const [userList, setUserList] = useState<Employees[]>([]);
@@ -41,6 +43,7 @@ const Users = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [pageNumber, setPageNumber] = useState<number>(1);
   const [totalUserCount, setTotalUserCount] = useState(0)
+  const timezone = useSelector((state: any) => state.sharedReducer.timezone);
   const pageSize = 10;
 
   
@@ -232,14 +235,7 @@ const Users = () => {
                     <CTableDataCell>{employee.name}</CTableDataCell>
                     <CTableDataCell>{employee.contactNumber}</CTableDataCell>
                     <CTableDataCell>{employee.email}</CTableDataCell>
-                    <CTableDataCell>{employee.joiningDate}</CTableDataCell>
-                    {/* <CTableDataCell>
-                    <img
-                    src={employee.profilePicturePath || profile}
-                    className="profile-picture"
-                    alt="Profile"
-                    />
-                    </CTableDataCell> */}
+                    <CTableDataCell>  {moment.utc(employee.joiningDate).tz(timezone)?.format('DD/MM/YYYY hh:mm A')}</CTableDataCell>
                     <CTableDataCell>
                     <img src={employee.profilePicturePath ? employee.profilePicturePath : profile} className="profile-picture"/>
                     </CTableDataCell>

@@ -344,7 +344,10 @@ const CreateOrUpdateUser = () => {
     departmentId: Yup.number().required("Department is required"),
     roleId: Yup.string().required("Role is required"),
     shiftId: Yup.string().required("Shift is required"),
-    dateOfBirth: Yup.date().required("Date of birth is required"),
+    dateOfBirth: Yup.date()
+    .required('Date of birth is required')
+    .max(new Date(), 'Date of birth cannot be in the future'),
+  
     // contactNumber: Yup.string()
     // .required('Contact number is required')
     // .matches(/^\d{10}$/, 'Contact number must be exactly 10 digits'),
@@ -903,6 +906,7 @@ const CreateOrUpdateUser = () => {
                           className={`form-control ${
                             touched.dateOfBirth && errors.dateOfBirth
                               ? "is-invalid"
+
                               : ""
                           }`}
                         />

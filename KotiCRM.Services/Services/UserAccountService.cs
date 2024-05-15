@@ -129,7 +129,7 @@ namespace KotiCRM.Services.Services
             {
                 if (!String.IsNullOrEmpty(user.ProfilePicturePath))
                 {
-                    _profilePictureRepository.GetImagePathByEmployeeId(user.ProfilePicturePath);
+                    user.ProfilePicturePath = _profilePictureRepository.GetImagePathByEmployeeId(user.ProfilePicturePath);
                 }
             }
             return users;

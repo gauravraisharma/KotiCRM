@@ -8,7 +8,6 @@ import {
   createNotesRequest,
   getNotes,
 } from "../../redux-saga/modules/notes/action";
-import { formatDate } from "../../utils/Shared/DateTransform";
 import moment from "moment";
 import 'moment-timezone' 
 import GetModulePermissions from "../../utils/Shared/GetModulePermissions";
@@ -23,7 +22,7 @@ interface NoteProps {
 const Notes: React.FC<NoteProps> = ({
   getNotesCount,
   accountId,
-  accountName,
+ 
 }) => {
   const dispatch = useDispatch();
   const notes = useSelector((state: any) => state.noteReducer.notes);
@@ -86,7 +85,6 @@ const Notes: React.FC<NoteProps> = ({
                     <div className="mt-2 mx-5 d-flex align-items-center">
                       <BsClockFill color="#3c4b64" className="mx-1" />
                       <span className="mx-1">
-                        {/* {formatDate(note.dateOfNote, "DD/MM/YYYY HH:mm", timezone)} */}
                         {moment.utc(note.dateOfNote).tz(timezone)?.format('DD/MM/YYYY hh:mm A')}
 
                       </span>
@@ -104,6 +102,7 @@ const Notes: React.FC<NoteProps> = ({
       )}
       <CRow>
         <CCol xs={8}>
+        {notesPermissions.isAdd &&
           <CForm>
             <CFormTextarea
               className="textarea"
@@ -123,7 +122,7 @@ const Notes: React.FC<NoteProps> = ({
                 value="Cancel"
                 onClick={handleCancelClick}
               />
-              {notesPermissions.isAdd &&
+             
               <CButton
                 style={{ margin: "5px" }}
                 component="input"
@@ -131,9 +130,9 @@ const Notes: React.FC<NoteProps> = ({
                 color="primary"
                 value="Save"
                 onClick={handleNoteSave}
-              />}
+              />
             </div>
-          </CForm>
+          </CForm>}
         </CCol>
       </CRow>
     </div>
