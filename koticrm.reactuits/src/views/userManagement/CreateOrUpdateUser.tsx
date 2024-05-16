@@ -133,6 +133,7 @@ const CreateOrUpdateUser = () => {
         setFormData(response);
         setEmployeeCode(response.employeeCode);
         setDepartmentId(response.departmentId);
+        setImage(response.profilePictureURL)
         setDesignationId(response.designationId);
         setShiftId(response.shiftId);
         setRoleId(response.roleId);

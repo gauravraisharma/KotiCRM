@@ -165,6 +165,7 @@ namespace KotiCRM.Services.Services
                 userResponse.employeeData.ProfilePictureURL = _profilePictureRepository.GetImagePathByEmployeeId(userResponse.employeeData.ProfilePictureURL);
             }
 
+
             return userResponse;
 
         }
