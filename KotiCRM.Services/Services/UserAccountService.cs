@@ -158,7 +158,15 @@ namespace KotiCRM.Services.Services
 
         public EmployeeResponse GetEmployeeById(string employeeId)
         {
-            return _accountRepository.GetEmployeeById(employeeId);
+            EmployeeResponse userResponse =  _accountRepository.GetEmployeeById(employeeId);
+
+            if (!String.IsNullOrEmpty(userResponse.employeeData.ProfilePictureURL))
+            {
+                userResponse.employeeData.ProfilePictureURL = _profilePictureRepository.GetImagePathByEmployeeId(userResponse.employeeData.ProfilePictureURL);
+            }
+
+            return userResponse;
+
         }
         // for create Employee
         public async Task<EmployeeResponseStatus> CreateEmployee(CreateEmployeeDTO createEmployeeDTO)
