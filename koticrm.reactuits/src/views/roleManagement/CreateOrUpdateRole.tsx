@@ -5,7 +5,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { createContact, updateContact } from "../../redux-saga/modules/contact/action";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { CButton, CCard, CCardBody, CCardHeader, CCol, CFormCheck, CRow, CTableBody, CTableDataCell, CTableRow } from "@coreui/react";
+import { CButton, CCard, CCardBody, CCardHeader, CCol, CFormCheck, CModal, CModalBody, CModalFooter, CModalHeader, CRow, CTableBody, CTableDataCell, CTableRow } from "@coreui/react";
 import { Role, RoleClass } from "../../models/permissionManagement/Role";
 import { CreateRole, GetPermissionsList, GetRoleById, GetRolesList, UpdatePermission, UpdateRole } from "../../redux-saga/modules/permissionManagement/apiService";
 import { Permission } from "../../models/permissionManagement/Permissions";
@@ -14,8 +14,9 @@ import { Permission } from "../../models/permissionManagement/Permissions";
 const CreateOrUpdateRole = () => {
    const { id } = useParams<{ id: string }>();
    const [role, setRole] = useState<Role>(new RoleClass());
-   const [isActive, setIsActive] = useState(true);
+   const [isActive, setIsActive] = useState(false);
    const [permissionList, setPermissionList] = useState<Permission[]>([]);
+   const [showPopup, setShowPopup] = useState(false);
 
 
   const navigate = useNavigate();
@@ -50,6 +51,13 @@ const CreateOrUpdateRole = () => {
 
     const handleIsActiveChange = (e:any) => {
         setIsActive(e.target.checked);
+  
+        // if (!isActive) {
+        //   setShowPopup(true);
+        // }
+    };
+    const handleClosePopup = () => {
+      setShowPopup(false);
     };
 
     const handleCheckboxChange = (e: any, permissionId: number) => {
@@ -92,6 +100,11 @@ const CreateOrUpdateRole = () => {
     role: Role,
     { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }
   ) => {
+    if (!isActive){
+      setShowPopup(true);
+      setSubmitting(false);
+      return;
+    }
     try {
         role.isactive = isActive;
       if (!id) {
@@ -205,29 +218,62 @@ const CreateOrUpdateRole = () => {
                     </CRow>
                   </CCol>
                   <CCol xs={6}>
-                    <CRow className="mb-3">
-                      <CCol sm={4}>
-                        <label htmlFor="isactive" className="col-form-label">
-                          Is Active
-                        </label>
-                      </CCol>
-                      <CCol sm={8}>
-                        <CFormCheck
-                            id="isactive"
-                            name="isactive"
-                            checked={isActive}
-                            onChange={handleIsActiveChange}
-                        />
-                        <ErrorMessage
-                          name="isactive"
-                          className="invalid-feedback"
-                          render={(error) => (
-                            <label style={{ color: "#dc3545" }}>{error}</label>
-                          )}
-                        />
-                      </CCol>
-                    </CRow>
-                  </CCol>
+  <CRow className="mb-3">
+    <CCol sm={4}>
+      <label htmlFor="isactive" className="col-form-label">
+        Is Active
+      </label>
+    </CCol>
+    <CCol sm={8}>
+      <CFormCheck
+        id="isactive"
+        name="isactive"
+        checked={isActive}
+        onChange={handleIsActiveChange}
+      />
+      <ErrorMessage
+        name="isactive"
+        className="invalid-feedback"
+        render={(error) => (
+          <label style={{ color: "#dc3545" }}>{error}</label>
+        )}
+      />
+    </CCol>
+  </CRow>
+  {showPopup && (
+    <div className="backdrop">
+      <div className="delete-confirmation-modal card">
+        <div className="modal-content">
+          <div className="modal-header flex-column">
+            <h4 className="modal-title w-100">Note:</h4>
+          </div>
+          <div className="modal-body">
+          <p> If <b>'Is Active'</b> is not checked, users assigned to this role will not be able to log in.</p>
+          </div>
+          <div className="modal-footer justify-content-center">
+          <button
+              type="button"
+              className="btn btn-success mx-2"
+              onClick={handleClosePopup}
+              data-dismiss="modal"
+            >
+              Ok
+            </button>
+            <button
+              type="button"
+              className="btn btn-secondary mx-2"
+              onClick={handleClosePopup}
+              data-dismiss="modal"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  )}
+</CCol>
+
                   {id ? permissionList.length > 0 ?
                     (
                         <>

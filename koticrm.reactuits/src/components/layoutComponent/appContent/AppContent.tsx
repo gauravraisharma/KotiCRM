@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react'
+import React from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { CContainer } from '@coreui/react'
 
@@ -24,7 +24,7 @@ const AppContent = () => {
           })}
           <Route path="/" element={<Navigate to="dashboard" replace />} />
         </Routes>
-      {/* </Suspense> */}
+
     </CContainer>
   )
 }

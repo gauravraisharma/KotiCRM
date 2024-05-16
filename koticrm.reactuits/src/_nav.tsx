@@ -1,6 +1,6 @@
 import CIcon from '@coreui/icons-react'
-import {cilSpeedometer,cilBook,cilContact,cibMarketo,cibEventStore,cibPaypal,
-  cibMarkdown,cilApplications,cilSettings,cilMoney, cilUser,
+import {cilSpeedometer,cilBook,cilContact,cibMarketo,cibEventStore,
+  cibMarkdown,cilApplications,cilSettings,cilMoney,
 } from '@coreui/icons'
 import { CNavItem } from '@coreui/react'
 import { NavItem } from './models/commonModels/CommonModels'
