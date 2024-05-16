@@ -57,20 +57,7 @@ const AppHeader = () => {
               Dashboard
             </CNavLink>
           </CNavItem>
-          {/* <CNavItem>
-            <CNavLink>
-              <Link to="/users" onClick={() => handleClick("/users")}>
-                Users
-              </Link>
-            </CNavLink>
-          </CNavItem> */}
-          {/* <CNavItem>
-            <CNavLink>
-              <Link to="/settings" onClick={() => handleClick("/settings")}>
-                Settings
-              </Link>
-            </CNavLink>
-          </CNavItem> */}
+
         </CHeaderNav>
 
         <CHeaderNav>

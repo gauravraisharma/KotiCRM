@@ -5,8 +5,6 @@ import {
   CDropdownItem,
   CDropdownMenu,
   CDropdownToggle,
-  CNavItem,
-  CNavLink,
 } from "@coreui/react";
 import { cilAccountLogout, cilSettings, cilUser } from "@coreui/icons";
 import CIcon from "@coreui/icons-react";
@@ -20,13 +18,7 @@ import { useSelector } from "react-redux";
 
 const AppHeaderDropdown = () => {
   
-    // // Check if corresponding permission object exists in `modulePermissions`
-    // if (modulePermissions) {
-    //     return allowedItems.includes(item.moduleName) ||
-    //         modulePermissions.some((permission: any) => permission.moduleName === item.moduleName && permission.isView);
-    // } else {
-    //     return null;
-    // }
+ 
   const navigate = useNavigate();
   // const auth = useAuth();
   const dispatch = useDispatch();
