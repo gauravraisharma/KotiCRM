@@ -24,7 +24,7 @@ import {
   CTableRow,
 } from "@coreui/react";
 
-import profile from "../../assets/brand/profile.avif";
+import profile from "../../assets/brand/DefaultProfile.png";
 
 
 

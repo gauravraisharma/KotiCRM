@@ -32,7 +32,8 @@ import {
   GetShifts,
 } from "../../redux-saga/modules/shared/apiService";
 import "../../../src/css/style.css";
-import profile from "../../assets/brand/profile.avif";
+import profile from "../../assets/brand/DefaultProfile.png";
+
 import "react-toastify/dist/ReactToastify.css";
 import * as Yup from "yup";
 import { Role } from "../../models/permissionManagement/Role";
