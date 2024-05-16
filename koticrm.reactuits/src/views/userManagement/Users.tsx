@@ -23,8 +23,7 @@ import {
   CTableHead,
   CTableRow,
 } from "@coreui/react";
-const apiUrl = import.meta.env.VITE_API_URL;
-// import profile from "../../assets/images/profile.avif";
+
 import profile from "../../assets/brand/profile.avif";
 
 
@@ -58,16 +57,9 @@ const Users = () => {
         searchQuery,
         pageNumber,
         pageSize,
-        // searchField
-
       );
 
-      //const serverBaseUrl = apiUrl.replace("/api","")
-      //response.data.employee = response.data.employee.map((x: any) => {
-      //  x.profilePicturePath = serverBaseUrl + x.profilePicturePath
-      //  return x;
-      //})
-/*debugger;*/
+
       setUserList(response.data.employee);
       debugger
       setTotalUserCount(response.data.userCount)

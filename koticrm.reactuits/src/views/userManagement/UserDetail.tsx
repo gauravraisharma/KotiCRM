@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { ChangePassword, GetEmployeeById } from "../../redux-saga/modules/userManagement/apiService";
 import { Employee, EmployeeClass } from "../../models/userManagement/employee";
 import { ToastContainer, toast } from "react-toastify";
 import { CRow, CCol, CCard, CCardHeader, CButton, CCardBody } from "@coreui/react";
 import * as Yup from "yup";
-import { Formik, Field, ErrorMessage } from "formik";
+import { Formik, Field } from "formik";
 import "react-toastify/dist/ReactToastify.css";
 
 const UserDetails = () => {

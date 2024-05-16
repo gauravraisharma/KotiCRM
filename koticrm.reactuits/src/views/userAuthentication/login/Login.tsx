@@ -21,7 +21,6 @@ import { UserLogin } from "../../../models/userAccount/login";
 import { ToastContainer } from "react-toastify";
 import {
   loginRequest,
-  loginSuccess,
 } from "../../../redux-saga/modules/auth/action";
 import CIcon from "@coreui/icons-react";
 import "../../../css/style.css";
@@ -105,16 +104,6 @@ const Login = () => {
                         onChange={handleChange}
                       />
                     </CInputGroup>
-                    {/* <CInputGroup className="mb-4">
-                      <CFormCheck
-                        type="checkbox"
-                        id="rememberMe"
-                        label="Remember Me"
-                        name="rememberMe"
-                        checked={user.rememberMe}
-                        onChange={(e) => setUser({ ...user, rememberMe: e.target.checked })}
-                      />
-                    </CInputGroup>  */}
                       <CRow>
                         <CCol xs={12}>
                           <CButtonGroup>
