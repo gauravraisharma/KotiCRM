@@ -24,10 +24,6 @@ import {
   CTableRow,
 } from "@coreui/react";
 
-import profile from "../../assets/brand/DefaultProfile.png";
-
-
-
 import "../../css/style.css";
 import moment from "moment";
 import { useSelector } from "react-redux";
@@ -35,6 +31,7 @@ const Users = () => {
   //  const [employeesList, setEmployeesList] = useState<Employees[]>([]);
   const [userList, setUserList] = useState<Employees[]>([]);
 
+  const [profileImage, setProfileImage] = useState('/profilePlaceholder.jpg');
   const [userId, setUserId] = useState<string>("");
   const [isLoading, setIsLoading] = useState(true);
   const [dropdownValue, setDropdownValue] = useState("Name");
@@ -46,7 +43,6 @@ const Users = () => {
   const pageSize = 10;
 
   
-  console.log(profile)
 
   const GetEmployees = async () => {
     debugger
@@ -229,7 +225,7 @@ const Users = () => {
                     <CTableDataCell>{employee.email}</CTableDataCell>
                     <CTableDataCell>  {moment.utc(employee.joiningDate).tz(timezone)?.format('DD/MM/YYYY hh:mm A')}</CTableDataCell>
                     <CTableDataCell>
-                    <img src={employee.profilePicturePath ? employee.profilePicturePath : profile} className="profile-picture"/>
+                    <img src={employee.profilePicturePath ? employee.profilePicturePath : profileImage} className="profile-picture"/>
                     </CTableDataCell>
 
                     <CTableDataCell>

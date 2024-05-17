@@ -52,9 +52,9 @@ const CreateOrUpdateRole = () => {
     const handleIsActiveChange = (e:any) => {
         setIsActive(e.target.checked);
   
-        // if (!isActive) {
-        //   setShowPopup(true);
-        // }
+        if (id && isActive) {
+          setShowPopup(true);
+        }
     };
     const handleClosePopup = () => {
       setShowPopup(false);
@@ -100,7 +100,7 @@ const CreateOrUpdateRole = () => {
     role: Role,
     { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }
   ) => {
-    if (!isActive){
+    if (id && !isActive){
       setShowPopup(true);
       setSubmitting(false);
       return;
@@ -245,7 +245,7 @@ const CreateOrUpdateRole = () => {
       <div className="delete-confirmation-modal card">
         <div className="modal-content">
           <div className="modal-header flex-column">
-            <h4 className="modal-title w-100">Note:</h4>
+            <h4 className="modal-title w-100">Warning!</h4>
           </div>
           <div className="modal-body">
           <p> If <b>'Is Active'</b> is not checked, users assigned to this role will not be able to log in.</p>
@@ -257,7 +257,7 @@ const CreateOrUpdateRole = () => {
               onClick={handleClosePopup}
               data-dismiss="modal"
             >
-              Ok
+              Okay
             </button>
             <button
               type="button"

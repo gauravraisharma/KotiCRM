@@ -32,8 +32,6 @@ import {
   GetShifts,
 } from "../../redux-saga/modules/shared/apiService";
 import "../../../src/css/style.css";
-import profile from "../../assets/brand/DefaultProfile.png";
-
 import "react-toastify/dist/ReactToastify.css";
 import * as Yup from "yup";
 import { Role } from "../../models/permissionManagement/Role";
@@ -59,7 +57,7 @@ const CreateOrUpdateUser = () => {
     Designation[] | undefined
   >([]);
   const [roleList, setRoleList] = useState<Role[] | undefined>([]);
-
+  const [profileImage, setProfileImage] = useState('/profilePlaceholder.jpg');
   const [shiftList, setShiftList] = useState<Shift[] | undefined>([]);
   const [bloodGroup, setBloodGroup] = useState("");
   const [departmentId, setDepartmentId] = useState(0);
@@ -358,6 +356,9 @@ const CreateOrUpdateUser = () => {
     dateOfBirth: Yup.date()
       .required("Date of birth is required")
       .max(new Date(), "Date of birth cannot be in the future"),
+      contactNumber: Yup.string()
+      .matches(/^\d{10}$/, "contact number  must be exactly 10 digits"),
+    
   });
 
   if (isRelievedChecked) {
@@ -421,7 +422,7 @@ const CreateOrUpdateUser = () => {
                           <CImage
                             rounded
                             thumbnail
-                            src={image || profile}
+                            src={image || profileImage}
                             width={120}
                             height={120}
                             className="rounded-circle"
@@ -997,13 +998,13 @@ const CreateOrUpdateUser = () => {
                             // }`}
                             placeholder="Contact Number "
                           />
-                          {/* <ErrorMessage
+                          <ErrorMessage
                           name="contactNumber"
                           className="invalid-feedback"
                           render={(error) => (
                             <label style={{ color: "#dc3545" }}>{error}</label>
                           )}
-                        /> */}
+                        />
                         </div>
                       </CCol>
                     </CRow>
