@@ -42,6 +42,7 @@ const Users = () => {
   const timezone = useSelector((state: any) => state.sharedReducer.timezone);
   const pageSize = 10;
 
+  console.log (setProfileImage)
   
 
   const GetEmployees = async () => {
@@ -93,6 +94,7 @@ const Users = () => {
   const startIndex = (pageNumber - 1) * pageSize;
   const endIndex = Math.min(startIndex + pageSize, totalCount);
   const employeesList = userList.slice(startIndex, endIndex);
+  console .log (employeesList)
 
 
   console.log(userList)

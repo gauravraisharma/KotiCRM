@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -16,29 +17,36 @@ import { AppBreadcrumb } from "../../index";
 import { AppHeaderDropdown } from "./index";
 import { logo } from "../../../assets/brand/logo";
 import { SIDEBAR_TOGGLE } from "../../../constants/reduxConstants";
-import { useState } from "react";
 import "../../../css/style.css";
 
-const AppHeader = () => {
-  const [activeLink, setActiveLink] = useState(null);
+// Define the type for the state used in useSelector
+interface RootState {
+  sharedReducer: {
+    sidebarToggle: boolean;
+  };
+}
+
+const AppHeader: React.FC = () => {
+  // Define the type of the state explicitly
+  const [activeLink, setActiveLink] = useState<string | null>(null);
   const dispatch = useDispatch();
-  const handleClick = (link) => {
+
+  // Define the type of the parameter for handleClick
+  const handleClick = (link: string) => {
     setActiveLink(link);
   };
-  const sidebarShow = useSelector(
-    (state: any) => state.sharedReducer.sidebarToggle
-  );
+
+  // Use the RootState type in useSelector
+  const sidebarShow = useSelector((state: RootState) => state.sharedReducer.sidebarToggle);
 
   const toggleSidebar = () => {
     dispatch({ type: SIDEBAR_TOGGLE, sidebarShow: !sidebarShow });
   };
+
   return (
     <CHeader position="sticky" className="mb-4">
       <CContainer fluid>
-        <CHeaderToggler
-          className="ps-1"
-          onClick={toggleSidebar}>
-    
+        <CHeaderToggler className="ps-1" onClick={toggleSidebar}>
           <CIcon icon={cilMenu} size="lg" />
         </CHeaderToggler>
         <CHeaderBrand className="mx-auto d-md-none">
@@ -57,9 +65,7 @@ const AppHeader = () => {
               Dashboard
             </CNavLink>
           </CNavItem>
-
         </CHeaderNav>
-
         <CHeaderNav>
           <CNavItem>
             <CNavLink href="#">
