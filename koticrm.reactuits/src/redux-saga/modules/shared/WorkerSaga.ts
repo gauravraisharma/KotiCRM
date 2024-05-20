@@ -8,7 +8,7 @@ import {
   GET_ORGANIZATION_SUCCESS,
   UPDATE_TIMEZONE_SUCCESS
 } from '../../../constants/reduxConstants';
-import { OrganizationBankModel, OrganizationModel, SharedModel } from '../../../models/commonModels/SharedModels';
+import { OrganizationBankModel, SharedModel } from '../../../models/commonModels/SharedModels';
 import { actionPayloadModel } from '../../../models/actionModel/actionModel';
 
 

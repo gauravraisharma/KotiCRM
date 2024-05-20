@@ -94,10 +94,7 @@ const Users = () => {
   const startIndex = (pageNumber - 1) * pageSize;
   const endIndex = Math.min(startIndex + pageSize, totalCount);
   const employeesList = userList.slice(startIndex, endIndex);
-  console .log (employeesList)
 
-
-  console.log(userList)
 
   //Handle page change
   const handlePageChange = (pageNumber: number) => {

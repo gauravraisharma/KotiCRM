@@ -201,91 +201,12 @@ const EditInvoice = () => {
 
   let grandTotalValue = 0;
 
-  // const [updateInvoice, setUpdateInvoice] = useState({
-  //   subject: "",
-  //   invoiceDate: new Date(),
-  //   dueDate: new Date(),
-  //   dealName: "",
-  //   purchaseOrder: "",
-  //   status: 0,
-
-  //   fromBillingStreet: orgDetails?.billingStreet,
-  //   fromBillingCity: orgDetails?.billingCity,
-  //   fromBillingState: orgDetails?.billingState,
-  //   fromZipCode: orgDetails?.zipCode,
-  //   fromBillingCountry: orgDetails?.billingCountry,
-
-  //   toBillingStreet: "",
-  //   toBillingCity: "",
-  //   toBillingState: "",
-  //   toZipCode: "",
-  //   toBillingCountry: "",
-
-  //   termsandConditions: "",
-  //   description: "",
-  //   subTotal: 0,
-  //   discount: 0,
-  //   tax: 0,
-  //   adjustments: 0,
-  //   grandTotal: grandTotalValue,
-  // });
-
   const validationSchema = Yup.object().shape({
     accountID: Yup.string().required("Required (Account)"),
     ownerID: Yup.string().required("Required (Invoice Owner)"),
     subject: Yup.string().required("Required(Subject)"),
     contactID: Yup.number().required("Required (Contacts)"),
-    // invoiceDate: touchedFields.invoiceDate
-    //   ? Yup.string().required("Required (Due Date)")
-    //   : Yup.string(),
-    // dueDate: touchedFields.dueDate
-    //   ? Yup.string().required("Required (Due Date)")
-    //   : Yup.string(),
-    // status: Yup.string().required("Required (Status)"),
-    // fromBillingStreet: touchedFields.fromBillingStreet
-    //   ? Yup.string().required("Required (Billing Street)")
-    //   : Yup.string(),
-    // fromBillingCity: touchedFields.fromBillingCity
-    //   ? Yup.string().required("Required (Billing City)")
-    //   : Yup.string(),
-    // fromBillingState: touchedFields.fromBillingState
-    //   ? Yup.string().required("Required (Billing State)")
-    //   : Yup.string(),
-    // fromZipCode: touchedFields.fromZipCode
-    //   ? Yup.string()
-    //     .required("Required (zip Code)")
-    //   : Yup.string(),
-    // fromBillingCountry: touchedFields.fromBillingCountry
-    //   ? Yup.string().required("Required (Billing Country)")
-    //   : Yup.string(),
-    // toBillingStreet:
-    //   updateInvoice.toBillingStreet == ""
-    //     ? Yup.string().required("Required (Billing Street)")
-    //     : touchedFields.toBillingStreet
-    //       ? Yup.string().required("Required (Billing Street)")
-    //       : Yup.string(),
-    // toBillingCity:
-    //   updateInvoice.toBillingCity == ""
-    //     ? Yup.string().required("Required (Billing City)")
-    //     : touchedFields.toBillingCity
-    //       ? Yup.string().required("Required (Billing City)")
-    //       : Yup.string(),
-    // toBillingState:
-    //   updateInvoice.toBillingState == ""
-    //     ? Yup.string().required("Required (Billing State)")
-    //     : touchedFields.toBillingState
-    //       ? Yup.string().required("Required (Billing State)")
-    //       : Yup.string(),
-    // toZipCode:
-    //   updateInvoice.toZipCode == ""
-    //     ? Yup.string().required("Required (zip Code)")
-    //     : Yup.string(),
-    // toBillingCountry:
-    //   updateInvoice.toBillingCountry == ""
-    //     ? Yup.string().required("Required (Billing Country)")
-    //     : touchedFields.toBillingCountry
-    //       ? Yup.string().required("Required (Billing Country)")
-    //       : Yup.string(),
+    
   });
 
   const handleDropdownChange = (e: any, selectedOption: any) => {
