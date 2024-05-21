@@ -37,30 +37,23 @@ const _nav:NavItem[] = [
     moduleName : 'Invoices'
 
   },
-  {
-    component: CNavItem,
-    name: 'Leads',
-    to: '/theme/typography',
-    icon: <CIcon icon={cibMarketo} customClassName="nav-icon" />,
-    moduleName : 'Leads'
+  
+  // {
+  //   component: CNavItem,
+  //   name: 'Events',
+  //   to: '/theme/typograph',
+  //   icon: <CIcon icon={cibEventStore} customClassName="nav-icon" />,
+  //   moduleName : 'Events'
 
-  },
-  {
-    component: CNavItem,
-    name: 'Events',
-    to: '/theme/typograph',
-    icon: <CIcon icon={cibEventStore} customClassName="nav-icon" />,
-    moduleName : 'Events'
+  // },
+  // {
+  //   component: CNavItem,
+  //   name: 'Leaves',
+  //   to: '/theme/typography',
+  //   icon: <CIcon icon={cilApplications} customClassName="nav-icon" />,
+  //   moduleName : 'Leaves'
 
-  },
-  {
-    component: CNavItem,
-    name: 'Leaves',
-    to: '/theme/typography',
-    icon: <CIcon icon={cilApplications} customClassName="nav-icon" />,
-    moduleName : 'Leaves'
-
-  },
+  // },
   // {
   //   component: CNavItem,
   //   name: 'Payroll',

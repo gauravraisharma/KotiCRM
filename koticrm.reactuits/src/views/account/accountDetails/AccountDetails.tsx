@@ -5,11 +5,11 @@ import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { getAccountByIdRequest } from "../../../redux-saga/modules/account/action";
 import Notes from "../../../components/notes/Notes";
-import InvoiceComponent from "../../invoice/Invoices";
+
 import Invoices from "../../invoice/Invoices";
 import Contacts from "../../contacts/Contacts";
 import Attachments from "../../attachments/Attachments";
-import { ToastContainer } from "react-toastify";
+
 
 const AccountDetails = () => {
   const navigate = useNavigate();

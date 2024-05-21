@@ -110,6 +110,12 @@ namespace KotiCRM.Services.Services
         {
             return _accountRepository.GetModulePermission(userId);
         }
+        // get module
+        public async Task<IEnumerable<GetModulesDTO>> GetModulesAsync()
+        {
+            return await _accountRepository.GetAllModulesAsync();
+        }
+
         public async Task<ResponseStatus> UpdateModulePermission(List<UpdateModulePermissionDTO> updateModulePermissions)
         {
             return await _accountRepository.UpdateModulePermission(updateModulePermissions);

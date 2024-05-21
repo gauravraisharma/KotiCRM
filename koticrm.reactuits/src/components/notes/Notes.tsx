@@ -28,7 +28,6 @@ const Notes: React.FC<NoteProps> = ({
   const notes = useSelector((state: any) => state.noteReducer.notes);
   const userId = useSelector((state: any) => state.authReducer.userId);
   const timezone = useSelector((state: any) => state.sharedReducer.timezone);
-  console.log(timezone)
   const notesPermissions = GetModulePermissions('Notes');
   
   const [noteDescription, setNoteDescription] = useState("");

@@ -24,7 +24,7 @@ const Timezone: React.FC = () => {
   const dispatch = useDispatch();
   //Fetch data from redux
   const timeZone = useSelector((state: any) => state.sharedReducer.timezone);
-  console.log(timeZone)
+
   const organization = useSelector((state: any) => state.sharedReducer.organization);
 
   // const [selectedTimezone, setSelectedTimezone] = useState(

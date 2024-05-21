@@ -26,6 +26,7 @@ namespace KotiCRM.Services.IServices
         DDListResponse GetUserTypeListDD();
         IEnumerable<ResponseApplicationUserModel> GetUserList();
         ResponseStatus DeleteUser(string userId);
+        Task<IEnumerable<GetModulesDTO>> GetModulesAsync();
         Task<ModulePermissionResponse> GetModulePermissions(string userType);
         Task<ModulePermissionResponse> GetModulePermission(string userId);
         Task<ResponseStatus> UpdateModulePermission(List<UpdateModulePermissionDTO> updateModulePermissions);

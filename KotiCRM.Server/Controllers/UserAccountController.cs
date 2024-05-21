@@ -7,6 +7,7 @@ using KotiCRM.Services.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
@@ -235,6 +236,28 @@ namespace KotiCRM.Server.Controllers
             }
             return Ok(dbResponse);
         }
+
+        // get modules
+        [HttpGet("GetModules")]
+        public async Task<ActionResult<IEnumerable<GetModulesDTO>>> GetModules()
+        {
+            try
+            {
+                var modules = await _accountService.GetModulesAsync();
+
+                if (modules == null || !modules.Any())
+                {
+                    return NotFound();
+                }
+                return Ok(modules);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error");
+            }
+        }
+
+
 
         [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpGet("GetModulePermission/{userId}")]

@@ -38,9 +38,9 @@ namespace KotiCRM.Repository.IRepository
         ResponseStatus DeleteEmployee(string employeeId);
 
         //For Employee Password
-     
         Task<ChangePasswordDbResponse> ChangePassword(ChangePasswordRequest passwordData);
-        
+        Task<IEnumerable<GetModulesDTO>> GetAllModulesAsync();
+
         //Task<string> SendEmailPassword(string );
 
 

@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import * as Yup from "yup";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { Account } from "../../../models/account/Account";
@@ -40,10 +40,10 @@ const initialValues = {
 const EditPage = () => {
   //useParam hook to get account Id
   const { accountId } = useParams<{ accountId: string }>();
-  console.log(accountId)
+
   //Fetch data from Redux store
   const accountData = useSelector((state:any)=> state.accountReducer.account)
-  console.log(accountData)
+
   // State declaration
 
   const dispatch = useDispatch();

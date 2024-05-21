@@ -4,6 +4,7 @@ import { Role } from "../../../models/permissionManagement/Role";
 
 export async function GetPermissionsList(roleId: string){
     try {
+     
         const response = await axiosInstance.get(`/UserAccount/GetModulePermissions/${roleId}`);
         return response.data;
     } catch (error: any) {

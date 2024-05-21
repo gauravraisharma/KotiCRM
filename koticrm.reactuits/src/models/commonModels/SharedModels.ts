@@ -19,7 +19,7 @@ export interface OrganizationModel{
     id :number;
     orgName : string,
     isActive: boolean,
-    timeZone: boolean,
+    timeZone: string,
     shifts: boolean,
     includeLogofToIdle :boolean,
     currency : string,

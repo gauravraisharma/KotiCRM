@@ -33,7 +33,7 @@ const AppHeaderDropdown = () => {
   const modulePermissions = useSelector(
     (state: any) => state.authReducer.modulePermission
   );
-  console.log(modulePermissions);
+
 
   return (
     <CDropdown variant="nav-item">

@@ -3,6 +3,7 @@ using KotiCRM.Repository.Data;
 using KotiCRM.Repository.DTOs.Contact;
 using KotiCRM.Repository.DTOs.RoleManagement;
 using KotiCRM.Repository.DTOs.UserManagement;
+using KotiCRM.Repository.Enums;
 using KotiCRM.Repository.IRepository;
 using KotiCRM.Repository.Models;
 using Microsoft.AspNetCore.Hosting;
@@ -883,6 +884,28 @@ namespace KotiCRM.Repository.Repository
 
 
         }
+        //get modules
+        public async Task<IEnumerable<GetModulesDTO>> GetAllModulesAsync()
+        {
+            try
+            {
+                var allModules = await _context.Modules.ToListAsync();
+                var modulesDTOs = allModules.Select(module => new GetModulesDTO
+                {
+                 
+                    Id = module.Id,
+                    Name = module.Name,
+                
+                });
+                return modulesDTOs;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+
         public async Task<ModulePermissionResponse> GetModulePermission(string userId)
         {
             try
@@ -950,8 +973,6 @@ namespace KotiCRM.Repository.Repository
                     Message = "Something went wrong"
                 };
             }
-
-
         }
         public async Task<ResponseStatus> UpdateModulePermission(List<UpdateModulePermissionDTO> updateModulePermissions)
         {

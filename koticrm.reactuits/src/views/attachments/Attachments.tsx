@@ -26,8 +26,7 @@ import { IoMdDownload } from "react-icons/io";
 import { DownloadAttachmentAsync } from "../../redux-saga/modules/attachment/apiService";
 import moment from "moment";
 import "moment-timezone";
-import { ToastContainer } from "react-toastify";
-import GetModulePermissions from "../../utils/Shared/GetModulePermissions";
+
 
 interface Props {
   accountId: number;

@@ -71,7 +71,7 @@ const CreateOrUpdateUser = () => {
   const organizationId = useSelector(
     (state: any) => state.authReducer.organizationId
   );
-  console.log(organizationId);
+  
 
   // File
   const handleFileSelect = (event: any) => {
@@ -398,7 +398,6 @@ const CreateOrUpdateUser = () => {
             onSubmit={handleFormSubmit}
           >
             {({
-              handleSubmit,
               isSubmitting,
               touched,
               errors,

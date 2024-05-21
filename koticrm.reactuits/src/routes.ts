@@ -161,7 +161,6 @@ const routes: Route[] = [
     { path: '/invoices/createInvoice', name: 'CreateInvoice', element: CreateInvoice, isAuth: true, modulePermission: 'Invoices' },
     { path: '/invoices/editInvoice/:invoiceId', name: 'EditInvoice', element: EditInvoice, isAuth: true, modulePermission: 'Invoices' },
     { path: '/invoices/viewInvoicePdf/:invoiceId', name: 'ViewInvoicePDF', element: InvoicePDF, isAuth: true, modulePermission: 'Invoices' },
-
     { path: '/settings', name: 'Settings', element: Settings, isAuth: true },
 
     { path: '/users', name: 'Users', element: Users, isAuth: true, modulePermission: 'ManageUsers' },
@@ -169,9 +168,9 @@ const routes: Route[] = [
     { path: '/users/updateUser/:id', name: 'UpdateUser', element: CreateOrUpdateUser, isAuth: true, modulePermission: 'ManageUsers' },
     { path: '/users/createOrUpdateUser', name: 'CreateUser', element: CreateOrUpdateUser, isAuth: true, modulePermission: 'ManageUsers' },
 
-    { path: '/roles', name: 'Roles', element: Roles, isAuth: true, modulePermission: 'ManagePermission' },
-    { path: '/roles/createRole', name: 'CreateRole', element: CreateOrUpdateRole, isAuth: true, modulePermission: 'ManagePermission' },
-    { path: '/roles/updateRole/:id', name: 'UpdateRole', element: CreateOrUpdateRole, isAuth: true, modulePermission: 'ManagePermission' },
+    { path: '/roles', name: 'Roles', element: Roles, isAuth: true, modulePermission: 'ManageRoles'},
+    { path: '/roles/createRole', name: 'CreateRole', element: CreateOrUpdateRole, isAuth: true, modulePermission: 'ManageRoles' },
+    { path: '/roles/updateRole/:id', name: 'UpdateRole', element: CreateOrUpdateRole, isAuth: true, modulePermission: 'ManageRoles' },
 ]
 
 export default routes

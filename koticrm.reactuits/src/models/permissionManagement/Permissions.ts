@@ -30,3 +30,9 @@ export class PermissionClass implements Permission {
         this.isAdd = false;
     }
 }
+
+export interface GetModulesDTO {
+    id: number;
+    name: string;
+  
+  }

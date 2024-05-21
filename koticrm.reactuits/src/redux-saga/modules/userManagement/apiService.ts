@@ -1,4 +1,3 @@
-import axios from "axios";
 import { apiResponse, axiosInstance, responseBody } from "../../../apiInterceptor/axiosInterceptor";
 import { Employee } from "../../../models/userManagement/employee";
 import { Employees } from "../../../models/userManagement/employees";
