@@ -16,6 +16,20 @@ export async function GetPermissionsList(roleId: string){
         return errorResponse;
     }
 }
+export async function GetModules(){
+    try {
+     
+        const response = await axiosInstance.get(`/UserAccount/GetModules`);
+        return response.data;
+    } catch (error: any) {
+        const errorResponse: apiResponse<Permission[]> = {
+            data: undefined,
+            status: 500,
+            statusText: error.message
+        };
+        return errorResponse;
+    }
+}
 
 export async function UpdatePermission(permission: Permission[]) {
     try {

@@ -2,12 +2,11 @@ import { useEffect, useState } from "react";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import * as Yup from "yup";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { createContact, updateContact } from "../../redux-saga/modules/contact/action";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { CButton, CCard, CCardBody, CCardHeader, CCol, CFormCheck, CModal, CModalBody, CModalFooter, CModalHeader, CRow, CTableBody, CTableDataCell, CTableRow } from "@coreui/react";
 import { Role, RoleClass } from "../../models/permissionManagement/Role";
-import { CreateRole, GetPermissionsList, GetRoleById, GetRolesList, UpdatePermission, UpdateRole } from "../../redux-saga/modules/permissionManagement/apiService";
+import { CreateRole, GetPermissionsList, GetRoleById, GetRolesList, UpdatePermission, UpdateRole,GetModules } from "../../redux-saga/modules/permissionManagement/apiService";
 import { Permission } from "../../models/permissionManagement/Permissions";
 
 
@@ -17,10 +16,12 @@ const CreateOrUpdateRole = () => {
    const [isActive, setIsActive] = useState(false);
    const [permissionList, setPermissionList] = useState<Permission[]>([]);
    const [showPopup, setShowPopup] = useState(false);
+   const [roleModules, setRoleModules] = useState([]);
 
 
   const navigate = useNavigate();
  
+
 
     useEffect(() => {
     if (id) {
@@ -30,6 +31,10 @@ const CreateOrUpdateRole = () => {
         setRole(new RoleClass());
     }
     }, [id]);
+    
+    useEffect(() => {
+      GetModule();
+    }, []);
 
     const GetRole = async (roleId: string) => {
         const response = await GetRoleById(roleId);
@@ -48,6 +53,35 @@ const CreateOrUpdateRole = () => {
         //   setIsLoading(false);
         }
       };
+  
+      const GetModule = async () => {
+        try {
+          const response = await GetModules();
+          setRoleModules(response)
+            if(id==null || id==undefined){
+           let permissions=  response.map((modules:any)=>{
+
+              return  {
+                moduleId: modules.id,
+                roleId: '',
+                permissionId: 0,
+                moduleName: modules.name,
+                isView: false,
+                isEdit: false,
+                isDelete: false,
+                isAdd: false,
+              }
+             })
+             setPermissionList(permissions);
+            }
+        } catch (error) {
+          console.error("Error fetching modules:", error);
+          toast.error("Failed to fetch modules.");
+        } finally {
+        //   setIsLoading(false);
+        }
+      };
+
 
     const handleIsActiveChange = (e:any) => {
         setIsActive(e.target.checked);
@@ -60,19 +94,35 @@ const CreateOrUpdateRole = () => {
       setShowPopup(false);
     };
 
-    const handleCheckboxChange = (e: any, permissionId: number) => {
+    const handleCheckboxChange = (e: any, passedId: number) => {
         const { name, checked } = e.target;
     
-        if (permissionId) {
+        //edit case 
+        if (passedId) {
             setPermissionList(prevPermissions =>
                 prevPermissions.map(permission =>
-                    permission.permissionId === permissionId
+                    permission.permissionId === passedId
                         ? { ...permission, [name]: checked ? checked : false, roleId: id ? id : ""}
-                        : { ...permission, roleId: permission.permissionId !== permissionId ? (id ? id : "") : permission.roleId }
+                        : { ...permission, roleId: permission.permissionId !== passedId ? (id ? id : "") : permission.roleId }
                         // : permission
                 )
             );
-        } else {
+        } 
+
+        //Add case 
+        else if (id==null || id==undefined){
+          setPermissionList(prevPermissions =>
+            prevPermissions.map(permission =>
+                permission.moduleId === passedId
+
+                    ? { ...permission, [name]: checked ? checked : false, roleId: id ? id : ""}
+                    : { ...permission, roleId: ''}
+                    // : permission
+            )
+        );
+
+        }
+        else {
             toast.error("PermissionId not found");
         }
     };
@@ -274,8 +324,7 @@ const CreateOrUpdateRole = () => {
   )}
 </CCol>
 
-                  {id ? permissionList.length > 0 ?
-                    (
+                  
                         <>
                             <CRow>
                                 <h5 className="mb-0 mb-3 mt-5">Manage Permissions</h5><hr/>
@@ -298,13 +347,14 @@ const CreateOrUpdateRole = () => {
                                 </CCol>
                             </CRow>
                             <CRow>
+                              
                                 {permissionList?.map((permission: Permission) => (
                                     <CRow className="mb-3 pl-6">
                                         <CCol sm={4}>
                                             {permission.moduleName}
                                         </CCol>
                                         <CCol sm={2}>
-                                            <CFormCheck id="isView" name="isView" checked={permission.isView} onChange={(e) => handleCheckboxChange(e, permission.permissionId)} />
+                                            <CFormCheck id="isView" name="isView" checked={permission.isView} onChange={(e) => handleCheckboxChange(e, (permission.permissionId==0 ||permission.permissionId==undefined)?permission.moduleId : permission.permissionId)} />
                                         </CCol>
                                         <CCol sm={2}>
                                             <CFormCheck id="isAdd" name="isAdd" checked={permission.isAdd} onChange={(e) => handleCheckboxChange(e,permission.permissionId)} />
@@ -319,13 +369,7 @@ const CreateOrUpdateRole = () => {
                                 ))}
                             </CRow>
                         </>
-                    ) : 
-                    <CRow>
-                        <h3 className="mb-0 mb-5 mt-5 text-center">No module found.</h3>
-                    </CRow>
-                    : ""
-                  }
-                  
+                   
 
                   <CRow className="mb-3">
                     <CCol sm={12} className="text-end">
