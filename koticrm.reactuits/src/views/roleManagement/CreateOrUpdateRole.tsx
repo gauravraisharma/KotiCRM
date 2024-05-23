@@ -2,9 +2,10 @@ import { useEffect, useState } from "react";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import * as Yup from "yup";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import { createContact, updateContact } from "../../redux-saga/modules/contact/action";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { CButton, CCard, CCardBody, CCardHeader, CCol, CFormCheck, CRow } from "@coreui/react";
+import { CButton, CCard, CCardBody, CCardHeader, CCol, CFormCheck, CModal, CModalBody, CModalFooter, CModalHeader, CRow, CTableBody, CTableDataCell, CTableRow } from "@coreui/react";
 import { Role, RoleClass } from "../../models/permissionManagement/Role";
 import { CreateRole, GetPermissionsList, GetRoleById, UpdatePermission, UpdateRole, GetModules, createModulePermission } from "../../redux-saga/modules/permissionManagement/apiService";
 import { Permission } from "../../models/permissionManagement/Permissions";
@@ -21,7 +22,7 @@ const CreateOrUpdateRole = () => {
 
 
   const navigate = useNavigate();
-
+ 
 
   useEffect(() => {
     if (id) {
@@ -212,7 +213,7 @@ const CreateOrUpdateRole = () => {
     role: Role,
     { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }
   ) => {
-    if (id && !isActive) {
+    if (id && !isActive){
       setShowPopup(true);
       setSubmitting(false);
       return;
@@ -246,6 +247,9 @@ const CreateOrUpdateRole = () => {
               throw new Error("Permissions update failed");
             }
           }
+            }
+            }
+            }
         }
         // const response = await CreateRole(role);
         if (response.status == 200) {
@@ -259,9 +263,6 @@ const CreateOrUpdateRole = () => {
         
         
         setTimeout(() => navigate("/roles"), 3000);
-      } else {
-        toast.error("Role operation failed");
-      }
     }catch (error) {
         console.error("Error during form submission:", error);
         toast.error("Permission is failed");
@@ -299,6 +300,9 @@ const CreateOrUpdateRole = () => {
   //   }
   // };
 
+
+
+
   const validationSchema = Yup.object({
     name: Yup.string().required("Required (Role Name)"),
   });
@@ -310,13 +314,13 @@ const CreateOrUpdateRole = () => {
         <CCardHeader className="mb-3">
           <div className="d-flex justify-content-between align-items-center">
             <div>
-              <h5 className="mb-0">{id == null ? "Create" : "Update"} Role</h5>
-            </div>
-            <div className="text-end">
-              <Link to={`/roles`}>
-                <CButton
-                  component="input"
-                  type="button"
+            <Link to={`/roles`}>
+              <CButton
+                component="input"
+                type="button"
+                color="secondary"
+                value="Back To Roles"
+              />
                   color="secondary"
                   value="Back To Roles"
                 />
@@ -346,13 +350,16 @@ const CreateOrUpdateRole = () => {
                       </CCol>
                       <CCol sm={8}>
                         <Field
-                          type="text"
-                          id="name"
-                          name="name"
                           className={`form-control ${touched.name && errors.name
                               ? "is-invalid"
                               : ""
                             }`}
+                          }`}
+                              ? "is-invalid"
+                              : ""
+                          }`}
+                              : ""
+                          }`}
                           placeholder="Enter role here"
                           style={{ height: "50px" }}
                         />
@@ -361,12 +368,6 @@ const CreateOrUpdateRole = () => {
                           className="invalid-feedback"
                           render={(error) => (
                             <label style={{ color: "#dc3545" }}>{error}</label>
-                          )}
-                        />
-                      </CCol>
-                    </CRow>
-                  </CCol>
-                  <CCol xs={6}>
                     <CRow className="mb-3">
                       <CCol sm={4}>
                         <label htmlFor="isactive" className="col-form-label">
@@ -469,6 +470,12 @@ const CreateOrUpdateRole = () => {
                     </CRow>
                   </>
 
+                  
+                    : ""
+                  }
+                  
+                  }
+                  
 
                   <CRow className="mb-3">
                     <CCol sm={12} className="text-end">
