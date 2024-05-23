@@ -17,7 +17,7 @@ namespace KotiCRM.Repository.IRepository
         Task<ResponseStatus> GetRoleNameAsync(string roleId);
         Task<RolesResponseStatus> GetRoles(string? searchQuery, int? pageNumber, int? pageSize);
         Task<RoleResponseStatus> GetRole(string roleId);
-        Task<ResponseStatus> CreateNewRole(CreateUpdateRoleDTO createUpdateRoleDTO);
+        Task<RoleResponse> CreateNewRole(CreateUpdateRoleDTO createUpdateRoleDTO);
         Task<RoleResponseStatus> UpdateRole(CreateUpdateRoleDTO createUpdateRoleDTO);
         Task<ResponseStatus> DeleteRole(string roleId);
         DDListResponse GetUserTypeListDD();
@@ -25,6 +25,8 @@ namespace KotiCRM.Repository.IRepository
         ResponseStatus DeleteUser(string userId);
         Task<ModulePermissionResponse> GetModulePermissions(string userType);
         Task<ModulePermissionResponse> GetModulePermission(string userId);
+
+        Task<ResponseStatus> CreateModulePermission(List<CreateModulePermissionDTO> createModulePermissions);
         Task<ResponseStatus> UpdateModulePermission(List<UpdateModulePermissionDTO> updateModulePermissions);
 
         UserDataResponse GetUserDataById(string userId);

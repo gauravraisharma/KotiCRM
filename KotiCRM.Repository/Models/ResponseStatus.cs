@@ -113,6 +113,10 @@ namespace KotiCRM.Repository.Models
         public string Message { get; set; }
         public EmployeeDTO employeeData { get; set; }
     }
+    public class RoleResponse :ResponseStatus
+    {
+        public string RoleId { get; set; }
+    }
 
 }
 

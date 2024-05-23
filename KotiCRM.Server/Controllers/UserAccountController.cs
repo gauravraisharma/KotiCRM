@@ -140,7 +140,7 @@ namespace KotiCRM.Server.Controllers
 
             if (responseStatus.Status == "SUCCEED")
             {
-                return Ok(responseStatus.Message);
+                return Ok(responseStatus);
             }
             else
             {
@@ -269,6 +269,30 @@ namespace KotiCRM.Server.Controllers
                 return BadRequest();
             }
             return Ok(dbResponse);
+        }
+
+        // create module permission
+
+
+        [HttpPost] // Use HttpPost for creation
+        [Route("CreateModulePermission")] // Define your route
+        public async Task<ActionResult> CreateModulePermission(List<CreateModulePermissionDTO> createModulePermissions)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest("Please pass valid input.");
+            }
+
+            var responseStatus = await _accountService.CreateModulePermission(createModulePermissions);
+
+            if (responseStatus.Status == "SUCCEED")
+            {
+                return Ok(responseStatus);
+            }
+            else
+            {
+                return BadRequest(responseStatus.Message);
+            }
         }
 
         [HttpPut]

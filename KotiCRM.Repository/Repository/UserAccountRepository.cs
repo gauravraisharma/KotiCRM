@@ -448,13 +448,13 @@ namespace KotiCRM.Repository.Repository
             };
         }
 
-        public async Task<ResponseStatus> CreateNewRole(CreateUpdateRoleDTO createUpdateRoleDTO)
+        public async Task<RoleResponse> CreateNewRole(CreateUpdateRoleDTO createUpdateRoleDTO)
         {
             try
             {
                 if (createUpdateRoleDTO == null)
                 {
-                    return new ResponseStatus
+                    return new RoleResponse
                     {
                         Status = "FAILED",
                         Message = "Invalid model"
@@ -476,16 +476,18 @@ namespace KotiCRM.Repository.Repository
                 var result = await _roleManager.CreateAsync(role);
                 if (result.Succeeded)
                 {
-                    return new ResponseStatus()
+                    return new RoleResponse()
                     {
                         Status = "SUCCEED",
-                        Message = "Role created successfully"
+                        Message = "Role created successfully",
+                        RoleId = role.Id
+
                     };
                 }
                 else
                 {
                     var errors = string.Join(" and ", result.Errors.Select(item => item.Description).ToArray());
-                    return new ResponseStatus
+                    return new RoleResponse
                     {
                         Status = "FAILED",
                         Message = errors
@@ -494,7 +496,7 @@ namespace KotiCRM.Repository.Repository
             }
             catch (Exception ex)
             {
-                return new ResponseStatus
+                return new RoleResponse
                 {
                     Status = "FAILED",
                     Message = "Something went wrong."
@@ -974,6 +976,72 @@ namespace KotiCRM.Repository.Repository
                 };
             }
         }
+
+
+        // create module permission
+        public async Task<ResponseStatus> CreateModulePermission(List<CreateModulePermissionDTO> createModulePermissions)
+        {
+            try
+            {
+                // Check if createModulePermissions is null or empty
+                if (createModulePermissions == null)
+                {
+                    return new ResponseStatus
+                    {
+                        Status = "FAILED",
+                        Message = "No permissions provided."
+                    };
+                }
+
+                // Loop through each permission in the list
+                foreach (var createModulePermissionDTO in createModulePermissions)
+                {
+                    // Check if the role ID is provided
+                    if (string.IsNullOrEmpty(createModulePermissionDTO.RoleId))
+                    {
+                        return new ResponseStatus
+                        {
+                            Status = "FAILED",
+                            Message = "Role ID is required for creating module permissions."
+                        };
+                    }
+
+                    
+                    // Create a new permission entity
+                    Permissions newPermission = new Permissions // Assuming Permission is your entity type
+                    {
+                     
+                        ModuleID = createModulePermissionDTO.ModuleId,
+                        RoleID = createModulePermissionDTO.RoleId,
+                        View = createModulePermissionDTO.IsView,
+                        Add = createModulePermissionDTO.IsAdd,
+                        Edit = createModulePermissionDTO.IsEdit,
+                        Delete = createModulePermissionDTO.IsDelete
+                    };
+
+                    // Add the new permission to the database context
+                    _context.Permissions.Add(newPermission);
+                }
+
+                // Save changes to the database
+                await _context.SaveChangesAsync();
+
+                return new ResponseStatus
+                {
+                    Status = "SUCCEED",
+                    Message = "Permissions created successfully",
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ResponseStatus
+                {
+                    Status = "FAILED",
+                    Message = "Failed to create permissions"
+                };
+            }
+        }
+
         public async Task<ResponseStatus> UpdateModulePermission(List<UpdateModulePermissionDTO> updateModulePermissions)
         {
             try
@@ -987,59 +1055,62 @@ namespace KotiCRM.Repository.Repository
                         Message = "No permissions provided."
                     };
                 }
-                bool permissionsUpdated = false;
 
                 foreach (var updateModulePermissionDTO in updateModulePermissions)
                 {
                     if (updateModulePermissionDTO.RoleId == null) continue;
-                    var permission = _context.Permissions.FirstOrDefault(x => x.PermissionId == updateModulePermissionDTO.PermissionId && x.RoleID == updateModulePermissionDTO.RoleId);
+
+                    var permission = _context.Permissions.FirstOrDefault(x =>
+                        x.PermissionId == updateModulePermissionDTO.PermissionId &&
+                        x.RoleID == updateModulePermissionDTO.RoleId
+                    );
 
                     if (permission == null)
                     {
-                        return new ResponseStatus
+                        Permissions newPermission = new Permissions // Assuming Permission is your entity type
                         {
-                            Status = "FAILED",
-                            Message = $"Permission with ID {updateModulePermissionDTO.PermissionId} not found."
+                            ModuleID = updateModulePermissionDTO.ModuleId,
+                            RoleID = updateModulePermissionDTO.RoleId,
+                            View = updateModulePermissionDTO.IsView,
+                            Add = updateModulePermissionDTO.IsAdd,
+                            Edit = updateModulePermissionDTO.IsEdit,
+                            Delete = updateModulePermissionDTO.IsDelete
                         };
+
+                        // Add the new permission to the database context
+                        _context.Permissions.Add(newPermission);
                     }
-
-                    permission.View = updateModulePermissionDTO.IsView;
-                    permission.Add = updateModulePermissionDTO.IsAdd;
-                    permission.Edit = updateModulePermissionDTO.IsEdit;
-                    permission.Delete = updateModulePermissionDTO.IsDelete;
-
-                    _context.Permissions.Update(permission);
-                    permissionsUpdated = true;
-                }
-                if (permissionsUpdated)
-                {
-                    await _context.SaveChangesAsync();
-
-                    return new ResponseStatus
+                    else
                     {
-                        Status = "SUCCEED",
-                        Message = "Permissions updated successfully",
-                    };
+                        // Update the existing permission
+                        permission.View = updateModulePermissionDTO.IsView;
+                        permission.Add = updateModulePermissionDTO.IsAdd;
+                        permission.Edit = updateModulePermissionDTO.IsEdit;
+                        permission.Delete = updateModulePermissionDTO.IsDelete;
+
+                        _context.Permissions.Update(permission);
+                    }
                 }
-                else
+
+                // Save all changes to the database
+                await _context.SaveChangesAsync();
+
+                return new ResponseStatus
                 {
-                    return new ResponseStatus
-                    {
-                        Status = "SUCCEED",
-                        Message = "No permissions were updated",
-                    };
-                }
+                    Status = "SUCCEED",
+                    Message = "Permissions updated successfully"
+                };
             }
             catch (Exception ex)
             {
                 return new ResponseStatus
                 {
                     Status = "FAILED",
-                    Message = "Failed to update permissions"
+                    Message = $"Failed to update permissions: {ex.Message}"
                 };
             }
         }
-       
+
         public UserDataResponse GetUserDataById(string userId)
         {
             try

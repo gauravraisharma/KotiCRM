@@ -64,7 +64,7 @@ namespace KotiCRM.Services.Services
         {
             return await _accountRepository.GetRole(roleId);
         }
-        public Task<ResponseStatus> CreateNewRole(CreateUpdateRoleDTO createUpdateRoleDTO)
+        public Task<RoleResponse> CreateNewRole(CreateUpdateRoleDTO createUpdateRoleDTO)
         {
             return _accountRepository.CreateNewRole(createUpdateRoleDTO);
         }
@@ -115,7 +115,10 @@ namespace KotiCRM.Services.Services
         {
             return await _accountRepository.GetAllModulesAsync();
         }
-
+        public async Task<ResponseStatus> CreateModulePermission(List<CreateModulePermissionDTO> createModulePermissions)
+        {
+            return await _accountRepository.CreateModulePermission(createModulePermissions);
+        }
         public async Task<ResponseStatus> UpdateModulePermission(List<UpdateModulePermissionDTO> updateModulePermissions)
         {
             return await _accountRepository.UpdateModulePermission(updateModulePermissions);

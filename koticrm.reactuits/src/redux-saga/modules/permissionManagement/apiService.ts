@@ -31,6 +31,23 @@ export async function GetModules(){
     }
 }
 
+export async function createModulePermission(permissions: Permission[]) {
+    try {
+        const response = await axiosInstance.post<Permission>('/UserAccount/CreateModulePermission', permissions);
+        return {
+            data: response.data,
+            status: response.status,
+            statusText: response.statusText
+        };
+    } catch (error: any) {
+        return {
+            data: undefined,
+            status: error.response?.status || 500,
+            statusText: error.response?.statusText || error.message
+        };
+    }
+}
+
 export async function UpdatePermission(permission: Permission[]) {
     try {
         const response = await axiosInstance.put<Permission[]>(`/UserAccount/UpdateModulePermission`, permission);
@@ -80,7 +97,7 @@ export async function GetRoleById(roleId: string){
 export async function CreateRole(role: Role) {
     try {
         const response = await axiosInstance.post<Role>(`/UserAccount/CreateNewRole`, role);
-        return responseBody(response);
+        return response;
     } catch (error: any) {
         const errorResponse: apiResponse<Role> = {
             data: undefined,

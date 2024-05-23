@@ -1,6 +1,6 @@
 import CIcon from '@coreui/icons-react'
-import {cilSpeedometer,cilBook,cilContact,cibMarketo,cibEventStore,
-  cibMarkdown,cilApplications,cilSettings,cilMoney,
+import {cilSpeedometer,cilBook,cilContact,
+  cibMarkdown,cilSettings,cilMoney,
 } from '@coreui/icons'
 import { CNavItem } from '@coreui/react'
 import { NavItem } from './models/commonModels/CommonModels'
@@ -38,22 +38,7 @@ const _nav:NavItem[] = [
 
   },
   
-  // {
-  //   component: CNavItem,
-  //   name: 'Events',
-  //   to: '/theme/typograph',
-  //   icon: <CIcon icon={cibEventStore} customClassName="nav-icon" />,
-  //   moduleName : 'Events'
 
-  // },
-  // {
-  //   component: CNavItem,
-  //   name: 'Leaves',
-  //   to: '/theme/typography',
-  //   icon: <CIcon icon={cilApplications} customClassName="nav-icon" />,
-  //   moduleName : 'Leaves'
-
-  // },
   // {
   //   component: CNavItem,
   //   name: 'Payroll',
@@ -78,14 +63,7 @@ const _nav:NavItem[] = [
     moduleName : 'Settings'
 
   },
-  // {
-  //   component: CNavItem,
-  //   name: 'Manage Roles',
-  //   to: '/roles',
-  //   icon: <CIcon icon={cilUser} customClassName="nav-icon" />,
-  //   moduleName : 'ManagePermission'
 
-  // },
   ]
 
 export default _nav
