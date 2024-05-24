@@ -31,6 +31,14 @@ const Form12BB = () => {
     proofSubmitted: false
   }]);
 
+  const addRow = () => {
+    const newRow = {
+      id: rows.length + 1,
+      amount: '',
+      proofSubmitted: false
+    };
+    setRows([...rows, newRow]);
+  };
 
 
 
@@ -60,37 +68,37 @@ const Form12BB = () => {
   return (
     <>
 
-    <CCard>
+      <CCard>
 
-      <CCardHeader className="mb-3">
+        <CCardHeader className="mb-3">
 
-        <div className="d-flex justify-content-between align-items-center">
-          <div>
-            <h5>Form 12BB Declaration</h5>
+          <div className="d-flex justify-content-between align-items-center">
+            <div>
+              <h5>Form 12BB Declaration</h5>
+            </div>
+
+
+            <div className="text-end">
+              <CButton
+                component="input"
+                type="button"
+                color="secondary"
+                value="Back To users"
+                onClick={() => navigate("/users")}
+              />
+            </div>
           </div>
 
-
-          <div className="text-end">
-            <CButton
-              component="input"
-              type="button"
-              color="secondary"
-              value="Back To users"
-              onClick={() => navigate("/users")}
-            />
-          </div>
+        </CCardHeader>
+        <div className="p-3">
+          <p>
+            Form 12BB is a statement of claims by an employee for deduction of tax. With effect from 1st June 2016,
+            a salaried employee is required to submit Form 12BB to his or her employer to claim tax benefits or rebates
+            on investments and expenses. Form 12BB has to be submitted at the end of the financial year. Documentary
+            evidence of these investments and expenses has to be provided at the end of the financial year as well.
+          </p>
         </div>
 
-      </CCardHeader>
-      <div className="p-3">
-        <p>
-          Form 12BB is a statement of claims by an employee for deduction of tax. With effect from 1st June 2016,
-          a salaried employee is required to submit Form 12BB to his or her employer to claim tax benefits or rebates
-          on investments and expenses. Form 12BB has to be submitted at the end of the financial year. Documentary
-          evidence of these investments and expenses has to be provided at the end of the financial year as well.
-        </p>
-      </div>
-  
 
         {/* house rent declaration */}
         <CCard className="mt-3">
@@ -125,7 +133,7 @@ const Form12BB = () => {
             <CCardBody>
               <CRow className="align-items-center">
                 <CCol md="5" className="mb-3">
-                <label htmlFor="amount" style={{ marginBottom: '10px' }}>Enter annual house rent:</label>
+                  <label htmlFor="amount" style={{ marginBottom: '10px' }}>Enter annual house rent:</label>
                   <input
                     type="text"
                     id="amount"
@@ -143,18 +151,18 @@ const Form12BB = () => {
               </CRow>
               <hr />
               <CRow className="align-items-center">
-                <CCol md="3"style={{ marginTop: '20px' }}>
+                <CCol md="3" style={{ marginTop: '20px' }}>
                   <p>This section will be made visible in Feb to submit the final proofs</p>
                 </CCol>
-                <CCol md="3"style={{ marginTop: '40px' }}>
-                    
-                    <input
-                      type="file"
-                      className="custom-file-input"
-                      id="rentSlips"
-                      style={{ display: 'none' }}
-                    />
-                  <div style={{ border: '1px solid #ccc', padding: '10px', borderRadius: '5px',marginBottom: '10px' }}>
+                <CCol md="3" style={{ marginTop: '40px' }}>
+
+                  <input
+                    type="file"
+                    className="custom-file-input"
+                    id="rentSlips"
+                    style={{ display: 'none' }}
+                  />
+                  <div style={{ border: '1px solid #ccc', padding: '10px', borderRadius: '5px', marginBottom: '10px' }}>
 
                     <label
                       className="custom-file-label"
@@ -166,7 +174,7 @@ const Form12BB = () => {
                   </div>
                 </CCol>
                 <CCol md="3">
-                <label htmlFor="ownerPan" style={{ marginBottom: '10px' }}>Owner PAN Number</label>
+                  <label htmlFor="ownerPan" style={{ marginBottom: '10px' }}>Owner PAN Number</label>
                   <input
                     type="text"
                     id="ownerPan"
@@ -202,8 +210,8 @@ const Form12BB = () => {
             <CCardBody>
               <CRow className="align-items-center">
                 <CCol md="5" className="mb-3">
-                <label htmlFor="amount" style={{ marginBottom: '10px' }}>Enter Amount of  any travel to claim in a year 
-                :</label>
+                  <label htmlFor="amount" style={{ marginBottom: '10px' }}>Enter Amount of  any travel to claim in a year
+                    :</label>
                   <input
                     type="text"
                     id="amount"
@@ -221,12 +229,12 @@ const Form12BB = () => {
               </CRow>
               <hr />
               <CRow className="align-items-center">
-                <CCol md="3"style={{ marginTop: '20px' }}>
+                <CCol md="3" style={{ marginTop: '20px' }}>
                   <p>This section will be made visible in Feb to submit the final proofs</p>
                 </CCol>
-            
-                <CCol md="3"style={{ marginTop: '40px' }}>
-                  <div style={{ border: '1px solid #ccc', padding: '10px', borderRadius: '5px',marginBottom: '10px' }}>
+
+                <CCol md="3" style={{ marginTop: '40px' }}>
+                  <div style={{ border: '1px solid #ccc', padding: '10px', borderRadius: '5px', marginBottom: '10px' }}>
                     <input
                       type="file"
                       className="custom-file-input"
@@ -242,9 +250,9 @@ const Form12BB = () => {
                     </label>
                   </div>
                 </CCol>
-          
+
                 <CCol md="3">
-                <label htmlFor="ownerPan" style={{ marginBottom: '10px' }}>Owner PAN Number</label>
+                  <label htmlFor="ownerPan" style={{ marginBottom: '10px' }}>Owner PAN Number</label>
                   <input
                     type="text"
                     id="ownerPan"
@@ -292,7 +300,7 @@ const Form12BB = () => {
             <CCardBody>
               <CRow className="align-items-center">
                 <CCol md="5" className="mb-3">
-                <label htmlFor="amount" style={{ marginBottom: '10px' }}>Interest Amount on home loan in an year:</label>
+                  <label htmlFor="amount" style={{ marginBottom: '10px' }}>Interest Amount on home loan in an year:</label>
                   <input
                     type="text"
                     id="amount"
@@ -301,7 +309,7 @@ const Form12BB = () => {
                   />
                 </CCol>
                 <CCol md="2" className="mb-3">
-                <label htmlFor="nameOfLender" style={{ marginBottom: '10px' }}>Name of Lender</label>
+                  <label htmlFor="nameOfLender" style={{ marginBottom: '10px' }}>Name of Lender</label>
                   <input
                     type="text"
                     id="amount"
@@ -310,7 +318,7 @@ const Form12BB = () => {
                   />
                 </CCol>
                 <CCol md="2" className="mb-3">
-                <label htmlFor="addressOfLender" style={{ marginBottom: '10px' }}>Address of Lender</label>
+                  <label htmlFor="addressOfLender" style={{ marginBottom: '10px' }}>Address of Lender</label>
                   <input
                     type="text"
                     id="amount"
@@ -319,7 +327,7 @@ const Form12BB = () => {
                   />
                 </CCol>
                 <CCol md="3" className="mb-3">
-                <label htmlFor="ownerPan" style={{ marginBottom: '10px' }}>PAN Number of Lender</label>
+                  <label htmlFor="ownerPan" style={{ marginBottom: '10px' }}>PAN Number of Lender</label>
                   <input
                     type="text"
                     id="amount"
@@ -340,7 +348,7 @@ const Form12BB = () => {
                 <CCol md="3" className="mb-2">
                   <p>This section will be made visible in Feb to submit the final proofs</p>
                 </CCol>
-                <CCol md="3"style={{ marginTop: '10px' }}>
+                <CCol md="3" style={{ marginTop: '10px' }}>
                   <div style={{ border: '1px solid #ccc', padding: '10px', borderRadius: '5px' }}>
                     <input
                       type="file"
@@ -358,7 +366,7 @@ const Form12BB = () => {
                   </div>
                 </CCol>
                 <CCol md="3" className="mb-3">
-                <label htmlFor="ownerPan" style={{ marginBottom: '10px' }}>Owner PAN Number</label>
+                  <label htmlFor="ownerPan" style={{ marginBottom: '10px' }}>Owner PAN Number</label>
                   <input
                     type="text"
                     id="ownerPan"
@@ -373,426 +381,436 @@ const Form12BB = () => {
             </CCardBody>
           )}
         </CCard>
-   
 
-      
-        
-  
-    </CCard>
-    <CCard>
-          
+
+
+
+
+      </CCard>
+      <CCard>
+
         <CCardHeader>
-         <CCol md="6 mb-2 mt-2" className="d-flex align-items-center"  >
-          <h5>All Tax Deductions (80C,80D,80DD,80GGA,80TTA,80U)</h5>
+          <CCol md="6 mb-2 mt-2" className="d-flex align-items-center"  >
+            <h5>All Tax Deductions (80C,80D,80DD,80GGA,80TTA,80U)</h5>
           </CCol>
         </CCardHeader>
-       
-       <CCardBody>
-        
-       <CCard className="mt-3">
-          <CCardHeader>
-            <CRow className="align-items-center">
-              <CCol md="4 mb-2 mt-2" className="d-flex align-items-center"  >
-                <CIcon
-                  icon={isCollapsedFour ? cilChevronDoubleDown : cilChevronDoubleUp}
-                  className="ml-2"
-                  size="lg"
-                  onClick={toggleCollapseFour}
-                  style={{ cursor: 'pointer' }}
-                />
 
-                <h5 className="m-0">80 C</h5>
-              </CCol>
-              <CCol md="4" className="d-flex align-items-center">
-                <input type="checkbox" id="houseRentNoInvestments" className="custom-checkbox checkbox-spacing" />
-                <label htmlFor="houseRentNoInvestments" className="ml-2 mb-0">No Investments</label>
+        <CCardBody>
 
 
-
-              </CCol>
-              <CCol md="4" className="d-flex justify-content-end align-items-center">
-                <input type="checkbox" id="houseRentProofSubmitted" className="custom-checkbox" />
-
-              </CCol>
-            </CRow>
-          </CCardHeader>
-          {!isCollapsedFour && (
-            <CCardBody>
+          <CCard className="mt-3">
+            <CCardHeader>
               <CRow className="align-items-center">
-
-
-
-
-              </CRow>
-              <CRow className="align-items-center">
-                <CCol md="4" className="mb-3" style={{ textAlign: 'center' }}>
-                  <CFormSelect>
-                    <option value="">Select Medical Expenses</option>
-                    <option value="0">None</option>
-                    <option value="25000">Up to Rs.25,000</option>
-                    <option value="50000">Up to Rs.50,000</option>
-                    {/* Add more options as needed */}
-                  </CFormSelect>
-                </CCol>
-                <CCol md="2" className="mb-3">
-                  <label htmlFor="amount" style={{ marginBottom: '10px' }}>Amount:</label>
-                  <input
-                    type="text"
-                    id="amount"
-                    className="form-control"
-                    placeholder="Amount"
+                <CCol md="4 mb-2 mt-2" className="d-flex align-items-center">
+                  <CIcon
+                    icon={isCollapsedFour ? cilChevronDoubleDown : cilChevronDoubleUp}
+                    className="ml-2"
+                    size="lg"
+                    onClick={toggleCollapseFour}
+                    style={{ cursor: 'pointer' }}
                   />
+                  <h5 className="m-0">80 C</h5>
                 </CCol>
-                <CCol md="2">
+                <CCol md="4" className="d-flex align-items-center">
+                  <input type="checkbox" id="houseRentNoInvestments" className="custom-checkbox checkbox-spacing" />
+                  <label htmlFor="houseRentNoInvestments" className="ml-2 mb-0">No Investments</label>
+                </CCol>
+                <CCol md="4" className="d-flex justify-content-end align-items-center">
+                  <input type="checkbox" id="houseRentProofSubmitted" className="custom-checkbox" />
+                </CCol>
+              </CRow>
+            </CCardHeader>
+            {!isCollapsedFour && (
+              <CCardBody>
+                {rows.map((row, index) => (
+                  <CRow key={row.id} className="align-items-center">
+                    <CCol md="4" className="mb-3" style={{ textAlign: 'center' }}>
+                      <CFormSelect>
+                        <option value="">Select Medical Expenses</option>
+                        <option value="0">None</option>
+                        <option value="25000">Up to Rs.25,000</option>
+                        <option value="50000">Up to Rs.50,000</option>
+                      </CFormSelect>
+                    </CCol>
+                    <CCol md="2" className="mb-3">
+                      <label htmlFor={`amount${row.id}`} style={{ marginBottom: '10px' }}>Amount:</label>
+                      <input
+                        type="text"
+                        id={`amount${row.id}`}
+                        className="form-control"
+                        placeholder="Amount"
+                        value={row.amount}
+                        onChange={(e) => {
+                          const updatedRows = [...rows];
+                          updatedRows[index].amount = e.target.value;
+                          setRows(updatedRows);
+                        }}
+                      />
+                    </CCol>
+                    <CCol md="2">
+                      <input
+                        type="checkbox"
+                        id={`proofSubmitted${row.id}`}
+                        className="custom-checkbox"
+                        checked={row.proofSubmitted}
+                        onChange={(e) => {
+                          const updatedRows = [...rows];
+                          updatedRows[index].proofSubmitted = e.target.checked;
+                          setRows(updatedRows);
+                        }}
+                      />
+                    </CCol>
+                    <CCol md="2" className="mb-3">
+                      <div>
+                        <input
+                          type="file"
+                          className="custom-file-input"
+                          id={`rentSlips${row.id}`}
+                          style={{ display: 'none' }}
+                        />
+                        <label
+                          className="custom-file-label"
+                          htmlFor={`rentSlips${row.id}`}
+                          style={{ cursor: 'pointer' }}
+                        >
+                          <u>Upload Proof</u>
+                        </label>
+                      </div>
+                    </CCol>
+                    <CCol md="2" className="mb-3">
+                      <MdDelete
+                        style={{
+                          color: "red",
+                          fontSize: "30px",
+                          cursor: "pointer",
+                          marginLeft: "10px"
+                        }}
+                        className="text-danger"
+                        onClick={() => {
+                          const updatedRows = rows.filter(r => r.id !== row.id);
+                          setRows(updatedRows);
+                        }}
+                      />
+                    </CCol>
+                  </CRow>
+                ))}
+                <CRow>
+                  <CCol md="12">
+                    <button className="btn btn-primary" onClick={addRow}>+</button>
+                  </CCol>
+                </CRow>
+              </CCardBody>
+            )}
+          </CCard>
+
+          <CCard className="mt-3">
+            <CCardHeader>
+              <CRow className="align-items-center">
+                <CCol md="4 mb-2 mt-2" className="d-flex align-items-center"  >
+                  <CIcon
+                    icon={isCollapsedFive ? cilChevronDoubleDown : cilChevronDoubleUp}
+                    className="ml-2"
+                    size="lg"
+                    onClick={toggleCollapseFive}
+                    style={{ cursor: 'pointer' }}
+                  />
+                  <h5 className="m-0">80 D</h5>
+                </CCol>
+                <CCol md="4" className="d-flex align-items-center">
+                  <input type="checkbox" id="houseRentNoInvestments" className="custom-checkbox checkbox-spacing" />
+                  <label htmlFor="houseRentNoInvestments" className="ml-2 mb-0">No Investments</label>
+
+
+
+                </CCol>
+                <CCol md="4" className="d-flex justify-content-end align-items-center">
                   <input type="checkbox" id="houseRentProofSubmitted" className="custom-checkbox" />
 
                 </CCol>
-
-                <CCol md="2" className="mb-3">
-                  <div>
-                    <input
-                      type="file"
-                      className="custom-file-input"
-                      id="rentSlips"
-                      style={{ display: 'none' }}
-                    />
-                    <label
-                      className="custom-file-label"
-                      htmlFor="rentSlips"
-                      style={{ cursor: 'pointer' }}
-                    >
-                      <u>Upload Proof</u>
-                    </label>
-                  </div>
-                </CCol>
-                <CCol md="2" className="mb-3">
-
-                  <MdDelete
-                    style={{
-                      color: "red",
-                      fontSize: "30px",
-                      cursor: "pointer",
-                      marginLeft: "10px"
-                    }}
-                    className="text-danger"
-                  // onClick={() => handleDeleteClick(row.sNo)}
-                  />
-                </CCol>
-
               </CRow>
+            </CCardHeader>
+            {!isCollapsedFive && (
+              <CCardBody>
+                <CRow className="align-items-center">
+                  <CCol md="4" className="mb-3" style={{ textAlign: 'center' }}>
+                    <p>Self and Family Insurance</p>
 
-            </CCardBody>
-          )}
-        </CCard>
-
-        <CCard className="mt-3">
-          <CCardHeader>
-            <CRow className="align-items-center">
-              <CCol md="4 mb-2 mt-2" className="d-flex align-items-center"  >
-                <CIcon
-                  icon={isCollapsedFive ? cilChevronDoubleDown : cilChevronDoubleUp}
-                  className="ml-2"
-                  size="lg"
-                  onClick={toggleCollapseFive}
-                  style={{ cursor: 'pointer' }}
-                />
-                <h5 className="m-0">80 D</h5>
-              </CCol>
-              <CCol md="4" className="d-flex align-items-center">
-                <input type="checkbox" id="houseRentNoInvestments" className="custom-checkbox checkbox-spacing" />
-                <label htmlFor="houseRentNoInvestments" className="ml-2 mb-0">No Investments</label>
-
-
-
-              </CCol>
-              <CCol md="4" className="d-flex justify-content-end align-items-center">
-                <input type="checkbox" id="houseRentProofSubmitted" className="custom-checkbox" />
-
-              </CCol>
-            </CRow>
-          </CCardHeader>
-          {!isCollapsedFive && (
-            <CCardBody>
-              <CRow className="align-items-center">
-                <CCol md="4" className="mb-3" style={{ textAlign: 'center' }}>
-                  <p>Self and Family Insurance</p>
-
-                </CCol>
-                <CCol md="2" className="mb-3">
+                  </CCol>
+                  <CCol md="2" className="mb-3">
                     <label htmlFor="amount" style={{ marginBottom: '10px' }}>Amount:</label>
-                  <input
-                    type="text"
-                    id="amount"
-                    className="form-control"
-                    placeholder="Amount"
-                  />
-                </CCol>
-
-                <CCol md="2" className="mb-3">
-                  <div >
                     <input
-                      type="file"
-                      className="custom-file-input"
-                      id="rentSlips"
-                      style={{ display: 'none' }}
+                      type="text"
+                      id="amount"
+                      className="form-control"
+                      placeholder="Amount"
                     />
-                    <label
-                      className="custom-file-label"
-                      htmlFor="rentSlips"
-                      style={{ cursor: 'pointer' }}
-                    >
-                      <u>Upload Proof</u>
-                    </label>
-                  </div>
-                </CCol>
+                  </CCol>
+
+                  <CCol md="2" className="mb-3">
+                    <div >
+                      <input
+                        type="file"
+                        className="custom-file-input"
+                        id="rentSlips"
+                        style={{ display: 'none' }}
+                      />
+                      <label
+                        className="custom-file-label"
+                        htmlFor="rentSlips"
+                        style={{ cursor: 'pointer' }}
+                      >
+                        <u>Upload Proof</u>
+                      </label>
+                    </div>
+                  </CCol>
 
 
-              </CRow>
-              <CRow className="align-items-center">
-                <CCol md="4" className="mb-3" style={{ textAlign: 'center' }}>
-                  <p>Medical Expenses if parents are Less than 60 (Maximum Exemption Rs.25,000)</p>
-                </CCol>
-                <CCol md="2" className="mb-3">
+                </CRow>
+                <CRow className="align-items-center">
+                  <CCol md="4" className="mb-3" style={{ textAlign: 'center' }}>
+                    <p>Medical Expenses if parents are Less than 60 (Maximum Exemption Rs.25,000)</p>
+                  </CCol>
+                  <CCol md="2" className="mb-3">
                     <label htmlFor="amount" style={{ marginBottom: '10px' }}>Amount:</label>
-                  <input
-                    type="text"
-                    id="amount"
-                    className="form-control"
-                    placeholder="Amount"
-                  />
-                </CCol>
-
-                <CCol md="2" className="mb-3">
-                  <div>
                     <input
-                      type="file"
-                      className="custom-file-input"
-                      id="rentSlips"
-                      style={{ display: 'none' }}
+                      type="text"
+                      id="amount"
+                      className="form-control"
+                      placeholder="Amount"
                     />
-                    <label
-                      className="custom-file-label"
-                      htmlFor="rentSlips"
-                      style={{ cursor: 'pointer' }}
-                    >
-                      <u>Upload Proof</u>
-                    </label>
-                  </div>
-                </CCol>
+                  </CCol>
+
+                  <CCol md="2" className="mb-3">
+                    <div>
+                      <input
+                        type="file"
+                        className="custom-file-input"
+                        id="rentSlips"
+                        style={{ display: 'none' }}
+                      />
+                      <label
+                        className="custom-file-label"
+                        htmlFor="rentSlips"
+                        style={{ cursor: 'pointer' }}
+                      >
+                        <u>Upload Proof</u>
+                      </label>
+                    </div>
+                  </CCol>
 
 
-              </CRow>
-              <CCol md="4" className="mb-3" style={{ textAlign: 'center' }}>
-                <p>OR</p>
-              </CCol>
-              <CRow className="align-items-center">
+                </CRow>
                 <CCol md="4" className="mb-3" style={{ textAlign: 'center' }}>
-                  <p>Medical Expenses if parents are Greater than 60 (Maximum Exemption Rs.50,000)</p>
-
+                  <p>OR</p>
                 </CCol>
-                <CCol md="2" className="mb-3">
+                <CRow className="align-items-center">
+                  <CCol md="4" className="mb-3" style={{ textAlign: 'center' }}>
+                    <p>Medical Expenses if parents are Greater than 60 (Maximum Exemption Rs.50,000)</p>
+
+                  </CCol>
+                  <CCol md="2" className="mb-3">
                     <label htmlFor="amount" style={{ marginBottom: '10px' }}>Amount:</label>
-                  <input
-                    type="text"
-                    id="amount"
-                    className="form-control"
-                    placeholder="Amount"
-                  />
-                </CCol>
-
-                <CCol md="2" className="mb-3">
-                  <div >
                     <input
-                      type="file"
-                      className="custom-file-input"
-                      id="rentSlips"
-                      style={{ display: 'none' }}
+                      type="text"
+                      id="amount"
+                      className="form-control"
+                      placeholder="Amount"
                     />
-                    <label
-                      className="custom-file-label"
-                      htmlFor="rentSlips"
-                      style={{ cursor: 'pointer' }}
-                    >
-                      <u>Upload Proof</u>
-                    </label>
-                  </div>
-                </CCol>
-                <CCol md="4" className="d-flex justify-content-end" >
-                  <CButton color="primary">Save</CButton>
-                </CCol>
+                  </CCol>
+
+                  <CCol md="2" className="mb-3">
+                    <div >
+                      <input
+                        type="file"
+                        className="custom-file-input"
+                        id="rentSlips"
+                        style={{ display: 'none' }}
+                      />
+                      <label
+                        className="custom-file-label"
+                        htmlFor="rentSlips"
+                        style={{ cursor: 'pointer' }}
+                      >
+                        <u>Upload Proof</u>
+                      </label>
+                    </div>
+                  </CCol>
+                  <CCol md="4" className="d-flex justify-content-end" >
+                    <CButton color="primary">Save</CButton>
+                  </CCol>
 
 
 
-              </CRow>
-            </CCardBody>
-          )}
-        </CCard>
+                </CRow>
+              </CCardBody>
+            )}
+          </CCard>
 
-        <CCard className="mt-3">
-          <CCardHeader>
-            <CRow className="align-items-center">
-              <CCol md="4 mb-2 mt-2" className="d-flex align-items-center"  >
-                <CIcon
-                  icon={isCollapsedSix ? cilChevronDoubleDown : cilChevronDoubleUp}
-                  className="ml-2"
-                  size="lg"
-                  onClick={toggleCollapseSix}
-                  style={{ cursor: 'pointer' }}
-                />
-                <h5 className="m-0">80 G-Donations</h5>
-              </CCol>
-              <CCol md="4" className="d-flex align-items-center">
-                <input type="checkbox" id="houseRentNoInvestments" className="custom-checkbox checkbox-spacing" />
-                <label htmlFor="houseRentNoInvestments" className="ml-2 mb-0">No Investments</label>
-
-
-
-              </CCol>
-              <CCol md="4" className="d-flex justify-content-end align-items-center">
-                <input type="checkbox" id="houseRentProofSubmitted" className="custom-checkbox" />
-
-              </CCol>
-            </CRow>
-          </CCardHeader>
-          {!isCollapsedSix && (
-            <CCardBody>
+          <CCard className="mt-3">
+            <CCardHeader>
               <CRow className="align-items-center">
-                <CCol md="4" className="mb-3">
-                <label htmlFor="amount" style={{ marginBottom: '10px' }}>Name of the Done:</label>
-                  <input
-                    type="text"
-                    id="amount"
-                    className="form-control"
-                    placeholder="Name  of the done"
+                <CCol md="4 mb-2 mt-2" className="d-flex align-items-center"  >
+                  <CIcon
+                    icon={isCollapsedSix ? cilChevronDoubleDown : cilChevronDoubleUp}
+                    className="ml-2"
+                    size="lg"
+                    onClick={toggleCollapseSix}
+                    style={{ cursor: 'pointer' }}
                   />
+                  <h5 className="m-0">80 G-Donations</h5>
                 </CCol>
-                <CCol md="2" className="mb-3">
-                  <label htmlFor="amount" style={{ marginBottom: '10px' }}>PAN Details:</label>
-                  <input
-                    type="text"
-                    id="amount"
-                    className="form-control"
-                    placeholder="PAN Details"
-                  />
-                </CCol>
-                <CCol md="2" className="mb-3">
-                  <label htmlFor="amount" style={{ marginBottom: '10px' }}>Address:</label>
-                  <input
-                    type="text"
-                    id="amount"
-                    className="form-control"
-                    placeholder="Address "
-                  />
-                </CCol>
-                <CCol md="2" className="mb-3">
-                  <label htmlFor="amount" style={{ marginBottom: '10px' }}>Amount:</label>
-                  <input
-                    type="text"
-                    id="amount"
-                    className="form-control"
-                    placeholder="Amount"
-                  />
-                </CCol>
-                <CCol md="2" className="mb-3">
-                  <div >
-                    <input
-                      type="file"
-                      className="custom-file-input"
-                      id="rentSlips"
-                      style={{ display: 'none' }}
-                    />
-                    <label
-                      className="custom-file-label"
-                      htmlFor="rentSlips"
-                      style={{ cursor: 'pointer' }}
-                    >
-                      <u>Upload Proof</u>
-                    </label>
-                  </div>
-                </CCol>
+                <CCol md="4" className="d-flex align-items-center">
+                  <input type="checkbox" id="houseRentNoInvestments" className="custom-checkbox checkbox-spacing" />
+                  <label htmlFor="houseRentNoInvestments" className="ml-2 mb-0">No Investments</label>
 
 
+
+                </CCol>
+                <CCol md="4" className="d-flex justify-content-end align-items-center">
+                  <input type="checkbox" id="houseRentProofSubmitted" className="custom-checkbox" />
+
+                </CCol>
               </CRow>
+            </CCardHeader>
+            {!isCollapsedSix && (
+              <CCardBody>
+                <CRow className="align-items-center">
+                  <CCol md="4" className="mb-3">
+                    <label htmlFor="amount" style={{ marginBottom: '10px' }}>Name of the Done:</label>
+                    <input
+                      type="text"
+                      id="amount"
+                      className="form-control"
+                      placeholder="Name  of the done"
+                    />
+                  </CCol>
+                  <CCol md="2" className="mb-3">
+                    <label htmlFor="amount" style={{ marginBottom: '10px' }}>PAN Details:</label>
+                    <input
+                      type="text"
+                      id="amount"
+                      className="form-control"
+                      placeholder="PAN Details"
+                    />
+                  </CCol>
+                  <CCol md="2" className="mb-3">
+                    <label htmlFor="amount" style={{ marginBottom: '10px' }}>Address:</label>
+                    <input
+                      type="text"
+                      id="amount"
+                      className="form-control"
+                      placeholder="Address "
+                    />
+                  </CCol>
+                  <CCol md="2" className="mb-3">
+                    <label htmlFor="amount" style={{ marginBottom: '10px' }}>Amount:</label>
+                    <input
+                      type="text"
+                      id="amount"
+                      className="form-control"
+                      placeholder="Amount"
+                    />
+                  </CCol>
+                  <CCol md="2" className="mb-3">
+                    <div >
+                      <input
+                        type="file"
+                        className="custom-file-input"
+                        id="rentSlips"
+                        style={{ display: 'none' }}
+                      />
+                      <label
+                        className="custom-file-label"
+                        htmlFor="rentSlips"
+                        style={{ cursor: 'pointer' }}
+                      >
+                        <u>Upload Proof</u>
+                      </label>
+                    </div>
+                  </CCol>
 
-            </CCardBody>
-          )}
-        </CCard>
 
-        <CCard className="mt-3">
-          <CCardHeader>
-            <CRow className="align-items-center">
-              <CCol md="4 mb-2 mt-2" className="d-flex align-items-center"  >
-                <CIcon
-                  icon={isCollapsedSeven ? cilChevronDoubleDown : cilChevronDoubleUp}
-                  className="ml-2"
-                  size="lg"
-                  onClick={toggleCollapseSeven}
-                  style={{ cursor: 'pointer' }}
-                />
-                <h5 className="m-0">Other Investment Proofs</h5>
-              </CCol>
-              <CCol md="4" className="d-flex align-items-center">
-                <input type="checkbox" id="houseRentNoInvestments" className="custom-checkbox checkbox-spacing" />
-                <label htmlFor="houseRentNoInvestments" className="ml-2 mb-0">No Investments</label>
+                </CRow>
 
+              </CCardBody>
+            )}
+          </CCard>
 
-
-              </CCol>
-              <CCol md="4" className="d-flex justify-content-end align-items-center">
-                <input type="checkbox" id="houseRentProofSubmitted" className="custom-checkbox" />
-
-              </CCol>
-            </CRow>
-          </CCardHeader>
-          {!isCollapsedSeven && (
-            <CCardBody>
+          <CCard className="mt-3">
+            <CCardHeader>
               <CRow className="align-items-center">
-                <CCol md="6" className="mb-3">
-                <label htmlFor="amount" style={{ marginBottom: '10px' }}>Type Descriotion of investment type:</label>
-                  <input
-                    type="text"
-                    id="amount"
-                    className="form-control"
-                    placeholder="Type Descriotion of investment type"
+                <CCol md="4 mb-2 mt-2" className="d-flex align-items-center"  >
+                  <CIcon
+                    icon={isCollapsedSeven ? cilChevronDoubleDown : cilChevronDoubleUp}
+                    className="ml-2"
+                    size="lg"
+                    onClick={toggleCollapseSeven}
+                    style={{ cursor: 'pointer' }}
                   />
+                  <h5 className="m-0">Other Investment Proofs</h5>
                 </CCol>
+                <CCol md="4" className="d-flex align-items-center">
+                  <input type="checkbox" id="houseRentNoInvestments" className="custom-checkbox checkbox-spacing" />
+                  <label htmlFor="houseRentNoInvestments" className="ml-2 mb-0">No Investments</label>
 
-                <CCol md="6" className="mb-3">
-                  <div >
-                    <input
-                      type="file"
-                      className="custom-file-input"
-                      id="rentSlips"
-                      style={{ display: 'none' }}
-                    />
-                    <label
-                      className="custom-file-label"
-                      htmlFor="rentSlips"
-                      style={{ cursor: 'pointer' }}
-                    >
-                      <u>Upload Proof</u>
-                    </label>
-                  </div>
+
+
                 </CCol>
+                <CCol md="4" className="d-flex justify-content-end align-items-center">
+                  <input type="checkbox" id="houseRentProofSubmitted" className="custom-checkbox" />
 
-
+                </CCol>
               </CRow>
+            </CCardHeader>
+            {!isCollapsedSeven && (
+              <CCardBody>
+                <CRow className="align-items-center">
+                  <CCol md="6" className="mb-3">
+                    <label htmlFor="amount" style={{ marginBottom: '10px' }}>Type Descriotion of investment type:</label>
+                    <input
+                      type="text"
+                      id="amount"
+                      className="form-control"
+                      placeholder="Type Descriotion of investment type"
+                    />
+                  </CCol>
 
-            </CCardBody>
-          )}
-        </CCard>
-       </CCardBody>
-       <CRow className="mt-3">
+                  <CCol md="6" className="mb-3">
+                    <div >
+                      <input
+                        type="file"
+                        className="custom-file-input"
+                        id="rentSlips"
+                        style={{ display: 'none' }}
+                      />
+                      <label
+                        className="custom-file-label"
+                        htmlFor="rentSlips"
+                        style={{ cursor: 'pointer' }}
+                      >
+                        <u>Upload Proof</u>
+                      </label>
+                    </div>
+                  </CCol>
+
+
+                </CRow>
+
+              </CCardBody>
+            )}
+          </CCard>
+        </CCardBody>
+        <CRow className="mt-3">
           <CCol className="d-flex justify-content-end">
             <CButton type="submit" color="primary">Submit</CButton>
 
           </CCol>
 
         </CRow>
-    </CCard>
-    
+      </CCard>
 
-</>
+
+    </>
   );
 };
 
