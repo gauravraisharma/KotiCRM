@@ -47,8 +47,7 @@ const AppHeaderDropdown = () => {
 
         <Link to="/users">
         Users
-        </Link>
-     
+        </Link>    
         </CDropdownItem>
            )}
       {modulePermissions && modulePermissions.some(permission => permission.moduleName === 'ManageUsers' && permission.isView) && (

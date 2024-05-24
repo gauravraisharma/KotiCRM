@@ -27,7 +27,6 @@ import { useSelector } from "react-redux";
 import { RoleList } from "../../models/permissionManagement/RoleList";
 import moment from "moment";
 import DeleteConfirmationModal from "../account/accountsList/DeleteConfirmation";
-import { color } from "html2canvas/dist/types/css/types/color";
 
 const Roles = () => {
   const [isLoading, setIsLoading] = useState(true);

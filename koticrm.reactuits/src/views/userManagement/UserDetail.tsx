@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { ChangePassword, GetEmployeeById } from "../../redux-saga/modules/userManagement/apiService";
 import { Employee, EmployeeClass } from "../../models/userManagement/employee";
 import { ToastContainer, toast } from "react-toastify";
@@ -8,12 +8,13 @@ import * as Yup from "yup";
 import { Formik, Field } from "formik";
 import "react-toastify/dist/ReactToastify.css";
 import { FaDownload } from "react-icons/fa6";
-import Form12BB from "./Form12BB";
 
 const UserDetails = () => {
   const { employeeId, userId } = useParams();
   const navigate = useNavigate();
   const [formData, setFormData] = useState<Employee>(new EmployeeClass());
+  const financialYears = ["2024-25", "2023-24"];
+  const years = ['2024-25', '2023-24'];
 
   useEffect(() => {
     const getEmployeeById = async (employeeId: string) => {
@@ -59,6 +60,7 @@ const UserDetails = () => {
     }
   };
 
+
   const validationSchema = Yup.object().shape({
     newPassword: Yup.string()
       .required("New password is required")
@@ -70,6 +72,16 @@ const UserDetails = () => {
       .required("Confirm password is required")
       .oneOf([Yup.ref("newPassword"), null], "Passwords must match")
   });
+  // Loop to generate JSX elements
+  const financialYearElements = [];
+  for (let i = 0; i < financialYears.length; i++) {
+    financialYearElements.push(
+      <div key={i}>
+        <p style={{ fontWeight: 'bold' }}>Financial year {financialYears[i]}</p>
+      </div>
+    );
+  }
+
 
   return (
     <>
@@ -371,7 +383,7 @@ const UserDetails = () => {
                     </CCardHeader>
 
                     <CCardBody style={{ padding: '20px', backgroundColor: '#f8f9fc' }}>
-                      <CRow>
+                      {/* <CRow>
                         <CCol md="6">
                           <div>
                             <p style={{ fontWeight: 'bold' }}>Financial year 2024-25</p>
@@ -382,12 +394,30 @@ const UserDetails = () => {
                         </CCol>
                         <CCol md="6" className="text-end">
                           <div>
-                            <u style={{ cursor: 'pointer', color: '#4e73df' }}>Submit Proofs</u>
+                          <Link to={`/Form12BB`}>
+                            Submit Proofs
+                          </Link>
                           </div>
                           <br />
                           <div>
                             <p>Last submitted on 21-March-2024 <u style={{ cursor: 'pointer', color: '#4e73df' }}>View Detail</u></p>
                           </div>
+                        </CCol>
+                      </CRow> */}
+                      <CRow>
+                        <CCol md="6">
+                          {financialYearElements}
+                        </CCol>
+                        <CCol md="6" className="text-end">
+                          <div>
+                            <Link to={`/Form12BB`}>
+                              Submit Proofs
+                            </Link>
+                          </div>
+                          <br />
+                          {/* <div>
+                            <p>Last submitted on 21-March-2024 <u style={{ cursor: 'pointer', color: '#4e73df' }}>View Detail</u></p>
+                          </div> */}
                         </CCol>
                       </CRow>
                     </CCardBody>
@@ -401,31 +431,24 @@ const UserDetails = () => {
                     </CCardHeader>
                     <CCardBody style={{ padding: '20px', backgroundColor: '#f8f9fc' }}>
                       <CRow>
-                        <CCol md="6">
-                          <div>
-                            <p style={{ fontWeight: 'bold' }}>Financial year 2024-25</p>
-                          </div>
-                          <div>
-                            <p style={{ fontWeight: 'bold' }}>Financial year 2023-24</p>
-                          </div>
-                        </CCol>
-                        <CCol md="6" className="text-end">
-                          <div>
-                            <u style={{ cursor: 'pointer', color: '#1cc88a' }}><FaDownload /> Download</u>
-                          </div>
-                          <br />
-                          <div>
-                            <u style={{ cursor: 'pointer', color: '#1cc88a' }}><FaDownload /> Download</u>
-                          </div>
-                        </CCol>
+                        {years.map((year, index) => (
+                          <CCol md="12" key={index}>
+                            <div>
+                              <p style={{ fontWeight: 'bold' }}>Financial year {year}</p>
+                            </div>
+                            <div className="text-end">
+                              <div>
+                                <u style={{ cursor: 'pointer', color: '#1cc88a' }}><FaDownload /> Download</u>
+                              </div>
+
+
+                            </div>
+                      
+                          </CCol>
+                        ))}
                       </CRow>
                     </CCardBody>
                   </CCard>
-                  <Form12BB/>
-
-
-      
-
                 </div>
 
               </div>

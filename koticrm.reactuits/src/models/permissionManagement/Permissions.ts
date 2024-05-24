@@ -31,8 +31,3 @@ export class PermissionClass implements Permission {
     }
 }
 
-export interface GetModulesDTO {
-    id: number;
-    name: string;
-  
-  }

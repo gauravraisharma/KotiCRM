@@ -35,6 +35,7 @@ const InvoicePDF = lazy(()=> import('./pdf-template/InvoiceTemplate'))
 
 //Manage Users Routes
 const Users = lazy(() => import('./views/userManagement/Users'))
+const Form12BB = lazy(() => import('./views/userManagement/Form12BB'));
 const UserDetail = lazy(() => import('./views/userManagement/UserDetail'))
 const CreateOrUpdateUser = lazy(() => import('./views/userManagement/CreateOrUpdateUser'))
 
@@ -167,6 +168,8 @@ const routes: Route[] = [
     { path: '/users/userDetail/:userId/:employeeId', name: 'UserDetail', element: UserDetail, isAuth: true, modulePermission: 'ManageUsers' },
     { path: '/users/updateUser/:id', name: 'UpdateUser', element: CreateOrUpdateUser, isAuth: true, modulePermission: 'ManageUsers' },
     { path: '/users/createOrUpdateUser', name: 'CreateUser', element: CreateOrUpdateUser, isAuth: true, modulePermission: 'ManageUsers' },
+    { path: '/form12bb',  name: 'Form12BB', element: Form12BB,  isAuth: true,  modulePermission: 'ManageUsers' },
+    
 
     { path: '/roles', name: 'Roles', element: Roles, isAuth: true, modulePermission: 'ManageRoles'},
     { path: '/roles/createRole', name: 'CreateRole', element: CreateOrUpdateRole, isAuth: true, modulePermission: 'ManageRoles' },
