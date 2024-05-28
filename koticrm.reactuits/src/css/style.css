@@ -299,3 +299,7 @@
 .checkbox-spacing {
   margin-right: 8px;
 }
+.no-border {
+  border: none !important;
+  background-color: transparent; /* Optional: to make the background match the surrounding */
+}
