@@ -38,6 +38,6 @@ public partial class Employee : BaseEntity
     public virtual Shift? Shift { get; set; }
     public virtual Bank? Bank { get; set; }
     //public string CreatedBy { get; set; }
+    public virtual ICollection<Employee12BB> Employee12BBs { get; set; }
 
-   
 }
