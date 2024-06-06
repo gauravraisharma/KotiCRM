@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { ChangePassword, GetEmployeeById } from "../../redux-saga/modules/userManagement/apiService";
+import { ChangePassword, GetEmployeeById, GetEmployeeId } from "../../redux-saga/modules/userManagement/apiService";
 import { Employee, EmployeeClass } from "../../models/userManagement/employee";
 import { ToastContainer, toast } from "react-toastify";
 import { CRow, CCol, CCard, CCardHeader, CButton, CCardBody } from "@coreui/react";
@@ -15,6 +15,17 @@ const UserDetails = () => {
   const [formData, setFormData] = useState<Employee>(new EmployeeClass());
   const financialYears = ["2024-25", "2023-24"];
   const years = ['2024-25', '2023-24'];
+  const { id } = useParams<{ id: string }>();
+
+  useEffect(() => {
+    if (id) {
+      GetEmployeeId();
+    } else {
+
+    }
+   
+  }, [id]);
+
 
   useEffect(() => {
     const getEmployeeById = async (employeeId: string) => {
@@ -372,84 +383,83 @@ const UserDetails = () => {
                     )}
                   </Formik>
                 </div>
+                  <div className="tab-pane fade" id="taxation" role="tabpanel" aria-labelledby="taxation-tab">
+                    <CCard className="mb-4" style={{ borderColor: '#4e73df' }}>
+                      <CCardHeader className="mb-3" style={{ backgroundColor: '#4e73df', color: 'white' }}>
+                        <div className="d-flex justify-content-between align-items-center">
+                          <h5 className="mb-0">12 BB Declaration and Details</h5>
+                        </div>
+                      </CCardHeader>
 
-
-                <div className="tab-pane fade" id="taxation" role="tabpanel" aria-labelledby="taxation-tab">
-                  <CCard className="mb-4" style={{ borderColor: '#4e73df' }}>
-                    <CCardHeader className="mb-3" style={{ backgroundColor: '#4e73df', color: 'white' }}>
-                      <div className="d-flex justify-content-between align-items-center">
-                        <h5 className="mb-0">12 BB Declaration and Details</h5>
-                      </div>
-                    </CCardHeader>
-
-                    <CCardBody style={{ padding: '20px', backgroundColor: '#f8f9fc' }}>
-                      {/* <CRow>
-                        <CCol md="6">
-                          <div>
-                            <p style={{ fontWeight: 'bold' }}>Financial year 2024-25</p>
-                          </div>
-                          <div>
-                            <p style={{ fontWeight: 'bold' }}>Financial year 2023-24</p>
-                          </div>
-                        </CCol>
-                        <CCol md="6" className="text-end">
-                          <div>
-                          <Link to={`/Form12BB`}>
-                            Submit Proofs
-                          </Link>
-                          </div>
-                          <br />
-                          <div>
-                            <p>Last submitted on 21-March-2024 <u style={{ cursor: 'pointer', color: '#4e73df' }}>View Detail</u></p>
-                          </div>
-                        </CCol>
-                      </CRow> */}
-                      <CRow>
-                        <CCol md="6">
-                          {financialYearElements}
-                        </CCol>
-                        <CCol md="6" className="text-end">
-                          <div>
+                      <CCardBody style={{ padding: '20px', backgroundColor: '#f8f9fc' }}>
+                        {/* <CRow>
+                          <CCol md="6">
+                            <div>
+                              <p style={{ fontWeight: 'bold' }}>Financial year 2024-25</p>
+                            </div>
+                            <div>
+                              <p style={{ fontWeight: 'bold' }}>Financial year 2023-24</p>
+                            </div>
+                          </CCol>
+                          <CCol md="6" className="text-end">
+                            <div>
                             <Link to={`/Form12BB`}>
                               Submit Proofs
                             </Link>
-                          </div>
-                          <br />
-                          {/* <div>
-                            <p>Last submitted on 21-March-2024 <u style={{ cursor: 'pointer', color: '#4e73df' }}>View Detail</u></p>
-                          </div> */}
-                        </CCol>
-                      </CRow>
-                    </CCardBody>
-
-                  </CCard>
-                  <CCard className="mb-4" style={{ borderColor: '#1cc88a' }}>
-                    <CCardHeader className="mb-3" style={{ backgroundColor: '#1cc88a', color: 'white' }}>
-                      <div className="d-flex justify-content-between align-items-center">
-                        <h5 className="mb-0">Form 16</h5>
-                      </div>
-                    </CCardHeader>
-                    <CCardBody style={{ padding: '20px', backgroundColor: '#f8f9fc' }}>
-                      <CRow>
-                        {years.map((year, index) => (
-                          <CCol md="12" key={index}>
+                            </div>
+                            <br />
                             <div>
-                              <p style={{ fontWeight: 'bold' }}>Financial year {year}</p>
+                              <p>Last submitted on 21-March-2024 <u style={{ cursor: 'pointer', color: '#4e73df' }}>View Detail</u></p>
                             </div>
-                            <div className="text-end">
-                              <div>
-                                <u style={{ cursor: 'pointer', color: '#1cc88a' }}><FaDownload /> Download</u>
-                              </div>
-
-
-                            </div>
-                      
                           </CCol>
-                        ))}
-                      </CRow>
-                    </CCardBody>
-                  </CCard>
-                </div>
+                        </CRow> */}
+                        <CRow>
+                          <CCol md="6">
+                            {financialYearElements}
+                          </CCol>
+                          <CCol md="6" className="text-end">
+                            <div>
+                            {/* <Link to={`/users/userDetail/${employee.userId}/${employee.employeeId}`}> */}
+                             <Link to={`/Form12BB/${userId}/${employeeId}`}>
+                                Submit Proofs
+                              </Link> 
+                            </div>
+                            <br />
+                          <div>
+                              <p>Last submitted on 21-March-2024 <u style={{ cursor: 'pointer', color: '#4e73df' }}>View Detail</u></p>
+                          </div>
+                          </CCol>
+                        </CRow>
+                      </CCardBody>
+
+                    </CCard>
+                    <CCard className="mb-4" style={{ borderColor: '#1cc88a' }}>
+                      <CCardHeader className="mb-3" style={{ backgroundColor: '#1cc88a', color: 'white' }}>
+                        <div className="d-flex justify-content-between align-items-center">
+                          <h5 className="mb-0">Form 16</h5>
+                        </div>
+                      </CCardHeader>
+                      <CCardBody style={{ padding: '20px', backgroundColor: '#f8f9fc' }}>
+                        <CRow>
+                          {years.map((year, index) => (
+                            <CCol md="12" key={index}>
+                              <div>
+                                <p style={{ fontWeight: 'bold' }}>Financial year {year}</p>
+                              </div>
+                              <div className="text-end">
+                                <div>
+                                  <u style={{ cursor: 'pointer', color: '#1cc88a' }}><FaDownload /> Download</u>
+                                </div>
+
+
+                              </div>
+                        
+                            </CCol>
+                          ))}
+                        </CRow>
+                      </CCardBody>
+                    </CCard>
+                  </div>
 
               </div>
             </CCardBody>

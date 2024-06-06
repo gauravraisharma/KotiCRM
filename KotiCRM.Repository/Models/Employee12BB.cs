@@ -14,6 +14,7 @@ namespace KotiCRM.Repository.Models
         public int? HouseRentRecordId { get; set; }
         public int? TravelExpenditureRecordId { get; set; }
         public int? HomeLoanRecordId { get; set; }
+        //public int? EightyCRecordId { get; set; }
         public int? EightyDRecordId { get; set; }
         public int? EightyGRecordId { get; set; }
         public int? OtherInvestmentRecordId { get; set; }
@@ -30,6 +31,7 @@ namespace KotiCRM.Repository.Models
         public virtual HouseRentDeclaration HouseRentRecord { get; set; }
         public virtual TravelExpenditureDeclaration TravelExpenditureRecord { get; set; }
         public virtual HomeLoanDeclaration HomeLoanRecord { get; set; }
+      
         public virtual EightyDDeclaration EightyDRecord { get; set; }
         public virtual EightyGDeclaration EightyGRecord { get; set; }
         public virtual OtherInvestmentDeclaration OtherInvestmentRecord { get; set; }

@@ -37,7 +37,9 @@ public partial class Employee : BaseEntity
     public virtual Designation? Designation { get; set; }
     public virtual Shift? Shift { get; set; }
     public virtual Bank? Bank { get; set; }
+    //public object Employee12BBs { get; internal set; }
+    public ICollection<Employee12BB> Employee12BBs { get; set; }
     //public string CreatedBy { get; set; }
-    public virtual ICollection<Employee12BB> Employee12BBs { get; set; }
+
 
 }
