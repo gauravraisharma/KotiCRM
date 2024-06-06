@@ -16,6 +16,9 @@ export class initialEmployeeRecord implements EmployeeFinancialRecord {
   eightyDRecord: EightyDRecord;
   eightyGRecord: EightyGRecord;
   otherInvestmentRecord: OtherInvestmentRecord;
+  otherInvestmentRecordId: string;
+
+
 
   constructor() {
     this.id = 0;
@@ -81,6 +84,7 @@ export class initialEmployeeRecord implements EmployeeFinancialRecord {
       isVerified: false,
       remarks: "",
     };
+    this.otherInvestmentRecordId = '';
   }
 }
 

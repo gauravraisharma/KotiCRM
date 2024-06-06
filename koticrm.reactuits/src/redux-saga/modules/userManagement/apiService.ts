@@ -303,7 +303,7 @@ export async function SaveEightyG(EightyG: FormData) {
         return errorResponse;
     }
 }
-export async function OtherInvestment(OtherInvestment: FormData) {
+export async function SaveOtherInvestment(OtherInvestment: OtherInvestmentRecord) {
     try {
         const response = await axiosInstance.post<OtherInvestmentRecord>(`/TaxDeclaration/OtherInvestment`, OtherInvestment);
         return response;
