@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   CButton,
   CCard,
@@ -13,6 +13,7 @@ import {
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
+import 'cropperjs/dist/cropper.css';
 import { Employee, EmployeeClass } from "../../models/userManagement/employee";
 import {
   CreateEmployee,
@@ -36,6 +37,7 @@ import "react-toastify/dist/ReactToastify.css";
 import * as Yup from "yup";
 import { Role } from "../../models/permissionManagement/Role";
 import { useSelector } from "react-redux";
+import CropImage from "../shared/cropImage";
 
 const CreateOrUpdateUser = () => {
   // Parameters
@@ -58,6 +60,9 @@ const CreateOrUpdateUser = () => {
   >([]);
   const [roleList, setRoleList] = useState<Role[] | undefined>([]);
   const [profileImage, setProfileImage] = useState('/profilePlaceholder.jpg');
+  const [croppedImage, setCroppedImage] = useState<string | null>(null);
+  // const [isCropping, setIsCropping] = useState(false);
+  const [visible, setVisible] = useState(false);
   const [shiftList, setShiftList] = useState<Shift[] | undefined>([]);
   const [bloodGroup, setBloodGroup] = useState("");
   const [departmentId, setDepartmentId] = useState(0);
@@ -74,16 +79,28 @@ const CreateOrUpdateUser = () => {
   
 
   // File
-  const handleFileSelect = (event: any) => {
-    const file = event.target.files[0];
+  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
         setImage(reader.result);
+        setVisible(true); 
       };
       reader.readAsDataURL(file);
+      formData.profilePicture = file;
     }
+  };
+
+  const handleCrop = (croppedImageDataURL: string) => {
+    setCroppedImage(croppedImageDataURL);
+    setVisible(false); 
+    fetch(croppedImageDataURL)
+    .then(res => res.blob())
+    .then(blob => {
+      const file = new File([blob], 'profilePic.png', { type: "image/png" });
     formData.profilePicture = file;
+    });
   };
 
   // Effects
@@ -416,12 +433,12 @@ const CreateOrUpdateUser = () => {
                     <h4>User Code</h4>
 
                     <CRow className="justify-content-between">
-                      <CCol xs={4}>
+                    <CCol xs={4}>
                         <label htmlFor="profile-photo-upload">
                           <CImage
                             rounded
                             thumbnail
-                            src={image || profileImage}
+                            src={croppedImage || image || profileImage}
                             width={120}
                             height={120}
                             className="rounded-circle"
@@ -439,6 +456,12 @@ const CreateOrUpdateUser = () => {
                           accept="image/*"
                           style={{ display: "none" }} // Hide the input element
                           onChange={handleFileSelect}
+                        />
+                        <CropImage
+                          image={image}
+                          visible={visible}
+                          onClose={() => setVisible(false)}
+                          onCrop={handleCrop}
                         />
                       </CCol>
 
