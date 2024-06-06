@@ -105,16 +105,17 @@ const Form12BB = () => {
       });
     }
   }, [employee12BBData]);
-  const handleFormChange = (e: any, fieldName: string, section: string) => {
-    const value = e.target.type === 'file' ? e.target.files[0] : e.target.value;
-    setFormData(prevData => ({
-      ...prevData,
-      [section]: {
-        ...prevData[section],
-        [fieldName]: value,
-      }
-    }));
-  };
+// Update handleFormChange to handle all parameters
+const handleFormChange = (e: any, fieldName: string, section: string) => {
+  const value = e.target.type === 'file' ? e.target.files[0] : e.target.value;
+  setFormData(prevData => ({
+    ...prevData,
+    [section]: {
+      ...prevData[section],
+      [fieldName]: value,
+    }
+  }));
+};
 
   const toggleRentCheckbox = () => {
     setIsRentChecked(!isRentChecked);
@@ -131,7 +132,7 @@ const Form12BB = () => {
     setIsCollapsedTwo(!isCollapsedTwo);
   };
   const toggleCollapseThree = () => setIsCollapsedThree(!isCollapsedThree);
-  const toggleInterestPaybleChecked = () => setIsInterestPayableChecked(!isInterestPayableChecked);
+  const toggleInterestPaybleChecked = () => setIsInterestPayableChecked(!isInterestPaybleChecked);
   //house rent 
   //get
   const HouseRent = async (id: number) => {
@@ -228,6 +229,11 @@ const Form12BB = () => {
       console.error('Error saving leave travel data:', error);
     }
   };
+
+  // const handleFormChange = (e, fieldName, recordName, setFieldValue) => {
+  //   const { value } = e.target;
+  //   setFieldValue(`${recordName}.${fieldName}`, value);
+  // };
 
   //homeloan 
 
@@ -399,14 +405,14 @@ const Form12BB = () => {
                             <p>This section will be made visible in Feb to submit the final proofs</p>
                           </CCol>
                           <CCol md="3" style={{ marginTop: '40px' }}>
-                            <Field
-                              type="file"
-                              className="custom-file-input"
-                              name="houseRentRecord.proofdocumentLink"
-                              id="rentSlips"
-                              style={{ display: 'none' }}
-                              onChange={(e) => handleFormChange(e, 'proofdocumentLink')}
-                            />
+                          <Field
+  type="file"
+  className="custom-file-input"
+  name="houseRentRecord.proofdocumentLink"
+  id="rentSlips"
+  style={{ display: 'none' }}
+  onChange={(e) => handleFormChange(e, 'proofdocumentLink', 'houseRentRecord')}
+/>
                             <div style={{ border: '1px solid #ccc', padding: '10px', borderRadius: '5px', marginBottom: '10px' }}>
                               <label
                                 className="custom-file-label"
@@ -420,14 +426,14 @@ const Form12BB = () => {
                           <CCol md="3">
                             <label htmlFor="ownerPan" style={{ marginBottom: '10px' }}>Owner PAN Number</label>
                             <Field
-                              type="text"
-                              id="ownerPanCard"
-                              name="houseRentRecord.ownerPanCard"
-                              value={formData.houseRentRecord.ownerPanCard}
-                              onChange={(e) => handleFormChange(e, 'ownerPanCard')}
-                              className={`form-control${touched.houseRentRecord?.ownerPanCard && errors.houseRentRecord?.ownerPanCard ? ' is-invalid' : ''}`}
-                              placeholder="Owner PAN Number"
-                            />
+  type="text"
+  id="ownerPanCard"
+  name="houseRentRecord.ownerPanCard"
+  value={formData.houseRentRecord.ownerPanCard}
+  onChange={(e) => handleFormChange(e, 'ownerPanCard', 'houseRentRecord')}
+  className={`form-control${touched.houseRentRecord?.ownerPanCard && errors.houseRentRecord?.ownerPanCard ? ' is-invalid' : ''}`}
+  placeholder="Owner PAN Number"
+/>
                             <ErrorMessage name="houseRentRecord.ownerPanCard" component="div" className="invalid-feedback" />
                           </CCol>
                           <CCol md="3" className="d-flex justify-content-end">
@@ -571,18 +577,18 @@ const Form12BB = () => {
                     initialValues={formData}
                     validationSchema={interestHomeLoanValidationSchema}
                     onSubmit={(values, actions) => {
-                      handleSaveHomeLoan(validateForm, setFieldValue);
+                      handleSaveHomeLoan(actions.validateForm, actions.setFieldValue);
                       actions.setSubmitting(false);
                     }}
                     enableReinitialize
                   >
-                     {({ validateField, setFieldValue, errors, touched }) => (
+                     {({  values,validateField, setFieldValue, errors, touched }) => (
                   <Form>
                   <CRow className="align-items-center">
                     <CCol md="5" className="mb-3">
                       <label htmlFor="amount" style={{ marginBottom: '10px' }}>Interest Amount on home loan in an year:</label>
                       <Field
-                        type="text"
+                        type="number"
                         
                         id="amount"
                         name="homeLoanRecord.amount"
@@ -602,7 +608,7 @@ const Form12BB = () => {
                         type="text"
                         id="lenderName"
                         name="homeLoanRecord.lenderName"
-                        value={formData.homeLoanRecord.lenderName || ''} // Controlled component
+                        // value={formData.homeLoanRecord.lenderName || ''} // Controlled component
                         className={`form-control${touched?.homeLoanRecord?.lenderName && errors?.homeLoanRecord?.lenderName ? ' is-invalid' : ''}${isInterestPaybleChecked ? ' no-border' : ''}`}
                         placeholder="Name of Lender"
                         disabled={isInterestPaybleChecked}
@@ -617,7 +623,7 @@ const Form12BB = () => {
                         type="text"
                         id="lenderAddress"
                         name="homeLoanRecord.lenderAddress"
-                        value={formData.homeLoanRecord.lenderAddress || ''} // Controlled component
+                        // value={formData.homeLoanRecord.lenderAddress || ''} // Controlled component
                         className={`form-control${touched?.homeLoanRecord?.lenderAddress && errors?.homeLoanRecord?.lenderAddress ? ' is-invalid' : ''}${isInterestPaybleChecked ? ' no-border' : ''}`}
                         placeholder="Address of Lender"
                         disabled={isInterestPaybleChecked}
@@ -659,7 +665,7 @@ const Form12BB = () => {
                     }}
                     enableReinitialize
                   >
-                     {({ validateField, setFieldValue, errors, touched }) => (
+                     {() => (
                       <Form>
                   <CRow className="align-items-center">
                     <CCol md="4" className="mb-2">
@@ -676,7 +682,7 @@ const Form12BB = () => {
                           id="rentSlips"
                           style={{ display: 'none' }}
                         />
-                        <ErrorMessage name="rentSlips" component="div" className="text-danger" />
+             
                       </div>
                     </CCol>
                     <CCol md="4" className="d-flex justify-content-end">
@@ -689,8 +695,6 @@ const Form12BB = () => {
                 </CCardBody>
               )}
             </CCard>
-
-
 
 
           </CCard>
