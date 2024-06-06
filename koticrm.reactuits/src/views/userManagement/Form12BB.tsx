@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import CIcon from '@coreui/icons-react';
 import { cilChevronDoubleDown, cilChevronDoubleUp } from '@coreui/icons';
 import "../../css/style.css";
-import { GetEightyD, GetEightyG, GetEmployee12BB, GetHouseRent, GetInterestPayableOnHomeLoan, GetLeaveTravelExpenditure, GetOtherInvestment, SaveHouseRent, SaveInterestPayableOnHomeLoan, SaveLeaveTravelExpenditure, SaveOtherInvestment, } from '../../redux-saga/modules/userManagement/apiService';
+import { GetEightyD, GetEightyG, GetEmployee12BB, GetHouseRent, GetInterestPayableOnHomeLoan, GetLeaveTravelExpenditure, GetOtherInvestment, SaveEightyD, SaveHouseRent, SaveInterestPayableOnHomeLoan, SaveLeaveTravelExpenditure, SaveOtherInvestment, } from '../../redux-saga/modules/userManagement/apiService';
 import { EmployeeFinancialRecord, initialEmployeeRecord } from '../../models/Form12BB/Form12BB';
 import { MdDelete } from 'react-icons/md';
 
@@ -71,9 +71,6 @@ const eightyDValidationSchema = Yup.object().shape({
 
   }),
 });
-
-
-
 //80-G
 const eightyGValidationSchema = Yup.object().shape({
   eightyGRecord: Yup.object().shape({
@@ -109,16 +106,30 @@ const Form12BB = () => {
   const [isInterestPaybleChecked, setIsInterestPayableChecked] = useState(false);
   const [is80CChecked, setIs80CChecked] = useState(false);
   const [is80DChecked, setIs80DChecked] = useState(false);
-  const [selectedOption, setSelectedOption] = useState('');
   const [is80GChecked, setIs80GChecked] = useState(false);
   const [isOtherChecked, setIsOtherChecked] = useState(false);
+  const [selectedOption, setSelectedOption] = useState('');
+  const [submissionType, setSubmissionType] = useState('declaration');
   const { employeeId } = useParams<{ employeeId: string }>();
-  const [rows, setRows] = useState([{
-    id: 1,
-    amount: '',
-    proofSubmitted: false
-  }]);
+  const [rows, setRows] = useState([{id: 1,amount: '',proofSubmitted: false}]);
   const navigate = useNavigate();
+
+  //toggles
+  const toggleCollapseOne = () => setIsCollapsedOne(!isCollapsedOne);
+  const toggleCollapseTwo = () => setIsCollapsedTwo(!isCollapsedTwo);
+  const toggleCollapseThree = () => setIsCollapsedThree(!isCollapsedThree);
+  const toggleCollapseFour = () => setIsCollapsedFour(!isCollapsedFour);
+  const toggleCollapseFive = () => setIsCollapsedFive(!isCollapsedFive);
+  const toggleCollapseSix = () => setIsCollapsedSix(!isCollapsedSix);
+  const toggleCollapseSeven = () => setIsCollapsedSeven(!isCollapsedSeven);
+  const toggleRentCheckbox = () => setIsRentChecked(!isRentChecked);
+  const toggleLeaveCheckbox = () => setIsLeaveChecked(!isLeaveChecked);
+  const toggleInterestPayableChecked = () => setIsInterestPayableChecked(!isInterestPaybleChecked);
+  const toggle80CChecked = () => setIs80CChecked(!is80CChecked);
+  const toggle80DChecked = () => setIs80DChecked(!is80DChecked);
+  const toggle80GChecked = () => setIs80GChecked(!is80GChecked);
+  const toggleOtherChecked = () => setIsOtherChecked(!isOtherChecked);
+
 
 
   useEffect(() => {
@@ -142,6 +153,8 @@ const Form12BB = () => {
           interestHomeLoan(response.data.homeLoanRecordId);
 
         }
+        // if(response)
+
         if (response.data.eightyDRecordId) {
           getEightyD(response.data.eightyDRecordId)
         }
@@ -180,6 +193,7 @@ const Form12BB = () => {
       });
     }
   }, [employee12BBData]);
+
   // Update handleFormChange to handle all parameters
   const handleFormChange = (e: any, fieldName: string, section: string) => {
     const value = e.target.type === 'file' ? e.target.files[0] : e.target.value;
@@ -192,24 +206,8 @@ const Form12BB = () => {
     }));
   };
 
-  const toggleRentCheckbox = () => setIsRentChecked(!isRentChecked);
-  const toggleLeaveCheckbox = () => setIsLeaveChecked(!isLeaveChecked);
-  const toggleCollapseOne = () => setIsCollapsedOne(!isCollapsedOne);
-  const toggleCollapseTwo = () => setIsCollapsedTwo(!isCollapsedTwo);
-  const toggleCollapseThree = () => setIsCollapsedThree(!isCollapsedThree);
-  const toggleInterestPayableChecked = () => setIsInterestPayableChecked(!isInterestPaybleChecked);
-  const toggleCollapseFour = () => setIsCollapsedFour(!isCollapsedFour);
-  const toggleCollapseFive = () => setIsCollapsedFive(!isCollapsedFive);
-  const toggleCollapseSix = () => setIsCollapsedSix(!isCollapsedSix);
-  const toggleCollapseSeven = () => setIsCollapsedSeven(!isCollapsedSeven);
-  const toggle80CChecked = () => setIs80CChecked(!is80CChecked);
-  const toggle80DChecked = () => setIs80DChecked(!is80DChecked);
-  const toggle80GChecked = () => setIs80GChecked(!is80GChecked);
-  const toggleOtherChecked = () => setIsOtherChecked(!isOtherChecked);
 
-
-  //house rent 
-  //get
+  //get house rent 
   const HouseRent = async (id: number) => {
     try {
       const response = await GetHouseRent(id);
@@ -229,13 +227,15 @@ const Form12BB = () => {
       console.error('Error fetching House Rent:', error);
     }
   };
-  //save
+  //save house rent 
 
-  const handleSaveHouseRent = async (validateField: any, setFieldValue) => {
+  const handleSaveHouseRent = async (formData:any) => {
     try {
+      debugger;
       // Validate specific field
-      await validateField('houseRentRecord.amount');
+      //  await validateForm('houseRentRecord.amount'); 
       if (!formData.houseRentRecord.amount) return;
+    
 
       const response = await SaveHouseRent(formData.houseRentRecord);
       if (response.status === 200) {
@@ -248,7 +248,7 @@ const Form12BB = () => {
     }
   };
 
-  const handleSaveOwnerPanRentSlips = async (validateField: any, setFieldValue) => {
+  const handleSaveOwnerPanRentSlips = async (validateField: any) => {
     try {
       // Validate specific fields
       await Promise.all([
@@ -268,8 +268,7 @@ const Form12BB = () => {
     }
   };
 
-  //leave travel
-  //get
+  // get leave travel
   const LeaveTravel = async (id: number) => {
     try {
       const response = await GetLeaveTravelExpenditure(id);
@@ -288,8 +287,8 @@ const Form12BB = () => {
       console.error('Error fetching Leave Travel:', error);
     }
   };
-  //save
-  const handleSaveLeaveTravel = async (validateForm, setFieldValue) => {
+  //save leave travel
+  const handleSaveLeaveTravel = async (validateForm: any) => {
     try {
       await validateForm();
       if (!formData.travelExpenditureRecord.amount || !formData.travelExpenditureRecord.proofdocumentLink) return;
@@ -306,17 +305,16 @@ const Form12BB = () => {
   };
 
 
-  //homeloan 
-  //get 
-
+  // get homeloan 
   const interestHomeLoan = async (id: number) => {
     try {
       const response = await GetInterestPayableOnHomeLoan(id);
-      console.log(response.data);
-      if (response?.data) {
+      console.log('API Response:', response); 
+      if (response && response.data) {
+        console.log('Data:', response.data); 
         setFormData((prevState) => ({
           ...prevState,
-          interestHomeLoanRecord: {
+          homeLoanRecord: {
             amount: response.data.amount || 0,
             lenderName: response.data.lenderName || '',
             lenderAddress: response.data.lenderAddress || '',
@@ -328,12 +326,13 @@ const Form12BB = () => {
       console.error('Error fetching interest payable on home loan:', error);
     }
   };
+  
   //save 
-
-  const handleSaveHomeLoan = async (validateForm, touched) => {
+  const handleSaveHomeLoan = async (validateForm: any) => {
     try {
+      debugger;
       await validateForm();
-
+  
       if (
         !formData.homeLoanRecord.amount ||
         !formData.homeLoanRecord.lenderName ||
@@ -343,9 +342,9 @@ const Form12BB = () => {
         // If any required field is empty, return without saving
         return;
       }
-
+  
       const response = await SaveInterestPayableOnHomeLoan(formData.homeLoanRecord);
-
+  
       if (response.status === 200) {
         console.log('Home loan saved successfully:', response.data);
       } else {
@@ -364,8 +363,9 @@ const Form12BB = () => {
       if (response.data) {
         setFormData((prevState) => ({
           ...prevState,
-          getEightyD: {
-            amount: response.data.amount || 0,
+          eightyDRecord: {
+            insuranceAmount: response.data.insuranceAmount || '',
+            medicalExpenseAmount: response.data.medicalExpenseAmount || '',
 
           },
         }));
@@ -375,6 +375,27 @@ const Form12BB = () => {
     }
   };
 
+
+  // save 80 D
+  const handleSaveEightyDRecord = async (validateForm: any) => {
+    try {
+      await validateForm();
+      if (!formData.eightyDRecord.insuranceAmount ||
+        !formData.eightyDRecord.medicalExpenseAmount) {
+        return;
+      }
+      const response = await SaveEightyD(formData.eightyDRecord);
+      if (response.status === 200) {
+        console.log('Saved Eighty D Record:', response);
+        // You can add further logic here if needed, like updating state or showing a success message
+      } else {
+        console.error('Error saving Eighty D record:', response.error);
+        // Handle error scenarios, e.g., show error message to the user
+      }
+    } catch (error) {
+      console.error('Error saving Eighty D record:', error);
+    }
+  };
 
   //get80 G
 
@@ -423,7 +444,7 @@ const Form12BB = () => {
   };
 
   //save 
-  const handleSaveOtherInvestment = async (validateForm, touched) => {
+  const handleSaveOtherInvestment = async (validateForm:any) => {
     try {
       await validateForm();
       if (!formData.otherInvestmentRecord.description || !formData.otherInvestmentRecord.proofdocumentLink) {
@@ -458,20 +479,38 @@ const Form12BB = () => {
 
 
 
-  const handleSubmit = (values, { setSubmitting }) => {
-    console.log(values);
-    setSubmitting(false);
+  const handleFinalSubmit = (values, actions) => {
+    if (submissionType === 'declaration') {
+      // Handle submission for declaration
+      console.log('Submitting declaration:', values);
+      // Perform declaration submission logic
+    } else if (submissionType === 'proof') {
+      // Handle submission for proof
+      console.log('Submitting proof:', values);
+      // Perform proof submission logic
+    }
+
+    // Reset form fields and any other necessary actions
+    actions.resetForm();
   };
+
+  // Function to handle switching between submission types
+  const handleSwitchSubmissionType = () => {
+    // Toggle between 'declaration' and 'proof'
+    const newSubmissionType = submissionType === 'declaration' ? 'proof' : 'declaration';
+    setSubmissionType(newSubmissionType);
+  };
+
 
   return (
     <Formik
       initialValues={formData}
       validationSchema={Yup.object()} // General validation schema
-      onSubmit={handleSubmit}
+      onSubmit={handleFinalSubmit}
       enableReinitialize
     >
-      {({ validateForm, setFieldValue, errors, touched }) => (
-        <Form>
+      {({ validateForm, setFieldValue }) => (
+        <Form >
           <CCard>
             <CCardHeader className="mb-3">
               <div className="d-flex justify-content-between align-items-center">
@@ -529,12 +568,12 @@ const Form12BB = () => {
                     initialValues={formData}
                     validationSchema={houseRentAmountValidationSchema}
                     onSubmit={(values, actions) => {
-                      handleSaveHouseRent(validateForm, setFieldValue);
+                       handleSaveHouseRent(validateForm);
                       actions.setSubmitting(false);
                     }}
                     enableReinitialize
                   >
-                    {({ validateField, setFieldValue, errors, touched }) => (
+                    {({ errors, touched }) => (
                       <Form>
                         <CRow className="align-items-center">
                           <CCol md="5" className="mb-3">
@@ -543,7 +582,7 @@ const Form12BB = () => {
                               type="number"
                               id="amount"
                               name="houseRentRecord.amount"
-                              value={formData.houseRentRecord.amount}
+                              // value={formData.houseRentRecord.amount}
                               onChange={(e) => handleFormChange(e, 'amount', 'houseRentRecord')}
                               className={`form-control${touched.houseRentRecord?.amount && errors.houseRentRecord?.amount ? ' is-invalid' : ''}`}
                               placeholder="Amount of House Rent in a year"
@@ -599,7 +638,7 @@ const Form12BB = () => {
                               type="text"
                               id="ownerPanCard"
                               name="houseRentRecord.ownerPanCard"
-                              value={formData.houseRentRecord.ownerPanCard}
+                              // value={formData.houseRentRecord.ownerPanCard}
                               onChange={(e) => handleFormChange(e, 'ownerPanCard', 'houseRentRecord')}
                               className={`form-control${touched.houseRentRecord?.ownerPanCard && errors.houseRentRecord?.ownerPanCard ? ' is-invalid' : ''}`}
                               placeholder="Owner PAN Number"
@@ -752,7 +791,7 @@ const Form12BB = () => {
                     }}
                     enableReinitialize
                   >
-                    {({ values, errors, touched }) => (
+                    {({ errors, touched }) => (
                       <Form>
                         <CRow className="align-items-center">
                           <CCol md="5" className="mb-3">
@@ -865,6 +904,8 @@ const Form12BB = () => {
                 </CCardBody>
               )}
             </CCard>
+
+
             {/* All tax deductions */}
 
             <CCard>
@@ -889,113 +930,115 @@ const Form12BB = () => {
                         />
                         <h5 className="m-0">80 C</h5>
                       </CCol>
-                      
+
                       <CCol md="4" className="d-flex align-items-center">
-                          <Field
-                            type="checkbox"
-                            id="80C"
-                            checked={is80CChecked}
-                            onChange={toggle80CChecked}
-                            className="custom-checkbox checkbox-spacing"
-                          />
-                          <label htmlFor="80C" className="ml-2 mb-0">No Investments</label>
-                        </CCol>
-                      
+                        <Field
+                          type="checkbox"
+                          id="80C"
+                          checked={is80CChecked}
+                          onChange={toggle80CChecked}
+                          className="custom-checkbox checkbox-spacing"
+                        />
+                        <label htmlFor="80C" className="ml-2 mb-0">No Investments</label>
+                      </CCol>
+
                     </CRow>
                   </CCardHeader>
-                  
+
                   {!isCollapsedFour && !is80CChecked && (
-                     <Formik
-                     initialValues={formData}
-                     validationSchema={eightyCValidationSchema}
-                     onSubmit={(values) => {
-                       console.log(values);
-                     }}
-                   >
-                     {({ values, setFieldValue }) => (
-                       <Form>
-                    <CCardBody>
-                      {rows.map((row, index) => (
-                        <CRow key={row.id} className="align-items-center">
-                          <CCol md="4" className="mb-3" style={{ textAlign: 'center' }}>
-                            <CFormSelect>
-                              <option value="">Select Medical Expenses</option>
-                              <option value="0">None</option>
-                              <option value="25000">Up to Rs.25,000</option>
-                              <option value="50000">Up to Rs.50,000</option>
-                            </CFormSelect>
-                          </CCol>
-                          <CCol md="2" className="mb-3">
-                            <label htmlFor={`amount${row.id}`} style={{ marginBottom: '10px' }}>Amount:</label>
-                            <input
-                              type="text"
-                              id={`amount${row.id}`}
-                              className="form-control"
-                              placeholder="Amount"
-                              value={row.amount}
-                              onChange={(e) => {
-                                const updatedRows = [...rows];
-                                updatedRows[index].amount = e.target.value;
-                                setRows(updatedRows);
-                              }}
-                            />
-                          </CCol>
-                          <CCol md="2">
-                            <input
-                              type="checkbox"
-                              id={`proofSubmitted${row.id}`}
-                              className="custom-checkbox"
-                              checked={row.proofSubmitted}
-                              onChange={(e) => {
-                                const updatedRows = [...rows];
-                                updatedRows[index].proofSubmitted = e.target.checked;
-                                setRows(updatedRows);
-                              }}
-                            />
-                          </CCol>
-                          <CCol md="2" className="mb-3">
-                            <div>
-                              <input
-                                type="file"
-                                className="custom-file-input"
-                                id={`rentSlips${row.id}`}
-                                style={{ display: 'none' }}
-                              />
-                              <label
-                                className="custom-file-label"
-                                htmlFor={`rentSlips${row.id}`}
-                                style={{ cursor: 'pointer' }}
-                              >
-                                <u>Upload Proof</u>
-                              </label>
+                    <Formik
+                      initialValues={formData}
+                      validationSchema={eightyCValidationSchema}
+                      onSubmit={(values) => {
+                        console.log(values);
+                      }}
+                    >
+                      {() => (
+                        <Form>
+                          <CCardBody>
+                            <label htmlFor="deduction" className="ml-2 mb-0">Deduction Type</label>
+                            {rows.map((row, index) => (
+                              <CRow key={row.id} className="align-items-center">
+                                <CCol md="4" className="mb-3" style={{ textAlign: 'center' }}>
+                                  <CFormSelect>
+                                    <option value="">Select Medical Expenses</option>
+                                    <option value="0">None</option>
+                                    <option value="25000">Up to Rs.25,000</option>
+                                    <option value="50000">Up to Rs.50,000</option>
+                                  </CFormSelect>
+                                </CCol>
+                                <CCol md="2" className="mb-3">
+                                  <label htmlFor={`amount${row.id}`} style={{ marginBottom: '10px' }}>Amount:</label>
+                                  <input
+                                    type="text"
+                                    id={`amount${row.id}`}
+                                    className="form-control"
+                                    placeholder="Amount"
+                                    value={row.amount}
+                                    onChange={(e) => {
+                                      const updatedRows = [...rows];
+                                      updatedRows[index].amount = e.target.value;
+                                      setRows(updatedRows);
+                                    }}
+                                  />
+                                </CCol>
+                                <CCol md="2">
+                                  <input
+                                    type="checkbox"
+                                    id={`proofSubmitted${row.id}`}
+                                    className="custom-checkbox"
+                                    checked={row.proofSubmitted}
+                                    onChange={(e) => {
+                                      const updatedRows = [...rows];
+                                      updatedRows[index].proofSubmitted = e.target.checked;
+                                      setRows(updatedRows);
+                                    }}
+                                  />
+                                </CCol>
+                                <CCol md="2" className="mb-3">
+                                  <div>
+                                    <input
+                                      type="file"
+                                      className="custom-file-input"
+                                      id={`rentSlips${row.id}`}
+                                      style={{ display: 'none' }}
+                                    />
+                                    <label
+                                      className="custom-file-label"
+                                      htmlFor={`rentSlips${row.id}`}
+                                      style={{ cursor: 'pointer' }}
+                                    >
+                                      <u>Upload Proof</u>
+                                    </label>
+                                  </div>
+                                </CCol>
+                                <CCol md="2" className="mb-3">
+                                  <MdDelete
+                                    style={{
+                                      color: "red",
+                                      fontSize: "30px",
+                                      cursor: "pointer",
+                                      marginLeft: "10px"
+                                    }}
+                                    className="text-danger"
+                                    onClick={() => {
+                                      const updatedRows = rows.filter(r => r.id !== row.id);
+                                      setRows(updatedRows);
+                                    }}
+                                  />
+                                </CCol>
+                              </CRow>
+                            ))}
+                            <div className="mb-3">
+                              <button className="btn btn-primary" onClick={addRow}>+</button>
                             </div>
-                          </CCol>
-                          <CCol md="2" className="mb-3">
-                            <MdDelete
-                              style={{
-                                color: "red",
-                                fontSize: "30px",
-                                cursor: "pointer",
-                                marginLeft: "10px"
-                              }}
-                              className="text-danger"
-                              onClick={() => {
-                                const updatedRows = rows.filter(r => r.id !== row.id);
-                                setRows(updatedRows);
-                              }}
-                            />
-                          </CCol>
-                        </CRow>
-                      ))}
-                      <CRow>
-                        <CCol md="12">
-                          <button className="btn btn-primary" onClick={addRow}>+</button>
-                        </CCol>
-                      </CRow>
-                    </CCardBody>
-                    </Form>
-                  )}
-                  </Formik>
+                            <div className="d-flex justify-content-end">
+                              <CButton color="primary" type="submit">Save</CButton>
+                            </div>
+                          </CCardBody>
+                        </Form>
+                      )}
+                    </Formik>
                   )}
                 </CCard>
                 {/* 80 D */}
@@ -1029,7 +1072,7 @@ const Form12BB = () => {
                       initialValues={formData}
                       validationSchema={eightyDValidationSchema}
                       onSubmit={(values, actions) => {
-                        handleSaveEightyGRecord(values);
+                        handleSaveEightyDRecord(values);
                         actions.setSubmitting(false);
                       }}
                       enableReinitialize
@@ -1184,7 +1227,7 @@ const Form12BB = () => {
                       }}
                       enableReinitialize
                     >
-                      {({ values, errors, touched }) => (
+                      {({ errors, touched }) => (
                         <Form>
                           <CCardBody>
                             <CRow className="align-items-center">
@@ -1224,7 +1267,7 @@ const Form12BB = () => {
                               <CCol md="2" className="mb-3">
                                 <label htmlFor="amount" style={{ marginBottom: '10px' }}>Amount:</label>
                                 <Field
-                                  type="text"
+                                  type="number"
                                   id="amount"
                                   name="eightyGRecord.amount"
                                   className={`form-control${touched.eightyGRecord?.amount && errors.eightyGRecord?.amount ? ' is-invalid' : ''}`}
@@ -1310,7 +1353,7 @@ const Form12BB = () => {
                                   id="description"
                                   name="otherInvestmentRecord.description"
                                   // value={formData.otherInvestmentRecord.description}
-                                  rows={2} // Set the number of rows for the textarea
+                                  rows={2} 
                                   className={`form-control${touched.otherInvestmentRecord?.description && errors.otherInvestmentRecord?.description ? ' is-invalid' : ''}`}
                                   placeholder="Type Description of investment type"
                                 />
@@ -1350,10 +1393,24 @@ const Form12BB = () => {
 
 
             </CCard>
-
             <CRow className="mt-3 mb-2">
               <CCol className="d-flex justify-content-end">
-                <CButton type="submit" style={{ marginRight: '20px' }} color="primary">Submit</CButton>
+                <CButton
+                  type="button"
+                  style={{ marginRight: '20px' }}
+                  color="warning"
+                  onClick={handleSwitchSubmissionType}
+                >
+                  Switch Submission Type
+                </CButton>
+
+                <CButton
+                  type="submit"
+                  style={{ marginRight: '20px' }}
+                  color="primary"
+                >
+                  {submissionType === 'declaration' ? 'Submit Declaration' : 'Submit Proof'}
+                </CButton>
               </CCol>
             </CRow>
 

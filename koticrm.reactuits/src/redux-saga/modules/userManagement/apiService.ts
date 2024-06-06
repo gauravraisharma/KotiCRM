@@ -136,7 +136,7 @@ export async function GetHouseRent(id: number){
         return errorResponse;
     }
 }
-// https://localhost:7063/api/TaxDeclaration/GetHouseRent/3
+
 export async function GetLeaveTravelExpenditure(id: number){
     try {
         const response = await axiosInstance.get(`/TaxDeclaration/GetLeaveTravelExpenditure/` + id);
@@ -276,7 +276,7 @@ export async function SaveEightyC(EightyC: FormData) {
     }
 }
 
-export async function SaveEightyD(EightyD: FormData) {
+export async function SaveEightyD(EightyD: EightyDRecord) {
     try {
         const response = await axiosInstance.post<EightyDRecord>(`/TaxDeclaration/EightyC`, EightyD);
         return response;
@@ -290,7 +290,7 @@ export async function SaveEightyD(EightyD: FormData) {
     }
 }
 
-export async function SaveEightyG(EightyG: FormData) {
+export async function SaveEightyG(EightyG: EightyGRecord) {
     try {
         const response = await axiosInstance.post<EightyGRecord>(`/TaxDeclaration/EightyG`, EightyG);
         return response;

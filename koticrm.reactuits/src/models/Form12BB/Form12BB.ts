@@ -8,7 +8,7 @@ export class initialEmployeeRecord implements EmployeeFinancialRecord {
   isNoHouseRentDeclaration: boolean;
   travelExpenditureRecord: TravelExpenditureRecord;
   travelExpenditureRecordId: number;
-  homeDeclarationId:number;
+  homeLoanRecordId:number;
   isNoTravelDeclaration: boolean;
   homeLoanRecord: HomeLoanRecord;
   isNoHomeDeclaration: boolean;
@@ -55,7 +55,7 @@ export class initialEmployeeRecord implements EmployeeFinancialRecord {
       remarks: "",
     };
 
-    this.homeDeclarationId = 0;  
+    this.homeLoanRecordId = 0;  
     this.isNoHomeDeclaration = false;
     this.eightyCRecord = [];
     this.eightyDRecord = {

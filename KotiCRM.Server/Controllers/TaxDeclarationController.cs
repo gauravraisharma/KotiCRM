@@ -194,9 +194,6 @@ namespace KotiCRM.Server.Controllers
 
         }
 
-
-
-
         // save house rent
         [HttpPost]
         [Route("HouseRent")]
