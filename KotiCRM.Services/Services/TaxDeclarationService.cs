@@ -94,6 +94,11 @@ namespace KotiCRM.Services.Services
 
             return await _taxDeclarationRepository.GetEmployee12BB(employeeId, financialYear);
         }
+        public async Task<List<Employee12BB>> GetEmployee12BBs(string employeeId)
+        {
+
+            return await _taxDeclarationRepository.GetEmployee12BBs(employeeId);
+        }
         public async Task<Employee12BB> SaveEmployee12BB(Employee12BB employee12BB)
         {
             return await _taxDeclarationRepository.SaveEmployee12BB(employee12BB);

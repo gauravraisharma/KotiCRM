@@ -25,10 +25,7 @@ const customStyles = {
 
 const SearchableDropdown = ({ name, options }: Props) => {
     const [field, , helpers] = useField(name);
-    
-
     const isObjectOptions = Array.isArray(options) && options.length > 0 && typeof options[0] === 'object';
-
     const renderOptionLabel = (option: Option | string) => {
         if (isObjectOptions && typeof option !== 'string') {
             const labelArray = option.label.split(" ");
@@ -49,7 +46,6 @@ const SearchableDropdown = ({ name, options }: Props) => {
         value: typeof option === 'object' ? option.id : option,
         label: renderOptionLabel(option)
     }));
-
 
     const handleChange = (selectedOption: Option | string) => {
         helpers.setValue(selectedOption);

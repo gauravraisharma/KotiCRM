@@ -156,7 +156,6 @@ const CreateOrUpdateUser = () => {
       })
       .catch((error) => {
         toast.error("Fetch employee failed");
-        console.error("Error fetching employee:", error.statusText);
       });
   };
 
@@ -213,10 +212,8 @@ const CreateOrUpdateUser = () => {
         setRoleList(response.data.roles);
       })
       .catch((error) => {
-        console.error("Error getting role list:", error.statusText);
       });
   };
-  console.log(roleId);
 
   // Department list
   const getDepartmentList = () => {
@@ -225,7 +222,6 @@ const CreateOrUpdateUser = () => {
         setDepartmentList(response.data);
       })
       .catch((error) => {
-        console.error("Error getting department list:", error.statusText);
       });
   };
 
@@ -236,7 +232,6 @@ const CreateOrUpdateUser = () => {
         setDesignationList(response.data);
       })
       .catch((error) => {
-        console.error("Error getting designation list:", error.statusText);
       });
   };
 
@@ -247,7 +242,6 @@ const CreateOrUpdateUser = () => {
         setShiftList(response.data);
       })
       .catch((error) => {
-        console.error("Error getting shift list:", error.statusText);
       });
   };
 
@@ -344,7 +338,6 @@ const CreateOrUpdateUser = () => {
         }
       }
     } catch (error) {
-      console.log("error message:", error);
     } finally {
       setSubmitting(false);
     }
@@ -420,9 +413,6 @@ const CreateOrUpdateUser = () => {
               errors,
               setFieldValue,
             }) => {
-              {
-                console.log(errors);
-              }
               return (
                 <Form
                   className="profile-info"

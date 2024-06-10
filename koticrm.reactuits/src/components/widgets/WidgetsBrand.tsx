@@ -175,8 +175,5 @@ const WidgetsBrand: FC<Props> = ({ withCharts }) => {
   )
 }
 
-// WidgetsBrand.propTypes = {
-//   withCharts: PropTypes.bool,
-// }
 
 export default WidgetsBrand

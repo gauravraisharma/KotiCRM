@@ -78,10 +78,8 @@
   .card {
     border: 1px solid #ccc;
     border-radius: 5px;
-    /* padding: 20px; */
     margin: 20px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    /* text-align: center; */
   }
   .form-group {
     margin-bottom: 20px;
@@ -119,9 +117,6 @@
   font-weight: 600;
 }
 
-/* .form-control {
-  border: 1px solid red;
-} */
 .account-list li {
   margin-bottom: 20px;
 }
@@ -224,7 +219,6 @@
   
 
 }
-/* Add this CSS to your existing stylesheet or create a new one */
 
 .headings {
   color: #131212; /* Darker color for headings */
@@ -250,17 +244,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-
-/* }.header-nav {
-  display: flex;
-  align-items: center;
-  /* background-color: #f8f9fa; */
   padding: 10px;
-} */
-/* .header-nav .nav-link.active {
-  background-color: #3498db;
-  color: #fff;
-} */
+}
 .nav-item {
   margin-right: 5px;
 }
@@ -271,15 +256,7 @@
 
   padding: 8px 12px;
   border-radius: 5px;
-  /* transition: background-color 0.3s ease, color 0.3s ease; */
 }
-
-/* .nav-item a.active-link,
-.nav-item a:hover {
-  background-color: #3498db;
-  color: #fff;
-} */
-/* style.css */
 
 .profile-picture{
   width: 44px; /* Set your desired width */

@@ -47,11 +47,8 @@ const Placeholders = () => {
                     orientation="top"
                     width="100%"
                     height="162"
-                    // xmlns="http://www.w3.org/2000/svg"
                     role="img"
                     aria-label="Placeholder"
-                    // preserveAspectRatio="xMidYMid slice"
-                    // focusable="false"
                   >
                     <title>Placeholder</title>
                     <rect width="100%" height="100%" fill="#868e96"></rect>
@@ -69,8 +66,6 @@ const Placeholders = () => {
                     </CPlaceholder>
                     <CPlaceholder
                       component={CButton}
-                      // disabled
-                      // href="#"
                       tabIndex={-1}
                       xs={6}
                     ></CPlaceholder>
@@ -98,8 +93,6 @@ const Placeholders = () => {
               <CPlaceholder
                 component={CButton}
                 aria-hidden="true"
-                // disabled
-                // href="#"
                 tabIndex={-1}
                 xs={4}
               ></CPlaceholder>
@@ -133,7 +126,6 @@ const Placeholders = () => {
             </p>
             <DocsExample href="components/placeholder#color">
               <CPlaceholder xs={12} />
-
               <CPlaceholder color="primary" xs={12} />
               <CPlaceholder color="secondary" xs={12} />
               <CPlaceholder color="success" xs={12} />
@@ -177,7 +169,6 @@ const Placeholders = () => {
               <CPlaceholder component="p" animation="glow">
                 <CPlaceholder xs={12} />
               </CPlaceholder>
-
               <CPlaceholder component="p" animation="wave">
                 <CPlaceholder xs={12} />
               </CPlaceholder>

@@ -113,13 +113,11 @@ const handleStateChange = (e: ChangeEvent<HTMLSelectElement>) => {
       contact.homePhone = contact.homePhone?.toString()
       if (!contact.id) {
         contact.accountID = selectedAccount!.id;
-        console.log("Create new contact:", contact);
         dispatch(createContact(contact));
       } else {
         dispatch(updateContact(contact));
       }
     } catch (error) {
-      console.log("error message:", error);
     } finally {
       setSubmitting(false);
       navigate("/contacts");

@@ -9,7 +9,6 @@ const loading = (
 		size="sm"
 		color='white'
 		style={{
-			// color: "#2e89e4",
 			width: "5rem",
 			height: "5rem",
 			borderWidth: "0.70rem",

@@ -12,7 +12,6 @@ axiosInstance.interceptors.request.use(
         if (token) {
             config.headers['Authorization'] = 'Bearer ' + token;
         }
-        // config.headers['Content-Type'] = 'application/json';
         return config;
     },
     (error: AxiosError) => {
@@ -28,7 +27,6 @@ axiosInstance.interceptors.response.use(
         return response;
     },
     error => {
-        
         if (error.response && error.response.status === 401) {
             // Check if the error is due to token expiration
             let isTokenReChecked = localStorage.getItem('isTokenReChecked');
@@ -37,8 +35,6 @@ axiosInstance.interceptors.response.use(
             } else {
                 localStorage.setItem('isTokenReChecked', 'true');
             }
-
-
         }
         return Promise.reject(error);
     }
@@ -49,6 +45,7 @@ export interface apiResponse<T> {
     status: number;
     statusText: string;
 }
+
 const responseBody = <T>(response: AxiosResponse<T>): apiResponse<T> => {
     return {
         data: response.data,

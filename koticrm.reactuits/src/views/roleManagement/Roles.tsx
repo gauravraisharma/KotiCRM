@@ -49,7 +49,6 @@ const timezone = useSelector((state: any) => state.sharedReducer.timezone);
       const response = await GetRolesList();
       setRoleList(response.roles);
     } catch (error) {
-      console.error("Error fetching roles:", error);
       toast.error("Failed to fetch roles.");
     } finally {
       setIsLoading(false);

@@ -62,7 +62,6 @@ const Login = () => {
       await dispatch(loginRequest(userLogin, navigate));
     }
     catch(ex){
-      console.log(ex)
     } 
   }
 

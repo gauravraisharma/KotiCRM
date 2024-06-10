@@ -109,7 +109,6 @@ const InvoiceTemplate= () => {
 
 									</th>
 								</tr>
-								{/* </thead> */}
 							</table>
 						</div>
 					</div>
@@ -193,9 +192,7 @@ const InvoiceTemplate= () => {
 					<div className="invoice-footer" style={{ fontSize: '16px'}}>
 						<p style={{ margin: '5px 0', borderTop: '1px solid rgb(182, 178, 178) ', paddingTop: '20px' }}><strong>Terms & Conditions :</strong> {invoiceDetails?.invoice.termsAndConditions}</p>
 						<p className='link-footer'><b><u>In case of any questions on Invoice, please contact info@techbitsolution.com</u></b></p>
-
 						<p className='link-footer' style={{ marginTop: '20px' }}>{getDateTime(invoiceDetails?.invoice.invoiceDate)}</p>
-						{/* Add other footer details */}
 					</div>
 				</div>
 			</div>

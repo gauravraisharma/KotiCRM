@@ -155,7 +155,9 @@ export interface EmployeeFinancialRecord {
   travelExpenditureRecord: TravelExpenditureRecord;
   isNoTravelDeclaration: boolean;
   homeLoanRecord: HomeLoanRecord;
-  isNoHomeDeclaration: boolean;
+  isNoHomeDeclaration: boolean; 
+  isDeclarationComplete: boolean; 
+  modifiedOn: Date;
   eightyCRecord: any[]; // You might want to define a type for this
   eightyDRecord: EightyDRecord;
   eightyGRecord: EightyGRecord;

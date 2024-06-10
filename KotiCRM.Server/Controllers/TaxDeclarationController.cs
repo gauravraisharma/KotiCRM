@@ -428,6 +428,22 @@ namespace KotiCRM.Server.Controllers
             return Ok(records);
         }
 
+        [HttpGet]
+        [Route("Employee12BBs/{employeeId}")]
+        public async Task<List<Employee12BB>> GetEmployee12BBs(string employeeId)
+        {
+            if (string.IsNullOrEmpty(employeeId))
+            {
+                throw new Exception("EmployeeId is required.");
+            }
+            var records = await _taxDeclarationService.GetEmployee12BBs(employeeId);
+            if (records == null)
+            {
+                throw new Exception("No records found");
+            }
+            return records;
+        }
+
         //save Form 12BB
         [HttpPost]
         [Route("SaveEmployee12BB")]

@@ -8,7 +8,7 @@ import {
 } from "@coreui/react";
 import { cilAccountLogout, cilSettings, cilUser } from "@coreui/icons";
 import CIcon from "@coreui/icons-react";
-import avatar8 from "../../../assets/images/avatars/8.jpg";
+import avatar8 from "../../../assets/brand/profilePlaceholder.jpg";
 import { useNavigate } from "react-router-dom";
 //import { useAuth } from '../../utils/AuthProvider'
 import { useDispatch } from "react-redux";
@@ -38,7 +38,7 @@ const AppHeaderDropdown = () => {
   return (
     <CDropdown variant="nav-item">
       <CDropdownToggle className="py-0" caret={false}>
-        <CAvatar src={avatar8} size="md" />
+        <CAvatar src={avatar8} size="lg" />
       </CDropdownToggle>
       <CDropdownMenu className="pt-0">
       {modulePermissions && modulePermissions.some(permission => permission.moduleName === 'ManageUsers' && permission.isView) && (

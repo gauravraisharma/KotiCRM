@@ -7,9 +7,6 @@ import { CreateContact, DeleteContact, GetContactDetails, GetContactsList, Updat
 import { ContactWithAccountName } from '../../../models/contact/ContactWithAccountName';
 import { getContacts } from './action';
 
-// const DEFAULT_PAGE_NUMBER = 1;
-// const DEFAULT_PAGE_SIZE = 5;
-
 export function* workGetContactsFetch(action: actionPayloadModel): Generator<any> {
   try {
     const { accountId, searchQuery, pageNumber, pageSize } = action.payload;

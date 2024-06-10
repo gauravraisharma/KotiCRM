@@ -31,6 +31,7 @@ namespace KotiCRM.Repository.IRepository
 
         //form 12
         Task<Employee12BB> GetEmployee12BB(string employeeId, string financialYear);
+        Task<List<Employee12BB>> GetEmployee12BBs(string employeeId);
 
         Task<Employee12BB> SaveEmployee12BB(Employee12BB employee12BB);
 

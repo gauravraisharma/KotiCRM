@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { ChangePassword, GetEmployeeById, GetEmployeeId } from "../../redux-saga/modules/userManagement/apiService";
+import { ChangePassword, GetEmployee12BBs, GetEmployeeById } from "../../redux-saga/modules/userManagement/apiService";
 import { Employee, EmployeeClass } from "../../models/userManagement/employee";
 import { ToastContainer, toast } from "react-toastify";
 import { CRow, CCol, CCard, CCardHeader, CButton, CCardBody } from "@coreui/react";
@@ -8,39 +8,41 @@ import * as Yup from "yup";
 import { Formik, Field } from "formik";
 import "react-toastify/dist/ReactToastify.css";
 import { FaDownload } from "react-icons/fa6";
+import { EmployeeFinancialRecord } from "../../models/Form12BB/Form12BB";
+import moment from "moment";
 
 const UserDetails = () => {
   const { employeeId, userId } = useParams();
   const navigate = useNavigate();
   const [formData, setFormData] = useState<Employee>(new EmployeeClass());
-  const financialYears = ["2024-25", "2023-24"];
-  const years = ['2024-25', '2023-24'];
-  const { id } = useParams<{ id: string }>();
-
+  const [employee12BBData, setEmployee12BBData] = useState<EmployeeFinancialRecord[]>([]);
+  const years: any = [] ;
+ 
   useEffect(() => {
-    if (id) {
-      GetEmployeeId();
-    } else {
-
-    }
-   
-  }, [id]);
-
-
-  useEffect(() => {
-    const getEmployeeById = async (employeeId: string) => {
-      try {
-        const response = await GetEmployeeById(employeeId);
-        setFormData(response);
-      } catch (error) {
-        toast.error("Fetch User failed");
-      }
-    };
-
     if (employeeId) {
       getEmployeeById(employeeId);
+      getForm12BbsById(employeeId);
     }
   }, [employeeId]);
+
+  const getEmployeeById = async (employeeId: string) => {
+    try {
+      const response = await GetEmployeeById(employeeId);
+      setFormData(response);
+    } catch (error) {
+      toast.error("Fetch User failed");
+    }
+  };
+
+  const getForm12BbsById = async (employeeId: string) => {
+    try {
+      const response = await GetEmployee12BBs(employeeId);
+      if (response.status == 200) {
+        setEmployee12BBData(response.data);
+      }
+    } catch (error) {
+    }
+  };
 
   const handleSubmit = async (values, { setSubmitting, resetForm }) => {
     if (values.newPassword === values.confirmPassword) {
@@ -66,11 +68,8 @@ const UserDetails = () => {
       // If valid, navigate to the "/users" page
       window.location.href = '/users';
     } else {
-
-      console.log('Please fill out the form');
     }
   };
-
 
   const validationSchema = Yup.object().shape({
     newPassword: Yup.string()
@@ -83,16 +82,6 @@ const UserDetails = () => {
       .required("Confirm password is required")
       .oneOf([Yup.ref("newPassword"), null], "Passwords must match")
   });
-  // Loop to generate JSX elements
-  const financialYearElements = [];
-  for (let i = 0; i < financialYears.length; i++) {
-    financialYearElements.push(
-      <div key={i}>
-        <p style={{ fontWeight: 'bold' }}>Financial year {financialYears[i]}</p>
-      </div>
-    );
-  }
-
 
   return (
     <>
@@ -392,44 +381,26 @@ const UserDetails = () => {
                       </CCardHeader>
 
                       <CCardBody style={{ padding: '20px', backgroundColor: '#f8f9fc' }}>
-                        {/* <CRow>
-                          <CCol md="6">
-                            <div>
-                              <p style={{ fontWeight: 'bold' }}>Financial year 2024-25</p>
-                            </div>
-                            <div>
-                              <p style={{ fontWeight: 'bold' }}>Financial year 2023-24</p>
-                            </div>
-                          </CCol>
-                          <CCol md="6" className="text-end">
-                            <div>
-                            <Link to={`/Form12BB`}>
-                              Submit Proofs
-                            </Link>
-                            </div>
-                            <br />
-                            <div>
-                              <p>Last submitted on 21-March-2024 <u style={{ cursor: 'pointer', color: '#4e73df' }}>View Detail</u></p>
-                            </div>
-                          </CCol>
-                        </CRow> */}
-                        <CRow>
-                          <CCol md="6">
-                            {financialYearElements}
-                          </CCol>
-                          <CCol md="6" className="text-end">
-                            <div>
-                            {/* <Link to={`/users/userDetail/${employee.userId}/${employee.employeeId}`}> */}
-                             <Link to={`/Form12BB/${userId}/${employeeId}`}>
-                                Submit Proofs
-                              </Link> 
-                            </div>
-                            <br />
-                          <div>
-                              <p>Last submitted on 21-March-2024 <u style={{ cursor: 'pointer', color: '#4e73df' }}>View Detail</u></p>
-                          </div>
-                          </CCol>
-                        </CRow>
+                        {employee12BBData.length > 0 ? employee12BBData.map((element, index) => (
+                          <CRow>
+                            <CCol md="6">
+                                <CCol md="12" key={index}>
+                                  <div>
+                                    <p style={{ fontWeight: 'bold' }}>Financial year {element.financialYear}</p>
+                                  </div>
+                                </CCol>
+                            </CCol>
+                            <CCol md="6" className="text-end">
+                                <div>
+                                    {element.isDeclarationComplete ? 
+                                      <p>Last submitted on {moment(element.modifiedOn).format('DD MMMM YYYY')} <u style={{ cursor: 'pointer', color: '#4e73df' }}>View Detail</u></p>
+                                      :
+                                      <p><Link to={`/Form12BB/${userId}/${element.employeeId}`}>Submit Proofs</Link></p>
+                                    }
+                                </div>
+                            </CCol>
+                          </CRow>
+                        )) : <h6>No data available.</h6>}
                       </CCardBody>
 
                     </CCard>
@@ -441,7 +412,7 @@ const UserDetails = () => {
                       </CCardHeader>
                       <CCardBody style={{ padding: '20px', backgroundColor: '#f8f9fc' }}>
                         <CRow>
-                          {years.map((year, index) => (
+                          {years.length  > 0 ? years.map((year, index) => (
                             <CCol md="12" key={index}>
                               <div>
                                 <p style={{ fontWeight: 'bold' }}>Financial year {year}</p>
@@ -450,12 +421,9 @@ const UserDetails = () => {
                                 <div>
                                   <u style={{ cursor: 'pointer', color: '#1cc88a' }}><FaDownload /> Download</u>
                                 </div>
-
-
                               </div>
-                        
                             </CCol>
-                          ))}
+                          )) : <h6>No data available.</h6>}
                         </CRow>
                       </CCardBody>
                     </CCard>

@@ -74,7 +74,6 @@ const Contacts = ({ getContactsCount, accountId }: Props) => {
     dispatch(getContacts(accountId, searchQuery, pageNumber, pageSize));
   }, [dispatch, accountId, pageNumber, pageSize]);
 
-console.log(fetchedContactWithAccountNameListAndTotal)
   useEffect(() => {
     if (getContactsCount) {
       getContactsCount(contactsCount);

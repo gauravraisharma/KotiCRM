@@ -71,7 +71,6 @@ const Toasts = () => {
             </p>
             <DocsExample href="components/toast">
               <CToast
-                // title="CoreUI for React.js"
                 autohide={false} visible={true}>
                 <CToastHeader closeButton>
                   <svg
@@ -107,7 +106,6 @@ const Toasts = () => {
             <DocsExample href="components/toast#translucent">
               <div className="bg-dark p-3">
                 <CToast
-                  // title="CoreUI for React.js"
                   autohide={false} visible={true}>
                   <CToastHeader closeButton>
                     <svg
@@ -144,7 +142,6 @@ const Toasts = () => {
             <DocsExample href="components/toast#stacking">
               <CToaster>
                 <CToast
-                  // title="CoreUI for React.js" 
                   autohide={false} visible={true}>
                   <CToastHeader closeButton>
                     <svg
@@ -164,7 +161,6 @@ const Toasts = () => {
                   <CToastBody>Hello, world! This is a toast message.</CToastBody>
                 </CToast>
                 <CToast
-                  // title="CoreUI for React.js" 
                   autohide={false} visible={true}>
                   <CToastHeader closeButton>
                     <svg

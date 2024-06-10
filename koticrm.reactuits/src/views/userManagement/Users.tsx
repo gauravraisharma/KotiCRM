@@ -42,7 +42,6 @@ const Users = () => {
   const timezone = useSelector((state: any) => state.sharedReducer.timezone);
   const pageSize = 10;
 
-  console.log (setProfileImage)
   
 
   const GetEmployees = async () => {
@@ -61,7 +60,6 @@ const Users = () => {
       debugger
       setTotalUserCount(response.data.userCount)
     } catch (error) {
-      console.error("Error fetching employees:", error);
       toast.error("Failed to fetch employees. Please try again later.");
     } finally {
       setIsLoading(false);

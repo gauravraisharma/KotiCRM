@@ -412,6 +412,11 @@ namespace KotiCRM.Repository.Repository
             return employeeDataForm;
         }
 
+        public async Task<List<Employee12BB>> GetEmployee12BBs(string employeeId)
+        {
+            return _context.Employee12BBs.Where(e => e.EmployeeId == employeeId).OrderByDescending(e => e.FinancialYear).ToList();
+        }
+
         // Save form12BB and return DTO
         public async Task<Employee12BB> SaveEmployee12BB(Employee12BB employee12BB)
         {

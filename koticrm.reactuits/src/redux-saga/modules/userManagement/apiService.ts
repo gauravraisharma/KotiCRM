@@ -107,7 +107,7 @@ export async function ChangePassword(passwordRequestModal:any) {
 // Taxation services
   
 
-export async function GetEmployee12BB(id: string , financialYear : string){
+export async function GetEmployee12BB(id: string , financialYear? : string){
     try {
      
         const response = await axiosInstance.get(`/TaxDeclaration/Employee12BB/` + id + '/' + financialYear);
@@ -122,10 +122,23 @@ export async function GetEmployee12BB(id: string , financialYear : string){
     }
 }
 
+export async function GetEmployee12BBs(id: string){
+    try {
+        const response = await axiosInstance.get(`/TaxDeclaration/Employee12BBs/` + id);
+        return response;
+    } catch (error: any) {
+        const errorResponse: apiResponse<EmployeeFinancialRecord> = {
+            data: undefined,
+            status: 500,
+            statusText: error.message
+        };
+        return errorResponse;
+    }
+}
+
 export async function GetHouseRent(id: number){
     try {
         const response = await axiosInstance.get(`/TaxDeclaration/GetHouseRent/` + id);
-        console.log(response)
         return response;
     } catch (error: any) {
         const errorResponse: apiResponse<HouseRentRecord> = {

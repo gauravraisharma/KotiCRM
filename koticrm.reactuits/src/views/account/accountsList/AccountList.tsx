@@ -70,7 +70,6 @@ const AccountList: React.FC = () => {
 
   //Fetching data from store
   const accounts = useSelector((state: any) => state.accountReducer.accounts);
-  console.log(accounts);
   const refreshList = useSelector(
     (state: any) => state.accountReducer.refreshList
   );

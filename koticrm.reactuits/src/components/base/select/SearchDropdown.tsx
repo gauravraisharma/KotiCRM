@@ -18,7 +18,6 @@ interface Props {
 // Assuming FormValues is the interface representing your form values
 interface FormValues {
     [key: string]: any;
-    // Define your form fields here
 }
 
 const SearchDropdown = (props: Props) => {
@@ -44,12 +43,6 @@ const SearchDropdown = (props: Props) => {
 		setOpen(false);
 		formik.setFieldValue(name, option.value);
 		setInputValue('');
-		// if (!selected || option.value !== selected.value) {
-		// 	setSelected(option);
-		// 	setOpen(false);
-		// 	formik.setFieldValue(name, option.value);
-		// 	setInputValue('');
-		// }
 	}
 
 	return (

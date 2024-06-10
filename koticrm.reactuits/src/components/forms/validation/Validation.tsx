@@ -17,7 +17,6 @@ import {
   CRow,
 } from '@coreui/react'
 import { DocsExample } from '../..'
-// import { DocsExample } from 'src/components'
 
 const CustomStyles = () => {
   const [validated, setValidated] = useState(false)

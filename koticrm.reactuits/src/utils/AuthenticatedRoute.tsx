@@ -18,7 +18,6 @@ const checkTokenExpired = () => {
 
         return currentTime > tokenExpirationTime; 
     } catch (error) {
-        console.error('Error decoding or parsing token:', error);
         return true;
     }
 };
@@ -46,17 +45,6 @@ const AuthenticatedRoute: React.FC<AuthProps> = ({ isAuth }) => {
         return <Outlet />;
     }
 
-    // const authLogin = localStorage.getItem('accessToken');  (authLogin && window.location.pathname === '/login') || 
-
-    // if not logged In then cannot access authorized pages
-    // if (isAuth) {
-    //     return authLogin ? <Outlet /> : <Navigate to="/login" />;
-    // }
-    // else if ((authLogin && window.location.pathname === '/login') || (authLogin && window.location.pathname === '/')) {
-    //     return <Navigate to="/dashboard" />
-    // } else {
-    //     return <Outlet />;
-    // }
 };
 
 export default AuthenticatedRoute;

@@ -64,7 +64,6 @@ const CreateNewAttachment = ({ accountId, isVisible, handleClose }: Props) => {
       resetForm();
       handleClose();
     } catch (error) {
-      console.log(error);
     } finally {
       setSubmitting(false);
     }

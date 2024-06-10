@@ -20,10 +20,4 @@ const DocsLink:FC<DocsLinkProps> = ({ href, name, text, ...rest }) => {
   )
 }
 
-// DocsLink.propTypes = {
-//   href: PropTypes.string,
-//   name: PropTypes.string,
-//   text: PropTypes.string,
-// }
-
 export default React.memo(DocsLink)

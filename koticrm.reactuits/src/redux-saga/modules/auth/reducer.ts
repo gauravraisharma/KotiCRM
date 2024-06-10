@@ -27,6 +27,7 @@ const authReducer: Reducer<authState, AppAction> = (state: authState = INITIAL_S
             loginPayload = (action as actionPayloadModel).payload;
             if (loginPayload && loginPayload.status === 'SUCCEED') { // Simplify condition
                 localStorage.setItem('accessToken', loginPayload.token);
+                localStorage.setItem('currentUser', loginPayload.currentUser);
                 return {
                     ...state,
                     token: loginPayload.token,
