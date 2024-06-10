@@ -1,3 +1,4 @@
+import { Employee } from "../userManagement/employee"
 
 export interface authState{
     token: string|null,
@@ -5,6 +6,7 @@ export interface authState{
     loggedIn: boolean,
     userId:string | null,
     userType:string | null,
+    user: Employee,
     organizationId: number| null,
     isLoading:boolean
 }

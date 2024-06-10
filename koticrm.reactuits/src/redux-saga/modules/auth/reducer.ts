@@ -3,6 +3,7 @@ import { LOGIN_FAILURE, LOGIN_REQUEST, LOGIN_SUCCESS, LOGOUT, START_LOADING, UPD
 import { authState } from "../../../models/reduxState/authState";
 import { AppAction } from "../../../models/redux/action/ActionModel";
 import { actionPayloadModel } from "../../../models/actionModel/actionModel";
+import { EmployeeClass } from "../../../models/userManagement/employee";
 
 const INITIAL_STATE: authState = {
   token: null,
@@ -10,6 +11,7 @@ const INITIAL_STATE: authState = {
   userType: null,
   userId: null,
   organizationId:null,
+  user: new EmployeeClass(),
   loggedIn: false,
   isLoading: false,
 };
@@ -34,6 +36,7 @@ const authReducer: Reducer<authState, AppAction> = (state: authState = INITIAL_S
                     modulePermission: loginPayload.modulePermission,
                     userId: loginPayload.userId,
                     userType: loginPayload.userType,
+                    user: loginPayload.employee,
                     organizationId:loginPayload.organizationId,
                     loggedIn: true,
                     isLoading :false

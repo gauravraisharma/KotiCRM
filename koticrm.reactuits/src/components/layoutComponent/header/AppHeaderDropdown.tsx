@@ -8,9 +8,7 @@ import {
 } from "@coreui/react";
 import { cilAccountLogout, cilSettings, cilUser } from "@coreui/icons";
 import CIcon from "@coreui/icons-react";
-import avatar8 from "../../../assets/brand/profilePlaceholder.jpg";
 import { useNavigate } from "react-router-dom";
-//import { useAuth } from '../../utils/AuthProvider'
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { logout } from "../../../redux-saga/modules/auth/action";
@@ -20,11 +18,9 @@ const AppHeaderDropdown = () => {
   
  
   const navigate = useNavigate();
-  // const auth = useAuth();
   const dispatch = useDispatch();
   const handleLogout = () => {
     localStorage.removeItem("accessToken");
-    // auth?.logout()
     dispatch(logout());
     navigate("/login");
   };
@@ -33,12 +29,13 @@ const AppHeaderDropdown = () => {
   const modulePermissions = useSelector(
     (state: any) => state.authReducer.modulePermission
   );
+  const user = useSelector((state: any) => state.authReducer.user);
 
 
   return (
     <CDropdown variant="nav-item">
       <CDropdownToggle className="py-0" caret={false}>
-        <CAvatar src={avatar8} size="lg" />
+        <CAvatar src={user.profilePictureURL} size="lg" />
       </CDropdownToggle>
       <CDropdownMenu className="pt-0">
       {modulePermissions && modulePermissions.some(permission => permission.moduleName === 'ManageUsers' && permission.isView) && (

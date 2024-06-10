@@ -1,4 +1,5 @@
-﻿using KotiCRM.Repository.IRepository;
+﻿using KotiCRM.Repository.Constants;
+using KotiCRM.Repository.IRepository;
 using KotiCRM.Repository.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -29,11 +30,11 @@ namespace KotiCRM.Repository.Repository
 
             try
             {
-                if (!Directory.Exists(_profilePicturePath))
-                    Directory.CreateDirectory(_profilePicturePath);
+                if (!Directory.Exists(_profilePicturePath + '/' + PathConstant.PROFILE_PICTURE_FOLDER))
+                    Directory.CreateDirectory(_profilePicturePath + '/' + PathConstant.PROFILE_PICTURE_FOLDER);
 
                 string name = String.Concat(DateTime.Now.ToString("MM_dd_yyyy_HH_mm"), "_", fileName, Path.GetExtension(ContentDispositionHeaderValue.Parse(profilePicture.ContentDisposition).FileName.Trim('"')));
-                string fullPath = Path.Combine(_profilePicturePath, name);
+                string fullPath = Path.Combine(_profilePicturePath, PathConstant.PROFILE_PICTURE_FOLDER, name);
 
                 using (var stream = new FileStream(fullPath, FileMode.Create))
                 {
@@ -88,17 +89,15 @@ namespace KotiCRM.Repository.Repository
 
         public string GetImagePathByEmployeeId(string profilePic)
         {
-            var absolutePath = Path.Combine(_profilePicturePath, profilePic);
+            var absolutePath = Path.Combine(_profilePicturePath + '/' + PathConstant.PROFILE_PICTURE_FOLDER, profilePic);
             if (File.Exists(absolutePath))
             {
-                return Path.Combine(_profilePictureLink, profilePic);
+                return Path.Combine(_profilePictureLink + '/' + PathConstant.PROFILE_PICTURE_FOLDER, profilePic);
             }
             else
             {
                 return null;
             }
-
         }
-
     }
 }

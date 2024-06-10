@@ -35,12 +35,15 @@ namespace KotiCRM.Repository.Repository
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IConfiguration _config;
         private readonly KotiCRMDbContext _context;
+        private readonly IProfilePictureRepository _profilePictureRepository;
+
         public UserAccountRepository(
             UserManager<ApplicationUser> userManager,
             KotiCRMDbContext context,
             RoleManager<ApplicationRole> roleManager,
             SignInManager<ApplicationUser> signInManager,
-            IConfiguration config)
+            IConfiguration config, 
+            IProfilePictureRepository profilePictureRepository)
         {
 
             _userManager = userManager;
@@ -48,6 +51,7 @@ namespace KotiCRM.Repository.Repository
             _signInManager = signInManager;
             _config = config;
             _context = context;
+            _profilePictureRepository = profilePictureRepository;
         }
         public async Task<ResponseStatus> CreateApplicationUser(ApplicationUserModel userModel)
         {
@@ -346,6 +350,18 @@ namespace KotiCRM.Repository.Repository
                         };
                     }
 
+                    var employee = _context.Employees.FirstOrDefault(x => x.UserId == user.Id);
+                    if (employee == null)
+                    {
+                        return new LoginStatus
+                        {
+                            Status = "FAILED",
+                            Message = "User not found."
+                        };
+                    }
+
+                    string profilePicturePath = _profilePictureRepository.GetImagePathByEmployeeId(employee.ProfilePictureURL);
+                    employee.ProfilePictureURL = profilePicturePath;
 
                     return new LoginStatus
                     {
@@ -356,7 +372,8 @@ namespace KotiCRM.Repository.Repository
                         TimeZone = timeZone,
                         UserId = user.Id,
                         OrganizationId = user.OrganizationId,
-                        ModulePermission = ModulePermissionList
+                        ModulePermission = ModulePermissionList,
+                        Employee = (Employee)employee
                     };
 
                 }

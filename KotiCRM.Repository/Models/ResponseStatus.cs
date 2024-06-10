@@ -14,6 +14,7 @@ namespace KotiCRM.Repository.Models
         public string? TimeZone { get; set; }
         public int? OrganizationId { get; set; }
         public List<ModulePermission>? ModulePermission { get; set; }
+        public Employee? Employee { get; set; }
     }
     public class ResponseStatus
     {
