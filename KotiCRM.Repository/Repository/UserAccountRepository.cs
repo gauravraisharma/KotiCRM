@@ -360,8 +360,11 @@ namespace KotiCRM.Repository.Repository
                         };
                     }
 
-                    string profilePicturePath = _profilePictureRepository.GetImagePathByEmployeeId(employee.ProfilePictureURL);
-                    employee.ProfilePictureURL = profilePicturePath;
+                    if (employee.ProfilePictureURL != null)
+                    {
+                        string profilePicturePath = _profilePictureRepository.GetImagePathByEmployeeId(employee.ProfilePictureURL);
+                        employee.ProfilePictureURL = profilePicturePath;
+                    }
 
                     return new LoginStatus
                     {
@@ -1519,12 +1522,20 @@ namespace KotiCRM.Repository.Repository
                 var updatedContact = _context.Banks.Update(bankResponse);
                 await _context.SaveChangesAsync();
 
+
                 // Update Employee
                 employee.EmployeeId = createEmployeeDTO.EmployeeId;
                 employee.EmpCode = createEmployeeDTO.EmployeeCode;
                 employee.UserId = employee.UserId;
                 employee.Name = createEmployeeDTO.Name;
-                employee.ProfilePictureURL = createEmployeeDTO.ProfilePicturePath;
+                if (createEmployeeDTO.ProfilePicturePath == null)                  // Check if ProfilePicturePath is null then assign ProfilePicturePath from DB
+                {
+                    employee.ProfilePictureURL = employee.ProfilePictureURL;
+                }
+                else
+                {
+                    employee.ProfilePictureURL = createEmployeeDTO.ProfilePicturePath;
+                }
                 employee.FatherName = createEmployeeDTO.FatherName;
                 employee.GuardianName = createEmployeeDTO.GuardianName;
                 employee.BloodGroup = createEmployeeDTO.BloodGroup;

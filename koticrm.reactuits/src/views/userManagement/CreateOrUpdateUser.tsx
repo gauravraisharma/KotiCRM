@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   CButton,
   CCard,
@@ -70,6 +70,7 @@ const CreateOrUpdateUser = () => {
   const [shiftId, setShiftId] = useState(0);
   const [roleId, setRoleId] = useState<string>("");
   const [image, setImage] = useState(null);
+  const [oldImage, setOldImage] = useState(null);
   const [isNewUserPage, setIsNewUserPage] = useState(false);
 
   //Get organizationId
@@ -246,7 +247,6 @@ const CreateOrUpdateUser = () => {
   };
 
   const mapEmployeeToFormData = (employee: Employee): FormData => {
-    debugger;
     employee.organizationId = organizationId;
     const formData = new FormData();
     formData.append("employeeId", employee.employeeId);

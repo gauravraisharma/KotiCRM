@@ -89,7 +89,11 @@ namespace KotiCRM.Repository.Repository
 
         public string GetImagePathByEmployeeId(string profilePic)
         {
-            var absolutePath = Path.Combine(_profilePicturePath + '/' + PathConstant.PROFILE_PICTURE_FOLDER, profilePic);
+            if(profilePic == null)
+            {
+                return null;
+            }
+            var absolutePath = Path.Combine(_profilePicturePath, PathConstant.PROFILE_PICTURE_FOLDER, profilePic);
             if (File.Exists(absolutePath))
             {
                 return Path.Combine(_profilePictureLink + '/' + PathConstant.PROFILE_PICTURE_FOLDER, profilePic);

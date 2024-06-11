@@ -9,6 +9,7 @@ import {
 import { cilAccountLogout, cilSettings, cilUser } from "@coreui/icons";
 import CIcon from "@coreui/icons-react";
 import { useNavigate } from "react-router-dom";
+import avatar from "../../../assets/brand/profilePlaceholder.jpg";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { logout } from "../../../redux-saga/modules/auth/action";
@@ -31,11 +32,10 @@ const AppHeaderDropdown = () => {
   );
   const user = useSelector((state: any) => state.authReducer.user);
 
-
   return (
     <CDropdown variant="nav-item">
       <CDropdownToggle className="py-0" caret={false}>
-        <CAvatar src={user.profilePictureURL} size="lg" />
+        <CAvatar src={user.profilePictureURL ? user.profilePictureURL : avatar} size="lg" />
       </CDropdownToggle>
       <CDropdownMenu className="pt-0">
       {modulePermissions && modulePermissions.some(permission => permission.moduleName === 'ManageUsers' && permission.isView) && (

@@ -45,7 +45,6 @@ const Users = () => {
   
 
   const GetEmployees = async () => {
-    debugger
     try {
       // let searchField = dropdownValue.toLowerCase().replace(' ', '');
 
@@ -57,7 +56,6 @@ const Users = () => {
 
 
       setUserList(response.data.employee);
-      debugger
       setTotalUserCount(response.data.userCount)
     } catch (error) {
       toast.error("Failed to fetch employees. Please try again later.");
