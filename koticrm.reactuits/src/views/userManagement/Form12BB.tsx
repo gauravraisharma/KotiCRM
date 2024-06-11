@@ -231,7 +231,6 @@ const Form12BB = () => {
 
   const handleSaveHouseRent = async (formData:any) => {
     try {
-      debugger;
       // Validate specific field
       //  await validateForm('houseRentRecord.amount'); 
       if (!formData.houseRentRecord.amount) return;
@@ -330,7 +329,6 @@ const Form12BB = () => {
   //save 
   const handleSaveHomeLoan = async (validateForm: any) => {
     try {
-      debugger;
       await validateForm();
   
       if (

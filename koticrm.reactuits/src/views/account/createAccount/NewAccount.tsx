@@ -143,30 +143,6 @@ const MyForm = () => {
     navigate('/accountsList')
   };
 
-
-
-  // // dispatch(createAccountRequest(accountDetail));
-  // const response :any  =  CreateAccount(AccountDetails);
-  // debugger
-  // if (response.status == 200) {
-  //   toast.success("Account created successfully");
-  //   navigate('/accountsList')
-  // }else{
-  //   toast.error("Accouny creation failed");
-  // }
-
-  //  export function CreateAccount(account: Account): Promise<apiResponse<Account>> {
-  //   return axiosInstance.post<Account>(`/Account/CreateAccount`, account).then((response: AxiosResponse<Account>) => responseBody(response)).
-  //       catch((error: AxiosError) => {
-  //           const errorResponse: apiResponse<Account> = {
-  //               data: undefined,
-  //               status: 500,
-  //               statusText: error.message
-  //           };
-  //           return errorResponse;
-  //       });
-
-
   const accountOwner = useSelector(
     (state: any) => state.accountReducer.accountOwner
   );

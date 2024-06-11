@@ -363,12 +363,8 @@ const CreateOrUpdateUser = () => {
     departmentId: Yup.number().required("Department is required"),
     roleId: Yup.string().required("Role is required"),
     shiftId: Yup.string().required("Shift is required"),
-    dateOfBirth: Yup.date()
-      .required("Date of birth is required")
-      .max(new Date(), "Date of birth cannot be in the future"),
-      contactNumber: Yup.string()
-      .matches(/^\d{10}$/, "contact number  must be exactly 10 digits"),
-    
+    dateOfBirth: Yup.date().required("Date of birth is required").max(new Date(), "Date of birth cannot be in the future"),
+    contactNumber: Yup.string().required("Contact number is required").matches(/^\d{10}$/, "contact number  must be exactly 10 digits"),
   });
 
   if (isRelievedChecked) {
@@ -997,26 +993,36 @@ const CreateOrUpdateUser = () => {
 
                       <CCol sm={4}>
                         <div className="form-group">
-                          <label htmlFor="contactNumber">Contact Number </label>
+                          <label htmlFor="contactNumber">Contact Number 
+                          <span
+                              style={{
+                                color: "red",
+                                fontSize: "25px",
+                                lineHeight: "0",
+                              }}
+                            >
+                              *
+                            </span>
+                          </label>
                           <Field
                             type="number"
                             id="contactNumber"
                             name="contactNumber"
-                            className="form-control"
-                            // className={`form-control ${
-                            //   touched.contactNumber && errors.contactNumber
-                            //     ? "is-invalid"
-                            //     : ""
-                            // }`}
+                            // className="form-control"
+                            className={`form-control ${
+                              touched.contactNumber && errors.contactNumber
+                                ? "is-invalid"
+                                : ""
+                            }`}
                             placeholder="Contact Number "
                           />
                           <ErrorMessage
-                          name="contactNumber"
-                          className="invalid-feedback"
-                          render={(error) => (
-                            <label style={{ color: "#dc3545" }}>{error}</label>
-                          )}
-                        />
+                            name="contactNumber"
+                            className="invalid-feedback"
+                            render={(error) => (
+                              <label style={{ color: "#dc3545" }}>{error}</label>
+                            )}
+                          />
                         </div>
                       </CCol>
                     </CRow>

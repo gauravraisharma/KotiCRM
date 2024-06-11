@@ -69,7 +69,6 @@ const CreateOrUpdateRole = () => {
 
   const GetModule = async (modulePermission: any) => {
     try {
-      debugger;
       const response = await GetModules();
       setRoleModules(response);
   
@@ -157,7 +156,6 @@ const CreateOrUpdateRole = () => {
 
   // };
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>, moduleId: number) => {
-    debugger;
     const { name, checked } = e.target;
 
     setPermissionList((prevPermissions:any) => {
@@ -224,7 +222,6 @@ const CreateOrUpdateRole = () => {
         if (!id) {
           response = await CreateRole(role);
           if (permissionList.length > 0) {
-            debugger
               const updatedPermissionList = permissionList.map(permission => ({
                 ...permission,
                 roleId: response.data.roleId
