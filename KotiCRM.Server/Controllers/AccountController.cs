@@ -1,6 +1,7 @@
 ﻿using Azure;
 using KotiCRM.Repository.DTOs.AccountDTO;
 using KotiCRM.Repository.Models;
+using KotiCRM.Server.Authentication;
 using KotiCRM.Services.IServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -22,12 +23,14 @@ namespace KotiCRM.Server.Controllers
 
         [HttpGet]
         [Route("GetAccountList")]
+        [Authorize(Policy = Policies.Accounts_View)]
         public async Task<AccountWithCountDTO> GetAccountList(string? searchQuery, int? pageNumber, int? pageSize)
         {
             return await _accountService.GetAccountList(searchQuery, pageNumber, pageSize);
         }
 
         [HttpGet("GetAccountDetails/{id}")]
+        [Authorize(Policy = Policies.Accounts_View)]
         public async Task<ActionResult<Account>> GetAccountDetails(int id)
         {
 
@@ -40,6 +43,7 @@ namespace KotiCRM.Server.Controllers
 
         [HttpPost]
         [Route("CreateAccount")]
+        [Authorize(Policy = Policies.Accounts_Add)]
         public async Task<ActionResult<Account>> CreateAccount(Account account)
         {
             var response = await _accountService.CreateAccount(account);
@@ -51,6 +55,7 @@ namespace KotiCRM.Server.Controllers
         }
 
         [HttpPut("UpdateAccount/{id}")]
+        [Authorize(Policy = Policies.Accounts_Edit)]
         public async Task<IActionResult> UpdateAccount(int id, Account account)
         {
             return Ok(await _accountService.UpdateAccount(id, account));
@@ -59,6 +64,7 @@ namespace KotiCRM.Server.Controllers
 
 
         [HttpDelete("DeleteAccount/{id}")]
+        [Authorize(Policy = Policies.Accounts_Delete)]
         public async Task<IActionResult> DeleteAccount(int id)
         {
             return Ok(await _accountService.DeleteAccount(id));

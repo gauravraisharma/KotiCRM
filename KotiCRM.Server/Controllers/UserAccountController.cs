@@ -15,17 +15,13 @@ using System.Text;
 namespace KotiCRM.Server.Controllers
 {
     [Route("api/[controller]")]
-
     [ApiController]
     public class UserAccountController : Controller
     {
-
         private readonly IUserAccountService _accountService;
-
 
         public UserAccountController(IUserAccountService accountService)
         {
-           
             _accountService = accountService;
         }
 
@@ -53,8 +49,8 @@ namespace KotiCRM.Server.Controllers
         }
 
         //It will create the application user
-        [Authorize(Roles = "Administrator")]
         [HttpPost("CreateApplicationUser")]
+        [Authorize(Policy = Policies.Accounts_Add)]
         public async Task<IActionResult> CreateApplicationUser(ApplicationUserModel userModel)
         {
             if (!ModelState.IsValid)
@@ -78,8 +74,8 @@ namespace KotiCRM.Server.Controllers
         }
 
         //It will update the application user
-        [Authorize(Roles = "Administrator")]
         [HttpPost("updateApplicationUser")]
+        [Authorize(Policy = Policies.Accounts_Edit)]
         public async Task<IActionResult> UpdateApplicationUser(UpdateApplicationUserModel userModel)
         {
             if (!ModelState.IsValid)
@@ -104,6 +100,7 @@ namespace KotiCRM.Server.Controllers
         // Role Management
 
         [HttpGet("GetRoles")]
+        [Authorize(Policy = Policies.Accounts_View)]
         public async Task<ActionResult> GetRoles(string? searchQuery, int? pageNumber, int? pageSize)
         {
             var dbResponse = await _accountService.GetRoles(searchQuery, pageNumber, pageSize);
@@ -115,6 +112,7 @@ namespace KotiCRM.Server.Controllers
         }
 
         [HttpGet("GetRole/{roleId}")]
+        [Authorize(Policy = Policies.Accounts_View)]
         public async Task<ActionResult> GetRole(string roleId)
         {
             var dbResponse = await _accountService.GetRole(roleId);
@@ -126,9 +124,9 @@ namespace KotiCRM.Server.Controllers
         }
 
         //It will create the application Role
-        //[Authorize(Roles = "Administrator")]
         [HttpPost]
         [Route("CreateNewRole")]
+        [Authorize(Policy = Policies.Accounts_Add)]
         public async Task<IActionResult> CreateNewRole(CreateUpdateRoleDTO createUpdateRoleDTO)
         {
             if (!ModelState.IsValid)
@@ -151,6 +149,7 @@ namespace KotiCRM.Server.Controllers
 
         [HttpPut]
         [Route("UpdateRole")]
+        [Authorize(Policy = Policies.Accounts_Edit)]
         public async Task<ActionResult> UpdateRole(CreateUpdateRoleDTO createUpdateRoleDTO)
         {
             if (!ModelState.IsValid)
@@ -170,6 +169,7 @@ namespace KotiCRM.Server.Controllers
         }
 
         [HttpGet("DeleteRole/{roleId}")]
+        [Authorize(Policy = Policies.Accounts_Delete)]
         public async Task<ActionResult> DeleteRole(string roleId)
         {
             var dbResponse = await _accountService.DeleteRole(roleId);
@@ -182,8 +182,8 @@ namespace KotiCRM.Server.Controllers
 
 
         //This method is used to get List of Roles 
-        [Authorize(Policy = Policies.Accounts)]
         [HttpGet("GetUserTypeListDD")]
+        [Authorize(Policy = Policies.Accounts_View)]
         public ActionResult GetUserTypeListDD()
         {
             var dbResponse = _accountService.GetUserTypeListDD();
@@ -194,10 +194,9 @@ namespace KotiCRM.Server.Controllers
             return Ok(dbResponse.DdList);
         }
 
-
-        [Authorize(Roles = "Administrator")]
         //This method is used to get List of Roles
         [HttpGet("GetUserList")]
+        [Authorize(Policy = Policies.Accounts_View)]
         public ActionResult GetUserList()
         {
             var dbResponse = _accountService.GetUserList();
@@ -205,8 +204,8 @@ namespace KotiCRM.Server.Controllers
             return Ok(dbResponse);
         }
 
-        [Authorize(Roles = "Administrator")]
         [HttpGet("getUserDataById/{userId}")]
+        [Authorize(Policy = Policies.Accounts_View)]
         public ActionResult GetUserDataById(string userId)
         {
             var dbResponse = _accountService.GetUserDataById(userId);
@@ -214,8 +213,8 @@ namespace KotiCRM.Server.Controllers
             return Ok(dbResponse);
         }
 
-        [Authorize(Roles = "Administrator")]
         [HttpGet("DeleteUser/{userId}")]
+        [Authorize(Policy = Policies.Accounts_Delete)]
         public ActionResult DeleteUser(string userId)
         {
             var dbResponse = _accountService.DeleteUser(userId);
@@ -227,6 +226,7 @@ namespace KotiCRM.Server.Controllers
         }
 
         [HttpGet("GetModulePermissions/{userType}")]
+        [Authorize(Policy = Policies.Accounts_View)]
         public async Task<ActionResult> GetModulePermissions(string userType)
         {
             var dbResponse = await _accountService.GetModulePermissions(userType);
@@ -239,6 +239,7 @@ namespace KotiCRM.Server.Controllers
 
         // get modules
         [HttpGet("GetModules")]
+        [Authorize(Policy = Policies.Accounts_View)]
         public async Task<ActionResult<IEnumerable<GetModulesDTO>>> GetModules()
         {
             try
@@ -257,10 +258,8 @@ namespace KotiCRM.Server.Controllers
             }
         }
 
-
-
-        [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpGet("GetModulePermission/{userId}")]
+        [Authorize(Policy = Policies.Accounts_View)]
         public async Task<ActionResult> GetModulePermission(string userId)
         {
             var dbResponse = await _accountService.GetModulePermission(userId);
@@ -275,7 +274,8 @@ namespace KotiCRM.Server.Controllers
 
 
         [HttpPost] // Use HttpPost for creation
-        [Route("CreateModulePermission")] // Define your route
+        [Route("CreateModulePermission")]
+        [Authorize(Policy = Policies.Accounts_Add)]
         public async Task<ActionResult> CreateModulePermission(List<CreateModulePermissionDTO> createModulePermissions)
         {
             if (!ModelState.IsValid)
@@ -297,6 +297,7 @@ namespace KotiCRM.Server.Controllers
 
         [HttpPut]
         [Route("UpdateModulePermission")]
+        [Authorize(Policy = Policies.Accounts_Edit)]
         public async Task<ActionResult> UpdateModulePermission(List<UpdateModulePermissionDTO> updateModulePermissions)
         {
             if (!ModelState.IsValid)
@@ -319,6 +320,7 @@ namespace KotiCRM.Server.Controllers
         //This method is used to get List of Employees
         [HttpGet]
         [Route("GetUsers")]
+        [Authorize(Policy = Policies.Accounts_View)]
         public async Task<EmployeeWithCountDTO> GetEmployees(string? searchQuery, int? pageNumber, int? pageSize)
        {
             var users = await _accountService.GetEmployees(searchQuery, pageNumber, pageSize);
@@ -329,6 +331,7 @@ namespace KotiCRM.Server.Controllers
         //This method is used to get Employee by id
         [HttpGet]
         [Route("GetEmployeeById/{employeeId}")]
+        [Authorize(Policy = Policies.Accounts_View)]
         public ActionResult GetEmployeeById(string employeeId)
         {
             var response = _accountService.GetEmployeeById(employeeId);
@@ -338,6 +341,7 @@ namespace KotiCRM.Server.Controllers
         // This method is used to create Employee
         [HttpPost]
         [Route("CreateEmployee")]
+        [Authorize(Policy = Policies.Accounts_Add)]
         public async Task<ActionResult> CreateEmployee([FromForm] CreateEmployeeDTO createEmployeeDTO )
         {
             if (!ModelState.IsValid)
@@ -362,6 +366,7 @@ namespace KotiCRM.Server.Controllers
         // This method is used to update Employee
         [HttpPut]
         [Route("UpdateEmployee")]
+        [Authorize(Policy = Policies.Accounts_Edit)]
         public async Task<ActionResult> UpdateEmployee([FromForm]CreateEmployeeDTO createEmployeeDTO )
         {
             if (!ModelState.IsValid)
@@ -385,6 +390,7 @@ namespace KotiCRM.Server.Controllers
         // This method is used to delete Employee
         [HttpGet]
         [Route("DeleteEmployee/{employeeId}")]
+        [Authorize(Policy = Policies.Accounts_Delete)]
         public ActionResult DeleteEmployee(string employeeId)
         {
             var dbResponse = _accountService.DeleteEmployee(employeeId);
@@ -398,6 +404,7 @@ namespace KotiCRM.Server.Controllers
 
         [HttpPost]
         [Route("ChangePassword")]
+        [Authorize(Policy = Policies.Accounts_Edit)]
         public async Task<ActionResult<string>> ChangePassword(ChangePasswordRequest passwordData)
         {
             if (passwordData == null || string.IsNullOrEmpty(passwordData.userID) || string.IsNullOrEmpty(passwordData.newPassword))

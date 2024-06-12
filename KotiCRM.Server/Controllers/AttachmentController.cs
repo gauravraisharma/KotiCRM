@@ -1,13 +1,14 @@
 ﻿using KotiCRM.Repository.DTOs.Attachment;
 using KotiCRM.Repository.Models;
+using KotiCRM.Server.Authentication;
 using KotiCRM.Services.IServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace KotiCRM.Server.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    //[Authorize(AuthenticationSchemes = "Bearer")]
     public class AttachmentController : Controller
     {
         private readonly IAttachmentService _attachmentService;
@@ -19,6 +20,7 @@ namespace KotiCRM.Server.Controllers
 
         [HttpGet]
         [Route("GetAttachmentList")]
+        [Authorize(Policy = Policies.Accounts_View)]
         public async Task<IEnumerable<AttachmentDTO>> GetAttachmentList()
         {
             return await _attachmentService.GetAttachmentList();
@@ -26,6 +28,7 @@ namespace KotiCRM.Server.Controllers
 
         [HttpPost]
         [Route("CreateAttachment")]
+        [Authorize(Policy = Policies.Accounts_Add)]
         public async Task<ActionResult<Attachment>> CreateAttachment([FromForm] CreateAttachmentDTO createAttachmentDTO)
         {
             var response = await _attachmentService.CreateAttachment(createAttachmentDTO);
@@ -37,6 +40,7 @@ namespace KotiCRM.Server.Controllers
         }
 
         [HttpGet("{attachmentId}/download")]
+        [Authorize(Policy = Policies.Accounts_View)]
         public async Task<IActionResult> DownloadAttachmentAsync(int attachmentId)
         {
             var dbResponse = await _attachmentService.DownloadAttachmentAsync(attachmentId);
