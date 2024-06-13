@@ -1,7 +1,8 @@
 import { apiResponse, axiosInstance, responseBody } from "../../../apiInterceptor/axiosInterceptor";
-import { DeductionRecord, EightyDRecord, EightyGRecord, EmployeeFinancialRecord, HomeLoanRecord, HouseRentRecord, OtherInvestmentRecord, TravelExpenditureRecord } from "../../../models/Form12BB/Form12BB";
+import { EightyCDeclaration, EightyDRecord, EightyGRecord, EmployeeFinancialRecord, HomeLoanRecord, HouseRentRecord, OtherInvestmentRecord, TravelExpenditureRecord } from "../../../models/Form12BB/Form12BB";
 import { Employee } from "../../../models/userManagement/employee";
 import { Employees } from "../../../models/userManagement/employees";
+import { Deduction } from "../../../views/userManagement/deduction";
 
 
 export async function GetEmployeeId(){
@@ -152,6 +153,7 @@ export async function GetHouseRent(id: number){
 
 export async function GetLeaveTravelExpenditure(id: number){
     try {
+       
         const response = await axiosInstance.get(`/TaxDeclaration/GetLeaveTravelExpenditure/` + id);
         return response;
     } catch (error: any) {
@@ -177,12 +179,13 @@ export async function GetInterestPayableOnHomeLoan(id: number){
     }
 }
 
-export async function GetEightyC(id: number){
+export async function GetEightyC(employee12BBId: number){
     try {
-        const response = await axiosInstance.get(`/TaxDeclaration/GetEightyC/` + id);
+        debugger;
+        const response = await axiosInstance.get(`/TaxDeclaration/GetEightyC/` + employee12BBId);
         return response;
     } catch (error: any) {
-        const errorResponse: apiResponse<DeductionRecord> = {
+        const errorResponse: apiResponse<EightyCDeclaration> = {
             data: undefined,
             status: 500,
             statusText: error.message
@@ -190,6 +193,23 @@ export async function GetEightyC(id: number){
         return errorResponse;
     }
 }
+
+export async function GetDeductionTypes(): Promise<apiResponse<Deduction[]>> {
+    try {
+        debugger;
+        const response = await axiosInstance.get<Deduction[]>(`/TaxDeclaration/GetEightyCdeductionList`);
+        return response;
+    } catch (error: any) {
+        const errorResponse: apiResponse<Deduction[]> = {
+            data: undefined,
+            status: 500,
+            statusText: error.message
+        };
+        return errorResponse;
+    }
+}
+
+
 export async function GetEightyD(id: number){
     try {
         const response = await axiosInstance.get(`/TaxDeclaration/GetEightyD/` + id);
@@ -249,6 +269,7 @@ export async function SaveHouseRent(houseRentData: HouseRentRecord) {
 
 export async function SaveLeaveTravelExpenditure(LeaveTravelExpenditure: TravelExpenditureRecord) {
     try {
+        debugger;
         const response = await axiosInstance.post<TravelExpenditureRecord>(`/TaxDeclaration/LeaveTravelExpenditure`, LeaveTravelExpenditure);
         return response;
     } catch (error: any) {
@@ -275,12 +296,13 @@ export async function SaveInterestPayableOnHomeLoan(InterestPayableOnHomeLoan: H
     }
 }
 
-export async function SaveEightyC(EightyC: FormData) {
+export async function SaveEightyC(EightyC: EightyCDeclaration) {
     try {
-        const response = await axiosInstance.post<DeductionRecord>(`/TaxDeclaration/EightyC`, EightyC);
+        debugger;
+        const response = await axiosInstance.post<EightyCDeclaration>(`/TaxDeclaration/EightyC`, EightyC);
         return response;
     } catch (error: any) {
-        const errorResponse: apiResponse<DeductionRecord> = {
+        const errorResponse: apiResponse<EightyCDeclaration> = {
             data: undefined,
             status: 500,
             statusText: error.message

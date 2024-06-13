@@ -14,7 +14,7 @@ namespace KotiCRM.Repository.Models
         public int? HouseRentRecordId { get; set; }
         public int? TravelExpenditureRecordId { get; set; }
         public int? HomeLoanRecordId { get; set; }
-        //public int? EightyCRecordId { get; set; }
+        public int? EightyCRecordId { get; set; }
         public int? EightyDRecordId { get; set; }
         public int? EightyGRecordId { get; set; }
         public int? OtherInvestmentRecordId { get; set; }

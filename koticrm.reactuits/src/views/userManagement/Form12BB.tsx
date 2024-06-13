@@ -4,11 +4,12 @@ import * as Yup from 'yup';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import CIcon from '@coreui/icons-react';
-import { cilChevronDoubleDown, cilChevronDoubleUp } from '@coreui/icons';
+import { cilCheckCircle, cilChevronDoubleDown, cilChevronDoubleUp } from '@coreui/icons';
 import "../../css/style.css";
-import { GetEightyD, GetEightyG, GetEmployee12BB, GetHouseRent, GetInterestPayableOnHomeLoan, GetLeaveTravelExpenditure, GetOtherInvestment, SaveEightyD, SaveHouseRent, SaveInterestPayableOnHomeLoan, SaveLeaveTravelExpenditure, SaveOtherInvestment, } from '../../redux-saga/modules/userManagement/apiService';
+import { GetDeductionTypes, GetEightyC, GetEightyD, GetEightyG, GetEmployee12BB, GetHouseRent, GetInterestPayableOnHomeLoan, GetLeaveTravelExpenditure, GetOtherInvestment, SaveEightyC, SaveEightyD, SaveEightyG, SaveHouseRent, SaveInterestPayableOnHomeLoan, SaveLeaveTravelExpenditure, SaveOtherInvestment, } from '../../redux-saga/modules/userManagement/apiService';
 import { EmployeeFinancialRecord, initialEmployeeRecord } from '../../models/Form12BB/Form12BB';
 import { MdDelete } from 'react-icons/md';
+import { Deduction } from './deduction';
 
 // Separate validation schemas for each section
 const houseRentAmountValidationSchema = Yup.object().shape({
@@ -16,20 +17,19 @@ const houseRentAmountValidationSchema = Yup.object().shape({
     amount: Yup.number().required('Amount is required'),
   }),
 });
-
 const houseRentProofValidationSchema = Yup.object().shape({
   houseRentRecord: Yup.object().shape({
     ownerPanCard: Yup.string().required('PAN is required'),
-    proofdocumentLink: Yup.mixed().required('Proof document is required'),
+
   }),
 });
+//leave travel
 const leaveTravelValidationSchema = Yup.object().shape({
   travelExpenditureRecord: Yup.object().shape({
     amount: Yup.number().required('Amount is required'),
-    proofdocumentLink: Yup.mixed().required('Proof document is required'),
   }),
 });
-// Define the validation schema for Interest Payable on Home Loan
+// Interest Payable on Home Loan
 const interestHomeLoanValidationSchema = Yup.object().shape({
   homeLoanRecord: Yup.object().shape({
     amount: Yup.number().required('Interest amount is required'),
@@ -38,36 +38,20 @@ const interestHomeLoanValidationSchema = Yup.object().shape({
     lenderPanNumber: Yup.string().required('PAN number of lender is required'),
   }),
 });
-
-// 80-C
 const eightyCValidationSchema = Yup.object().shape({
   rows: Yup.array().of(
     Yup.object().shape({
-      selectOption: Yup.string()
-        .required('Select Medical Expenses is required')
-        .oneOf(['0', '25000', '50000'], 'Invalid option selected'),
-      amount: Yup.number()
-        .typeError('Amount must be a number')
-        .required('Amount is required')
-        .positive('Amount must be a positive number'),
-      proofSubmitted: Yup.boolean(),
-      file: Yup.mixed().when('proofSubmitted', {
-        is: true,
-        then: Yup.mixed().required('Proof document is required when proof is submitted'),
-        otherwise: Yup.mixed().notRequired()
-      })
+      deductionTypeId: Yup.string().required("Deduction Type is required"),
+      amount: Yup.number().typeError("Amount must be a number").required("Amount is required").min(0, "Amount must be greater than or equal to 0"),
     })
   ),
-  noInvestments: Yup.boolean(),
-  houseRentProofSubmitted: Yup.boolean()
 });
+
 //80-D
 const eightyDValidationSchema = Yup.object().shape({
   eightyDRecord: Yup.object().shape({
     insuranceAmount: Yup.number().required('Amount is required'),
     medicalExpenseAmount: Yup.number().required('Amount is required'),
-    insuranceProof: Yup.mixed().required('Insurance proof document is required'),
-    MedicalExpenseProof: Yup.mixed().required('Medicalproof document is required'),
 
   }),
 });
@@ -75,19 +59,18 @@ const eightyDValidationSchema = Yup.object().shape({
 const eightyGValidationSchema = Yup.object().shape({
   eightyGRecord: Yup.object().shape({
     nameofdonee: Yup.string().required('Name of the Donee is required'),
-    panNumber: Yup.string().required('PAN Details are required').matches(/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/, 'PAN Details must be in the correct format'),
+    panNumber: Yup.string().required('PAN Details must be in the correct format'),
     address: Yup.string().required('Address is required'),
     amount: Yup.number().required('Interest amount is required'),
-    proofdocumentLink: Yup.mixed().required('Proof document is required'),
+
   }),
 });
-// Define the validation schema for Other Investment Proofs
+// Other Investment
 const otherInvestmentValidationSchema = Yup.object().shape({
   otherInvestmentRecord: Yup.object().shape({
     description: Yup.string().required('Description is required'),
   }),
 });
-
 
 const Form12BB = () => {
   const [employee12BBData, setEmployee12BBData] = useState<EmployeeFinancialRecord>();
@@ -100,6 +83,7 @@ const Form12BB = () => {
   const [isCollapsedFive, setIsCollapsedFive] = useState(true);
   const [isCollapsedSix, setIsCollapsedSix] = useState(true);
   const [isCollapsedSeven, setIsCollapsedSeven] = useState(true);
+  const [file, setFile] = useState(null);
   // Checkboxes checks
   const [isRentChecked, setIsRentChecked] = useState(false);
   const [isLeaveChecked, setIsLeaveChecked] = useState(false);
@@ -109,9 +93,26 @@ const Form12BB = () => {
   const [is80GChecked, setIs80GChecked] = useState(false);
   const [isOtherChecked, setIsOtherChecked] = useState(false);
   const [selectedOption, setSelectedOption] = useState('');
-  const [submissionType, setSubmissionType] = useState('declaration');
+  const [deductionList, setDeductionList] = useState<Deduction[] | undefined>([]);
   const { employeeId } = useParams<{ employeeId: string }>();
-  const [rows, setRows] = useState([{id: 1,amount: '',proofSubmitted: false}]);
+  // const [rows, setRows] = useState([{ id: 1, amount: '', proofSubmitted: false }]);
+  const [rows, setRows] = useState(formData.eightyCRecord);
+
+
+  const addRow = () => {
+    const newRow = { key: Date.now(), id: '', amount: '', proofSubmitted: false };
+    setRows([...rows, newRow]);
+  };
+
+  const handleDeleteRow = (indexToDelete) => {
+    const updatedRows = [...rows];
+    updatedRows.splice(indexToDelete, 1); // Remove the row at the specified index
+    setRows(updatedRows);
+  };
+  const handleOptionChange = (event: any) => {
+    setSelectedOption(event.target.value);
+  };
+
   const navigate = useNavigate();
 
   //toggles
@@ -131,7 +132,6 @@ const Form12BB = () => {
   const toggleOtherChecked = () => setIsOtherChecked(!isOtherChecked);
 
 
-
   useEffect(() => {
     if (employeeId !== undefined) {
       employee12BB(employeeId, '2024-2025');
@@ -141,6 +141,8 @@ const Form12BB = () => {
   const employee12BB = async (id: string, financialYear: string) => {
     try {
       const response = await GetEmployee12BB(id, financialYear);
+      console.log('employee12BBId' + response.data?.id)
+      console.log(response)
       if (response != null) {
         setEmployee12BBData(response.data);
         if (response.data?.houseRentRecordId) {
@@ -151,10 +153,10 @@ const Form12BB = () => {
         }
         if (response.data?.homeLoanRecordId) {
           interestHomeLoan(response.data.homeLoanRecordId);
-
         }
-        // if(response)
-
+        if (response.data.id) {
+          getEightyC(response.data.id)
+        }
         if (response.data.eightyDRecordId) {
           getEightyD(response.data.eightyDRecordId)
         }
@@ -163,7 +165,6 @@ const Form12BB = () => {
         }
         if (response.data?.otherInvestmentRecordId)
           otherInvestment(response.data.otherInvestmentRecordId);
-
       }
     } catch (error) {
       console.error('Error fetching employee 12BB data:', error);
@@ -192,6 +193,85 @@ const Form12BB = () => {
         }
       });
     }
+    if (employee12BBData && employee12BBData.homeLoanRecord) {
+      setFormData({
+        ...formData,
+        homeLoanRecord: {
+          ...formData.travelExpenditureRecord,
+          amount: employee12BBData.travelExpenditureRecord.amount,
+          proofDocumentLink: employee12BBData.travelExpenditureRecord.proofdocumentLink,
+          isVerified: employee12BBData.travelExpenditureRecord.isVerified,
+          remarks: employee12BBData.travelExpenditureRecord.remarks,
+          lenderName: "",
+          lenderAddress: "",
+          lenderPanNumber: "",
+        }
+      });
+      if (employee12BBData && employee12BBData.eightyCRecord && employee12BBData.eightyCRecord.length > 0) {
+        setFormData({
+          ...formData,
+          eightyCRecord: {
+            id: employee12BBData.eightyCRecord[0].id,
+            deductionTypeId: employee12BBData.eightyCRecord[0].deductionTypeId,
+            amount: employee12BBData.eightyCRecord[0].amount,
+            proofDocumentLink: employee12BBData.eightyCRecord[0].proofDocumentLink,
+            isVerified: employee12BBData.eightyCRecord[0].isVerified,
+            remarks: employee12BBData.eightyCRecord[0].remarks,
+            createdBy: employee12BBData.eightyCRecord[0].createdBy,
+            createdOn: employee12BBData.eightyCRecord[0].createdOn,
+            modifiedBy: employee12BBData.eightyCRecord[0].modifiedBy,
+            modifiedOn: employee12BBData.eightyCRecord[0].modifiedOn,
+            isDelete: employee12BBData.eightyCRecord[0].isDelete,
+            employee12BBId: employee12BBData.eightyCRecord[0].employee12BBId,
+            employee12BB: employee12BBData.eightyCRecord[0].employee12BB,
+          }
+        });
+      }
+
+      if (employee12BBData && employee12BBData.eightyDRecord) {
+        setFormData({
+          ...formData,
+          eightyDRecord: {
+            id: employee12BBData.eightyDRecord.id,
+            insuranceAmount: employee12BBData.eightyDRecord.insuranceAmount,
+            insuranceProofLink: employee12BBData.eightyDRecord.insuranceProofLink,
+            medicalExpenseAmount: employee12BBData.eightyDRecord.medicalExpenseAmount,
+            medicalExpenseProof: employee12BBData.eightyDRecord.medicalExpenseProof,
+            isVerified: employee12BBData.eightyDRecord.isVerified,
+            remarks: employee12BBData.eightyDRecord.remarks
+          }
+        });
+      }
+      if (employee12BBData && employee12BBData.eightyGRecord) {
+        setFormData({
+          ...formData,
+          eightyGRecord: {
+            id: employee12BBData.eightyGRecord.id,
+            nameofdonee: employee12BBData.eightyGRecord.nameofdonee,
+            panNumber: employee12BBData.eightyGRecord.panNumber,
+            address: employee12BBData.eightyGRecord.address,
+            amount: employee12BBData.eightyGRecord.amount,
+            proofdocumentLink: employee12BBData.eightyGRecord.proofdocumentLink,
+            isVerified: employee12BBData.eightyGRecord.isVerified,
+            remarks: employee12BBData.eightyGRecord.remarks
+          }
+        });
+      }
+      if (employee12BBData && employee12BBData.otherInvestmentRecord) {
+        setFormData({
+          ...formData,
+          otherInvestmentRecord: {
+            id: employee12BBData.otherInvestmentRecord.id,
+            description: employee12BBData.otherInvestmentRecord.description,
+            proofdocumentLink: employee12BBData.otherInvestmentRecord.proofdocumentLink,
+            isVerified: employee12BBData.otherInvestmentRecord.isVerified,
+            remarks: employee12BBData.otherInvestmentRecord.remarks
+          }
+        });
+      }
+
+
+    }
   }, [employee12BBData]);
 
   // Update handleFormChange to handle all parameters
@@ -206,6 +286,118 @@ const Form12BB = () => {
     }));
   };
 
+  const handleFormPanChange = (e: any, fieldName: string, section: string) => {
+    const value = e.target.type === 'file' ? e.target.files[0] : e.target.value;
+    setFormData(prevData => ({
+      ...prevData,
+      [section]: {
+        ...prevData[section],
+        [fieldName]: value,
+      }
+    }));
+  }
+
+
+  const handleDescriptionChange = (e) => {
+    const newValue = e.target.value;
+    setFormData({
+      ...formData,
+      otherInvestmentRecord: {
+        ...formData.otherInvestmentRecord,
+        description: newValue
+      }
+    });
+  };
+
+  const handleAmountChange = (e) => {
+    const newValue = e.target.value;
+    setFormData({
+      ...formData,
+      travelExpenditureRecord: {
+        ...formData.travelExpenditureRecord,
+        amount: newValue
+      }
+    });
+  };
+
+  const handleProofDocumentChange = (e) => {
+    const newValue = e.target.files[0];
+    setFormData({
+      ...formData,
+      travelExpenditureRecord: {
+        ...formData.travelExpenditureRecord,
+        proofdocumentLink: newValue
+      }
+    });
+  };
+  const handleFormOtherChange = (e, fieldName) => {
+    const file = e.target.files[0];
+    setFormData(prevState => ({
+      ...prevState,
+      [fieldName]: file,
+    }));
+  };
+
+
+  // Handler for Name of the Donee field
+  const handleNameOfDoneeChange = (e: any) => {
+    const value = e.target.value;
+    setFormData(prevData => ({
+      ...prevData,
+      eightyGRecord: {
+        ...prevData.eightyGRecord,
+        nameofdonee: value,
+      }
+    }));
+  };
+
+  // Handler for PAN Number field
+  const handlePanNumberChange = (e: any) => {
+    const value = e.target.value;
+    setFormData(prevData => ({
+      ...prevData,
+      eightyGRecord: {
+        ...prevData.eightyGRecord,
+        panNumber: value,
+      }
+    }));
+  };
+
+  // Handler for Address field
+  const handleAddressChange = (e: any) => {
+    const value = e.target.value;
+    setFormData(prevData => ({
+      ...prevData,
+      eightyGRecord: {
+        ...prevData.eightyGRecord,
+        address: value,
+      }
+    }));
+  };
+
+  // Handler for Amount field
+  const handleGAmountChange = (e: any) => {
+    const value = e.target.value;
+    setFormData(prevData => ({
+      ...prevData,
+      eightyGRecord: {
+        ...prevData.eightyGRecord,
+        amount: value,
+      }
+    }));
+  };
+
+  // Handler for Proof Document Link field
+  const handleProofDocumentLinkChange = (e: any) => {
+    const value = e.target.files[0]; // Assuming you're uploading files
+    setFormData(prevData => ({
+      ...prevData,
+      eightyGRecord: {
+        ...prevData.eightyGRecord,
+        proofdocumentLink: value,
+      }
+    }));
+  };
 
   //get house rent 
   const HouseRent = async (id: number) => {
@@ -217,6 +409,7 @@ const Form12BB = () => {
           ...prevState,
           houseRentRecord: {
             ...prevState.houseRentRecord,
+            id,
             amount,
             ownerPanCard,
             proofdocumentLink,
@@ -229,16 +422,24 @@ const Form12BB = () => {
   };
   //save house rent 
 
-  const handleSaveHouseRent = async (formData:any) => {
+  const handleSaveHouseRent = async (validateForm: any) => {
     try {
       // Validate specific field
-      //  await validateForm('houseRentRecord.amount'); 
+      await validateForm('houseRentRecord.amount');
       if (!formData.houseRentRecord.amount) return;
-    
+
 
       const response = await SaveHouseRent(formData.houseRentRecord);
       if (response.status === 200) {
         console.log('House rent data saved:', response.data);
+        setFormData(prevState => ({
+          ...prevState,
+          houseRentRecord: {
+            ...prevState.houseRentRecord,
+            id: response.data?.id,
+            amount: response.data?.amount
+          }
+        }));
       } else {
         console.log('Unable to save', response.status);
       }
@@ -247,36 +448,53 @@ const Form12BB = () => {
     }
   };
 
-  const handleSaveOwnerPanRentSlips = async (validateField: any) => {
+
+  const handleSaveOwnerPanRentSlips = async (validateForm: any) => {
     try {
-      // Validate specific fields
-      await Promise.all([
-        validateField('houseRentRecord.ownerPanCard'),
-        validateField('houseRentRecord.proofdocumentLink'),
-      ]);
-      if (!formData.houseRentRecord.ownerPanCard || !formData.houseRentRecord.proofdocumentLink) return;
+      // Validate the form fields
+      await validateForm();
 
+      // Destructure the necessary fields from formData
+      const { amount, ownerPanCard, proofdocumentLink } = formData.houseRentRecord;
+
+      // Check if all required fields are filled
+      if (amount! == null && amount > 100000 && !ownerPanCard) {
+        console.log("Owner PAN is mandatory for rent amounts exceeding 1 lakh.");
+        return;
+      }
+
+      if (!proofdocumentLink && (amount === null || amount <= 100000)) {
+        console.log("Proof is optional for rent amounts up to 1 lakh.");
+      }
+      // Save the house rent data
       const response = await SaveHouseRent(formData.houseRentRecord);
       if (response.status === 200) {
         console.log('House rent data saved:', response.data);
       } else {
         console.log('Unable to save', response.status);
       }
+
+      if (proofdocumentLink) {
+        // Show check in both declaration and proof sections if proof is present
+        setIsRentChecked(true);
+      }
     } catch (error) {
       console.error('Error saving house rent data:', error);
     }
   };
+
 
   // get leave travel
   const LeaveTravel = async (id: number) => {
     try {
       const response = await GetLeaveTravelExpenditure(id);
       if (response?.data != null) {
-        const { amount, proofdocumentLink } = response.data;
+        const { id, amount, proofdocumentLink } = response.data;
         setFormData(prevState => ({
           ...prevState,
           travelExpenditureRecord: {
             ...prevState.travelExpenditureRecord,
+            id,
             amount,
             proofdocumentLink,
           }
@@ -287,33 +505,73 @@ const Form12BB = () => {
     }
   };
   //save leave travel
-  const handleSaveLeaveTravel = async (validateForm: any) => {
-    try {
-      await validateForm();
-      if (!formData.travelExpenditureRecord.amount || !formData.travelExpenditureRecord.proofdocumentLink) return;
 
-      const response = await SaveLeaveTravelExpenditure(formData.travelExpenditureRecord);
+  const handleSaveAmount = async (validateForm, formData, setFormData) => {
+    try {
+      await validateForm('travelExpenditureRecord.amount');
+
+      if (!formData.travelExpenditureRecord.amount) return;
+
+      const response = await SaveLeaveTravelExpenditure({
+        ...formData.travelExpenditureRecord,
+        amount: formData.travelExpenditureRecord.amount
+      });
+
       if (response.status === 200) {
-        console.log('Leave travel data saved:', response.data);
+        console.log('Amount saved:', response.data);
+        setFormData(prevState => ({
+          ...prevState,
+          travelExpenditureRecord: {
+            ...prevState.travelExpenditureRecord,
+            id: response.data?.id,
+            amount: response.data?.amount
+          }
+        }));
       } else {
-        console.log('Unable to save', response.status);
+        console.log('Unable to save amount', response.status);
       }
     } catch (error) {
-      console.error('Error saving leave travel data:', error);
+      console.error('Error saving amount:', error);
     }
   };
 
+
+
+  const handleSaveProof = async (id, validateForm, formData) => {
+    try {
+      debugger;
+      await validateForm();
+
+      if (!formData.travelExpenditureRecord.proofdocumentLink) return;
+
+      const record = {
+        id,
+        proofdocumentLink: formData.travelExpenditureRecord.proofdocumentLink
+      };
+
+      const response = await SaveLeaveTravelExpenditure(record);
+
+      if (response.status === 200) {
+        console.log('Proof document saved:', response.data);
+      } else {
+        console.log('Unable to save proof document', response.status);
+      }
+    } catch (error) {
+      console.error('Error saving proof document:', error);
+    }
+  };
 
   // get homeloan 
   const interestHomeLoan = async (id: number) => {
     try {
       const response = await GetInterestPayableOnHomeLoan(id);
-      console.log('API Response:', response); 
+      console.log('API Response:', response);
       if (response && response.data) {
-        console.log('Data:', response.data); 
+        console.log('Data:', response.data);
         setFormData((prevState) => ({
           ...prevState,
           homeLoanRecord: {
+            id: response.data.id,
             amount: response.data.amount || 0,
             lenderName: response.data.lenderName || '',
             lenderAddress: response.data.lenderAddress || '',
@@ -325,24 +583,28 @@ const Form12BB = () => {
       console.error('Error fetching interest payable on home loan:', error);
     }
   };
-  
+
   //save 
   const handleSaveHomeLoan = async (validateForm: any) => {
     try {
-      await validateForm();
-  
-      if (
-        !formData.homeLoanRecord.amount ||
-        !formData.homeLoanRecord.lenderName ||
-        !formData.homeLoanRecord.lenderAddress ||
-        !formData.homeLoanRecord.lenderPanNumber
-      ) {
+      // Validate each field
+      await validateForm('homeLoanRecord.amount');
+      await validateForm('homeLoanRecord.lenderName');
+      await validateForm('homeLoanRecord.lenderAddress');
+      await validateForm('homeLoanRecord.lenderPanNumber');
+      // Check if all required fields are filled
+      const { amount, lenderName, lenderAddress, lenderPanNumber } = formData.homeLoanRecord;
+      if (!amount || !lenderName || !lenderAddress || !lenderPanNumber) {
         // If any required field is empty, return without saving
+        console.log("Required fields are missing.");
         return;
       }
-  
+      formData.homeLoanRecord.isVerified = false;
+      formData.homeLoanRecord.remarks = 'hlo';
+      console.log(formData.homeLoanRecord)
+      // Make the API call to save the home loan record
       const response = await SaveInterestPayableOnHomeLoan(formData.homeLoanRecord);
-  
+
       if (response.status === 200) {
         console.log('Home loan saved successfully:', response.data);
       } else {
@@ -353,8 +615,104 @@ const Form12BB = () => {
     }
   };
 
-  // get 80 D
+  const handleFileChange = (e) => {
+    setFile(e.target.files[0]);
+  };
 
+  const handleSaveSlips = () => {
+    // Handle the file save logic here
+    console.log('File to save:', file);
+    alert('File saved successfully!');
+    // Reset the file input after save
+    setFile(null);
+    document.getElementById('rentSlips').value = '';
+  };
+
+
+  // get 80 C
+
+  const getEightyC = async (employee12BBId: number) => {
+    try {
+      // Make the API request
+      const response = await GetEightyC(employee12BBId);
+      console.log('API Response:', response);
+      if (response.data) {
+
+        setFormData((prevState) => ({
+          ...prevState,
+          eightyCRecord: prevState.eightyCRecord.map(record => {
+            if (record.id === response.data.id) {
+              return {
+                ...record,
+                id: response.data.id,
+                deductionTypeId: response.data.deductionTypeId,
+                amount: response.data.amount,
+                proofDocumentLink: response.data.proofDocumentLink,
+                isVerified: response.data.isVerified,
+                remarks: response.data.remarks,
+                createdBy: response.data.createdBy,
+                createdOn: response.data.createdOn,
+                modifiedBy: response.data.modifiedBy,
+                modifiedOn: response.data.modifiedOn,
+                isDelete: response.data.isDelete,
+                employee12BBId: response.data.employee12BBId,
+                employee12BB: response.data.employee12BB,
+              };
+            }
+            return record;
+          })
+        }));
+      }
+    } catch (error) {
+      // Handle any errors that occur during the API request
+      console.error('Error fetching Eighty C data:', error);
+    }
+  };
+  const handleSaveEightyC = async (validateForm: any) => {
+    try {
+      debugger
+      await validateForm();
+
+      const formDataToSave = rows.map(row => ({
+        deductionTypeId: row.deductionTypeId,
+        amount: row.amount,
+        proofSubmitted: row.proofDocumentLink ? 'present' : null,
+      }));
+
+      const response = await SaveEightyC(formDataToSave);
+      console.log('Response:', response);
+    } catch (error) {
+      if (error.response) {
+        console.error('Error details:', error.response.data);
+      } else if (error.request) {
+        console.error('No response received:', error.request);
+      } else {
+        console.error('Request error:', error.message);
+      }
+    }
+  };
+
+
+
+
+
+  //  get deduction type 
+  useEffect(() => {
+    const fetchDeductionData = async () => {
+      const result = await GetDeductionTypes();
+      if (result.status === 200 && result.data) {
+        setDeductionList(result.data);
+      } else {
+
+      }
+    };
+
+    fetchDeductionData();
+  }, []);
+
+
+
+  // get 80 D
   const getEightyD = async (id: number) => {
     try {
       const response = await GetEightyD(id);
@@ -362,9 +720,13 @@ const Form12BB = () => {
         setFormData((prevState) => ({
           ...prevState,
           eightyDRecord: {
+            id: response.data.id,
             insuranceAmount: response.data.insuranceAmount || '',
             medicalExpenseAmount: response.data.medicalExpenseAmount || '',
-
+            insuranceProofLink: response.data.insuranceProofLink || null,
+            medicalExpenseProof: response.data.medicalExpenseProof || null,
+            isVerified: response.data.isVerified || false,
+            remarks: response.data.remarks || '',
           },
         }));
       }
@@ -373,16 +735,49 @@ const Form12BB = () => {
     }
   };
 
-
-  // save 80 D
-  const handleSaveEightyDRecord = async (validateForm: any) => {
+  // Save 80 D
+  // Assuming validateForm is a function that takes no arguments and returns a Promise
+  const handleSaveEightyDRecord = async (id: number, validateForm: any, formData: any) => {
     try {
+      debugger;
       await validateForm();
-      if (!formData.eightyDRecord.insuranceAmount ||
-        !formData.eightyDRecord.medicalExpenseAmount) {
+
+      // Extract necessary data from formData
+      const { insuranceAmount, medicalExpenseAmount, insuranceProofLink, medicalExpenseProof } = formData.eightyDRecord;
+
+      // Check if essential data is present
+      if (!insuranceAmount || !medicalExpenseAmount) {
+        console.error('Missing data: Insurance amount or medical expense amount is not provided');
         return;
       }
-      const response = await SaveEightyD(formData.eightyDRecord);
+
+      // Prepare the record to be saved
+      let eightyDRecord = {
+        insuranceAmount,
+        medicalExpenseAmount,
+        isVerified: formData.eightyDRecord.isVerified || false,
+        remarks: formData.eightyDRecord.remarks || ''
+      };
+
+      // If insuranceProofLink is available, include it in the record
+      if (insuranceProofLink !== null) {
+        eightyDRecord = {
+          ...eightyDRecord,
+          insuranceProofLink
+        };
+      }
+
+      // If medicalExpenseProof is available, include it in the record
+      if (medicalExpenseProof !== null) {
+        eightyDRecord = {
+          ...eightyDRecord,
+          medicalExpenseProof
+        };
+      }
+
+      // Call the API to save 80D record
+      const response = await SaveEightyD(id, eightyDRecord);
+
       if (response.status === 200) {
         console.log('Saved Eighty D Record:', response);
         // You can add further logic here if needed, like updating state or showing a success message
@@ -399,29 +794,101 @@ const Form12BB = () => {
 
   const getEightyG = async (id: number) => {
     try {
+      // Additional validation to handle case where ID is 0 or undefined
+      if (!id || id === 0) {
+        console.error('Invalid ID provided.');
+        return;
+      }
+
       const response = await GetEightyG(id);
-      if (response?.data) {
-        setFormData((prevState) => ({
-          ...prevState,
-          eightyGRecord: {
-            nameofdonee: response.data.nameofdonee || '',
-            panNumber: response.data.panNumber || '',
-            address: response.data.address || '',
-            amount: response.data.amount || 0,
-            proofdocumentLink: response.data.proofdocumentLink || ''
-          },
-        }));
+
+      // Check if the response and response data are valid
+      if (response && response.data) {
+        const { id, nameofdonee, panNumber, address, amount, proofdocumentLink } = response.data;
+
+        // Log the received data
+        console.log('Received EightyG data:', response.data);
+
+        // Check if the ID received in the response is valid
+        if (id && id !== 0) {
+          setFormData((prevState) => ({
+            ...prevState,
+            eightyGRecord: {
+              id: id,
+              nameofdonee: nameofdonee || '',
+              panNumber: panNumber || '',
+              address: address || '',
+              amount: amount || 0,
+              proofdocumentLink: proofdocumentLink || ''
+            },
+          }));
+        } else {
+          console.error('Received invalid ID in the response data:', id);
+        }
+      } else {
+        console.error('No data found in the response.');
       }
     } catch (error) {
       console.error('Error fetching EightyG data:', error);
-
     }
   };
 
 
+  //save 80 G
 
-  //otherInvestment
-  //get 
+  const handleSaveEightyGRecord = async (validateForm: any) => {
+    try {
+      debugger;
+      console.log('Entering handleSaveEightyGRecord');  // Log to check function entry
+
+      await validateForm();
+      console.log('Form validated');  // Log to confirm form validation
+
+      const { id, nameofdonee, panNumber, address, amount, proofdocumentLink } = formData.eightyGRecord;
+
+      // Log each field value
+      console.log('nameofdonee:', nameofdonee);
+      console.log('panNumber:', panNumber);
+      console.log('address:', address);
+      console.log('amount:', amount);
+      console.log('proofdocumentLink:', proofdocumentLink);
+
+      // Check required fields
+      if (!nameofdonee || !panNumber || !address || !amount) {
+        console.error('All fields except proofdocumentLink are required.');
+        return;
+      }
+
+      // Preparing the data for saving
+      const dataToSave = {
+        id,  // Including ID for updates
+        nameofdonee,
+        panNumber,
+        address,
+        amount,
+        proofdocumentLink: proofdocumentLink || null  // Ensure proofdocumentLink is null if not provided
+      };
+
+      console.log('Data to save:', dataToSave);  // Log the data to be saved
+
+      // Save the data
+      const response = await SaveEightyG(dataToSave);
+      console.log('SaveEightyG response:', response);  // Log the response
+
+      if (response.status === 200) {
+        if (response.data && response.data.id) {
+          console.log('EightyG record saved successfully. ID:', response.data.id);
+          // Handle post-save actions if needed
+        } else {
+          console.error('Failed to get ID from response data:', response.data);
+        }
+      } else {
+        console.error('Failed to save EightyG record:', response.status);
+      }
+    } catch (error) {
+      console.error('Error saving EightyG record:', error);
+    }
+  };
 
   const otherInvestment = async (id: number) => {
     try {
@@ -431,8 +898,9 @@ const Form12BB = () => {
           ...prevState,
           otherInvestmentRecord: {
             ...prevState.otherInvestmentRecord,
+            id: response.data.id, // Add the id here
             description: response.data.description || '',
-            amount: response.data.amount || 0,
+            proofdocumentLink: response.data.proofdocumentLink || '',
           },
         }));
       }
@@ -441,73 +909,44 @@ const Form12BB = () => {
     }
   };
 
-  //save 
-  const handleSaveOtherInvestment = async (validateForm:any) => {
+  // save 
+  const handleSaveOtherInvestment = async (validateForm: any) => {
     try {
+      debugger;
       await validateForm();
-      if (!formData.otherInvestmentRecord.description || !formData.otherInvestmentRecord.proofdocumentLink) {
-        return
+      if (!formData.otherInvestmentRecord.description) {
+        return;
       }
+
+      console.log("Data before saving:", formData.otherInvestmentRecord);
       const response = await SaveOtherInvestment(formData.otherInvestmentRecord);
+      console.log("Response from SaveOtherInvestment:", response.data);
       if (response.status === 200) {
-        console.log('Home loan saved successfully:', response.data);
+        console.log('Other investment saved successfully:', response.data);
       } else {
-        console.log('Unable to save home loan:', response.status);
+        console.log('Unable to save other investment:', response.status);
       }
     } catch (error) {
-      console.error('Error saving home loan:', error);
+      console.error('Error saving other investment:', error);
     }
-
-
   };
-  const handleOptionChange = (event: any) => {
-    setSelectedOption(event.target.value);
-  };
-
-
-
-  const addRow = () => {
-    const newRow = {
-      id: rows.length + 1,
-      amount: '',
-      proofSubmitted: false
-    };
-    setRows([...rows, newRow]);
-  };
-
 
 
   const handleFinalSubmit = (values, actions) => {
-    if (submissionType === 'declaration') {
-      // Handle submission for declaration
-      console.log('Submitting declaration:', values);
-      // Perform declaration submission logic
-    } else if (submissionType === 'proof') {
-      // Handle submission for proof
-      console.log('Submitting proof:', values);
-      // Perform proof submission logic
-    }
+    debugger
 
-    // Reset form fields and any other necessary actions
     actions.resetForm();
   };
 
-  // Function to handle switching between submission types
-  const handleSwitchSubmissionType = () => {
-    // Toggle between 'declaration' and 'proof'
-    const newSubmissionType = submissionType === 'declaration' ? 'proof' : 'declaration';
-    setSubmissionType(newSubmissionType);
-  };
-
-
   return (
     <Formik
+
       initialValues={formData}
       validationSchema={Yup.object()} // General validation schema
       onSubmit={handleFinalSubmit}
       enableReinitialize
     >
-      {({ validateForm, setFieldValue }) => (
+      {({ validateForm }) => (
         <Form >
           <CCard>
             <CCardHeader className="mb-3">
@@ -558,6 +997,15 @@ const Form12BB = () => {
                     />
                     <label htmlFor="houseRentNoInvestments" className="ml-2 mb-0" style={{ marginBottom: '10px' }}>No Investments</label>
                   </CCol>
+                  <CCol md="4" className="d-flex justify-content-end align-items-center">
+                    {isRentChecked && (
+                      <CIcon
+                        icon={cilCheckCircle}
+                        className="ml-2 check-icon"
+                        size="xl"
+                      />
+                    )}
+                  </CCol>
                 </CRow>
               </CCardHeader>
               {!isCollapsedOne && !isRentChecked && (
@@ -565,10 +1013,6 @@ const Form12BB = () => {
                   <Formik
                     initialValues={formData}
                     validationSchema={houseRentAmountValidationSchema}
-                    onSubmit={(values, actions) => {
-                       handleSaveHouseRent(validateForm);
-                      actions.setSubmitting(false);
-                    }}
                     enableReinitialize
                   >
                     {({ errors, touched }) => (
@@ -580,7 +1024,6 @@ const Form12BB = () => {
                               type="number"
                               id="amount"
                               name="houseRentRecord.amount"
-                              // value={formData.houseRentRecord.amount}
                               onChange={(e) => handleFormChange(e, 'amount', 'houseRentRecord')}
                               className={`form-control${touched.houseRentRecord?.amount && errors.houseRentRecord?.amount ? ' is-invalid' : ''}`}
                               placeholder="Amount of House Rent in a year"
@@ -589,8 +1032,9 @@ const Form12BB = () => {
                             <ErrorMessage name="houseRentRecord.amount" component="div" className="invalid-feedback" />
                           </CCol>
                           <CCol md="4" className="d-flex justify-content-center">
-                            <CButton type="submit" color="primary">Save</CButton>
+                            <CButton type="button" color="primary" onClick={() => handleSaveHouseRent(validateForm)}>Save</CButton>
                           </CCol>
+
                         </CRow>
                       </Form>
                     )}
@@ -599,10 +1043,6 @@ const Form12BB = () => {
                   <Formik
                     initialValues={formData}
                     validationSchema={houseRentProofValidationSchema}
-                    onSubmit={(values, actions) => {
-                      handleSaveOwnerPanRentSlips(validateForm, setFieldValue);
-                      actions.setSubmitting(false);
-                    }}
                     enableReinitialize
                   >
                     {({ errors, touched }) => (
@@ -636,15 +1076,16 @@ const Form12BB = () => {
                               type="text"
                               id="ownerPanCard"
                               name="houseRentRecord.ownerPanCard"
-                              // value={formData.houseRentRecord.ownerPanCard}
-                              onChange={(e) => handleFormChange(e, 'ownerPanCard', 'houseRentRecord')}
+                              onChange={(e) => handleFormPanChange(e, 'ownerPanCard', 'houseRentRecord')}
                               className={`form-control${touched.houseRentRecord?.ownerPanCard && errors.houseRentRecord?.ownerPanCard ? ' is-invalid' : ''}`}
                               placeholder="Owner PAN Number"
+                              disabled={(formData.houseRentRecord.amount ?? 0) <= 100000}
                             />
+                            <p>(if amount greaterThan 1 Lac)</p>
                             <ErrorMessage name="houseRentRecord.ownerPanCard" component="div" className="invalid-feedback" />
                           </CCol>
                           <CCol md="3" className="d-flex justify-content-end">
-                            <CButton type="submit" color="primary">Save</CButton>
+                            <CButton type="button" color="primary" onClick={() => handleSaveOwnerPanRentSlips(validateForm)}>Save</CButton>
                           </CCol>
                         </CRow>
                       </Form>
@@ -653,7 +1094,6 @@ const Form12BB = () => {
                 </CCardBody>
               )}
             </CCard>
-
             {/* Leave travel expenditure details */}
             <CCard className="mt-3">
               <CCardHeader>
@@ -673,6 +1113,16 @@ const Form12BB = () => {
                       onChange={toggleLeaveCheckbox} id="rent" className="custom-checkbox checkbox-spacing" />
                     <label htmlFor="noTravelDeclaration" className="ml-2 mb-0" style={{ marginBottom: '10px' }}>No Investments</label>
                   </CCol>
+                  <CCol md="4" className="d-flex justify-content-end align-items-center">
+                    {isLeaveChecked && (
+                      <CIcon
+                        icon={cilCheckCircle}
+                        className="ml-2 check-icon"
+                        size="xl"
+                      />
+                    )}
+                  </CCol>
+
                 </CRow>
               </CCardHeader>
               {!isCollapsedTwo && !isLeaveChecked && (
@@ -680,13 +1130,10 @@ const Form12BB = () => {
                   <Formik
                     initialValues={formData}
                     validationSchema={leaveTravelValidationSchema}
-                    onSubmit={(values, actions) => {
-                      handleSaveLeaveTravel(validateForm, setFieldValue);
-                      actions.setSubmitting(false);
-                    }}
+
                     enableReinitialize
                   >
-                    {({ errors, touched }) => (
+                    {({ errors, touched, validateForm }) => (
                       <Form>
                         <CRow className="align-items-center">
                           <CCol md="5" className="mb-3">
@@ -698,7 +1145,7 @@ const Form12BB = () => {
                               id="amount"
                               name="travelExpenditureRecord.amount"
                               value={formData.travelExpenditureRecord.amount}
-                              onChange={(e) => handleFormChange(e, 'amount', 'travelExpenditureRecord')}
+                              onChange={handleAmountChange}
 
                               className={`form-control${touched.travelExpenditureRecord?.amount && errors.travelExpenditureRecord?.amount ? ' is-invalid' : ''}${isLeaveChecked ? ' no-border' : ''}`}
                               disabled={isLeaveChecked}
@@ -709,7 +1156,7 @@ const Form12BB = () => {
                             )}
                           </CCol>
                           <CCol md="4" className="d-flex justify-content-center">
-                            <CButton type="submit" color="primary">Save</CButton>
+                            <CButton type="button" color="primary" onClick={() => handleSaveAmount(validateForm, formData, setFormData)}>Save</CButton>
                           </CCol>
                         </CRow>
                         <hr />
@@ -724,7 +1171,7 @@ const Form12BB = () => {
                               id="proofDocumentLink"
                               name="travelExpenditureRecord.proofdocumentLink"
                               style={{ display: 'none' }}
-                            // onChange={(e) => handleFormChange(e, 'proofdocumentLink', 'travelExpenditureRecord')}
+                              onChange={handleProofDocumentChange}
                             />
                             <div style={{ border: '1px solid #ccc', padding: '10px', borderRadius: '5px', marginBottom: '10px' }}>
                               <label
@@ -742,7 +1189,7 @@ const Form12BB = () => {
                             </div>
                           </CCol>
                           <CCol md="4" className="d-flex justify-content-end">
-                            <CButton type="submit" color="primary">Save</CButton>
+                            <CButton type="button" color="primary" onClick={() => handleSaveProof(formData.travelExpenditureRecord.id, validateForm, formData)}>Save</CButton>
                           </CCol>
                         </CRow>
                       </Form>
@@ -776,6 +1223,18 @@ const Form12BB = () => {
                     />
                     <label htmlFor="interestPayable" className="ml-2 mb-0">No Investments</label>
                   </CCol>
+                  <CCol md="4" className="d-flex justify-content-end align-items-center">
+                    {isInterestPaybleChecked && (
+                      <CIcon
+                        icon={cilCheckCircle}
+                        className="ml-2 check-icon"
+                        size="xl"
+                      />
+                    )}
+
+
+                  </CCol>
+
                 </CRow>
               </CCardHeader>
               {!isCollapsedThree && !isInterestPaybleChecked && (
@@ -783,10 +1242,7 @@ const Form12BB = () => {
                   <Formik
                     initialValues={formData}
                     validationSchema={interestHomeLoanValidationSchema}
-                    onSubmit={(values, actions) => {
-                      handleSaveHomeLoan(actions.validateForm, actions.setFieldValue);
-                      actions.setSubmitting(false);
-                    }}
+
                     enableReinitialize
                   >
                     {({ errors, touched }) => (
@@ -815,7 +1271,7 @@ const Form12BB = () => {
                               type="text"
                               id="lenderName"
                               name="homeLoanRecord.lenderName"
-                              // value={formData.homeLoanRecord.lenderName || ''} // Controlled component
+                              onChange={(e) => handleFormChange(e, 'lenderName', 'homeLoanRecord')}
                               className={`form-control${touched?.homeLoanRecord?.lenderName && errors?.homeLoanRecord?.lenderName ? ' is-invalid' : ''}${isInterestPaybleChecked ? ' no-border' : ''}`}
                               placeholder="Name of Lender"
                               disabled={isInterestPaybleChecked}
@@ -830,7 +1286,7 @@ const Form12BB = () => {
                               type="text"
                               id="lenderAddress"
                               name="homeLoanRecord.lenderAddress"
-                              // value={formData.homeLoanRecord.lenderAddress || ''} // Controlled component
+                              onChange={(e) => handleFormChange(e, 'lenderAddress', 'homeLoanRecord')}
                               className={`form-control${touched?.homeLoanRecord?.lenderAddress && errors?.homeLoanRecord?.lenderAddress ? ' is-invalid' : ''}${isInterestPaybleChecked ? ' no-border' : ''}`}
                               placeholder="Address of Lender"
                               disabled={isInterestPaybleChecked}
@@ -845,7 +1301,7 @@ const Form12BB = () => {
                               type="text"
                               id="lenderPan"
                               name="homeLoanRecord.lenderPanNumber"
-
+                              onChange={(e) => handleFormPanChange(e, 'lenderPanNumber', 'homeLoanRecord')}
                               className={`form-control${touched?.homeLoanRecord?.lenderPanNumber && errors?.homeLoanRecord?.lenderPanNumber ? ' is-invalid' : ''}${isInterestPaybleChecked ? ' no-border' : ''}`}
                               placeholder="PAN No. of Lender"
                               disabled={isInterestPaybleChecked}
@@ -855,7 +1311,7 @@ const Form12BB = () => {
                             )}
                           </CCol>
                           <CCol md="8" className="d-flex justify-content-end">
-                            <CButton color="primary">Save</CButton>
+                            <CButton type='button' color="primary" onClick={() => handleSaveHomeLoan(validateForm)}>Save</CButton>
                           </CCol>
                         </CRow>
                       </Form>
@@ -866,10 +1322,7 @@ const Form12BB = () => {
                   <Formik
                     initialValues={formData}
                     validationSchema={houseRentProofValidationSchema}
-                    onSubmit={(values, actions) => {
-                      handleSaveOwnerPanRentSlips(validateForm, setFieldValue);
-                      actions.setSubmitting(false);
-                    }}
+
                     enableReinitialize
                   >
                     {() => (
@@ -893,7 +1346,7 @@ const Form12BB = () => {
                             </div>
                           </CCol>
                           <CCol md="4" className="d-flex justify-content-end">
-                            <CButton type="submit" color="primary">Save</CButton>
+                            <CButton type="button" color="primary" onClick={() => handleSaveSlips(validateForm)}>Save</CButton>
                           </CCol>
                         </CRow>
                       </Form>
@@ -903,9 +1356,7 @@ const Form12BB = () => {
               )}
             </CCard>
 
-
             {/* All tax deductions */}
-
             <CCard>
               <CCardHeader>
                 <CCol md="6 mb-2 mt-2" className="d-flex align-items-center"  >
@@ -939,56 +1390,83 @@ const Form12BB = () => {
                         />
                         <label htmlFor="80C" className="ml-2 mb-0">No Investments</label>
                       </CCol>
+                      <CCol md="4" className="d-flex justify-content-end align-items-center">
+                        {is80CChecked && (
+                          <CIcon
+                            icon={cilCheckCircle}
+                            className="ml-2 check-icon"
+                            size="xl"
+                          />
+                        )}
+                      </CCol>
 
                     </CRow>
                   </CCardHeader>
 
                   {!isCollapsedFour && !is80CChecked && (
+
                     <Formik
-                      initialValues={formData}
-                      validationSchema={eightyCValidationSchema}
-                      onSubmit={(values) => {
-                        console.log(values);
+                      initialValues={{
+                        rows: rows.map((row) => ({
+                          deductionTypeId: row.deductionTypeId || '', // Use existing value or default
+                          amount: row.amount || '', // Use existing value or default
+                          proofDocumentLink: row.proofDocumentLink || false, // Use existing value or default
+                        })),
                       }}
+                      validationSchema={eightyCValidationSchema}
                     >
-                      {() => (
+                      {({ validateForm, values, setFieldValue, errors, touched }) => (
                         <Form>
                           <CCardBody>
-                            <label htmlFor="deduction" className="ml-2 mb-0">Deduction Type</label>
+
                             {rows.map((row, index) => (
                               <CRow key={row.id} className="align-items-center">
                                 <CCol md="4" className="mb-3" style={{ textAlign: 'center' }}>
-                                  <CFormSelect>
+                                  <label htmlFor="deduction" className="ml-2 mb-0">Deduction Type</label>
+                                  <Field as="select"
+                                    name={`rows[${index}].deductionTypeId`}
+                                    className={`form-control ${touched.rows && touched.rows[index] && errors.rows && errors.rows[index] && errors.rows[index].deductionTypeId ? 'is-invalid' : ''}`}
+
+                                    onChange={(e) => {
+                                      const updatedRows = [...values.rows];
+                                      updatedRows[index] = { ...updatedRows[index], deductionTypeId: e.target.value };
+                                      setFieldValue('rows', updatedRows);
+                                    }}
+                                  >
                                     <option value="">Select Medical Expenses</option>
-                                    <option value="0">None</option>
-                                    <option value="25000">Up to Rs.25,000</option>
-                                    <option value="50000">Up to Rs.50,000</option>
-                                  </CFormSelect>
+                                    {deductionList && deductionList.length > 0 && deductionList.map(item => (
+                                      <option key={item.id} value={item.id}>
+                                        {item.name}
+                                      </option>
+                                    ))}
+                                    <ErrorMessage name={`rows[${index}].deductionTypeId`} component="div" className="invalid-feedback" />
+                                  </Field>
                                 </CCol>
                                 <CCol md="2" className="mb-3">
                                   <label htmlFor={`amount${row.id}`} style={{ marginBottom: '10px' }}>Amount:</label>
-                                  <input
+                                  <Field
                                     type="text"
-                                    id={`amount${row.id}`}
-                                    className="form-control"
+                                    name={`rows[${index}].amount`}
+                                    className={`form-control ${touched.rows && touched.rows[index] && errors.rows && errors.rows[index] && errors.rows[index].amount ? 'is-invalid' : ''}`}
                                     placeholder="Amount"
-                                    value={row.amount}
+
                                     onChange={(e) => {
-                                      const updatedRows = [...rows];
+                                      const updatedRows = [...values.rows];
                                       updatedRows[index].amount = e.target.value;
-                                      setRows(updatedRows);
+                                      setFieldValue('rows', updatedRows);
                                     }}
                                   />
+                                  <ErrorMessage name={`rows[${index}].amount`} component="div" className="invalid-feedback" />
                                 </CCol>
                                 <CCol md="2">
                                   <input
                                     type="checkbox"
                                     id={`proofSubmitted${row.id}`}
                                     className="custom-checkbox"
-                                    checked={row.proofSubmitted}
+                                    checked={row.proofDocumentLink}
                                     onChange={(e) => {
                                       const updatedRows = [...rows];
-                                      updatedRows[index].proofSubmitted = e.target.checked;
+                                      updatedRows[index].proofDocumentLink = e.target.checked;
                                       setRows(updatedRows);
                                     }}
                                   />
@@ -1019,24 +1497,136 @@ const Form12BB = () => {
                                       marginLeft: "10px"
                                     }}
                                     className="text-danger"
-                                    onClick={() => {
-                                      const updatedRows = rows.filter(r => r.id !== row.id);
-                                      setRows(updatedRows);
-                                    }}
+                                    onClick={() => handleDeleteRow(index)} // Assuming handleDeleteRow is your delete function
                                   />
                                 </CCol>
                               </CRow>
                             ))}
                             <div className="mb-3">
-                              <button className="btn btn-primary" onClick={addRow}>+</button>
+                              {/* <button className="btn btn-primary" onClick={addRow}>+</button> */}
+                              <button className="btn btn-primary" onClick={(e) => { e.preventDefault(); addRow(); }}>+</button>
+
                             </div>
                             <div className="d-flex justify-content-end">
-                              <CButton color="primary" type="submit">Save</CButton>
+                              <CButton type="button" color="primary" onClick={() => handleSaveEightyC(validateForm)}>Save</CButton>
+
                             </div>
                           </CCardBody>
                         </Form>
                       )}
                     </Formik>
+                    //                     <Formik
+                    //   initialValues={{
+                    //     rows: rows.map((row) => ({
+                    //       deductionTypeId: row.deductionTypeId || '', // Use existing value or default
+                    //       amount: row.amount || '', // Use existing value or default
+                    //       proofDocumentLink: row.proofDocumentLink || false, // Use existing value or default
+                    //     })),
+                    //   }}
+                    //   validationSchema={eightyCValidationSchema}
+                    //   onSubmit={(values, { setSubmitting }) => {
+                    //     handleSaveEightyC(values.rows);
+                    //     setSubmitting(false);
+                    //   }}
+                    // >
+                    //   {({ values, setFieldValue, errors, touched, submitForm }) => (
+                    //     <Form>
+                    //       <CCardBody>
+                    //         {values.rows.map((row, index) => (
+                    //           <CRow key={index} className="align-items-center">
+                    //             <CCol md="4" className="mb-3" style={{ textAlign: 'center' }}>
+                    //               <label htmlFor="deduction" className="ml-2 mb-0">Deduction Type</label>
+                    //               <Field as="select"
+                    //                 name={`rows[${index}].deductionTypeId`}
+                    //                 className={`form-control ${touched.rows && touched.rows[index] && errors.rows && errors.rows[index] && errors.rows[index].deductionTypeId ? 'is-invalid' : ''}`}
+                    //                 onChange={(e) => {
+                    //                   setFieldValue(`rows[${index}].deductionTypeId`, e.target.value);
+                    //                 }}
+                    //               >
+                    //                 <option value="">Select Medical Expenses</option>
+                    //                 {deductionList && deductionList.length > 0 && deductionList.map(item => (
+                    //                   <option key={item.id} value={item.id}>
+                    //                     {item.name}
+                    //                   </option>
+                    //                 ))}
+                    //               </Field>
+                    //               <ErrorMessage name={`rows[${index}].deductionTypeId`} component="div" className="invalid-feedback" />
+                    //             </CCol>
+
+                    //             <CCol md="2" className="mb-3">
+                    //               <label htmlFor={`amount${index}`} style={{ marginBottom: '10px' }}>Amount:</label>
+                    //               <Field
+                    //                 type="text"
+                    //                 name={`rows[${index}].amount`}
+                    //                 className={`form-control ${touched.rows && touched.rows[index] && errors.rows && errors.rows[index] && errors.rows[index].amount ? 'is-invalid' : ''}`}
+                    //                 placeholder="Amount"
+                    //                 onChange={(e) => {
+                    //                   setFieldValue(`rows[${index}].amount`, e.target.value);
+                    //                 }}
+                    //               />
+                    //               <ErrorMessage name={`rows[${index}].amount`} component="div" className="invalid-feedback" />
+                    //             </CCol>
+
+                    //             <CCol md="2">
+                    //               <input
+                    //                 type="checkbox"
+                    //                 id={`proofSubmitted${index}`}
+                    //                 className="custom-checkbox"
+                    //                 checked={values.rows[index].proofDocumentLink}
+                    //                 onChange={(e) => {
+                    //                   setFieldValue(`rows[${index}].proofDocumentLink`, e.target.checked);
+                    //                 }}
+                    //               />
+                    //             </CCol>
+
+                    //             <CCol md="2" className="mb-3">
+                    //               <div>
+                    //                 <input
+                    //                   type="file"
+                    //                   className="custom-file-input"
+                    //                   id={`rentSlips${index}`}
+                    //                   style={{ display: 'none' }}
+                    //                   onChange={(e) => {
+                    //                     // Handle file upload logic here
+                    //                   }}
+                    //                 />
+                    //                 <label
+                    //                   className="custom-file-label"
+                    //                   htmlFor={`rentSlips${index}`}
+                    //                   style={{ cursor: 'pointer' }}
+                    //                 >
+                    //                   <u>Upload Proof</u>
+                    //                 </label>
+                    //               </div>
+                    //             </CCol>
+
+                    //             <CCol md="2" className="mb-3">
+                    //               <MdDelete
+                    //                 style={{
+                    //                   color: "red",
+                    //                   fontSize: "30px",
+                    //                   cursor: "pointer",
+                    //                   marginLeft: "10px"
+                    //                 }}
+                    //                 className="text-danger"
+                    //                 onClick={() => handleDeleteRow(index)} // Assuming handleDeleteRow is your delete function
+                    //               />
+                    //             </CCol>
+                    //           </CRow>
+                    //         ))}
+
+                    //         <div className="mb-3">
+                    //           <button className="btn btn-primary" onClick={(e) => { e.preventDefault(); addRow(); }}>+</button>
+                    //         </div>
+
+                    //         <div className="d-flex justify-content-end">
+                    //           <CButton type="button" color="primary" onClick={() => submitForm()}>Save</CButton>
+                    //         </div>
+                    //       </CCardBody>
+                    //     </Form>
+                    //   )}
+                    // </Formik>
+
                   )}
                 </CCard>
                 {/* 80 D */}
@@ -1063,19 +1653,28 @@ const Form12BB = () => {
                         />
                         <label htmlFor="80D" className="ml-2 mb-0">No Investments</label>
                       </CCol>
+                      <CCol md="4" className="d-flex justify-content-end align-items-center">
+                        {is80DChecked && (
+                          <CIcon
+                            icon={cilCheckCircle}
+                            className="ml-2 check-icon"
+                            size="xl"
+                          />
+                        )}
+
+
+                      </CCol>
+
                     </CRow>
                   </CCardHeader>
                   {!isCollapsedFive && !is80DChecked && (
                     <Formik
                       initialValues={formData}
                       validationSchema={eightyDValidationSchema}
-                      onSubmit={(values, actions) => {
-                        handleSaveEightyDRecord(values);
-                        actions.setSubmitting(false);
-                      }}
+
                       enableReinitialize
                     >
-                      {({ values, errors, touched }) => (
+                      {({ errors, touched, validateForm }) => (
                         <Form>
                           <CCardBody>
                             <CRow className="align-items-center">
@@ -1150,6 +1749,7 @@ const Form12BB = () => {
                                     <Field
                                       type="text"
                                       id="medicalExpenseAmount"
+                                      onChange={(e) => handleFormChange(e, 'medicalExpenseAmount', 'eightyDRecord')}
                                       name="eightyDRecord.medicalExpenseAmount"
                                       className={`form-control${touched.eightyDRecord?.medicalExpenseAmount && errors.eightyDRecord?.medicalExpenseAmount ? ' is-invalid' : ''}`}
                                       placeholder="Amount"
@@ -1175,7 +1775,7 @@ const Form12BB = () => {
                                     </div>
                                   </CCol>
                                   <CCol md="3" className="d-flex justify-content-end">
-                                    <CButton color="primary" type="submit">Save</CButton>
+                                    <CButton type="button" color="primary" onClick={() => handleSaveEightyDRecord(id, validateForm, formData)}>Save</CButton>
                                   </CCol>
                                 </CRow>
                               </>
@@ -1186,9 +1786,6 @@ const Form12BB = () => {
                     </Formik>
                   )}
                 </CCard>
-
-
-
                 {/* 80 G */}
                 <CCard className="mt-3">
                   <CCardHeader>
@@ -1213,16 +1810,23 @@ const Form12BB = () => {
                         />
                         <label htmlFor="80GDonations" className="ml-2 mb-0">No Investments</label>
                       </CCol>
+                      <CCol md="4" className="d-flex justify-content-end align-items-center">
+                        {is80GChecked && (
+                          <CIcon
+                            icon={cilCheckCircle}
+                            className="ml-2 check-icon"
+                            size="xl"
+                          />
+                        )}
+                      </CCol>
+
                     </CRow>
                   </CCardHeader>
                   {!isCollapsedSix && !is80GChecked && (
                     <Formik
                       initialValues={formData}
                       validationSchema={eightyGValidationSchema}
-                      onSubmit={(values, actions) => {
-                        handleSaveHomeLoan(actions.validateForm, actions.setFieldValue);
-                        actions.setSubmitting(false);
-                      }}
+
                       enableReinitialize
                     >
                       {({ errors, touched }) => (
@@ -1235,6 +1839,8 @@ const Form12BB = () => {
                                   type="text"
                                   id="nameofdonee"
                                   name="eightyGRecord.nameofdonee"
+                                  // onChange={(e: any) => handleFormChange(e, 'nameofdonee', 'eightyGRecord')}
+                                  onChange={handleNameOfDoneeChange}
                                   className={`form-control${touched.eightyGRecord?.nameofdonee && errors.eightyGRecord?.nameofdonee ? ' is-invalid' : ''}`}
                                   placeholder="Name of the Donee"
                                 />
@@ -1246,6 +1852,8 @@ const Form12BB = () => {
                                   type="text"
                                   id="panNumber"
                                   name="eightyGRecord.panNumber"
+                                  // onChange={(e: any) => handleFormPanChange(e, 'panNumber', 'eightyGRecord')}
+                                  onChange={handlePanNumberChange}
                                   className={`form-control${touched.eightyGRecord?.panNumber && errors.eightyGRecord?.panNumber ? ' is-invalid' : ''}`}
                                   placeholder="PAN Details"
                                 />
@@ -1257,6 +1865,8 @@ const Form12BB = () => {
                                   type="text"
                                   id="address"
                                   name="eightyGRecord.address"
+                                  // onChange={(e: any) => handleFormChange(e, 'address', 'eightyGRecord')}
+                                  onChange={handleAddressChange}
                                   className={`form-control${touched.eightyGRecord?.address && errors.eightyGRecord?.address ? ' is-invalid' : ''}`}
                                   placeholder="Address"
                                 />
@@ -1268,6 +1878,8 @@ const Form12BB = () => {
                                   type="number"
                                   id="amount"
                                   name="eightyGRecord.amount"
+                                  // onChange={(e: any) => handleFormChange(e, 'amount', 'eightyGRecord')}
+                                  onChange={handleGAmountChange}
                                   className={`form-control${touched.eightyGRecord?.amount && errors.eightyGRecord?.amount ? ' is-invalid' : ''}`}
                                   placeholder="Amount"
                                 />
@@ -1280,6 +1892,8 @@ const Form12BB = () => {
                                     className="custom-file-input"
                                     id="proofdocumentLink"
                                     name="eightyGRecord.proofdocumentLink"
+                                    // onChange={(e: any) => handleFormChange(e, 'proofdocumentLink', 'eightyGRecord')}
+                                    onChange={handleProofDocumentLinkChange}
                                     style={{ display: 'none' }}
                                   />
                                   <label
@@ -1292,7 +1906,7 @@ const Form12BB = () => {
                                 </div>
                               </CCol>
                               <CCol md="2" className="d-flex justify-content-end">
-                                <CButton color="primary" type="submit">Save</CButton>
+                                <CButton type="button" color="primary" onClick={() => handleSaveEightyGRecord(validateForm)}>Save</CButton>
                               </CCol>
                             </CRow>
                           </CCardBody>
@@ -1301,6 +1915,7 @@ const Form12BB = () => {
                     </Formik>
                   )}
                 </CCard>
+
 
                 {/* Other investments */}
                 <CCard className="mt-3">
@@ -1326,6 +1941,16 @@ const Form12BB = () => {
                         />
                         <label htmlFor="otherChecked" className="ml-2 mb-0">No Investments</label>
                       </CCol>
+                      <CCol md="4" className="d-flex justify-content-end align-items-center">
+                        {isOtherChecked && (
+                          <CIcon
+                            icon={cilCheckCircle}
+                            className="ml-2 check-icon"
+                            size="xl"
+                          />
+                        )}
+                      </CCol>
+
                     </CRow>
                   </CCardHeader>
                   {!isCollapsedSeven && !isOtherChecked && (
@@ -1333,13 +1958,9 @@ const Form12BB = () => {
                       <Formik
                         initialValues={formData}
                         validationSchema={otherInvestmentValidationSchema}
-                        onSubmit={(values, actions) => {
-                          handleSaveOtherInvestment(validateForm, setFieldValue);
-                          actions.setSubmitting(false);
-                        }}
                         enableReinitialize
                       >
-                        {({ errors, touched }) => (
+                        {({ errors, touched, validateForm }) => (
                           <Form>
                             <CRow className="align-items-center">
                               <CCol md="5" className="mb-3">
@@ -1350,8 +1971,8 @@ const Form12BB = () => {
                                   as="textarea" // Change to textarea
                                   id="description"
                                   name="otherInvestmentRecord.description"
-                                  // value={formData.otherInvestmentRecord.description}
-                                  rows={2} 
+                                  rows={2}
+                                  onChange={handleDescriptionChange}
                                   className={`form-control${touched.otherInvestmentRecord?.description && errors.otherInvestmentRecord?.description ? ' is-invalid' : ''}`}
                                   placeholder="Type Description of investment type"
                                 />
@@ -1361,9 +1982,10 @@ const Form12BB = () => {
                                 <div>
                                   <Field
                                     type="file"
-                                    name="rentSlips"
+                                    name="proofdocumentLink"
+                                    onChange={(e) => handleFormOtherChange(e, 'otherInvestmentRecord.proofdocumentLink')}
                                     className="custom-file-input"
-                                    id="rentSlips"
+                                    id="proofdocumentLink"
                                     style={{ display: 'none' }}
                                   />
                                   <label
@@ -1376,45 +1998,40 @@ const Form12BB = () => {
                                 </div>
                               </CCol>
                               <CCol md="4" className="d-flex justify-content-end">
-                                <CButton color="primary" type="submit">Save</CButton>
+                                <CButton type="button" color="primary" onClick={() => handleSaveOtherInvestment(validateForm)}>Save</CButton>
                               </CCol>
                             </CRow>
+
+                            {formData.otherInvestmentRecord.description && formData.otherInvestmentRecord.proofdocumentLink && (
+                              <CRow className="align-items-center">
+                                <CCol md="12" className="d-flex justify-content-center">
+                                  <span style={{ color: 'green' }}>✔ Declaration and Proof provided</span>
+                                </CCol>
+                              </CRow>
+                            )}
                           </Form>
+
                         )}
                       </Formik>
+
                     </CCardBody>
                   )}
                 </CCard>
-
-
               </CCardBody>
-
-
             </CCard>
+
             <CRow className="mt-3 mb-2">
               <CCol className="d-flex justify-content-end">
-                <CButton
-                  type="button"
-                  style={{ marginRight: '20px' }}
-                  color="warning"
-                  onClick={handleSwitchSubmissionType}
-                >
-                  Switch Submission Type
-                </CButton>
-
                 <CButton
                   type="submit"
                   style={{ marginRight: '20px' }}
                   color="primary"
+
                 >
-                  {submissionType === 'declaration' ? 'Submit Declaration' : 'Submit Proof'}
+                  submit
                 </CButton>
               </CCol>
             </CRow>
-
-
-
-
           </CCard>
         </Form>
       )}

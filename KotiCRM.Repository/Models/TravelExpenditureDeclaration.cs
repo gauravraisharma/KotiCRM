@@ -9,8 +9,8 @@ namespace KotiCRM.Repository.Models
     public class TravelExpenditureDeclaration
     {
         public int Id { get; set; }
-        public int Amount { get; set; }
-        public string ProofDocumentLink { get; set; }
+        public int? Amount { get; set; }
+        public string? ProofDocumentLink { get; set; }
         public bool IsVerified { get; set; }
         public string Remarks { get; set; }
     }

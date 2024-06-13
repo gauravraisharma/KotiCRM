@@ -96,12 +96,12 @@ namespace KotiCRM.Server.Controllers
         // get 80 C-Donations
 
         [HttpGet]
-        [Route("GetEightyC/{id}")]
-        public async Task<EightyCRecordDTO> GetEightyC(int id)
+        [Route("GetEightyC/{employee12BBId}")]
+        public async Task<EightyCRecordDTO> GetEightyC(int employee12BBId)
         {
             try
             {
-                var result = await _taxDeclarationService.GetEightyC(id);
+                var result = await _taxDeclarationService.GetEightyC(employee12BBId);
 
 
                 if (result == null)
@@ -118,6 +118,15 @@ namespace KotiCRM.Server.Controllers
 
             }
 
+        }
+
+        // get 80 c deduction type 
+        [HttpGet]
+        [Route("GetEightyCdeductionList")]
+        public async Task<ActionResult<IEnumerable<EightyCDeductionType>>> GetDeductionTypes()
+        {
+            var deductionTypes = await _taxDeclarationService.GetDeductionTypesAsync();
+            return Ok(deductionTypes);
         }
 
         // get 80 D

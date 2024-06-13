@@ -69,10 +69,14 @@ namespace KotiCRM.Services.Services
             return await _taxDeclarationRepository.GetInterestPayableOnHome(id);
 
         }
-        public async Task<EightyCRecordDTO> GetEightyC(int id)
+        public async Task<EightyCRecordDTO> GetEightyC(int employee12BBId)
         {
-            return await _taxDeclarationRepository.GetEightyC(id);
+            return await _taxDeclarationRepository.GetEightyC(employee12BBId);
 
+        }
+        public async Task<IEnumerable<EightyCDeductionType>> GetDeductionTypesAsync()
+        {
+            return await _taxDeclarationRepository.GetDeductionTypesAsync();
         }
         public async Task<EightyDRecordDTO> GetEightyD(int id)
         {
@@ -104,7 +108,7 @@ namespace KotiCRM.Services.Services
             return await _taxDeclarationRepository.SaveEmployee12BB(employee12BB);
 
         }
-
+      
     }
 }
 

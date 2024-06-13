@@ -23,7 +23,8 @@ namespace KotiCRM.Services.IServices
         Task<HouseRentRecordDTO> GetHouseRent(int id);
         Task<TravelExpenditureDeclarationDTO> GetLeaveTravelExpenditure(int id);
         Task<HomeLoanRecordDTO> GetInterestPayableOnHome(int id);
-        Task<EightyCRecordDTO> GetEightyC(int id);
+        Task<EightyCRecordDTO> GetEightyC(int employee12BBId);
+        Task<IEnumerable<EightyCDeductionType>> GetDeductionTypesAsync();
         Task<EightyDRecordDTO> GetEightyD(int id);
         Task<EightyGRecordDTO> GetEightyG(int id);
         Task<OtherInvestmentRecordDTO> GetOtherInvestment(int id);

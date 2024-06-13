@@ -280,3 +280,16 @@
   border: none !important;
   background-color: transparent; /* Optional: to make the background match the surrounding */
 }
+
+.check-icon {
+  color: #28a745; /* A pleasant green color */
+  margin-left: 1rem; /* Adjust the margin as needed */
+  width: 2rem; /* Increase the width */
+  height: 2rem; /* Increase the height */
+  transition: transform 0.3s ease, opacity 0.3s ease; /* Smooth transition */
+}
+
+.check-icon:hover {
+  transform: scale(1.1); /* Slightly enlarge on hover */
+  opacity: 0.8; /* Slightly dim the opacity on hover */
+}
