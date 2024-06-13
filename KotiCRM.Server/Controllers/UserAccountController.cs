@@ -14,8 +14,9 @@ using System.Text;
 
 namespace KotiCRM.Server.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
+    [Authorize(AuthenticationSchemes = "Bearer")]
     public class UserAccountController : Controller
     {
         private readonly IUserAccountService _accountService;

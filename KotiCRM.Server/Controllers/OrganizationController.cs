@@ -2,6 +2,7 @@
 using KotiCRM.Repository.Models;
 using KotiCRM.Services.IServices;
 using KotiCRM.Services.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -10,6 +11,7 @@ namespace KotiCRM.Server.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize(AuthenticationSchemes = "Bearer")]
     public class OrganizationController : ControllerBase
     {
         private readonly IOrganizationService _organizationService;

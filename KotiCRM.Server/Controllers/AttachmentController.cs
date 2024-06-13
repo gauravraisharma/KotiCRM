@@ -9,6 +9,7 @@ namespace KotiCRM.Server.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize(AuthenticationSchemes = "Bearer")]
     public class AttachmentController : Controller
     {
         private readonly IAttachmentService _attachmentService;

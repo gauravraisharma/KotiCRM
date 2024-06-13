@@ -1,6 +1,7 @@
 ﻿using KotiCRM.Repository.DTOs.TaxDeclaration;
 using KotiCRM.Repository.Models;
 using KotiCRM.Services.IServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,6 +9,7 @@ namespace KotiCRM.Server.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize(AuthenticationSchemes = "Bearer")]
     public class TaxDeclarationController : ControllerBase
     {
         private readonly ITaxDeclarationService _taxDeclarationService;
