@@ -241,6 +241,7 @@ const AccountList: React.FC = () => {
                               />
                             </Link>
                           )}
+                            {accountsPermissions.isView && (
                           <AiFillEye
                             style={{
                               color: "darkblue",
@@ -250,6 +251,7 @@ const AccountList: React.FC = () => {
                             className="mr-4 text-primary"
                             onClick={() => showItems(account?.id)}
                           />
+                            )}
                           {accountsPermissions.isDelete && (
                             <MdDelete
                               style={{

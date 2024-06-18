@@ -27,6 +27,7 @@ import { useSelector } from "react-redux";
 import { RoleList } from "../../models/permissionManagement/RoleList";
 import moment from "moment";
 import DeleteConfirmationModal from "../account/accountsList/DeleteConfirmation";
+import GetModulePermissions from "../../utils/Shared/GetModulePermissions";
 
 const Roles = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -35,9 +36,9 @@ const Roles = () => {
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState<boolean>(false);
   const [searchQuery, setSearchQuery] = useState('')
   const [pageNumber, setPageNumber] = useState<number>(1);
-
-const userType = useSelector((state: any) => state.authReducer.userType);
-const timezone = useSelector((state: any) => state.sharedReducer.timezone);
+  const rolesPermissions = GetModulePermissions('ManageRoles');
+  const userType = useSelector((state: any) => state.authReducer.userType);
+  const timezone = useSelector((state: any) => state.sharedReducer.timezone);
 
 
   useEffect(() => {
@@ -91,11 +92,11 @@ const timezone = useSelector((state: any) => state.sharedReducer.timezone);
   //Focus out event to searchh
   const handleBlur = async () => {
     const response = await GetRolesList(searchQuery, pageNumber, pageSize);
-      setRoleList(response.roles);
+    setRoleList(response.roles);
   }
 
   //Effects
-  
+
   return (
     <>
       {isLoading && (
@@ -133,15 +134,17 @@ const timezone = useSelector((state: any) => state.sharedReducer.timezone);
               </CInputGroup>
             </CCol>
             <CCol xs={8} className="text-end">
-              <Link to={`/roles/createRole`}>
-                <CButton
-                  component="input"
-                  type="button"
-                  style={{ padding: "6px 16px" }}
-                  color="primary"
-                  value="+ New"
-                />
-              </Link>
+              {rolesPermissions.isAdd && (
+                <Link to={`/roles/createRole`}>
+                  <CButton
+                    component="input"
+                    type="button"
+                    style={{ padding: "6px 16px" }}
+                    color="primary"
+                    value="+ New"
+                  />
+                </Link>
+              )}
               <Link to={`/users`}>
                 <CButton
                   component="input"
@@ -151,7 +154,7 @@ const timezone = useSelector((state: any) => state.sharedReducer.timezone);
                   style={{ padding: "6px 16px" }}
                   variant="outline"
                 />
-          </Link>
+              </Link>
             </CCol>
           </CRow>
         </CCol>
@@ -162,7 +165,7 @@ const timezone = useSelector((state: any) => state.sharedReducer.timezone);
         onCancel={cancelDelete}
         roleId={roleId}
       />
-      <CCard  className="mb-4 mt-2">
+      <CCard className="mb-4 mt-2">
         <CCardHeader>
           <h5 className="mb-0"><strong>Roles</strong></h5>
         </CCardHeader>
@@ -171,7 +174,7 @@ const timezone = useSelector((state: any) => state.sharedReducer.timezone);
             <CTableHead>
               <CTableRow>
                 <CTableDataCell scope="col">Role Name</CTableDataCell>
-                <CTableDataCell scope="col">IsActive</CTableDataCell> 
+                <CTableDataCell scope="col">IsActive</CTableDataCell>
                 <CTableDataCell scope="col">Created Date</CTableDataCell>
                 <CTableDataCell scope="col">Actions</CTableDataCell>
               </CTableRow>
@@ -180,13 +183,14 @@ const timezone = useSelector((state: any) => state.sharedReducer.timezone);
               {displayedRoles?.map((role: RoleList) => (
                 <CTableRow key={role.id}>
                   <CTableDataCell>{role.name}</CTableDataCell>
-                  <CTableDataCell>{role.isactive ? (<span style={{color: "green"}}>Yes</span>) : (<span style={{color: "red"}}>No</span>)}</CTableDataCell>
+                  <CTableDataCell>{role.isactive ? (<span style={{ color: "green" }}>Yes</span>) : (<span style={{ color: "red" }}>No</span>)}</CTableDataCell>
                   <CTableDataCell>
                     {moment.utc(role.createdOn).tz(timezone)?.format('DD/MM/YYYY hh:mm A')}
                   </CTableDataCell>
                   <CTableDataCell>
                     {role.name.toLocaleLowerCase() === "administrator" ? (
                       <>
+
                         <MdEdit
                           style={{
                             color: "green",
@@ -197,41 +201,46 @@ const timezone = useSelector((state: any) => state.sharedReducer.timezone);
                           }}
                           title="Not allowed"
                         />
-                        <MdDelete
-                          style={{
-                            color: "red",
-                            marginRight: "10px",
-                            fontSize: "20px",
-                            opacity: "0.5",
-                            cursor: "not-allowed",
-                          }}
-                          title="Not allowed"
-                        />
+                          <MdDelete
+                            style={{
+                              color: "red",
+                              marginRight: "10px",
+                              fontSize: "20px",
+                              opacity: "0.5",
+                              cursor: "not-allowed",
+                            }}
+                            title="Not allowed"
+                          />
+                      
                       </>
                     ) : (
                       <>
-                        <Link to={`/roles/UpdateRole/${role?.id}`}>
-                          <MdEdit
+                        {rolesPermissions.isEdit && (
+                          <Link to={`/roles/UpdateRole/${role?.id}`}>
+                            <MdEdit
+                              style={{
+                                color: "green",
+                                marginRight: "10px",
+                                fontSize: "20px",
+                              }}
+                              className="mr-4 text-success"
+                            />
+                          </Link>
+                        )}
+                        {rolesPermissions.isDelete && (
+                          <MdDelete
                             style={{
-                              color: "green",
+                              color: "red",
                               marginRight: "10px",
                               fontSize: "20px",
+                              cursor: "pointer",
                             }}
-                            className="mr-4 text-success"
+                            className="text-danger"
+                            onClick={() => handleDeleteClick(role.id)}
                           />
-                        </Link>
-                        <MdDelete
-                          style={{
-                            color: "red",
-                            marginRight: "10px",
-                            fontSize: "20px",
-                            cursor: "pointer",
-                          }}
-                          className="text-danger"
-                          onClick={() => handleDeleteClick(role.id)}
-                        />
+                        )}
                       </>
-                    )}           
+                    )}
 
                   </CTableDataCell>
                 </CTableRow>
@@ -244,7 +253,7 @@ const timezone = useSelector((state: any) => state.sharedReducer.timezone);
             aria-label="Page navigation example"
             className="m-auto"
           >
-            
+
             <CPaginationItem
               onClick={() => handlePageChange(pageNumber - 1)}
               disabled={pageNumber === 1}
@@ -262,7 +271,7 @@ const timezone = useSelector((state: any) => state.sharedReducer.timezone);
                 {index + 1}
               </CPaginationItem>
             ))}
-          
+
             <CPaginationItem
               onClick={() => handlePageChange(pageNumber + 1)}
               disabled={pageNumber === totalPages}
@@ -271,9 +280,9 @@ const timezone = useSelector((state: any) => state.sharedReducer.timezone);
               <span aria-hidden="true">&raquo;</span>
             </CPaginationItem>
           </CPagination>
-          
-        
-       
+
+
+
         </CCardBody>
       </CCard>
     </>

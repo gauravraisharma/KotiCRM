@@ -79,7 +79,7 @@ namespace KotiCRM.Repository.Repository
                     };
                 }
 
-
+                // Check if the role specified by userModel.RoleId exists
                 var roleResponse = await GetRoleNameAsync(userModel.RoleId);
                 if (roleResponse.Status == "FAILED")
                 {
@@ -89,7 +89,7 @@ namespace KotiCRM.Repository.Repository
                         Message = "Invalid UserType"
                     };
                 }
-
+                // Create new ApplicationUser object
                 ApplicationUser user = new ApplicationUser
                 {
                     UserName = userModel.UserName,
@@ -101,11 +101,11 @@ namespace KotiCRM.Repository.Repository
                     CreatedBy = userModel.CreatedBy,
                     CreatedOn = DateTime.UtcNow
                 };
-
+                // Attempt to create user using _userManager
                 IdentityResult identityResult = await _userManager.CreateAsync(user, userModel.Password);
 
 
-
+                // Check if user creation was successful
                 if (!identityResult.Succeeded)
                 {
                     var errors = string.Join(" and ", identityResult.Errors.Select(e => e.Description).ToArray());
@@ -115,9 +115,11 @@ namespace KotiCRM.Repository.Repository
                         Message = errors
                     };
                 }
-
+                // Check if the role exists in the system
                 if (!await _roleManager.RoleExistsAsync(roleResponse.Message))
                 {
+
+                    // Return success status
                     return new ResponseStatus
                     {
                         Status = "FAILED",
@@ -136,6 +138,7 @@ namespace KotiCRM.Repository.Repository
             }
             catch (Exception ex)
             {
+                // Return failure status if an exception occurs
                 return new ResponseStatus
                 {
                     Status = "FAILED",
@@ -149,7 +152,9 @@ namespace KotiCRM.Repository.Repository
         {
             try
             {
+                // Find user by userName
                 var userFound = await _userManager.FindByNameAsync(userModel.UserName);
+                // If user not found or is deleted, return failure
                 if (userFound == null && userFound.IsDeleted)
                 {
                     return new ResponseStatus
@@ -159,7 +164,7 @@ namespace KotiCRM.Repository.Repository
                     };
                 }
 
-                //If Email is changed 
+                // If Email is changed, check for uniqueness
                 if (userFound.Email != userModel.Email)
                 {
                     var userFoundByEmail = await _userManager.FindByEmailAsync(userModel.Email);
@@ -172,8 +177,7 @@ namespace KotiCRM.Repository.Repository
                         };
                     }
                 }
-
-                //Update the user role 
+                // Update user role based on userModel.RoleId
                 var currentRoles = await _userManager.GetRolesAsync(userFound);
                 var roleFound = await _roleManager.FindByIdAsync(userModel.RoleId);
                 if (roleFound != null)
@@ -193,7 +197,7 @@ namespace KotiCRM.Repository.Repository
                     if (!IsRoleAlreadyPresent) await _userManager.AddToRoleAsync(userFound, roleFound.Name);
                 }
 
-                //Update User data 
+                // Update user data with userModel properties
 
                 userFound.Email = userModel.Email;
                 userFound.PhoneNumber = userModel.PhoneNumber;
@@ -202,12 +206,13 @@ namespace KotiCRM.Repository.Repository
                 userFound.ModifiedBy = userModel.ModifiedBy;
                 userFound.ModifiedOn = DateTime.UtcNow;
 
-
+                // Attempt to update user using _userManager
                 IdentityResult identityResult = await _userManager.UpdateAsync(userFound);
-
+                // Check if user update was successful
                 if (!identityResult.Succeeded)
                 {
                     var errors = string.Join(" and ", identityResult.Errors.Select(e => e.Description).ToArray());
+                    // Return success status
                     return new ResponseStatus
                     {
                         Status = "FAILED",
@@ -244,18 +249,16 @@ namespace KotiCRM.Repository.Repository
                 };
             }
         }
-
+        // Generates a JWT token for the provided user with permissions based on roles and modules
         private async Task<string> GenerateToken(ApplicationUser user, bool rememberMe)
         {
             try
             {
+                // Setting up security key and credentials for token generation
                 var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
                 var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
-
-
-
-                //Find UserRole 
+                // Fetching user roles and corresponding permissions from database
                 var userRoles = await _userManager.GetRolesAsync(user);
                 var permissions = (from permission in _context.Permissions
                                    join role in _context.Roles on permission.RoleID equals role.Id
@@ -281,21 +284,24 @@ namespace KotiCRM.Repository.Repository
                 {
                     claims.Add(new Claim($"Permission.{permission.ModuleName}", $"Add:{permission.ADD}, Edit:{permission.EDIT}, View:{permission.VIEW}, Delete:{permission.DELETE}"));
                 }
-
+                // Creating JWT token with expiry based on 'rememberMe' flag
                 var token = new JwtSecurityToken(claims: claims, expires: (rememberMe) ? DateTime.Now.AddDays(30) : DateTime.Now.AddHours(12), signingCredentials: credentials);
                 return new JwtSecurityTokenHandler().WriteToken(token);
             }
             catch (Exception ex)
             {
+                // Handle any exceptions and return null in case of failure
                 return null;
             }
         }
 
+        // Handles user login operation and generates a JWT token upon successful login
         public async Task<LoginStatus> UserLogin(UserLoginModel userModel)
         {
             try
             {
                 var user = await _userManager.FindByEmailAsync(userModel.Username);
+                // Checking if user exists
                 if (user == null)
                 {
                     return new LoginStatus
@@ -304,6 +310,7 @@ namespace KotiCRM.Repository.Repository
                         Message = "User doesn't exist"
                     };
                 }
+                // Validating user password
                 if (!await _userManager.CheckPasswordAsync(user, userModel.Password))
                 {
                     return new LoginStatus
@@ -312,13 +319,14 @@ namespace KotiCRM.Repository.Repository
                         Message = "Invalid Password"
                     };
                 }
-
+                // Signing in the user using SignInManager
                 var signInResult = await _signInManager.PasswordSignInAsync(user, userModel.Password, false, true);
                 if (signInResult.Succeeded)
                 {
                     var userRoles = await _userManager.GetRolesAsync(user);
+                    // Generating JWT token for the authenticated user
                     var token = await GenerateToken(user, userModel.RememberMe);
-
+                    // Fetching user roles and permissions for UI access control
                     var role = await _roleManager.FindByNameAsync(userRoles[0]);
                     var roleid = role.Id;
                     var ModulePermissionList = (from Permissions in _context.Permissions
@@ -334,7 +342,7 @@ namespace KotiCRM.Repository.Repository
                                                     IsDelete = Permissions.Delete,
                                                 }
                               ).ToList();
-
+                    // Fetching organization timezone for the user
 
                     var timeZone = (from organization in _context.Organizations
                                     join users in _context.Users on organization.Id equals users.OrganizationId
@@ -349,7 +357,7 @@ namespace KotiCRM.Repository.Repository
                             Message = "Timezone not found for the logged-in user's organization."
                         };
                     }
-
+                    // Checking and retrieving employee information associated with the user
                     var employee = _context.Employees.FirstOrDefault(x => x.UserId == user.Id);
                     if (employee == null)
                     {
@@ -359,13 +367,14 @@ namespace KotiCRM.Repository.Repository
                             Message = "User not found."
                         };
                     }
-
+                    // Optionally handling employee profile picture URL retrieval
                     if (employee.ProfilePictureURL != null)
                     {
                         string profilePicturePath = _profilePictureRepository.GetImagePathByEmployeeId(employee.ProfilePictureURL);
                         employee.ProfilePictureURL = profilePicturePath;
                     }
 
+                    // Returning login status with relevant information
                     return new LoginStatus
                     {
                         Status = "SUCCEED",
@@ -382,6 +391,7 @@ namespace KotiCRM.Repository.Repository
                 }
                 else if (signInResult.IsLockedOut)
                 {
+                 
                     return new LoginStatus
                     {
                         Status = "FAILED",
@@ -399,6 +409,7 @@ namespace KotiCRM.Repository.Repository
             }
             catch (Exception ex)
             {
+                // Handling any unexpected exceptions during login
                 return new LoginStatus
                 {
                     Status = "FAILED",
@@ -407,10 +418,10 @@ namespace KotiCRM.Repository.Repository
             }
             finally
             {
-                _context.Dispose();
+                _context.Dispose(); // Dispose context to release resources
             }
         }
-
+        // Retrieves a list of roles with optional pagination and search filtering
         public async Task<RolesResponseStatus> GetRoles(string? searchQuery, int? pageNumber, int? pageSize) 
         {
             IQueryable<ApplicationRole> rolesQuery = _context.Roles.Where(x => !x.Isdelete);
@@ -448,7 +459,7 @@ namespace KotiCRM.Repository.Repository
                 Roles = roles
             };
         }
-
+        // Retrieves a role based on the provided roleId
         public async Task<RoleResponseStatus> GetRole(string roleId)
         {
             if (roleId == null)
@@ -460,6 +471,7 @@ namespace KotiCRM.Repository.Repository
                 };
             }
             var role = _context.Roles.FirstOrDefault(role => role.Id == roleId);
+            // Returning response with retrieved role or failure message if not found
             return new RoleResponseStatus
             {
                 Status = "SUCCEED",
@@ -467,7 +479,7 @@ namespace KotiCRM.Repository.Repository
                 Role = role
             };
         }
-
+        // Creates a new role based on the provided role details
         public async Task<RoleResponse> CreateNewRole(CreateUpdateRoleDTO createUpdateRoleDTO)
         {
             try
@@ -481,6 +493,7 @@ namespace KotiCRM.Repository.Repository
                     };
                 }
 
+                // Creating a new role entity with provided details
                 var role = new ApplicationRole
                 {
                     Name = createUpdateRoleDTO.Name,
@@ -493,7 +506,10 @@ namespace KotiCRM.Repository.Repository
                     CreatedBy = "1"
 
                 };
+                // Attempting to create the role using RoleManager
                 var result = await _roleManager.CreateAsync(role);
+
+                // Returning response based on the creation result
                 if (result.Succeeded)
                 {
                     return new RoleResponse()
@@ -506,6 +522,7 @@ namespace KotiCRM.Repository.Repository
                 }
                 else
                 {
+                    // Handling errors if role creation fails
                     var errors = string.Join(" and ", result.Errors.Select(item => item.Description).ToArray());
                     return new RoleResponse
                     {
@@ -524,13 +541,13 @@ namespace KotiCRM.Repository.Repository
             }
             finally
             {
-                _context.Dispose();
+                _context.Dispose(); // Dispose context to release resources
             }
         }
-
+        // Updates an existing role based on the provided role details
         public async Task<RoleResponseStatus> UpdateRole(CreateUpdateRoleDTO createUpdateRoleDTO)
         {
-            using var transaction = _context.Database.BeginTransaction(); // Begin transaction
+            using var transaction = _context.Database.BeginTransaction(); // Begin transaction for data consistency
             try
             {
                 //Check if createUpdateRoleDTO is null
@@ -583,7 +600,7 @@ namespace KotiCRM.Repository.Repository
 
             }
         }
-
+        //Method for deleting role
         public async Task<ResponseStatus> DeleteRole(string roleId)
         {
             // Check if the context is null
@@ -664,10 +681,12 @@ namespace KotiCRM.Repository.Repository
             }
         }
 
+        // Method to fetch user types for dropdown list
         public DDListResponse GetUserTypeListDD()
         {
             try
             {
+                // Check if the context is null
                 if (_context == null)
                 {
                     return new DDListResponse
@@ -676,6 +695,7 @@ namespace KotiCRM.Repository.Repository
                         DdList = null
                     };
                 }
+                // Fetch roles for dropdown list
                 var result = (from role in _context.Roles
                               select new DropDownModel
                               {
@@ -692,6 +712,7 @@ namespace KotiCRM.Repository.Repository
             }
             catch (Exception ex)
             {
+                // Return failed status with null list
                 return new DDListResponse
                 {
                     Status = "FAILED",
@@ -737,10 +758,12 @@ namespace KotiCRM.Repository.Repository
         //    }
         //}
 
+        // Method to asynchronously fetch role name by roleId
         public async Task<ResponseStatus> GetRoleNameAsync(string roleId)
         {
             try
             {
+                // Check if the context is null
                 if (_context == null)
                 {
                     return new ResponseStatus
@@ -749,7 +772,7 @@ namespace KotiCRM.Repository.Repository
                         Message = "Db Context is null"
                     };
                 }
-
+                // Fetch role name by roleId
                 var role = await _context.Roles.FirstOrDefaultAsync(r => r.Id == roleId);
 
                 if (role == null)
@@ -760,7 +783,7 @@ namespace KotiCRM.Repository.Repository
                         Message = "Role not found"
                     };
                 }
-
+                // Return success status with role name
                 return new ResponseStatus
                 {
                     Status = "SUCCEED",
@@ -786,16 +809,17 @@ namespace KotiCRM.Repository.Repository
                 };
             }
         }
-
+        // Method to fetch a list of users with associated details
         public IEnumerable<ResponseApplicationUserModel> GetUserList()
         {
-
+            // Check if the context is null
             if (_context == null)
             {
                 return null;
             }
             try
             {
+                // Fetch user list with associated roles and creator
                 var result = (from user in _context.Users
                               join userrole in _context.UserRoles on user.Id equals userrole.UserId
                               join role in _context.Roles on userrole.RoleId equals role.Id
@@ -817,6 +841,7 @@ namespace KotiCRM.Repository.Repository
             }
             catch (Exception ex)
             {
+                // Return null on failure
                 return null;
             }
             finally
@@ -825,6 +850,7 @@ namespace KotiCRM.Repository.Repository
             }
 
         }
+        // Method for deleting a user
         public ResponseStatus DeleteUser(string userId)
         {
             try
@@ -861,6 +887,8 @@ namespace KotiCRM.Repository.Repository
 
 
         }
+
+        // Method to asynchronously fetch module permissions for a specific user type
         public async Task<ModulePermissionResponse> GetModulePermissions(string userType)
         {
             try
@@ -874,6 +902,7 @@ namespace KotiCRM.Repository.Repository
                     };
                 }
 
+                // Fetch module permissions for a specific user type
                 var modulePermissionList = (from permission in _context.Permissions
                                             join module in _context.Modules on permission.ModuleID equals module.Id
                                             where permission.RoleID == userType

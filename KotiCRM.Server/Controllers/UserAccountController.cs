@@ -16,7 +16,7 @@ namespace KotiCRM.Server.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize(AuthenticationSchemes = "Bearer")]
+    [Authorize(AuthenticationSchemes = "Bearer")]// Authorize the entire controller using Bearer authentication scheme
     public class UserAccountController : Controller
     {
         private readonly IUserAccountService _accountService;
@@ -48,8 +48,8 @@ namespace KotiCRM.Server.Controllers
                 return BadRequest(loginStatus);
             }
         }
-
-        //It will create the application user
+        // CreateApplicationUser method creates a new application user
+        // Requires Accounts_Add policy
         [HttpPost("CreateApplicationUser")]
         [Authorize(Policy = Policies.Accounts_Add)]
         public async Task<IActionResult> CreateApplicationUser(ApplicationUserModel userModel)
@@ -58,7 +58,6 @@ namespace KotiCRM.Server.Controllers
             {
                 return BadRequest("Please pass the valid Input.");
             }
-
 
             var responseStatus = await _accountService.CreateApplicationUser(userModel);
 
@@ -74,7 +73,8 @@ namespace KotiCRM.Server.Controllers
 
         }
 
-        //It will update the application user
+        // UpdateApplicationUser method updates an existing application user
+        // Requires Accounts_Edit policy
         [HttpPost("updateApplicationUser")]
         [Authorize(Policy = Policies.Accounts_Edit)]
         public async Task<IActionResult> UpdateApplicationUser(UpdateApplicationUserModel userModel)
@@ -98,8 +98,8 @@ namespace KotiCRM.Server.Controllers
 
         }
 
-        // Role Management
-
+        // GetRoles method retrieves a list of roles based on search query and pagination parameters
+        // Requires Accounts_View policy
         [HttpGet("GetRoles")]
         [Authorize(Policy = Policies.Accounts_View)]
         public async Task<ActionResult> GetRoles(string? searchQuery, int? pageNumber, int? pageSize)
@@ -111,7 +111,8 @@ namespace KotiCRM.Server.Controllers
             }
             return Ok(dbResponse);
         }
-
+        // GetRole method retrieves a specific role by its ID
+        // Requires Accounts_View policy
         [HttpGet("GetRole/{roleId}")]
         [Authorize(Policy = Policies.Accounts_View)]
         public async Task<ActionResult> GetRole(string roleId)
@@ -123,8 +124,8 @@ namespace KotiCRM.Server.Controllers
             }
             return Ok(dbResponse);
         }
-
-        //It will create the application Role
+        // CreateNewRole method creates a new role
+        // Requires Accounts_Add policy
         [HttpPost]
         [Route("CreateNewRole")]
         [Authorize(Policy = Policies.Accounts_Add)]
@@ -147,7 +148,8 @@ namespace KotiCRM.Server.Controllers
             }
 
         }
-
+        // UpdateRole method updates an existing role
+        // Requires Accounts_Edit policy
         [HttpPut]
         [Route("UpdateRole")]
         [Authorize(Policy = Policies.Accounts_Edit)]
@@ -168,7 +170,8 @@ namespace KotiCRM.Server.Controllers
                 return BadRequest(responseStatus.Message);
             }
         }
-
+        // DeleteRole method deletes a specific role by its ID
+        // Requires Accounts_Delete policy
         [HttpGet("DeleteRole/{roleId}")]
         [Authorize(Policy = Policies.Accounts_Delete)]
         public async Task<ActionResult> DeleteRole(string roleId)
@@ -182,7 +185,8 @@ namespace KotiCRM.Server.Controllers
         }
 
 
-        //This method is used to get List of Roles 
+        // GetUserTypeListDD method retrieves a list of user types
+        // Requires Accounts_View policy
         [HttpGet("GetUserTypeListDD")]
         [Authorize(Policy = Policies.Accounts_View)]
         public ActionResult GetUserTypeListDD()
@@ -195,7 +199,8 @@ namespace KotiCRM.Server.Controllers
             return Ok(dbResponse.DdList);
         }
 
-        //This method is used to get List of Roles
+        // GetUserList method retrieves a list of users
+        // Requires Accounts_View policy
         [HttpGet("GetUserList")]
         [Authorize(Policy = Policies.Accounts_View)]
         public ActionResult GetUserList()
@@ -204,7 +209,8 @@ namespace KotiCRM.Server.Controllers
 
             return Ok(dbResponse);
         }
-
+        // GetUserDataById method retrieves user data by user ID
+        // Requires Accounts_View policy
         [HttpGet("getUserDataById/{userId}")]
         [Authorize(Policy = Policies.Accounts_View)]
         public ActionResult GetUserDataById(string userId)
@@ -213,7 +219,8 @@ namespace KotiCRM.Server.Controllers
 
             return Ok(dbResponse);
         }
-
+        // DeleteUser method deletes a specific user by user ID
+        // Requires Accounts_Delete policy
         [HttpGet("DeleteUser/{userId}")]
         [Authorize(Policy = Policies.Accounts_Delete)]
         public ActionResult DeleteUser(string userId)
@@ -225,6 +232,8 @@ namespace KotiCRM.Server.Controllers
             }
             return Ok(dbResponse);
         }
+        // GetModulePermissions method retrieves module permissions by user type
+        // Requires Accounts_View policy
 
         [HttpGet("GetModulePermissions/{userType}")]
         [Authorize(Policy = Policies.Accounts_View)]
@@ -238,7 +247,8 @@ namespace KotiCRM.Server.Controllers
             return Ok(dbResponse);
         }
 
-        // get modules
+        // GetModules method retrieves a list of all modules
+        // Requires Accounts_View policy
         [HttpGet("GetModules")]
         [Authorize(Policy = Policies.Accounts_View)]
         public async Task<ActionResult<IEnumerable<GetModulesDTO>>> GetModules()
@@ -258,7 +268,8 @@ namespace KotiCRM.Server.Controllers
                 return StatusCode(500, "Internal server error");
             }
         }
-
+        // GetModulePermission method retrieves module permissions by user ID
+        // Requires Accounts_View policy
         [HttpGet("GetModulePermission/{userId}")]
         [Authorize(Policy = Policies.Accounts_View)]
         public async Task<ActionResult> GetModulePermission(string userId)
@@ -271,10 +282,9 @@ namespace KotiCRM.Server.Controllers
             return Ok(dbResponse);
         }
 
-        // create module permission
-
-
-        [HttpPost] // Use HttpPost for creation
+        // CreateModulePermission method creates new module permissions
+        // Requires Accounts_Add policy
+        [HttpPost]
         [Route("CreateModulePermission")]
         [Authorize(Policy = Policies.Accounts_Add)]
         public async Task<ActionResult> CreateModulePermission(List<CreateModulePermissionDTO> createModulePermissions)
@@ -295,7 +305,8 @@ namespace KotiCRM.Server.Controllers
                 return BadRequest(responseStatus.Message);
             }
         }
-
+        // UpdateModulePermission method updates existing module permissions
+        // Requires Accounts_Edit policy
         [HttpPut]
         [Route("UpdateModulePermission")]
         [Authorize(Policy = Policies.Accounts_Edit)]
@@ -317,8 +328,8 @@ namespace KotiCRM.Server.Controllers
             }
         }
 
-
-        //This method is used to get List of Employees
+        // GetUsers method retrieves a list of employees based on search query and pagination parameters
+        // Requires Accounts_View policy
         [HttpGet]
         [Route("GetUsers")]
         [Authorize(Policy = Policies.Accounts_View)]
@@ -330,6 +341,7 @@ namespace KotiCRM.Server.Controllers
         }
 
         //This method is used to get Employee by id
+        // Requires Accounts_View policy
         [HttpGet]
         [Route("GetEmployeeById/{employeeId}")]
         [Authorize(Policy = Policies.Accounts_View)]
@@ -340,6 +352,7 @@ namespace KotiCRM.Server.Controllers
         }
 
         // This method is used to create Employee
+        // Requires Accounts_Add policy
         [HttpPost]
         [Route("CreateEmployee")]
         [Authorize(Policy = Policies.Accounts_Add)]
@@ -365,6 +378,7 @@ namespace KotiCRM.Server.Controllers
         }
 
         // This method is used to update Employee
+        // Requires Accounts_Edit policy
         [HttpPut]
         [Route("UpdateEmployee")]
         [Authorize(Policy = Policies.Accounts_Edit)]
@@ -389,6 +403,7 @@ namespace KotiCRM.Server.Controllers
         }
 
         // This method is used to delete Employee
+        // Requires Accounts_Delete policy
         [HttpGet]
         [Route("DeleteEmployee/{employeeId}")]
         [Authorize(Policy = Policies.Accounts_Delete)]
@@ -402,7 +417,8 @@ namespace KotiCRM.Server.Controllers
             return Ok(dbResponse);
         }
 
-
+        // This method is used to change a user's password
+        // Requires Accounts_Edit policy
         [HttpPost]
         [Route("ChangePassword")]
         [Authorize(Policy = Policies.Accounts_Edit)]

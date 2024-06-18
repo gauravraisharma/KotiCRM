@@ -18,6 +18,8 @@ namespace KotiCRM.Server.Controllers
         {
             _attachmentService = attachmentService;
         }
+        /// Endpoint to retrieve a list of attachments.
+        /// Requires the 'Accounts_View' policy.
 
         [HttpGet]
         [Route("GetAttachmentList")]
@@ -26,6 +28,8 @@ namespace KotiCRM.Server.Controllers
         {
             return await _attachmentService.GetAttachmentList();
         }
+        /// Endpoint to create a new attachment.
+        /// Requires the 'Accounts_Add' policy.
 
         [HttpPost]
         [Route("CreateAttachment")]
@@ -39,7 +43,8 @@ namespace KotiCRM.Server.Controllers
             }
             return Ok(response);
         }
-
+        /// Endpoint to download an attachment by attachmentId.
+        /// Requires the 'Accounts_View' policy.
         [HttpGet("{attachmentId}/download")]
         [Authorize(Policy = Policies.Accounts_View)]
         public async Task<IActionResult> DownloadAttachmentAsync(int attachmentId)

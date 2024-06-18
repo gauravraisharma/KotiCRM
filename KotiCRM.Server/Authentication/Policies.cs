@@ -24,10 +24,10 @@ namespace KotiCRM.Server.Authentication
         public const string Invoices_Edit = "Invoices.Edit";
         public const string Invoices_Delete = "Invoices.Delete";
 
-        public const string Notes_View = "Notes.View";
-        public const string Notes_Add = "Notes.Add";
-        public const string Notes_Edit = "Notes.Edit";
-        public const string Notes_Delete = "Notes.Delete";
+        //public const string Notes_View = "Notes.View";
+        //public const string Notes_Add = "Notes.Add";
+        //public const string Notes_Edit = "Notes.Edit";
+        //public const string Notes_Delete = "Notes.Delete";
 
         //public const string Employees_View = "Employees.View";
         //public const string Employees_Add = "Employees.Add";
@@ -39,9 +39,9 @@ namespace KotiCRM.Server.Authentication
         public const string ManageUsers_Edit = "ManageUsers.Edit";
         public const string ManageUsers_Delete = "ManageUsers.Delete";
 
-        public const string ManagePermission_View = "ManagePermission.View";
-        public const string ManagePermission_Add = "ManagePermission.Add";
-        public const string ManagePermission_Edit = "ManagePermission.Edit";
-        public const string ManagePermission_Delete = "ManagePermission.Delete";
+        public const string ManageRoles_View = "ManageRoles.View";
+        public const string ManageRoles_Add = "ManageRoles.Add";
+        public const string ManageRoles_Edit = "ManageRoles.Edit";
+        public const string ManageRoles_Delete = "ManageRoles.Delete";
     }
 }

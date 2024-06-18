@@ -27,6 +27,7 @@ import {
 import "../../css/style.css";
 import moment from "moment";
 import { useSelector } from "react-redux";
+import GetModulePermissions from "../../utils/Shared/GetModulePermissions";
 const Users = () => {
   //  const [employeesList, setEmployeesList] = useState<Employees[]>([]);
   const [userList, setUserList] = useState<Employees[]>([]);
@@ -40,6 +41,7 @@ const Users = () => {
   const [pageNumber, setPageNumber] = useState<number>(1);
   const [totalUserCount, setTotalUserCount] = useState(0)
   const timezone = useSelector((state: any) => state.sharedReducer.timezone);
+  const usersPermissions = GetModulePermissions('ManageUsers');
   const pageSize = 10;
 
   
@@ -177,11 +179,13 @@ const Users = () => {
                   Manage Roles
                 </CButton>
               </Link>
+              {usersPermissions.isAdd && (
               <Link to={`/users/createOrUpdateUser`}>
                 <CButton color="primary">
                   + New
                 </CButton>
               </Link>
+              )}
             </CCol>
           </CRow>
         </CCol>
@@ -224,6 +228,7 @@ const Users = () => {
                     </CTableDataCell>
 
                     <CTableDataCell>
+                      {usersPermissions.isEdit && (
                       <Link to={`/users/updateUser/${employee.employeeId}`}>
                         <MdEdit
                           style={{
@@ -234,6 +239,8 @@ const Users = () => {
                           className="mr-4 text-success"
                         />
                       </Link>
+                      )}
+                         {usersPermissions.isView && (
                       <Link to={`/users/userDetail/${employee.userId}/${employee.employeeId}`}>
                         <AiFillEye
                           style={{
@@ -244,6 +251,8 @@ const Users = () => {
                           className="mr-4 text-primary"
                         />
                       </Link>
+                         )}
+                      {usersPermissions.isDelete && (
                       <MdDelete
                         style={{
                           color: "red",
@@ -254,6 +263,7 @@ const Users = () => {
                         className="text-danger"
                         onClick={() => handleDeleteClick(employee.employeeId)}
                       />
+                      )}
                     </CTableDataCell>
                   </CTableRow>
                 ))}

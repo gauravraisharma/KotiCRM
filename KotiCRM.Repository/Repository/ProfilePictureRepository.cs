@@ -12,35 +12,36 @@ namespace KotiCRM.Repository.Repository
 {
     public class ProfilePictureRepository : IProfilePictureRepository
     {
-        private readonly string _profilePicturePath;
-        private readonly string _profilePictureLink;
+        private readonly string _profilePicturePath; // Path where profile pictures are stored
+        private readonly string _profilePictureLink; // Link used to access profile pictures
 
+        // Constructor to initialize configuration settings
         public ProfilePictureRepository(IConfiguration configuration)
         {
             _profilePicturePath = configuration.GetSection("ProfileFileConfig:Path").Value;
             _profilePictureLink = configuration.GetSection("ProfileFileConfig:Link").Value;
         }
-
+        // Method to upload a profile picture
         public async Task<string> UploadProfilePicture(IFormFile profilePicture, string fileName)
         {
+            // Check if the profile picture is null or empty
             if (profilePicture == null || profilePicture.Length == 0)
                 throw new ArgumentNullException(nameof(profilePicture), "Profile picture is required");
 
-
-
             try
             {
+                // Check if the directory exists, if not, create it
                 if (!Directory.Exists(_profilePicturePath + '/' + PathConstant.PROFILE_PICTURE_FOLDER))
                     Directory.CreateDirectory(_profilePicturePath + '/' + PathConstant.PROFILE_PICTURE_FOLDER);
-
+                // Create a unique name for the profile picture
                 string name = String.Concat(DateTime.Now.ToString("MM_dd_yyyy_HH_mm"), "_", fileName, Path.GetExtension(ContentDispositionHeaderValue.Parse(profilePicture.ContentDisposition).FileName.Trim('"')));
                 string fullPath = Path.Combine(_profilePicturePath, PathConstant.PROFILE_PICTURE_FOLDER, name);
-
+                // Save the profile picture to the file system
                 using (var stream = new FileStream(fullPath, FileMode.Create))
                 {
                     await profilePicture.CopyToAsync(stream);
                 }
-
+                // Return the name of the uploaded file
                 return name;
             }
             catch (Exception ex)
@@ -86,20 +87,26 @@ namespace KotiCRM.Repository.Repository
         //    }
 
         //}
-
+        // Method to get the image path by employee ID
         public string GetImagePathByEmployeeId(string profilePic)
         {
-            if(profilePic == null)
+            // Return null if profilePic is null
+            if (profilePic == null)
             {
                 return null;
             }
+            // Combine paths to get the absolute path
             var absolutePath = Path.Combine(_profilePicturePath, PathConstant.PROFILE_PICTURE_FOLDER, profilePic);
+
+            // Check if the file exists
             if (File.Exists(absolutePath))
             {
+                // Return the web link to the profile picture
                 return Path.Combine(_profilePictureLink + '/' + PathConstant.PROFILE_PICTURE_FOLDER, profilePic);
             }
             else
             {
+                // Return null if the file doesn't exist
                 return null;
             }
         }

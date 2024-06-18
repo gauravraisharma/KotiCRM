@@ -17,6 +17,9 @@ namespace KotiCRM.Server.Controllers
         {
             _contactService = contactService;
         }
+   
+        /// Retrieves a list of contacts based on optional filters.
+        /// Requires the policy "Contacts_View" for authorization.
 
         [HttpGet]
         [Route("GetContactList")]
@@ -26,6 +29,9 @@ namespace KotiCRM.Server.Controllers
             return await _contactService.GetContactList(accountId, searchQuery, pageNumber, pageSize);
         }
 
+        /// Retrieves details of a specific contact by ID.
+        /// Requires the policy "Contacts_View" for authorization.
+
         [HttpGet("GetContactDetails/{id}")]
         [Authorize(Policy = Policies.Contacts_View)]
         public async Task<ActionResult<ContactWithAccountNameDTO>> GetContactDetails(int id)
@@ -33,6 +39,8 @@ namespace KotiCRM.Server.Controllers
             return Ok(await _contactService.GetContactDetails(id));
         }
 
+        /// Creates a new contact.
+        /// Requires the policy "Contacts_Add" for authorization.
         [HttpPost]
         [Route("CreateContact")]
         [Authorize(Policy = Policies.Contacts_Add)]
@@ -40,14 +48,16 @@ namespace KotiCRM.Server.Controllers
         {
             return Ok(await _contactService.CreateContact(contactDTO));
         }
-
+        /// Updates an existing contact.
+        /// Requires the policy "Contacts_Edit" for authorization.
         [HttpPut("UpdateContact")]
         [Authorize(Policy = Policies.Contacts_Edit)]
         public async Task<ActionResult<ContactDTO>> UpdateContact(ContactDTO contactDTO)
         {
             return Ok(await _contactService.UpdateContact(contactDTO));
         }
-
+        /// Deletes a contact by ID.
+        /// Requires the policy "Contacts_Delete" for authorization.
 
         [HttpDelete("DeleteContact/{id}")]
         [Authorize(Policy = Policies.Contacts_Delete)]
