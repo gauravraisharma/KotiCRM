@@ -168,7 +168,7 @@ const routes: Route[] = [
     { path: '/users/userDetail/:userId/:employeeId', name: 'UserDetail', element: UserDetail, isAuth: true, modulePermission: 'ManageUsers' },
     { path: '/users/updateUser/:id', name: 'UpdateUser', element: CreateOrUpdateUser, isAuth: true, modulePermission: 'ManageUsers' },
     { path: '/users/createOrUpdateUser', name: 'CreateUser', element: CreateOrUpdateUser, isAuth: true, modulePermission: 'ManageUsers' },
-    { path: '/form12bb/:userId/:employeeId',  name: 'Form12BB', element: Form12BB,  isAuth: true,  modulePermission: 'ManageUsers' },
+    { path: '/form12bb/:userId/:employeeId/:financialYear',  name: 'Form12BB', element: Form12BB,  isAuth: true,  modulePermission: 'ManageUsers' },
     // { path: "/users/userDetail/:userId/:employeeId/form12bb", element: <Form12BB />, isAuth: true, modulePermission: "ManageUsers" },
       
 

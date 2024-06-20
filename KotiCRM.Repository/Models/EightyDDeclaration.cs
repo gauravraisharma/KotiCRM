@@ -14,6 +14,6 @@ namespace KotiCRM.Repository.Models
         public int? MedicalExpenseAmount { get; set; }
         public string? MedicalExpenseProof { get; set; }
         public bool IsVerified { get; set; }
-        public string Remarks { get; set; }
+        public string? Remarks { get; set; }
     }
 }

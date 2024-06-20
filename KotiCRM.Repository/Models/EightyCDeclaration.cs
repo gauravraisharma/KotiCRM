@@ -16,13 +16,13 @@ namespace KotiCRM.Repository.Models
         public string? Remarks { get; set; }
         public string CreatedBy { get; set; }
         public DateTime CreatedOn { get; set; }
-        public string ModifiedBy { get; set; }
-        public DateTime ModifiedOn { get; set; }
+        public string? ModifiedBy { get; set; }
+        public DateTime? ModifiedOn { get; set; }
         public bool IsDelete { get; set; }
 
         // Foreign key Employee12BB
         public int Employee12BBId { get; set; }
-        public virtual Employee12BB Employee12BB { get; set; }
-        //public virtual ICollection<EightyCDeductionType> EightyCDeductionTypes { get; set; }
+        public virtual Employee12BB? Employee12BB { get; set; }
+        public virtual ICollection<EightyCDeductionType> EightyCDeductionTypes { get; set; }
     }
 }

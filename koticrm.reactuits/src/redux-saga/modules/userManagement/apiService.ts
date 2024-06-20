@@ -106,12 +106,11 @@ export async function ChangePassword(passwordRequestModal:any) {
 }
 
 // Taxation services
-  
 
 export async function GetEmployee12BB(id: string , financialYear? : string){
     try {
      
-        const response = await axiosInstance.get(`/TaxDeclaration/Employee12BB/` + id + '/' + financialYear);
+        const response = await axiosInstance.get<EmployeeFinancialRecord>(`/TaxDeclaration/Employee12BB/` + id + '/' + financialYear);
         return response;
     } catch (error: any) {
         const errorResponse: apiResponse<EmployeeFinancialRecord> = {
@@ -181,7 +180,6 @@ export async function GetInterestPayableOnHomeLoan(id: number){
 
 export async function GetEightyC(employee12BBId: number){
     try {
-        debugger;
         const response = await axiosInstance.get(`/TaxDeclaration/GetEightyC/` + employee12BBId);
         return response;
     } catch (error: any) {
@@ -196,7 +194,6 @@ export async function GetEightyC(employee12BBId: number){
 
 export async function GetDeductionTypes(): Promise<apiResponse<Deduction[]>> {
     try {
-        debugger;
         const response = await axiosInstance.get<Deduction[]>(`/TaxDeclaration/GetEightyCdeductionList`);
         return response;
     } catch (error: any) {
@@ -269,7 +266,6 @@ export async function SaveHouseRent(houseRentData: HouseRentRecord) {
 
 export async function SaveLeaveTravelExpenditure(LeaveTravelExpenditure: TravelExpenditureRecord) {
     try {
-        debugger;
         const response = await axiosInstance.post<TravelExpenditureRecord>(`/TaxDeclaration/LeaveTravelExpenditure`, LeaveTravelExpenditure);
         return response;
     } catch (error: any) {
@@ -298,7 +294,6 @@ export async function SaveInterestPayableOnHomeLoan(InterestPayableOnHomeLoan: H
 
 export async function SaveEightyC(EightyC: EightyCDeclaration) {
     try {
-        debugger;
         const response = await axiosInstance.post<EightyCDeclaration>(`/TaxDeclaration/EightyC`, EightyC);
         return response;
     } catch (error: any) {
@@ -344,6 +339,21 @@ export async function SaveOtherInvestment(OtherInvestment: OtherInvestmentRecord
         return response;
     } catch (error: any) {
         const errorResponse: apiResponse<OtherInvestmentRecord> = {
+            data: undefined,
+            status: 500,
+            statusText: error.message
+        };
+        return errorResponse;
+    }
+}
+
+// Final submit
+export async function SaveForm12BB(employeeFinancialRecord: EmployeeFinancialRecord) {
+    try {
+        const response = await axiosInstance.post<EmployeeFinancialRecord>(`/TaxDeclaration/SaveEmployee12BB`, employeeFinancialRecord);
+        return response;
+    } catch (error: any) {
+        const errorResponse: apiResponse<EmployeeFinancialRecord> = {
             data: undefined,
             status: 500,
             statusText: error.message

@@ -12,6 +12,6 @@ namespace KotiCRM.Repository.Models
         public int? Amount { get; set; }
         public string? ProofDocumentLink { get; set; }
         public bool IsVerified { get; set; }
-        public string Remarks { get; set; }
+        public string? Remarks { get; set; }
     }
 }

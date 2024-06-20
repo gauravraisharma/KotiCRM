@@ -192,6 +192,7 @@ namespace KotiCRM.Repository.Repository
                         if (roleFound.Name == userRole)
                         {
                             IsRoleAlreadyPresent = true;
+
                         }
                     }
                     if (!IsRoleAlreadyPresent) await _userManager.AddToRoleAsync(userFound, roleFound.Name);
@@ -219,21 +220,6 @@ namespace KotiCRM.Repository.Repository
                         Message = errors
                     };
                 }
-                //if (!string.IsNullOrEmpty(userModel.Password))
-                //{
-                //    var token = await _userManager.GeneratePasswordResetTokenAsync(userFound);
-                //    var resetPasswordResult = await _userManager.ResetPasswordAsync(userFound, token, userModel.Password);
-                //    var errors = string.Join(" and ", resetPasswordResult.Errors.Select(e => e.Description).ToArray());
-                //    if (!resetPasswordResult.Succeeded)
-                //        return new ResponseStatus
-                //        {
-                //            Status = "FAILED",
-                //            Message = errors
-                //        };
-                //}
-
-
-
                 return new ResponseStatus
                 {
                     Status = "SUCCEED",

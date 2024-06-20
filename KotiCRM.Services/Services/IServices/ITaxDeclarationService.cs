@@ -10,27 +10,7 @@ namespace KotiCRM.Services.IServices
 {
     public interface ITaxDeclarationService
     {
-        //save
-        Task<HouseRentRecordDTO> SaveHouseRent(HouseRentRecordDTO houseRentRecordDTO);
-        Task<TravelExpenditureDeclarationDTO> SaveLeaveTravelExpenditure(TravelExpenditureDeclarationDTO travelExpenditureDeclarationDTO);
-        Task<HomeLoanRecordDTO> SaveInterestPayableOnHome(HomeLoanRecordDTO homeLoanRecordDTO);
-        Task<EightyCRecordDTO> SaveEightyC(EightyCRecordDTO eightyCRecordDTO);
-        Task<EightyDRecordDTO> SaveEightyD(EightyDRecordDTO eightyDRecordDTO);
-        Task<EightyGRecordDTO> SaveEightyG(EightyGRecordDTO eightyGRecordDTO);
-        Task<OtherInvestmentRecordDTO> SaveOtherInvestment(OtherInvestmentRecordDTO otherInvestmentRecordDTO);
-
-        //Get
-        Task<HouseRentRecordDTO> GetHouseRent(int id);
-        Task<TravelExpenditureDeclarationDTO> GetLeaveTravelExpenditure(int id);
-        Task<HomeLoanRecordDTO> GetInterestPayableOnHome(int id);
-        Task<EightyCRecordDTO> GetEightyC(int employee12BBId);
-        Task<IEnumerable<EightyCDeductionType>> GetDeductionTypesAsync();
-        Task<EightyDRecordDTO> GetEightyD(int id);
-        Task<EightyGRecordDTO> GetEightyG(int id);
-        Task<OtherInvestmentRecordDTO> GetOtherInvestment(int id);
-
         // Get 
-     
          Task<Employee12BB> GetEmployee12BB(string employeeId, string financialYear);
          Task<List<Employee12BB>> GetEmployee12BBs(string employeeId);
 

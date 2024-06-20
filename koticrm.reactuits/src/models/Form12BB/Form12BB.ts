@@ -1,99 +1,35 @@
 // Define your initial values
-export class initialEmployeeRecord implements EmployeeFinancialRecord {
+export class InitialEmployeeRecord implements EmployeeFinancialRecord {
   id: number;
-  employeeId: number;
+  employeeId: string;
   financialYear: string;
   houseRentRecord: HouseRentRecord;
   houseRentRecordId: number;
+  travelExpenditureRecordId: number;
+  homeLoanRecordId: number;
+  eightyDRecordId: number;
+  eightyGRecordId: number;
+  otherInvestmentRecordId: number;
   isNoHouseRentDeclaration: boolean;
   travelExpenditureRecord: TravelExpenditureRecord;
-  travelExpenditureRecordId: number;
-  homeLoanRecordId:number;
   isNoTravelDeclaration: boolean;
   homeLoanRecord: HomeLoanRecord;
   isNoHomeDeclaration: boolean;
   eightyCRecordId: number;
-  eightyCRecord: EightyCDeclaration[]; // You might want to define a type for this
+  eightyCDeclarations: EightyCDeclaration[]; // You might want to define a type for this
   eightyDRecord: EightyDRecord;
   eightyGRecord: EightyGRecord;
   otherInvestmentRecord: OtherInvestmentRecord;
-  otherInvestmentRecordId: string;
+  isDeclarationComplete: boolean;
+  modifiedBy: string;
+  modifiedOn: Date | null;
+  createdBy: string ;
 
 
 
-//   constructor() {
-//     this.id = 0;
-//     this.employeeId = 0;
-//     this.financialYear = "";
-//     this.houseRentRecord = {
-//       id: 0,
-//       amount: null,
-//       ownerPanCard: null,
-//       proofdocumentLink: null,
-//       isVerified: false,
-//       remarks: "",
-//     };
-//     this.houseRentRecordId = 0;
-//     this.isNoHouseRentDeclaration = false;
-//     this.travelExpenditureRecord = {
-//       id: 0,
-//       amount: 0,
-//       proofdocumentLink: null,
-//       isVerified: false,
-//       remarks: "",
-//     };
-//     this.travelExpenditureRecordId = 0;
-
-//     this.isNoTravelDeclaration = false;
-//     this.homeLoanRecord = {
-//       id: 0,
-//       lenderName: "",
-//       lenderAddress: "",
-//       lenderPanNumber: "",
-//       amount: 0,
-//       proofDocumentLink: null,
-//       isVerified: false,
-//       remarks: "",
-//     };
-
-//     this.homeLoanRecordId = 0;  
-//     this.isNoHomeDeclaration = false;
-//     this.eightyCRecordId = 0;
-//     this. eightyCRecord: EightyCDeclaration[] = [],
-
-//     this.eightyDRecord = {
-//       id: 0,
-//       insuranceAmount: 0,
-//       insuranceProofLink: null,
-//       medicalExpenseAmount: 0,
-//       medicalExpenseProof: null,
-//       isVerified: false,
-//       remarks: "",
-//     };
-
-//     this.eightyGRecord = {
-//       id: 0,
-//       nameofdonee: "",
-//       panNumber: "",
-//       address: "",
-//       amount: 0,
-//       proofdocumentLink: null,
-//       isVerified: false,
-//       remarks: "",
-//     };
-//     this.otherInvestmentRecord = {
-//       id: 0,
-//       description: "",
-//       proofdocumentLink: null,
-//       isVerified: false,
-//       remarks: "",
-//     };
-//     this.otherInvestmentRecordId = '';
-//   }
-// }
 constructor(
   id: number = 0,
-  employeeId: number = 0,
+  employeeId: string = "",
   financialYear: string = "",
   houseRentRecord: HouseRentRecord = {
       id: 0,
@@ -104,6 +40,8 @@ constructor(
       remarks: "",
   },
   houseRentRecordId: number = 0,
+  eightyDRecordId: number = 0,
+  eightyGRecordId: number = 0,
   isNoHouseRentDeclaration: boolean = false,
   travelExpenditureRecord: TravelExpenditureRecord = {
       id: 0,
@@ -139,7 +77,7 @@ constructor(
   },
   eightyGRecord: EightyGRecord = {
       id: 0,
-      nameofdonee: "",
+      nameOfDonee: "",
       panNumber: "",
       address: "",
       amount: 0,
@@ -154,7 +92,12 @@ constructor(
       isVerified: false,
       remarks: "",
   },
-  otherInvestmentRecordId: string = ''
+  otherInvestmentRecordId: number = 0,
+  
+  isDeclarationComplete: boolean = false,
+  modifiedBy: string = "",
+  modifiedOn: Date | null = null,
+  createdBy: string = "",
 ) {
   this.id = id;
   this.employeeId = employeeId;
@@ -167,13 +110,20 @@ constructor(
   this.isNoTravelDeclaration = isNoTravelDeclaration;
   this.homeLoanRecord = homeLoanRecord;
   this.homeLoanRecordId = homeLoanRecordId;
+  this.eightyDRecordId = eightyDRecordId;
+  this.eightyGRecordId = eightyGRecordId;
   this.isNoHomeDeclaration = isNoHomeDeclaration;
   this.eightyCRecordId = eightyCRecordId;
-  this.eightyCRecord = eightyCRecord;
+  this.eightyCDeclarations = eightyCRecord;
   this.eightyDRecord = eightyDRecord;
   this.eightyGRecord = eightyGRecord;
   this.otherInvestmentRecord = otherInvestmentRecord;
   this.otherInvestmentRecordId = otherInvestmentRecordId;
+  
+  this.isDeclarationComplete = isDeclarationComplete;
+  this.modifiedBy = modifiedBy;
+  this.modifiedOn = modifiedOn;
+  this.createdBy = createdBy;
 }
 }
 export interface HouseRentRecord {
@@ -217,6 +167,7 @@ export interface EightyCDeclaration {
   isDelete: boolean;
   employee12BBId: number;
   employee12BB?: ''; // Optional as it's a navigation property
+  eightyCDeductionTypes: EightyCDeductionTypes[];
 }
 
 export interface EightyDRecord {
@@ -231,7 +182,7 @@ export interface EightyDRecord {
 
 export interface EightyGRecord {
   id: number;
-  nameofdonee: string;
+  nameOfDonee: string;
   panNumber: string;
   address: string;
   amount: number;
@@ -248,19 +199,33 @@ export interface OtherInvestmentRecord {
   remarks: string;
 }
 
+export interface EightyCDeductionTypes {
+  id: number;
+  name: string;
+}
+
 export interface EmployeeFinancialRecord {
   id: number;
-  employeeId: number;
+  employeeId: string;
   financialYear: string;
-  houseRentRecord: HouseRentRecord;
   houseRentRecordId: number;
+  travelExpenditureRecordId: number;
+  homeLoanRecordId: number;
+  eightyDRecordId: number;
+  eightyGRecordId: number;
+  otherInvestmentRecordId: number;
+  houseRentRecord: HouseRentRecord;
   isNoHouseRentDeclaration: boolean;
   travelExpenditureRecord: TravelExpenditureRecord;
   isNoTravelDeclaration: boolean;
   homeLoanRecord: HomeLoanRecord;
   isNoHomeDeclaration: boolean;
-  eightyCRecord: EightyCDeclaration[]; // You might want to define a type for this
+  eightyCDeclarations: EightyCDeclaration[]; // You might want to define a type for this
   eightyDRecord: EightyDRecord;
   eightyGRecord: EightyGRecord;
   otherInvestmentRecord: OtherInvestmentRecord;
+  isDeclarationComplete: boolean;
+  modifiedBy: string;
+  modifiedOn: Date | null;
+  createdBy: string;
 }

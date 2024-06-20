@@ -83,6 +83,11 @@ const UserDetails = () => {
       .oneOf([Yup.ref("newPassword"), null], "Passwords must match")
   });
 
+  const handleClick = (element: any) => {
+    const financialYear = element.financialYear
+    navigate(`/Form12BB/${userId}/${element.employeeId}/${financialYear}`);
+  };
+
   return (
     <>
       <ToastContainer />
@@ -391,11 +396,11 @@ const UserDetails = () => {
                                 </CCol>
                             </CCol>
                             <CCol md="6" className="text-end">
-                                <div>
+                                <div key={index}>
                                     {element.isDeclarationComplete ? 
                                       <p>Last submitted on {moment(element.modifiedOn).format('DD MMMM YYYY')} <u style={{ cursor: 'pointer', color: '#4e73df' }}>View Detail</u></p>
                                       :
-                                      <p><Link to={`/Form12BB/${userId}/${element.employeeId}`}>Submit Proofs</Link></p>
+                                      <button onClick={() => handleClick(element)} className="btn btn-warning">Submit Proofs</button>
                                     }
                                 </div>
                             </CCol>

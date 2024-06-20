@@ -4,6 +4,7 @@ using KotiCRM.Repository.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace KotiCRM.Server.Migrations
 {
     [DbContext(typeof(KotiCRMDbContext))]
-    partial class KotiCRMDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240614104050_Added_EightyCDeclarations_In_Employee12BB")]
+    partial class Added_EightyCDeclarations_In_Employee12BB
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -591,17 +594,12 @@ namespace KotiCRM.Server.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("EightyCDeclarationId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("EightyCDeclarationId");
 
                     b.ToTable("EightyCDeductionTypes");
                 });
@@ -2418,13 +2416,6 @@ namespace KotiCRM.Server.Migrations
                     b.Navigation("Employee12BB");
                 });
 
-            modelBuilder.Entity("KotiCRM.Repository.Models.EightyCDeductionType", b =>
-                {
-                    b.HasOne("KotiCRM.Repository.Models.EightyCDeclaration", null)
-                        .WithMany("EightyCDeductionTypes")
-                        .HasForeignKey("EightyCDeclarationId");
-                });
-
             modelBuilder.Entity("KotiCRM.Repository.Models.Employee", b =>
                 {
                     b.HasOne("KotiCRM.Repository.Models.Bank", "Bank")
@@ -2615,11 +2606,6 @@ namespace KotiCRM.Server.Migrations
             modelBuilder.Entity("KotiCRM.Repository.Models.Designation", b =>
                 {
                     b.Navigation("Employees");
-                });
-
-            modelBuilder.Entity("KotiCRM.Repository.Models.EightyCDeclaration", b =>
-                {
-                    b.Navigation("EightyCDeductionTypes");
                 });
 
             modelBuilder.Entity("KotiCRM.Repository.Models.Employee", b =>

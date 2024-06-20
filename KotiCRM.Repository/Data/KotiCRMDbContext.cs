@@ -112,7 +112,8 @@ namespace KotiCRM.Repository.Data
 
                 entity.Property(e => e.BankAccountNumber)
                     .HasMaxLength(100)
-                    .IsUnicode(false);
+                    .IsUnicode(false)
+                    .IsRequired(false);
                 entity.Property(e => e.Branch)
                     .HasMaxLength(100)
                     .IsUnicode(false);
@@ -761,8 +762,10 @@ namespace KotiCRM.Repository.Data
             {
                 entity.HasKey(e => e.Id);
 
+                
                 entity.Property(e => e.EmployeeId)
-                    .HasMaxLength(50);
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
 
                 entity.Property(e => e.FinancialYear)
                     .IsRequired()
@@ -776,10 +779,11 @@ namespace KotiCRM.Repository.Data
                     .IsRequired();
 
                 entity.Property(e => e.ModifiedBy)
+                    .IsRequired(false)
                     .HasMaxLength(50);
 
                 entity.Property(e => e.ModifiedOn)
-                    .IsRequired();
+                    .IsRequired(false);
 
                 entity.Property(e => e.IsDelete)
                     .IsRequired();
@@ -994,11 +998,6 @@ namespace KotiCRM.Repository.Data
 
                 entity.Property(e => e.IsDelete)
                     .IsRequired();
-
-                entity.HasOne(d => d.Employee12BB)
-                    .WithMany(p => p.EightyCDeclarations)
-                    .HasForeignKey(d => d.Employee12BBId)
-                    .OnDelete(DeleteBehavior.Restrict);
             });
 
             modelBuilder.Entity<EightyCDeductionType>(entity =>

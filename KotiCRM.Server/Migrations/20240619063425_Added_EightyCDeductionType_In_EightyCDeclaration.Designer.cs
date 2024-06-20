@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace KotiCRM.Server.Migrations
 {
     [DbContext(typeof(KotiCRMDbContext))]
-    [Migration("20240612083636_Modified_eightyC2Declarations_Models")]
-    partial class Modified_eightyC2Declarations_Models
+    [Migration("20240619063425_Added_EightyCDeductionType_In_EightyCDeclaration")]
+    partial class Added_EightyCDeductionType_In_EightyCDeclaration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -564,11 +564,11 @@ namespace KotiCRM.Server.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("ModifiedBy")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<DateTime>("ModifiedOn")
+                    b.Property<DateTime?>("ModifiedOn")
+                        .IsRequired()
                         .HasColumnType("datetime2");
 
                     b.Property<string>("ProofDocumentLink")
@@ -594,12 +594,17 @@ namespace KotiCRM.Server.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int?>("EightyCDeclarationId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("EightyCDeclarationId");
 
                     b.ToTable("EightyCDeductionTypes");
                 });
@@ -632,7 +637,6 @@ namespace KotiCRM.Server.Migrations
                         .HasColumnType("nvarchar(255)");
 
                     b.Property<string>("Remarks")
-                        .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
@@ -838,9 +842,6 @@ namespace KotiCRM.Server.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("EightyCRecordId")
-                        .HasColumnType("int");
-
                     b.Property<int?>("EightyDRecordId")
                         .HasColumnType("int");
 
@@ -848,8 +849,9 @@ namespace KotiCRM.Server.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("EmployeeId")
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
+                        .HasMaxLength(100)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(100)");
 
                     b.Property<string>("FinancialYear")
                         .IsRequired()
@@ -875,11 +877,10 @@ namespace KotiCRM.Server.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("ModifiedBy")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<DateTime>("ModifiedOn")
+                    b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
 
                     b.Property<int?>("OtherInvestmentRecordId")
@@ -2188,7 +2189,6 @@ namespace KotiCRM.Server.Migrations
                         .HasColumnType("nvarchar(255)");
 
                     b.Property<string>("Remarks")
-                        .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
@@ -2415,10 +2415,17 @@ namespace KotiCRM.Server.Migrations
                     b.HasOne("KotiCRM.Repository.Models.Employee12BB", "Employee12BB")
                         .WithMany("EightyCDeclarations")
                         .HasForeignKey("Employee12BBId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Employee12BB");
+                });
+
+            modelBuilder.Entity("KotiCRM.Repository.Models.EightyCDeductionType", b =>
+                {
+                    b.HasOne("KotiCRM.Repository.Models.EightyCDeclaration", null)
+                        .WithMany("EightyCDeductionTypes")
+                        .HasForeignKey("EightyCDeclarationId");
                 });
 
             modelBuilder.Entity("KotiCRM.Repository.Models.Employee", b =>
@@ -2611,6 +2618,11 @@ namespace KotiCRM.Server.Migrations
             modelBuilder.Entity("KotiCRM.Repository.Models.Designation", b =>
                 {
                     b.Navigation("Employees");
+                });
+
+            modelBuilder.Entity("KotiCRM.Repository.Models.EightyCDeclaration", b =>
+                {
+                    b.Navigation("EightyCDeductionTypes");
                 });
 
             modelBuilder.Entity("KotiCRM.Repository.Models.Employee", b =>
