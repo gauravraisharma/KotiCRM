@@ -1036,6 +1036,10 @@ const Form12BB = () => {
     formData.isDeclarationComplete = false;
     const response = await SaveForm12BB(formData);
     // actions.resetForm();
+    if(response.status == 200)
+      {
+        navigate(`/users`);
+      }
   };
 
   const finalSubmit = async () => {

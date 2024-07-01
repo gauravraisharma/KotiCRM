@@ -87,16 +87,15 @@ const Login = () => {
                     <h1>Login</h1>
                     <p className="text-medium-emphasis">Sign In to your account</p>
                     <CInputGroup className="mb-3">
-                      <CInputGroupText>
+                      <CInputGroupText  className="bg-primary text-white">
                         <CIcon icon={cilUser} />
                       </CInputGroupText>
                       <CFormInput placeholder="Email" type="email" autoComplete="username" name="userName"
-
                         onChange={handleChange}
                       />
                     </CInputGroup>
                     <CInputGroup className="mb-4">
-                      <CInputGroupText>
+                      <CInputGroupText  className="bg-primary text-white">
                         <CIcon icon={cilLockLocked} />
                       </CInputGroupText>
                       <CFormInput type="password" placeholder="Password" autoComplete="current-password" name="password"
@@ -123,6 +122,8 @@ const Login = () => {
                           </CButtonGroup>
                         </CCol>
                         <CCol xs={12} className="text-right">
+                          
+                        <Link to={`/forgotPassword`}>
                           <CButton
                             color="link"
                             className="px-0"
@@ -132,8 +133,9 @@ const Login = () => {
                             onMouseEnter={handleMouseEnter}
                             onMouseLeave={handleMouseLeave}
                           >
-                            Forgot password?
+                           Forgot password?
                           </CButton>
+                          </Link>
                         </CCol>
                       </CRow>
                     </CForm>

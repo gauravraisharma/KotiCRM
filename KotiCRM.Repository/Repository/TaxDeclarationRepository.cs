@@ -19,12 +19,13 @@ namespace KotiCRM.Repository.Repository
         }
 
 
-        //Form 12BB
+        // Form 12BB - Retrieve Employee12BB record for a given employee and financial year
 
         public async Task<Employee12BB> GetEmployee12BB(string employeeId, string financialYear)
         {
+            // Fetch the main form data for the employee and financial year
             var employeeDataForm = _context.Employee12BBs.FirstOrDefault(e => e.EmployeeId == employeeId && e.FinancialYear == financialYear);
-
+            // Fetch house rent declaration data and create a new object
             var houserentRecordData = _context.HouseRentDeclarations.FirstOrDefault(x => x.Id == employeeDataForm.HouseRentRecordId);
             HouseRentDeclaration houseRentDeclaration = new HouseRentDeclaration
             {
@@ -36,6 +37,8 @@ namespace KotiCRM.Repository.Repository
                 IsVerified = houserentRecordData.IsVerified
 
             };
+
+            // Fetch travel expenditure declaration data and create a new object
             var leaveTravelRecordData = _context.TravelExpenditureDeclarations.FirstOrDefault(x => x.Id == employeeDataForm.TravelExpenditureRecordId);
             TravelExpenditureDeclaration travelExpenditureDeclaration = new TravelExpenditureDeclaration
             {
@@ -47,6 +50,7 @@ namespace KotiCRM.Repository.Repository
                 IsVerified = false
 
             };
+            // Fetch home loan declaration data and create a new object
             var InterestOnHomLoanRecordData = _context.HomeLoanDeclarations.FirstOrDefault(x => x.Id == employeeDataForm.HomeLoanRecordId);
             HomeLoanDeclaration homeLoanDeclaration = new HomeLoanDeclaration
             {
@@ -58,8 +62,9 @@ namespace KotiCRM.Repository.Repository
                 Remarks = InterestOnHomLoanRecordData.Remarks,
                 IsVerified = false, // Assuming this needs to be updated too
              };
-            var eightyCRecordData = _context.EightyCDeclarations.Where(x => x.Employee12BBId == employeeDataForm.Id).ToList();
 
+            // Fetch and prepare 80C declarations list
+            var eightyCRecordData = _context.EightyCDeclarations.Where(x => x.Employee12BBId == employeeDataForm.Id).ToList();
             List<EightyCDeclaration> eightyCDeclarationsList = new List<EightyCDeclaration>();
 
             foreach (var recordData in eightyCRecordData)
@@ -83,7 +88,7 @@ namespace KotiCRM.Repository.Repository
 
                 eightyCDeclarationsList.Add(eightyCDeclaration);
             }
-
+            // Fetch 80D declaration data and create a new object
             var EightyDRecordData = _context.EightyDDeclarations.FirstOrDefault(x => x.Id == employeeDataForm.EightyDRecordId);
             EightyDDeclaration eightyDDeclaration = new EightyDDeclaration
             {
@@ -95,6 +100,7 @@ namespace KotiCRM.Repository.Repository
                 Remarks = EightyDRecordData.Remarks,
                 IsVerified = false
             };
+            // Fetch 80G declaration data and create a new object
             var EightyGRecordData = _context.EightyGDeclarations.FirstOrDefault(x => x.Id == employeeDataForm.EightyGRecordId);
             EightyGDeclaration eightyGDeclaration = new EightyGDeclaration
             {
@@ -109,6 +115,8 @@ namespace KotiCRM.Repository.Repository
                 IsVerified = false
 
             };
+
+            // Fetch other investment declaration data and create a new object
             var otherInvestmentRecordData = _context.OtherInvestmentDeclarations.FirstOrDefault(x => x.Id == employeeDataForm.OtherInvestmentRecordId);
             OtherInvestmentDeclaration otherInvestmentDeclaration = new OtherInvestmentDeclaration
             {
@@ -118,7 +126,7 @@ namespace KotiCRM.Repository.Repository
                 Remarks = otherInvestmentRecordData.Remarks,
                 IsVerified = false
             };
-          
+            // Create and return the final Employee12BB object
             Employee12BB employee12BB = new Employee12BB
             {
                 Id = employeeDataForm.Id,
@@ -141,13 +149,13 @@ namespace KotiCRM.Repository.Repository
             };
             return employee12BB;
         }
-
+        // Retrieve all Employee12BB records for a given employee
         public async Task<List<Employee12BB>> GetEmployee12BBs(string employeeId)
         {
             return _context.Employee12BBs.Where(e => e.EmployeeId == employeeId).OrderByDescending(e => e.FinancialYear).ToList();
         }
 
-        // Save form12BB and return DTO
+        // Save form 12BB and return the updated DTO
         public async Task<Employee12BB> SaveEmployee12BB(Employee12BB employee12BB)
         {
             if(employee12BB == null)
@@ -155,6 +163,7 @@ namespace KotiCRM.Repository.Repository
                 throw new Exception("sdhf shf");
             }
             var existingEmployee12BBs = _context.Employee12BBs.SingleOrDefault(x => x.Id == employee12BB.Id);
+            // Update house rent declaration data if present
 
 
             if (employee12BB.HouseRentRecordId > 0)
@@ -169,6 +178,7 @@ namespace KotiCRM.Repository.Repository
                 _context.HouseRentDeclarations.Update(houseRentDeclarations);
                 _context.SaveChanges();
             }
+            // Update travel expenditure declaration data if present
             if (employee12BB.TravelExpenditureRecordId > 0)
             {
                 var travelExpenditureDeclarations = _context.TravelExpenditureDeclarations.SingleOrDefault(x => x.Id == employee12BB.TravelExpenditureRecordId);
@@ -180,6 +190,7 @@ namespace KotiCRM.Repository.Repository
                 _context.TravelExpenditureDeclarations.Update(travelExpenditureDeclarations);
                 _context.SaveChanges();
             }
+            // Update home loan declaration data if present
             if (employee12BB.HomeLoanRecordId > 0)
             {
                 var homeLoanDeclarations = _context.HomeLoanDeclarations.SingleOrDefault(x => x.Id == employee12BB.HomeLoanRecordId);
@@ -254,6 +265,7 @@ namespace KotiCRM.Repository.Repository
                 }
                 _context.SaveChanges();
             }
+            // Update 80D declaration data if present
             if (employee12BB.EightyDRecordId > 0)
             {
                 var eightyDDeclarations = _context.EightyDDeclarations.SingleOrDefault(x => x.Id == employee12BB.EightyDRecordId);
@@ -267,6 +279,7 @@ namespace KotiCRM.Repository.Repository
                 _context.EightyDDeclarations.Update(eightyDDeclarations);
                 _context.SaveChanges();
             }
+            // Update 80G declaration data if present
             if (employee12BB.EightyGRecordId > 0)
             {
                 var eightyGDeclarations = _context.EightyGDeclarations.SingleOrDefault(x => x.Id == employee12BB.EightyGRecordId);
@@ -281,6 +294,7 @@ namespace KotiCRM.Repository.Repository
                 _context.EightyGDeclarations.Update(eightyGDeclarations);
                 _context.SaveChanges();
             }
+            // Update other investment declaration data if present
             if (employee12BB.OtherInvestmentRecordId > 0)
             {
                 var otherInvestmentDeclarations = _context.OtherInvestmentDeclarations.SingleOrDefault(x => x.Id == employee12BB.OtherInvestmentRecordId);
@@ -293,7 +307,7 @@ namespace KotiCRM.Repository.Repository
                 _context.SaveChanges();
             }
 
-            // Update Employee12BB
+            // Update the main Employee12BB form
 
             existingEmployee12BBs.EmployeeId = employee12BB.EmployeeId;
             existingEmployee12BBs.FinancialYear = employee12BB.FinancialYear;

@@ -7,7 +7,7 @@ namespace ApplicationService.Utilities
 {
     public static class MailOperation
     {
-        public static Task SendEmailAsync(List<string> email, string subject, string message, IConfiguration _config, Dictionary<string, string> subjectVariables, Dictionary<string, string> contentVariables)
+        public static async  Task SendEmailAsync(List<string> email, string subject, string message, IConfiguration _config, Dictionary<string, string> subjectVariables = null, Dictionary<string, string> contentVariables = null)
         {
             var fromMail = _config["smtp:SMTP_Mail"];
             var password = _config["smtp:SMTP_Password"];
@@ -33,14 +33,36 @@ namespace ApplicationService.Utilities
             mailMessage.Subject = subjectValue;
             mailMessage.Body = messageValue;
             mailMessage.IsBodyHtml = true;
-            email.ForEach(mail =>
-            {
-                mailMessage.To.Add(new MailAddress(mail));
-            });
+            //email.ForEach(mail =>
+            //{
+            //    mailMessage.To.Add(new MailAddress(mail));
+            //});
 
-            return client.SendMailAsync(mailMessage);
+            //return client.SendMailAsync(mailMessage);
+            foreach (var recipientEmail in email)
+            {
+                mailMessage.To.Add(new MailAddress(recipientEmail));
+            }
+
+            await client.SendMailAsync(mailMessage);
 
         }
+        //public static async Task SendPasswordResetEmailAsync(string userEmail, string resetLink, IConfiguration _config)
+        //{
+        //    var subject = "Password Reset Request";
+        //    var message = $"Click <a href='{resetLink}'>here</a> to reset your password.";
+
+        //    await SendEmailAsync(new List<string> { userEmail }, subject, message, _config);
+        //}
+        public static async Task SendPasswordResetEmailAsync(string userEmail, string resetLink, IConfiguration config)
+        {
+            var subject = "Password Reset Request";
+            var message = $"Click <a href='{resetLink}'>here</a> to reset your password.";
+
+            await SendEmailAsync(new List<string> { userEmail }, subject, message, config);
+        }
+
+
         private static string ReplaceVaribaleWithValue(Dictionary<string, string> valuePairs, string oprationalString)
         {
             IDictionaryEnumerator dictionaryEnumerator = valuePairs.GetEnumerator();
@@ -51,9 +73,14 @@ namespace ApplicationService.Utilities
                 {
                     oprationalString = oprationalString.Replace(dictionaryEnumerator.Key.ToString(), dictionaryEnumerator.Value.ToString());
                 }
+                //foreach (var pair in valuePairs)
+                //{
+                //    operationalString = operationalString.Replace(pair.Key, pair.Value);
+                //}
             }
 
             return oprationalString;
         }
     }
 }
+

@@ -1,6 +1,6 @@
 import { apiResponse, axiosInstance, responseBody } from "../../../apiInterceptor/axiosInterceptor";
 import { EightyCDeclaration, EightyDRecord, EightyGRecord, EmployeeFinancialRecord, HomeLoanRecord, HouseRentRecord, OtherInvestmentRecord, TravelExpenditureRecord } from "../../../models/Form12BB/Form12BB";
-import { Employee } from "../../../models/userManagement/employee";
+import { Employee, ForgotPasswordDTO, ResetPassword } from "../../../models/userManagement/employee";
 import { Employees } from "../../../models/userManagement/employees";
 import { Deduction } from "../../../views/userManagement/deduction";
 
@@ -91,6 +91,37 @@ export async function DeleteEmployee(employeeId: string) {
     }
 }
 
+
+
+// export async function ForgotPassword(forgotPasswordDTO: any) {
+//   try {
+//     debugger
+//     const response = await axiosInstance.post('/UserAccount/ForgotPassword', forgotPasswordDTO);
+//     return responseBody(response)
+//   } catch (error: any  ) {
+//     const errorResponse: apiResponse<ForgotPasswordDTO> = {
+//         data: undefined,
+//         status: 500,
+//         statusText: error.message
+//     };
+//     return errorResponse;
+//   }
+// }
+export async function UserForgotPassword(forgotPasswordDTO: any) {
+    try {
+      debugger
+      const response = await axiosInstance.post('/UserAccount/ForgotPassword', forgotPasswordDTO);
+      return responseBody(response)
+    } catch (error: any  ) {
+      const errorResponse: apiResponse<ForgotPasswordDTO> = {
+          data: undefined,
+          status: 500,
+          statusText: error.message
+      };
+      return errorResponse;
+    }
+  }
+
 export async function ChangePassword(passwordRequestModal:any) {
     try {
         const response = await axiosInstance.post(`/UserAccount/ChangePassword`,passwordRequestModal);
@@ -102,6 +133,40 @@ export async function ChangePassword(passwordRequestModal:any) {
             statusText: error.message
         };
         return errorResponse;
+    }
+}
+
+
+
+
+// export async function ResetUserPassword(resetPassword: ResetPassword) {
+//     try {
+//         debugger;
+//       console.log("Sending reset password request:", resetPassword);
+//       const response = await axiosInstance.post(`/UserAccount/ResetPassword`, resetPassword);
+//       console.log("Received response:", response);
+//       return responseBody(response); // Assuming responseBody function handles response formatting
+//     } catch (error: any) {
+//       console.error("Error occurred:", error);
+//       const errorResponse: apiResponse<ResetPassword> = {
+//         data: undefined,
+//         status: 500,
+//         statusText: error.message,
+//       };
+//       return errorResponse;
+//     }
+//   }
+  
+
+export async function ResetUserPassword(resetPassword: ResetPassword): Promise<boolean> {
+    try {
+        console.log("Sending reset password request:", resetPassword);
+        const response = await axiosInstance.post(`/UserAccount/ResetPassword`, resetPassword);
+        console.log("Received response:", response);
+        return response.data; // Assuming the backend returns a boolean indicating success or failure
+    } catch (error: any) {
+        console.error("Error occurred:", error);
+        return false; // Return false in case of an error
     }
 }
 

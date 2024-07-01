@@ -54,16 +54,13 @@ const AccountList: React.FC = () => {
   const showItems = (id: any) => {
     navigate(`/accountsList/accountDetails/${id}`);
   };
-
   const handleDeleteClick = (id: any) => {
     setAccountId(id);
     setShowDeleteConfirmation(true);
   };
-
   const confirmDelete = () => {
     setShowDeleteConfirmation(false);
   };
-
   const cancelDelete = () => {
     setShowDeleteConfirmation(false);
   };
@@ -230,7 +227,6 @@ const AccountList: React.FC = () => {
                             <Link
                               to={`/accountsList/editAccount/${account.id}`}
                             >
-                              {/* <Link to ={`/accountsList/editAccount/${account.id}`}> */}
                               <MdEdit
                                 style={{
                                   color: "green",
@@ -284,7 +280,7 @@ const AccountList: React.FC = () => {
                       fontSize: "12px",
                     }}
                   >
-                    <span aria-hidden="true">&laquo;</span>
+                  <span aria-hidden="true">&laquo;</span>
                   </CPaginationItem>
                   {Array.from({ length: totalPages }, (_, index) => (
                     <CPaginationItem
@@ -309,7 +305,7 @@ const AccountList: React.FC = () => {
                       fontSize: "12px",
                     }}
                   >
-                    <span aria-hidden="true">&raquo;</span>
+                  <span aria-hidden="true">&raquo;</span>
                   </CPaginationItem>
                 </CPagination>
               </CCardBody>

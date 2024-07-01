@@ -2,18 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { MdDelete, MdEdit } from "react-icons/md";
 import { ToastContainer, toast } from "react-toastify";
-import {
-  CButton,
-  CCard,
-  CCardBody,
-  CCardHeader,
-  CCol,
-  CFormInput,
-  CInputGroup,
-  CInputGroupText,
-  CPagination,
-  CPaginationItem,
-  CRow,
+import { CButton,CCard,CCardBody,CCardHeader,CCol,CFormInput,CInputGroup,CInputGroupText,CPagination,CPaginationItem,CRow,
   CSpinner,
   CTable,
   CTableBody,
@@ -40,6 +29,11 @@ const Roles = () => {
   const userType = useSelector((state: any) => state.authReducer.userType);
   const timezone = useSelector((state: any) => state.sharedReducer.timezone);
 
+
+
+  // useEffect(()=>{
+  //   GetRoles();
+  // },[showDeleteConfirmation])
 
   useEffect(() => {
     GetRoles();

@@ -5,6 +5,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import { appRoutes } from './routes';
 import AuthenticatedRoute from './utils/AuthenticatedRoute';
+import ResetPassword from './views/userAuthentication/resetPassword/ResetPassword';
+
 
 const loading = (
   <div className="pt-3 text-center">
@@ -13,9 +15,9 @@ const loading = (
 )
 
 function App() {
+
   return (
     <BrowserRouter>
-      {/* <AuthProvider> */}
       <Suspense fallback={loading}>
         <Routes>
 
@@ -32,9 +34,13 @@ function App() {
             )
 
           })}
+ 
+         <Route path="/resetPassword" element={<ResetPassword />} />
+
         </Routes>
+     
       </Suspense>
-      {/* </AuthProvider> */}
+    
     </BrowserRouter>
   );
 }

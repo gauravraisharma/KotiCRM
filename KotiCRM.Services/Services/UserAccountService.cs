@@ -1,5 +1,4 @@
-﻿
-using KotiCRM.Repository.Models;
+﻿using KotiCRM.Repository.Models;
 using KotiCRM.Services.IServices;
 using Microsoft.Extensions.Configuration;
 using KotiCRM.Repository.IRepository;
@@ -9,6 +8,10 @@ using System.Drawing.Printing;
 using ApplicationService.Utilities;
 using KotiCRM.Repository.DTOs.RoleManagement;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using KotiCRM.Repository.DTOs.ForgotPasswordDTO;
+using Microsoft.AspNetCore.Http.Extensions;
+using Microsoft.EntityFrameworkCore;
 
 namespace KotiCRM.Services.Services
 {
@@ -28,8 +31,41 @@ namespace KotiCRM.Services.Services
             _profilePictureRepository = profilePictureRepository;
         }
 
-        public async Task<ResponseStatus> CreateApplicationUser(ApplicationUserModel userModel)
+        public async Task<ResponseStatus> ForgotPassword(ForgotPasswordDTO forgotPasswordDTO)
         {
+            try
+            {
+                var resendLink = await _accountRepository.ForgotPassword(forgotPasswordDTO);
+
+                if (resendLink != null)
+                {
+
+                    try
+                    {
+                      await  MailOperation.SendPasswordResetEmailAsync(forgotPasswordDTO.Email, resendLink, _config);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        return new ResponseStatus() { Message = "Error", Status = "ERROR" };
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                return new ResponseStatus() { Message = "Error", Status = "ERROR" };
+            }
+
+            return new ResponseStatus() { Message = "Password reset link sent!", Status = "SUCCEED" };
+        }
+        public async Task<bool> ResetPassword(string email, string token, string newPassword)
+        {
+            return await _accountRepository.ResetPassword(email, token, newPassword);
+        }
+
+        public async Task<ResponseStatus> CreateApplicationUser(ApplicationUserModel userModel)
+            {
             var response = await _accountRepository.CreateApplicationUser(userModel);
             if (response.Status == "SUCCEED")
                 try
@@ -145,26 +181,6 @@ namespace KotiCRM.Services.Services
         }
 
 
-        //public async Task<EmployeeWithCountDTO> GetEmployees(string? searchQuery, int? pageNumber, int? pageSize)
-        //{
-        //    var usersList = (from userAccount in await _accountRepository.GetEmployees()
-        //                     where (string.IsNullOrEmpty(searchQuery) ||
-        //                     userAccount.Name.Contains(searchQuery, StringComparison.OrdinalIgnoreCase) ||
-        //                     userAccount.EmployeeCode.Contains(searchQuery, StringComparison.OrdinalIgnoreCase) ||
-        //                     (userAccount.BloodGroup != null && userAccount.BloodGroup.Contains(searchQuery, StringComparison.OrdinalIgnoreCase)) ||
-        //                     (userAccount.BirthDate.HasValue && userAccount.BirthDate.Value.ToString() == searchQuery) ||
-        //                     userAccount.Designation.Contains(searchQuery, StringComparison.OrdinalIgnoreCase)
-
-        //                     )
-        //                     select userAccount)
-        //                    .Skip(pageNumber.HasValue && pageSize.HasValue ? (pageNumber.Value - 1) * pageSize.Value : 0)
-        //                    .Take(pageNumber.HasValue && pageSize.HasValue ? pageSize.Value : 10);
-
-        //    var users = await _accountRepository.GetEmployees();
-        //    int count = users.Count();
-        //    return new EmployeeWithCountDTO { Employee = usersList, UserCount = count };
-        //}
-
         public EmployeeResponse GetEmployeeById(string employeeId)
         {
             EmployeeResponse userResponse =  _accountRepository.GetEmployeeById(employeeId);
@@ -275,5 +291,7 @@ namespace KotiCRM.Services.Services
         {
             throw new NotImplementedException();
         }
+
+   
     }
 }

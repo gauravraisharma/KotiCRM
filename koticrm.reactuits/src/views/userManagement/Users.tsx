@@ -147,15 +147,15 @@ const Users = () => {
                     borderRadius: "8px",
                     marginRight: "10px",
                     border: "1px solid #ccc",
-                    width: "160px",
+                    width: "220px",
                   }}
                 > 
-                  <option value="Name">Name</option>
-                  <option value="Emp code">Emp code</option>
-                  <option value="Blood Group">Blood Group</option>
-                  <option value="Birthday">Birthday</option>
-                  <option value="RoleId">RoleId</option>
-                  <option value="Designation">Designation</option>
+                  <option value="Name">Search by Name</option>
+                  <option value="Emp code"> Search by code</option>
+                  <option value="Blood Group">Search by Blood Group</option>
+                  <option value="Birthday">Search by Birthday</option>
+                  <option value="RoleId">Search by RoleId</option>
+                  <option value="Designation">Search by Designation</option>
                 </select>
                 <input
                   type="text"
@@ -226,7 +226,6 @@ const Users = () => {
                     <CTableDataCell>
                     <img src={employee.profilePicturePath ? employee.profilePicturePath : profileImage} className="profile-picture"/>
                     </CTableDataCell>
-
                     <CTableDataCell>
                       {usersPermissions.isEdit && (
                       <Link to={`/users/updateUser/${employee.employeeId}`}>

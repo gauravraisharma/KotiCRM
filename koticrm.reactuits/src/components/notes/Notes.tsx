@@ -101,7 +101,7 @@ const Notes: React.FC<NoteProps> = ({
       )}
       <CRow>
         <CCol xs={8}>
-        {notesPermissions.isAdd &&
+        {/* {notesPermissions.isAdd && */}
           <CForm>
             <CFormTextarea
               className="textarea"
@@ -131,7 +131,7 @@ const Notes: React.FC<NoteProps> = ({
                 onClick={handleNoteSave}
               />
             </div>
-          </CForm>}
+          </CForm>
         </CCol>
       </CRow>
     </div>

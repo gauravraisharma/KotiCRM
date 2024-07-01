@@ -1,4 +1,5 @@
-﻿using KotiCRM.Repository.DTOs.RoleManagement;
+﻿using KotiCRM.Repository.DTOs.ForgotPasswordDTO;
+using KotiCRM.Repository.DTOs.RoleManagement;
 using KotiCRM.Repository.DTOs.UserManagement;
 using KotiCRM.Repository.Models;
 using System;
@@ -12,6 +13,8 @@ namespace KotiCRM.Repository.IRepository
     public interface IUserAccountRepository
     {
         Task<LoginStatus> UserLogin(UserLoginModel userModel);
+        Task<string> ForgotPassword(ForgotPasswordDTO forgotPasswordDTO);
+        Task<bool> ResetPassword(string email, string token, string newPassword);
         Task<ResponseStatus> CreateApplicationUser(ApplicationUserModel userModel);
         Task<ResponseStatus> UpdateApplicationUser(UpdateApplicationUserModel userModel);
         Task<ResponseStatus> GetRoleNameAsync(string roleId);
@@ -42,8 +45,7 @@ namespace KotiCRM.Repository.IRepository
         //For Employee Password
         Task<ChangePasswordDbResponse> ChangePassword(ChangePasswordRequest passwordData);
         Task<IEnumerable<GetModulesDTO>> GetAllModulesAsync();
-
-        //Task<string> SendEmailPassword(string );
+        
 
 
     }

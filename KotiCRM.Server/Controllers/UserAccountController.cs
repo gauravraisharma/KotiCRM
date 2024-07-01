@@ -1,4 +1,5 @@
-﻿using KotiCRM.Repository.DTOs.RoleManagement;
+﻿using KotiCRM.Repository.DTOs.ForgotPasswordDTO;
+using KotiCRM.Repository.DTOs.RoleManagement;
 using KotiCRM.Repository.DTOs.UserManagement;
 using KotiCRM.Repository.Models;
 using KotiCRM.Server.Authentication;
@@ -7,6 +8,7 @@ using KotiCRM.Services.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -20,10 +22,14 @@ namespace KotiCRM.Server.Controllers
     public class UserAccountController : Controller
     {
         private readonly IUserAccountService _accountService;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public UserAccountController(IUserAccountService accountService)
+
+        public UserAccountController(IUserAccountService accountService, UserManager<ApplicationUser> userManager)
         {
             _accountService = accountService;
+            _userManager = userManager;
+         
         }
 
         //LoginUser method is used to check user credential and allow login into application 
@@ -48,6 +54,71 @@ namespace KotiCRM.Server.Controllers
                 return BadRequest(loginStatus);
             }
         }
+        // ForgotPassword API
+        [HttpPost]
+        [AllowAnonymous]
+        [Route("ForgotPassword")]
+        public async Task<IActionResult> ForgotPassword(ForgotPasswordDTO forgotPasswordDTO)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest("Invalid input.");
+            }
+
+            var responseStatus = await _accountService.ForgotPassword(forgotPasswordDTO);
+
+            if (responseStatus.Status == "SUCCEED")
+            {
+                return Ok(new { message = responseStatus.Message });
+            }
+            else
+            {
+                return BadRequest(new { message = responseStatus.Message });
+            }
+        }
+
+        //[HttpPost]
+        //[AllowAnonymous]
+        //[Route("ResetPassword")]
+        //public async Task<IActionResult> ResetPassword(ResetPassword resetPassword)
+        //{
+        //    var user = await _userManager.Users.FirstOrDefaultAsync(u => u.Email == resetPassword.Email);
+
+        //    if(user != null)
+        //    {
+        //        resetPassword.Token = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(resetPassword.Token));
+
+        //        var responseStatus = await _userManager.ResetPasswordAsync(user, resetPassword.Token, resetPassword.Password);
+        //        if (responseStatus.Succeeded)
+        //        {
+        //            return Ok();
+        //        }
+        //    }
+
+        //    return BadRequest("Password not reset");            
+        //}
+
+        [HttpPost]
+        [AllowAnonymous]
+        [Route("ResetPassword")]
+        public async Task<IActionResult> ResetPassword(ResetPassword resetPassword)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var isPasswordReset = await _accountService.ResetPassword(resetPassword.Email, resetPassword.Token, resetPassword.Password);
+
+            if (isPasswordReset)
+            {
+                return Ok(isPasswordReset);
+            }
+
+            return BadRequest("Password reset failed");
+        }
+
+
         // CreateApplicationUser method creates a new application user
         // Requires Accounts_Add policy
         [HttpPost("CreateApplicationUser")]

@@ -1,12 +1,15 @@
 ﻿using Azure;
+using Azure.Core;
+using Microsoft.AspNetCore.WebUtilities;
 using KotiCRM.Repository.Data;
 using KotiCRM.Repository.DTOs.Contact;
+using KotiCRM.Repository.DTOs.ForgotPasswordDTO;
 using KotiCRM.Repository.DTOs.RoleManagement;
 using KotiCRM.Repository.DTOs.UserManagement;
 using KotiCRM.Repository.Enums;
 using KotiCRM.Repository.IRepository;
 using KotiCRM.Repository.Models;
-using Microsoft.AspNetCore.Hosting;
+
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -24,6 +27,7 @@ using System.Security.Cryptography;
 using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace KotiCRM.Repository.Repository
 {
@@ -31,6 +35,7 @@ namespace KotiCRM.Repository.Repository
     public class UserAccountRepository : IUserAccountRepository
     {
         private readonly UserManager<ApplicationUser> _userManager;
+ 
         private readonly RoleManager<ApplicationRole> _roleManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IConfiguration _config;
@@ -39,6 +44,7 @@ namespace KotiCRM.Repository.Repository
 
         public UserAccountRepository(
             UserManager<ApplicationUser> userManager,
+       
             KotiCRMDbContext context,
             RoleManager<ApplicationRole> roleManager,
             SignInManager<ApplicationUser> signInManager,
@@ -53,6 +59,194 @@ namespace KotiCRM.Repository.Repository
             _context = context;
             _profilePictureRepository = profilePictureRepository;
         }
+
+        public async Task<string> ForgotPassword(ForgotPasswordDTO forgotPasswordDTO)
+        {
+            var user = await _userManager.Users.FirstOrDefaultAsync(u => u.Email == forgotPasswordDTO.Email);
+            if (user != null)
+            {
+                var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+                var encodedToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
+
+
+                Console.WriteLine($"Generated Token: {token}");
+                Console.WriteLine($"Encoded Token: {encodedToken}");
+
+                var expirationTime = DateTime.UtcNow.AddHours(1).ToString("o");
+                var resetLink = $"{_config["ClientAppUrl"]}/resetPassword?token={Uri.EscapeDataString(encodedToken)}&email={Uri.EscapeDataString(forgotPasswordDTO.Email)}&expires={Uri.EscapeDataString(expirationTime)}";
+
+                return resetLink;
+            }
+            else
+            {
+                throw new KeyNotFoundException("User not found");
+            }
+        }
+
+        public async Task<bool> ResetPassword(string email, string token, string newPassword)
+        {
+            try
+            {
+                Console.WriteLine($"ResetPassword request received: Email={email}, Token={token}, NewPassword={newPassword}");
+                var user = await _userManager.FindByEmailAsync(email);
+                if (user != null)
+                {
+
+                    var decodedToken = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(token));
+
+                    Console.WriteLine($"Decoded Token: {decodedToken}");
+                
+
+                    var result = await _userManager.ResetPasswordAsync(user, decodedToken, newPassword);
+                    if (result.Succeeded)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        foreach (var error in result.Errors)
+                        {
+                            Console.WriteLine($"Error: {error.Code} - {error.Description}");
+                        }
+                    }
+                }
+                else
+                {
+                    Console.WriteLine($"User with email {email} not found.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Exception occurred: {ex.Message}");
+            }
+            return false;
+        }
+
+        //public async Task<string> ForgotPassword(ForgotPasswordDTO forgotPasswordDTO)
+        //{
+        //    var user = await _userManager.Users.FirstOrDefaultAsync(u => u.Email == forgotPasswordDTO.Email);
+
+        //    if (user != null)
+        //    {
+        //        var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+        //        token = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
+
+
+        //        //var resetLink = $"{_config["ClientAppUrl"]}/ResetPassword?token={token}&email={forgotPasswordDTO.Email}";
+        //          var resetLink = $"{_config["ClientAppUrl"]}/resetPassword?token={token}&email={forgotPasswordDTO.Email}";
+
+
+
+        //        return resetLink;
+        //    }
+        //    else
+        //    {
+        //        //throw new Exception("User not found");
+
+        //        throw new KeyNotFoundException("User not found");
+        //    }
+        //}
+        //    public async Task<string> ForgotPassword(ForgotPasswordDTO forgotPasswordDTO)
+        //    {
+        //    // Find the user by email
+        //    var user = await _userManager.Users.FirstOrDefaultAsync(u => u.Email == forgotPasswordDTO.Email);
+
+        //    if (user != null)
+        //    {
+        //        // Generate the password reset token
+        //        var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+        //        // Encode the token in Base64 URL format
+        //        var encodedToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
+
+        //        // Print generated token
+        //        Console.WriteLine($"Generated Token: {token}");
+        //        Console.WriteLine($"Encoded Token: {encodedToken}");
+        //        Console.WriteLine($"Received Token: {token}");
+        //        Console.WriteLine($"Received Token Length: {token.Length}");
+
+        //                // Set token expiration (e.g., 1 hour)
+        //                var expirationTime = DateTime.UtcNow.AddHours(1).ToString("o");
+
+        //        // Construct the reset link with expiration time
+        //        var resetLink = $"{_config["ClientAppUrl"]}/resetPassword?token={Uri.EscapeDataString(encodedToken)}&email={Uri.EscapeDataString(forgotPasswordDTO.Email)}&expires={Uri.EscapeDataString(expirationTime)}";
+
+        //        return resetLink;
+        //    }
+        //    else
+        //    {
+        //        // Throw an exception if the user is not found
+        //        throw new KeyNotFoundException("User not found");
+        //    }
+        //}
+
+
+        //public async Task<bool> ResetPassword(string email, string token, string newPassword)
+        //{
+        //    var user = await _userManager.FindByEmailAsync(email);
+
+        //    if (user != null)
+        //    {
+        //        // Decode the token from Base64 URL encoding
+        //        token = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(token));
+
+        //        // Attempt to reset the password using UserManager
+        //        var result = await _userManager.ResetPasswordAsync(user, token, newPassword);
+        //        return result.Succeeded;
+        //    }
+
+        //    return false;
+        //}
+        //public async Task<bool> ResetPassword(string email, string token, string newPassword)
+        //{
+        //    try
+        //    {
+        //        var user = await _userManager.FindByEmailAsync(email);
+
+        //        if (user != null)
+        //        {
+        //            // Print received token
+        //            Console.WriteLine($"Received Token: {token}");
+        //            Console.WriteLine($"Received Token Length: {token.Length}");
+
+        //            // Decode the token from Base64 URL encoding
+        //            var decodedToken = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(token));
+
+
+        //            // Print decoded token
+        //            Console.WriteLine($"Decoded Token: {decodedToken}");
+        //            Console.WriteLine($"Decoded Token Length: {decodedToken.Length}");
+
+
+        //            // Attempt to reset the password using UserManager
+        //            var result = await _userManager.ResetPasswordAsync(user, decodedToken, newPassword);
+
+        //            if (result.Succeeded)
+        //            {
+        //                return true;
+        //            }
+        //            else
+        //            {
+        //                // Log or handle the errors
+        //                foreach (var error in result.Errors)
+        //                {
+        //                    Console.WriteLine($"Error: {error.Code} - {error.Description}");
+        //                }
+        //            }
+        //        }
+        //        else
+        //        {
+        //            Console.WriteLine($"User with email {email} not found.");
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Console.WriteLine($"Exception occurred: {ex.Message}");
+        //    }
+
+        //    return false;
+        //}
+
         public async Task<ResponseStatus> CreateApplicationUser(ApplicationUserModel userModel)
         {
             try

@@ -39,6 +39,7 @@ namespace KotiCRM.Services
 
             // Add email service as singleton
             services.AddSingleton<IEmailService, EmailService>();
+   
         }
     }
 }

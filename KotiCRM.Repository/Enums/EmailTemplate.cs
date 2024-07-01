@@ -3,6 +3,7 @@
     public enum EmailTemplate
     {
         None,
-        ChangePasswordTemplate
+        ChangePasswordTemplate,
+        ForgotPasswordTemplate
     }
 }

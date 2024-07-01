@@ -6,6 +6,10 @@ import { Route } from './models/commonModels/CommonModels';
 const DefaultLayout = lazy(() => import('./layout/DefaultLayout'))
 // Pages
 const Login = lazy(() => import('./views/userAuthentication/login/Login'))
+const ForgotPassword = lazy(() => import('./views/userAuthentication/forgotPassword/ForgotPassword'))
+const ResetPassword = lazy(() => import('./views/userAuthentication/resetPassword/ResetPassword'))
+
+
 const Home = lazy(()=>import ('./views/userAuthentication/home/Home'))
 const Register = lazy(() => import('./views/userAuthentication/register/Register'))
 const Page404 = lazy(() => import('./views/userAuthentication/page404/Page404'))
@@ -92,6 +96,9 @@ const Widgets = lazy(() => import('./components/widgets/Widgets'))
 export const appRoutes: Route[] = [
     // App routing
     { path: "/login", name: "Login Page", element: Login, isAuth:false },
+    { path: "/forgotPassword", name: "Forgot Password", element: ForgotPassword, isAuth:false },
+    { path: "/resetPassword", name: "Reset Password", element: ResetPassword, isAuth:false },
+
     { path: "/",name :" Home Page", element:Home,isAuth:false},
     { path: "/register", name: "Register Page", element: Register, isAuth: false },
     { path: "/404", name: "Page 404", element: Page404, isAuth: false },

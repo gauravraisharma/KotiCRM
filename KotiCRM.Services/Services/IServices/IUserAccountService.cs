@@ -1,5 +1,4 @@
-﻿
-
+﻿using KotiCRM.Repository.DTOs.ForgotPasswordDTO;
 using KotiCRM.Repository.DTOs.RoleManagement;
 using KotiCRM.Repository.DTOs.UserManagement;
 using KotiCRM.Repository.Models;
@@ -15,6 +14,8 @@ namespace KotiCRM.Services.IServices
     public interface IUserAccountService
     {
         Task<LoginStatus> UserLogin(UserLoginModel userModel);
+        Task<ResponseStatus> ForgotPassword(ForgotPasswordDTO forgotPasswordDTO);
+        Task<bool> ResetPassword(string email, string token, string newPassword);
         Task<ResponseStatus> CreateApplicationUser(ApplicationUserModel userModel);
         Task<ResponseStatus> UpdateApplicationUser(UpdateApplicationUserModel userModel);
         Task<ResponseStatus> GetRoleName(string roleId);

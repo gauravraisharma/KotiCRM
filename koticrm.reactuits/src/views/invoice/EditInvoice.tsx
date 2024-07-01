@@ -81,7 +81,7 @@ const EditInvoice = () => {
   console.log(fetchedInvoice)
   const invoice = fetchedInvoice?.invoice;
   const invoiceItems = fetchedInvoice?.invoiceItems;
-  // const organization = useSelector((state: any) => state.sharedReducer.organization);
+
   const invoiceStatus = useSelector(
     (state: any) => state.invoiceReducer.invoiceStatus
   );

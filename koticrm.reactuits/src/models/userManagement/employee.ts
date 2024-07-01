@@ -100,3 +100,13 @@ export class EmployeeClass implements Employee{
     }
     
 }
+
+ export interface ForgotPasswordDTO {
+    email: string;
+  }
+
+export interface ResetPassword{
+    email : string;
+    token: string;
+    password : string;
+}
