@@ -1,9 +1,15 @@
-﻿using KotiCRM.Repository.DTOs.TaxDeclaration;
+﻿using KotiCRM.Repository.Constants;
+using KotiCRM.Repository.DTOs.TaxDeclaration;
 using KotiCRM.Repository.Models;
 using KotiCRM.Services.IServices;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
+using System.Net.Http.Headers;
 
 namespace KotiCRM.Server.Controllers
 {
@@ -22,7 +28,7 @@ namespace KotiCRM.Server.Controllers
 
         [HttpGet]
         [Route("Employee12BB/{employeeId}/{financialYear}")]
-        public async Task<Employee12BB> GetEmployee12BB(string employeeId, string financialYear)
+        public async Task<Employee12BBDTO> GetEmployee12BB(string employeeId, string financialYear)
         {
             if (string.IsNullOrEmpty(employeeId) || string.IsNullOrEmpty(financialYear))
             {
@@ -90,6 +96,24 @@ namespace KotiCRM.Server.Controllers
             {
                 // Handle errors and return an appropriate response
                 return StatusCode(500, "An error occurred while saving Employee12BB data.");
+            }
+        }
+
+        // Upload Document Proofs
+        [HttpPost]
+        [Route("UploadDocumentProofs")]
+        [RequestFormLimits(MultipartBodyLengthLimit = 104857600)] // 100MB
+        public async Task<ActionResult<bool>> UploadDocumentProofs()
+        {
+            try
+            {
+                var formCollection = await Request.ReadFormAsync();
+                var result = await _taxDeclarationService.UploadDocumentProofs(formCollection);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "An error occurred while uploading files.");
             }
         }
 

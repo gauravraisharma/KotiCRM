@@ -3,6 +3,7 @@ using KotiCRM.Repository.IRepository;
 using KotiCRM.Repository.Models;
 using KotiCRM.Repository.Repository;
 using KotiCRM.Services.IServices;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Threading.Tasks;
 
@@ -17,7 +18,7 @@ namespace KotiCRM.Services.Services
         {
             _taxDeclarationRepository = taxDeclarationRepository;
         }
-        public async Task<Employee12BB> GetEmployee12BB(string employeeId, string financialYear)
+        public async Task<Employee12BBDTO> GetEmployee12BB(string employeeId, string financialYear)
         {
 
             return await _taxDeclarationRepository.GetEmployee12BB(employeeId, financialYear);
@@ -32,7 +33,12 @@ namespace KotiCRM.Services.Services
             return await _taxDeclarationRepository.SaveEmployee12BB(employee12BB);
 
         }
-      
+
+        public async Task<bool> UploadDocumentProofs(IFormCollection formCollection)
+        {
+            return await _taxDeclarationRepository.UploadDocumentProofs(formCollection);
+        }
+
     }
 }
 

@@ -17,6 +17,7 @@ export class InitialEmployeeRecord implements EmployeeFinancialRecord {
   isNoHomeDeclaration: boolean;
   eightyCRecordId: number;
   eightyCDeclarations: EightyCDeclaration[]; // You might want to define a type for this
+  eightyCDeductionTypes: EightyCDeductionTypes[];
   eightyDRecord: EightyDRecord;
   eightyGRecord: EightyGRecord;
   otherInvestmentRecord: OtherInvestmentRecord;
@@ -35,7 +36,7 @@ constructor(
       id: 0,
       amount: null,
       ownerPanCard: null,
-      proofdocumentLink: null,
+      proofDocumentLink: null,
       isVerified: false,
       remarks: "",
   },
@@ -46,7 +47,7 @@ constructor(
   travelExpenditureRecord: TravelExpenditureRecord = {
       id: 0,
       amount: 0,
-      proofdocumentLink: null,
+      proofDocumentLink: null,
       isVerified: false,
       remarks: "",
   },
@@ -66,6 +67,7 @@ constructor(
   isNoHomeDeclaration: boolean = false,
   eightyCRecordId: number = 0,
   eightyCRecord: EightyCDeclaration[] = [],
+  eightyCDeductionTypes: EightyCDeductionTypes[] = [],
   eightyDRecord: EightyDRecord = {
       id: 0,
       insuranceAmount: 0,
@@ -81,14 +83,14 @@ constructor(
       panNumber: "",
       address: "",
       amount: 0,
-      proofdocumentLink: null,
+      proofDocumentLink: null,
       isVerified: false,
       remarks: "",
   },
   otherInvestmentRecord: OtherInvestmentRecord = {
       id: 0,
       description: "",
-      proofdocumentLink: null,
+      proofDocumentLink: null,
       isVerified: false,
       remarks: "",
   },
@@ -115,6 +117,7 @@ constructor(
   this.isNoHomeDeclaration = isNoHomeDeclaration;
   this.eightyCRecordId = eightyCRecordId;
   this.eightyCDeclarations = eightyCRecord;
+  this.eightyCDeductionTypes = eightyCDeductionTypes;
   this.eightyDRecord = eightyDRecord;
   this.eightyGRecord = eightyGRecord;
   this.otherInvestmentRecord = otherInvestmentRecord;
@@ -129,8 +132,8 @@ constructor(
 export interface HouseRentRecord {
   id: number;
   amount: number | null;
-  ownerPanCard: string | null;
-  proofdocumentLink: string | null;
+  ownerPanCard: File | null;
+  proofDocumentLink: string | null;
   isVerified: boolean;
   remarks: string;
 }
@@ -138,7 +141,7 @@ export interface HouseRentRecord {
 export interface TravelExpenditureRecord {
   id: number;
   amount: number ;
-  proofdocumentLink: string | null;
+  proofDocumentLink: File | null;
   isVerified: boolean;
   remarks: string;
 }
@@ -149,7 +152,7 @@ export interface HomeLoanRecord {
   lenderAddress: string | null;
   lenderPanNumber: string | null;  
   amount: number | null;
-  proofDocumentLink: string | null;
+  proofDocumentLink: File | null;
   isVerified: boolean;
   remarks: string | null;
 }
@@ -157,7 +160,7 @@ export interface EightyCDeclaration {
   id: number;
   deductionTypeId: number;
   amount: number;
-  proofDocumentLink: string | null;
+  proofDocumentLink: File | null;
   isVerified: boolean;
   remarks: string;
   createdBy: string;
@@ -186,7 +189,7 @@ export interface EightyGRecord {
   panNumber: string;
   address: string;
   amount: number;
-  proofdocumentLink: string | null;
+  proofDocumentLink: File | null;
   isVerified: boolean;
   remarks: string;
 }
@@ -194,7 +197,7 @@ export interface EightyGRecord {
 export interface OtherInvestmentRecord {
   id: number;
   description: string;
-  proofdocumentLink: string | null;
+  proofDocumentLink: File | null;
   isVerified: boolean;
   remarks: string;
 }
@@ -221,6 +224,7 @@ export interface EmployeeFinancialRecord {
   homeLoanRecord: HomeLoanRecord;
   isNoHomeDeclaration: boolean;
   eightyCDeclarations: EightyCDeclaration[]; // You might want to define a type for this
+  eightyCDeductionTypes: EightyCDeductionTypes[];
   eightyDRecord: EightyDRecord;
   eightyGRecord: EightyGRecord;
   otherInvestmentRecord: OtherInvestmentRecord;

@@ -18,8 +18,8 @@ namespace KotiCRM.Repository.Repository
         // Constructor to initialize configuration settings
         public ProfilePictureRepository(IConfiguration configuration)
         {
-            _profilePicturePath = configuration.GetSection("ProfileFileConfig:Path").Value;
-            _profilePictureLink = configuration.GetSection("ProfileFileConfig:Link").Value;
+            _profilePicturePath = configuration.GetSection("BaseFileConfig:Path").Value;
+            _profilePictureLink = configuration.GetSection("BaseFileConfig:Link").Value;
         }
         // Method to upload a profile picture
         public async Task<string> UploadProfilePicture(IFormFile profilePicture, string fileName)

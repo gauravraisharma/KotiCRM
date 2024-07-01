@@ -5,6 +5,7 @@ using KotiCRM.Services;
 using KotiCRM.Services.Services.IServices;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
@@ -122,6 +123,11 @@ builder.Services.AddCors(p => p.AddPolicy("defaultCorsPolicy", builder =>
 );
 
 builder.Services.AddInfrastructure();
+
+builder.Services.Configure<FormOptions>(options =>
+{
+    options.MultipartBodyLengthLimit = 104857600; // 100 MB
+});
 
 // Database context setup
 builder.Services.AddDbContext<KotiCRMDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DbConnection"), b => b.MigrationsAssembly("KotiCRM.Server")));

@@ -1,5 +1,6 @@
 ﻿using KotiCRM.Repository.DTOs.TaxDeclaration;
 using KotiCRM.Repository.Models;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,13 +12,13 @@ namespace KotiCRM.Services.IServices
     public interface ITaxDeclarationService
     {
         // Get 
-         Task<Employee12BB> GetEmployee12BB(string employeeId, string financialYear);
-         Task<List<Employee12BB>> GetEmployee12BBs(string employeeId);
+        Task<Employee12BBDTO> GetEmployee12BB(string employeeId, string financialYear);
+        Task<List<Employee12BB>> GetEmployee12BBs(string employeeId);
 
         //save 
         Task<Employee12BB> SaveEmployee12BB(Employee12BB employee12BB);
 
-
+        Task<bool> UploadDocumentProofs(IFormCollection formCollection);
 
 
 

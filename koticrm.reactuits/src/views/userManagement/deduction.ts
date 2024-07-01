@@ -1,17 +1,14 @@
 export interface Deduction {
-    id: string;
+    id: number;
     name: string;
-    isActive: boolean; // Adjusted property name to match TypeScript convention
 }
 
 export class DeductionClass implements Deduction {
-    id: string;
+    id: number;
     name: string;
-    isActive: boolean; // Adjusted property name to match TypeScript convention
 
     constructor() {
-        this.id = "";
+        this.id = 0;
         this.name = "";
-        this.isActive = false;
     }
 }

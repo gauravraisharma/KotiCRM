@@ -1,9 +1,12 @@
 ﻿using Azure;
+using KotiCRM.Repository.Constants;
 using KotiCRM.Repository.Data;
 using KotiCRM.Repository.DTOs.TaxDeclaration;
 using KotiCRM.Repository.IRepository;
 using KotiCRM.Repository.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Threading.Tasks;
 
@@ -12,16 +15,18 @@ namespace KotiCRM.Repository.Repository
     public class TaxDeclarationRepository : ITaxDeclarationRepository
     {
         private readonly KotiCRMDbContext _context;
+        private readonly string _documentProofsPath; // Path where document proofs are stored
 
-        public TaxDeclarationRepository(KotiCRMDbContext context)
+        public TaxDeclarationRepository(KotiCRMDbContext context, IConfiguration configuration)
         {
             _context = context;
+            _documentProofsPath = configuration.GetSection("BaseFileConfig:Path").Value;
         }
 
 
         // Form 12BB - Retrieve Employee12BB record for a given employee and financial year
 
-        public async Task<Employee12BB> GetEmployee12BB(string employeeId, string financialYear)
+        public async Task<Employee12BBDTO> GetEmployee12BB(string employeeId, string financialYear)
         {
             // Fetch the main form data for the employee and financial year
             var employeeDataForm = _context.Employee12BBs.FirstOrDefault(e => e.EmployeeId == employeeId && e.FinancialYear == financialYear);
@@ -69,7 +74,7 @@ namespace KotiCRM.Repository.Repository
 
             foreach (var recordData in eightyCRecordData)
             {
-                var eightyCDeductionTypes = _context.EightyCDeductionTypes.Where(x => x.Id == recordData.DeductionTypeId).ToList();
+                var eightyCDeductionType = _context.EightyCDeductionTypes.Where(x => x.Id == recordData.DeductionTypeId).ToList();
                 EightyCDeclaration eightyCDeclaration = new EightyCDeclaration
                 {
                     Id = recordData.Id,
@@ -83,11 +88,13 @@ namespace KotiCRM.Repository.Repository
                     ModifiedOn = DateTime.Now,
                     IsDelete = false,
                     Employee12BBId = recordData.Id,
-                    EightyCDeductionTypes = eightyCDeductionTypes,
+                    EightyCDeductionTypes = eightyCDeductionType,
                 };
 
                 eightyCDeclarationsList.Add(eightyCDeclaration);
             }
+            var eightyCDeductionTypes = _context.EightyCDeductionTypes.ToList();
+
             // Fetch 80D declaration data and create a new object
             var EightyDRecordData = _context.EightyDDeclarations.FirstOrDefault(x => x.Id == employeeDataForm.EightyDRecordId);
             EightyDDeclaration eightyDDeclaration = new EightyDDeclaration
@@ -126,8 +133,9 @@ namespace KotiCRM.Repository.Repository
                 Remarks = otherInvestmentRecordData.Remarks,
                 IsVerified = false
             };
+
             // Create and return the final Employee12BB object
-            Employee12BB employee12BB = new Employee12BB
+            Employee12BBDTO employee12BB = new Employee12BBDTO
             {
                 Id = employeeDataForm.Id,
                 EmployeeId = employeeDataForm.EmployeeId,
@@ -142,10 +150,10 @@ namespace KotiCRM.Repository.Repository
                 TravelExpenditureRecord = travelExpenditureDeclaration,
                 HomeLoanRecord = homeLoanDeclaration,
                 EightyCDeclarations = eightyCDeclarationsList,
+                EightyCDeductionTypes = eightyCDeductionTypes,
                 EightyDRecord = eightyDDeclaration,
                 EightyGRecord = eightyGDeclaration,
-                OtherInvestmentRecord = otherInvestmentDeclaration,
-
+                OtherInvestmentRecord = otherInvestmentDeclaration
             };
             return employee12BB;
         }
@@ -352,6 +360,62 @@ namespace KotiCRM.Repository.Repository
             return employee12BBDto;
         }
 
+        public async Task<bool> UploadDocumentProofs(IFormCollection formCollection)
+        {
+            // Extract files
+            var files = formCollection.Files;
+            if (files == null || files.Count == 0)
+                throw new ArgumentNullException(nameof(files), "ProofDocumentLink is required");
+
+            // Extract sections and field names
+            var sections = formCollection.Where(kvp => kvp.Key.Contains("section")).Select(kvp => kvp.Value.ToString()).ToList();
+            var fieldNames = formCollection.Where(kvp => kvp.Key.Contains("fieldName")).Select(kvp => kvp.Value.ToString()).ToList();
+
+            // Process each file along with its section and field name
+            foreach (var file in files)
+            {
+                var fileIndex = int.Parse(file.Name.Split('[')[1].Split(']')[0]);
+                var section = sections[fileIndex];
+                var fieldName = fieldNames[fileIndex];
+
+                var subFolder = char.ToUpper(section[0]) + section.Substring(1) + " Proofs";
+                string fullPath = "";
+                string fileName = "";
+
+                if (section == "80dDeduction")
+                {
+                    var subFolder80D = char.ToUpper(fieldName[0]) + fieldName.Substring(1);
+
+                    // Process file, section, and fieldName as needed
+                    if (!Directory.Exists(_documentProofsPath + '/' + PathConstant.TAX_DECLARATION_FOLDER + '/' + subFolder + '/' + subFolder80D))
+                    {
+                        Directory.CreateDirectory(_documentProofsPath + '/' + PathConstant.TAX_DECLARATION_FOLDER + '/' + subFolder + '/' + subFolder80D);
+                    }
+                    fileName = String.Concat(DateTime.Now.ToString("MM_dd_yyyy_HH_mm"), "_", file.FileName);
+                    fullPath = Path.Combine(_documentProofsPath, PathConstant.TAX_DECLARATION_FOLDER, subFolder, subFolder80D, fileName);
+
+                }
+                else
+                {
+                    // Process file, section, and fieldName as needed
+                    if (!Directory.Exists(_documentProofsPath + '/' + PathConstant.TAX_DECLARATION_FOLDER + '/' + subFolder))
+                    {
+                        Directory.CreateDirectory(_documentProofsPath + '/' + PathConstant.TAX_DECLARATION_FOLDER + '/' + subFolder);
+                    }
+                    fileName = String.Concat(DateTime.Now.ToString("MM_dd_yyyy_HH_mm"), "_", file.FileName);
+                    fullPath = Path.Combine(_documentProofsPath, PathConstant.TAX_DECLARATION_FOLDER, subFolder, fileName);
+                }
+
+                // Save the document proof to the file system
+                using (var stream = new FileStream(fullPath, FileMode.Create))
+                {
+                    await file.CopyToAsync(stream);
+                }
+            }
+
+            return true;
+
+        }
 
     }
 }

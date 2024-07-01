@@ -6,10 +6,11 @@ import { useEffect, useState } from 'react';
 import CIcon from '@coreui/icons-react';
 import { cilCheckCircle, cilChevronDoubleDown, cilChevronDoubleUp } from '@coreui/icons';
 import "../../css/style.css";
-import { GetDeductionTypes, GetEightyC, GetEightyD, GetEightyG, GetEmployee12BB, GetHouseRent, GetInterestPayableOnHomeLoan, GetLeaveTravelExpenditure, GetOtherInvestment, SaveEightyC, SaveEightyD, SaveEightyG, SaveForm12BB, SaveHouseRent, SaveInterestPayableOnHomeLoan, SaveLeaveTravelExpenditure, SaveOtherInvestment, } from '../../redux-saga/modules/userManagement/apiService';
+import { GetDeductionTypes, GetEightyC, GetEightyD, GetEightyG, GetEmployee12BB, GetHouseRent, GetInterestPayableOnHomeLoan, GetLeaveTravelExpenditure, GetOtherInvestment, SaveEightyC, SaveEightyD, SaveEightyG, SaveForm12BB, SaveHouseRent, SaveInterestPayableOnHomeLoan, SaveLeaveTravelExpenditure, SaveOtherInvestment, UploadDocuments, } from '../../redux-saga/modules/userManagement/apiService';
 import { EmployeeFinancialRecord, InitialEmployeeRecord } from '../../models/Form12BB/Form12BB';
 import { MdDelete } from 'react-icons/md';
 import { Deduction } from './deduction';
+import { DocumentProofs, InitialDocumentProofs } from '../../models/Form12BB/DocumentProofs';
 
 // Separate validation schemas for each section
 const houseRentAmountValidationSchema = Yup.object().shape({
@@ -104,7 +105,7 @@ const Form12BB = () => {
   const [is80GChecked, setIs80GChecked] = useState(false);
   const [isOtherChecked, setIsOtherChecked] = useState(false);
   const [selectedOption, setSelectedOption] = useState('');
-  const [deductionList, setDeductionList] = useState<Deduction[] | undefined>([]);
+  const [deductionList, setDeductionList] = useState<Deduction[]>([]);
   const [rows, setRows] = useState(formData.eightyCDeclarations);
 
   const [id, setId] = useState<number>();
@@ -114,6 +115,10 @@ const Form12BB = () => {
   const [eightyDRecordId, setEightyDRecordId] = useState<number>();
   const [eightyGRecordId, setEightyGRecordId] = useState<number>();
   const [otherInvestmentRecordId, setOtherInvestmentRecordId] = useState<number>();
+
+  // Documents upload
+  const [documentProofs, setDocumentProofs] = useState<DocumentProofs[]>([]);
+
 
   const submitButtonEnable = isRentChecked && isLeaveChecked && isInterestPaybleChecked && is80CChecked && is80DChecked && is80GChecked && isOtherChecked;
 
@@ -180,7 +185,7 @@ const Form12BB = () => {
           ...formData.houseRentRecord,
           amount: employee12BBData.houseRentRecord.amount,
           ownerPanCard: employee12BBData.houseRentRecord.ownerPanCard,
-          proofdocumentLink: employee12BBData.houseRentRecord.proofdocumentLink,
+          proofDocumentLink: employee12BBData.houseRentRecord.proofDocumentLink,
         }
       });
     }
@@ -191,7 +196,7 @@ const Form12BB = () => {
         travelExpenditureRecord: {
           ...formData.travelExpenditureRecord,
           amount: employee12BBData.travelExpenditureRecord.amount,
-          proofdocumentLink: employee12BBData.travelExpenditureRecord.proofdocumentLink,
+          proofDocumentLink: employee12BBData.travelExpenditureRecord.proofDocumentLink,
         }
       });
     }
@@ -202,7 +207,7 @@ const Form12BB = () => {
         homeLoanRecord: {
           ...formData.travelExpenditureRecord,
           amount: employee12BBData.travelExpenditureRecord.amount,
-          proofDocumentLink: employee12BBData.travelExpenditureRecord.proofdocumentLink,
+          proofDocumentLink: employee12BBData.travelExpenditureRecord.proofDocumentLink,
           isVerified: employee12BBData.travelExpenditureRecord.isVerified,
           remarks: employee12BBData.travelExpenditureRecord.remarks,
           lenderName: "",
@@ -233,6 +238,7 @@ const Form12BB = () => {
           eightyCDeclarations: mappedRecords
         });
         setRows(mappedRecords);
+        setDeductionList(employee12BBData.eightyCDeductionTypes);
       }
 
       if (employee12BBData && employee12BBData.eightyDRecord) {
@@ -260,7 +266,7 @@ const Form12BB = () => {
             panNumber: employee12BBData.eightyGRecord.panNumber,
             address: employee12BBData.eightyGRecord.address,
             amount: employee12BBData.eightyGRecord.amount,
-            proofdocumentLink: employee12BBData.eightyGRecord.proofdocumentLink,
+            proofDocumentLink: employee12BBData.eightyGRecord.proofDocumentLink,
             isVerified: employee12BBData.eightyGRecord.isVerified,
             remarks: employee12BBData.eightyGRecord.remarks
           }
@@ -273,7 +279,7 @@ const Form12BB = () => {
           otherInvestmentRecord: {
             id: employee12BBData.otherInvestmentRecord.id,
             description: employee12BBData.otherInvestmentRecord.description,
-            proofdocumentLink: employee12BBData.otherInvestmentRecord.proofdocumentLink,
+            proofDocumentLink: employee12BBData.otherInvestmentRecord.proofDocumentLink,
             isVerified: employee12BBData.otherInvestmentRecord.isVerified,
             remarks: employee12BBData.otherInvestmentRecord.remarks
           }
@@ -292,7 +298,7 @@ const Form12BB = () => {
       if (response != null) {
         setEmployee12BBData(response.data);
         if (response.data?.houseRentRecord) {
-          const { id, amount, ownerPanCard, proofdocumentLink } = response.data?.houseRentRecord;
+          const { id, amount, ownerPanCard, proofDocumentLink } = response.data?.houseRentRecord;
           setFormData(prevState => ({
             ...prevState,
             houseRentRecordId: id,
@@ -301,12 +307,12 @@ const Form12BB = () => {
               id,
               amount,
               ownerPanCard,
-              proofdocumentLink,
+              proofDocumentLink,
             }
           }));
         }
         if (response.data?.travelExpenditureRecord) {
-          const { id, amount, proofdocumentLink } = response.data?.travelExpenditureRecord;
+          const { id, amount, proofDocumentLink } = response.data?.travelExpenditureRecord;
           setFormData(prevState => ({
             ...prevState,
             travelExpenditureRecordId: id,
@@ -314,7 +320,7 @@ const Form12BB = () => {
               ...prevState.travelExpenditureRecord,
               id,
               amount,
-              proofdocumentLink,
+              proofDocumentLink,
             }
           }));
         }
@@ -353,7 +359,7 @@ const Form12BB = () => {
         //   }));
         // }
         if (response.data?.eightyGRecord) {
-          const { id, amount, nameOfDonee, panNumber, address, proofdocumentLink } = response.data?.eightyGRecord;
+          const { id, amount, nameOfDonee, panNumber, address, proofDocumentLink } = response.data?.eightyGRecord;
           setFormData((prevState) => ({
             ...prevState,
             eightyGRecordId: id,
@@ -364,12 +370,12 @@ const Form12BB = () => {
               panNumber,
               address,
               amount,
-              proofdocumentLink,
+              proofDocumentLink,
             }
           }));
         }
         if (response.data?.otherInvestmentRecord) {
-          const { id, description, proofdocumentLink } = response.data?.otherInvestmentRecord;
+          const { id, description, proofDocumentLink } = response.data?.otherInvestmentRecord;
           setFormData((prevState) => ({
             ...prevState,
           otherInvestmentRecordId: id,
@@ -377,7 +383,7 @@ const Form12BB = () => {
               ...prevState.otherInvestmentRecord,
               id,
               description,
-              proofdocumentLink
+              proofDocumentLink
             }
           }));
         }
@@ -388,16 +394,19 @@ const Form12BB = () => {
   };
 
   // Update handleFormChange to handle all parameters
-  const handleFormChange = (e: any, fieldName: string, section: string) => {
-    const value = e.target.type === 'file' ? e.target.files[0] : e.target.value;
-    setFormData(prevData => ({
-      ...prevData,
-      [section]: {
-        ...prevData[section],
-        [fieldName]: value,
-      }
-    }));
+  const handleFileChange = (e: any, fieldName: string, section: string) => {
+    const selectedFile = e.target.type === 'file' ? (e.target.files ? e.target.files[0] : null) : e.target.value;
+    const fileToSend = {
+      section,
+      fieldName,
+      file: selectedFile,
+    };
+    const newFiles = [...documentProofs];
+    newFiles.push(fileToSend);
+    setDocumentProofs(newFiles);
   };
+
+  
 
   const handleFormPanChange = (e: any, fieldName: string, section: string) => {
     const value = e.target.type === 'file' ? e.target.files[0] : e.target.value;
@@ -438,7 +447,7 @@ const Form12BB = () => {
       ...formData,
       travelExpenditureRecord: {
         ...formData.travelExpenditureRecord,
-        proofdocumentLink: newValue
+        proofDocumentLink: newValue
       }
     });
   };
@@ -506,7 +515,7 @@ const Form12BB = () => {
       ...prevData,
       eightyGRecord: {
         ...prevData.eightyGRecord,
-        proofdocumentLink: value,
+        proofDocumentLink: value,
       }
     }));
   };
@@ -516,7 +525,7 @@ const Form12BB = () => {
   //   try {
   //     const response = await GetHouseRent(id);
   //     if (response?.data != null) {
-  //       const { amount, ownerPanCard, proofdocumentLink } = response.data;
+  //       const { amount, ownerPanCard, proofDocumentLink } = response.data;
   //       setFormData(prevState => ({
   //         ...prevState,
   //         houseRentRecord: {
@@ -524,7 +533,7 @@ const Form12BB = () => {
   //           id,
   //           amount,
   //           ownerPanCard,
-  //           proofdocumentLink,
+  //           proofDocumentLink,
   //         }
   //       }));
   //     }
@@ -566,7 +575,7 @@ const Form12BB = () => {
   //     await validateForm();
 
   //     // Destructure the necessary fields from formData
-  //     const { amount, ownerPanCard, proofdocumentLink } = formData.houseRentRecord;
+  //     const { amount, ownerPanCard, proofDocumentLink } = formData.houseRentRecord;
 
   //     // Check if all required fields are filled
   //     if (amount! == null && amount > 100000 && !ownerPanCard) {
@@ -574,7 +583,7 @@ const Form12BB = () => {
   //       return;
   //     }
 
-  //     if (!proofdocumentLink && (amount === null || amount <= 100000)) {
+  //     if (!proofDocumentLink && (amount === null || amount <= 100000)) {
   //       console.log("Proof is optional for rent amounts up to 1 lakh.");
   //     }
   //     // Save the house rent data
@@ -585,7 +594,7 @@ const Form12BB = () => {
   //       console.log('Unable to save', response.status);
   //     }
 
-  //     if (proofdocumentLink) {
+  //     if (proofDocumentLink) {
   //       // Show check in both declaration and proof sections if proof is present
   //       setIsRentChecked(true);
   //     }
@@ -599,14 +608,14 @@ const Form12BB = () => {
   //   try {
   //     const response = await GetLeaveTravelExpenditure(id);
   //     if (response?.data != null) {
-  //       const { id, amount, proofdocumentLink } = response.data;
+  //       const { id, amount, proofDocumentLink } = response.data;
   //       setFormData(prevState => ({
   //         ...prevState,
   //         travelExpenditureRecord: {
   //           ...prevState.travelExpenditureRecord,
   //           id,
   //           amount,
-  //           proofdocumentLink,
+  //           proofDocumentLink,
   //         }
   //       }));
   //     }
@@ -650,11 +659,11 @@ const Form12BB = () => {
   //     debugger;
   //     await validateForm();
 
-  //     if (!formData.travelExpenditureRecord.proofdocumentLink) return;
+  //     if (!formData.travelExpenditureRecord.proofDocumentLink) return;
 
   //     const record = {
   //       id,
-  //       proofdocumentLink: formData.travelExpenditureRecord.proofdocumentLink
+  //       proofDocumentLink: formData.travelExpenditureRecord.proofDocumentLink
   //     };
 
   //     const response = await SaveLeaveTravelExpenditure(record);
@@ -893,7 +902,7 @@ const Form12BB = () => {
 
   //     // Check if the response and response data are valid
   //     if (response && response.data) {
-  //       const { id, nameOfDonee, panNumber, address, amount, proofdocumentLink } = response.data;
+  //       const { id, nameOfDonee, panNumber, address, amount, proofDocumentLink } = response.data;
 
   //       // Log the received data
   //       console.log('Received EightyG data:', response.data);
@@ -908,7 +917,7 @@ const Form12BB = () => {
   //             panNumber: panNumber || '',
   //             address: address || '',
   //             amount: amount || 0,
-  //             proofdocumentLink: proofdocumentLink || ''
+  //             proofDocumentLink: proofDocumentLink || ''
   //           },
   //         }));
   //       } else {
@@ -933,18 +942,18 @@ const Form12BB = () => {
   //     await validateForm();
   //     console.log('Form validated');  // Log to confirm form validation
 
-  //     const { id, nameOfDonee, panNumber, address, amount, proofdocumentLink } = formData.eightyGRecord;
+  //     const { id, nameOfDonee, panNumber, address, amount, proofDocumentLink } = formData.eightyGRecord;
 
   //     // Log each field value
   //     console.log('nameOfDonee:', nameOfDonee);
   //     console.log('panNumber:', panNumber);
   //     console.log('address:', address);
   //     console.log('amount:', amount);
-  //     console.log('proofdocumentLink:', proofdocumentLink);
+  //     console.log('proofDocumentLink:', proofDocumentLink);
 
   //     // Check required fields
   //     if (!nameOfDonee || !panNumber || !address || !amount) {
-  //       console.error('All fields except proofdocumentLink are required.');
+  //       console.error('All fields except proofDocumentLink are required.');
   //       return;
   //     }
 
@@ -955,7 +964,7 @@ const Form12BB = () => {
   //       panNumber,
   //       address,
   //       amount,
-  //       proofdocumentLink: proofdocumentLink || null  // Ensure proofdocumentLink is null if not provided
+  //       proofDocumentLink: proofDocumentLink || null  // Ensure proofDocumentLink is null if not provided
   //     };
 
   //     console.log('Data to save:', dataToSave);  // Log the data to be saved
@@ -989,7 +998,7 @@ const Form12BB = () => {
   //           ...prevState.otherInvestmentRecord,
   //           id: response.data.id, // Add the id here
   //           description: response.data.description || '',
-  //           proofdocumentLink: response.data.proofdocumentLink || '',
+  //           proofDocumentLink: response.data.proofDocumentLink || '',
   //         },
   //       }));
   //     }
@@ -1020,7 +1029,74 @@ const Form12BB = () => {
   //   }
   // };
 
-  const handleSubmit = async (values, actions) => {
+  // const handleSubmit = async (values, actions) => {
+  //   formData.id = id ? id : 0;
+  //   formData.employeeId = getEmployeeId ? getEmployeeId : "";
+  //   formData.financialYear = financialYear ? financialYear : "";
+  //   formData.houseRentRecordId = houseRentRecordId ? houseRentRecordId : 0;
+  //   formData.travelExpenditureRecordId = travelExpenditureRecordId ? travelExpenditureRecordId : 0;
+  //   formData.homeLoanRecordId = homeLoanRecordId ? homeLoanRecordId : 0;
+  //   formData.eightyDRecordId = eightyDRecordId ? eightyDRecordId : 0;
+  //   formData.eightyGRecordId = eightyGRecordId ? eightyGRecordId : 0;
+  //   formData.otherInvestmentRecordId = otherInvestmentRecordId ? otherInvestmentRecordId : 0;
+  //   formData.eightyCDeclarations = rows;
+  //   formData.modifiedBy = userId ? userId : "";
+  //   formData.modifiedOn = null;
+  //   formData.isDeclarationComplete = false;
+  //   const response = await SaveForm12BB(formData);
+  //   if(response.status == 200)
+  //   {
+  //     navigate(`/users`);
+  //   }
+  //   // actions.resetForm();
+  // };
+
+  // const finalSubmit = async () => {
+  //   formData.id = id ? id : 0;
+  //   formData.employeeId = getEmployeeId ? getEmployeeId : "";
+  //   formData.financialYear = financialYear ? financialYear : "";
+  //   formData.houseRentRecordId = houseRentRecordId ? houseRentRecordId : 0;
+  //   formData.travelExpenditureRecordId = travelExpenditureRecordId ? travelExpenditureRecordId : 0;
+  //   formData.homeLoanRecordId = homeLoanRecordId ? homeLoanRecordId : 0;
+  //   formData.eightyDRecordId = eightyDRecordId ? eightyDRecordId : 0;
+  //   formData.eightyGRecordId = eightyGRecordId ? eightyGRecordId : 0;
+  //   formData.otherInvestmentRecordId = otherInvestmentRecordId ? otherInvestmentRecordId : 0;
+  //   formData.eightyCDeclarations = rows;
+  //   formData.modifiedBy = userId ? userId : "";
+  //   formData.modifiedOn = null;
+  //   formData.isDeclarationComplete = true;
+  //   const response = await SaveForm12BB(formData);
+  //   if(response.status == 200)
+  //   {
+  //     navigate(`/users`);
+  //   }
+  // }
+
+  // Upload Document Proofs
+  
+  const uploadDocuments = () => {
+    const formData = new FormData();
+    documentProofs.forEach((fileToSend, index) => {
+      formData.append(`files[${index}].files`, fileToSend.file);
+      formData.append(`files[${index}].sections`, fileToSend.section);
+      formData.append(`files[${index}].fieldNames`, fileToSend.fieldName);
+    });
+    if(formData){
+      UploadDocuments(formData)
+      .then( response =>
+        {
+          if(response.status == 200){
+            alert("Success");
+          }
+          else{
+            alert("Failed");
+          }
+        }
+      );
+    }
+  };
+
+  const prepareFormData = () => {
     formData.id = id ? id : 0;
     formData.employeeId = getEmployeeId ? getEmployeeId : "";
     formData.financialYear = financialYear ? financialYear : "";
@@ -1033,31 +1109,32 @@ const Form12BB = () => {
     formData.eightyCDeclarations = rows;
     formData.modifiedBy = userId ? userId : "";
     formData.modifiedOn = null;
+  };
+  
+  const handleSubmit = async (values, actions) => {
+    prepareFormData();
+    uploadDocuments();
     formData.isDeclarationComplete = false;
     const response = await SaveForm12BB(formData);
+    if (response.status === 200) {
+      // navigate(`/users`);
+    }
     // actions.resetForm();
     if(response.status == 200)
       {
         navigate(`/users`);
       }
   };
-
+  
   const finalSubmit = async () => {
-    formData.id = id ? id : 0;
-    formData.employeeId = getEmployeeId ? getEmployeeId : "";
-    formData.financialYear = financialYear ? financialYear : "";
-    formData.houseRentRecordId = houseRentRecordId ? houseRentRecordId : 0;
-    formData.travelExpenditureRecordId = travelExpenditureRecordId ? travelExpenditureRecordId : 0;
-    formData.homeLoanRecordId = homeLoanRecordId ? homeLoanRecordId : 0;
-    formData.eightyDRecordId = eightyDRecordId ? eightyDRecordId : 0;
-    formData.eightyGRecordId = eightyGRecordId ? eightyGRecordId : 0;
-    formData.otherInvestmentRecordId = otherInvestmentRecordId ? otherInvestmentRecordId : 0;
-    formData.eightyCDeclarations = rows;
-    formData.modifiedBy = userId ? userId : "";
-    formData.modifiedOn = null;
+    prepareFormData();
+    uploadDocuments();
     formData.isDeclarationComplete = true;
     const response = await SaveForm12BB(formData);
-  }
+    if (response.status === 200) {
+      // navigate(`/users`);
+    }
+  };
 
   return (
     <Formik
@@ -1144,7 +1221,7 @@ const Form12BB = () => {
                               type="number"
                               id="amount"
                               name="houseRentRecord.amount"
-                              onChange={(e) => handleFormChange(e, 'amount', 'houseRentRecord')}
+                              // onChange={(e) => handleFormChange(e, 'amount', 'houseRentRecord')}
                               className={`form-control${touched.houseRentRecord?.amount && errors.houseRentRecord?.amount ? ' is-invalid' : ''}`}
                               placeholder="Amount of House Rent in a year"
                               disabled={isRentChecked}
@@ -1180,10 +1257,10 @@ const Form12BB = () => {
                             <Field
                               type="file"
                               className="custom-file-input"
-                              name="houseRentRecord.proofdocumentLink"
+                              name="houseRentRecord.proofDocumentLink"
                               id="rentSlips"
                               style={{ display: 'none' }}
-                              onChange={(e) => handleFormChange(e, 'proofdocumentLink', 'houseRentRecord')}
+                              onChange={(e) => handleFileChange(e, 'proofDocumentLink', 'houseRentRecord')}
                             />
                             <div style={{ border: '1px solid #ccc', padding: '10px', borderRadius: '5px', marginBottom: '10px' }}>
                               <label
@@ -1245,7 +1322,7 @@ const Form12BB = () => {
                     <label htmlFor="noTravelDeclaration" className="ml-2 mb-0" style={{ marginBottom: '10px' }}>No Investments</label>
                   </CCol>
                   <CCol md="4" className="d-flex justify-content-end align-items-center">
-                    {isLeaveChecked || formData.travelExpenditureRecord.amount && formData.travelExpenditureRecord.proofdocumentLink && (
+                    {isLeaveChecked || formData.travelExpenditureRecord.amount && formData.travelExpenditureRecord.proofDocumentLink && (
                       <CIcon
                         icon={cilCheckCircle}
                         className="ml-2 check-icon"
@@ -1306,9 +1383,9 @@ const Form12BB = () => {
                               type="file"
                               className="custom-file-input"
                               id="proofDocumentLink"
-                              name="travelExpenditureRecord.proofdocumentLink"
+                              name="travelExpenditureRecord.proofDocumentLink"
                               style={{ display: 'none' }}
-                              onChange={handleProofDocumentChange}
+                              onChange={(e) => handleFileChange(e, 'proofDocumentLink', 'travelExpenditureRecord')}
                             />
                             <div style={{ border: '1px solid #ccc', padding: '10px', borderRadius: '5px', marginBottom: '10px' }}>
                               <label
@@ -1319,14 +1396,14 @@ const Form12BB = () => {
                                 Upload final proof in a zip
                               </label>
                               <ErrorMessage
-                                name="travelExpenditureRecord.proofdocumentLink"
+                                name="travelExpenditureRecord.proofDocumentLink"
                                 component="div"
                                 className="text-danger"
                               />
                             </div>
                           </CCol>
                           <CCol md="4" className="d-flex justify-content-end align-items-center">
-                            {formData.travelExpenditureRecord.proofdocumentLink && (
+                            {formData.travelExpenditureRecord.proofDocumentLink && (
                               <CIcon
                                 icon={cilCheckCircle}
                                 className="ml-2 check-icon"
@@ -1400,7 +1477,7 @@ const Form12BB = () => {
                               id="amount"
                               name="homeLoanRecord.amount"
                               value={formData.homeLoanRecord.amount}
-                              onChange={(e) => handleFormChange(e, 'amount', 'homeLoanRecord')}
+                              // onChange={(e) => handleFormChange(e, 'amount', 'homeLoanRecord')}
                               className={`form-control${touched?.homeLoanRecord?.amount && errors?.homeLoanRecord?.amount ? ' is-invalid' : ''}${isInterestPaybleChecked ? ' no-border' : ''}`}
                               placeholder="Interest Amount on home loan in an year"
                               disabled={isInterestPaybleChecked}
@@ -1415,7 +1492,7 @@ const Form12BB = () => {
                               type="text"
                               id="lenderName"
                               name="homeLoanRecord.lenderName"
-                              onChange={(e) => handleFormChange(e, 'lenderName', 'homeLoanRecord')}
+                              // onChange={(e) => handleFormChange(e, 'lenderName', 'homeLoanRecord')}
                               className={`form-control${touched?.homeLoanRecord?.lenderName && errors?.homeLoanRecord?.lenderName ? ' is-invalid' : ''}${isInterestPaybleChecked ? ' no-border' : ''}`}
                               placeholder="Name of Lender"
                               disabled={isInterestPaybleChecked}
@@ -1430,7 +1507,7 @@ const Form12BB = () => {
                               type="text"
                               id="lenderAddress"
                               name="homeLoanRecord.lenderAddress"
-                              onChange={(e) => handleFormChange(e, 'lenderAddress', 'homeLoanRecord')}
+                              // onChange={(e) => handleFormChange(e, 'lenderAddress', 'homeLoanRecord')}
                               className={`form-control${touched?.homeLoanRecord?.lenderAddress && errors?.homeLoanRecord?.lenderAddress ? ' is-invalid' : ''}${isInterestPaybleChecked ? ' no-border' : ''}`}
                               placeholder="Address of Lender"
                               disabled={isInterestPaybleChecked}
@@ -1487,13 +1564,13 @@ const Form12BB = () => {
                               <label htmlFor="rentSlips" style={{ cursor: 'pointer' }}>
                                 Upload Rent slips in a zip file
                               </label>
-                              <input
+                              <Field
                                 type="file"
                                 className="custom-file-input"
                                 id="rentSlips"
                                 name="homeLoanRecord.proofDocumentLink"
                                 style={{ display: 'none' }}
-                                onChange={(e) => handleFormChange(e, 'proofdocumentLink', 'homeLoanRecord')}
+                                onChange={(e) => handleFileChange(e, 'proofDocumentLink', 'homeLoanRecord')}
                               />
 
                             </div>
@@ -1570,7 +1647,8 @@ const Form12BB = () => {
                           deductionTypeId: row.deductionTypeId || '', // Use existing value or default
                           amount: row.amount || '', // Use existing value or default
                           proofDocumentLink: row.proofDocumentLink || false, // Use existing value or default
-                          eightyCDeductionTypes: row.eightyCDeductionTypes
+                          eightyCDeductionTypes: row.eightyCDeductionTypes,
+                          file: null
                         })),
                       }}
                       validationSchema={eightyCValidationSchema}
@@ -1627,19 +1705,6 @@ const Form12BB = () => {
                                     />
                                   )}
                                 </CCol>
-                                {/* <CCol md="2">
-                                  <input
-                                    type="checkbox"
-                                    id={`proofSubmitted${row.id}`}
-                                    className="custom-checkbox"
-                                    checked={row.proofDocumentLink}
-                                    onChange={(e) => {
-                                      const updatedRows = [...rows];
-                                      updatedRows[index].proofDocumentLink = e.target.value;
-                                      setRows(updatedRows);
-                                    }}
-                                  />
-                                </CCol> */}
                                 <CCol md="2" className="mb-3">
                                   <div>
                                     <input
@@ -1647,6 +1712,13 @@ const Form12BB = () => {
                                       className="custom-file-input"
                                       id={`rentSlips${row.id}`}
                                       style={{ display: 'none' }}
+                                      // onChange={(e) => {
+                                      //   const file = e.currentTarget.files[0];
+                                      //   const updatedRows = [...values.rows];
+                                      //   updatedRows[index].file = file;
+                                      //   setFieldValue('rows', updatedRows);
+                                      // }}
+                                      onChange={(e) => handleFileChange(e, 'proofDocumentLink', '80cDeduction')}
                                     />
                                     <label
                                       className="custom-file-label"
@@ -1762,6 +1834,7 @@ const Form12BB = () => {
                                     className="custom-file-input"
                                     id="insuranceProof"
                                     style={{ display: 'none' }}
+                                    onChange={(e) => handleFileChange(e, 'insuranceProofLink', '80dDeduction')}
                                   />
                                   <label
                                     className="custom-file-label"
@@ -1820,7 +1893,7 @@ const Form12BB = () => {
                                     <Field
                                       type="text"
                                       id="medicalExpenseAmount"
-                                      onChange={(e) => handleFormChange(e, 'medicalExpenseAmount', 'eightyDRecord')}
+                                      // onChange={(e) => handleFormChange(e, 'medicalExpenseAmount', 'eightyDRecord')}
                                       name="eightyDRecord.medicalExpenseAmount"
                                       className={`form-control${touched.eightyDRecord?.medicalExpenseAmount && errors.eightyDRecord?.medicalExpenseAmount ? ' is-invalid' : ''}`}
                                       placeholder="Amount"
@@ -1835,6 +1908,7 @@ const Form12BB = () => {
                                         className="custom-file-input"
                                         id="medicalProof"
                                         style={{ display: 'none' }}
+                                        onChange={(e) => handleFileChange(e, 'medicalExpenseProof', '80dDeduction')}
                                       />
                                       <label
                                         className="custom-file-label"
@@ -1946,7 +2020,7 @@ const Form12BB = () => {
                                   type="number"
                                   id="amount"
                                   name="eightyGRecord.amount"
-                                  onChange={(e: any) => handleFormChange(e, 'amount', 'eightyGRecord')}
+                                  // onChange={(e: any) => handleFormChange(e, 'amount', 'eightyGRecord')}
                                   // onChange={handleGAmountChange}
                                   className={`form-control${touched.eightyGRecord?.amount && errors.eightyGRecord?.amount ? ' is-invalid' : ''}`}
                                   placeholder="Amount"
@@ -1958,15 +2032,14 @@ const Form12BB = () => {
                                   <Field
                                     type="file"
                                     className="custom-file-input"
-                                    id="proofdocumentLink"
-                                    name="eightyGRecord.proofdocumentLink"
-                                    // onChange={(e: any) => handleFormChange(e, 'proofdocumentLink', 'eightyGRecord')}
-                                    onChange={handleProofDocumentLinkChange}
+                                    id="proofDocumentLink"
+                                    name="eightyGRecord.proofDocumentLink"
                                     style={{ display: 'none' }}
+                                    onChange={(e) => handleFileChange(e, 'proofDocumentLink', '80gRecord')}
                                   />
                                   <label
                                     className="custom-file-label"
-                                    htmlFor="proofdocumentLink"
+                                    htmlFor="proofDocumentLink"
                                     style={{ cursor: 'pointer' }}
                                   >
                                     <u>Upload Proof</u>
@@ -2053,18 +2126,18 @@ const Form12BB = () => {
                                 <ErrorMessage name="otherInvestmentRecord.description" component="div" className="text-danger" /> {/* Fix the casing */}
                               </CCol>
                               <CCol md="3" className="mb-3">
-                                <div>
+                              <div>
                                   <Field
                                     type="file"
-                                    name="proofdocumentLink"
-                                    onChange={(e) => handleFormOtherChange(e, 'otherInvestmentRecord.proofdocumentLink')}
                                     className="custom-file-input"
-                                    id="proofdocumentLink"
+                                    id="proofDocumentLink"
+                                    name="otherInvestmentRecord.proofDocumentLink"
                                     style={{ display: 'none' }}
+                                    onChange={(e) => handleFileChange(e, 'proofDocumentLink', 'otherInvestmentRecord')}
                                   />
                                   <label
                                     className="custom-file-label"
-                                    htmlFor="rentSlips"
+                                    htmlFor="proofDocumentLink"
                                     style={{ cursor: 'pointer' }}
                                   >
                                     <u>Upload Proof</u>
@@ -2082,7 +2155,7 @@ const Form12BB = () => {
                               </CCol>
                             </CRow>
 
-                            {formData.otherInvestmentRecord.description && formData.otherInvestmentRecord.proofdocumentLink && (
+                            {formData.otherInvestmentRecord.description && formData.otherInvestmentRecord.proofDocumentLink && (
                               <CRow className="align-items-center">
                                 <CCol md="12" className="d-flex justify-content-center">
                                   <span style={{ color: 'green' }}>✔ Declaration and Proof provided</span>

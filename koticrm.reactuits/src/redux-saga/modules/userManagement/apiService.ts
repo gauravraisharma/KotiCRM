@@ -1,4 +1,5 @@
 import { apiResponse, axiosInstance, responseBody } from "../../../apiInterceptor/axiosInterceptor";
+import { DocumentProofs } from "../../../models/Form12BB/DocumentProofs";
 import { EightyCDeclaration, EightyDRecord, EightyGRecord, EmployeeFinancialRecord, HomeLoanRecord, HouseRentRecord, OtherInvestmentRecord, TravelExpenditureRecord } from "../../../models/Form12BB/Form12BB";
 import { Employee, ForgotPasswordDTO, ResetPassword } from "../../../models/userManagement/employee";
 import { Employees } from "../../../models/userManagement/employees";
@@ -419,6 +420,25 @@ export async function SaveForm12BB(employeeFinancialRecord: EmployeeFinancialRec
         return response;
     } catch (error: any) {
         const errorResponse: apiResponse<EmployeeFinancialRecord> = {
+            data: undefined,
+            status: 500,
+            statusText: error.message
+        };
+        return errorResponse;
+    }
+}
+
+// Document upload
+export async function UploadDocuments(documentProofs: FormData) {
+    try {
+        const response = await axiosInstance.post(`/TaxDeclaration/UploadDocumentProofs`, documentProofs, {
+            headers: {
+                'Content-Type': 'multipart/form-data' // Specify the content type
+            }
+        });
+        return response;
+    } catch (error: any) {
+        const errorResponse: apiResponse<FormData> = {
             data: undefined,
             status: 500,
             statusText: error.message
