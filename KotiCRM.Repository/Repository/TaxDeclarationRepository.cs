@@ -32,125 +32,178 @@ namespace KotiCRM.Repository.Repository
             var employeeDataForm = _context.Employee12BBs.FirstOrDefault(e => e.EmployeeId == employeeId && e.FinancialYear == financialYear);
             // Fetch house rent declaration data and create a new object
             var houserentRecordData = _context.HouseRentDeclarations.FirstOrDefault(x => x.Id == employeeDataForm.HouseRentRecordId);
-            HouseRentDeclaration houseRentDeclaration = new HouseRentDeclaration
-            {
-                Id = houserentRecordData.Id,
-                Amount = houserentRecordData.Amount,
-                ProofDocumentLink = houserentRecordData.ProofDocumentLink,
-                OwnerPanCard = houserentRecordData.OwnerPanCard,
-                Remarks = houserentRecordData.Remarks,
-                IsVerified = houserentRecordData.IsVerified
+            HouseRentDeclaration houseRentDeclaration = new HouseRentDeclaration();
 
-            };
+            if (houserentRecordData == null)
+            {
+                houseRentDeclaration = null;
+            }
+            else
+            {
+                houseRentDeclaration = new HouseRentDeclaration()
+                {
+                    Id = houserentRecordData.Id,
+                    Amount = houserentRecordData.Amount,
+                    ProofDocumentLink = houserentRecordData.ProofDocumentLink,
+                    OwnerPanCard = houserentRecordData.OwnerPanCard,
+                    Remarks = houserentRecordData.Remarks,
+                    IsVerified = houserentRecordData.IsVerified
+                };
+            }
+            
 
             // Fetch travel expenditure declaration data and create a new object
             var leaveTravelRecordData = _context.TravelExpenditureDeclarations.FirstOrDefault(x => x.Id == employeeDataForm.TravelExpenditureRecordId);
-            TravelExpenditureDeclaration travelExpenditureDeclaration = new TravelExpenditureDeclaration
+            TravelExpenditureDeclaration travelExpenditureDeclaration = new TravelExpenditureDeclaration();
+            if (leaveTravelRecordData == null)
             {
-
-                Id = leaveTravelRecordData.Id,
-                Amount = (int)leaveTravelRecordData.Amount,
-                ProofDocumentLink = leaveTravelRecordData.ProofDocumentLink,
-                Remarks = leaveTravelRecordData.Remarks,
-                IsVerified = false
-
-            };
+                travelExpenditureDeclaration = null;
+            }
+            else
+            {
+                travelExpenditureDeclaration = new TravelExpenditureDeclaration
+                {
+                    Id = leaveTravelRecordData.Id,
+                    Amount = (int)leaveTravelRecordData.Amount,
+                    ProofDocumentLink = leaveTravelRecordData.ProofDocumentLink,
+                    Remarks = leaveTravelRecordData.Remarks,
+                    IsVerified = false
+                };
+            }
+            
             // Fetch home loan declaration data and create a new object
             var InterestOnHomLoanRecordData = _context.HomeLoanDeclarations.FirstOrDefault(x => x.Id == employeeDataForm.HomeLoanRecordId);
-            HomeLoanDeclaration homeLoanDeclaration = new HomeLoanDeclaration
+            HomeLoanDeclaration homeLoanDeclaration = new HomeLoanDeclaration();
+            if (InterestOnHomLoanRecordData == null)
             {
-                Id = InterestOnHomLoanRecordData.Id,
-                LenderName = InterestOnHomLoanRecordData.LenderName,
-                LenderAddress = InterestOnHomLoanRecordData.LenderAddress,
-                Amount = (int)InterestOnHomLoanRecordData.Amount,
-                ProofDocumentLink = InterestOnHomLoanRecordData.ProofDocumentLink,
-                Remarks = InterestOnHomLoanRecordData.Remarks,
-                IsVerified = false, // Assuming this needs to be updated too
-             };
+                homeLoanDeclaration = null;
+            }
+            else
+            {
+                homeLoanDeclaration = new HomeLoanDeclaration
+                {
+                    Id = InterestOnHomLoanRecordData.Id,
+                    LenderName = InterestOnHomLoanRecordData.LenderName,
+                    LenderAddress = InterestOnHomLoanRecordData.LenderAddress,
+                    Amount = (int)InterestOnHomLoanRecordData.Amount,
+                    ProofDocumentLink = InterestOnHomLoanRecordData.ProofDocumentLink,
+                    Remarks = InterestOnHomLoanRecordData.Remarks,
+                    IsVerified = false, // Assuming this needs to be updated too
+                };
+            }
 
             // Fetch and prepare 80C declarations list
             var eightyCRecordData = _context.EightyCDeclarations.Where(x => x.Employee12BBId == employeeDataForm.Id).ToList();
             List<EightyCDeclaration> eightyCDeclarationsList = new List<EightyCDeclaration>();
-
-            foreach (var recordData in eightyCRecordData)
+            if (eightyCRecordData.Count <= 0)
             {
-                var eightyCDeductionType = _context.EightyCDeductionTypes.Where(x => x.Id == recordData.DeductionTypeId).ToList();
-                EightyCDeclaration eightyCDeclaration = new EightyCDeclaration
-                {
-                    Id = recordData.Id,
-                    DeductionTypeId = recordData.DeductionTypeId,
-                    Amount = (int)recordData.Amount,
-                    ProofDocumentLink = recordData.ProofDocumentLink,
-                    Remarks = recordData.Remarks,
-                    IsVerified = false,
-                    CreatedBy = recordData.CreatedBy,
-                    ModifiedBy = recordData.ModifiedBy,
-                    ModifiedOn = DateTime.Now,
-                    IsDelete = false,
-                    Employee12BBId = recordData.Id,
-                    EightyCDeductionTypes = eightyCDeductionType,
-                };
-
-                eightyCDeclarationsList.Add(eightyCDeclaration);
+                eightyCDeclarationsList = null;
             }
-            var eightyCDeductionTypes = _context.EightyCDeductionTypes.ToList();
+            else
+            {
+                foreach (var recordData in eightyCRecordData)
+                {
+                    var eightyCDeductionType = _context.EightyCDeductionTypes.Where(x => x.Id == recordData.DeductionTypeId).ToList();
+                    EightyCDeclaration eightyCDeclaration = new EightyCDeclaration
+                    {
+                        Id = recordData.Id,
+                        DeductionTypeId = recordData.DeductionTypeId,
+                        Amount = (int)recordData.Amount,
+                        ProofDocumentLink = recordData.ProofDocumentLink,
+                        Remarks = recordData.Remarks,
+                        IsVerified = false,
+                        CreatedBy = recordData.CreatedBy,
+                        ModifiedBy = recordData.ModifiedBy,
+                        ModifiedOn = DateTime.Now,
+                        IsDelete = false,
+                        Employee12BBId = recordData.Id,
+                        EightyCDeductionTypes = eightyCDeductionType,
+                    };
+
+                    eightyCDeclarationsList.Add(eightyCDeclaration);
+                }
+            }
 
             // Fetch 80D declaration data and create a new object
-            var EightyDRecordData = _context.EightyDDeclarations.FirstOrDefault(x => x.Id == employeeDataForm.EightyDRecordId);
-            EightyDDeclaration eightyDDeclaration = new EightyDDeclaration
+            var eightyDRecordData = _context.EightyDDeclarations.FirstOrDefault(x => x.Id == employeeDataForm.EightyDRecordId);
+            EightyDDeclaration eightyDDeclaration = new EightyDDeclaration();
+            if(eightyDRecordData == null)
             {
-                Id = EightyDRecordData.Id,
-                InsuranceAmount = (int)EightyDRecordData.InsuranceAmount,
-                InsuranceProofLink = EightyDRecordData.InsuranceProofLink,
-                MedicalExpenseAmount = (int)EightyDRecordData.MedicalExpenseAmount,
-                MedicalExpenseProof = EightyDRecordData.MedicalExpenseProof,
-                Remarks = EightyDRecordData.Remarks,
-                IsVerified = false
-            };
+                eightyDRecordData = null;
+            }
+            else
+            {
+                eightyDDeclaration = new EightyDDeclaration
+                {
+                    Id = eightyDRecordData.Id,
+                    InsuranceAmount = (int)eightyDRecordData.InsuranceAmount,
+                    InsuranceProofLink = eightyDRecordData.InsuranceProofLink,
+                    MedicalExpenseAmount = (int)eightyDRecordData.MedicalExpenseAmount,
+                    MedicalExpenseProof = eightyDRecordData.MedicalExpenseProof,
+                    Remarks = eightyDRecordData.Remarks,
+                    IsVerified = false
+                };
+            }
+            
             // Fetch 80G declaration data and create a new object
-            var EightyGRecordData = _context.EightyGDeclarations.FirstOrDefault(x => x.Id == employeeDataForm.EightyGRecordId);
-            EightyGDeclaration eightyGDeclaration = new EightyGDeclaration
+            var eightyGRecordData = _context.EightyGDeclarations.FirstOrDefault(x => x.Id == employeeDataForm.EightyGRecordId);
+            EightyGDeclaration eightyGDeclaration = new EightyGDeclaration();
+            if(eightyGRecordData == null)
             {
-
-                Id = EightyGRecordData.Id,
-                NameOfDonee = EightyGRecordData.NameOfDonee,
-                Amount = EightyGRecordData.Amount,
-                PanNumber = EightyGRecordData.PanNumber,
-                Address = EightyGRecordData.Address,
-                ProofDocumentLink = EightyGRecordData.ProofDocumentLink,
-                Remarks = EightyGRecordData.Remarks,
-                IsVerified = false
-
-            };
+                eightyGRecordData = null;
+            }
+            else
+            {
+                eightyGDeclaration = new EightyGDeclaration
+                {
+                    Id = eightyGRecordData.Id,
+                    NameOfDonee = eightyGRecordData.NameOfDonee,
+                    Amount = eightyGRecordData.Amount,
+                    PanNumber = eightyGRecordData.PanNumber,
+                    Address = eightyGRecordData.Address,
+                    ProofDocumentLink = eightyGRecordData.ProofDocumentLink,
+                    Remarks = eightyGRecordData.Remarks,
+                    IsVerified = false
+                };
+            }
+            
 
             // Fetch other investment declaration data and create a new object
             var otherInvestmentRecordData = _context.OtherInvestmentDeclarations.FirstOrDefault(x => x.Id == employeeDataForm.OtherInvestmentRecordId);
-            OtherInvestmentDeclaration otherInvestmentDeclaration = new OtherInvestmentDeclaration
+            OtherInvestmentDeclaration otherInvestmentDeclaration = new OtherInvestmentDeclaration();
+            if(otherInvestmentRecordData == null)
             {
-                Id = otherInvestmentRecordData.Id,
-                Description = otherInvestmentRecordData.Description,
-                ProofDocumentLink = otherInvestmentRecordData.ProofDocumentLink,
-                Remarks = otherInvestmentRecordData.Remarks,
-                IsVerified = false
-            };
-
+                otherInvestmentRecordData = null;
+            }
+            else
+            {
+                otherInvestmentDeclaration = new OtherInvestmentDeclaration
+                {
+                    Id = otherInvestmentRecordData.Id,
+                    Description = otherInvestmentRecordData.Description,
+                    ProofDocumentLink = otherInvestmentRecordData.ProofDocumentLink,
+                    Remarks = otherInvestmentRecordData.Remarks,
+                    IsVerified = false
+                };
+            }
+            
             // Create and return the final Employee12BB object
             Employee12BBDTO employee12BB = new Employee12BBDTO
             {
                 Id = employeeDataForm.Id,
                 EmployeeId = employeeDataForm.EmployeeId,
                 FinancialYear = employeeDataForm.FinancialYear,
-                HouseRentRecordId = houseRentDeclaration.Id,
-                HomeLoanRecordId = homeLoanDeclaration.Id,
-                TravelExpenditureRecordId = travelExpenditureDeclaration.Id,
-                EightyDRecordId = eightyDDeclaration.Id,
-                EightyGRecordId = eightyGDeclaration.Id,
-                OtherInvestmentRecordId = otherInvestmentDeclaration.Id,
+                HouseRentRecordId = houseRentDeclaration == null ? 0 : houseRentDeclaration.Id,
+                HomeLoanRecordId = homeLoanDeclaration == null ? 0 : homeLoanDeclaration.Id,
+                TravelExpenditureRecordId = travelExpenditureDeclaration == null ? 0 : travelExpenditureDeclaration.Id,
+                EightyDRecordId = eightyDDeclaration == null ? 0 : eightyDDeclaration.Id,
+                EightyGRecordId = eightyGDeclaration == null ? 0 : eightyGDeclaration.Id,
+                OtherInvestmentRecordId = otherInvestmentDeclaration == null ? 0 : otherInvestmentDeclaration.Id,
                 HouseRentRecord = houseRentDeclaration,
                 TravelExpenditureRecord = travelExpenditureDeclaration,
                 HomeLoanRecord = homeLoanDeclaration,
                 EightyCDeclarations = eightyCDeclarationsList,
-                EightyCDeductionTypes = eightyCDeductionTypes,
+                EightyCDeductionTypes = _context.EightyCDeductionTypes.ToList(),
                 EightyDRecord = eightyDDeclaration,
                 EightyGRecord = eightyGDeclaration,
                 OtherInvestmentRecord = otherInvestmentDeclaration
