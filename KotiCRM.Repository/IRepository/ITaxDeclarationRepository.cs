@@ -19,6 +19,7 @@ namespace KotiCRM.Repository.IRepository
 
         Task<Employee12BB> SaveEmployee12BB(Employee12BB employee12BB);
         Task<bool> UploadDocumentProofs(IFormCollection formCollection);
+        Task<int> InsertEmployeeRecordAsync(Employee12BBDTO employeeRecordDto);
 
     }
 }

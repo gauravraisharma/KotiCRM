@@ -417,5 +417,32 @@ namespace KotiCRM.Repository.Repository
 
         }
 
+
+        public async Task<int> InsertEmployeeRecordAsync(Employee12BBDTO employeeRecordDto)
+        {
+            var employeeRecord = new Employee12BB
+            {
+                EmployeeId = employeeRecordDto.EmployeeId,
+                FinancialYear = employeeRecordDto.FinancialYear,
+                HouseRentRecordId = employeeRecordDto.HouseRentRecordId,
+                TravelExpenditureRecordId = employeeRecordDto.TravelExpenditureRecordId,
+                HomeLoanRecordId = employeeRecordDto.HomeLoanRecordId,
+                EightyDRecordId = employeeRecordDto.EightyDRecordId,
+                EightyGRecordId = employeeRecordDto.EightyGRecordId,
+                OtherInvestmentRecordId = employeeRecordDto.OtherInvestmentRecordId,
+                CreatedBy = employeeRecordDto.CreatedBy,
+                CreatedOn = DateTime.Now,
+                ModifiedBy = employeeRecordDto.ModifiedBy,
+                ModifiedOn = DateTime.Now,
+                IsDelete = employeeRecordDto.IsDelete,
+                IsActive = employeeRecordDto.IsActive,
+                IsFormVerified = employeeRecordDto.IsFormVerified,
+                IsDeclarationComplete = employeeRecordDto.IsDeclarationComplete
+            };
+
+            _context.Employee12BBs.Add(employeeRecord);
+            return await _context.SaveChangesAsync();
+        }
     }
+
 }

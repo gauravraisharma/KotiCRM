@@ -38,6 +38,10 @@ namespace KotiCRM.Services.Services
         {
             return await _taxDeclarationRepository.UploadDocumentProofs(formCollection);
         }
+        public async Task<int> AddEmployeeRecordAsync(Employee12BBDTO employee12BBDTO)
+        {
+            return await _taxDeclarationRepository.InsertEmployeeRecordAsync(employee12BBDTO);
+        }
 
     }
 }

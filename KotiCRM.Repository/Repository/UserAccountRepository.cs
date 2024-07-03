@@ -73,6 +73,7 @@ namespace KotiCRM.Repository.Repository
                 Console.WriteLine($"Encoded Token: {encodedToken}");
 
                 var expirationTime = DateTime.UtcNow.AddHours(1).ToString("o");
+             
                 var resetLink = $"{_config["ClientAppUrl"]}/resetPassword?token={Uri.EscapeDataString(encodedToken)}&email={Uri.EscapeDataString(forgotPasswordDTO.Email)}&expires={Uri.EscapeDataString(expirationTime)}";
 
                 return resetLink;
@@ -133,7 +134,7 @@ namespace KotiCRM.Repository.Repository
 
 
         //        //var resetLink = $"{_config["ClientAppUrl"]}/ResetPassword?token={token}&email={forgotPasswordDTO.Email}";
-        //          var resetLink = $"{_config["ClientAppUrl"]}/resetPassword?token={token}&email={forgotPasswordDTO.Email}";
+  
 
 
 

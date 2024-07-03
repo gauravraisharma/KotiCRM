@@ -233,3 +233,15 @@ export interface EmployeeFinancialRecord {
   modifiedOn: Date | null;
   createdBy: string;
 }
+
+export interface EmployeeFinancialRecordDummy {
+  // Define properties based on your actual data structure
+  employeeId: string;
+  financialYear: string;
+  createdBy: string;
+  modifiedBy: string;
+  isDelete: boolean;
+  isActive: boolean;
+  isFormVerified: boolean;
+  isDeclarationComplete: boolean;
+}

@@ -8,6 +8,7 @@ import AuthenticatedRoute from './utils/AuthenticatedRoute';
 import ResetPassword from './views/userAuthentication/resetPassword/ResetPassword';
 
 
+
 const loading = (
   <div className="pt-3 text-center">
     <div className="sk-spinner sk-spinner-pulse"></div>
@@ -34,13 +35,13 @@ function App() {
             )
 
           })}
- 
-         <Route path="/resetPassword" element={<ResetPassword />} />
+
+          <Route path="/resetPassword" element={<ResetPassword />} />
 
         </Routes>
-     
+
       </Suspense>
-    
+
     </BrowserRouter>
   );
 }

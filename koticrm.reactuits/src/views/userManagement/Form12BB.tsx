@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import CIcon from '@coreui/icons-react';
 import { cilCheckCircle, cilChevronDoubleDown, cilChevronDoubleUp } from '@coreui/icons';
 import "../../css/style.css";
-import { GetDeductionTypes, GetEightyC, GetEightyD, GetEightyG, GetEmployee12BB, GetHouseRent, GetInterestPayableOnHomeLoan, GetLeaveTravelExpenditure, GetOtherInvestment, SaveEightyC, SaveEightyD, SaveEightyG, SaveForm12BB, SaveHouseRent, SaveInterestPayableOnHomeLoan, SaveLeaveTravelExpenditure, SaveOtherInvestment, UploadDocuments, } from '../../redux-saga/modules/userManagement/apiService';
+import { GetDeductionTypes, GetEightyC, GetEightyD, GetEightyG, GetEmployee12BB, GetHouseRent, GetInterestPayableOnHomeLoan, GetLeaveTravelExpenditure, GetOtherInvestment, SaveEightyC, SaveEightyD, SaveEightyG, SaveForm12BB, SaveHouseRent, SaveInterestPayableOnHomeLoan, SaveLeaveTravelExpenditure, SaveOtherInvestment } from '../../redux-saga/modules/userManagement/apiService';
 import { EmployeeFinancialRecord, InitialEmployeeRecord } from '../../models/Form12BB/Form12BB';
 import { MdDelete } from 'react-icons/md';
 import { Deduction } from './deduction';

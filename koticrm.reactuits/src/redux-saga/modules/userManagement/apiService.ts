@@ -1,6 +1,5 @@
 import { apiResponse, axiosInstance, responseBody } from "../../../apiInterceptor/axiosInterceptor";
-import { DocumentProofs } from "../../../models/Form12BB/DocumentProofs";
-import { EightyCDeclaration, EightyDRecord, EightyGRecord, EmployeeFinancialRecord, HomeLoanRecord, HouseRentRecord, OtherInvestmentRecord, TravelExpenditureRecord } from "../../../models/Form12BB/Form12BB";
+import { EightyCDeclaration, EightyDRecord, EightyGRecord, EmployeeFinancialRecord, EmployeeFinancialRecordDummy, HomeLoanRecord, HouseRentRecord, OtherInvestmentRecord, TravelExpenditureRecord } from "../../../models/Form12BB/Form12BB";
 import { Employee, ForgotPasswordDTO, ResetPassword } from "../../../models/userManagement/employee";
 import { Employees } from "../../../models/userManagement/employees";
 import { Deduction } from "../../../views/userManagement/deduction";
@@ -94,20 +93,7 @@ export async function DeleteEmployee(employeeId: string) {
 
 
 
-// export async function ForgotPassword(forgotPasswordDTO: any) {
-//   try {
-//     debugger
-//     const response = await axiosInstance.post('/UserAccount/ForgotPassword', forgotPasswordDTO);
-//     return responseBody(response)
-//   } catch (error: any  ) {
-//     const errorResponse: apiResponse<ForgotPasswordDTO> = {
-//         data: undefined,
-//         status: 500,
-//         statusText: error.message
-//     };
-//     return errorResponse;
-//   }
-// }
+//Forgot Password
 export async function UserForgotPassword(forgotPasswordDTO: any) {
     try {
       debugger
@@ -125,6 +111,7 @@ export async function UserForgotPassword(forgotPasswordDTO: any) {
 
 export async function ChangePassword(passwordRequestModal:any) {
     try {
+        debugger;
         const response = await axiosInstance.post(`/UserAccount/ChangePassword`,passwordRequestModal);
         return responseBody(response);
     } catch (error: any) {
@@ -136,28 +123,7 @@ export async function ChangePassword(passwordRequestModal:any) {
         return errorResponse;
     }
 }
-
-
-
-
-// export async function ResetUserPassword(resetPassword: ResetPassword) {
-//     try {
-//         debugger;
-//       console.log("Sending reset password request:", resetPassword);
-//       const response = await axiosInstance.post(`/UserAccount/ResetPassword`, resetPassword);
-//       console.log("Received response:", response);
-//       return responseBody(response); // Assuming responseBody function handles response formatting
-//     } catch (error: any) {
-//       console.error("Error occurred:", error);
-//       const errorResponse: apiResponse<ResetPassword> = {
-//         data: undefined,
-//         status: 500,
-//         statusText: error.message,
-//       };
-//       return errorResponse;
-//     }
-//   }
-  
+// Reset Passwoord  
 
 export async function ResetUserPassword(resetPassword: ResetPassword): Promise<boolean> {
     try {
@@ -428,24 +394,19 @@ export async function SaveForm12BB(employeeFinancialRecord: EmployeeFinancialRec
     }
 }
 
-// Document upload
-export async function UploadDocuments(documentProofs: FormData) {
+
+
+export async function AddNewFinancial(employeeFinancialRecordDummy: EmployeeFinancialRecordDummy) {
     try {
-        const response = await axiosInstance.post(`/TaxDeclaration/UploadDocumentProofs`, documentProofs, {
-            headers: {
-                'Content-Type': 'multipart/form-data' // Specify the content type
-            }
-        });
-        return response;
+      const response = await axiosInstance.post<EmployeeFinancialRecordDummy>('/TaxDeclaration/AddEmployeeRecord', employeeFinancialRecordDummy);
+     
+      return response;
     } catch (error: any) {
-        const errorResponse: apiResponse<FormData> = {
-            data: undefined,
-            status: 500,
-            statusText: error.message
-        };
-        return errorResponse;
+      const errorResponse: apiResponse<EmployeeFinancialRecordDummy> = {
+        data: undefined,
+        status: 500,
+        statusText: error.message
+      };
+      return errorResponse;
     }
-}
-
-
-
+  }

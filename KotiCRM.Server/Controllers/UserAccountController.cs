@@ -77,27 +77,7 @@ namespace KotiCRM.Server.Controllers
             }
         }
 
-        //[HttpPost]
-        //[AllowAnonymous]
-        //[Route("ResetPassword")]
-        //public async Task<IActionResult> ResetPassword(ResetPassword resetPassword)
-        //{
-        //    var user = await _userManager.Users.FirstOrDefaultAsync(u => u.Email == resetPassword.Email);
-
-        //    if(user != null)
-        //    {
-        //        resetPassword.Token = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(resetPassword.Token));
-
-        //        var responseStatus = await _userManager.ResetPasswordAsync(user, resetPassword.Token, resetPassword.Password);
-        //        if (responseStatus.Succeeded)
-        //        {
-        //            return Ok();
-        //        }
-        //    }
-
-        //    return BadRequest("Password not reset");            
-        //}
-
+        
         [HttpPost]
         [AllowAnonymous]
         [Route("ResetPassword")]

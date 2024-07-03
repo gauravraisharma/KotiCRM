@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using Newtonsoft.Json;
+
 using System.Net.Http.Headers;
 
 namespace KotiCRM.Server.Controllers
@@ -117,7 +117,32 @@ namespace KotiCRM.Server.Controllers
             }
         }
 
-    }
+        [HttpPost]
+        [Route("AddEmployeeRecord")]
+        public async Task<IActionResult> AddEmployeeRecord(Employee12BBDTO employee12BBDTO)
+        {
+            // Validate the input
+            if (employee12BBDTO == null)
+            {
+                return BadRequest("Invalid data.");
+            }
 
+            try
+            {
+                var result = await _taxDeclarationService.AddEmployeeRecordAsync(employee12BBDTO);
+                if (result > 0)
+                {
+                    return Ok(result);
+                }
+                return BadRequest("Failed to insert employee record.");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+    }
 }
+
+
 
