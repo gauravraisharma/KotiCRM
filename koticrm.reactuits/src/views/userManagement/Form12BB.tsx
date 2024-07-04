@@ -116,7 +116,7 @@ const Form12BB = () => {
   const submitButtonEnable = isRentChecked && isLeaveChecked && isInterestPaybleChecked && is80CChecked && is80DChecked && is80GChecked && isOtherChecked;
 
   const addRow = () => {
-    const newRow = { key: Date.now(), id: '', amount: '', deductionTypeId: 0, proofSubmitted: false };
+    const newRow = { key: Date.now(), id: '', amount: 0, deductionTypeId: 0, proofSubmitted: false };
     setRows([...rows, newRow]);
   };
 
@@ -737,7 +737,7 @@ const Form12BB = () => {
                               Enter Amount of any travel to claim in a year:
                             </label>
                             <Field
-                              type="text"
+                              type="number"
                               id="amount"
                               name="travelExpenditureRecord.amount"
                               value={formData.travelExpenditureRecord.amount}
@@ -1070,7 +1070,7 @@ const Form12BB = () => {
                                 <CCol md="2" className="mb-3">
                                   <label htmlFor={`amount${row.id}`} style={{ marginBottom: '10px' }}>Amount:</label>
                                   <Field
-                                    type="text"
+                                    type="number"
                                     name={`rows[${index}].amount`}
                                     className={`form-control ${touched.rows && touched.rows[index] && errors.rows && errors.rows[index] && errors.rows[index].amount ? 'is-invalid' : ''}`}
                                     placeholder="Amount"
@@ -1206,7 +1206,7 @@ const Form12BB = () => {
                               <CCol md="2" className="mb-3">
                                 <label htmlFor="insuranceAmount" className="mb-10">Amount:</label>
                                 <Field
-                                  type="text"
+                                  type="number"
                                   id="insuranceAmount"
                                   name="eightyDRecord.insuranceAmount"
                                   className={`form-control${touched.eightyDRecord?.insuranceAmount && errors.eightyDRecord?.insuranceAmount ? ' is-invalid' : ''}`}
@@ -1219,11 +1219,11 @@ const Form12BB = () => {
                                 <div>
                                   <Field
                                     type="file"
-                                    name="insuranceProof"
+                                    name="eightyDRecord.insuranceProofLink"
                                     className="custom-file-input"
                                     id="insuranceProof"
                                     style={{ display: 'none' }}
-                                    onChange={(e) => handleFileChange(e, 'insuranceProofLink', '80dDeduction')}
+                                    onChange={(e) => handleFileChange(e, 'insuranceProofLink', 'eightyDRecord')}
                                   />
                                   <label
                                     className="custom-file-label"
@@ -1280,7 +1280,7 @@ const Form12BB = () => {
                                   <CCol md="2" className="mb-3">
                                     <label htmlFor="medicalExpenseAmount" className="mb-10">Amount:</label>
                                     <Field
-                                      type="text"
+                                      type="number"
                                       id="medicalExpenseAmount"
                                       onChange={(e) => handleFormChange(e, 'medicalExpenseAmount', 'eightyDRecord')}
                                       name="eightyDRecord.medicalExpenseAmount"
@@ -1293,11 +1293,11 @@ const Form12BB = () => {
                                     <div>
                                       <Field
                                         type="file"
-                                        name="medicalProof"
+                                        name="eightyDRecord.medicalProof"
                                         className="custom-file-input"
                                         id="medicalProof"
                                         style={{ display: 'none' }}
-                                        onChange={(e) => handleFileChange(e, 'medicalExpenseProof', 'eightyDDeduction')}
+                                        onChange={(e) => handleFileChange(e, 'medicalExpenseProof', 'eightyDRecord')}
                                       />
                                       <label
                                         className="custom-file-label"
@@ -1420,7 +1420,7 @@ const Form12BB = () => {
                                     id="proofDocumentLink"
                                     name="eightyGRecord.proofDocumentLink"
                                     style={{ display: 'none' }}
-                                    onChange={(e) => handleFileChange(e, 'proofDocumentLink', '80gRecord')}
+                                    onChange={(e) => handleFileChange(e, 'proofDocumentLink', 'eightyGRecord')}
                                   />
                                   <label
                                     className="custom-file-label"
@@ -1512,7 +1512,7 @@ const Form12BB = () => {
                               </CCol>
                               <CCol md="3" className="mb-3">
                               <div>
-                                  <Field
+                                  <input
                                     type="file"
                                     className="custom-file-input"
                                     id="proofDocumentLink"

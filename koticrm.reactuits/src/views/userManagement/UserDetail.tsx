@@ -102,10 +102,13 @@ const UserDetails = () => {
     };
 
     try {
-      debugger;
       const response = await AddNewFinancial(newEmployeeRecord); // Call your AddNewFinancial function
       if (response.status === 200) {
         toast.success('Employee record inserted successfully.');
+        setTimeout(() => {
+          navigate('/users')
+          // navigate(`/users/userDetail/${userId}/${employeeId}`);
+        }, 3000); 
       } else {
 
         toast.error('Failed to insert the record.');

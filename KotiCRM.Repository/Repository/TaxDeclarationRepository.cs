@@ -219,7 +219,18 @@ namespace KotiCRM.Repository.Repository
             {
                 throw new Exception("Invalid payload");
             }
+
+            // Added record Ids
+            var houseRentRecordId = 0;
+            var travelExpenditureRecordId = 0;
+            var homeLoanRecordId = 0;
+            var eightyDRecordId = 0;
+            var eightyGRecordId = 0;
+            var otherInvestmentRecordId = 0;
+
+            // Get employee12BB form data from DB
             var existingEmployee12BBs = _context.Employee12BBs.SingleOrDefault(x => x.Id == employee12BB.Id);
+
             // Update house rent declaration data if present
             if (employee12BB.HouseRentRecordId > 0)
             {
@@ -233,6 +244,13 @@ namespace KotiCRM.Repository.Repository
                 _context.HouseRentDeclarations.Update(houseRentDeclarations);
                 _context.SaveChanges();
             }
+            else
+            {
+                var response = _context.HouseRentDeclarations.Add(employee12BB.HouseRentRecord);
+                _context.SaveChanges();
+                houseRentRecordId = response.Entity.Id;
+            }
+
             // Update travel expenditure declaration data if present
             if (employee12BB.TravelExpenditureRecordId > 0)
             {
@@ -245,6 +263,13 @@ namespace KotiCRM.Repository.Repository
                 _context.TravelExpenditureDeclarations.Update(travelExpenditureDeclarations);
                 _context.SaveChanges();
             }
+            else
+            {
+                var response = _context.TravelExpenditureDeclarations.Add(employee12BB.TravelExpenditureRecord);
+                _context.SaveChanges();
+                travelExpenditureRecordId = response.Entity.Id;
+            }
+
             // Update home loan declaration data if present
             if (employee12BB.HomeLoanRecordId > 0)
             {
@@ -260,64 +285,74 @@ namespace KotiCRM.Repository.Repository
                 _context.HomeLoanDeclarations.Update(homeLoanDeclarations);
                 _context.SaveChanges();
             }
+            else
+            {
+                var response = _context.HomeLoanDeclarations.Add(employee12BB.HomeLoanRecord);
+                _context.SaveChanges();
+                homeLoanRecordId = response.Entity.Id;
+            }
+
             if (employee12BB.Id > 0)
             {
                 // Fetch existing declarations from the database
                 var existingEightyCDeclarations = _context.EightyCDeclarations.Where(x => x.Employee12BBId == employee12BB.Id).ToList();
 
-                // Iterate through the current list of declarations sent from the client
-                foreach (var eightyCDeclaration in employee12BB.EightyCDeclarations)
+                if(existingEightyCDeclarations.Count > 0)
                 {
-                    // Find the matching existing declaration (if any)
-                    var existingEightyCDeclaration = existingEightyCDeclarations.FirstOrDefault(x => x.Id == eightyCDeclaration.Id);
-
-                    if (existingEightyCDeclaration != null)
+                    // Iterate through the current list of declarations sent from the client
+                    foreach (var eightyCDeclaration in employee12BB.EightyCDeclarations)
                     {
-                        // Update the existing declaration
-                        existingEightyCDeclaration.DeductionTypeId = eightyCDeclaration.DeductionTypeId;
-                        existingEightyCDeclaration.Amount = eightyCDeclaration.Amount;
-                        existingEightyCDeclaration.ProofDocumentLink = eightyCDeclaration.ProofDocumentLink ?? existingEightyCDeclaration.ProofDocumentLink;
-                        existingEightyCDeclaration.Remarks = eightyCDeclaration.Remarks;
-                        existingEightyCDeclaration.IsVerified = eightyCDeclaration.IsVerified;
-                        existingEightyCDeclaration.ModifiedBy = eightyCDeclaration.ModifiedBy;
-                        existingEightyCDeclaration.ModifiedOn = DateTime.Now;
-                        existingEightyCDeclaration.IsDelete = false;
+                        // Find the matching existing declaration (if any)
+                        var existingEightyCDeclaration = existingEightyCDeclarations.FirstOrDefault(x => x.Id == eightyCDeclaration.Id);
 
-                        _context.EightyCDeclarations.Update(existingEightyCDeclaration);
-                    }
-                    else
-                    {
-                        // Create a new declaration
-                        var newEightyCDeclaration = new EightyCDeclaration
+                        if (existingEightyCDeclaration != null)
                         {
-                            Employee12BBId = employee12BB.Id,
-                            DeductionTypeId = eightyCDeclaration.DeductionTypeId,
-                            Amount = eightyCDeclaration.Amount,
-                            ProofDocumentLink = eightyCDeclaration.ProofDocumentLink ?? null,
-                            Remarks = eightyCDeclaration.Remarks,
-                            IsVerified = eightyCDeclaration.IsVerified,
-                            CreatedBy = eightyCDeclaration.CreatedBy,
-                            CreatedOn = DateTime.Now,
-                            ModifiedBy = eightyCDeclaration.ModifiedBy,
-                            ModifiedOn = DateTime.Now,
-                            IsDelete = false
-                        };
+                            // Update the existing declaration
+                            existingEightyCDeclaration.DeductionTypeId = eightyCDeclaration.DeductionTypeId;
+                            existingEightyCDeclaration.Amount = eightyCDeclaration.Amount;
+                            existingEightyCDeclaration.ProofDocumentLink = eightyCDeclaration.ProofDocumentLink ?? existingEightyCDeclaration.ProofDocumentLink;
+                            existingEightyCDeclaration.Remarks = eightyCDeclaration.Remarks;
+                            existingEightyCDeclaration.IsVerified = eightyCDeclaration.IsVerified;
+                            existingEightyCDeclaration.ModifiedBy = eightyCDeclaration.ModifiedBy;
+                            existingEightyCDeclaration.ModifiedOn = DateTime.Now;
+                            existingEightyCDeclaration.IsDelete = false;
 
-                        _context.EightyCDeclarations.Add(newEightyCDeclaration);
+                            _context.EightyCDeclarations.Update(existingEightyCDeclaration);
+                        }
+                        else
+                        {
+                            // Create a new declaration
+                            var newEightyCDeclaration = new EightyCDeclaration
+                            {
+                                Employee12BBId = employee12BB.Id,
+                                DeductionTypeId = eightyCDeclaration.DeductionTypeId,
+                                Amount = eightyCDeclaration.Amount,
+                                ProofDocumentLink = eightyCDeclaration.ProofDocumentLink ?? null,
+                                Remarks = eightyCDeclaration.Remarks,
+                                IsVerified = eightyCDeclaration.IsVerified,
+                                CreatedBy = eightyCDeclaration.CreatedBy,
+                                CreatedOn = DateTime.Now,
+                                ModifiedBy = eightyCDeclaration.ModifiedBy,
+                                ModifiedOn = DateTime.Now,
+                                IsDelete = false
+                            };
+
+                            _context.EightyCDeclarations.Add(newEightyCDeclaration);
+                        }
                     }
-                }
 
-                // Optionally, if you want to remove declarations that are no longer in the current list
-                foreach (var existingEightyCDeclaration in existingEightyCDeclarations)
-                {
-                    if (!employee12BB.EightyCDeclarations.Any(x => x.Id == existingEightyCDeclaration.Id))
+                    // Optionally, if you want to remove declarations that are no longer in the current list
+                    foreach (var existingEightyCDeclaration in existingEightyCDeclarations)
                     {
-                        // Mark as deleted or remove from the context
-                        existingEightyCDeclaration.IsDelete = true;
-                        _context.EightyCDeclarations.Update(existingEightyCDeclaration);
+                        if (!employee12BB.EightyCDeclarations.Any(x => x.Id == existingEightyCDeclaration.Id))
+                        {
+                            // Mark as deleted or remove from the context
+                            existingEightyCDeclaration.IsDelete = true;
+                            _context.EightyCDeclarations.Update(existingEightyCDeclaration);
+                        }
                     }
+                    _context.SaveChanges();
                 }
-                _context.SaveChanges();
             }
             // Update 80D declaration data if present
             if (employee12BB.EightyDRecordId > 0)
@@ -333,6 +368,15 @@ namespace KotiCRM.Repository.Repository
                 _context.EightyDDeclarations.Update(eightyDDeclarations);
                 _context.SaveChanges();
             }
+            else
+            {
+                employee12BB.EightyDRecord.InsuranceAmount = employee12BB.EightyDRecord.InsuranceAmount ?? 0;
+                employee12BB.EightyDRecord.MedicalExpenseAmount = employee12BB.EightyDRecord.MedicalExpenseAmount ?? 0;
+                var response = _context.EightyDDeclarations.Add(employee12BB.EightyDRecord);
+                _context.SaveChanges();
+                eightyDRecordId = response.Entity.Id;
+            }
+
             // Update 80G declaration data if present
             if (employee12BB.EightyGRecordId > 0)
             {
@@ -348,6 +392,14 @@ namespace KotiCRM.Repository.Repository
                 _context.EightyGDeclarations.Update(eightyGDeclarations);
                 _context.SaveChanges();
             }
+            else
+            {
+                employee12BB.EightyGRecord.Amount = employee12BB.EightyGRecord.Amount ?? 0;
+                var response = _context.EightyGDeclarations.Add(employee12BB.EightyGRecord);
+                _context.SaveChanges();
+                eightyGRecordId = response.Entity.Id;
+            }
+
             // Update other investment declaration data if present
             if (employee12BB.OtherInvestmentRecordId > 0)
             {
@@ -360,17 +412,23 @@ namespace KotiCRM.Repository.Repository
                 _context.OtherInvestmentDeclarations.Update(otherInvestmentDeclarations);
                 _context.SaveChanges();
             }
+            else
+            {
+                var response = _context.OtherInvestmentDeclarations.Add(employee12BB.OtherInvestmentRecord);
+                _context.SaveChanges();
+                otherInvestmentRecordId = response.Entity.Id;
+            }
+
 
             // Update the main Employee12BB form
-
             existingEmployee12BBs.EmployeeId = employee12BB.EmployeeId;
             existingEmployee12BBs.FinancialYear = employee12BB.FinancialYear;
-            existingEmployee12BBs.HouseRentRecordId = employee12BB.HouseRentRecordId;
-            existingEmployee12BBs.TravelExpenditureRecordId = employee12BB.TravelExpenditureRecordId;
-            existingEmployee12BBs.HomeLoanRecordId = employee12BB.HomeLoanRecordId;
-            existingEmployee12BBs.EightyDRecordId = employee12BB.EightyDRecordId;
-            existingEmployee12BBs.EightyGRecordId = employee12BB.EightyGRecordId;
-            existingEmployee12BBs.OtherInvestmentRecordId = employee12BB.OtherInvestmentRecordId;
+            existingEmployee12BBs.HouseRentRecordId = employee12BB.HouseRentRecordId == 0 ? houseRentRecordId : employee12BB.HouseRentRecordId;
+            existingEmployee12BBs.TravelExpenditureRecordId = employee12BB.TravelExpenditureRecordId == 0 ? travelExpenditureRecordId : employee12BB.TravelExpenditureRecordId;
+            existingEmployee12BBs.HomeLoanRecordId = employee12BB.HomeLoanRecordId == 0 ? homeLoanRecordId : employee12BB.HomeLoanRecordId;
+            existingEmployee12BBs.EightyDRecordId = employee12BB.EightyDRecordId == 0 ? eightyDRecordId : employee12BB.EightyDRecordId;
+            existingEmployee12BBs.EightyGRecordId = employee12BB.EightyGRecordId == 0 ? eightyGRecordId : employee12BB.EightyGRecordId;
+            existingEmployee12BBs.OtherInvestmentRecordId = employee12BB.OtherInvestmentRecordId == 0 ? otherInvestmentRecordId : employee12BB.OtherInvestmentRecordId;
             existingEmployee12BBs.ModifiedBy = employee12BB.ModifiedBy;
             existingEmployee12BBs.ModifiedOn = DateTime.Now;
             existingEmployee12BBs.IsDelete = employee12BB.IsDelete;
@@ -378,17 +436,24 @@ namespace KotiCRM.Repository.Repository
             existingEmployee12BBs.IsFormVerified = employee12BB.IsFormVerified;
             existingEmployee12BBs.IsDeclarationComplete = employee12BB.IsDeclarationComplete;
 
+            _context.Employee12BBs.Update(existingEmployee12BBs);
+            var result = await _context.SaveChangesAsync();
+            if (result <= 0)
+            {
+                throw new Exception("Unable to update data");
+            }
+
             var employee12BBDto = new Employee12BB
             {
                 //Id = employee12BB.Id,
                 EmployeeId = existingEmployee12BBs.EmployeeId,
                 FinancialYear = existingEmployee12BBs.FinancialYear,
-                HouseRentRecordId = existingEmployee12BBs.HouseRentRecordId,
-                TravelExpenditureRecordId = existingEmployee12BBs.TravelExpenditureRecordId,
-                HomeLoanRecordId = existingEmployee12BBs.HomeLoanRecordId,
-                EightyDRecordId = existingEmployee12BBs.EightyDRecordId,
-                EightyGRecordId = existingEmployee12BBs.EightyGRecordId,
-                OtherInvestmentRecordId = existingEmployee12BBs.OtherInvestmentRecordId,
+                HouseRentRecordId = existingEmployee12BBs.HouseRentRecordId == 0 ? houseRentRecordId : existingEmployee12BBs.HouseRentRecordId,
+                TravelExpenditureRecordId = existingEmployee12BBs.TravelExpenditureRecordId == 0 ? travelExpenditureRecordId : existingEmployee12BBs.TravelExpenditureRecordId,
+                HomeLoanRecordId = existingEmployee12BBs.HomeLoanRecordId == 0 ? homeLoanRecordId : existingEmployee12BBs.HomeLoanRecordId,
+                EightyDRecordId = existingEmployee12BBs.EightyDRecordId == 0 ? eightyDRecordId : existingEmployee12BBs.EightyDRecordId,
+                EightyGRecordId = existingEmployee12BBs.EightyGRecordId == 0 ? eightyGRecordId : existingEmployee12BBs.EightyGRecordId,
+                OtherInvestmentRecordId = existingEmployee12BBs.OtherInvestmentRecordId == 0 ? otherInvestmentRecordId : existingEmployee12BBs.OtherInvestmentRecordId,
                 ModifiedBy = existingEmployee12BBs.ModifiedBy,
                 ModifiedOn = DateTime.Now,
                 IsDelete = existingEmployee12BBs.IsDelete,
@@ -397,12 +462,6 @@ namespace KotiCRM.Repository.Repository
                 IsDeclarationComplete = existingEmployee12BBs.IsDeclarationComplete
             };
 
-            _context.Employee12BBs.Update(existingEmployee12BBs);
-            var result = await _context.SaveChangesAsync();
-            if(result <= 0)
-            {
-                throw new Exception("Unable to update data");
-            }
             return employee12BBDto;
         }
 

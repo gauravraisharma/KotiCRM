@@ -34,7 +34,7 @@ constructor(
   financialYear: string = "",
   houseRentRecord: HouseRentRecord = {
       id: 0,
-      amount: null,
+      amount: 0,
       ownerPanCard: null,
       proofDocumentLink: null,
       isVerified: false,
