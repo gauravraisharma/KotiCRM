@@ -353,7 +353,28 @@ namespace KotiCRM.Repository.Repository
                     }
                     _context.SaveChanges();
                 }
+                else
+                {
+                    // Create a new declaration
+                    var newEightyCDeclaration = new EightyCDeclaration
+                    {
+                        Employee12BBId = employee12BB.Id,
+                        DeductionTypeId = 0,
+                        Amount = 0,
+                        ProofDocumentLink = null,
+                        Remarks = null,
+                        IsVerified = false,
+                        CreatedBy = "null",
+                        CreatedOn = DateTime.Now,
+                        ModifiedBy = "null",
+                        ModifiedOn = DateTime.Now,
+                        IsDelete = false
+                    };
+                    _context.EightyCDeclarations.Add(newEightyCDeclaration);
+                    _context.SaveChanges();
+                }
             }
+
             // Update 80D declaration data if present
             if (employee12BB.EightyDRecordId > 0)
             {

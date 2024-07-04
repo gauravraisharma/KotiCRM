@@ -91,7 +91,7 @@ const UserDetails = () => {
     }
     const newEmployeeRecord: EmployeeFinancialRecordDummy = {
       employeeId: employeeId, // Use the dynamically obtained employeeId
-      financialYear: ' 2024-2025',
+      financialYear: '2024-2025',
       createdBy: '5faccdc7-7ddb-4b14-9295-f3a933bef7f1',
       modifiedBy: '24d59f65-7aad-4b0e-b821-f07ca663a32b',
       isDelete: false,

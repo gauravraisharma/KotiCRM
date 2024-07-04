@@ -1059,7 +1059,7 @@ const Form12BB = () => {
                                     }}
                                   >
                                     <option value="">Select Medical Expenses</option>
-                                    {deductionList && deductionList.length > 0 && deductionList.map(item => (
+                                    {deductionList.map(item => (
                                       <option key={item.id} value={item.id}>
                                         {item.name}
                                       </option>
