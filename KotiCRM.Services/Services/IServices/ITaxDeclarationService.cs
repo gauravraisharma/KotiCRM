@@ -18,7 +18,7 @@ namespace KotiCRM.Services.IServices
         //save 
         Task<Employee12BB> SaveEmployee12BB(Employee12BB employee12BB);
 
-        Task<bool> UploadDocumentProofs(IFormCollection formCollection);
+        Task<List<DocumentPaths>> UploadDocumentProofs(IFormCollection formCollection);
 
         Task<int> AddEmployeeRecordAsync(Employee12BBDTO employee12BBDTO);
 

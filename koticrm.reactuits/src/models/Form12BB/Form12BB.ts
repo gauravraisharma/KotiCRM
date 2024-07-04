@@ -173,6 +173,13 @@ export interface EightyCDeclaration {
   eightyCDeductionTypes: EightyCDeductionTypes[];
 }
 
+export interface DocumentPaths {
+  fileIndex: number;
+  section: string;
+  fieldName: string;
+  fullPath: string;
+}
+
 export interface EightyDRecord {
   id: number;
   insuranceAmount: number;

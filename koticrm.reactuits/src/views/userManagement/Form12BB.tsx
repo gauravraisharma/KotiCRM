@@ -1,16 +1,16 @@
-import { CCard, CCardBody, CCardHeader, CCol, CRow, CButton, CFormSelect } from '@coreui/react';
+import { CCard, CCardBody, CCardHeader, CCol, CRow, CButton } from '@coreui/react';
 import { Field, Formik, ErrorMessage, Form } from 'formik';
 import * as Yup from 'yup';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import CIcon from '@coreui/icons-react';
 import { cilCheckCircle, cilChevronDoubleDown, cilChevronDoubleUp } from '@coreui/icons';
 import "../../css/style.css";
-import { GetDeductionTypes, GetEightyC, GetEightyD, GetEightyG, GetEmployee12BB, GetHouseRent, GetInterestPayableOnHomeLoan, GetLeaveTravelExpenditure, GetOtherInvestment, SaveEightyC, SaveEightyD, SaveEightyG, SaveForm12BB, SaveHouseRent, SaveInterestPayableOnHomeLoan, SaveLeaveTravelExpenditure, SaveOtherInvestment } from '../../redux-saga/modules/userManagement/apiService';
-import { EmployeeFinancialRecord, InitialEmployeeRecord } from '../../models/Form12BB/Form12BB';
+import { GetEmployee12BB, SaveForm12BB, UploadDocuments, } from '../../redux-saga/modules/userManagement/apiService';
+import { DocumentPaths, EightyCDeclaration, EmployeeFinancialRecord, InitialEmployeeRecord } from '../../models/Form12BB/Form12BB';
 import { MdDelete } from 'react-icons/md';
 import { Deduction } from './deduction';
-import { DocumentProofs, InitialDocumentProofs } from '../../models/Form12BB/DocumentProofs';
+import { DocumentProofs } from '../../models/Form12BB/DocumentProofs';
 
 // Separate validation schemas for each section
 const houseRentAmountValidationSchema = Yup.object().shape({
@@ -22,7 +22,6 @@ const houseRentAmountValidationSchema = Yup.object().shape({
 const houseRentProofValidationSchema = Yup.object().shape({
   houseRentRecord: Yup.object().shape({
     ownerPanCard: Yup.string().required('PAN is required'),
-
   }),
 });
 
@@ -57,7 +56,6 @@ const eightyDValidationSchema = Yup.object().shape({
   eightyDRecord: Yup.object().shape({
     insuranceAmount: Yup.number().required('Amount is required'),
     medicalExpenseAmount: Yup.number().required('Amount is required'),
-
   }),
 });
 
@@ -68,7 +66,6 @@ const eightyGValidationSchema = Yup.object().shape({
     panNumber: Yup.string().required('PAN Details must be in the correct format'),
     address: Yup.string().required('Address is required'),
     amount: Yup.number().required('Interest amount is required'),
-
   }),
 });
 
@@ -81,8 +78,6 @@ const otherInvestmentValidationSchema = Yup.object().shape({
 
 const Form12BB = () => {
   const { employeeId, userId, financialYear } = useParams<{ employeeId: string, userId: string, financialYear: string }>();
-  // const location = useLocation();
-  // const { financialYear } = location.state || {};
 
   const [getEmployeeId, setEmployeeId] = useState<string>();
   const [employee12BBData, setEmployee12BBData] = useState<EmployeeFinancialRecord>();
@@ -95,7 +90,6 @@ const Form12BB = () => {
   const [isCollapsedFive, setIsCollapsedFive] = useState(true);
   const [isCollapsedSix, setIsCollapsedSix] = useState(true);
   const [isCollapsedSeven, setIsCollapsedSeven] = useState(true);
-  const [file, setFile] = useState(null);
   // Checkboxes checks
   const [isRentChecked, setIsRentChecked] = useState(false);
   const [isLeaveChecked, setIsLeaveChecked] = useState(false);
@@ -119,12 +113,10 @@ const Form12BB = () => {
   // Documents upload
   const [documentProofs, setDocumentProofs] = useState<DocumentProofs[]>([]);
 
-
   const submitButtonEnable = isRentChecked && isLeaveChecked && isInterestPaybleChecked && is80CChecked && is80DChecked && is80GChecked && isOtherChecked;
 
-
   const addRow = () => {
-    const newRow = { key: Date.now(), id: '', amount: '', proofSubmitted: false };
+    const newRow = { key: Date.now(), id: '', amount: '', deductionTypeId: 0, proofSubmitted: false };
     setRows([...rows, newRow]);
   };
 
@@ -163,17 +155,6 @@ const Form12BB = () => {
     }
   }, [employeeId, financialYear]);
 
-  // get deduction type 
-  useEffect(() => {
-    const fetchDeductionData = async () => {  
-      // const result = await GetDeductionTypes();
-      // if (result.status === 200 && result.data) {
-      //   setDeductionList(result.data);
-      // }
-    };
-    fetchDeductionData();
-  }, []);
-
   // UseEffect for Filling data in form 
   useEffect(() => {
     setId(employee12BBData?.id);
@@ -205,14 +186,14 @@ const Form12BB = () => {
       setFormData({
         ...formData,
         homeLoanRecord: {
-          ...formData.travelExpenditureRecord,
-          amount: employee12BBData.travelExpenditureRecord.amount,
-          proofDocumentLink: employee12BBData.travelExpenditureRecord.proofDocumentLink,
-          isVerified: employee12BBData.travelExpenditureRecord.isVerified,
-          remarks: employee12BBData.travelExpenditureRecord.remarks,
-          lenderName: "",
-          lenderAddress: "",
-          lenderPanNumber: "",
+          ...formData.homeLoanRecord,
+          amount: employee12BBData.homeLoanRecord.amount,
+          proofDocumentLink: employee12BBData.homeLoanRecord.proofDocumentLink,
+          isVerified: employee12BBData.homeLoanRecord.isVerified,
+          remarks: employee12BBData.homeLoanRecord.remarks,
+          lenderName: employee12BBData.homeLoanRecord.lenderName,
+          lenderAddress: employee12BBData.homeLoanRecord.lenderAddress,
+          lenderPanNumber: employee12BBData.homeLoanRecord.lenderPanNumber,
         }
       });
       if (employee12BBData && employee12BBData.eightyCDeclarations && employee12BBData.eightyCDeclarations.length > 0) {
@@ -285,16 +266,13 @@ const Form12BB = () => {
           }
         });
       }
-
-
     }
   }, [employee12BBData]);
 
+  // Get Employee12BB data
   const employee12BB = async (id: string, financialYear: string) => {
     try {
       const response = await GetEmployee12BB(id, financialYear);
-      console.log('employee12BBId' + response.data?.id)
-      console.log(response)
       if (response != null) {
         setEmployee12BBData(response.data);
         if (response.data?.houseRentRecord) {
@@ -307,7 +285,7 @@ const Form12BB = () => {
               id,
               amount,
               ownerPanCard,
-              proofDocumentLink,
+              // proofDocumentLink,
             }
           }));
         }
@@ -320,12 +298,12 @@ const Form12BB = () => {
               ...prevState.travelExpenditureRecord,
               id,
               amount,
-              proofDocumentLink,
+              // proofDocumentLink,
             }
           }));
         }
         if (response.data?.homeLoanRecord) {
-          const { id, amount, lenderName, lenderAddress, lenderPanNumber } = response.data?.homeLoanRecord;
+          const { id, amount, lenderName, lenderAddress, lenderPanNumber, proofDocumentLink } = response.data?.homeLoanRecord;
           setFormData((prevState) => ({
             ...prevState,
             homeLoanRecordId: id,
@@ -336,28 +314,26 @@ const Form12BB = () => {
               lenderName,
               lenderAddress,
               lenderPanNumber,
+              // proofDocumentLink,
             }
           }));
         }
-        // if (response.data.id) {
-        //   getEightyC(response.data.id);
-        // }
-        // if (response.data.eightyDRecord) {
-        //   const { id, insuranceAmount, medicalExpenseAmount, insuranceProofLink, medicalExpenseProof, isVerified, remarks } = response.data?.eightyDRecord;
-        //   setFormData((prevState) => ({
-        //     ...prevState,
-        //     eightyDRecord: {
-        //       ...prevState.eightyDRecord,
-        //       id,
-        //       insuranceAmount,
-        //       medicalExpenseAmount,
-        //       insuranceProofLink,
-        //       medicalExpenseProof,
-        //       isVerified,
-        //       remarks
-        //     }
-        //   }));
-        // }
+        if (response.data?.eightyDRecord) {
+          const { id, insuranceAmount, medicalExpenseAmount, insuranceProofLink, medicalExpenseProof, isVerified, remarks } = response.data?.eightyDRecord;
+          setFormData((prevState) => ({
+            ...prevState,
+            eightyDRecord: {
+              ...prevState.eightyDRecord,
+              id,
+              insuranceAmount,
+              medicalExpenseAmount,
+              // insuranceProofLink,
+              // medicalExpenseProof,
+              isVerified,
+              remarks
+            }
+          }));
+        }
         if (response.data?.eightyGRecord) {
           const { id, amount, nameOfDonee, panNumber, address, proofDocumentLink } = response.data?.eightyGRecord;
           setFormData((prevState) => ({
@@ -370,7 +346,7 @@ const Form12BB = () => {
               panNumber,
               address,
               amount,
-              proofDocumentLink,
+              // proofDocumentLink,
             }
           }));
         }
@@ -383,7 +359,7 @@ const Form12BB = () => {
               ...prevState.otherInvestmentRecord,
               id,
               description,
-              proofDocumentLink
+              // proofDocumentLink
             }
           }));
         }
@@ -393,23 +369,30 @@ const Form12BB = () => {
     }
   };
 
-  // Update handleFormChange to handle all parameters
+  // Handle file change
   const handleFileChange = (e: any, fieldName: string, section: string) => {
-    const selectedFile = e.target.type === 'file' ? (e.target.files ? e.target.files[0] : null) : e.target.value;
-    const fileToSend = {
-      section,
-      fieldName,
-      file: selectedFile,
-    };
-    const newFiles = [...documentProofs];
-    newFiles.push(fileToSend);
-    setDocumentProofs(newFiles);
+    const selectedFile = e.target.files ? e.target.files[0] : null; 
+    if (selectedFile) {
+      const fileToSend = {
+        section,
+        fieldName,
+        file: selectedFile,
+      };
+      const newFiles = [...documentProofs, fileToSend];
+      setDocumentProofs(newFiles);
+    }
   };
 
-  
-
-  const handleFormPanChange = (e: any, fieldName: string, section: string) => {
-    const value = e.target.type === 'file' ? e.target.files[0] : e.target.value;
+  // Handle form change
+  const handleFormChange = (e: any, fieldName: string, section: string) => {
+    const value = e.target.value;
+    // if (section === 'houseRentRecord' && fieldName === 'amount') {
+    //   const amount = formData.houseRentRecord.amount ?? 0;
+    //   if (amount <= 100000 && fieldName === 'ownerPanCard') {
+    //     // If amount is less than or equal to 1 Lac, don't update the ownerPanCard
+    //     return;
+    //   }
+    // }
     setFormData(prevData => ({
       ...prevData,
       [section]: {
@@ -419,683 +402,84 @@ const Form12BB = () => {
     }));
   }
 
-  const handleDescriptionChange = (e) => {
-    const newValue = e.target.value;
-    setFormData({
-      ...formData,
-      otherInvestmentRecord: {
-        ...formData.otherInvestmentRecord,
-        description: newValue
-      }
-    });
-  };
-
-  const handleAmountChange = (e) => {
-    const newValue = e.target.value;
-    setFormData({
-      ...formData,
-      travelExpenditureRecord: {
-        ...formData.travelExpenditureRecord,
-        amount: newValue
-      }
-    });
-  };
-
-  const handleProofDocumentChange = (e) => {
-    const newValue = e.target.files[0];
-    setFormData({
-      ...formData,
-      travelExpenditureRecord: {
-        ...formData.travelExpenditureRecord,
-        proofDocumentLink: newValue
-      }
-    });
-  };
-
-  const handleFormOtherChange = (e, fieldName) => {
-    const file = e.target.files[0];
-    setFormData(prevState => ({
-      ...prevState,
-      [fieldName]: file,
+  // Set EightyCDeclaration rows
+  const setEightyCDeclarationRows = (updatedRows) => {
+    const eightyCDeclarations: EightyCDeclaration[] = updatedRows.map(item => ({
+      id: item.id,
+      deductionTypeId: item.deductionTypeId,
+      amount: item.amount,
+      proofDocumentLink: null,
+      isVerified: false,
+      remarks: "",
+      createdBy: "",
+      createdOn: new Date(),
+      modifiedBy: "",
+      modifiedOn: new Date(),
+      isDelete: false,
+      employee12BBId: 0,
+      employee12BB: undefined,
+      eightyCDeductionTypes: [],
     }));
-  };
+    setRows(eightyCDeclarations);
+  }
 
-  // Handler for Name of the Donee field
-  const handlenameOfDoneeChange = (e: any) => {
-    const value = e.target.value;
-    setFormData(prevData => ({
-      ...prevData,
-      eightyGRecord: {
-        ...prevData.eightyGRecord,
-        nameOfDonee: value,
-      }
-    }));
-  };
 
-  // Handler for PAN Number field
-  const handlePanNumberChange = (e: any) => {
-    const value = e.target.value;
-    setFormData(prevData => ({
-      ...prevData,
-      eightyGRecord: {
-        ...prevData.eightyGRecord,
-        panNumber: value,
-      }
-    }));
-  };
-
-  // Handler for Address field
-  const handleAddressChange = (e: any) => {
-    const value = e.target.value;
-    setFormData(prevData => ({
-      ...prevData,
-      eightyGRecord: {
-        ...prevData.eightyGRecord,
-        address: value,
-      }
-    }));
-  };
-
-  // Handler for Amount field
-  const handleGAmountChange = (e: any) => {
-    const value = e.target.value;
-    setFormData(prevData => ({
-      ...prevData,
-      eightyGRecord: {
-        ...prevData.eightyGRecord,
-        amount: value,
-      }
-    }));
-  };
-
-  // Handler for Proof Document Link field
-  const handleProofDocumentLinkChange = (e: any) => {
-    const value = e.target.files[0]; // Assuming you're uploading files
-    setFormData(prevData => ({
-      ...prevData,
-      eightyGRecord: {
-        ...prevData.eightyGRecord,
-        proofDocumentLink: value,
-      }
-    }));
-  };
-
-  // //get house rent 
-  // const HouseRent = async (id: number) => {
-  //   try {
-  //     const response = await GetHouseRent(id);
-  //     if (response?.data != null) {
-  //       const { amount, ownerPanCard, proofDocumentLink } = response.data;
-  //       setFormData(prevState => ({
-  //         ...prevState,
-  //         houseRentRecord: {
-  //           ...prevState.houseRentRecord,
-  //           id,
-  //           amount,
-  //           ownerPanCard,
-  //           proofDocumentLink,
-  //         }
-  //       }));
-  //     }
-  //   } catch (error) {
-  //     console.error('Error fetching House Rent:', error);
-  //   }
-  // };
-  // //save house rent 
-
-  // const handleSaveHouseRent = async (validateForm: any) => {
-  //   try {
-  //     // Validate specific field
-  //     await validateForm('houseRentRecord.amount');
-  //     if (!formData.houseRentRecord.amount) return;
-
-
-  //     const response = await SaveHouseRent(formData.houseRentRecord);
-  //     if (response.status === 200) {
-  //       console.log('House rent data saved:', response.data);
-  //       setFormData(prevState => ({
-  //         ...prevState,
-  //         houseRentRecord: {
-  //           ...prevState.houseRentRecord,
-  //           id: response.data?.id,
-  //           amount: response.data?.amount
-  //         }
-  //       }));
-  //     } else {
-  //       console.log('Unable to save', response.status);
-  //     }
-  //   } catch (error) {
-  //     console.error('Error saving house rent data:', error);
-  //   }
-  // };
-
-  // const handleSaveOwnerPanRentSlips = async (validateForm: any) => {
-  //   try {
-  //     // Validate the form fields
-  //     await validateForm();
-
-  //     // Destructure the necessary fields from formData
-  //     const { amount, ownerPanCard, proofDocumentLink } = formData.houseRentRecord;
-
-  //     // Check if all required fields are filled
-  //     if (amount! == null && amount > 100000 && !ownerPanCard) {
-  //       console.log("Owner PAN is mandatory for rent amounts exceeding 1 lakh.");
-  //       return;
-  //     }
-
-  //     if (!proofDocumentLink && (amount === null || amount <= 100000)) {
-  //       console.log("Proof is optional for rent amounts up to 1 lakh.");
-  //     }
-  //     // Save the house rent data
-  //     const response = await SaveHouseRent(formData.houseRentRecord);
-  //     if (response.status === 200) {
-  //       console.log('House rent data saved:', response.data);
-  //     } else {
-  //       console.log('Unable to save', response.status);
-  //     }
-
-  //     if (proofDocumentLink) {
-  //       // Show check in both declaration and proof sections if proof is present
-  //       setIsRentChecked(true);
-  //     }
-  //   } catch (error) {
-  //     console.error('Error saving house rent data:', error);
-  //   }
-  // };
-
-  // // get leave travel
-  // const LeaveTravel = async (id: number) => {
-  //   try {
-  //     const response = await GetLeaveTravelExpenditure(id);
-  //     if (response?.data != null) {
-  //       const { id, amount, proofDocumentLink } = response.data;
-  //       setFormData(prevState => ({
-  //         ...prevState,
-  //         travelExpenditureRecord: {
-  //           ...prevState.travelExpenditureRecord,
-  //           id,
-  //           amount,
-  //           proofDocumentLink,
-  //         }
-  //       }));
-  //     }
-  //   } catch (error) {
-  //     console.error('Error fetching Leave Travel:', error);
-  //   }
-  // };
-  // //save leave travel
-
-  // const handleSaveAmount = async (validateForm, formData, setFormData) => {
-  //   try {
-  //     await validateForm('travelExpenditureRecord.amount');
-
-  //     if (!formData.travelExpenditureRecord.amount) return;
-
-  //     const response = await SaveLeaveTravelExpenditure({
-  //       ...formData.travelExpenditureRecord,
-  //       amount: formData.travelExpenditureRecord.amount
-  //     });
-
-  //     if (response.status === 200) {
-  //       console.log('Amount saved:', response.data);
-  //       setFormData(prevState => ({
-  //         ...prevState,
-  //         travelExpenditureRecord: {
-  //           ...prevState.travelExpenditureRecord,
-  //           id: response.data?.id,
-  //           amount: response.data?.amount
-  //         }
-  //       }));
-  //     } else {
-  //       console.log('Unable to save amount', response.status);
-  //     }
-  //   } catch (error) {
-  //     console.error('Error saving amount:', error);
-  //   }
-  // };
-
-  // const handleSaveProof = async (id, validateForm, formData) => {
-  //   try {
-  //     debugger;
-  //     await validateForm();
-
-  //     if (!formData.travelExpenditureRecord.proofDocumentLink) return;
-
-  //     const record = {
-  //       id,
-  //       proofDocumentLink: formData.travelExpenditureRecord.proofDocumentLink
-  //     };
-
-  //     const response = await SaveLeaveTravelExpenditure(record);
-
-  //     if (response.status === 200) {
-  //       console.log('Proof document saved:', response.data);
-  //     } else {
-  //       console.log('Unable to save proof document', response.status);
-  //     }
-  //   } catch (error) {
-  //     console.error('Error saving proof document:', error);
-  //   }
-  // };
-
-  // // get homeloan 
-  // const interestHomeLoan = async (id: number) => {
-  //   try {
-  //     const response = await GetInterestPayableOnHomeLoan(id);
-  //     console.log('API Response:', response);
-  //     if (response && response.data) {
-  //       console.log('Data:', response.data);
-  //       setFormData((prevState) => ({
-  //         ...prevState,
-  //         homeLoanRecord: {
-  //           id: response.data.id,
-  //           amount: response.data.amount || 0,
-  //           lenderName: response.data.lenderName || '',
-  //           lenderAddress: response.data.lenderAddress || '',
-  //           lenderPanNumber: response.data.lenderPanNumber || ''
-  //         },
-  //       }));
-  //     }
-  //   } catch (error) {
-  //     console.error('Error fetching interest payable on home loan:', error);
-  //   }
-  // };
-
-  // //save 
-  // const handleSaveHomeLoan = async (validateForm: any) => {
-  //   try {
-  //     // Validate each field
-  //     await validateForm('homeLoanRecord.amount');
-  //     await validateForm('homeLoanRecord.lenderName');
-  //     await validateForm('homeLoanRecord.lenderAddress');
-  //     await validateForm('homeLoanRecord.lenderPanNumber');
-  //     // Check if all required fields are filled
-  //     const { amount, lenderName, lenderAddress, lenderPanNumber } = formData.homeLoanRecord;
-  //     if (!amount || !lenderName || !lenderAddress || !lenderPanNumber) {
-  //       // If any required field is empty, return without saving
-  //       console.log("Required fields are missing.");
-  //       return;
-  //     }
-  //     formData.homeLoanRecord.isVerified = false;
-  //     formData.homeLoanRecord.remarks = 'hlo';
-  //     console.log(formData.homeLoanRecord)
-  //     // Make the API call to save the home loan record
-  //     const response = await SaveInterestPayableOnHomeLoan(formData.homeLoanRecord);
-
-  //     if (response.status === 200) {
-  //       console.log('Home loan saved successfully:', response.data);
-  //     } else {
-  //       console.log('Unable to save home loan:', response.status);
-  //     }
-  //   } catch (error) {
-  //     console.error('Error saving home loan:', error);
-  //   }
-  // };
-
-  // const handleFileChange = (e) => {
-  //   setFile(e.target.files[0]);
-  // };
-
-  // const handleSaveSlips = () => {
-  //   // Handle the file save logic here
-  //   console.log('File to save:', file);
-  //   alert('File saved successfully!');
-  //   // Reset the file input after save
-  //   setFile(null);
-  //   document.getElementById('rentSlips').value = '';
-  // };
-
-  // get 80 C
-  
-  // const getEightyC = async (employee12BBId: number) => {
-  //   try {
-  //     // Make the API request
-  //     const response = await GetEightyC(employee12BBId);
-  //     console.log('API Response:', response);
-  //     if (response.data) {
-
-  //       setFormData((prevState) => ({
-  //         ...prevState,
-  //         eightyCRecord: prevState.eightyCRecord.map(record => {
-  //           if (record.id === response.data.id) {
-  //             return {
-  //               ...record,
-  //               id: response.data.id,
-  //               deductionTypeId: response.data.deductionTypeId,
-  //               amount: response.data.amount,
-  //               proofDocumentLink: response.data.proofDocumentLink,
-  //               isVerified: response.data.isVerified,
-  //               remarks: response.data.remarks,
-  //               createdBy: response.data.createdBy,
-  //               createdOn: response.data.createdOn,
-  //               modifiedBy: response.data.modifiedBy,
-  //               modifiedOn: response.data.modifiedOn,
-  //               isDelete: response.data.isDelete,
-  //               employee12BBId: response.data.employee12BBId,
-  //               employee12BB: response.data.employee12BB,
-  //             };
-  //           }
-  //           return record;
-  //         })
-  //       }));
-  //     }
-  //   } catch (error) {
-  //     // Handle any errors that occur during the API request
-  //     console.error('Error fetching Eighty C data:', error);
-  //   }
-  // };
-
-  // const handleSaveEightyC = async (validateForm: any) => {
-  //   try {
-  //     debugger
-  //     await validateForm();
-
-  //     const formDataToSave = rows.map(row => ({
-  //       deductionTypeId: row.deductionTypeId,
-  //       amount: row.amount,
-  //       proofSubmitted: row.proofDocumentLink ? 'present' : null,
-  //     }));
-
-  //     const response = await SaveEightyC(formDataToSave);
-  //     console.log('Response:', response);
-  //   } catch (error) {
-  //     if (error.response) {
-  //       console.error('Error details:', error.response.data);
-  //     } else if (error.request) {
-  //       console.error('No response received:', error.request);
-  //     } else {
-  //       console.error('Request error:', error.message);
-  //     }
-  //   }
-  // };
-
-
-  // // get 80 D
-  // const getEightyD = async (id: number) => {
-  //   try {
-  //     const response = await GetEightyD(id);
-  //     if (response.data) {
-  //       setFormData((prevState) => ({
-  //         ...prevState,
-  //         eightyDRecord: {
-  //           id: response.data.id,
-  //           insuranceAmount: response.data.insuranceAmount || '',
-  //           medicalExpenseAmount: response.data.medicalExpenseAmount || '',
-  //           insuranceProofLink: response.data.insuranceProofLink || null,
-  //           medicalExpenseProof: response.data.medicalExpenseProof || null,
-  //           isVerified: response.data.isVerified || false,
-  //           remarks: response.data.remarks || '',
-  //         },
-  //       }));
-  //     }
-  //   } catch (error) {
-  //     console.error('Error fetching Eighty D data:', error);
-  //   }
-  // };
-
-  // // Save 80 D
-  // // Assuming validateForm is a function that takes no arguments and returns a Promise
-  // const handleSaveEightyDRecord = async (id: number, validateForm: any, formData: any) => {
-  //   try {
-  //     debugger;
-  //     await validateForm();
-
-  //     // Extract necessary data from formData
-  //     const { insuranceAmount, medicalExpenseAmount, insuranceProofLink, medicalExpenseProof } = formData.eightyDRecord;
-
-  //     // Check if essential data is present
-  //     if (!insuranceAmount || !medicalExpenseAmount) {
-  //       console.error('Missing data: Insurance amount or medical expense amount is not provided');
-  //       return;
-  //     }
-
-  //     // Prepare the record to be saved
-  //     let eightyDRecord = {
-  //       insuranceAmount,
-  //       medicalExpenseAmount,
-  //       isVerified: formData.eightyDRecord.isVerified || false,
-  //       remarks: formData.eightyDRecord.remarks || ''
-  //     };
-
-  //     // If insuranceProofLink is available, include it in the record
-  //     if (insuranceProofLink !== null) {
-  //       eightyDRecord = {
-  //         ...eightyDRecord,
-  //         insuranceProofLink
-  //       };
-  //     }
-
-  //     // If medicalExpenseProof is available, include it in the record
-  //     if (medicalExpenseProof !== null) {
-  //       eightyDRecord = {
-  //         ...eightyDRecord,
-  //         medicalExpenseProof
-  //       };
-  //     }
-
-  //     // Call the API to save 80D record
-  //     const response = await SaveEightyD(id, eightyDRecord);
-
-  //     if (response.status === 200) {
-  //       console.log('Saved Eighty D Record:', response);
-  //       // You can add further logic here if needed, like updating state or showing a success message
-  //     } else {
-  //       console.error('Error saving Eighty D record:', response.error);
-  //       // Handle error scenarios, e.g., show error message to the user
-  //     }
-  //   } catch (error) {
-  //     console.error('Error saving Eighty D record:', error);
-  //   }
-  // };
-
-  // //get80 G
-
-  // const getEightyG = async (id: number) => {
-  //   try {
-  //     // Additional validation to handle case where ID is 0 or undefined
-  //     if (!id || id === 0) {
-  //       console.error('Invalid ID provided.');
-  //       return;
-  //     }
-
-  //     const response = await GetEightyG(id);
-
-  //     // Check if the response and response data are valid
-  //     if (response && response.data) {
-  //       const { id, nameOfDonee, panNumber, address, amount, proofDocumentLink } = response.data;
-
-  //       // Log the received data
-  //       console.log('Received EightyG data:', response.data);
-
-  //       // Check if the ID received in the response is valid
-  //       if (id && id !== 0) {
-  //         setFormData((prevState) => ({
-  //           ...prevState,
-  //           eightyGRecord: {
-  //             id: id,
-  //             nameOfDonee: nameOfDonee || '',
-  //             panNumber: panNumber || '',
-  //             address: address || '',
-  //             amount: amount || 0,
-  //             proofDocumentLink: proofDocumentLink || ''
-  //           },
-  //         }));
-  //       } else {
-  //         console.error('Received invalid ID in the response data:', id);
-  //       }
-  //     } else {
-  //       console.error('No data found in the response.');
-  //     }
-  //   } catch (error) {
-  //     console.error('Error fetching EightyG data:', error);
-  //   }
-  // };
-
-
-  // //save 80 G
-
-  // const handleSaveEightyGRecord = async (validateForm: any) => {
-  //   try {
-  //     debugger;
-  //     console.log('Entering handleSaveEightyGRecord');  // Log to check function entry
-
-  //     await validateForm();
-  //     console.log('Form validated');  // Log to confirm form validation
-
-  //     const { id, nameOfDonee, panNumber, address, amount, proofDocumentLink } = formData.eightyGRecord;
-
-  //     // Log each field value
-  //     console.log('nameOfDonee:', nameOfDonee);
-  //     console.log('panNumber:', panNumber);
-  //     console.log('address:', address);
-  //     console.log('amount:', amount);
-  //     console.log('proofDocumentLink:', proofDocumentLink);
-
-  //     // Check required fields
-  //     if (!nameOfDonee || !panNumber || !address || !amount) {
-  //       console.error('All fields except proofDocumentLink are required.');
-  //       return;
-  //     }
-
-  //     // Preparing the data for saving
-  //     const dataToSave = {
-  //       id,  // Including ID for updates
-  //       nameOfDonee,
-  //       panNumber,
-  //       address,
-  //       amount,
-  //       proofDocumentLink: proofDocumentLink || null  // Ensure proofDocumentLink is null if not provided
-  //     };
-
-  //     console.log('Data to save:', dataToSave);  // Log the data to be saved
-
-  //     // Save the data
-  //     const response = await SaveEightyG(dataToSave);
-  //     console.log('SaveEightyG response:', response);  // Log the response
-
-  //     if (response.status === 200) {
-  //       if (response.data && response.data.id) {
-  //         console.log('EightyG record saved successfully. ID:', response.data.id);
-  //         // Handle post-save actions if needed
-  //       } else {
-  //         console.error('Failed to get ID from response data:', response.data);
-  //       }
-  //     } else {
-  //       console.error('Failed to save EightyG record:', response.status);
-  //     }
-  //   } catch (error) {
-  //     console.error('Error saving EightyG record:', error);
-  //   }
-  // };
-
-  // const otherInvestment = async (id: number) => {
-  //   try {
-  //     const response = await GetOtherInvestment(id);
-  //     if (response?.data) {
-  //       setFormData(prevState => ({
-  //         ...prevState,
-  //         otherInvestmentRecord: {
-  //           ...prevState.otherInvestmentRecord,
-  //           id: response.data.id, // Add the id here
-  //           description: response.data.description || '',
-  //           proofDocumentLink: response.data.proofDocumentLink || '',
-  //         },
-  //       }));
-  //     }
-  //   } catch (error) {
-  //     console.error('Error fetching other investment:', error);
-  //   }
-  // };
-
-  // save 
-  // const handleSaveOtherInvestment = async (validateForm: any) => {
-  //   try {
-  //     debugger;
-  //     await validateForm();
-  //     if (!formData.otherInvestmentRecord.description) {
-  //       return;
-  //     }
-
-  //     console.log("Data before saving:", formData.otherInvestmentRecord);
-  //     const response = await SaveOtherInvestment(formData.otherInvestmentRecord);
-  //     console.log("Response from SaveOtherInvestment:", response.data);
-  //     if (response.status === 200) {
-  //       console.log('Other investment saved successfully:', response.data);
-  //     } else {
-  //       console.log('Unable to save other investment:', response.status);
-  //     }
-  //   } catch (error) {
-  //     console.error('Error saving other investment:', error);
-  //   }
-  // };
-
-  // const handleSubmit = async (values, actions) => {
-  //   formData.id = id ? id : 0;
-  //   formData.employeeId = getEmployeeId ? getEmployeeId : "";
-  //   formData.financialYear = financialYear ? financialYear : "";
-  //   formData.houseRentRecordId = houseRentRecordId ? houseRentRecordId : 0;
-  //   formData.travelExpenditureRecordId = travelExpenditureRecordId ? travelExpenditureRecordId : 0;
-  //   formData.homeLoanRecordId = homeLoanRecordId ? homeLoanRecordId : 0;
-  //   formData.eightyDRecordId = eightyDRecordId ? eightyDRecordId : 0;
-  //   formData.eightyGRecordId = eightyGRecordId ? eightyGRecordId : 0;
-  //   formData.otherInvestmentRecordId = otherInvestmentRecordId ? otherInvestmentRecordId : 0;
-  //   formData.eightyCDeclarations = rows;
-  //   formData.modifiedBy = userId ? userId : "";
-  //   formData.modifiedOn = null;
-  //   formData.isDeclarationComplete = false;
-  //   const response = await SaveForm12BB(formData);
-  //   if(response.status == 200)
-  //   {
-  //     navigate(`/users`);
-  //   }
-  //   // actions.resetForm();
-  // };
-
-  // const finalSubmit = async () => {
-  //   formData.id = id ? id : 0;
-  //   formData.employeeId = getEmployeeId ? getEmployeeId : "";
-  //   formData.financialYear = financialYear ? financialYear : "";
-  //   formData.houseRentRecordId = houseRentRecordId ? houseRentRecordId : 0;
-  //   formData.travelExpenditureRecordId = travelExpenditureRecordId ? travelExpenditureRecordId : 0;
-  //   formData.homeLoanRecordId = homeLoanRecordId ? homeLoanRecordId : 0;
-  //   formData.eightyDRecordId = eightyDRecordId ? eightyDRecordId : 0;
-  //   formData.eightyGRecordId = eightyGRecordId ? eightyGRecordId : 0;
-  //   formData.otherInvestmentRecordId = otherInvestmentRecordId ? otherInvestmentRecordId : 0;
-  //   formData.eightyCDeclarations = rows;
-  //   formData.modifiedBy = userId ? userId : "";
-  //   formData.modifiedOn = null;
-  //   formData.isDeclarationComplete = true;
-  //   const response = await SaveForm12BB(formData);
-  //   if(response.status == 200)
-  //   {
-  //     navigate(`/users`);
-  //   }
-  // }
-
-  // Upload Document Proofs
-  
-  const uploadDocuments = () => {
-    const formData = new FormData();
+  const uploadDocuments = async () => {
+    // Create a replica of formData
+    const formDataReplica = { ...formData };
+    let formDataFiles = new FormData();
     documentProofs.forEach((fileToSend, index) => {
-      formData.append(`files[${index}].files`, fileToSend.file);
-      formData.append(`files[${index}].sections`, fileToSend.section);
-      formData.append(`files[${index}].fieldNames`, fileToSend.fieldName);
+      formDataFiles.append(`files[${index}].files`, fileToSend.file);
+      formDataFiles.append(`files[${index}].sections`, fileToSend.section);
+      formDataFiles.append(`files[${index}].fieldNames`, fileToSend.fieldName);
     });
-    if(formData){
-      UploadDocuments(formData)
-      .then( response =>
-        {
-          if(response.status == 200){
-            alert("Success");
+    if(documentProofs.length > 0){
+      let section = "" as keyof EmployeeFinancialRecord;
+      let fieldName = "";
+      let fullPath = "";
+      const response = await UploadDocuments(formDataFiles);
+      if(response.status == 200){
+        const res = response?.data;
+        res?.map(link => {
+          section = link.section as keyof EmployeeFinancialRecord;
+          fieldName = link.fieldName;
+          fullPath = link.fullPath;
+
+          if (Array.isArray(formDataReplica[section])) {
+            // Handle the case where section is a list type
+            (formDataReplica[section] as any[]).forEach(entry => {
+              entry[fieldName] = fullPath;
+            });
+          } else {
+            // Handle the normal case
+            (formDataReplica[section] as any)[fieldName] = fullPath;
           }
-          else{
-            alert("Failed");
-          }
-        }
-      );
+        });
+        // Call save method 
+        await SaveForm12BB(formDataReplica);
+        res?.forEach(link => {
+          const section = link.section as keyof EmployeeFinancialRecord;
+          const fieldName = link.fieldName;
+          (formData[section] as any)[fieldName] = null;
+        });
+        setFormData(formData);
+        formDataFiles = new FormData();
+        navigate(`/users`);
+      }
+      else{
+        console.log("Unable to update data");
+      }
+    }
+    else{
+      // Call save method 
+      const response = await SaveForm12BB(formDataReplica);
+      if(response.status == 200){
+        navigate(`/users`);
+      }
     }
   };
 
+  // Fill form data before save
   const prepareFormData = () => {
     formData.id = id ? id : 0;
     formData.employeeId = getEmployeeId ? getEmployeeId : "";
@@ -1111,36 +495,40 @@ const Form12BB = () => {
     formData.modifiedOn = null;
   };
   
-  const handleSubmit = async (values, actions) => {
-    prepareFormData();
-    uploadDocuments();
-    formData.isDeclarationComplete = false;
-    const response = await SaveForm12BB(formData);
-    if (response.status === 200) {
-      // navigate(`/users`);
-    }
-    // actions.resetForm();
-    if(response.status == 200)
-      {
-        navigate(`/users`);
-      }
-  };
+  // const handleSubmit = async (values, actions) => {
+  //   prepareFormData();
+  //   formData.isDeclarationComplete = false;
+  //   // Upload document
+  //   await uploadDocuments();
+  // };
   
-  const finalSubmit = async () => {
+  // const finalSubmit = async () => {
+  //   prepareFormData();
+  //   uploadDocuments();
+  //   formData.isDeclarationComplete = true;
+  //   const response = await SaveForm12BB(formData);
+  //   if (response.status === 200) {
+  //     navigate(`/users`);
+  //   }
+  // };
+
+  const handleSubmit = async (type: string) => {
     prepareFormData();
-    uploadDocuments();
-    formData.isDeclarationComplete = true;
-    const response = await SaveForm12BB(formData);
-    if (response.status === 200) {
-      // navigate(`/users`);
+    // Update formData based on the type of submission
+    if (type === "draftSubmit") {
+      formData.isDeclarationComplete = false;
+    } else if (type === "finalSubmit") {
+      formData.isDeclarationComplete = true;
     }
-  };
+    
+    // Upload documents and handle the form submission
+    await uploadDocuments();
+  }
 
   return (
     <Formik
       initialValues={formData}
       validationSchema={Yup.object()} // General validation schema
-      onSubmit={handleSubmit}
       enableReinitialize
     >
       {({ validateForm }) => (
@@ -1221,7 +609,7 @@ const Form12BB = () => {
                               type="number"
                               id="amount"
                               name="houseRentRecord.amount"
-                              // onChange={(e) => handleFormChange(e, 'amount', 'houseRentRecord')}
+                              onChange={(e) => handleFormChange(e, 'amount', 'houseRentRecord')}
                               className={`form-control${touched.houseRentRecord?.amount && errors.houseRentRecord?.amount ? ' is-invalid' : ''}`}
                               placeholder="Amount of House Rent in a year"
                               disabled={isRentChecked}
@@ -1278,12 +666,12 @@ const Form12BB = () => {
                               type="text"
                               id="ownerPanCard"
                               name="houseRentRecord.ownerPanCard"
-                              onChange={(e) => handleFormPanChange(e, 'ownerPanCard', 'houseRentRecord')}
+                              onChange={(e) => handleFormChange(e, 'ownerPanCard', 'houseRentRecord')}
                               className={`form-control${touched.houseRentRecord?.ownerPanCard && errors.houseRentRecord?.ownerPanCard ? ' is-invalid' : ''}`}
                               placeholder="Owner PAN Number"
                               disabled={(formData.houseRentRecord.amount ?? 0) <= 100000}
                             />
-                            <p>(if amount greaterThan 1 Lac)</p>
+                            <p>(if amount greater than 1 Lac)</p>
                             <ErrorMessage name="houseRentRecord.ownerPanCard" component="div" className="invalid-feedback" />
                           </CCol>
                           <CCol md="2" className="d-flex justify-content-end align-items-center">
@@ -1353,8 +741,7 @@ const Form12BB = () => {
                               id="amount"
                               name="travelExpenditureRecord.amount"
                               value={formData.travelExpenditureRecord.amount}
-                              onChange={handleAmountChange}
-
+                              onChange={(e) => handleFormChange(e, 'amount', 'travelExpenditureRecord')}
                               className={`form-control${touched.travelExpenditureRecord?.amount && errors.travelExpenditureRecord?.amount ? ' is-invalid' : ''}${isLeaveChecked ? ' no-border' : ''}`}
                               disabled={isLeaveChecked}
                               placeholder="Amount of any travel to claim in an year"
@@ -1476,8 +863,7 @@ const Form12BB = () => {
 
                               id="amount"
                               name="homeLoanRecord.amount"
-                              value={formData.homeLoanRecord.amount}
-                              // onChange={(e) => handleFormChange(e, 'amount', 'homeLoanRecord')}
+                              onChange={(e) => handleFormChange(e, 'amount', 'homeLoanRecord')}
                               className={`form-control${touched?.homeLoanRecord?.amount && errors?.homeLoanRecord?.amount ? ' is-invalid' : ''}${isInterestPaybleChecked ? ' no-border' : ''}`}
                               placeholder="Interest Amount on home loan in an year"
                               disabled={isInterestPaybleChecked}
@@ -1492,7 +878,7 @@ const Form12BB = () => {
                               type="text"
                               id="lenderName"
                               name="homeLoanRecord.lenderName"
-                              // onChange={(e) => handleFormChange(e, 'lenderName', 'homeLoanRecord')}
+                              onChange={(e) => handleFormChange(e, 'lenderName', 'homeLoanRecord')}
                               className={`form-control${touched?.homeLoanRecord?.lenderName && errors?.homeLoanRecord?.lenderName ? ' is-invalid' : ''}${isInterestPaybleChecked ? ' no-border' : ''}`}
                               placeholder="Name of Lender"
                               disabled={isInterestPaybleChecked}
@@ -1507,7 +893,7 @@ const Form12BB = () => {
                               type="text"
                               id="lenderAddress"
                               name="homeLoanRecord.lenderAddress"
-                              // onChange={(e) => handleFormChange(e, 'lenderAddress', 'homeLoanRecord')}
+                              onChange={(e) => handleFormChange(e, 'lenderAddress', 'homeLoanRecord')}
                               className={`form-control${touched?.homeLoanRecord?.lenderAddress && errors?.homeLoanRecord?.lenderAddress ? ' is-invalid' : ''}${isInterestPaybleChecked ? ' no-border' : ''}`}
                               placeholder="Address of Lender"
                               disabled={isInterestPaybleChecked}
@@ -1522,7 +908,7 @@ const Form12BB = () => {
                               type="text"
                               id="lenderPan"
                               name="homeLoanRecord.lenderPanNumber"
-                              onChange={(e) => handleFormPanChange(e, 'lenderPanNumber', 'homeLoanRecord')}
+                              onChange={(e) => handleFormChange(e, 'lenderPanNumber', 'homeLoanRecord')}
                               className={`form-control${touched?.homeLoanRecord?.lenderPanNumber && errors?.homeLoanRecord?.lenderPanNumber ? ' is-invalid' : ''}${isInterestPaybleChecked ? ' no-border' : ''}`}
                               placeholder="PAN No. of Lender"
                               disabled={isInterestPaybleChecked}
@@ -1644,9 +1030,10 @@ const Form12BB = () => {
                     <Formik
                       initialValues={{
                         rows: rows.map((row) => ({
-                          deductionTypeId: row.deductionTypeId || '', // Use existing value or default
-                          amount: row.amount || '', // Use existing value or default
-                          proofDocumentLink: row.proofDocumentLink || false, // Use existing value or default
+                          id: row.id,
+                          deductionTypeId: row.deductionTypeId || 0, // Use existing value or default
+                          amount: row.amount || 0, // Use existing value or default
+                          proofDocumentLink: row.proofDocumentLink || '', // Use existing value or default
                           eightyCDeductionTypes: row.eightyCDeductionTypes,
                           file: null
                         })),
@@ -1664,11 +1051,11 @@ const Form12BB = () => {
                                   <Field as="select"
                                     name={`rows[${index}].deductionTypeId`}
                                     className={`form-control ${touched.rows && touched.rows[index] && errors.rows && errors.rows[index] && errors.rows[index].deductionTypeId ? 'is-invalid' : ''}`}
-                                    value={values.rows[index].deductionTypeId || ""}
                                     onChange={(e) => {
                                       const updatedRows = [...values.rows];
                                       updatedRows[index] = { ...updatedRows[index], deductionTypeId: e.target.value };
                                       setFieldValue('rows', updatedRows);
+                                      setEightyCDeclarationRows(updatedRows);
                                     }}
                                   >
                                     <option value="">Select Medical Expenses</option>
@@ -1692,6 +1079,7 @@ const Form12BB = () => {
                                       const updatedRows = [...values.rows];
                                       updatedRows[index].amount = e.target.value;
                                       setFieldValue('rows', updatedRows);
+                                      setEightyCDeclarationRows(updatedRows);
                                     }}
                                   />
                                   <ErrorMessage name={`rows[${index}].amount`} component="div" className="invalid-feedback" />
@@ -1718,7 +1106,7 @@ const Form12BB = () => {
                                       //   updatedRows[index].file = file;
                                       //   setFieldValue('rows', updatedRows);
                                       // }}
-                                      onChange={(e) => handleFileChange(e, 'proofDocumentLink', '80cDeduction')}
+                                      onChange={(e) => handleFileChange(e, 'proofDocumentLink', 'eightyCDeclarations')}
                                     />
                                     <label
                                       className="custom-file-label"
@@ -1823,6 +1211,7 @@ const Form12BB = () => {
                                   name="eightyDRecord.insuranceAmount"
                                   className={`form-control${touched.eightyDRecord?.insuranceAmount && errors.eightyDRecord?.insuranceAmount ? ' is-invalid' : ''}`}
                                   placeholder="Amount"
+                                  onChange={(e) => handleFormChange(e, 'insuranceAmount', 'eightyDRecord')}
                                 />
                                 <ErrorMessage name="eightyDRecord.insuranceAmount" component="div" className="invalid-feedback" />
                               </CCol>
@@ -1893,7 +1282,7 @@ const Form12BB = () => {
                                     <Field
                                       type="text"
                                       id="medicalExpenseAmount"
-                                      // onChange={(e) => handleFormChange(e, 'medicalExpenseAmount', 'eightyDRecord')}
+                                      onChange={(e) => handleFormChange(e, 'medicalExpenseAmount', 'eightyDRecord')}
                                       name="eightyDRecord.medicalExpenseAmount"
                                       className={`form-control${touched.eightyDRecord?.medicalExpenseAmount && errors.eightyDRecord?.medicalExpenseAmount ? ' is-invalid' : ''}`}
                                       placeholder="Amount"
@@ -1908,7 +1297,7 @@ const Form12BB = () => {
                                         className="custom-file-input"
                                         id="medicalProof"
                                         style={{ display: 'none' }}
-                                        onChange={(e) => handleFileChange(e, 'medicalExpenseProof', '80dDeduction')}
+                                        onChange={(e) => handleFileChange(e, 'medicalExpenseProof', 'eightyDDeduction')}
                                       />
                                       <label
                                         className="custom-file-label"
@@ -1981,8 +1370,7 @@ const Form12BB = () => {
                                   type="text"
                                   id="nameOfDonee"
                                   name="eightyGRecord.nameOfDonee"
-                                  // onChange={(e: any) => handleFormChange(e, 'nameOfDonee', 'eightyGRecord')}
-                                  onChange={handlenameOfDoneeChange}
+                                  onChange={(e: any) => handleFormChange(e, 'nameOfDonee', 'eightyGRecord')}
                                   className={`form-control${touched.eightyGRecord?.nameOfDonee && errors.eightyGRecord?.nameOfDonee ? ' is-invalid' : ''}`}
                                   placeholder="Name of the Donee"
                                 />
@@ -1994,8 +1382,7 @@ const Form12BB = () => {
                                   type="text"
                                   id="panNumber"
                                   name="eightyGRecord.panNumber"
-                                  // onChange={(e: any) => handleFormPanChange(e, 'panNumber', 'eightyGRecord')}
-                                  onChange={handlePanNumberChange}
+                                  onChange={(e: any) => handleFormChange(e, 'panNumber', 'eightyGRecord')}
                                   className={`form-control${touched.eightyGRecord?.panNumber && errors.eightyGRecord?.panNumber ? ' is-invalid' : ''}`}
                                   placeholder="PAN Details"
                                 />
@@ -2007,8 +1394,7 @@ const Form12BB = () => {
                                   type="text"
                                   id="address"
                                   name="eightyGRecord.address"
-                                  // onChange={(e: any) => handleFormChange(e, 'address', 'eightyGRecord')}
-                                  onChange={handleAddressChange}
+                                  onChange={(e: any) => handleFormChange(e, 'address', 'eightyGRecord')}
                                   className={`form-control${touched.eightyGRecord?.address && errors.eightyGRecord?.address ? ' is-invalid' : ''}`}
                                   placeholder="Address"
                                 />
@@ -2020,8 +1406,7 @@ const Form12BB = () => {
                                   type="number"
                                   id="amount"
                                   name="eightyGRecord.amount"
-                                  // onChange={(e: any) => handleFormChange(e, 'amount', 'eightyGRecord')}
-                                  // onChange={handleGAmountChange}
+                                  onChange={(e: any) => handleFormChange(e, 'amount', 'eightyGRecord')}
                                   className={`form-control${touched.eightyGRecord?.amount && errors.eightyGRecord?.amount ? ' is-invalid' : ''}`}
                                   placeholder="Amount"
                                 />
@@ -2119,7 +1504,7 @@ const Form12BB = () => {
                                   id="description"
                                   name="otherInvestmentRecord.description"
                                   rows={2}
-                                  onChange={handleDescriptionChange}
+                                  onChange={(e: any) => handleFormChange(e, 'description', 'otherInvestmentRecord')}
                                   className={`form-control${touched.otherInvestmentRecord?.description && errors.otherInvestmentRecord?.description ? ' is-invalid' : ''}`}
                                   placeholder="Type Description of investment type"
                                 />
@@ -2176,9 +1561,10 @@ const Form12BB = () => {
             <CRow className="mt-3 mb-2">
               <CCol className="d-flex justify-content-end">
                 <CButton
-                  type="submit"
+                  type="button"
                   style={{ marginRight: '20px' }}
                   color="outline-primary"
+                  onClick={() => handleSubmit("draftSubmit")}
                 >
                   Save As Draft
                 </CButton>
@@ -2187,7 +1573,7 @@ const Form12BB = () => {
                   style={{ marginRight: '20px' }}
                   color="primary"
                   disabled={!submitButtonEnable}
-                  onClick={finalSubmit}
+                  onClick={() => handleSubmit("finalSubmit")}
                 >
                   Final Submit
                 </CButton>

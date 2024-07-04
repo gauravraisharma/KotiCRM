@@ -34,7 +34,7 @@ namespace KotiCRM.Services.Services
 
         }
 
-        public async Task<bool> UploadDocumentProofs(IFormCollection formCollection)
+        public async Task<List<DocumentPaths>> UploadDocumentProofs(IFormCollection formCollection)
         {
             return await _taxDeclarationRepository.UploadDocumentProofs(formCollection);
         }

@@ -1,5 +1,6 @@
 ﻿using Azure;
 using KotiCRM.Repository.Constants;
+using KotiCRM.Repository.Constants.Taxation_Constant;
 using KotiCRM.Repository.Data;
 using KotiCRM.Repository.DTOs.TaxDeclaration;
 using KotiCRM.Repository.IRepository;
@@ -16,16 +17,13 @@ namespace KotiCRM.Repository.Repository
     {
         private readonly KotiCRMDbContext _context;
         private readonly string _documentProofsPath; // Path where document proofs are stored
-
         public TaxDeclarationRepository(KotiCRMDbContext context, IConfiguration configuration)
         {
             _context = context;
             _documentProofsPath = configuration.GetSection("BaseFileConfig:Path").Value;
         }
 
-
         // Form 12BB - Retrieve Employee12BB record for a given employee and financial year
-
         public async Task<Employee12BBDTO> GetEmployee12BB(string employeeId, string financialYear)
         {
             // Fetch the main form data for the employee and financial year
@@ -51,7 +49,6 @@ namespace KotiCRM.Repository.Repository
                 };
             }
             
-
             // Fetch travel expenditure declaration data and create a new object
             var leaveTravelRecordData = _context.TravelExpenditureDeclarations.FirstOrDefault(x => x.Id == employeeDataForm.TravelExpenditureRecordId);
             TravelExpenditureDeclaration travelExpenditureDeclaration = new TravelExpenditureDeclaration();
@@ -85,6 +82,7 @@ namespace KotiCRM.Repository.Repository
                     Id = InterestOnHomLoanRecordData.Id,
                     LenderName = InterestOnHomLoanRecordData.LenderName,
                     LenderAddress = InterestOnHomLoanRecordData.LenderAddress,
+                    LenderPanNumber = InterestOnHomLoanRecordData.LenderPanNumber,
                     Amount = (int)InterestOnHomLoanRecordData.Amount,
                     ProofDocumentLink = InterestOnHomLoanRecordData.ProofDocumentLink,
                     Remarks = InterestOnHomLoanRecordData.Remarks,
@@ -93,7 +91,7 @@ namespace KotiCRM.Repository.Repository
             }
 
             // Fetch and prepare 80C declarations list
-            var eightyCRecordData = _context.EightyCDeclarations.Where(x => x.Employee12BBId == employeeDataForm.Id).ToList();
+            var eightyCRecordData = _context.EightyCDeclarations.Where(x => x.Employee12BBId == employeeDataForm.Id && x.IsDelete == false).ToList();
             List<EightyCDeclaration> eightyCDeclarationsList = new List<EightyCDeclaration>();
             if (eightyCRecordData.Count <= 0)
             {
@@ -119,7 +117,6 @@ namespace KotiCRM.Repository.Repository
                         Employee12BBId = recordData.Id,
                         EightyCDeductionTypes = eightyCDeductionType,
                     };
-
                     eightyCDeclarationsList.Add(eightyCDeclaration);
                 }
             }
@@ -166,7 +163,6 @@ namespace KotiCRM.Repository.Repository
                     IsVerified = false
                 };
             }
-            
 
             // Fetch other investment declaration data and create a new object
             var otherInvestmentRecordData = _context.OtherInvestmentDeclarations.FirstOrDefault(x => x.Id == employeeDataForm.OtherInvestmentRecordId);
@@ -221,19 +217,17 @@ namespace KotiCRM.Repository.Repository
         {
             if(employee12BB == null)
             {
-                throw new Exception("sdhf shf");
+                throw new Exception("Invalid payload");
             }
             var existingEmployee12BBs = _context.Employee12BBs.SingleOrDefault(x => x.Id == employee12BB.Id);
             // Update house rent declaration data if present
-
-
             if (employee12BB.HouseRentRecordId > 0)
             {
                var houseRentDeclarations = _context.HouseRentDeclarations.SingleOrDefault(x => x.Id == employee12BB.HouseRentRecordId);
                 if(houseRentDeclarations == null) { }
                 houseRentDeclarations.Amount = employee12BB.HouseRentRecord.Amount;
                 houseRentDeclarations.OwnerPanCard = employee12BB.HouseRentRecord.OwnerPanCard;
-                houseRentDeclarations.ProofDocumentLink = employee12BB.HouseRentRecord.ProofDocumentLink;
+                houseRentDeclarations.ProofDocumentLink = employee12BB.HouseRentRecord.ProofDocumentLink ?? houseRentDeclarations.ProofDocumentLink;
                 houseRentDeclarations.IsVerified = employee12BB.HouseRentRecord.IsVerified;
                 houseRentDeclarations.Remarks = employee12BB.HouseRentRecord.Remarks;
                 _context.HouseRentDeclarations.Update(houseRentDeclarations);
@@ -245,7 +239,7 @@ namespace KotiCRM.Repository.Repository
                 var travelExpenditureDeclarations = _context.TravelExpenditureDeclarations.SingleOrDefault(x => x.Id == employee12BB.TravelExpenditureRecordId);
                 if (travelExpenditureDeclarations == null) { }
                 travelExpenditureDeclarations.Amount = employee12BB.TravelExpenditureRecord.Amount;
-                travelExpenditureDeclarations.ProofDocumentLink = employee12BB.TravelExpenditureRecord.ProofDocumentLink;
+                travelExpenditureDeclarations.ProofDocumentLink = employee12BB.TravelExpenditureRecord.ProofDocumentLink ?? travelExpenditureDeclarations.ProofDocumentLink;
                 travelExpenditureDeclarations.IsVerified = employee12BB.TravelExpenditureRecord.IsVerified;
                 travelExpenditureDeclarations.Remarks = employee12BB.TravelExpenditureRecord.Remarks;
                 _context.TravelExpenditureDeclarations.Update(travelExpenditureDeclarations);
@@ -260,7 +254,7 @@ namespace KotiCRM.Repository.Repository
                 homeLoanDeclarations.LenderName = employee12BB.HomeLoanRecord.LenderName;
                 homeLoanDeclarations.LenderAddress = employee12BB.HomeLoanRecord.LenderAddress;
                 homeLoanDeclarations.LenderPanNumber = employee12BB.HomeLoanRecord.LenderPanNumber;
-                homeLoanDeclarations.ProofDocumentLink = employee12BB.HomeLoanRecord.ProofDocumentLink;
+                homeLoanDeclarations.ProofDocumentLink = employee12BB.HomeLoanRecord.ProofDocumentLink ?? homeLoanDeclarations.ProofDocumentLink;
                 homeLoanDeclarations.IsVerified = employee12BB.HomeLoanRecord.IsVerified;
                 homeLoanDeclarations.Remarks = employee12BB.HomeLoanRecord.Remarks;
                 _context.HomeLoanDeclarations.Update(homeLoanDeclarations);
@@ -268,7 +262,6 @@ namespace KotiCRM.Repository.Repository
             }
             if (employee12BB.Id > 0)
             {
-
                 // Fetch existing declarations from the database
                 var existingEightyCDeclarations = _context.EightyCDeclarations.Where(x => x.Employee12BBId == employee12BB.Id).ToList();
 
@@ -283,7 +276,7 @@ namespace KotiCRM.Repository.Repository
                         // Update the existing declaration
                         existingEightyCDeclaration.DeductionTypeId = eightyCDeclaration.DeductionTypeId;
                         existingEightyCDeclaration.Amount = eightyCDeclaration.Amount;
-                        existingEightyCDeclaration.ProofDocumentLink = eightyCDeclaration.ProofDocumentLink;
+                        existingEightyCDeclaration.ProofDocumentLink = eightyCDeclaration.ProofDocumentLink ?? existingEightyCDeclaration.ProofDocumentLink;
                         existingEightyCDeclaration.Remarks = eightyCDeclaration.Remarks;
                         existingEightyCDeclaration.IsVerified = eightyCDeclaration.IsVerified;
                         existingEightyCDeclaration.ModifiedBy = eightyCDeclaration.ModifiedBy;
@@ -300,7 +293,7 @@ namespace KotiCRM.Repository.Repository
                             Employee12BBId = employee12BB.Id,
                             DeductionTypeId = eightyCDeclaration.DeductionTypeId,
                             Amount = eightyCDeclaration.Amount,
-                            ProofDocumentLink = eightyCDeclaration.ProofDocumentLink,
+                            ProofDocumentLink = eightyCDeclaration.ProofDocumentLink ?? null,
                             Remarks = eightyCDeclaration.Remarks,
                             IsVerified = eightyCDeclaration.IsVerified,
                             CreatedBy = eightyCDeclaration.CreatedBy,
@@ -332,9 +325,9 @@ namespace KotiCRM.Repository.Repository
                 var eightyDDeclarations = _context.EightyDDeclarations.SingleOrDefault(x => x.Id == employee12BB.EightyDRecordId);
                 if (eightyDDeclarations == null) { }
                 eightyDDeclarations.InsuranceAmount = employee12BB.EightyDRecord.InsuranceAmount;
-                eightyDDeclarations.InsuranceProofLink = employee12BB.EightyDRecord.InsuranceProofLink;
+                eightyDDeclarations.InsuranceProofLink = employee12BB.EightyDRecord.InsuranceProofLink ?? eightyDDeclarations.InsuranceProofLink;
                 eightyDDeclarations.MedicalExpenseAmount = employee12BB.EightyDRecord.MedicalExpenseAmount;
-                eightyDDeclarations.MedicalExpenseProof = employee12BB.EightyDRecord.MedicalExpenseProof;
+                eightyDDeclarations.MedicalExpenseProof = employee12BB.EightyDRecord.MedicalExpenseProof ?? eightyDDeclarations.MedicalExpenseProof;
                 eightyDDeclarations.IsVerified = employee12BB.EightyDRecord.IsVerified;
                 eightyDDeclarations.Remarks = employee12BB.EightyDRecord.Remarks;
                 _context.EightyDDeclarations.Update(eightyDDeclarations);
@@ -349,7 +342,7 @@ namespace KotiCRM.Repository.Repository
                 eightyGDeclarations.PanNumber = employee12BB.EightyGRecord.PanNumber;
                 eightyGDeclarations.Address = employee12BB.EightyGRecord.Address;
                 eightyGDeclarations.Amount = employee12BB.EightyGRecord.Amount;
-                eightyGDeclarations.ProofDocumentLink = employee12BB.EightyGRecord.ProofDocumentLink;
+                eightyGDeclarations.ProofDocumentLink = employee12BB.EightyGRecord.ProofDocumentLink ?? eightyGDeclarations.ProofDocumentLink;
                 eightyGDeclarations.IsVerified = employee12BB.EightyGRecord.IsVerified;
                 eightyGDeclarations.Remarks = employee12BB.EightyGRecord.Remarks;
                 _context.EightyGDeclarations.Update(eightyGDeclarations);
@@ -361,7 +354,7 @@ namespace KotiCRM.Repository.Repository
                 var otherInvestmentDeclarations = _context.OtherInvestmentDeclarations.SingleOrDefault(x => x.Id == employee12BB.OtherInvestmentRecordId);
                 if (otherInvestmentDeclarations == null) { }
                 otherInvestmentDeclarations.Description = employee12BB.OtherInvestmentRecord.Description;
-                otherInvestmentDeclarations.ProofDocumentLink = employee12BB.OtherInvestmentRecord.ProofDocumentLink;
+                otherInvestmentDeclarations.ProofDocumentLink = employee12BB.OtherInvestmentRecord.ProofDocumentLink ?? otherInvestmentDeclarations.ProofDocumentLink;
                 otherInvestmentDeclarations.IsVerified = employee12BB.OtherInvestmentRecord.IsVerified;
                 otherInvestmentDeclarations.Remarks = employee12BB.OtherInvestmentRecord.Remarks;
                 _context.OtherInvestmentDeclarations.Update(otherInvestmentDeclarations);
@@ -408,12 +401,12 @@ namespace KotiCRM.Repository.Repository
             var result = await _context.SaveChangesAsync();
             if(result <= 0)
             {
-
+                throw new Exception("Unable to update data");
             }
             return employee12BBDto;
         }
 
-        public async Task<bool> UploadDocumentProofs(IFormCollection formCollection)
+        public async Task<List<DocumentPaths>> UploadDocumentProofs(IFormCollection formCollection)
         {
             // Extract files
             var files = formCollection.Files;
@@ -423,6 +416,8 @@ namespace KotiCRM.Repository.Repository
             // Extract sections and field names
             var sections = formCollection.Where(kvp => kvp.Key.Contains("section")).Select(kvp => kvp.Value.ToString()).ToList();
             var fieldNames = formCollection.Where(kvp => kvp.Key.Contains("fieldName")).Select(kvp => kvp.Value.ToString()).ToList();
+
+            var documentProofs = new List<DocumentPaths>();
 
             // Process each file along with its section and field name
             foreach (var file in files)
@@ -435,7 +430,7 @@ namespace KotiCRM.Repository.Repository
                 string fullPath = "";
                 string fileName = "";
 
-                if (section == "80dDeduction")
+                if (section == DeclarationConstants.Eighty_D_Record)
                 {
                     var subFolder80D = char.ToUpper(fieldName[0]) + fieldName.Substring(1);
 
@@ -464,10 +459,16 @@ namespace KotiCRM.Repository.Repository
                 {
                     await file.CopyToAsync(stream);
                 }
+
+                documentProofs.Add(new DocumentPaths
+                {
+                    FileIndex = fileIndex,
+                    Section = section,
+                    FieldName = fieldName,
+                    FullPath = fullPath
+                });
             }
-
-            return true;
-
+            return documentProofs;
         }
 
 

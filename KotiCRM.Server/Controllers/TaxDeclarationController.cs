@@ -103,7 +103,7 @@ namespace KotiCRM.Server.Controllers
         [HttpPost]
         [Route("UploadDocumentProofs")]
         [RequestFormLimits(MultipartBodyLengthLimit = 104857600)] // 100MB
-        public async Task<ActionResult<bool>> UploadDocumentProofs()
+        public async Task<ActionResult<Task<List<DocumentPaths>>>> UploadDocumentProofs()
         {
             try
             {

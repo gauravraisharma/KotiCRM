@@ -1,5 +1,6 @@
 import { apiResponse, axiosInstance, responseBody } from "../../../apiInterceptor/axiosInterceptor";
-import { EightyCDeclaration, EightyDRecord, EightyGRecord, EmployeeFinancialRecord, EmployeeFinancialRecordDummy, HomeLoanRecord, HouseRentRecord, OtherInvestmentRecord, TravelExpenditureRecord } from "../../../models/Form12BB/Form12BB";
+import { DocumentProofs } from "../../../models/Form12BB/DocumentProofs";
+import { DocumentPaths, EightyCDeclaration, EightyDRecord, EightyGRecord, EmployeeFinancialRecord, EmployeeFinancialRecordDummy, HomeLoanRecord, HouseRentRecord, OtherInvestmentRecord, TravelExpenditureRecord } from "../../../models/Form12BB/Form12BB";
 import { Employee, ForgotPasswordDTO, ResetPassword } from "../../../models/userManagement/employee";
 import { Employees } from "../../../models/userManagement/employees";
 import { Deduction } from "../../../views/userManagement/deduction";
@@ -394,19 +395,38 @@ export async function SaveForm12BB(employeeFinancialRecord: EmployeeFinancialRec
     }
 }
 
+// Document upload
+export async function UploadDocuments(documentProofs: FormData): Promise<apiResponse<DocumentPaths[]>> {
+    try {
+        const response = await axiosInstance.post(`/TaxDeclaration/UploadDocumentProofs`, documentProofs, {
+            headers: {
+                'Content-Type': 'multipart/form-data' // Specify the content type
+            }
+        });
+        return response;
+    } catch (error: any) {
+        const errorResponse: apiResponse<DocumentPaths[]> = {
+            data: undefined,
+            status: 500,
+            statusText: error.message
+        };
+        return errorResponse;
+    }
+}
+
 
 
 export async function AddNewFinancial(employeeFinancialRecordDummy: EmployeeFinancialRecordDummy) {
     try {
-      const response = await axiosInstance.post<EmployeeFinancialRecordDummy>('/TaxDeclaration/AddEmployeeRecord', employeeFinancialRecordDummy);
-     
-      return response;
+        const response = await axiosInstance.post<EmployeeFinancialRecordDummy>('/TaxDeclaration/AddEmployeeRecord', employeeFinancialRecordDummy);
+
+        return response;
     } catch (error: any) {
-      const errorResponse: apiResponse<EmployeeFinancialRecordDummy> = {
-        data: undefined,
-        status: 500,
-        statusText: error.message
-      };
-      return errorResponse;
+        const errorResponse: apiResponse<EmployeeFinancialRecordDummy> = {
+            data: undefined,
+            status: 500,
+            statusText: error.message
+        };
+        return errorResponse;
     }
-  }
+}
