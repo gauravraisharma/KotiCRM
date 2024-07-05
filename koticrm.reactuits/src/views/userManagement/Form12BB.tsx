@@ -6,11 +6,12 @@ import { useEffect, useState } from 'react';
 import CIcon from '@coreui/icons-react';
 import { cilCheckCircle, cilChevronDoubleDown, cilChevronDoubleUp } from '@coreui/icons';
 import "../../css/style.css";
-import { GetEmployee12BB, SaveForm12BB, UploadDocuments, } from '../../redux-saga/modules/userManagement/apiService';
+import { GetEmployee12BB, SaveForm12BB, UploadDocuments } from '../../redux-saga/modules/userManagement/apiService';
 import { DocumentPaths, EightyCDeclaration, EmployeeFinancialRecord, InitialEmployeeRecord } from '../../models/Form12BB/Form12BB';
 import { MdDelete } from 'react-icons/md';
 import { Deduction } from './deduction';
 import { DocumentProofs } from '../../models/Form12BB/DocumentProofs';
+import { toast } from 'react-toastify';
 
 // Separate validation schemas for each section
 const houseRentAmountValidationSchema = Yup.object().shape({
@@ -213,7 +214,7 @@ const Form12BB = () => {
           employee12BB: record.employee12BB,
           eightyCDeductionTypes: record.eightyCDeductionTypes
         }));
-
+      
         setFormData({
           ...formData,
           eightyCDeclarations: mappedRecords
@@ -354,8 +355,8 @@ const Form12BB = () => {
           const { id, description, proofDocumentLink } = response.data?.otherInvestmentRecord;
           setFormData((prevState) => ({
             ...prevState,
-            otherInvestmentRecordId: id,
-            otherInvestmentRecord: {
+          otherInvestmentRecordId: id,
+          otherInvestmentRecord: {
               ...prevState.otherInvestmentRecord,
               id,
               description,
@@ -464,12 +465,19 @@ const Form12BB = () => {
         });
         setFormData(formData);
         formDataFiles = new FormData();
+        
+        if (formData.isDeclarationComplete === false) {
+          toast.success('Saved as draft');
+        } else {
+          toast.success('Final submission successful');
+        }
         navigate(`/users`);
-      }
-      else{
-        console.log("Unable to update data");
-      }
-    }
+        }
+        else {
+          toast.error('Unable to save');
+          console.log("Unable to update data");
+        }
+      }        
     else{
       // Call save method 
       const response = await SaveForm12BB(formDataReplica);
@@ -495,18 +503,19 @@ const Form12BB = () => {
     formData.modifiedOn = null;
   };
 
-    const handleSubmit = async (type: string) => {
-        prepareFormData();
-        // Update formData based on the type of submission
-        if (type === "draftSubmit") {
-            formData.isDeclarationComplete = false;
-        } else if (type === "finalSubmit") {
-            formData.isDeclarationComplete = true;
-        }
-
-        // Upload documents and handle the form submission
-        await uploadDocuments();
+  const handleSubmit = async (type: string) => {
+    prepareFormData();
+    // Update formData based on the type of submission
+    if (type === "draftSubmit") {
+      formData.isDeclarationComplete = false;
+    } else if (type === "finalSubmit") {
+      formData.isDeclarationComplete = true;
     }
+    
+    // Upload documents and handle the form submission
+    await uploadDocuments();
+  }
+
   return (
     <Formik
       initialValues={formData}
@@ -632,7 +641,7 @@ const Form12BB = () => {
                               style={{ display: 'none' }}
                               onChange={(e) => handleFileChange(e, 'proofDocumentLink', 'houseRentRecord')}
                             />
-                            <div style={{ border: '1px solid #76b5c5', padding: '10px', borderRadius: '5px', marginBottom: '10px' }}>
+                            <div style={{ border: '1px solid #ccc', padding: '10px', borderRadius: '5px', marginBottom: '10px' }}>
                               <label
                                 className="custom-file-label"
                                 htmlFor="rentSlips"
@@ -640,12 +649,10 @@ const Form12BB = () => {
                               >
                                 Upload Rent slips in a zip file
                               </label>
-                            </div> 
-                     
-
+                            </div>
                           </CCol>
                           <CCol md="3">
-                            <label htmlFor="ownerPan" style={{ marginTop: '30px' }}>Owner PAN Number</label>
+                            <label htmlFor="ownerPan" style={{ marginBottom: '10px' }}>Owner PAN Number</label>
                             <Field
                               type="text"
                               id="ownerPanCard"
@@ -758,7 +765,7 @@ const Form12BB = () => {
                               style={{ display: 'none' }}
                               onChange={(e) => handleFileChange(e, 'proofDocumentLink', 'travelExpenditureRecord')}
                             />
-                            <div style={{ border: '1px solid #76b5c5', padding: '10px', borderRadius: '5px', marginBottom: '10px' }}>
+                            <div style={{ border: '1px solid #ccc', padding: '10px', borderRadius: '5px', marginBottom: '10px' }}>
                               <label
                                 className="custom-file-label"
                                 htmlFor="proofDocumentLink"
@@ -816,13 +823,13 @@ const Form12BB = () => {
                   </CCol>
                   <CCol md="4" className="d-flex justify-content-end align-items-center">
                     {isInterestPaybleChecked || formData.homeLoanRecord.proofDocumentLink && formData.homeLoanRecord.amount && formData.homeLoanRecord.lenderName && formData.homeLoanRecord.lenderAddress &&
-                      formData.homeLoanRecord.lenderPanNumber && (
-                        <CIcon
-                          icon={cilCheckCircle}
-                          className="ml-2 check-icon"
-                          size="xl"
-                        />
-                      )}
+                            formData.homeLoanRecord.lenderPanNumber && (
+                      <CIcon
+                        icon={cilCheckCircle}
+                        className="ml-2 check-icon"
+                        size="xl"
+                      />
+                    )}
 
 
                   </CCol>
@@ -903,13 +910,13 @@ const Form12BB = () => {
                           </CCol>
                           <CCol md="1" className="d-flex justify-content-end align-items-center">
                             {formData.homeLoanRecord.amount && formData.homeLoanRecord.lenderName && formData.homeLoanRecord.lenderAddress &&
-                              formData.homeLoanRecord.lenderPanNumber && (
-                                <CIcon
-                                  icon={cilCheckCircle}
-                                  className="ml-2 check-icon"
-                                  size="xl"
-                                />
-                              )}
+                            formData.homeLoanRecord.lenderPanNumber && (
+                              <CIcon
+                                icon={cilCheckCircle}
+                                className="ml-2 check-icon"
+                                size="xl"
+                              />
+                            )}
                           </CCol>
                         </CRow>
                       </Form>
@@ -930,7 +937,7 @@ const Form12BB = () => {
                             <p>This section will be made visible in Feb to submit the final proofs</p>
                           </CCol>
                           <CCol md="4" style={{ marginTop: '10px' }}>
-                            <div style={{ border: '1px solid #76b5c5', padding: '10px', borderRadius: '5px' }}>
+                            <div style={{ border: '1px solid #ccc', padding: '10px', borderRadius: '5px' }}>
                               <label htmlFor="rentSlips" style={{ cursor: 'pointer' }}>
                                 Upload Rent slips in a zip file
                               </label>
@@ -1030,7 +1037,7 @@ const Form12BB = () => {
 
                             {rows.map((row, index) => (
                               <CRow key={row.id} className="align-items-center">
-                                <CCol md="4" className="mb-3" style={{ textAlign: 'center',marginTop:'18px' }}>
+                                <CCol md="4" className="mb-3" style={{ textAlign: 'center' }}>
                                   <label htmlFor="deduction" className="ml-2 mb-0">Deduction Type</label>
                                   <Field as="select"
                                     name={`rows[${index}].deductionTypeId`}
@@ -1326,7 +1333,7 @@ const Form12BB = () => {
                         <label htmlFor="80GDonations" className="ml-2 mb-0">No Investments</label>
                       </CCol>
                       <CCol md="4" className="d-flex justify-content-end align-items-center">
-                        {is80GChecked || formData.eightyGRecord.nameOfDonee && formData.eightyGRecord.panNumber && formData.eightyGRecord.address && formData.eightyGRecord.amount && (
+                        {is80GChecked || formData.eightyGRecord.nameOfDonee && formData.eightyGRecord.panNumber && formData.eightyGRecord.address &&  formData.eightyGRecord.amount && (
                           <CIcon
                             icon={cilCheckCircle}
                             className="ml-2 check-icon"
@@ -1416,7 +1423,7 @@ const Form12BB = () => {
                                 </div>
                               </CCol>
                               <CCol md="1" className="d-flex justify-content-end align-items-center">
-                                {formData.eightyGRecord.nameOfDonee && formData.eightyGRecord.panNumber && formData.eightyGRecord.address && formData.eightyGRecord.amount && (
+                                {formData.eightyGRecord.nameOfDonee && formData.eightyGRecord.panNumber && formData.eightyGRecord.address &&  formData.eightyGRecord.amount && (
                                   <CIcon
                                     icon={cilCheckCircle}
                                     className="ml-2 check-icon"
