@@ -423,3 +423,27 @@
 .modal-content button:hover {
   background-color: #0056b3;
 }
+
+.dropdown-toggle-custom {
+  height: 40px;
+  font-size: 1rem; /* Adjust the font size */
+  padding: 10px 20px; /* Adjust the padding for larger button */
+  background-color: transparent; /* Button background color */
+  color: #0056b3; /* Button text color */
+  border-radius: 5px; /* Button border radius */
+}
+.dropdown-toggle-custom:hover {
+  background-color: #0056b3; /* Button hover background color */
+}
+.dropdown-item-custom {
+  padding: 10px 20px;
+}
+
+.dropdown-link-custom {
+  text-decoration: none;
+  color: black;
+  display: block;
+  width: 100%;
+}
+
+

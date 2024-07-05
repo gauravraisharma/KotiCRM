@@ -13,6 +13,10 @@ import {
   CCardBody,
   CCardHeader,
   CCol,
+  CDropdown,
+  CDropdownItem,
+  CDropdownMenu,
+  CDropdownToggle,
   CPagination,
   CPaginationItem,
   CRow,
@@ -44,7 +48,7 @@ const Users = () => {
   const usersPermissions = GetModulePermissions('ManageUsers');
   const pageSize = 10;
 
-  
+
 
   const GetEmployees = async () => {
     try {
@@ -113,7 +117,7 @@ const Users = () => {
   // Effects
   useEffect(() => {
     GetEmployees();
-  }, [pageNumber, pageSize,showDeleteConfirmation]);
+  }, [pageNumber, pageSize, showDeleteConfirmation]);
 
   return (
     <>
@@ -149,7 +153,7 @@ const Users = () => {
                     border: "1px solid #ccc",
                     width: "220px",
                   }}
-                > 
+                >
                   <option value="Name">Search by Name</option>
                   <option value="Emp code"> Search by code</option>
                   <option value="Blood Group">Search by Blood Group</option>
@@ -174,17 +178,38 @@ const Users = () => {
               </div>
             </CCol>
             <CCol xs={4} className="text-end">
-              <Link to={`/roles`}>
-                <CButton color="primary" variant="outline">
-                  Manage Roles
-                </CButton>
-              </Link>
+
+              {usersPermissions && usersPermissions.isView && (
+                <CDropdown>
+                  <CDropdownToggle className="py-0 dropdown-toggle-custom" caret={true}>
+                    More
+                  </CDropdownToggle>
+                  <CDropdownMenu className="pt-0">
+                    <CDropdownItem className="dropdown-item-custom">
+                      <Link
+                        to="/roles"
+                        className="dropdown-link-custom"
+                      >
+                        Manage Roles
+                      </Link>
+                    </CDropdownItem>
+                    <CDropdownItem className="dropdown-item-custom">
+                      <Link
+                        to="/taxes"
+                        className="dropdown-link-custom"
+                      >
+                        Manage Taxes
+                      </Link>
+                    </CDropdownItem>
+                  </CDropdownMenu>
+                </CDropdown>
+              )}
               {usersPermissions.isAdd && (
-              <Link to={`/users/createOrUpdateUser`}>
-                <CButton color="primary">
-                  + New
-                </CButton>
-              </Link>
+                <Link to={`/users/createOrUpdateUser`}>
+                  <CButton color="primary">
+                    + New
+                  </CButton>
+                </Link>
               )}
             </CCol>
           </CRow>
@@ -224,44 +249,44 @@ const Users = () => {
                     <CTableDataCell>{employee.email}</CTableDataCell>
                     <CTableDataCell>  {moment.utc(employee.joiningDate).tz(timezone)?.format('DD/MM/YYYY hh:mm A')}</CTableDataCell>
                     <CTableDataCell>
-                    <img src={employee.profilePicturePath ? employee.profilePicturePath : profileImage} className="profile-picture"/>
+                      <img src={employee.profilePicturePath ? employee.profilePicturePath : profileImage} className="profile-picture" />
                     </CTableDataCell>
                     <CTableDataCell>
                       {usersPermissions.isEdit && (
-                      <Link to={`/users/updateUser/${employee.employeeId}`}>
-                        <MdEdit
-                          style={{
-                            color: "green",
-                            marginRight: "10px",
-                            fontSize: "20px",
-                          }}
-                          className="mr-4 text-success"
-                        />
-                      </Link>
+                        <Link to={`/users/updateUser/${employee.employeeId}`}>
+                          <MdEdit
+                            style={{
+                              color: "green",
+                              marginRight: "10px",
+                              fontSize: "20px",
+                            }}
+                            className="mr-4 text-success"
+                          />
+                        </Link>
                       )}
-                         {usersPermissions.isView && (
-                      <Link to={`/users/userDetail/${employee.userId}/${employee.employeeId}`}>
-                        <AiFillEye
+                      {usersPermissions.isView && (
+                        <Link to={`/users/userDetail/${employee.userId}/${employee.employeeId}`}>
+                          <AiFillEye
+                            style={{
+                              color: "darkblue",
+                              marginRight: "10px",
+                              fontSize: "20px",
+                            }}
+                            className="mr-4 text-primary"
+                          />
+                        </Link>
+                      )}
+                      {usersPermissions.isDelete && (
+                        <MdDelete
                           style={{
-                            color: "darkblue",
+                            color: "red",
                             marginRight: "10px",
                             fontSize: "20px",
+                            cursor: "pointer",
                           }}
-                          className="mr-4 text-primary"
+                          className="text-danger"
+                          onClick={() => handleDeleteClick(employee.employeeId)}
                         />
-                      </Link>
-                         )}
-                      {usersPermissions.isDelete && (
-                      <MdDelete
-                        style={{
-                          color: "red",
-                          marginRight: "10px",
-                          fontSize: "20px",
-                          cursor: "pointer",
-                        }}
-                        className="text-danger"
-                        onClick={() => handleDeleteClick(employee.employeeId)}
-                      />
                       )}
                     </CTableDataCell>
                   </CTableRow>

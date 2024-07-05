@@ -213,7 +213,7 @@ const Form12BB = () => {
           employee12BB: record.employee12BB,
           eightyCDeductionTypes: record.eightyCDeductionTypes
         }));
-      
+
         setFormData({
           ...formData,
           eightyCDeclarations: mappedRecords
@@ -354,8 +354,8 @@ const Form12BB = () => {
           const { id, description, proofDocumentLink } = response.data?.otherInvestmentRecord;
           setFormData((prevState) => ({
             ...prevState,
-          otherInvestmentRecordId: id,
-          otherInvestmentRecord: {
+            otherInvestmentRecordId: id,
+            otherInvestmentRecord: {
               ...prevState.otherInvestmentRecord,
               id,
               description,
@@ -494,37 +494,19 @@ const Form12BB = () => {
     formData.modifiedBy = userId ? userId : "";
     formData.modifiedOn = null;
   };
-  
-  // const handleSubmit = async (values, actions) => {
-  //   prepareFormData();
-  //   formData.isDeclarationComplete = false;
-  //   // Upload document
-  //   await uploadDocuments();
-  // };
-  
-  // const finalSubmit = async () => {
-  //   prepareFormData();
-  //   uploadDocuments();
-  //   formData.isDeclarationComplete = true;
-  //   const response = await SaveForm12BB(formData);
-  //   if (response.status === 200) {
-  //     navigate(`/users`);
-  //   }
-  // };
 
-  const handleSubmit = async (type: string) => {
-    prepareFormData();
-    // Update formData based on the type of submission
-    if (type === "draftSubmit") {
-      formData.isDeclarationComplete = false;
-    } else if (type === "finalSubmit") {
-      formData.isDeclarationComplete = true;
+    const handleSubmit = async (type: string) => {
+        prepareFormData();
+        // Update formData based on the type of submission
+        if (type === "draftSubmit") {
+            formData.isDeclarationComplete = false;
+        } else if (type === "finalSubmit") {
+            formData.isDeclarationComplete = true;
+        }
+
+        // Upload documents and handle the form submission
+        await uploadDocuments();
     }
-    
-    // Upload documents and handle the form submission
-    await uploadDocuments();
-  }
-
   return (
     <Formik
       initialValues={formData}
@@ -650,7 +632,7 @@ const Form12BB = () => {
                               style={{ display: 'none' }}
                               onChange={(e) => handleFileChange(e, 'proofDocumentLink', 'houseRentRecord')}
                             />
-                            <div style={{ border: '1px solid #ccc', padding: '10px', borderRadius: '5px', marginBottom: '10px' }}>
+                            <div style={{ border: '1px solid #76b5c5', padding: '10px', borderRadius: '5px', marginBottom: '10px' }}>
                               <label
                                 className="custom-file-label"
                                 htmlFor="rentSlips"
@@ -658,10 +640,12 @@ const Form12BB = () => {
                               >
                                 Upload Rent slips in a zip file
                               </label>
-                            </div>
+                            </div> 
+                     
+
                           </CCol>
                           <CCol md="3">
-                            <label htmlFor="ownerPan" style={{ marginBottom: '10px' }}>Owner PAN Number</label>
+                            <label htmlFor="ownerPan" style={{ marginTop: '30px' }}>Owner PAN Number</label>
                             <Field
                               type="text"
                               id="ownerPanCard"
@@ -774,7 +758,7 @@ const Form12BB = () => {
                               style={{ display: 'none' }}
                               onChange={(e) => handleFileChange(e, 'proofDocumentLink', 'travelExpenditureRecord')}
                             />
-                            <div style={{ border: '1px solid #ccc', padding: '10px', borderRadius: '5px', marginBottom: '10px' }}>
+                            <div style={{ border: '1px solid #76b5c5', padding: '10px', borderRadius: '5px', marginBottom: '10px' }}>
                               <label
                                 className="custom-file-label"
                                 htmlFor="proofDocumentLink"
@@ -832,13 +816,13 @@ const Form12BB = () => {
                   </CCol>
                   <CCol md="4" className="d-flex justify-content-end align-items-center">
                     {isInterestPaybleChecked || formData.homeLoanRecord.proofDocumentLink && formData.homeLoanRecord.amount && formData.homeLoanRecord.lenderName && formData.homeLoanRecord.lenderAddress &&
-                            formData.homeLoanRecord.lenderPanNumber && (
-                      <CIcon
-                        icon={cilCheckCircle}
-                        className="ml-2 check-icon"
-                        size="xl"
-                      />
-                    )}
+                      formData.homeLoanRecord.lenderPanNumber && (
+                        <CIcon
+                          icon={cilCheckCircle}
+                          className="ml-2 check-icon"
+                          size="xl"
+                        />
+                      )}
 
 
                   </CCol>
@@ -919,13 +903,13 @@ const Form12BB = () => {
                           </CCol>
                           <CCol md="1" className="d-flex justify-content-end align-items-center">
                             {formData.homeLoanRecord.amount && formData.homeLoanRecord.lenderName && formData.homeLoanRecord.lenderAddress &&
-                            formData.homeLoanRecord.lenderPanNumber && (
-                              <CIcon
-                                icon={cilCheckCircle}
-                                className="ml-2 check-icon"
-                                size="xl"
-                              />
-                            )}
+                              formData.homeLoanRecord.lenderPanNumber && (
+                                <CIcon
+                                  icon={cilCheckCircle}
+                                  className="ml-2 check-icon"
+                                  size="xl"
+                                />
+                              )}
                           </CCol>
                         </CRow>
                       </Form>
@@ -946,7 +930,7 @@ const Form12BB = () => {
                             <p>This section will be made visible in Feb to submit the final proofs</p>
                           </CCol>
                           <CCol md="4" style={{ marginTop: '10px' }}>
-                            <div style={{ border: '1px solid #ccc', padding: '10px', borderRadius: '5px' }}>
+                            <div style={{ border: '1px solid #76b5c5', padding: '10px', borderRadius: '5px' }}>
                               <label htmlFor="rentSlips" style={{ cursor: 'pointer' }}>
                                 Upload Rent slips in a zip file
                               </label>
@@ -1046,7 +1030,7 @@ const Form12BB = () => {
 
                             {rows.map((row, index) => (
                               <CRow key={row.id} className="align-items-center">
-                                <CCol md="4" className="mb-3" style={{ textAlign: 'center' }}>
+                                <CCol md="4" className="mb-3" style={{ textAlign: 'center',marginTop:'18px' }}>
                                   <label htmlFor="deduction" className="ml-2 mb-0">Deduction Type</label>
                                   <Field as="select"
                                     name={`rows[${index}].deductionTypeId`}
@@ -1342,7 +1326,7 @@ const Form12BB = () => {
                         <label htmlFor="80GDonations" className="ml-2 mb-0">No Investments</label>
                       </CCol>
                       <CCol md="4" className="d-flex justify-content-end align-items-center">
-                        {is80GChecked || formData.eightyGRecord.nameOfDonee && formData.eightyGRecord.panNumber && formData.eightyGRecord.address &&  formData.eightyGRecord.amount && (
+                        {is80GChecked || formData.eightyGRecord.nameOfDonee && formData.eightyGRecord.panNumber && formData.eightyGRecord.address && formData.eightyGRecord.amount && (
                           <CIcon
                             icon={cilCheckCircle}
                             className="ml-2 check-icon"
@@ -1432,7 +1416,7 @@ const Form12BB = () => {
                                 </div>
                               </CCol>
                               <CCol md="1" className="d-flex justify-content-end align-items-center">
-                                {formData.eightyGRecord.nameOfDonee && formData.eightyGRecord.panNumber && formData.eightyGRecord.address &&  formData.eightyGRecord.amount && (
+                                {formData.eightyGRecord.nameOfDonee && formData.eightyGRecord.panNumber && formData.eightyGRecord.address && formData.eightyGRecord.amount && (
                                   <CIcon
                                     icon={cilCheckCircle}
                                     className="ml-2 check-icon"

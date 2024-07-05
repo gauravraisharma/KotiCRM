@@ -1,5 +1,5 @@
 import { apiResponse, axiosInstance, responseBody } from "../../../apiInterceptor/axiosInterceptor";
-import { DocumentProofs } from "../../../models/Form12BB/DocumentProofs";
+
 import { DocumentPaths, EightyCDeclaration, EightyDRecord, EightyGRecord, EmployeeFinancialRecord, EmployeeFinancialRecordDummy, HomeLoanRecord, HouseRentRecord, OtherInvestmentRecord, TravelExpenditureRecord } from "../../../models/Form12BB/Form12BB";
 import { Employee, ForgotPasswordDTO, ResetPassword } from "../../../models/userManagement/employee";
 import { Employees } from "../../../models/userManagement/employees";
@@ -112,7 +112,7 @@ export async function UserForgotPassword(forgotPasswordDTO: any) {
 
 export async function ChangePassword(passwordRequestModal:any) {
     try {
-        debugger;
+    
         const response = await axiosInstance.post(`/UserAccount/ChangePassword`,passwordRequestModal);
         return responseBody(response);
     } catch (error: any) {
@@ -394,7 +394,6 @@ export async function SaveForm12BB(employeeFinancialRecord: EmployeeFinancialRec
         return errorResponse;
     }
 }
-
 // Document upload
 export async function UploadDocuments(documentProofs: FormData): Promise<apiResponse<DocumentPaths[]>> {
     try {
@@ -415,18 +414,17 @@ export async function UploadDocuments(documentProofs: FormData): Promise<apiResp
 }
 
 
-
 export async function AddNewFinancial(employeeFinancialRecordDummy: EmployeeFinancialRecordDummy) {
     try {
-        const response = await axiosInstance.post<EmployeeFinancialRecordDummy>('/TaxDeclaration/AddEmployeeRecord', employeeFinancialRecordDummy);
-
-        return response;
+      const response = await axiosInstance.post<EmployeeFinancialRecordDummy>('/TaxDeclaration/AddEmployeeRecord', employeeFinancialRecordDummy);
+     
+      return response;
     } catch (error: any) {
-        const errorResponse: apiResponse<EmployeeFinancialRecordDummy> = {
-            data: undefined,
-            status: 500,
-            statusText: error.message
-        };
-        return errorResponse;
+      const errorResponse: apiResponse<EmployeeFinancialRecordDummy> = {
+        data: undefined,
+        status: 500,
+        statusText: error.message
+      };
+      return errorResponse;
     }
-}
+  }

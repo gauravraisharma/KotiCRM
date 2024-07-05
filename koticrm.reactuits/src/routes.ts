@@ -80,10 +80,6 @@ const Validation = lazy(() => import('./components/forms/validation/Validation')
 
 const Charts = lazy(() => import('./components/charts/Charts'))
 
-// Icons
-// const CoreUIIcons = lazy(() => import('./components/icons/coreui-icons/CoreUIIcons'))
-// const Flags = lazy(() => import('./components/icons/flags/Flags'))
-// const Brands = lazy(() => import('./components/icons/brands/Brands'))
 
 // Notifications
 const Alerts = lazy(() => import('./components/notifications/alerts/Alerts'))
@@ -98,7 +94,6 @@ export const appRoutes: Route[] = [
     { path: "/login", name: "Login Page", element: Login, isAuth:false },
     { path: "/forgotPassword", name: "Forgot Password", element: ForgotPassword, isAuth:false },
     { path: "/resetPassword", name: "Reset Password", element: ResetPassword, isAuth:false },
-
     { path: "/",name :" Home Page", element:Home,isAuth:false},
     { path: "/register", name: "Register Page", element: Register, isAuth: false },
     { path: "/404", name: "Page 404", element: Page404, isAuth: false },
@@ -178,8 +173,6 @@ const routes: Route[] = [
     { path: '/form12bb/:userId/:employeeId/:financialYear',  name: 'Form12BB', element: Form12BB,  isAuth: true,  modulePermission: 'ManageUsers' },
     // { path: "/users/userDetail/:userId/:employeeId/form12bb", element: <Form12BB />, isAuth: true, modulePermission: "ManageUsers" },
       
-
-    
 
     { path: '/roles', name: 'Roles', element: Roles, isAuth: true, modulePermission: 'ManageRoles'},
     { path: '/roles/createRole', name: 'CreateRole', element: CreateOrUpdateRole, isAuth: true, modulePermission: 'ManageRoles' },

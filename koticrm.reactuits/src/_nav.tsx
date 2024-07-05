@@ -37,24 +37,9 @@ const _nav:NavItem[] = [
     moduleName : 'Invoices'
 
   },
+
   
 
-  // {
-  //   component: CNavItem,
-  //   name: 'Payroll',
-  //   to: '/theme/typography',
-  //   icon: <CIcon icon={cibPaypal} customClassName="nav-icon" />,
-  //   moduleName : 'Payroll'
-
-  // },
-  {
-    component: CNavItem,
-    name: 'Attendance',
-    to: '/theme/typography',
-    icon: <CIcon icon={cibMarkdown} customClassName="nav-icon" />,
-    moduleName : 'Attendance'
-
-  },
   {
     component: CNavItem,
     name: 'Settings',
