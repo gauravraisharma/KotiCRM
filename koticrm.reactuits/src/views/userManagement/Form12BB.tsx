@@ -482,7 +482,16 @@ const Form12BB = () => {
       // Call save method 
       const response = await SaveForm12BB(formDataReplica);
       if(response.status == 200){
+        if(formDataReplica.isDeclarationComplete == false){
+          toast.success('Saved as draft');
+        }
+        else{
+          toast.success('Final submission successful');
+        }
         navigate(`/users`);
+      }
+      else{
+        toast.error('Saved as draft');
       }
     }
   };
