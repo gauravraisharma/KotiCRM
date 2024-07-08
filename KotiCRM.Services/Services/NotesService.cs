@@ -24,7 +24,7 @@ namespace KotiCRM.Services.Services
 
         public async Task<DbResponse> DeleteNote(int id)
         {
-            return await _noteRepository.DeleteNote(id);  
+            return await _noteRepository.DeleteNote(id);
         }
 
         public async Task<ResponseNoteModel> GetNoteDetails(int id)
@@ -39,7 +39,7 @@ namespace KotiCRM.Services.Services
 
         public async Task<Note> UpdateNote(int id, Note note)
         {
-            return await _noteRepository.UpdateNote(id,note);
+            return await _noteRepository.UpdateNote(id, note);
         }
     }
 }

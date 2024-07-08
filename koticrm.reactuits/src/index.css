@@ -71,3 +71,17 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 } */
+
+.spinner-border::after  {
+  display: none !important; 
+}
+
+
+.sidebar-nav .active {
+  background-color: #2e89e4;
+  color: #fff !important; 
+} 
+
+.sidebar-nav .active .nav-text {
+  color: #fff !important; 
+}

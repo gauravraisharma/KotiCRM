@@ -1,13 +1,15 @@
 ﻿using KotiCRM.Repository.DTOs.Attachment;
 using KotiCRM.Repository.Models;
+using KotiCRM.Server.Authentication;
 using KotiCRM.Services.IServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace KotiCRM.Server.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    //[Authorize(AuthenticationSchemes = "Bearer")]
+    [Authorize(AuthenticationSchemes = "Bearer")]
     public class AttachmentController : Controller
     {
         private readonly IAttachmentService _attachmentService;
@@ -16,16 +18,22 @@ namespace KotiCRM.Server.Controllers
         {
             _attachmentService = attachmentService;
         }
+        /// Endpoint to retrieve a list of attachments.
+        /// Requires the 'Accounts_View' policy.
 
         [HttpGet]
         [Route("GetAttachmentList")]
+        [Authorize(Policy = Policies.Accounts_View)]
         public async Task<IEnumerable<AttachmentDTO>> GetAttachmentList()
         {
             return await _attachmentService.GetAttachmentList();
         }
+        /// Endpoint to create a new attachment.
+        /// Requires the 'Accounts_Add' policy.
 
         [HttpPost]
         [Route("CreateAttachment")]
+        [Authorize(Policy = Policies.Accounts_Add)]
         public async Task<ActionResult<Attachment>> CreateAttachment([FromForm] CreateAttachmentDTO createAttachmentDTO)
         {
             var response = await _attachmentService.CreateAttachment(createAttachmentDTO);
@@ -34,6 +42,34 @@ namespace KotiCRM.Server.Controllers
                 return StatusCode(500, response?.Message);
             }
             return Ok(response);
+        }
+        /// Endpoint to download an attachment by attachmentId.
+        /// Requires the 'Accounts_View' policy.
+        [HttpGet("{attachmentId}/download")]
+        [Authorize(Policy = Policies.Accounts_View)]
+        public async Task<IActionResult> DownloadAttachmentAsync(int attachmentId)
+        {
+            var dbResponse = await _attachmentService.DownloadAttachmentAsync(attachmentId);
+
+            if (dbResponse.Succeed == false)
+            {
+                return NotFound(dbResponse.Message);
+            }
+
+            var path = dbResponse.Message;
+
+            var memory = new MemoryStream();
+            using (var stream = new FileStream(path, FileMode.Open))
+            {
+                await stream.CopyToAsync(memory);
+            }
+            memory.Position = 0;
+            var contentType = "APPLICATION/octet-stream";
+            var fileName = Path.GetFileName(path);
+
+            var file = File(memory, contentType, fileName);
+
+            return file;
         }
     }
 }

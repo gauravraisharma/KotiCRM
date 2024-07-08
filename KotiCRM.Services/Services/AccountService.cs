@@ -1,4 +1,5 @@
-﻿using KotiCRM.Repository.IRepository;
+﻿using KotiCRM.Repository.DTOs.AccountDTO;
+using KotiCRM.Repository.IRepository;
 using KotiCRM.Repository.Models;
 using KotiCRM.Services.IServices;
 using System;
@@ -34,9 +35,18 @@ namespace KotiCRM.Services.Services
             return await _accountRepository.GetAccountDetails(id);
         }
 
-        public async Task<IEnumerable<Account>> GetAccountList()
+        public async Task<AccountWithCountDTO> GetAccountList(string? searchQuery, int? pageNumber, int? pageSize)
         {
-            return await _accountRepository.GetAccountList();
+            var accountList =  (from account in await _accountRepository.GetAccountList()
+                                where (string.IsNullOrEmpty(searchQuery) ||
+                                account.AccountName.Contains(searchQuery, StringComparison.OrdinalIgnoreCase) ||
+                                account.Phone.Contains(searchQuery, StringComparison.OrdinalIgnoreCase))
+                                select account)
+                                .Skip(pageNumber.HasValue && pageSize.HasValue ? (pageNumber.Value - 1) * pageSize.Value : 0)
+                                .Take(pageNumber.HasValue && pageSize.HasValue ? pageSize.Value : 10);
+           var accounts = await _accountRepository.GetAccountList();
+            int count = accounts.Count();
+            return new AccountWithCountDTO { Account = accountList, AccountCount = count};
         }
 
         public async Task<Account> UpdateAccount(int id, Account account)

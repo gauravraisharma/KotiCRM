@@ -1,7 +1,6 @@
 ﻿using KotiCRM.Repository.DTOs.Organization;
 using KotiCRM.Repository.IRepository;
 using KotiCRM.Repository.Models;
-using KotiCRM.Repository.Repository;
 using KotiCRM.Services.IServices;
 
 namespace KotiCRM.Services.Services
@@ -15,7 +14,7 @@ namespace KotiCRM.Services.Services
             _organizationRepository = organizationRepository;
         }
 
-         public async Task<IEnumerable<OrganizationBankResponse>> GetOrganizationList()
+        public async Task<IEnumerable<OrganizationBankResponse>> GetOrganizationList()
         {
             return await _organizationRepository.GetOrganizationList();
         }
@@ -35,22 +34,27 @@ namespace KotiCRM.Services.Services
                 BillingStreet = organization.BillingStreet,
                 BillingCity = organization.BillingCity,
                 BillingState = organization.BillingState,
-                BillingCode = organization.BillingCode,
+                ZipCode = organization.ZipCode,
                 BillingCountry = organization.BillingCountry
             };
 
             return organizationDTO;
         }
 
-        public async Task<OrganizationDTO> UpdateOrganization(int id, Organization organization)
+        public async Task<OrganizationDTO> UpdateOrganizationTimeZone(int id, Organization organization)
         {
             if (organization == null)
             {
                 throw new ArgumentNullException(nameof(organization));
             }
-            var organizationData = await _organizationRepository.UpdateOrganization(id, organization);
+            var organizationData = await _organizationRepository.UpdateOrganizationTimeZone(id, organization);
             return organizationData;
-  
+
+        }
+
+        public Task<bool> UpdateTimeZoneAsync(string userId, string timeZone)
+        {
+            throw new NotImplementedException();
         }
     }
 }

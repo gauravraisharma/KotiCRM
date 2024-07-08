@@ -5,7 +5,9 @@ namespace KotiCRM.Repository.Models;
 
 public partial class Bank
 {
-    public int BankId { get; set; }
+    public int? BankId { get; set; }
+
+    public string? BankAccountNumber { get; set; }
 
     public string? Name { get; set; }
 

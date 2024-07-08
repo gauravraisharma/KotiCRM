@@ -19,7 +19,7 @@ namespace KotiCRM.Repository.Repository
         {
             _context = context;
         }
-
+        // Method to get the list of industries asynchronously
         public async Task<IEnumerable<Industry>> GetIndustryList()
         {
             try
@@ -32,13 +32,13 @@ namespace KotiCRM.Repository.Repository
 
             }
         }
-        
-        
+        // Method to get a list of account owners
+
         public List<DropDownModel> GetAccountOwner()
         {
             try
             {
-
+                // Query to get users who have permissions to add, edit, delete, and view accounts
                 var result = (from users in _context.Users
                               join userRoles in _context.UserRoles on users.Id equals userRoles.UserId
                               join Permissions in _context.Permissions on userRoles.RoleId equals Permissions.RoleID
@@ -59,11 +59,12 @@ namespace KotiCRM.Repository.Repository
 
             }
         }
+        // Method to get a list of invoice owners
         public List<DropDownModel> GetInvoiceOwner()
         {
             try
             {
-
+                // Query to get users who have permissions to add, edit, delete, and view invoices
                 var result = (from users in _context.Users
                               join userRoles in _context.UserRoles on users.Id equals userRoles.UserId
                               join Permissions in _context.Permissions on userRoles.RoleId equals Permissions.RoleID
@@ -82,6 +83,89 @@ namespace KotiCRM.Repository.Repository
             {
                 throw new Exception(ex.Message, ex);
 
+            }
+        }
+        // Method to get the list of departments asynchronously
+        public async Task<IEnumerable<Department>> GetDepartmentList()
+        {
+            try
+            {
+                return await _context.Departments.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message, ex);
+
+            }
+        }
+        // Method to get the list of designations asynchronously
+        public async Task<IEnumerable<Designation>> GetDesignationList()
+        {
+            try
+            {
+                return await _context.Designations.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message, ex);
+
+            }
+        }
+        // Method to get the list of banks asynchronously
+        public async Task<IEnumerable<Bank>> GetBankList()
+        {
+            try
+            {
+                return await _context.Banks.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message, ex);
+
+            }
+        }
+        // Method to get the list of shifts asynchronously
+        public async Task<IEnumerable<Shift>> GetShiftList()
+        {
+            try
+            {
+                return await _context.Shifts.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message, ex);
+
+            }
+        }
+        // Method to generate a new employee ID
+        public string GetEmployeeId()
+        {
+            try
+            {
+                string lastCreatedEmployeeId = "";
+                // Query to get the last created employee
+                var lastCreatedEmployee = _context.Employees.OrderByDescending(e => e.EmployeeId).FirstOrDefault();
+                if (lastCreatedEmployee != null && lastCreatedEmployee.EmployeeId != null)
+                {
+                    int employeeId = int.Parse(lastCreatedEmployee.EmployeeId);
+                    if (employeeId <= 0)
+                    {
+                        lastCreatedEmployeeId = "";
+                    }
+                    else
+                    {
+                        lastCreatedEmployeeId = (employeeId + 1).ToString().PadLeft(lastCreatedEmployee.EmployeeId.Length, '0');
+                    }
+                    return lastCreatedEmployeeId;
+                }
+                else
+                {
+                    return lastCreatedEmployeeId = "";
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message, ex);
             }
         }
     }

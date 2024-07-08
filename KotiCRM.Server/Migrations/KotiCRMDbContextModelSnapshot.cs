@@ -42,10 +42,6 @@ namespace KotiCRM.Server.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<string>("BillingCode")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(100)");
-
                     b.Property<string>("BillingState")
                         .IsRequired()
                         .HasColumnType("nvarchar(100)");
@@ -108,6 +104,10 @@ namespace KotiCRM.Server.Migrations
                     b.Property<string>("WebSite")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ZipCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
 
@@ -264,6 +264,12 @@ namespace KotiCRM.Server.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
+                    b.Property<int?>("AccountID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ContentType")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("DateAdded")
                         .HasColumnType("datetime2");
 
@@ -291,9 +297,16 @@ namespace KotiCRM.Server.Migrations
 
             modelBuilder.Entity("KotiCRM.Repository.Models.Bank", b =>
                 {
-                    b.Property<int>("BankId")
-                        .HasColumnType("int")
-                        .HasColumnName("BankID");
+                    b.Property<int?>("BankId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("BankId"));
+
+                    b.Property<string>("BankAccountNumber")
+                        .HasMaxLength(100)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(100)");
 
                     b.Property<string>("Branch")
                         .HasMaxLength(100)
@@ -343,7 +356,8 @@ namespace KotiCRM.Server.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ContactId");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
@@ -351,47 +365,49 @@ namespace KotiCRM.Server.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("City")
-                        .IsRequired()
+                        .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Country")
-                        .IsRequired()
+                        .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<DateTime?>("DateOfBirth")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("date");
 
                     b.Property<string>("Department")
-                        .IsRequired()
+                        .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("Description")
-                        .IsRequired()
+                        .HasMaxLength(450)
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("HomePhone")
-                        .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("LinkedinURL")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("MailingStreet")
-                        .IsRequired()
+                        .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("Mobile")
@@ -400,44 +416,45 @@ namespace KotiCRM.Server.Migrations
                         .HasColumnType("nvarchar(20)");
 
                     b.Property<string>("OtherPhone")
-                        .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
                     b.Property<string>("OwnerId")
                         .IsRequired()
+                        .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("Phone")
-                        .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
                     b.Property<string>("SecondaryEmail")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("SkypeID")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("State")
-                        .IsRequired()
+                        .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Title")
-                        .IsRequired()
+                        .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("TwitterURL")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
-                    b.Property<string>("Zip")
-                        .IsRequired()
+                    b.Property<string>("ZipCode")
+                        .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AccountID");
 
                     b.ToTable("Contacts");
                 });
@@ -510,6 +527,161 @@ namespace KotiCRM.Server.Migrations
                     b.ToTable("Designation", (string)null);
                 });
 
+            modelBuilder.Entity("KotiCRM.Repository.Models.EightyCDeclaration", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("Amount")
+                        .IsRequired()
+                        .HasColumnType("int");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("DeductionTypeId")
+                        .IsRequired()
+                        .HasColumnType("int");
+
+                    b.Property<int>("Employee12BBId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsDelete")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsVerified")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .IsRequired()
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ProofDocumentLink")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("Remarks")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Employee12BBId");
+
+                    b.ToTable("EightyCDeclarations");
+                });
+
+            modelBuilder.Entity("KotiCRM.Repository.Models.EightyCDeductionType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("EightyCDeclarationId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EightyCDeclarationId");
+
+                    b.ToTable("EightyCDeductionTypes");
+                });
+
+            modelBuilder.Entity("KotiCRM.Repository.Models.EightyDDeclaration", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("InsuranceAmount")
+                        .IsRequired()
+                        .HasColumnType("int");
+
+                    b.Property<string>("InsuranceProofLink")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<bool>("IsVerified")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("MedicalExpenseAmount")
+                        .IsRequired()
+                        .HasColumnType("int");
+
+                    b.Property<string>("MedicalExpenseProof")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("Remarks")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("EightyDDeclarations");
+                });
+
+            modelBuilder.Entity("KotiCRM.Repository.Models.EightyGDeclaration", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Address")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<int?>("Amount")
+                        .IsRequired()
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsVerified")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("NameOfDonee")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("PanNumber")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("ProofDocumentLink")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("Remarks")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("EightyGDeclarations");
+                });
+
             modelBuilder.Entity("KotiCRM.Repository.Models.Employee", b =>
                 {
                     b.Property<string>("EmployeeId")
@@ -522,41 +694,43 @@ namespace KotiCRM.Server.Migrations
                         .IsUnicode(false)
                         .HasColumnType("varchar(50)");
 
-                    b.Property<string>("BankAccountNumber")
-                        .HasMaxLength(20)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(20)");
-
                     b.Property<int?>("BankId")
+                        .HasMaxLength(20)
                         .HasColumnType("int");
 
                     b.Property<string>("BloodGroup")
-                        .HasMaxLength(50)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(50)");
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
 
                     b.Property<int>("CompanyId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(1);
+                        .HasColumnType("int");
 
                     b.Property<string>("ContactNumber1")
-                        .HasMaxLength(50)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(50)");
+                        .HasMaxLength(15)
+                        .HasColumnType("nvarchar(15)");
 
                     b.Property<string>("ContactNumber2")
-                        .HasMaxLength(50)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(50)");
+                        .HasMaxLength(15)
+                        .HasColumnType("nvarchar(15)");
 
                     b.Property<string>("CorrespondenceAddress")
-                        .HasMaxLength(255)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(255)");
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("CreateBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<DateOnly?>("DateOfBirth")
                         .HasColumnType("date");
+
+                    b.Property<string>("DeletedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("DeletedDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<int?>("DepartmentId")
                         .HasColumnType("int");
@@ -565,86 +739,74 @@ namespace KotiCRM.Server.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("EmpCode")
-                        .HasMaxLength(50)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(50)");
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
 
                     b.Property<string>("FatherName")
-                        .HasMaxLength(100)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(100)");
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
 
-                    b.Property<string>("Id")
-                        .HasMaxLength(50)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(50)");
+                    b.Property<string>("GuardianContactNumber")
+                        .HasMaxLength(15)
+                        .HasColumnType("nvarchar(15)");
 
-                    b.Property<string>("Ifsccode")
-                        .HasMaxLength(50)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(50)")
-                        .HasColumnName("IFSCCode");
+                    b.Property<string>("GuardianName")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
                     b.Property<DateOnly?>("JoiningDate")
                         .HasColumnType("date");
 
                     b.Property<string>("Name")
-                        .HasMaxLength(100)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(100)");
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
 
                     b.Property<string>("OfficialEmailId")
-                        .HasMaxLength(100)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(100)");
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
 
                     b.Property<string>("OfficialEmailPassword")
-                        .HasMaxLength(50)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<int?>("OrganizationId")
-                        .HasColumnType("int")
-                        .HasColumnName("OrganizationID");
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
 
                     b.Property<string>("PanNumber")
-                        .HasMaxLength(20)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(20)");
-
-                    b.Property<string>("Password")
                         .HasMaxLength(10)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(10)");
+                        .HasColumnType("nvarchar(10)");
 
                     b.Property<string>("PermanentAddress")
-                        .HasMaxLength(255)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(255)");
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<string>("PersonalEmailId")
-                        .HasMaxLength(100)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(100)");
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("ProfilePictureURL")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
 
                     b.Property<DateOnly?>("RelievingDate")
                         .HasColumnType("date");
-
-                    b.Property<int>("RoleId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(1);
 
                     b.Property<int?>("ShiftId")
                         .HasColumnType("int");
 
                     b.Property<string>("SkypeId")
                         .HasMaxLength(100)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(100)");
+                        .HasColumnType("nvarchar(100)");
 
-                    b.Property<int?>("Status")
-                        .HasColumnType("int");
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserId")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
 
                     b.HasKey("EmployeeId");
 
@@ -656,13 +818,91 @@ namespace KotiCRM.Server.Migrations
 
                     b.HasIndex("DesignationId");
 
-                    b.HasIndex("OrganizationId");
-
-                    b.HasIndex("RoleId");
-
                     b.HasIndex("ShiftId");
 
                     b.ToTable("Employee", (string)null);
+                });
+
+            modelBuilder.Entity("KotiCRM.Repository.Models.Employee12BB", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("EightyDRecordId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("EightyGRecordId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("EmployeeId")
+                        .HasMaxLength(100)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<string>("FinancialYear")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
+                    b.Property<int?>("HomeLoanRecordId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("HouseRentRecordId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeclarationComplete")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDelete")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsFormVerified")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("OtherInvestmentRecordId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("TravelExpenditureRecordId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EightyDRecordId");
+
+                    b.HasIndex("EightyGRecordId");
+
+                    b.HasIndex("EmployeeId");
+
+                    b.HasIndex("HomeLoanRecordId");
+
+                    b.HasIndex("HouseRentRecordId");
+
+                    b.HasIndex("OtherInvestmentRecordId");
+
+                    b.HasIndex("TravelExpenditureRecordId");
+
+                    b.ToTable("Employee12BBs");
                 });
 
             modelBuilder.Entity("KotiCRM.Repository.Models.EmployeeAppraisal", b =>
@@ -748,24 +988,76 @@ namespace KotiCRM.Server.Migrations
                     b.ToTable("EmployeeLeaves");
                 });
 
-            modelBuilder.Entity("KotiCRM.Repository.Models.EmployeeRole", b =>
+            modelBuilder.Entity("KotiCRM.Repository.Models.HomeLoanDeclaration", b =>
                 {
-                    b.Property<int>("RoleId")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<string>("Description")
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("Amount")
+                        .IsRequired()
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsVerified")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LenderAddress")
                         .HasMaxLength(255)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(255)");
+                        .HasColumnType("nvarchar(255)");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("LenderName")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("LenderPanNumber")
                         .HasMaxLength(50)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(50)");
+                        .HasColumnType("nvarchar(50)");
 
-                    b.HasKey("RoleId");
+                    b.Property<string>("ProofDocumentLink")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
 
-                    b.ToTable("EmployeeRoles");
+                    b.Property<string>("Remarks")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("HomeLoanDeclarations");
+                });
+
+            modelBuilder.Entity("KotiCRM.Repository.Models.HouseRentDeclaration", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("Amount")
+                        .IsRequired()
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsVerified")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("OwnerPanCard")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("ProofDocumentLink")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("Remarks")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("HouseRentDeclarations");
                 });
 
             modelBuilder.Entity("KotiCRM.Repository.Models.ImportHistory", b =>
@@ -842,9 +1134,6 @@ namespace KotiCRM.Server.Migrations
                     b.Property<string>("FromBillingCity")
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<string>("FromBillingCode")
-                        .HasColumnType("nvarchar(100)");
-
                     b.Property<string>("FromBillingCountry")
                         .HasColumnType("nvarchar(100)");
 
@@ -852,6 +1141,9 @@ namespace KotiCRM.Server.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("FromBillingStreet")
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("FromZipCode")
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<DateTime>("InvoiceDate")
@@ -886,9 +1178,6 @@ namespace KotiCRM.Server.Migrations
                     b.Property<string>("ToBillingCity")
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<string>("ToBillingCode")
-                        .HasColumnType("nvarchar(100)");
-
                     b.Property<string>("ToBillingCountry")
                         .HasColumnType("nvarchar(100)");
 
@@ -896,6 +1185,9 @@ namespace KotiCRM.Server.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("ToBillingStreet")
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("ToZipCode")
                         .HasColumnType("nvarchar(100)");
 
                     b.HasKey("ID");
@@ -1193,10 +1485,6 @@ namespace KotiCRM.Server.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<string>("BillingCode")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
                     b.Property<string>("BillingCountry")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
@@ -1232,9 +1520,41 @@ namespace KotiCRM.Server.Migrations
                         .IsUnicode(false)
                         .HasColumnType("varchar(100)");
 
+                    b.Property<string>("ZipCode")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
                     b.HasKey("Id");
 
                     b.ToTable("Organization", (string)null);
+                });
+
+            modelBuilder.Entity("KotiCRM.Repository.Models.OtherInvestmentDeclaration", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<bool>("IsVerified")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ProofDocumentLink")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("Remarks")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("OtherInvestmentDeclarations");
                 });
 
             modelBuilder.Entity("KotiCRM.Repository.Models.Permissions", b =>
@@ -1846,6 +2166,34 @@ namespace KotiCRM.Server.Migrations
                     b.ToTable("Timesheets");
                 });
 
+            modelBuilder.Entity("KotiCRM.Repository.Models.TravelExpenditureDeclaration", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("Amount")
+                        .IsRequired()
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsVerified")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ProofDocumentLink")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("Remarks")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TravelExpenditureDeclarations");
+                });
+
             modelBuilder.Entity("KotiCRM.Repository.Models.UserLeave", b =>
                 {
                     b.Property<int>("LeaveId")
@@ -2030,12 +2378,22 @@ namespace KotiCRM.Server.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("KotiCRM.Repository.Models.Contact", b =>
+                {
+                    b.HasOne("KotiCRM.Repository.Models.Account", "Account")
+                        .WithMany()
+                        .HasForeignKey("AccountID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Account");
+                });
+
             modelBuilder.Entity("KotiCRM.Repository.Models.Department", b =>
                 {
                     b.HasOne("KotiCRM.Repository.Models.Organization", "Organization")
-                        .WithMany("Departments")
-                        .HasForeignKey("OrganizationId")
-                        .HasConstraintName("FK_Department_Organization");
+                        .WithMany()
+                        .HasForeignKey("OrganizationId");
 
                     b.Navigation("Organization");
                 });
@@ -2043,11 +2401,28 @@ namespace KotiCRM.Server.Migrations
             modelBuilder.Entity("KotiCRM.Repository.Models.Designation", b =>
                 {
                     b.HasOne("KotiCRM.Repository.Models.Organization", "Organization")
-                        .WithMany("Designations")
-                        .HasForeignKey("OrganizationId")
-                        .HasConstraintName("FK_Designation_Organization");
+                        .WithMany()
+                        .HasForeignKey("OrganizationId");
 
                     b.Navigation("Organization");
+                });
+
+            modelBuilder.Entity("KotiCRM.Repository.Models.EightyCDeclaration", b =>
+                {
+                    b.HasOne("KotiCRM.Repository.Models.Employee12BB", "Employee12BB")
+                        .WithMany("EightyCDeclarations")
+                        .HasForeignKey("Employee12BBId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Employee12BB");
+                });
+
+            modelBuilder.Entity("KotiCRM.Repository.Models.EightyCDeductionType", b =>
+                {
+                    b.HasOne("KotiCRM.Repository.Models.EightyCDeclaration", null)
+                        .WithMany("EightyCDeductionTypes")
+                        .HasForeignKey("EightyCDeclarationId");
                 });
 
             modelBuilder.Entity("KotiCRM.Repository.Models.Employee", b =>
@@ -2073,17 +2448,6 @@ namespace KotiCRM.Server.Migrations
                         .HasForeignKey("DesignationId")
                         .HasConstraintName("FK_Employee_Designation");
 
-                    b.HasOne("KotiCRM.Repository.Models.Organization", "Organization")
-                        .WithMany("Employees")
-                        .HasForeignKey("OrganizationId")
-                        .HasConstraintName("FK_Employee_Organization");
-
-                    b.HasOne("KotiCRM.Repository.Models.EmployeeRole", "Role")
-                        .WithMany("Employees")
-                        .HasForeignKey("RoleId")
-                        .IsRequired()
-                        .HasConstraintName("FK_Employee_EmployeeRoles");
-
                     b.HasOne("KotiCRM.Repository.Models.Shift", "Shift")
                         .WithMany("Employees")
                         .HasForeignKey("ShiftId")
@@ -2097,11 +2461,59 @@ namespace KotiCRM.Server.Migrations
 
                     b.Navigation("Designation");
 
-                    b.Navigation("Organization");
-
-                    b.Navigation("Role");
-
                     b.Navigation("Shift");
+                });
+
+            modelBuilder.Entity("KotiCRM.Repository.Models.Employee12BB", b =>
+                {
+                    b.HasOne("KotiCRM.Repository.Models.EightyDDeclaration", "EightyDRecord")
+                        .WithMany()
+                        .HasForeignKey("EightyDRecordId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("KotiCRM.Repository.Models.EightyGDeclaration", "EightyGRecord")
+                        .WithMany()
+                        .HasForeignKey("EightyGRecordId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("KotiCRM.Repository.Models.Employee", "Employee")
+                        .WithMany("Employee12BBs")
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("KotiCRM.Repository.Models.HomeLoanDeclaration", "HomeLoanRecord")
+                        .WithMany()
+                        .HasForeignKey("HomeLoanRecordId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("KotiCRM.Repository.Models.HouseRentDeclaration", "HouseRentRecord")
+                        .WithMany()
+                        .HasForeignKey("HouseRentRecordId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("KotiCRM.Repository.Models.OtherInvestmentDeclaration", "OtherInvestmentRecord")
+                        .WithMany()
+                        .HasForeignKey("OtherInvestmentRecordId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("KotiCRM.Repository.Models.TravelExpenditureDeclaration", "TravelExpenditureRecord")
+                        .WithMany()
+                        .HasForeignKey("TravelExpenditureRecordId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("EightyDRecord");
+
+                    b.Navigation("EightyGRecord");
+
+                    b.Navigation("Employee");
+
+                    b.Navigation("HomeLoanRecord");
+
+                    b.Navigation("HouseRentRecord");
+
+                    b.Navigation("OtherInvestmentRecord");
+
+                    b.Navigation("TravelExpenditureRecord");
                 });
 
             modelBuilder.Entity("KotiCRM.Repository.Models.ProjectTeam", b =>
@@ -2128,9 +2540,8 @@ namespace KotiCRM.Server.Migrations
             modelBuilder.Entity("KotiCRM.Repository.Models.UserLeave", b =>
                 {
                     b.HasOne("KotiCRM.Repository.Models.Employee", "Employee")
-                        .WithMany("UserLeaves")
-                        .HasForeignKey("EmployeeId")
-                        .HasConstraintName("FK_UserLeave_Employee");
+                        .WithMany()
+                        .HasForeignKey("EmployeeId");
 
                     b.Navigation("Employee");
                 });
@@ -2206,23 +2617,19 @@ namespace KotiCRM.Server.Migrations
                     b.Navigation("Employees");
                 });
 
+            modelBuilder.Entity("KotiCRM.Repository.Models.EightyCDeclaration", b =>
+                {
+                    b.Navigation("EightyCDeductionTypes");
+                });
+
             modelBuilder.Entity("KotiCRM.Repository.Models.Employee", b =>
                 {
-                    b.Navigation("UserLeaves");
+                    b.Navigation("Employee12BBs");
                 });
 
-            modelBuilder.Entity("KotiCRM.Repository.Models.EmployeeRole", b =>
+            modelBuilder.Entity("KotiCRM.Repository.Models.Employee12BB", b =>
                 {
-                    b.Navigation("Employees");
-                });
-
-            modelBuilder.Entity("KotiCRM.Repository.Models.Organization", b =>
-                {
-                    b.Navigation("Departments");
-
-                    b.Navigation("Designations");
-
-                    b.Navigation("Employees");
+                    b.Navigation("EightyCDeclarations");
                 });
 
             modelBuilder.Entity("KotiCRM.Repository.Models.Project", b =>
