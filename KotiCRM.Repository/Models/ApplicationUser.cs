@@ -18,6 +18,11 @@ namespace KotiCRM.Repository.Models
         public DateTime? ModifiedOn { get; set; }
         public bool IsDeleted { get; set; }
         public int OrganizationId { get; set; }
+
+        //[Column(TypeName = "nvarchar(450)")]
+        //public string ResetPasswordToken { get; set; }
+
+        //public DateTime ResetPasswordTokenExpiry { get; set; }
     }
 }
 

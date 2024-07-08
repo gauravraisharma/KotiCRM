@@ -2,24 +2,21 @@ import { useSelector } from "react-redux"
 import './invoiceTemplate.css'
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { getAccountByIdRequest, getInvoiceByIdRequest, getOrganization } from "../redux-saga/action";
 import { CButton, CCard, CCardHeader } from "@coreui/react";
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
+import { getAccountByIdRequest } from "../redux-saga/modules/account/action";
+import { getInvoiceByIdRequest } from "../redux-saga/modules/invoice/action";
+import { getOrganization } from "../redux-saga/modules/shared/action";
+import { Link, useParams } from "react-router-dom";
 
 
-interface InvoicePdfTemplateProps {
-	closeInvoicePdfModal: () => void;
-	invoiceId: any;
-	onBackToListButtonClickHandler: () => void;
-}
 
-const InvoiceTemplate: React.FC<InvoicePdfTemplateProps> = ({
-	invoiceId,
-	onBackToListButtonClickHandler
-}) => {
+const InvoiceTemplate= () => {
 
 	const dispatch = useDispatch()
+	const {invoiceId} = useParams();
+
 	function getDateTime(date: any) {
 		const formattedDate = new Date(date).toLocaleDateString('en-US', {
 			year: 'numeric',
@@ -29,10 +26,10 @@ const InvoiceTemplate: React.FC<InvoicePdfTemplateProps> = ({
 		return formattedDate;
 	}
 
-	const invoiceDetails = useSelector((state: any) => state.reducer.invoice)
-	const accountDetails = useSelector((state: any) => state.reducer.account)
+	const invoiceDetails = useSelector((state: any) => state.invoiceReducer.invoice)
+	const accountDetails = useSelector((state: any) => state.accountReducer.account)
 	const totalAmount = invoiceDetails?.invoiceItems.reduce((total: any, item: any) => total + item.total, 0);
-	const organization = useSelector((state: any) => state.reducer.organization)
+	const organization = useSelector((state: any) => state.sharedReducer.organization)
 
 	var orgName;
 	var bankDetails;
@@ -42,7 +39,7 @@ const InvoiceTemplate: React.FC<InvoicePdfTemplateProps> = ({
 			orgName = activeOrg[0]?.organizationResponse?.orgName;
 			const bank = activeOrg[0]?.banks?.filter((bank: any) => bank.organizationId === activeOrg[0].organizationResponse?.id);
 			if (bank && bank.length > 0) {
-				console.log(bank[0]?.bankId);
+
 				bankDetails = bank[0];
 			}
 		}
@@ -50,7 +47,6 @@ const InvoiceTemplate: React.FC<InvoicePdfTemplateProps> = ({
 
 
 	const handleDownloadPDF = () => {
-		debugger
 		const input: any = document.getElementById('invoice-pdf');
 
 		html2canvas(input).then((canvas: any) => {
@@ -79,13 +75,14 @@ const InvoiceTemplate: React.FC<InvoicePdfTemplateProps> = ({
 						value="Download PDF"
 						onClick={handleDownloadPDF}>
 					</CButton>
+					<Link to ={`/invoices`}>
 					<CButton
 						component="input"
 						type="button"
 						color="secondary"
 						value="Cancel"
-						onClick={onBackToListButtonClickHandler}
 					/>
+					</Link>
 				</div>
 			</CCardHeader>
 			<div id="invoice-pdf">
@@ -112,7 +109,6 @@ const InvoiceTemplate: React.FC<InvoicePdfTemplateProps> = ({
 
 									</th>
 								</tr>
-								{/* </thead> */}
 							</table>
 						</div>
 					</div>
@@ -196,9 +192,7 @@ const InvoiceTemplate: React.FC<InvoicePdfTemplateProps> = ({
 					<div className="invoice-footer" style={{ fontSize: '16px'}}>
 						<p style={{ margin: '5px 0', borderTop: '1px solid rgb(182, 178, 178) ', paddingTop: '20px' }}><strong>Terms & Conditions :</strong> {invoiceDetails?.invoice.termsAndConditions}</p>
 						<p className='link-footer'><b><u>In case of any questions on Invoice, please contact info@techbitsolution.com</u></b></p>
-
 						<p className='link-footer' style={{ marginTop: '20px' }}>{getDateTime(invoiceDetails?.invoice.invoiceDate)}</p>
-						{/* Add other footer details */}
 					</div>
 				</div>
 			</div>

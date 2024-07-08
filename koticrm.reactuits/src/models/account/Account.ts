@@ -5,7 +5,7 @@ export interface Account {
     annualRevenue: string;
     accountName: string;
     billingCity: string;
-    billingCode: string;
+    zipCode: string;
     billingState: string;
     billingStreet: string;
     country: string;

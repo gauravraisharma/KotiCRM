@@ -18,7 +18,7 @@ export interface CreateContact {
     mailingStreet: string | null;
     city: string | null;
     state: string | null;
-    zip: string | null;
+    zipCode: string | null;
     country: string | null;
     description: string | null;
 }
@@ -43,7 +43,7 @@ export class CreateContactClass implements CreateContact {
     mailingStreet: string | null;
     city: string | null;
     state: string | null;
-    zip: string | null;
+    zipCode: string | null;
     country: string | null;
     description: string | null;
 
@@ -67,7 +67,7 @@ export class CreateContactClass implements CreateContact {
         this.mailingStreet = '';
         this.city = '';
         this.state = '';
-        this.zip = '';
+        this.zipCode = '';
         this.country = '';
         this.description = '';
     }

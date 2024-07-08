@@ -1,16 +1,6 @@
 import CIcon from '@coreui/icons-react'
-import {
-  cilSpeedometer,
-  cilBook,
-  cilContact,
-  cibMarketo,
-  cibEventStore,
-  cibPaypal,
-  cibMarkdown,
-  cilGroup,
-  cilApplications,
-  cilSettings,
-  cilMoney,
+import {cilSpeedometer,cilBook,cilContact,
+  cibMarkdown,cilSettings,cilMoney,
 } from '@coreui/icons'
 import { CNavItem } from '@coreui/react'
 import { NavItem } from './models/commonModels/CommonModels'
@@ -21,13 +11,8 @@ const _nav:NavItem[] = [
     name: 'Dashboard',
     to: '/dashboard',
     icon: <CIcon icon={cilSpeedometer} customClassName="nav-icon" />,
-    //badge: {
-    //  color: 'info',
-    //  text: 'NEW',
-    //},
     moduleName : 'Dashboard'
   },
-
   {
     component: CNavItem,
     name: 'Accounts',
@@ -52,54 +37,9 @@ const _nav:NavItem[] = [
     moduleName : 'Invoices'
 
   },
-  {
-    component: CNavItem,
-    name: 'Leads',
-    to: '/theme/typography',
-    icon: <CIcon icon={cibMarketo} customClassName="nav-icon" />,
-    moduleName : 'Leads'
 
-  },
-  {
-    component: CNavItem,
-    name: 'Employees',
-    to: '/theme/typography',
-    icon: <CIcon icon={cilGroup} customClassName="nav-icon" />,
-    moduleName : 'Employees'
+  
 
-  },
-  {
-    component: CNavItem,
-    name: 'Events',
-    to: '/theme/typography',
-    icon: <CIcon icon={cibEventStore} customClassName="nav-icon" />,
-    moduleName : 'Events'
-
-  },
-  {
-    component: CNavItem,
-    name: 'Leaves',
-    to: '/theme/typography',
-    icon: <CIcon icon={cilApplications} customClassName="nav-icon" />,
-    moduleName : 'Leaves'
-
-  },
-  {
-    component: CNavItem,
-    name: 'Payroll',
-    to: '/theme/typography',
-    icon: <CIcon icon={cibPaypal} customClassName="nav-icon" />,
-    moduleName : 'Payroll'
-
-  },
-  {
-    component: CNavItem,
-    name: 'Attendance',
-    to: '/theme/typography',
-    icon: <CIcon icon={cibMarkdown} customClassName="nav-icon" />,
-    moduleName : 'Attendance'
-
-  },
   {
     component: CNavItem,
     name: 'Settings',
@@ -108,6 +48,7 @@ const _nav:NavItem[] = [
     moduleName : 'Settings'
 
   },
+
   ]
 
 export default _nav

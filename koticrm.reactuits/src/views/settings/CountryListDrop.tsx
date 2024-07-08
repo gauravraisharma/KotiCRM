@@ -1,8 +1,8 @@
-import CIcon from '@coreui/icons-react';
-import './SearchDropdown.scss';
 import { cilCaretBottom, cilCaretTop, cilSearch, cilX } from '@coreui/icons';
 import { useState } from 'react';
 import { useFormikContext } from 'formik';
+import CIcon from '@coreui/icons-react';
+import './SearchDropdown.scss';
 
 interface Option {
     id: string;
@@ -48,8 +48,8 @@ const SearchDropdown = (props: Props) => {
                     </span>
                     {
                         open ?
-                            <span><CIcon icon={cilCaretTop} size='sm' title='Up Caret' /></span> :
-                            <span><CIcon icon={cilCaretBottom} size='sm' title='Down Caret' /></span>
+                        <span><CIcon icon={cilCaretTop} size='sm' title='Up Caret' /></span> :
+                        <span><CIcon icon={cilCaretBottom} size='sm' title='Down Caret' /></span>
                     }
                 </div>
             </div>

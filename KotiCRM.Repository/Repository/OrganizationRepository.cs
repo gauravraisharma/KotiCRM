@@ -4,11 +4,6 @@ using KotiCRM.Repository.IRepository;
 using KotiCRM.Repository.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace KotiCRM.Repository.Repository
 {
@@ -17,20 +12,23 @@ namespace KotiCRM.Repository.Repository
         private readonly KotiCRMDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
 
+        // Constructor to initialize the context and userManager
         public OrganizationRepository(KotiCRMDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
             _userManager = userManager;
         }
 
-
+        // Method to get a list of organizations along with their associated banks
         public async Task<IEnumerable<OrganizationBankResponse>> GetOrganizationList()
         {
             try
             {
                 {
+                    // Retrieve all organizations and banks from the database
                     var organizations = await _context.Organizations.ToListAsync();
                     var banks = await _context.Banks.ToListAsync();
+                    // Map organizations to DTOs and associate banks with each organization
                     var organizationDto = organizations.Select(organization => new OrganizationBankResponse
                     {
                         OrganizationResponse = new OrganizationResponse()
@@ -45,13 +43,13 @@ namespace KotiCRM.Repository.Repository
                             BillingStreet = organization.BillingStreet,
                             BillingCity = organization.BillingCity,
                             BillingState = organization.BillingState,
-                            BillingCode = organization.BillingCode,
+                            ZipCode = organization.ZipCode,
                             BillingCountry = organization.BillingCountry
                         },
                         Banks = banks.Where(bank => bank.OrganizationId == organization.Id)
                 .Select(bank => new BankResponse()
                 {
-                    BankId = bank.BankId,
+                    BankId = (int)bank.BankId,
                     Name = bank.Name,
                     Branch = bank.Branch,
                     Ifsc = bank.Ifsc,
@@ -66,31 +64,36 @@ namespace KotiCRM.Repository.Repository
             }
             catch (Exception ex)
             {
+                // Throw an exception if something goes wrong
                 throw new Exception(ex.Message, ex);
 
             }
         }
-
+        // Method to get a single organization by its ID
         public async Task<Organization> GetOrganization(int id)
         {
             try
             {
+                // Find the organization in the database by its ID
                 var organization = await _context.Organizations.FindAsync(id);
                 return organization!;
             }
             catch (Exception ex)
             {
+                // Throw an exception if something goes wrong
                 throw new Exception(ex.Message, ex);
             }
         }
 
-        public async Task<OrganizationDTO> UpdateOrganization(int id, Organization organization)
+        // Method to update the time zone of an organization
+        public async Task<OrganizationDTO> UpdateOrganizationTimeZone(int id, Organization organization)
         {
             //var userRoles = await _userManager.GetRolesAsync(ownerFound);
 
 
                 var organizationDTO = new OrganizationDTO();
-                if (id == organization.Id)
+            // Check if the organization ID matches the provided ID
+            if (id == organization.Id)
                 {
                 //var usersWithOrg = (
                 //from org in _context.Organizations
@@ -127,8 +130,11 @@ namespace KotiCRM.Repository.Repository
                 }
                 try
                 {
-                    await _context.SaveChangesAsync();
-                    organizationDTO.OrgName = organization.OrgName;
+                // Save the changes to the database
+                await _context.SaveChangesAsync();
+
+                // Map the updated organization to the DTO
+                organizationDTO.OrgName = organization.OrgName;
                     organizationDTO.IsActive = organization.IsActive;
                     organizationDTO.TimeZone = organization.TimeZone;
                     organizationDTO.Shifts = organization.Shifts;
@@ -137,14 +143,15 @@ namespace KotiCRM.Repository.Repository
                     organizationDTO.BillingStreet = organization.BillingStreet;
                     organizationDTO.BillingCity = organization.BillingCity;
                     organizationDTO.BillingState = organization.BillingState;
-                    organizationDTO.BillingCode = organization.BillingCode;
+                    organizationDTO.ZipCode = organization.ZipCode;
                     organizationDTO.BillingCountry = organization.BillingCountry;
 
 
                 }
                 catch (DbUpdateConcurrencyException ex)
                 {
-                    throw new Exception("Concurrency conflict occurred. The entity has been modified or deleted by another user.", ex);
+                // Throw an exception if a concurrency conflict occurs
+                throw new Exception("Concurrency conflict occurred. The entity has been modified or deleted by another user.", ex);
                 }
                 return organizationDTO;
             }

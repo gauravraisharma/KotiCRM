@@ -19,17 +19,17 @@ namespace KotiCRM.Repository.Repository
         {
             _context = context;
         }
-
+        // Creates a new note in the database
         public async Task<DbResponse> CreateNote(Note note)
         {
             try
             {
-                _context.Notes.Add(note);
-                await _context.SaveChangesAsync();
+                _context.Notes.Add(note);// Add the note to the context
+                await _context.SaveChangesAsync();// Save changes asynchronously
                 return new DbResponse()
                 {
                     Succeed = true,
-                    Message = "Note added successfully"
+                    Message = "Note added successfully"// Return success response
                 };
             }
             catch (Exception ex)
@@ -37,24 +37,25 @@ namespace KotiCRM.Repository.Repository
                 return new DbResponse()
                 {
                     Succeed = false,
-                    Message = ex.Message
+                    Message = ex.Message// Return error message
 
                 };
             }
         }
-
+        // Retrieves the details of a specific note by ID
         public async Task<ResponseNoteModel> GetNoteDetails(int id)
         {
             try
             {
-                var note = await _context.Notes.FindAsync(id);
+                var note = await _context.Notes.FindAsync(id);// Find the note by ID
 
                 if (note == null)
                 {
-                    throw new Exception($"Note with ID {id} was not found.");
+                    throw new Exception($"Note with ID {id} was not found.");// Note not found
+
                 }
 
-                var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == note.UserID);
+                var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == note.UserID); // Find the user associated with the note
 
                 if (user != null)
                 {
@@ -69,33 +70,33 @@ namespace KotiCRM.Repository.Repository
                         LastName = user.LastName
                     };
 
-                    return responseNote;
+                    return responseNote;// Return the note details with user info
                 }
                 else
                 {
-                    throw new Exception($"User with ID {note.UserID} was not found.");
+                    throw new Exception($"User with ID {note.UserID} was not found.");// User not found
                 }
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message, ex);
+                throw new Exception(ex.Message, ex);// Return error message
             }
         }
 
-
+        // Retrieves a list of all notes with user details
         public async Task<IEnumerable<ResponseNoteModel>> GetNoteList()
         {
             try
             {
 
-                var notes = await _context.Notes.ToListAsync();
+                var notes = await _context.Notes.ToListAsync();// Get all notes
                 var responseNotes = new List<ResponseNoteModel>();
 
                         foreach (var note in notes)
                         {
-                            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == note.UserID);
+                            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == note.UserID);// Find the user associated with each note
 
-                            if (user != null)
+                    if (user != null)
                             {
                                 var responseNote = new ResponseNoteModel
                                 {
@@ -108,33 +109,31 @@ namespace KotiCRM.Repository.Repository
                                     LastName = user.LastName
                                 };
 
-                                responseNotes.Add(responseNote);
-                            }
+                                responseNotes.Add(responseNote); // Add the note with user details to the list
+                    }
                         }
 
-                        return responseNotes;
-                    }
+                        return responseNotes; // Return the list of notes
+            }
                     catch (Exception ex)
                     {
-                        throw new Exception(ex.Message, ex);
-                    }
+                        throw new Exception(ex.Message, ex); // Return error message
+            }
                 }
-
- 
-
+        // Deletes a note by ID
         public async Task<DbResponse> DeleteNote(int id)
         {
             try
             {
-                var note = await _context.Notes.FindAsync(id);
+                var note = await _context.Notes.FindAsync(id);// Find the note by ID
                 if (note != null)
                 {
-                    _context.Notes.Remove(note);
-                    await _context.SaveChangesAsync();
+                    _context.Notes.Remove(note);// Remove the note from the context
+                    await _context.SaveChangesAsync();// Save changes asynchronously
                     return new DbResponse()
                     {
                         Succeed = true,
-                        Message = "Note deleted successfully"
+                        Message = "Note deleted successfully"// Return success response
                     };
                 }
                 else
@@ -152,28 +151,29 @@ namespace KotiCRM.Repository.Repository
                 return new DbResponse()
                 {
                     Succeed = false,
-                    Message = ex.Message
+                    Message = ex.Message// Return error message
 
                 };
             }
 
 
         }
+        // Updates an existing note by ID
         public async Task<Note> UpdateNote(int id, Note note)
         {
             if (id == note.ID)
             {
-                _context.Entry(note).State = EntityState.Modified;
+                _context.Entry(note).State = EntityState.Modified;// Mark the note as modified
             }
             try
             {
-                await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync();// Save changes asynchronously
             }
             catch (DbUpdateConcurrencyException ex)
             {
                 throw new Exception("Concurrency conflict occurred. The entity has been modified or deleted by another user.", ex);
             }
-            return note;
+            return note;// Return the updated note
         }
     }
 }

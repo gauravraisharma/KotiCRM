@@ -1,11 +1,6 @@
 ﻿using KotiCRM.Repository.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Sockets;
-using System.Text;
 using Task = KotiCRM.Repository.Models.Task;
 
 namespace KotiCRM.Repository.Data
@@ -25,6 +20,19 @@ namespace KotiCRM.Repository.Data
         public DbSet<Attachment> Attachments { get; set; }
         public DbSet<InvoiceItem> InvoiceItems { get; set; }
         public DbSet<Note> Notes { get; set; }
+
+        // Tax
+
+        public DbSet<Employee12BB> Employee12BBs { get; set; }
+        public DbSet<HouseRentDeclaration> HouseRentDeclarations { get; set; }
+        public DbSet<TravelExpenditureDeclaration> TravelExpenditureDeclarations { get; set; }
+        public DbSet<HomeLoanDeclaration> HomeLoanDeclarations { get; set; }
+        public DbSet<EightyDDeclaration> EightyDDeclarations { get; set; }
+        public DbSet<EightyGDeclaration> EightyGDeclarations { get; set; }
+        public DbSet<OtherInvestmentDeclaration> OtherInvestmentDeclarations { get; set; }
+        public DbSet<EightyCDeclaration> EightyCDeclarations { get; set; }
+        public DbSet<EightyCDeductionType> EightyCDeductionTypes { get; set; }
+
         public virtual DbSet<Bank> Banks { get; set; }
         public virtual DbSet<Company> Companies { get; set; }
         public virtual DbSet<DefaultColumn> DefaultColumns { get; set; }
@@ -39,7 +47,7 @@ namespace KotiCRM.Repository.Data
 
         public virtual DbSet<EmployeeLeaf> EmployeeLeaves { get; set; }
 
-        public virtual DbSet<EmployeeRole> EmployeeRoles { get; set; }
+        // public virtual DbSet<EmployeeRole> EmployeeRoles { get; set; }
 
         public virtual DbSet<ImportHistory> ImportHistories { get; set; }
         public virtual DbSet<LeaveApplication> LeaveApplications { get; set; }
@@ -98,11 +106,14 @@ namespace KotiCRM.Repository.Data
 
             modelBuilder.Entity<Bank>(entity =>
             {
+                entity.HasKey(e => e.BankId);
+
                 entity.ToTable("Bank");
 
-                entity.Property(e => e.BankId)
-                    .ValueGeneratedNever()
-                    .HasColumnName("BankID");
+                entity.Property(e => e.BankAccountNumber)
+                    .HasMaxLength(100)
+                    .IsUnicode(false)
+                    .IsRequired(false);
                 entity.Property(e => e.Branch)
                     .HasMaxLength(100)
                     .IsUnicode(false);
@@ -124,6 +135,40 @@ namespace KotiCRM.Repository.Data
                     .HasMaxLength(50)
                     .IsUnicode(false);
             });
+
+            modelBuilder.Entity<Contact>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+
+                entity.Property(e => e.Id).HasColumnName("ContactId");
+                entity.Property(e => e.OwnerId).HasMaxLength(200).IsRequired();
+                entity.Property(e => e.FirstName).HasMaxLength(200).IsRequired();
+                entity.Property(e => e.LastName).HasMaxLength(200).IsRequired();
+                entity.Property(e => e.AccountID).IsRequired();
+                entity.Property(e => e.Email).HasMaxLength(100).IsRequired();
+                entity.Property(e => e.Phone).HasMaxLength(20);
+                entity.Property(e => e.OtherPhone).HasMaxLength(20);
+                entity.Property(e => e.Mobile).HasMaxLength(20).IsRequired();
+                entity.Property(e => e.Title).HasMaxLength(200);
+                entity.Property(e => e.Department).HasMaxLength(200);
+                entity.Property(e => e.DateOfBirth).HasColumnType("date");
+                entity.Property(e => e.HomePhone).HasMaxLength(20);
+                entity.Property(e => e.SkypeID).HasMaxLength(200);
+                entity.Property(e => e.LinkedinURL).HasMaxLength(200);
+                entity.Property(e => e.TwitterURL).HasMaxLength(200);
+                entity.Property(e => e.SecondaryEmail).HasMaxLength(100);
+                entity.Property(e => e.MailingStreet).HasMaxLength(200);
+                entity.Property(e => e.City).HasMaxLength(100);
+                entity.Property(e => e.State).HasMaxLength(100);
+                entity.Property(e => e.ZipCode).HasMaxLength(100);
+                entity.Property(e => e.Country).HasMaxLength(100);
+                entity.Property(e => e.Description).HasMaxLength(450);
+
+                entity.HasOne(e => e.Account)
+                    .WithMany()
+                    .HasForeignKey(e => e.AccountID);
+            });
+
             modelBuilder.Entity<Department>(entity =>
             {
                 entity.HasKey(e => e.DepartmentId).HasName("PK_Table_1");
@@ -163,66 +208,66 @@ namespace KotiCRM.Repository.Data
                 entity.ToTable("Employee");
 
                 entity.Property(e => e.EmployeeId)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                .HasMaxLength(50)
+                .IsUnicode(false);
+
+                entity.Property(e => e.EmpCode)
+                    .HasMaxLength(255);
+
+                entity.Property(e => e.UserId)
+                    .HasMaxLength(255);
+
+                entity.Property(e => e.Name)
+                    .HasMaxLength(255);
+
+                entity.Property(e => e.ProfilePictureURL)
+                    .HasMaxLength(255);
+
+                entity.Property(e => e.FatherName)
+                    .HasMaxLength(255);
+
+                entity.Property(e => e.GuardianName)
+                    .HasMaxLength(255);
+
+                entity.Property(e => e.BloodGroup)
+                    .HasMaxLength(10);
+
+                entity.Property(e => e.ContactNumber1)
+                    .HasMaxLength(15);
+
+                entity.Property(e => e.ContactNumber2)
+                    .HasMaxLength(15);
+
+                entity.Property(e => e.GuardianContactNumber)
+                    .HasMaxLength(15);
+
+                entity.Property(e => e.PersonalEmailId)
+                    .HasMaxLength(255);
+
+                entity.Property(e => e.OfficialEmailId)
+                    .HasMaxLength(255);
+
+                entity.Property(e => e.OfficialEmailPassword)
+                    .HasMaxLength(255);
+
+                entity.Property(e => e.SkypeId)
+                    .HasMaxLength(100);
+
                 entity.Property(e => e.AdharCardNumber)
                     .HasMaxLength(50)
                     .IsUnicode(false);
-                entity.Property(e => e.BankAccountNumber)
-                    .HasMaxLength(20)
-                    .IsUnicode(false);
-                entity.Property(e => e.BloodGroup)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-                entity.Property(e => e.CompanyId).HasDefaultValue(1);
-                entity.Property(e => e.ContactNumber1)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-                entity.Property(e => e.ContactNumber2)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-                entity.Property(e => e.CorrespondenceAddress)
-                    .HasMaxLength(255)
-                    .IsUnicode(false);
-                entity.Property(e => e.EmpCode)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-                entity.Property(e => e.FatherName)
-                    .HasMaxLength(100)
-                    .IsUnicode(false);
-                entity.Property(e => e.Id)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-                entity.Property(e => e.Ifsccode)
-                    .HasMaxLength(50)
-                    .IsUnicode(false)
-                    .HasColumnName("IFSCCode");
-                entity.Property(e => e.Name)
-                    .HasMaxLength(100)
-                    .IsUnicode(false);
-                entity.Property(e => e.OfficialEmailId)
-                    .HasMaxLength(100)
-                    .IsUnicode(false);
-                entity.Property(e => e.OfficialEmailPassword)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-                entity.Property(e => e.OrganizationId).HasColumnName("OrganizationID");
+
                 entity.Property(e => e.PanNumber)
-                    .HasMaxLength(20)
-                    .IsUnicode(false);
-                entity.Property(e => e.Password)
-                    .HasMaxLength(10)
-                    .IsUnicode(false);
+                    .HasMaxLength(10);
+
+                entity.Property(e => e.BankId)
+                    .HasMaxLength(20);
+
                 entity.Property(e => e.PermanentAddress)
-                    .HasMaxLength(255)
-                    .IsUnicode(false);
-                entity.Property(e => e.PersonalEmailId)
-                    .HasMaxLength(100)
-                    .IsUnicode(false);
-                entity.Property(e => e.RoleId).HasDefaultValue(1);
-                entity.Property(e => e.SkypeId)
-                    .HasMaxLength(100)
-                    .IsUnicode(false);
+                    .HasMaxLength(500);
+
+                entity.Property(e => e.CorrespondenceAddress)
+                    .HasMaxLength(500);
 
                 entity.HasOne(d => d.Bank).WithMany(p => p.Employees)
                     .HasForeignKey(d => d.BankId)
@@ -241,19 +286,11 @@ namespace KotiCRM.Repository.Data
                     .HasForeignKey(d => d.DesignationId)
                     .HasConstraintName("FK_Employee_Designation");
 
-                //entity.HasOne(d => d.Organization).WithMany(p => p.Employees)
-                //    .HasForeignKey(d => d.OrganizationId)
-                //    .HasConstraintName("FK_Employee_Organization");
-
-                entity.HasOne(d => d.Role).WithMany(p => p.Employees)
-                    .HasForeignKey(d => d.RoleId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Employee_EmployeeRoles");
-
                 entity.HasOne(d => d.Shift).WithMany(p => p.Employees)
                     .HasForeignKey(d => d.ShiftId)
                     .HasConstraintName("FK_Employee_Shift");
             });
+
 
             modelBuilder.Entity<EmployeeAppraisal>(entity =>
             {
@@ -284,18 +321,18 @@ namespace KotiCRM.Repository.Data
                     .IsUnicode(false);
             });
 
-            modelBuilder.Entity<EmployeeRole>(entity =>
-            {
-                entity.HasKey(e => e.RoleId);
+            //modelBuilder.Entity<EmployeeRole>(entity =>
+            //{
+            //    entity.HasKey(e => e.RoleId);
 
-                entity.Property(e => e.RoleId).ValueGeneratedNever();
-                entity.Property(e => e.Description)
-                    .HasMaxLength(255)
-                    .IsUnicode(false);
-                entity.Property(e => e.Name)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-            });
+            //    entity.Property(e => e.RoleId).ValueGeneratedNever();
+            //    entity.Property(e => e.Description)
+            //        .HasMaxLength(255)
+            //        .IsUnicode(false);
+            //    entity.Property(e => e.Name)
+            //        .HasMaxLength(50)
+            //        .IsUnicode(false);
+            //});
 
             modelBuilder.Entity<ImportHistory>(entity =>
             {
@@ -400,7 +437,7 @@ namespace KotiCRM.Repository.Data
                 entity.Property(e => e.BillingStreet).HasMaxLength(100);
                 entity.Property(e => e.BillingCity).HasMaxLength(100);
                 entity.Property(e => e.BillingState).HasMaxLength(100);
-                entity.Property(e => e.BillingCode).HasMaxLength(100);
+                entity.Property(e => e.ZipCode).HasMaxLength(100);
                 entity.Property(e => e.BillingCountry).HasMaxLength(100);
             });
             modelBuilder.Entity<ProcessedFile>(entity =>
@@ -708,10 +745,6 @@ namespace KotiCRM.Repository.Data
                     .HasMaxLength(200)
                     .IsUnicode(false);
                 entity.Property(e => e.ReasonForLeave).IsUnicode(false);
-
-                entity.HasOne(d => d.Employee).WithMany(p => p.UserLeaves)
-                    .HasForeignKey(d => d.EmployeeId)
-                    .HasConstraintName("FK_UserLeave_Employee");
             });
 
             modelBuilder.Entity<WorkLog>(entity =>
@@ -721,6 +754,259 @@ namespace KotiCRM.Repository.Data
                 entity.Property(e => e.EmployeeCode)
                     .HasMaxLength(50)
                     .IsUnicode(false);
+            });
+
+            // Tax module
+
+            modelBuilder.Entity<Employee12BB>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+
+                
+                entity.Property(e => e.EmployeeId)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.FinancialYear)
+                    .IsRequired()
+                    .HasMaxLength(10);
+
+                entity.Property(e => e.CreatedBy)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.CreatedOn)
+                    .IsRequired();
+
+                entity.Property(e => e.ModifiedBy)
+                    .IsRequired(false)
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.ModifiedOn)
+                    .IsRequired(false);
+
+                entity.Property(e => e.IsDelete)
+                    .IsRequired();
+
+                entity.Property(e => e.IsActive)
+                    .IsRequired();
+
+                entity.Property(e => e.IsFormVerified)
+                    .IsRequired();
+
+                entity.Property(e => e.IsDeclarationComplete)
+                    .IsRequired();
+
+                entity.HasOne(e => e.Employee)
+                    .WithMany(e => e.Employee12BBs)
+                    .HasForeignKey(e => e.EmployeeId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(e => e.HouseRentRecord)
+                    .WithMany()
+                    .HasForeignKey(e => e.HouseRentRecordId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(e => e.TravelExpenditureRecord)
+                    .WithMany()
+                    .HasForeignKey(e => e.TravelExpenditureRecordId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(e => e.HomeLoanRecord)
+                    .WithMany()
+                    .HasForeignKey(e => e.HomeLoanRecordId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(e => e.EightyDRecord)
+                    .WithMany()
+                    .HasForeignKey(e => e.EightyDRecordId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(e => e.EightyGRecord)
+                    .WithMany()
+                    .HasForeignKey(e => e.EightyGRecordId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(e => e.OtherInvestmentRecord)
+                    .WithMany()
+                    .HasForeignKey(e => e.OtherInvestmentRecordId)
+                    .OnDelete(DeleteBehavior.Restrict);
+            });
+
+            modelBuilder.Entity<HouseRentDeclaration>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+
+                entity.Property(e => e.Amount)
+                    .IsRequired();
+
+                entity.Property(e => e.OwnerPanCard)
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.ProofDocumentLink)
+                    .HasMaxLength(255);
+
+                entity.Property(e => e.IsVerified)
+                    .IsRequired();
+
+                entity.Property(e => e.Remarks)
+                    .HasMaxLength(500);
+            });
+
+            modelBuilder.Entity<TravelExpenditureDeclaration>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+
+                entity.Property(e => e.Amount)
+                    .IsRequired();
+
+                entity.Property(e => e.ProofDocumentLink)
+                    .HasMaxLength(255);
+
+                entity.Property(e => e.IsVerified)
+                    .IsRequired();
+
+                entity.Property(e => e.Remarks)
+                    .HasMaxLength(500);
+            });
+
+            modelBuilder.Entity<HomeLoanDeclaration>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+
+                entity.Property(e => e.LenderName)
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.LenderAddress)
+                    .HasMaxLength(255);
+
+                entity.Property(e => e.LenderPanNumber)
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.Amount)
+                    .IsRequired();
+
+                entity.Property(e => e.ProofDocumentLink)
+                    .HasMaxLength(255);
+
+                entity.Property(e => e.IsVerified)
+                    .IsRequired();
+
+                entity.Property(e => e.Remarks)
+                    .HasMaxLength(500);
+            });
+
+            modelBuilder.Entity<EightyDDeclaration>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+
+                entity.Property(e => e.InsuranceAmount)
+                    .IsRequired();
+
+                entity.Property(e => e.InsuranceProofLink)
+                    .HasMaxLength(255);
+
+                entity.Property(e => e.MedicalExpenseAmount)
+                    .IsRequired();
+
+                entity.Property(e => e.MedicalExpenseProof)
+                    .HasMaxLength(255);
+
+                entity.Property(e => e.IsVerified)
+                    .IsRequired();
+
+                entity.Property(e => e.Remarks)
+                    .HasMaxLength(500);
+            });
+
+            modelBuilder.Entity<EightyGDeclaration>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+
+                entity.Property(e => e.NameOfDonee)
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.PanNumber)
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.Address)
+                    .HasMaxLength(255);
+
+                entity.Property(e => e.Amount)
+                    .IsRequired();
+
+                entity.Property(e => e.ProofDocumentLink)
+                    .HasMaxLength(255);
+
+                entity.Property(e => e.IsVerified)
+                    .IsRequired();
+
+                entity.Property(e => e.Remarks)
+                    .HasMaxLength(500);
+            });
+
+            modelBuilder.Entity<OtherInvestmentDeclaration>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+
+                entity.Property(e => e.Description)
+                    .HasMaxLength(255);
+
+                entity.Property(e => e.ProofDocumentLink)
+                    .HasMaxLength(255);
+
+                entity.Property(e => e.IsVerified)
+                    .IsRequired();
+
+                entity.Property(e => e.Remarks)
+                    .HasMaxLength(500);
+            });
+
+            modelBuilder.Entity<EightyCDeclaration>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+
+                entity.Property(e => e.DeductionTypeId)
+                    .IsRequired();
+
+                entity.Property(e => e.Amount)
+                    .IsRequired();
+
+                entity.Property(e => e.ProofDocumentLink)
+                    .HasMaxLength(255);
+
+                entity.Property(e => e.IsVerified)
+                    .IsRequired();
+
+                entity.Property(e => e.Remarks)
+                    .HasMaxLength(500);
+
+                entity.Property(e => e.Employee12BBId)
+                    .IsRequired();
+
+                entity.Property(e => e.CreatedBy)
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.CreatedOn)
+                    .IsRequired();
+
+                entity.Property(e => e.ModifiedBy)
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.ModifiedOn)
+                    .IsRequired();
+
+                entity.Property(e => e.IsDelete)
+                    .IsRequired();
+            });
+
+            modelBuilder.Entity<EightyCDeductionType>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(100);
             });
 
             base.OnModelCreating(modelBuilder);

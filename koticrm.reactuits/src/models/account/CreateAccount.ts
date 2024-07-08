@@ -10,7 +10,7 @@ export interface CreateAccount {
     billingStreet: string;
     billingCity: string;
     billingState: string;
-    billingCode: string;
+    zipCode: string;
     country: string;
     description: string;
     isactive: boolean;

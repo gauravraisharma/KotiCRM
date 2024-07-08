@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using KotiCRM.Repository.DTOs.UserManagement;
+using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations;
 
 namespace KotiCRM.Repository.Models
 {
@@ -10,7 +12,9 @@ namespace KotiCRM.Repository.Models
         public string? UserType { get; set; }
         public string? UserId { get; set; }
         public string? TimeZone { get; set; }
+        public int? OrganizationId { get; set; }
         public List<ModulePermission>? ModulePermission { get; set; }
+        public Employee? Employee { get; set; }
     }
     public class ResponseStatus
     {
@@ -18,10 +22,27 @@ namespace KotiCRM.Repository.Models
         public string Message { get; set; }
     }
 
+    public class RolesResponseStatus
+    {
+        public string Status { get; set; }
+        public string Message { get; set; }
+        public List<ApplicationRole> Roles { get; set; }
+    }
 
-  
+    public class RoleResponseStatus
+    {
+        public string Status { get; set; }
+        public string Message { get; set; }
+        public ApplicationRole Role { get; set; }
+    }
 
- 
+    public class EmployeeResponseStatus
+    {
+        public string? EmployeeId { get; set; }
+        public string Status { get; set; }
+        public string Message { get; set; }
+    }
+
     public class DDListResponse
     {
         public string Status { get; set; }
@@ -53,10 +74,10 @@ namespace KotiCRM.Repository.Models
     public class UserDataResponse {
         public string Status { get; set; }
         public string Message { get; set; }
-        public UserDetailModel userDetail { get; set; }
+        public EmployeesDTO userDetail { get; set; }
     }
 
-    public class UserDetailModel
+    public class EmployeesDTO
     {
         public string Username { get; set; }
         public string FirstName { get; set; }
@@ -79,11 +100,23 @@ namespace KotiCRM.Repository.Models
     public class ModulePermission
     {
         public int ModuleId { get; set; }
+        public int PermissionId { get; set; }
         public string ModuleName { get; set; }
         public bool IsView { get; set; }
         public bool IsEdit { get; set; }
         public bool IsDelete { get; set; }
         public bool IsAdd { get; set; }
+    }
+
+    public class EmployeeResponse
+    {
+        public string Status { get; set; }
+        public string Message { get; set; }
+        public EmployeeDTO employeeData { get; set; }
+    }
+    public class RoleResponse :ResponseStatus
+    {
+        public string RoleId { get; set; }
     }
 
 }

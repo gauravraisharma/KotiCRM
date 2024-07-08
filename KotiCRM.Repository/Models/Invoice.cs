@@ -1,11 +1,6 @@
 ﻿using KotiCRM.Repository.Enums;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace KotiCRM.Repository.Models
 {
@@ -48,7 +43,7 @@ namespace KotiCRM.Repository.Models
         public string? FromBillingState { get; set; }
 
         [Column(TypeName = "nvarchar(100)")]
-        public string? FromBillingCode { get; set; }
+        public string? FromZipCode { get; set; }
 
         [Column(TypeName = "nvarchar(100)")]
         public string? FromBillingCountry { get; set; }
@@ -63,7 +58,7 @@ namespace KotiCRM.Repository.Models
         public string? ToBillingState { get; set; }
 
         [Column(TypeName = "nvarchar(100)")]
-        public string? ToBillingCode { get; set; }
+        public string? ToZipCode { get; set; }
 
         [Column(TypeName = "nvarchar(100)")]
         public string? ToBillingCountry { get; set; }

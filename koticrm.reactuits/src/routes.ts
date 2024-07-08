@@ -5,82 +5,96 @@ import { Route } from './models/commonModels/CommonModels';
 // Containers
 const DefaultLayout = lazy(() => import('./layout/DefaultLayout'))
 // Pages
-const Login = lazy(() => import('./views/pages/login/Login'))
-const Register = lazy(() => import('./views/pages/register/Register'))
-const Page404 = lazy(() => import('./views/pages/page404/Page404'))
-const Page500 = lazy(() => import('./views/pages/page500/Page500'))
+const Login = lazy(() => import('./views/userAuthentication/login/Login'))
+const ForgotPassword = lazy(() => import('./views/userAuthentication/forgotPassword/ForgotPassword'))
+const ResetPassword = lazy(() => import('./views/userAuthentication/resetPassword/ResetPassword'))
 
 
-//settings
+const Home = lazy(()=>import ('./views/userAuthentication/home/Home'))
+const Register = lazy(() => import('./views/userAuthentication/register/Register'))
+const Page404 = lazy(() => import('./views/userAuthentication/page404/Page404'))
+const Page500 = lazy(() => import('./views/userAuthentication/page500/Page500'))
 
+
+//setting
 const Settings = lazy(() => import('./views/settings/Settings'))
-
 const Dashboard = lazy(() => import('./views/dashboard/Dashboard'))
-const Colors = lazy(() => import('./views/theme/colors/Colors'))
-const Typography = lazy(() => import('./views/theme/typography/Typography'))
+const Colors = lazy(() => import('./theme/colors/Colors'))
+const Typography = lazy(() => import('./theme/typography/Typography'))
 // Account routes
-const AccountList = lazy(() => import('./views/accountsList/AccountList'))
-const AccountDetails = lazy(() => import('./views/accountDetails/AccountDetails'))
-const NewAccount = lazy(() => import('./views/account/NewAccount'))
+const AccountList = lazy(() => import('./views/account/accountsList/AccountList'))
+const AccountDetails = lazy(() => import('./views/account/accountDetails/AccountDetails'))
+const NewAccount = lazy(() => import('./views/account/createAccount/NewAccount'))
+const EditAccount = lazy(()=> import('./views/account/accountsList/EditAccountModal'))
 // Contact routes
 const Contacts = lazy(() => import('./views/contacts/Contacts'))
 const contactDetails = lazy(() => import('./views/contacts/ContactDetails'))
 const CreateContact = lazy(() => import('./views/contacts/CreateOrEditContact'))
 
 //Invoices Routes
-const Invoices = lazy(() => import('./views/invoice/Invoice'))
+const Invoices = lazy(() => import('./views/invoice/Invoices'))
 const CreateInvoice = lazy(() => import('./views/invoice/NewInvoice'))
+const EditInvoice = lazy(() => import('./views/invoice/EditInvoice'))
+const InvoicePDF = lazy(()=> import('./pdf-template/InvoiceTemplate'))
 
+//Manage Users Routes
+const Users = lazy(() => import('./views/userManagement/Users'))
+const Form12BB = lazy(() => import('./views/userManagement/Form12BB'));
+const UserDetail = lazy(() => import('./views/userManagement/UserDetail'))
+const CreateOrUpdateUser = lazy(() => import('./views/userManagement/CreateOrUpdateUser'))
+
+//Manage Permissions and Roles
+const Roles = lazy(() => import('./views/roleManagement/Roles'))
+const CreateOrUpdateRole = lazy(() => import('./views/roleManagement/CreateOrUpdateRole'))
 
 // Base
-const Accordion = lazy(() => import('./views/base/accordion/Accordion'))
-const Breadcrumbs = lazy(() => import('./views/base/breadcrumbs/Breadcrumbs'))
-const Cards = lazy(() => import('./views/base/cards/Cards'))
-const Carousels = lazy(() => import('./views/base/carousels/Carousels'))
-const Collapses = lazy(() => import('./views/base/collapses/Collapses'))
-const ListGroups = lazy(() => import('./views/base/list-groups/ListGroups'))
-const Navs = lazy(() => import('./views/base/navs/Navs'))
-const Paginations = lazy(() => import('./views/base/paginations/Paginations'))
-const Placeholders = lazy(() => import('./views/base/placeholders/Placeholders'))
-const Popovers = lazy(() => import('./views/base/popovers/Popovers'))
-const Progress = lazy(() => import('./views/base/progress/Progress'))
-const Spinners = lazy(() => import('./views/base/spinners/Spinners'))
-const Tables = lazy(() => import('./views/base/tables/Tables'))
-const Tooltips = lazy(() => import('./views/base/tooltips/Tooltips'))
+const Accordion = lazy(() => import('./components/base/accordion/Accordion'))
+const Breadcrumbs = lazy(() => import('./components/base/breadcrumbs/Breadcrumbs'))
+const Cards = lazy(() => import('./components/base/cards/Cards'))
+const Carousels = lazy(() => import('./components/base/carousels/Carousels'))
+const Collapses = lazy(() => import('./components/base/collapses/Collapses'))
+const ListGroups = lazy(() => import('./components/base/list-groups/ListGroups'))
+const Navs = lazy(() => import('./components/base/navs/Navs'))
+const Paginations = lazy(() => import('./components/base/paginations/Paginations'))
+const Placeholders = lazy(() => import('./components/base/placeholders/Placeholders'))
+const Popovers = lazy(() => import('./components/base/popovers/Popovers'))
+const Progress = lazy(() => import('./components/base/progress/Progress'))
+const Spinners = lazy(() => import('./components/base/spinners/Spinners'))
+const Tables = lazy(() => import('./components/base/tables/Tables'))
+const Tooltips = lazy(() => import('./components/base/tooltips/Tooltips'))
 
 // Buttons
-const Buttons = lazy(() => import('./views/buttons/buttons/Buttons'))
-const ButtonGroups = lazy(() => import('./views/buttons/button-groups/ButtonGroups'))
-const Dropdowns = lazy(() => import('./views/buttons/dropdowns/Dropdowns'))
+const Buttons = lazy(() => import('./components/buttons/buttons/Buttons'))
+const ButtonGroups = lazy(() => import('./components/buttons/button-groups/ButtonGroups'))
+const Dropdowns = lazy(() => import('./components/buttons/dropdowns/Dropdowns'))
 
 //Forms
-const ChecksRadios = lazy(() => import('./views/forms/checks-radios/ChecksRadios'))
-const FloatingLabels = lazy(() => import('./views/forms/floating-labels/FloatingLabels'))
-const FormControl = lazy(() => import('./views/forms/form-control/FormControl'))
-const InputGroup = lazy(() => import('./views/forms/input-group/InputGroup'))
-const Layout = lazy(() => import('./views/forms/layout/Layout'))
-const Range = lazy(() => import('./views/forms/range/Range'))
-const Select = lazy(() => import('./views/forms/select/Select'))
-const Validation = lazy(() => import('./views/forms/validation/Validation'))
+const ChecksRadios = lazy(() => import('./components/forms/checks-radios/ChecksRadios'))
+const FloatingLabels = lazy(() => import('./components/forms/floating-labels/FloatingLabels'))
+const FormControl = lazy(() => import('./components/forms/form-control/FormControl'))
+const InputGroup = lazy(() => import('./components/forms/input-group/InputGroup'))
+const Layout = lazy(() => import('./components/forms/layout/Layout'))
+const Range = lazy(() => import('./components/forms/range/Range'))
+const Select = lazy(() => import('./components/forms/select/Select'))
+const Validation = lazy(() => import('./components/forms/validation/Validation'))
 
-const Charts = lazy(() => import('./views/charts/Charts'))
+const Charts = lazy(() => import('./components/charts/Charts'))
 
-// Icons
-const CoreUIIcons = lazy(() => import('./views/icons/coreui-icons/CoreUIIcons'))
-const Flags = lazy(() => import('./views/icons/flags/Flags'))
-const Brands = lazy(() => import('./views/icons/brands/Brands'))
 
 // Notifications
-const Alerts = lazy(() => import('./views/notifications/alerts/Alerts'))
-const Badges = lazy(() => import('./views/notifications/badges/Badges'))
-const Modals = lazy(() => import('./views/notifications/modals/Modals'))
-const Toasts = lazy(() => import('./views/notifications/toasts/Toasts'))
+const Alerts = lazy(() => import('./components/notifications/alerts/Alerts'))
+const Badges = lazy(() => import('./components/notifications/badges/Badges'))
+const Modals = lazy(() => import('./components/notifications/modals/Modals'))
+const Toasts = lazy(() => import('./components/notifications/toasts/Toasts'))
 
-const Widgets = lazy(() => import('./views/widgets/Widgets'))
+const Widgets = lazy(() => import('./components/widgets/Widgets'))
 
 export const appRoutes: Route[] = [
     // App routing
     { path: "/login", name: "Login Page", element: Login, isAuth:false },
+    { path: "/forgotPassword", name: "Forgot Password", element: ForgotPassword, isAuth:false },
+    { path: "/resetPassword", name: "Reset Password", element: ResetPassword, isAuth:false },
+    { path: "/",name :" Home Page", element:Home,isAuth:false},
     { path: "/register", name: "Register Page", element: Register, isAuth: false },
     { path: "/404", name: "Page 404", element: Page404, isAuth: false },
     { path: "/500", name: "Page 500", element: Page500, isAuth: false },
@@ -88,8 +102,11 @@ export const appRoutes: Route[] = [
 ]
 
 const routes: Route[] = [
+    
     // { path: '/', name: 'Home', element: null, isAuth: false},
     { path: '/dashboard', name: 'Dashboard', element: Dashboard, isAuth: true },
+    // { path: '/dashboard', name: 'Dashboard', element: Dashboard, isAuth: true },
+
     { path: '/theme', name: 'Theme', element: Colors, isAuth: false },
     { path: '/theme/colors', name: 'Colors', element: Colors, isAuth: false },
     { path: '/theme/typography', name: 'Typography', element: Typography, isAuth: false },
@@ -122,10 +139,10 @@ const routes: Route[] = [
     { path: '/forms/floating-labels', name: 'Floating Labels', element: FloatingLabels, isAuth: false },
     { path: '/forms/layout', name: 'Layout', element: Layout, isAuth: false },
     { path: '/forms/validation', name: 'Validation', element: Validation, isAuth: false },
-    { path: '/icons', name: 'Icons', element: CoreUIIcons, isAuth: false },
-    { path: '/icons/coreui-icons', name: 'CoreUI Icons', element: CoreUIIcons, isAuth: false },
-    { path: '/icons/flags', name: 'Flags', element: Flags, isAuth: false },
-    { path: '/icons/brands', name: 'Brands', element: Brands, isAuth: false },
+    // { path: '/icons', name: 'Icons', element: CoreUIIcons, isAuth: false },
+    // { path: '/icons/coreui-icons', name: 'CoreUI Icons', element: CoreUIIcons, isAuth: false },
+    // { path: '/icons/flags', name: 'Flags', element: Flags, isAuth: false },
+    // { path: '/icons/brands', name: 'Brands', element: Brands, isAuth: false },
     { path: '/notifications', name: 'Notifications', element: Alerts, isAuth: false },
     { path: '/notifications/alerts', name: 'Alerts', element: Alerts, isAuth: false },
     { path: '/notifications/badges', name: 'Badges', element: Badges, isAuth: false },
@@ -133,19 +150,33 @@ const routes: Route[] = [
     { path: '/notifications/toasts', name: 'Toasts', element: Toasts, isAuth: false },
     { path: '/widgets', name: 'Widgets', element: Widgets, isAuth: false },
     { path: '/accountsList', name: 'Account List', element: AccountList, isAuth: true, modulePermission: 'Accounts' },
-    { path: '/accountDetails/:accountId', name: 'Account Details', element: AccountDetails, isAuth: true, modulePermission: 'Accounts' },
-    { path: '/account', name: 'Account', element: NewAccount, isAuth: true, modulePermission: 'Accounts' },
+    { path: '/accountsList/accountDetails/:accountId', name: 'Account Details', element: AccountDetails, isAuth: true, modulePermission: 'Accounts' },
+    // { path: '/account', name: 'Account', element: NewAccount, isAuth: true, modulePermission: 'Accounts' },
 
     { path: '/contacts', name: 'Contacts', element: Contacts, isAuth: true, modulePermission: 'Contacts' },
     { path: '/contacts/:contactId', name: 'contactDetails', element: contactDetails, isAuth: true, modulePermission: 'Contacts' },
     { path: '/contacts/createContact', name: 'CreateContact', element: CreateContact, isAuth: true, modulePermission: 'Contacts' },
     { path: '/contacts/editContact/:contactId', name: 'CreateContact', element: CreateContact, isAuth: true, modulePermission: 'Contacts' },
-    { path: '/newAccount', name: 'NewAccount', element: NewAccount, isAuth: true, modulePermission: 'Accounts' },
+    { path: '/accountsList/createAccount', name: 'CreateAccount', element: NewAccount, isAuth: true, modulePermission: 'Accounts' },
+    { path: '/accountsList/editAccount/:accountId', name: 'EditAccount', element: EditAccount, isAuth: true, modulePermission: 'Accounts' },
+
     { path: '/invoices', name: 'Invoices', element: Invoices, isAuth: true, modulePermission: 'Invoices' },
     { path: '/invoices/createInvoice', name: 'CreateInvoice', element: CreateInvoice, isAuth: true, modulePermission: 'Invoices' },
+    { path: '/invoices/editInvoice/:invoiceId', name: 'EditInvoice', element: EditInvoice, isAuth: true, modulePermission: 'Invoices' },
+    { path: '/invoices/viewInvoicePdf/:invoiceId', name: 'ViewInvoicePDF', element: InvoicePDF, isAuth: true, modulePermission: 'Invoices' },
     { path: '/settings', name: 'Settings', element: Settings, isAuth: true },
 
+    { path: '/users', name: 'Users', element: Users, isAuth: true, modulePermission: 'ManageUsers' },
+    { path: '/users/userDetail/:userId/:employeeId', name: 'UserDetail', element: UserDetail, isAuth: true, modulePermission: 'ManageUsers' },
+    { path: '/users/updateUser/:id', name: 'UpdateUser', element: CreateOrUpdateUser, isAuth: true, modulePermission: 'ManageUsers' },
+    { path: '/users/createOrUpdateUser', name: 'CreateUser', element: CreateOrUpdateUser, isAuth: true, modulePermission: 'ManageUsers' },
+    { path: '/form12bb/:userId/:employeeId/:financialYear',  name: 'Form12BB', element: Form12BB,  isAuth: true,  modulePermission: 'ManageUsers' },
+    // { path: "/users/userDetail/:userId/:employeeId/form12bb", element: <Form12BB />, isAuth: true, modulePermission: "ManageUsers" },
+      
 
+    { path: '/roles', name: 'Roles', element: Roles, isAuth: true, modulePermission: 'ManageRoles'},
+    { path: '/roles/createRole', name: 'CreateRole', element: CreateOrUpdateRole, isAuth: true, modulePermission: 'ManageRoles' },
+    { path: '/roles/updateRole/:id', name: 'UpdateRole', element: CreateOrUpdateRole, isAuth: true, modulePermission: 'ManageRoles' },
 ]
 
 export default routes

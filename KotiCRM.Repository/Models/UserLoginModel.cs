@@ -23,10 +23,12 @@ namespace KotiCRM.Repository.Models {
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
         [Required(ErrorMessage = "UserType is required")]
-        public string UserType { get; set; }
+        public string RoleId { get; set; }
         [Required(ErrorMessage = "Password is required")]
         public string Password { get; set; }
         public string CreatedBy { get; set; }
+
+        public int? OrganizationId { get; set; }
     }
     public class UpdateApplicationUserModel
     {
@@ -43,11 +45,12 @@ namespace KotiCRM.Repository.Models {
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
         [Required(ErrorMessage = "UserType is required")]
-        public string UserType { get; set; }
+        public string RoleId { get; set; }
 
         public string? Password { get; set; }
         [Required(ErrorMessage = "Created by  is required")]
         public string ModifiedBy { get; set; }
+        //public int OrganizationId { get; set; }
     } 
 }
 

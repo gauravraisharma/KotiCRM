@@ -78,10 +78,8 @@
   .card {
     border: 1px solid #ccc;
     border-radius: 5px;
-    /* padding: 20px; */
     margin: 20px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    /* text-align: center; */
   }
   .form-group {
     margin-bottom: 20px;
@@ -119,9 +117,6 @@
   font-weight: 600;
 }
 
-/* .form-control {
-  border: 1px solid red;
-} */
 .account-list li {
   margin-bottom: 20px;
 }
@@ -142,3 +137,313 @@
   border: 0;
   width: 74%;
 }
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(8, 2, 2, 0.5); /* You can adjust the opacity as needed */
+  z-index: 999; /* Ensure the backdrop is above other elements */
+}
+
+.spinner-border {
+  width: 3rem;
+  height: 3rem;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  z-index: 101; /* Ensure the spinner is above the backdrop */
+  backdrop-filter: hue-rotate(45deg);
+}
+
+.spinner-border::after {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: inline-block;
+  width: 100%;
+  height: 100%;
+  content: "";
+  border: 0.25em solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: spinner-border 0.75s linear infinite;
+}
+
+@keyframes spinner-border {
+  0% {
+      transform: rotate(0deg);
+  }
+  100% {
+      transform: rotate(360deg);
+  }
+}
+
+.content {
+  margin-top: 50px;
+  text-align: center;
+}
+.datePicker .react-datepicker-wrapper {
+ 
+  width: 100%;
+}
+.custom-dropdown .custom-toggle {
+  background-color: transparent !important;
+  border: none;
+  border: 1px solid #2b72be; /* light blue color */
+  color: #000; /* text color */
+  padding: 0.5rem 1rem; /* adjust padding as needed */
+}
+
+.custom-dropdown .custom-toggle:hover {
+  background-color: transparent !important;
+}
+
+.custom-dropdown .custom-menu {
+  background-color: #fff !important;
+  border: none;
+  z-index: 1000; /* set a higher z-index */
+}
+
+.custom-dropdown .custom-menu .dropdown-item {
+  color: #000; /* text color */
+}
+
+.custom-dropdown .custom-menu .dropdown-item:hover {
+  background-color: #59859e;
+  ; /* hover background color */
+}
+.profile-info label{
+  margin-bottom: 8px;
+  
+
+}
+
+.headings {
+  color: #131212; /* Darker color for headings */
+  font-weight: bolder; /* Make headings bold */
+}
+
+.value {
+  color: #777; /* Lighter color for values */
+}
+.account-list li p {
+  font-weight: 500;
+  margin-top: 4px;
+}
+.user-list li p {
+  font-weight: 500;
+  margin-top: 4px;
+}
+.contact-list li p {
+  font-weight: 500;
+  margin-top: 4px;
+}
+ .centered-inputs {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px;
+}
+.nav-item {
+  margin-right: 5px;
+}
+
+.nav-item a {
+  text-decoration: none;
+  color: #333;
+
+  padding: 8px 12px;
+  border-radius: 5px;
+}
+
+.profile-picture{
+  width: 44px; /* Set your desired width */
+  height: 44px; /* Maintain aspect ratio */
+  border-radius: 50%; /* Make it a circle */
+  border: 2px solid #ccc; /* Add a border */
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); 
+  margin-right: 20px;
+}
+
+.custom-checkbox {
+  width: 15px;
+  height: 15px;
+  transform: scale(1.5); /* Adjust the scale as needed */
+  margin: 0; /* Remove any default margin */
+}
+.checkbox-spacing {
+  margin-right: 8px;
+}
+.no-border {
+  border: none !important;
+  background-color: transparent; /* Optional: to make the background match the surrounding */
+}
+
+.check-icon {
+  color: #28a745; /* A pleasant green color */
+  margin-left: 1rem; /* Adjust the margin as needed */
+  width: 2rem; /* Increase the width */
+  height: 2rem; /* Increase the height */
+  transition: transform 0.3s ease, opacity 0.3s ease; /* Smooth transition */
+}
+
+.check-icon:hover {
+  transform: scale(1.1); /* Slightly enlarge on hover */
+  opacity: 0.8; /* Slightly dim the opacity on hover */
+}
+
+
+.forgot-password-card {
+  background-color: #ffffff;
+  border: none;
+}
+
+.forgot-password-input {
+  border-left: none;
+}
+
+.forgot-password-card .card-body {
+  padding: 2rem;
+}
+
+.forgot-password-card h1 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.forgot-password-card p {
+  font-size: 1rem;
+  margin-bottom: 2rem;
+}
+
+.forgot-password-card .btn-primary {
+  background-color: #007bff;
+  border: none;
+}
+
+.forgot-password-card .btn-primary:hover {
+  background-color: #0056b3;
+}
+.reset-password-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f0f0f0; /* Light background color */
+}
+
+.reset-password-card {
+
+  padding: 35px;
+  border-radius: 8px;
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1); /* Soft box shadow */
+  background-color: #ffffff; /* White background */
+  width: 75%; /* Card width */
+  max-width: 400px; /* Maximum card width */
+}
+
+.reset-password-card h2 {
+  margin-bottom: 20px;
+  color: #333333; /* Dark text color */
+  text-align: center;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.error-message {
+  color: #dc3545; /* Error text color */
+  font-size: 14px;
+}
+
+.form-control {
+  height: 50px;
+  font-size: 16px;
+  border: 1px solid #cccccc; /* Light border color */
+  border-radius: 4px;
+  padding: 0 12px;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: #007bff; /* Focus color */
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); /* Focus shadow */
+}
+
+
+.btn-primary:hover {
+  background-color: #0056b3; /* Darker hover color */
+}
+
+.modal-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1); /* Soft box shadow */
+  text-align: center;
+  max-width: 400px;
+  width: 90%;
+}
+
+.modal-content h3 {
+  margin-bottom: 10px;
+  color: #333333;
+}
+
+.modal-content p {
+  margin-bottom: 20px;
+  color: #666666;
+}
+
+.modal-content button {
+  height: 40px;
+  font-size: 14px;
+  border-radius: 4px;
+  padding: 0 20px;
+  background-color: #007bff;
+  border: none;
+  color: #ffffff;
+}
+
+.modal-content button:hover {
+  background-color: #0056b3;
+}
+
+.dropdown-toggle-custom {
+  height: 40px;
+  font-size: 1rem; /* Adjust the font size */
+  padding: 10px 20px; /* Adjust the padding for larger button */
+  background-color: transparent; /* Button background color */
+  color: #0056b3; /* Button text color */
+  border-radius: 5px; /* Button border radius */
+}
+.dropdown-toggle-custom:hover {
+  background-color: #0056b3; /* Button hover background color */
+}
+.dropdown-item-custom {
+  padding: 10px 20px;
+}
+
+.dropdown-link-custom {
+  text-decoration: none;
+  color: black;
+  display: block;
+  width: 100%;
+}
+
+

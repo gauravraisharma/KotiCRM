@@ -9,8 +9,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KotiCRM.Repository", "KotiC
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KotiCRM.Services", "KotiCRM.Services\KotiCRM.Services.csproj", "{07B27134-ED2F-4C35-8B03-1DAF67F875AF}"
 EndProject
-Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "koticrm.reactui", "KotiCRM.ReactUI\koticrm.reactui.esproj", "{430281E2-55C2-483A-BEFF-C1C57198DC8B}"
-EndProject
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "koticrm.reactuits", "koticrm.reactuits\koticrm.reactuits.esproj", "{9273B3E0-37C0-41EE-99E8-85872491F601}"
 EndProject
 Global
@@ -31,12 +29,6 @@ Global
 		{07B27134-ED2F-4C35-8B03-1DAF67F875AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{07B27134-ED2F-4C35-8B03-1DAF67F875AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{07B27134-ED2F-4C35-8B03-1DAF67F875AF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{430281E2-55C2-483A-BEFF-C1C57198DC8B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{430281E2-55C2-483A-BEFF-C1C57198DC8B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{430281E2-55C2-483A-BEFF-C1C57198DC8B}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{430281E2-55C2-483A-BEFF-C1C57198DC8B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{430281E2-55C2-483A-BEFF-C1C57198DC8B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{430281E2-55C2-483A-BEFF-C1C57198DC8B}.Release|Any CPU.Deploy.0 = Release|Any CPU
 		{9273B3E0-37C0-41EE-99E8-85872491F601}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9273B3E0-37C0-41EE-99E8-85872491F601}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9273B3E0-37C0-41EE-99E8-85872491F601}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
