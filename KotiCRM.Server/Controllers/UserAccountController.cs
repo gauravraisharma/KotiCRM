@@ -395,7 +395,7 @@ namespace KotiCRM.Server.Controllers
         // Requires Accounts_View policy
         [HttpGet]
         [Route("GetEmployeeById/{employeeId}")]
-        [Authorize(Policy = Policies.Accounts_View)]
+        //[Authorize(Policy = Policies.Accounts_View)]
         public ActionResult GetEmployeeById(string employeeId)
         {
             var response = _accountService.GetEmployeeById(employeeId);

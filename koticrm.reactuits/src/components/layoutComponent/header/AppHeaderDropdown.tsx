@@ -6,7 +6,7 @@ import {
   CDropdownMenu,
   CDropdownToggle,
 } from "@coreui/react";
-import { cilAccountLogout, cilSettings, cilUser } from "@coreui/icons";
+import { cilAccountLogout, cilSettings, cilUser, cilUserFemale } from "@coreui/icons";
 import CIcon from "@coreui/icons-react";
 import { useNavigate } from "react-router-dom";
 import avatar from "../../../assets/brand/profilePlaceholder.jpg";
@@ -30,7 +30,9 @@ const AppHeaderDropdown = () => {
   const modulePermissions = useSelector(
     (state: any) => state.authReducer.modulePermission
   );
+
   const user = useSelector((state: any) => state.authReducer.user);
+  console.log("useruseruser" + user.profilePictureURL);
 
   return (
     <CDropdown variant="nav-item">
@@ -38,6 +40,15 @@ const AppHeaderDropdown = () => {
         <CAvatar src={user.profilePictureURL ? user.profilePictureURL : avatar} size="lg" />
       </CDropdownToggle>
       <CDropdownMenu className="pt-0">
+      <CDropdownItem>
+          <CIcon icon={cilUserFemale} className="me-2" />
+          <Link
+            style={{ textDecoration: "none", color: "black" }}
+            to={`users/profile/${user.employeeId}`}
+          >
+            Profile
+          </Link>
+        </CDropdownItem>
       {modulePermissions && modulePermissions.some(permission => permission.moduleName === 'ManageUsers' && permission.isView) && (
         <CDropdownItem href="javascript:;">
           <CIcon icon={cilUser} className="me-2" />
