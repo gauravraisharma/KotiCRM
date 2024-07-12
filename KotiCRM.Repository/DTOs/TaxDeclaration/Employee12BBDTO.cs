@@ -11,7 +11,7 @@ namespace KotiCRM.Repository.DTOs.TaxDeclaration
     {
         public int Id { get; set; }
         public string? EmployeeId { get; set; }
-        public string FinancialYear { get; set; }
+
         public int? HouseRentRecordId { get; set; }
         public int? TravelExpenditureRecordId { get; set; }
         public int? HomeLoanRecordId { get; set; }
@@ -28,6 +28,7 @@ namespace KotiCRM.Repository.DTOs.TaxDeclaration
         public bool IsDeclarationComplete { get; set; }
 
         public virtual Employee? Employee { get; set; }
+        public virtual ICollection<FinancialYear>? FinancialYears { get; set; }
         public virtual HouseRentDeclaration? HouseRentRecord { get; set; }
         public virtual TravelExpenditureDeclaration? TravelExpenditureRecord { get; set; }
         public virtual HomeLoanDeclaration? HomeLoanRecord { get; set; }

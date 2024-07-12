@@ -3,6 +3,7 @@ using KotiCRM.Repository.Constants;
 using KotiCRM.Repository.Constants.Taxation_Constant;
 using KotiCRM.Repository.Data;
 using KotiCRM.Repository.DTOs.TaxDeclaration;
+using KotiCRM.Repository.DTOs.UserManagement;
 using KotiCRM.Repository.IRepository;
 using KotiCRM.Repository.Models;
 using Microsoft.AspNetCore.Http;
@@ -10,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Threading.Tasks;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace KotiCRM.Repository.Repository
 {
@@ -24,12 +26,36 @@ namespace KotiCRM.Repository.Repository
         }
 
         // Form 12BB - Retrieve Employee12BB record for a given employee and financial year
-        public async Task<Employee12BBDTO> GetEmployee12BB(string employeeId, string financialYear)
+        public async Task<Employee12BBDTO> GetEmployee12BB(string employeeId)
         {
             // Fetch the main form data for the employee and financial year
-            var employeeDataForm = _context.Employee12BBs.FirstOrDefault(e => e.EmployeeId == employeeId && e.FinancialYear == financialYear);
+
+            //var employeeDataForm = _context.Employee12BBs.FirstOrDefault(e => e.EmployeeId == employeeId);
+            //var financialYears = _context.FinancialYears.Where(x => x.Employee12BBId == employeeDataForm.Id).ToList();
+
+            var employeeDataForm = await (from e in _context.Employee12BBs
+                                          join f in _context.FinancialYears on e.Id equals f.Employee12BBId
+                                          where e.EmployeeId == employeeId
+                                              //&& f.Financialyear == financialYear
+                                              && f.IsActive
+                                          select new
+                                          {
+                                              Employee12BB = e,
+                                              FinancialYear = f
+                                          }).FirstOrDefaultAsync();
+
+
+            if (employeeDataForm == null)
+            {
+                return null; // No data found
+            }
+
+            var employee = employeeDataForm.Employee12BB;
+            var financialYearData = employeeDataForm.FinancialYear;
+
+
             // Fetch house rent declaration data and create a new object
-            var houserentRecordData = _context.HouseRentDeclarations.FirstOrDefault(x => x.Id == employeeDataForm.HouseRentRecordId);
+            var houserentRecordData = _context.HouseRentDeclarations.FirstOrDefault(x => x.Id == employee.HouseRentRecordId);
             HouseRentDeclaration houseRentDeclaration = new HouseRentDeclaration();
 
             if (houserentRecordData == null)
@@ -48,9 +74,9 @@ namespace KotiCRM.Repository.Repository
                     IsVerified = houserentRecordData.IsVerified
                 };
             }
-            
+
             // Fetch travel expenditure declaration data and create a new object
-            var leaveTravelRecordData = _context.TravelExpenditureDeclarations.FirstOrDefault(x => x.Id == employeeDataForm.TravelExpenditureRecordId);
+            var leaveTravelRecordData = _context.TravelExpenditureDeclarations.FirstOrDefault(x => x.Id == employee.TravelExpenditureRecordId);
             TravelExpenditureDeclaration travelExpenditureDeclaration = new TravelExpenditureDeclaration();
             if (leaveTravelRecordData == null)
             {
@@ -67,9 +93,9 @@ namespace KotiCRM.Repository.Repository
                     IsVerified = false
                 };
             }
-            
+
             // Fetch home loan declaration data and create a new object
-            var InterestOnHomLoanRecordData = _context.HomeLoanDeclarations.FirstOrDefault(x => x.Id == employeeDataForm.HomeLoanRecordId);
+            var InterestOnHomLoanRecordData = _context.HomeLoanDeclarations.FirstOrDefault(x => x.Id == employee.HomeLoanRecordId);
             HomeLoanDeclaration homeLoanDeclaration = new HomeLoanDeclaration();
             if (InterestOnHomLoanRecordData == null)
             {
@@ -91,7 +117,7 @@ namespace KotiCRM.Repository.Repository
             }
 
             // Fetch and prepare 80C declarations list
-            var eightyCRecordData = _context.EightyCDeclarations.Where(x => x.Employee12BBId == employeeDataForm.Id && x.IsDelete == false).ToList();
+            var eightyCRecordData = _context.EightyCDeclarations.Where(x => x.Employee12BBId == employee.Id && x.IsDelete == false).ToList();
             List<EightyCDeclaration> eightyCDeclarationsList = new List<EightyCDeclaration>();
             if (eightyCRecordData.Count <= 0)
             {
@@ -122,9 +148,9 @@ namespace KotiCRM.Repository.Repository
             }
 
             // Fetch 80D declaration data and create a new object
-            var eightyDRecordData = _context.EightyDDeclarations.FirstOrDefault(x => x.Id == employeeDataForm.EightyDRecordId);
+            var eightyDRecordData = _context.EightyDDeclarations.FirstOrDefault(x => x.Id == employee.EightyDRecordId);
             EightyDDeclaration eightyDDeclaration = new EightyDDeclaration();
-            if(eightyDRecordData == null)
+            if (eightyDRecordData == null)
             {
                 eightyDRecordData = null;
             }
@@ -141,11 +167,11 @@ namespace KotiCRM.Repository.Repository
                     IsVerified = false
                 };
             }
-            
+
             // Fetch 80G declaration data and create a new object
-            var eightyGRecordData = _context.EightyGDeclarations.FirstOrDefault(x => x.Id == employeeDataForm.EightyGRecordId);
+            var eightyGRecordData = _context.EightyGDeclarations.FirstOrDefault(x => x.Id == employee.EightyGRecordId);
             EightyGDeclaration eightyGDeclaration = new EightyGDeclaration();
-            if(eightyGRecordData == null)
+            if (eightyGRecordData == null)
             {
                 eightyGRecordData = null;
             }
@@ -165,9 +191,9 @@ namespace KotiCRM.Repository.Repository
             }
 
             // Fetch other investment declaration data and create a new object
-            var otherInvestmentRecordData = _context.OtherInvestmentDeclarations.FirstOrDefault(x => x.Id == employeeDataForm.OtherInvestmentRecordId);
+            var otherInvestmentRecordData = _context.OtherInvestmentDeclarations.FirstOrDefault(x => x.Id == employee.OtherInvestmentRecordId);
             OtherInvestmentDeclaration otherInvestmentDeclaration = new OtherInvestmentDeclaration();
-            if(otherInvestmentRecordData == null)
+            if (otherInvestmentRecordData == null)
             {
                 otherInvestmentRecordData = null;
             }
@@ -182,13 +208,14 @@ namespace KotiCRM.Repository.Repository
                     IsVerified = false
                 };
             }
-            
+
             // Create and return the final Employee12BB object
             Employee12BBDTO employee12BB = new Employee12BBDTO
             {
-                Id = employeeDataForm.Id,
-                EmployeeId = employeeDataForm.EmployeeId,
-                FinancialYear = employeeDataForm.FinancialYear,
+                Id = employee.Id,
+                EmployeeId = employee.EmployeeId,
+
+                FinancialYears = new List<FinancialYear> { financialYearData },
                 HouseRentRecordId = houseRentDeclaration == null ? 0 : houseRentDeclaration.Id,
                 HomeLoanRecordId = homeLoanDeclaration == null ? 0 : homeLoanDeclaration.Id,
                 TravelExpenditureRecordId = travelExpenditureDeclaration == null ? 0 : travelExpenditureDeclaration.Id,
@@ -209,13 +236,13 @@ namespace KotiCRM.Repository.Repository
         // Retrieve all Employee12BB records for a given employee
         public async Task<List<Employee12BB>> GetEmployee12BBs(string employeeId)
         {
-            return _context.Employee12BBs.Where(e => e.EmployeeId == employeeId).OrderByDescending(e => e.FinancialYear).ToList();
+            return _context.Employee12BBs.Where(e => e.EmployeeId == employeeId).ToList();
         }
 
         // Save form 12BB and return the updated DTO
         public async Task<Employee12BB> SaveEmployee12BB(Employee12BB employee12BB)
         {
-            if(employee12BB == null)
+            if (employee12BB == null)
             {
                 throw new Exception("Invalid payload");
             }
@@ -234,8 +261,8 @@ namespace KotiCRM.Repository.Repository
             // Update house rent declaration data if present
             if (employee12BB.HouseRentRecordId > 0)
             {
-               var houseRentDeclarations = _context.HouseRentDeclarations.SingleOrDefault(x => x.Id == employee12BB.HouseRentRecordId);
-                if(houseRentDeclarations == null) { }
+                var houseRentDeclarations = _context.HouseRentDeclarations.SingleOrDefault(x => x.Id == employee12BB.HouseRentRecordId);
+                if (houseRentDeclarations == null) { }
                 houseRentDeclarations.Amount = employee12BB.HouseRentRecord.Amount;
                 houseRentDeclarations.OwnerPanCard = employee12BB.HouseRentRecord.OwnerPanCard;
                 houseRentDeclarations.ProofDocumentLink = employee12BB.HouseRentRecord.ProofDocumentLink ?? houseRentDeclarations.ProofDocumentLink;
@@ -297,7 +324,7 @@ namespace KotiCRM.Repository.Repository
                 // Fetch existing declarations from the database
                 var existingEightyCDeclarations = _context.EightyCDeclarations.Where(x => x.Employee12BBId == employee12BB.Id).ToList();
 
-                if(existingEightyCDeclarations.Count > 0)
+                if (existingEightyCDeclarations.Count > 0)
                 {
                     // Iterate through the current list of declarations sent from the client
                     foreach (var eightyCDeclaration in employee12BB.EightyCDeclarations)
@@ -443,7 +470,8 @@ namespace KotiCRM.Repository.Repository
 
             // Update the main Employee12BB form
             existingEmployee12BBs.EmployeeId = employee12BB.EmployeeId;
-            existingEmployee12BBs.FinancialYear = employee12BB.FinancialYear;
+            existingEmployee12BBs.FinancialYears = employee12BB.FinancialYears;
+            //existingEmployee12BBs.FinancialYear = employee12BB.FinancialYear;
             existingEmployee12BBs.HouseRentRecordId = employee12BB.HouseRentRecordId == 0 ? houseRentRecordId : employee12BB.HouseRentRecordId;
             existingEmployee12BBs.TravelExpenditureRecordId = employee12BB.TravelExpenditureRecordId == 0 ? travelExpenditureRecordId : employee12BB.TravelExpenditureRecordId;
             existingEmployee12BBs.HomeLoanRecordId = employee12BB.HomeLoanRecordId == 0 ? homeLoanRecordId : employee12BB.HomeLoanRecordId;
@@ -468,7 +496,8 @@ namespace KotiCRM.Repository.Repository
             {
                 //Id = employee12BB.Id,
                 EmployeeId = existingEmployee12BBs.EmployeeId,
-                FinancialYear = existingEmployee12BBs.FinancialYear,
+                FinancialYears = existingEmployee12BBs.FinancialYears,
+                
                 HouseRentRecordId = existingEmployee12BBs.HouseRentRecordId == 0 ? houseRentRecordId : existingEmployee12BBs.HouseRentRecordId,
                 TravelExpenditureRecordId = existingEmployee12BBs.TravelExpenditureRecordId == 0 ? travelExpenditureRecordId : existingEmployee12BBs.TravelExpenditureRecordId,
                 HomeLoanRecordId = existingEmployee12BBs.HomeLoanRecordId == 0 ? homeLoanRecordId : existingEmployee12BBs.HomeLoanRecordId,
@@ -557,7 +586,8 @@ namespace KotiCRM.Repository.Repository
             var employeeRecord = new Employee12BB
             {
                 EmployeeId = employeeRecordDto.EmployeeId,
-                FinancialYear = employeeRecordDto.FinancialYear,
+                FinancialYears = employeeRecordDto.FinancialYears,
+                //FinancialYear = employeeRecordDto.FinancialYear,
                 HouseRentRecordId = employeeRecordDto.HouseRentRecordId,
                 TravelExpenditureRecordId = employeeRecordDto.TravelExpenditureRecordId,
                 HomeLoanRecordId = employeeRecordDto.HomeLoanRecordId,
@@ -577,6 +607,56 @@ namespace KotiCRM.Repository.Repository
             _context.Employee12BBs.Add(employeeRecord);
             return await _context.SaveChangesAsync();
         }
-    }
 
+        public async Task<List<ManageTaxes12BBDTO>> GetManageTaxes12BB(string? searchQuery, int? pageNumber, int? pageSize)
+        {
+            try
+            {
+                var query = from emp in _context.Employees
+                            join bb in _context.Employee12BBs
+                                on emp.EmployeeId equals bb.EmployeeId into employeeBBs
+                            from bb in employeeBBs.DefaultIfEmpty()
+                                //where bb == null || bb.IsDeclarationComplete
+                            where (bb != null && bb.IsDeclarationComplete && bb.ModifiedOn != null)
+                            select new ManageTaxes12BBDTO
+                            {
+                                EmployeeId = emp.EmployeeId,
+                                EmpCode = emp.EmpCode, 
+                                Name = emp.Name,
+                                ContactNumber = emp.ContactNumber1,
+                                Email = emp.PersonalEmailId, // Assuming PersonalEmailId is a property on Employee
+                                IsDeclarationComplete = bb != null && bb.IsDeclarationComplete,
+                                SubmittedOn = bb != null && bb.IsDeclarationComplete ? bb.ModifiedOn : null
+                                
+                            };
+
+                // Apply search filter
+                if (!string.IsNullOrEmpty(searchQuery))
+                {
+                    query = query.Where(mt => mt.Name.Contains(searchQuery) ||
+                                              mt.EmpCode.Contains(searchQuery));
+                                             
+                }
+
+                // Count the total number of records after applying the search filter
+                var usersCount = await query.CountAsync();
+
+                // Apply pagination
+                var manageTaxes = await query.OrderByDescending(u => u.EmpCode) // Order by EmpCode in descending order
+                                             .Skip(pageNumber.HasValue && pageSize.HasValue ? (pageNumber.Value - 1) * pageSize.Value : 0)
+                                             .Take(pageSize ?? 10)
+                                             .ToListAsync();
+
+                // Set the UserCount for each DTO
+                manageTaxes.ForEach(mt => mt.UserCount = usersCount);
+
+                return manageTaxes;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error fetching users.", ex);
+            }
+        }
+
+    }
 }

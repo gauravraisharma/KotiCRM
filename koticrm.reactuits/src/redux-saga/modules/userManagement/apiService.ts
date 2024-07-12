@@ -2,7 +2,7 @@ import { apiResponse, axiosInstance, responseBody } from "../../../apiIntercepto
 
 import { DocumentPaths, EightyCDeclaration, EightyDRecord, EightyGRecord, EmployeeFinancialRecord, EmployeeFinancialRecordDummy, HomeLoanRecord, HouseRentRecord, OtherInvestmentRecord, TravelExpenditureRecord } from "../../../models/Form12BB/Form12BB";
 import { Employee, ForgotPasswordDTO, ResetPassword } from "../../../models/userManagement/employee";
-import { Employees } from "../../../models/userManagement/employees";
+import { Employees, ManageTaxes } from "../../../models/userManagement/employees";
 import { Deduction } from "../../../views/userManagement/deduction";
 
 
@@ -97,7 +97,7 @@ export async function DeleteEmployee(employeeId: string) {
 //Forgot Password
 export async function UserForgotPassword(forgotPasswordDTO: any) {
     try {
-      debugger
+      
       const response = await axiosInstance.post('/UserAccount/ForgotPassword', forgotPasswordDTO);
       return responseBody(response)
     } catch (error: any  ) {
@@ -140,10 +140,10 @@ export async function ResetUserPassword(resetPassword: ResetPassword): Promise<b
 
 // Taxation services
 
-export async function GetEmployee12BB(id: string , financialYear? : string){
+export async function GetEmployee12BB(id: string ){
     try {
      
-        const response = await axiosInstance.get<EmployeeFinancialRecord>(`/TaxDeclaration/Employee12BB/` + id + '/' + financialYear);
+        const response = await axiosInstance.get<EmployeeFinancialRecord>(`/TaxDeclaration/Employee12BB/` + id );
         return response;
     } catch (error: any) {
         const errorResponse: apiResponse<EmployeeFinancialRecord> = {
@@ -416,6 +416,7 @@ export async function UploadDocuments(documentProofs: FormData): Promise<apiResp
 
 export async function AddNewFinancial(employeeFinancialRecordDummy: EmployeeFinancialRecordDummy) {
     try {
+        debugger;
       const response = await axiosInstance.post<EmployeeFinancialRecordDummy>('/TaxDeclaration/AddEmployeeRecord', employeeFinancialRecordDummy);
      
       return response;
@@ -428,3 +429,18 @@ export async function AddNewFinancial(employeeFinancialRecordDummy: EmployeeFina
       return errorResponse;
     }
   }
+
+  //get managetaxes12bb
+  export async function GetManageTaxes12BB(searchQuery: string, pageNumber: number, pageSize: number){
+    try {
+        const response = await axiosInstance.get(`/TaxDeclaration/GetManageTaxes12BB?searchQuery=${searchQuery}&pageNumber=${pageNumber}&pageSize=${pageSize}`);
+        return response;
+    } catch (error: any) {
+        const errorResponse: apiResponse<[ManageTaxes]> = {
+            data: undefined,
+            status: 500,
+            statusText: error.message
+        };
+        return errorResponse;
+    }
+}

@@ -78,7 +78,7 @@ const otherInvestmentValidationSchema = Yup.object().shape({
 });
 
 const Form12BB = () => {
-  const { employeeId, userId, financialYear } = useParams<{ employeeId: string, userId: string, financialYear: string }>();
+  const { employeeId, userId } = useParams<{ employeeId: string, userId: string}>();
 
   const [getEmployeeId, setEmployeeId] = useState<string>();
   const [employee12BBData, setEmployee12BBData] = useState<EmployeeFinancialRecord>();
@@ -150,11 +150,11 @@ const Form12BB = () => {
 
   // Call employee12BB method
   useEffect(() => {
-    if (employeeId && employeeId !== undefined && financialYear) {
+    if (employeeId && employeeId !== undefined) {
       setEmployeeId(employeeId);
-      employee12BB(employeeId, financialYear);
+      employee12BB(employeeId);
     }
-  }, [employeeId, financialYear]);
+  }, [employeeId]);
 
   // UseEffect for Filling data in form 
   useEffect(() => {
@@ -271,9 +271,9 @@ const Form12BB = () => {
   }, [employee12BBData]);
 
   // Get Employee12BB data
-  const employee12BB = async (id: string, financialYear: string) => {
+  const employee12BB = async (id: string) => {
     try {
-      const response = await GetEmployee12BB(id, financialYear);
+      const response = await GetEmployee12BB(id);
       if (response != null) {
         setEmployee12BBData(response.data);
         if (response.data?.houseRentRecord) {
@@ -500,7 +500,7 @@ const Form12BB = () => {
   const prepareFormData = () => {
     formData.id = id ? id : 0;
     formData.employeeId = getEmployeeId ? getEmployeeId : "";
-    formData.financialYear = financialYear ? financialYear : "";
+    // formData.financialYear = financialYear ? financialYear : "";
     formData.houseRentRecordId = houseRentRecordId ? houseRentRecordId : 0;
     formData.travelExpenditureRecordId = travelExpenditureRecordId ? travelExpenditureRecordId : 0;
     formData.homeLoanRecordId = homeLoanRecordId ? homeLoanRecordId : 0;

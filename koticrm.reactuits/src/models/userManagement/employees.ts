@@ -13,3 +13,13 @@ export interface Employees
     shift?: string;
 
 }
+
+export interface ManageTaxes {
+    employeeId: string | null;
+    empCode: string | null;
+    name: string | null;
+    contactNumber: string | null;
+    email: string | null;
+    isDeclarationComplete: boolean;
+    submittedOn: Date | null;
+}

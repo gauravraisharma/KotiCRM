@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { AiFillEye } from "react-icons/ai";
@@ -32,6 +31,7 @@ import "../../css/style.css";
 import moment from "moment";
 import { useSelector } from "react-redux";
 import GetModulePermissions from "../../utils/Shared/GetModulePermissions";
+
 const Users = () => {
   //  const [employeesList, setEmployeesList] = useState<Employees[]>([]);
   const [userList, setUserList] = useState<Employees[]>([]);
@@ -137,6 +137,7 @@ const Users = () => {
           />
         </div>
       )}
+      
       <CRow className="mb-3">
         <CCol xs={12}>
           <CRow className="align-items-center m-1">
@@ -195,7 +196,7 @@ const Users = () => {
                     </CDropdownItem>
                     <CDropdownItem className="dropdown-item-custom">
                       <Link
-                        to="/taxes"
+                        to="/manageTaxes"
                         className="dropdown-link-custom"
                       >
                         Manage Taxes
@@ -327,6 +328,9 @@ const Users = () => {
           </CPagination>
         </CCardBody>
       </CCard>
+
+
+ 
     </>
   );
 };

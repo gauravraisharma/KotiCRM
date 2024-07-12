@@ -1423,7 +1423,7 @@ namespace KotiCRM.Repository.Repository
                                  Shift = shift.Name,
                                  BirthDate = employee.DateOfBirth,
                                  BloodGroup = employee.BloodGroup,
-                                     ProfilePicturePath=employee.ProfilePictureURL
+                                 ProfilePicturePath = employee.ProfilePictureURL
                              });
 
                 // Count the total number of records

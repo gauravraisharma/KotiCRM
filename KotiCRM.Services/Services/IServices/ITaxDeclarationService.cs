@@ -1,4 +1,5 @@
 ﻿using KotiCRM.Repository.DTOs.TaxDeclaration;
+using KotiCRM.Repository.DTOs.UserManagement;
 using KotiCRM.Repository.Models;
 using Microsoft.AspNetCore.Http;
 using System;
@@ -12,7 +13,7 @@ namespace KotiCRM.Services.IServices
     public interface ITaxDeclarationService
     {
         // Get 
-        Task<Employee12BBDTO> GetEmployee12BB(string employeeId, string financialYear);
+        Task<Employee12BBDTO> GetEmployee12BB(string employeeId);
         Task<List<Employee12BB>> GetEmployee12BBs(string employeeId);
 
         //save 
@@ -22,7 +23,7 @@ namespace KotiCRM.Services.IServices
 
         Task<int> AddEmployeeRecordAsync(Employee12BBDTO employee12BBDTO);
 
-
+        Task<List<ManageTaxes12BBDTO>> GetManageTaxes12BB(string? searchQuery, int? pageNumber, int? pageSize);
 
 
 

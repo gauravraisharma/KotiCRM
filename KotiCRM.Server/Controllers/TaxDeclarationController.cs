@@ -1,7 +1,10 @@
 ﻿using KotiCRM.Repository.Constants;
 using KotiCRM.Repository.DTOs.TaxDeclaration;
+using KotiCRM.Repository.DTOs.UserManagement;
 using KotiCRM.Repository.Models;
+using KotiCRM.Server.Authentication;
 using KotiCRM.Services.IServices;
+using KotiCRM.Services.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -27,17 +30,17 @@ namespace KotiCRM.Server.Controllers
         // Endpoint to get Form 12BB for a specific employee and financial year
 
         [HttpGet]
-        [Route("Employee12BB/{employeeId}/{financialYear}")]
-        public async Task<Employee12BBDTO> GetEmployee12BB(string employeeId, string financialYear)
+        [Route("Employee12BB/{employeeId}")]
+        public async Task<Employee12BBDTO> GetEmployee12BB(string employeeId)
         {
-            if (string.IsNullOrEmpty(employeeId) || string.IsNullOrEmpty(financialYear))
+            if (string.IsNullOrEmpty(employeeId))
             {
                 throw new Exception("EmployeeId and FinancialYear are required.");
             }
 
             // Fetch the records from the service
 
-            var records = await _taxDeclarationService.GetEmployee12BB(employeeId, financialYear);
+            var records = await _taxDeclarationService.GetEmployee12BB(employeeId);
             if (records == null)
             {
                 throw new Exception("No records found.");
@@ -140,9 +143,26 @@ namespace KotiCRM.Server.Controllers
             {
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
+
         }
+        // GetUsers method retrieves a list of employees based on search query and pagination parameters
+
+        [HttpGet]
+        [Route("GetManageTaxes12BB")]
+        public async Task<ActionResult<List<ManageTaxes12BBDTO>>> GetManageTaxes12BB(string? searchQuery, int? pageNumber, int? pageSize)
+        
+        {
+           
+            
+                var employees = await _taxDeclarationService.GetManageTaxes12BB(searchQuery, pageNumber, pageSize);
+                return employees;
+            
+        
+        }
+
     }
 }
+
 
 
 

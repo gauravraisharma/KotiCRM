@@ -850,11 +850,6 @@ namespace KotiCRM.Server.Migrations
                         .IsUnicode(false)
                         .HasColumnType("varchar(100)");
 
-                    b.Property<string>("FinancialYear")
-                        .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)");
-
                     b.Property<int?>("HomeLoanRecordId")
                         .HasColumnType("int");
 
@@ -986,6 +981,42 @@ namespace KotiCRM.Server.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("EmployeeLeaves");
+                });
+
+            modelBuilder.Entity("KotiCRM.Repository.Models.FinancialYear", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CreatedOn")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Employee12BBId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("EmployeeId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Financialyear")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Employee12BBId");
+
+                    b.ToTable("FinancialYears");
                 });
 
             modelBuilder.Entity("KotiCRM.Repository.Models.HomeLoanDeclaration", b =>
@@ -2516,6 +2547,15 @@ namespace KotiCRM.Server.Migrations
                     b.Navigation("TravelExpenditureRecord");
                 });
 
+            modelBuilder.Entity("KotiCRM.Repository.Models.FinancialYear", b =>
+                {
+                    b.HasOne("KotiCRM.Repository.Models.Employee12BB", null)
+                        .WithMany("FinancialYears")
+                        .HasForeignKey("Employee12BBId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("KotiCRM.Repository.Models.ProjectTeam", b =>
                 {
                     b.HasOne("KotiCRM.Repository.Models.Project", "Project")
@@ -2630,6 +2670,8 @@ namespace KotiCRM.Server.Migrations
             modelBuilder.Entity("KotiCRM.Repository.Models.Employee12BB", b =>
                 {
                     b.Navigation("EightyCDeclarations");
+
+                    b.Navigation("FinancialYears");
                 });
 
             modelBuilder.Entity("KotiCRM.Repository.Models.Project", b =>

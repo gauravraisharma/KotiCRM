@@ -21,9 +21,11 @@ namespace KotiCRM.Repository.Data
         public DbSet<InvoiceItem> InvoiceItems { get; set; }
         public DbSet<Note> Notes { get; set; }
 
+
         // Tax
 
         public DbSet<Employee12BB> Employee12BBs { get; set; }
+        public DbSet<FinancialYear> FinancialYears { get; set; }
         public DbSet<HouseRentDeclaration> HouseRentDeclarations { get; set; }
         public DbSet<TravelExpenditureDeclaration> TravelExpenditureDeclarations { get; set; }
         public DbSet<HomeLoanDeclaration> HomeLoanDeclarations { get; set; }
@@ -767,9 +769,7 @@ namespace KotiCRM.Repository.Data
                     .HasMaxLength(100)
                     .IsUnicode(false);
 
-                entity.Property(e => e.FinancialYear)
-                    .IsRequired()
-                    .HasMaxLength(10);
+                
 
                 entity.Property(e => e.CreatedBy)
                     .IsRequired()
@@ -801,6 +801,11 @@ namespace KotiCRM.Repository.Data
                     .WithMany(e => e.Employee12BBs)
                     .HasForeignKey(e => e.EmployeeId)
                     .OnDelete(DeleteBehavior.Restrict);
+
+                //entity.HasOne(e => e.FinancialYear)
+                //.WithMany(e => e.FinancialYears)
+                //.HasForeignKey(e => e.Employee12BBId)
+                //.OnDelete(DeleteBehavior.Restrict);
 
                 entity.HasOne(e => e.HouseRentRecord)
                     .WithMany()

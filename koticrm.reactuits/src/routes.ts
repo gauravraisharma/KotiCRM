@@ -39,6 +39,9 @@ const InvoicePDF = lazy(()=> import('./pdf-template/InvoiceTemplate'))
 
 //Manage Users Routes
 const Users = lazy(() => import('./views/userManagement/Users'))
+const ManageTaxes = lazy(() => import('./views/userManagement/ManageTaxes'))
+
+const ManageTaxes12BB = lazy(() => import('./views/userManagement/ManageTaxes12BB'))
 const Form12BB = lazy(() => import('./views/userManagement/Form12BB'));
 const UserDetail = lazy(() => import('./views/userManagement/UserDetail'))
 const CreateOrUpdateUser = lazy(() => import('./views/userManagement/CreateOrUpdateUser'))
@@ -142,7 +145,7 @@ const routes: Route[] = [
     // { path: '/icons', name: 'Icons', element: CoreUIIcons, isAuth: false },
     // { path: '/icons/coreui-icons', name: 'CoreUI Icons', element: CoreUIIcons, isAuth: false },
     // { path: '/icons/flags', name: 'Flags', element: Flags, isAuth: false },
-    // { path: '/icons/brands', name: 'Brands', element: Brands, isAuth: false },
+    // { path: '/icons/brands', name: 'Brands', element: Brands, isAuth: false }
     { path: '/notifications', name: 'Notifications', element: Alerts, isAuth: false },
     { path: '/notifications/alerts', name: 'Alerts', element: Alerts, isAuth: false },
     { path: '/notifications/badges', name: 'Badges', element: Badges, isAuth: false },
@@ -176,6 +179,8 @@ const routes: Route[] = [
     // { path: "/users/userDetail/:userId/:employeeId/form12bb", element: <Form12BB />, isAuth: true, modulePermission: "ManageUsers" },
       
 
+    { path: '/manageTaxes', name: 'ManageTaxes', element: ManageTaxes, isAuth: true, modulePermission: 'ManageUsers' }, 
+    { path: '/manageTaxes12bb', name: 'ManageTaxes12BB', element: ManageTaxes12BB, isAuth: true, modulePermission: 'ManageUsers' }, 
     { path: '/roles', name: 'Roles', element: Roles, isAuth: true, modulePermission: 'ManageRoles'},
     { path: '/roles/createRole', name: 'CreateRole', element: CreateOrUpdateRole, isAuth: true, modulePermission: 'ManageRoles' },
     { path: '/roles/updateRole/:id', name: 'UpdateRole', element: CreateOrUpdateRole, isAuth: true, modulePermission: 'ManageRoles' },

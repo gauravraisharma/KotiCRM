@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import { AddNew, AddNewFinancial, ChangePassword, GetEmployee12BBs, GetEmployeeById } from "../../redux-saga/modules/userManagement/apiService";
+import { useNavigate, useParams } from "react-router-dom";
+import { AddNewFinancial, ChangePassword, GetEmployee12BBs, GetEmployeeById } from "../../redux-saga/modules/userManagement/apiService";
 import { Employee, EmployeeClass } from "../../models/userManagement/employee";
 import { ToastContainer, toast } from "react-toastify";
 import { CRow, CCol, CCard, CCardHeader, CButton, CCardBody } from "@coreui/react";
 import * as Yup from "yup";
-import { Formik, Field, ErrorMessage } from "formik";
+import { Formik, Field } from "formik";
 import "react-toastify/dist/ReactToastify.css";
 import { FaDownload } from "react-icons/fa6";
 import { EmployeeFinancialRecord, EmployeeFinancialRecordDummy } from "../../models/Form12BB/Form12BB";
@@ -16,6 +16,8 @@ const UserDetails = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState<Employee>(new EmployeeClass());
   const [employee12BBData, setEmployee12BBData] = useState<EmployeeFinancialRecord[]>([]);
+  const [formSubmitted, setFormSubmitted] = useState(false);
+  const [recordExists, setRecordExists] = useState(false);
   const years: any = [];
 
   useEffect(() => {
@@ -39,6 +41,8 @@ const UserDetails = () => {
       const response = await GetEmployee12BBs(employeeId);
       if (response.status == 200) {
         setEmployee12BBData(response.data);
+        const recordFor2024_2025 = response.data.some(record => record.financialYear === '2024-2025');
+        setRecordExists(recordFor2024_2025);
       }
     } catch (error) {
     }
@@ -102,13 +106,15 @@ const UserDetails = () => {
     };
 
     try {
-      const response = await AddNewFinancial(newEmployeeRecord); // Call your AddNewFinancial function
+      const response = await AddNewFinancial(newEmployeeRecord);
       if (response.status === 200) {
         toast.success('Employee record inserted successfully.');
         setTimeout(() => {
           navigate('/users')
           // navigate(`/users/userDetail/${userId}/${employeeId}`);
-        }, 3000); 
+        }, 3000);
+
+        setFormSubmitted(true);
       } else {
 
         toast.error('Failed to insert the record.');
@@ -122,8 +128,8 @@ const UserDetails = () => {
 
 
   const handleClick = (element: any) => {
-    const financialYear = element.financialYear
-    navigate(`/Form12BB/${userId}/${element.employeeId}/${financialYear}`);
+
+    navigate(`/Form12BB/${userId}/${element.employeeId}`);
   };
 
   return (
@@ -303,7 +309,7 @@ const UserDetails = () => {
                   role="tabpanel"
                   aria-labelledby="manageuser-tab"
                 >
-                   <Formik
+                  <Formik
                     initialValues={{
                       newPassword: "",
                       confirmPassword: "",
@@ -412,64 +418,7 @@ const UserDetails = () => {
                         </div>
                       </form>
                     )}
-                  </Formik> 
-                  {/* <Formik
-                    initialValues={{ newPassword: "", confirmPassword: "" }}
-                    validationSchema={validationSchema}
-                    onSubmit={handleSubmit}
-                  >
-                    {({ errors, touched }) => (
-                      <form onSubmit={handleSubmit}>
-                        <div className="headings">
-                          <h5>Change Password</h5>
-                        </div>
-                        <div className="card">
-                          <div className="card-body">
-                            <div className="row" style={{ margin: "20px 0" }}>
-                              <div className="col-sm-4 ">
-                                <label htmlFor="newPassword">New Password:</label>
-                              </div>
-                              <div className="col-sm-8">
-                                <Field
-                                  type="password"
-                                  id="newPassword"
-                                  name="newPassword"
-                                  className={`form-control ${touched.newPassword && errors.newPassword ? "is-invalid" : ""}`}
-                                  placeholder="Enter new password"
-                                />
-                                <ErrorMessage name="newPassword" component="div" className="error-message text-danger" />
-                              </div>
-                            </div>
-                            <div className="row" style={{ margin: "20px 0" }}>
-                              <div className="col-sm-4">
-                                <label htmlFor="confirmPassword">Confirm New Password:</label>
-                              </div>
-                              <div className="col-sm-8">
-                                <Field
-                                  type="password"
-                                  id="confirmPassword"
-                                  name="confirmPassword"
-                                  className={`form-control ${touched.confirmPassword && errors.confirmPassword ? "is-invalid" : ""}`}
-                                  placeholder="Confirm new password"
-                                />
-                                <ErrorMessage name="confirmPassword" component="div" className="error-message text-danger" />
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="row">
-                          <div className="col-sm-12 text-end">
-                            <button type="submit" onClick={handleSaveClick} className="btn btn-primary">
-                              Save
-                            </button>
-                            <button type="button" className="btn btn-primary">
-                              Email Password
-                            </button>
-                          </div>
-                        </div>
-                      </form>
-                    )}
-                  </Formik> */}
+                  </Formik>
 
 
                 </div>
@@ -478,10 +427,20 @@ const UserDetails = () => {
                     <CCardHeader className="mb-3" style={{ backgroundColor: '#4e73df', color: 'white' }}>
                       <div className="d-flex justify-content-between align-items-center">
                         <h5 className="mb-0">12 BB Declaration and Details</h5>
-                        <button onClick={handleAddNew} className="btn btn-primary ms-auto" style={{ backgroundColor: 'white', color: '#4e73df' }}>
-                          {/* + Add Current FY */}
+                        {/* <button onClick={handleAddNew} className="btn btn-primary ms-auto" style={{ backgroundColor: 'white', color: '#4e73df' }}>
+                    
+                          + Add FY 2024-25
+                        </button> */}
+                        <button
+                          onClick={handleAddNew}
+                          className="btn btn-primary ms-auto"
+                          style={{ backgroundColor: 'white', color: 'black' }}
+                          disabled={formSubmitted || recordExists} // Disable the button if form is submitted
+                        >
                           + Add FY 2024-25
                         </button>
+
+
                       </div>
                     </CCardHeader>
 
@@ -514,6 +473,10 @@ const UserDetails = () => {
                     <CCardHeader className="mb-3" style={{ backgroundColor: '#1cc88a', color: 'white' }}>
                       <div className="d-flex justify-content-between align-items-center">
                         <h5 className="mb-0">Form 16</h5>
+                        <button onClick={handleAddNew} className="btn btn-primary ms-auto">
+                       
+                          + Add FY 2024-25
+                        </button>
                       </div>
                     </CCardHeader>
                     <CCardBody style={{ padding: '20px', backgroundColor: '#f8f9fc' }}>

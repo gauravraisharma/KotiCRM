@@ -1,4 +1,5 @@
 ﻿using KotiCRM.Repository.DTOs.TaxDeclaration;
+using KotiCRM.Repository.DTOs.UserManagement;
 using KotiCRM.Repository.IRepository;
 using KotiCRM.Repository.Models;
 using KotiCRM.Repository.Repository;
@@ -18,10 +19,10 @@ namespace KotiCRM.Services.Services
         {
             _taxDeclarationRepository = taxDeclarationRepository;
         }
-        public async Task<Employee12BBDTO> GetEmployee12BB(string employeeId, string financialYear)
+        public async Task<Employee12BBDTO> GetEmployee12BB(string employeeId)
         {
 
-            return await _taxDeclarationRepository.GetEmployee12BB(employeeId, financialYear);
+            return await _taxDeclarationRepository.GetEmployee12BB(employeeId);
         }
         public async Task<List<Employee12BB>> GetEmployee12BBs(string employeeId)
         {
@@ -41,6 +42,12 @@ namespace KotiCRM.Services.Services
         public async Task<int> AddEmployeeRecordAsync(Employee12BBDTO employee12BBDTO)
         {
             return await _taxDeclarationRepository.InsertEmployeeRecordAsync(employee12BBDTO);
+        }
+        public async Task<List<ManageTaxes12BBDTO>> GetManageTaxes12BB(string? searchQuery, int? pageNumber, int? pageSize)
+        {
+
+            return  await _taxDeclarationRepository.GetManageTaxes12BB(searchQuery, pageNumber, pageSize);
+             
         }
 
     }
