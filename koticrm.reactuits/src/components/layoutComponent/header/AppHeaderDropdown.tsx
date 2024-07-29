@@ -9,7 +9,8 @@ import {
 import { cilAccountLogout, cilSettings, cilUser, cilUserFemale } from "@coreui/icons";
 import CIcon from "@coreui/icons-react";
 import { useNavigate } from "react-router-dom";
-import avatar from "../../../assets/brand/profilePlaceholder.jpg";
+ import avatar from "../../../assets/brand/profilePlaceholder.jpg";
+
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { logout } from "../../../redux-saga/modules/auth/action";
@@ -31,20 +32,22 @@ const AppHeaderDropdown = () => {
     (state: any) => state.authReducer.modulePermission
   );
 
-  const user = useSelector((state: any) => state.authReducer.user);
-  console.log("useruseruser" + user.profilePictureURL);
+   const user = useSelector((state: any) => state.authReducer.user);
+  // console.log("useruseruser" + user.profilePictureURL);
+  // console.log(user)
 
   return (
     <CDropdown variant="nav-item">
       <CDropdownToggle className="py-0" caret={false}>
-        <CAvatar src={user.profilePictureURL ? user.profilePictureURL : avatar} size="lg" />
+        {/* <CAvatar src={user.profilePictureURL ? user.profilePictureURL : avatar} size="lg" /> */}
+        <CAvatar src={user.profilePictureURL || avatar} size="lg" />
       </CDropdownToggle>
       <CDropdownMenu className="pt-0">
       <CDropdownItem>
           <CIcon icon={cilUserFemale} className="me-2" />
           <Link
             style={{ textDecoration: "none", color: "black" }}
-            to={`users/profile/${user.employeeId}`}
+            to={`/profile/${user.employeeId}`}
           >
             Profile
           </Link>

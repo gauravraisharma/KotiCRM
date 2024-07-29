@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import { AddNewFinancial, ChangePassword, GetEmployee12BBs, GetEmployeeById, GetFinancialYears } from "../../redux-saga/modules/userManagement/apiService";
+import {  useNavigate, useParams } from "react-router-dom";
+import {  ChangePassword, GetEmployee12BBs, GetEmployeeById } from "../../redux-saga/modules/userManagement/apiService";
 import { Employee, EmployeeClass } from "../../models/userManagement/employee";
 import { ToastContainer, toast } from "react-toastify";
 import { CRow, CCol, CCard, CCardHeader, CButton, CCardBody } from "@coreui/react";
@@ -10,20 +10,18 @@ import "react-toastify/dist/ReactToastify.css";
 import { FaDownload } from "react-icons/fa6";
 import { EmployeeFinancialRecord, } from "../../models/Form12BB/Form12BB";
 import moment from "moment";
-import GetModulePermissions from "../../utils/Shared/GetModulePermissions";
 
 
 
 
-const UserDetails = () => {
+const User = () => {
   const { employeeId, userId } = useParams();
   const navigate = useNavigate();
   const [formData, setFormData] = useState<Employee>(new EmployeeClass());
   const [employee12BBData, setEmployee12BBData] = useState<EmployeeFinancialRecord[]>([]);
-  const [formSubmitted, setFormSubmitted] = useState(false);
+
   const [recordExists, setRecordExists] = useState(false);
   const [years, setYears] = useState<string[]>([]);
-  const manangeTaxesPermissions = GetModulePermissions('ManageTaxes');
 
 
   useEffect(() => {
@@ -107,38 +105,7 @@ const UserDetails = () => {
       .oneOf([Yup.ref("newPassword"), null], "Passwords must match")
   });
 
-  const handleAddNew = async () => {
-    if (!employeeId) {
-      toast.error('Employee ID not found.');
-      return;
-    }
 
-    const newEmployeeRecord = {
-      employeeId: employeeId,
-      financialYear: '2024-2025',
-      financialYearName: '2024-2025',
-      createdBy: '5faccdc7-7ddb-4b14-9295-f3a933bef7f1', // Ideally should be fetched dynamically
-      modifiedBy: '24d59f65-7aad-4b0e-b821-f07ca663a32b', // Ideally should be fetched dynamically
-      isDelete: false,
-      isActive: true,
-      isFormVerified: false,
-      isDeclarationComplete: false,
-    };
-
-    try {
-      const response = await AddNewFinancial(newEmployeeRecord);
-      if (response.status === 200) {
-        toast.success('Employee record inserted successfully.');
-        setFormSubmitted(true);
-        getForm12BbsById(employeeId); // Refresh the data
-      } else {
-        toast.error('Failed to insert the record.');
-      }
-    } catch (error) {
-      console.error('Error adding new financial record:', error);
-      toast.error('Failed to add new financial record. Please try again.');
-    }
-  };
 
 
   const handleClick = (element: any) => {
@@ -442,16 +409,6 @@ const UserDetails = () => {
                       <div className="d-flex justify-content-between align-items-center">
                         <h5 className="mb-0">12 BB Declaration and Details</h5>
 
-                        {manangeTaxesPermissions.isAdd && (
-                          <button
-                            onClick={handleAddNew}
-                            className="btn btn-primary ms-auto"
-                            style={{ backgroundColor: 'white', color: 'black' }}
-                            disabled={formSubmitted || recordExists} // Disable the button if form is submitted or already exists
-                          >
-                            + Add FY 2024-25
-                          </button>
-                        )}
 
 
                       </div>
@@ -473,16 +430,7 @@ const UserDetails = () => {
                           <CCol md="6" className="text-end">
                             <div key={index}>
                               {element.isDeclarationComplete ?
-                               <p>
-                               Last submitted on {moment(element.modifiedOn).format('DD MMMM YYYY')}
-                               <Link
-                                 to={`/Form12BB/${userId}/${element.employeeId}`}
-                                 style={{ textDecoration: 'none', color: '#4e73df' }}
-                               >
-                                 <u style={{ cursor: 'pointer', color: '#4e73df' }}>View Detail</u>
-                               </Link>
-                             </p>
-                             
+                                <p>Last submitted on {moment(element.modifiedOn).format('DD MMMM YYYY')} <u style={{ cursor: 'pointer', color: '#4e73df' }}>View Detail</u></p>
                                 :
                                 <button onClick={() => handleClick(element)} className="btn btn-warning">Submit Proofs</button>
                               }
@@ -498,16 +446,8 @@ const UserDetails = () => {
                     <CCardHeader className="mb-3" style={{ backgroundColor: '#1cc88a', color: 'white' }}>
                       <div className="d-flex justify-content-between align-items-center">
                         <h5 className="mb-0">Form 16</h5>
-                        {manangeTaxesPermissions.isAdd && (
-                          <button
-                            onClick={handleAddNew}
-                            className="btn btn-primary ms-auto"
-                            style={{ backgroundColor: 'white', color: 'black' }}
-                            disabled={formSubmitted || recordExists} // Disable the button if form is submitted
-                          >
-                            + Add FY 2024-25
-                          </button>
-                        )}
+
+
                       </div>
                     </CCardHeader>
                     <CCardBody style={{ padding: '20px', backgroundColor: '#f8f9fc' }}>
@@ -538,4 +478,4 @@ const UserDetails = () => {
   );
 };
 
-export default UserDetails;
+export default User;

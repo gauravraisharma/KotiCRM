@@ -10,7 +10,8 @@ namespace KotiCRM.Repository.Models
     {
         public int Id { get; set; }
         public string? EmployeeId { get; set; }
-    
+        
+        public int? FinancialYearId { get; set; }
         public int? HouseRentRecordId { get; set; }
         public int? TravelExpenditureRecordId { get; set; }
         public int? HomeLoanRecordId { get; set; }
@@ -28,7 +29,7 @@ namespace KotiCRM.Repository.Models
 
         public virtual Employee? Employee { get; set; }
 
-        public virtual ICollection<FinancialYear>? FinancialYears { get; set; }
+        public virtual FinancialYear? FinancialYear { get; set; }
 
         public virtual HouseRentDeclaration? HouseRentRecord { get; set; }
         public virtual TravelExpenditureDeclaration? TravelExpenditureRecord { get; set; }

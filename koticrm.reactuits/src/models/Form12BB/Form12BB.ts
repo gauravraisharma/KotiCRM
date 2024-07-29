@@ -2,7 +2,8 @@
 export class InitialEmployeeRecord implements EmployeeFinancialRecord {
   id: number;
   employeeId: string;
-  financialYear: string;
+  financialYear: FinancialYear;
+  financialYearId: number;
   houseRentRecord: HouseRentRecord;
   houseRentRecordId: number;
   travelExpenditureRecordId: number;
@@ -24,36 +25,44 @@ export class InitialEmployeeRecord implements EmployeeFinancialRecord {
   isDeclarationComplete: boolean;
   modifiedBy: string;
   modifiedOn: Date | null;
-  createdBy: string ;
+  createdBy: string;
+ 
 
 
 
-constructor(
-  id: number = 0,
-  employeeId: string = "",
-  financialYear: string = "",
-  houseRentRecord: HouseRentRecord = {
+  constructor(
+    id: number = 0,
+    employeeId: string = "",
+    financialYearId: number = 0,
+    financialYear: FinancialYear = {
+      id: 0,
+      financialYearName: "",
+      createdOn: new Date(),
+      createdBy: "",
+      isActive: true,
+    },
+    houseRentRecord: HouseRentRecord = {
       id: 0,
       amount: 0,
       ownerPanCard: null,
       proofDocumentLink: null,
       isVerified: false,
       remarks: "",
-  },
-  houseRentRecordId: number = 0,
-  eightyDRecordId: number = 0,
-  eightyGRecordId: number = 0,
-  isNoHouseRentDeclaration: boolean = false,
-  travelExpenditureRecord: TravelExpenditureRecord = {
+    },
+    houseRentRecordId: number = 0,
+    eightyDRecordId: number = 0,
+    eightyGRecordId: number = 0,
+    isNoHouseRentDeclaration: boolean = false,
+    travelExpenditureRecord: TravelExpenditureRecord = {
       id: 0,
       amount: 0,
       proofDocumentLink: null,
       isVerified: false,
       remarks: "",
-  },
-  travelExpenditureRecordId: number = 0,
-  isNoTravelDeclaration: boolean = false,
-  homeLoanRecord: HomeLoanRecord = {
+    },
+    travelExpenditureRecordId: number = 0,
+    isNoTravelDeclaration: boolean = false,
+    homeLoanRecord: HomeLoanRecord = {
       id: 0,
       lenderName: "",
       lenderAddress: "",
@@ -62,13 +71,13 @@ constructor(
       proofDocumentLink: null,
       isVerified: false,
       remarks: "",
-  },
-  homeLoanRecordId: number = 0,
-  isNoHomeDeclaration: boolean = false,
-  eightyCRecordId: number = 0,
-  eightyCRecord: EightyCDeclaration[] = [],
-  eightyCDeductionTypes: EightyCDeductionTypes[] = [],
-  eightyDRecord: EightyDRecord = {
+    },
+    homeLoanRecordId: number = 0,
+    isNoHomeDeclaration: boolean = false,
+    eightyCRecordId: number = 0,
+    eightyCRecord: EightyCDeclaration[] = [],
+    eightyCDeductionTypes: EightyCDeductionTypes[] = [],
+    eightyDRecord: EightyDRecord = {
       id: 0,
       insuranceAmount: 0,
       insuranceProofLink: null,
@@ -76,8 +85,8 @@ constructor(
       medicalExpenseProof: null,
       isVerified: false,
       remarks: "",
-  },
-  eightyGRecord: EightyGRecord = {
+    },
+    eightyGRecord: EightyGRecord = {
       id: 0,
       nameOfDonee: "",
       panNumber: "",
@@ -86,48 +95,57 @@ constructor(
       proofDocumentLink: null,
       isVerified: false,
       remarks: "",
-  },
-  otherInvestmentRecord: OtherInvestmentRecord = {
+    },
+    otherInvestmentRecord: OtherInvestmentRecord = {
       id: 0,
       description: "",
       proofDocumentLink: null,
       isVerified: false,
       remarks: "",
-  },
-  otherInvestmentRecordId: number = 0,
+    },
+    otherInvestmentRecordId: number = 0,
+    isDeclarationComplete: boolean = false,
+    modifiedBy: string = "",
+    modifiedOn: Date | null = null,
+    createdBy: string = "",
+    
+  ) {
+    this.id = id;
+    this.employeeId = employeeId;
+    this.financialYearId = financialYearId;
+    this.financialYear = financialYear; // Assign financialYear here
+    this.houseRentRecord = houseRentRecord;
+    this.houseRentRecordId = houseRentRecordId;
+    this.isNoHouseRentDeclaration = isNoHouseRentDeclaration;
+    this.travelExpenditureRecord = travelExpenditureRecord;
+    this.travelExpenditureRecordId = travelExpenditureRecordId;
+    this.isNoTravelDeclaration = isNoTravelDeclaration;
+    this.homeLoanRecord = homeLoanRecord;
+    this.homeLoanRecordId = homeLoanRecordId;
+    this.eightyDRecordId = eightyDRecordId;
+    this.eightyGRecordId = eightyGRecordId;
+    this.isNoHomeDeclaration = isNoHomeDeclaration;
+    this.eightyCRecordId = eightyCRecordId;
+    this.eightyCDeclarations = eightyCRecord;
+    this.eightyCDeductionTypes = eightyCDeductionTypes;
+    this.eightyDRecord = eightyDRecord;
+    this.eightyGRecord = eightyGRecord;
+    this.otherInvestmentRecord = otherInvestmentRecord;
+    this.otherInvestmentRecordId = otherInvestmentRecordId;
+
+    this.isDeclarationComplete = isDeclarationComplete;
+    this.modifiedBy = modifiedBy;
+    this.modifiedOn = modifiedOn;
+    this.createdBy = createdBy;
   
-  isDeclarationComplete: boolean = false,
-  modifiedBy: string = "",
-  modifiedOn: Date | null = null,
-  createdBy: string = "",
-) {
-  this.id = id;
-  this.employeeId = employeeId;
-  this.financialYear = financialYear;
-  this.houseRentRecord = houseRentRecord;
-  this.houseRentRecordId = houseRentRecordId;
-  this.isNoHouseRentDeclaration = isNoHouseRentDeclaration;
-  this.travelExpenditureRecord = travelExpenditureRecord;
-  this.travelExpenditureRecordId = travelExpenditureRecordId;
-  this.isNoTravelDeclaration = isNoTravelDeclaration;
-  this.homeLoanRecord = homeLoanRecord;
-  this.homeLoanRecordId = homeLoanRecordId;
-  this.eightyDRecordId = eightyDRecordId;
-  this.eightyGRecordId = eightyGRecordId;
-  this.isNoHomeDeclaration = isNoHomeDeclaration;
-  this.eightyCRecordId = eightyCRecordId;
-  this.eightyCDeclarations = eightyCRecord;
-  this.eightyCDeductionTypes = eightyCDeductionTypes;
-  this.eightyDRecord = eightyDRecord;
-  this.eightyGRecord = eightyGRecord;
-  this.otherInvestmentRecord = otherInvestmentRecord;
-  this.otherInvestmentRecordId = otherInvestmentRecordId;
-  
-  this.isDeclarationComplete = isDeclarationComplete;
-  this.modifiedBy = modifiedBy;
-  this.modifiedOn = modifiedOn;
-  this.createdBy = createdBy;
+  }
 }
+export interface FinancialYear {
+  id: number;
+  financialYearName: string;
+  createdOn: Date;
+  createdBy: string;
+  isActive: boolean;
 }
 export interface HouseRentRecord {
   id: number;
@@ -140,7 +158,7 @@ export interface HouseRentRecord {
 
 export interface TravelExpenditureRecord {
   id: number;
-  amount: number ;
+  amount: number;
   proofDocumentLink: File | null;
   isVerified: boolean;
   remarks: string;
@@ -150,7 +168,7 @@ export interface HomeLoanRecord {
   id: number;
   lenderName: string | null;
   lenderAddress: string | null;
-  lenderPanNumber: string | null;  
+  lenderPanNumber: string | null;
   amount: number | null;
   proofDocumentLink: File | null;
   isVerified: boolean;
@@ -217,7 +235,7 @@ export interface EightyCDeductionTypes {
 export interface EmployeeFinancialRecord {
   id: number;
   employeeId: string;
-  financialYear: string;
+  financialYearId: number;
   houseRentRecordId: number;
   travelExpenditureRecordId: number;
   homeLoanRecordId: number;
@@ -239,16 +257,29 @@ export interface EmployeeFinancialRecord {
   modifiedBy: string;
   modifiedOn: Date | null;
   createdBy: string;
+  financialYear: FinancialYear;
 }
 
 export interface EmployeeFinancialRecordDummy {
-  // Define properties based on your actual data structure
+
   employeeId: string;
-  financialYear: string;
   createdBy: string;
   modifiedBy: string;
   isDelete: boolean;
   isActive: boolean;
   isFormVerified: boolean;
   isDeclarationComplete: boolean;
+}
+export interface FinancialYearDTO {
+  createdOn: Date;
+  createdBy: string;
+  isActive: boolean;
+  startDate: Date;       // Added startDate property
+  endDate: Date;         // Added endDate property
+  financialYearName: string;
+}
+
+
+export interface FinancialYearResponse {
+  FinancialYearName: string;
 }

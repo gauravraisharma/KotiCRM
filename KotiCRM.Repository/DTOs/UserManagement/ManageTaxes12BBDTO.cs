@@ -17,5 +17,7 @@ namespace KotiCRM.Repository.DTOs.UserManagement
         public bool IsDeclarationComplete { get; set; }
         public DateTime? SubmittedOn { get; set; }
         public int UserCount { get; set; }
+
+        public int FinancialYearId { get; set; }
     }
 }

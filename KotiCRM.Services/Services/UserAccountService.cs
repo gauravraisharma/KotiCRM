@@ -214,9 +214,6 @@ namespace KotiCRM.Services.Services
             return dbResponse;
         }
         //public async Task<EmployeeResponseStatus> UpdateEmployee(CreateEmployeeDTO createEmployeeDTO)
-        //{
-        //    return await _accountRepository.UpdateEmployee(createEmployeeDTO);
-        //}
 
        //for update employee
         public async Task<EmployeeResponseStatus> UpdateEmployee(CreateEmployeeDTO createEmployeeDTO)

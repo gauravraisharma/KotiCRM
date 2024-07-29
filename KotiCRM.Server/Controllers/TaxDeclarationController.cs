@@ -13,6 +13,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
 using System.Net.Http.Headers;
+using System.Threading.Tasks;
 
 namespace KotiCRM.Server.Controllers
 {
@@ -48,23 +49,27 @@ namespace KotiCRM.Server.Controllers
             return records;
         }
 
+
         // Endpoint to get all Form 12BB records for a specific employee
+
         [HttpGet]
         [Route("Employee12BBs/{employeeId}")]
-        public async Task<List<Employee12BB>> GetEmployee12BBs(string employeeId)
+        public async Task<IActionResult> GetEmployee12BBs(string employeeId)
         {
             if (string.IsNullOrEmpty(employeeId))
             {
-                throw new Exception("EmployeeId is required.");
+                return BadRequest("EmployeeId is required.");
             }
+
             // Fetch the records from the service
             var records = await _taxDeclarationService.GetEmployee12BBs(employeeId);
-            if (records == null)
+            if (records == null || !records.Any())
             {
-                throw new Exception("No records found");
+                return NotFound("No records found");
             }
-            return records;
+            return Ok(records);
         }
+
 
         //save Form 12BB
         // Endpoint to save a new or update an existing Form 12BB record
@@ -119,12 +124,46 @@ namespace KotiCRM.Server.Controllers
                 return StatusCode(500, "An error occurred while uploading files.");
             }
         }
+        //download
+        [HttpGet]
+        [Route("DownloadDocumentProof")]
+        public async Task<IActionResult> DownloadDocumentProof([FromQuery] string url)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(url))
+                {
+                    return BadRequest("The URL parameter is required.");
+                }
+
+                var fileBytes = await _taxDeclarationService.DownloadDocumentByUrlAsync(url);
+                if (fileBytes == null || fileBytes.Length == 0)
+                {
+                    return NotFound("File not found.");
+                }
+
+                var fileName = url.Split('/').Last();
+                var fileContent = new FileContentResult(fileBytes, "application/octet-stream")
+                {
+                    FileDownloadName = fileName
+                };
+
+                return fileContent;
+            }
+            catch (Exception ex)
+            {
+                // Log the exception details (if needed)
+                return StatusCode(500, "An error occurred while downloading the file.");
+            }
+        }
+        //add from taxation
 
         [HttpPost]
         [Route("AddEmployeeRecord")]
         public async Task<IActionResult> AddEmployeeRecord(Employee12BBDTO employee12BBDTO)
         {
             // Validate the input
+
             if (employee12BBDTO == null)
             {
                 return BadRequest("Invalid data.");
@@ -145,20 +184,88 @@ namespace KotiCRM.Server.Controllers
             }
 
         }
-        // GetUsers method retrieves a list of employees based on search query and pagination parameters
 
+        // ManagetaxesList
         [HttpGet]
         [Route("GetManageTaxes12BB")]
-        public async Task<ActionResult<List<ManageTaxes12BBDTO>>> GetManageTaxes12BB(string? searchQuery, int? pageNumber, int? pageSize)
-        
+        public async Task<IActionResult> GetManageTaxes12BB(int financialYearId, string? searchQuery, int? pageNumber, int? pageSize)
         {
-           
-            
-                var employees = await _taxDeclarationService.GetManageTaxes12BB(searchQuery, pageNumber, pageSize);
-                return employees;
-            
-        
+            try
+            {
+                var result = await _taxDeclarationService.GetManageTaxes12BB(financialYearId, searchQuery, pageNumber, pageSize);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = ex.Message });
+            }
         }
+
+        // for financial year
+        [HttpGet]
+        [Route("GetFinancialYears")]
+        public async Task<IActionResult> GetFinancialYears()
+        {
+            try
+            {
+                var financialYears = await _taxDeclarationService.GetFinancialYearsAsync();
+                if (financialYears == null || !financialYears.Any())
+                {
+                    return NotFound("No financial years found.");
+                }
+                return Ok(financialYears);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+        // financial year 
+        [HttpPost]
+        [Route("AddLatestFinancialYear")]
+        public async Task<IActionResult> AddLatestFinancialYear([FromBody] FinancialYearDTO financialYearDTO)
+        {
+            // Validate the input
+            if (financialYearDTO == null)
+            {
+                return BadRequest("Invalid data.");
+            }
+
+            try
+            {
+                // Call the service to add a new financial year
+                var result = await _taxDeclarationService.AddLatestFinancialYearAsync(financialYearDTO);
+
+                if (result > 0) // Assuming result is the ID of the newly inserted record
+                {
+                    // Optionally, you can return the URL of the newly created resource
+                    return CreatedAtAction(nameof(GetFinancialYearById), new { id = result }, result);
+                }
+                else
+                {
+                    return BadRequest("Failed to insert financial year.");
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log the exception if necessary
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        [HttpGet]
+        [Route("GetFinancialYearbyId")]
+        public async Task<IActionResult> GetFinancialYearById(int id)
+        {
+            var financialYear = await _taxDeclarationService.GetFinancialYearByIdAsync(id);
+            if (financialYear == null)
+            {
+                return NotFound();
+            }
+            return Ok(financialYear);
+        }
+
+
 
     }
 }

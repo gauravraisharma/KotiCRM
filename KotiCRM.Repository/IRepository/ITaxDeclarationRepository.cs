@@ -20,8 +20,17 @@ namespace KotiCRM.Repository.IRepository
 
         Task<Employee12BB> SaveEmployee12BB(Employee12BB employee12BB);
         Task<List<DocumentPaths>> UploadDocumentProofs(IFormCollection formCollection);
+    
         Task<int> InsertEmployeeRecordAsync(Employee12BBDTO employee12BBDTO);
-        Task<List<ManageTaxes12BBDTO>> GetManageTaxes12BB(string? searchQuery, int? pageNumber, int? pageSize);
+        Task<List<ManageTaxes12BBDTO>> GetManageTaxes12BB(int financialYearId, string? searchQuery, int? pageNumber, int? pageSize);
+        //Task<int> AddFinancialYearAsync(FinancialYearDTO financialYearDTO);
+
+        Task<List<FinancialYearDTO>> GetFinancialYearsAsync();
+        //new
+        Task<int> AddLatestFinancialYearAsync(FinancialYearDTO financialYearDTO);
+        Task<FinancialYearDTO> GetFinancialYearByIdAsync(int id);
+        Task<byte[]> DownloadDocumentByUrlAsync(string url);
+
     }
 
 }
