@@ -1,184 +1,209 @@
-import { CButton, CCard, CCardBody, CCardHeader, CCol, CRow } from '@coreui/react';
-import React, { useEffect, useState } from 'react';
 import { FaDownload } from 'react-icons/fa';
-import moment from 'moment';
 import { useNavigate, useParams } from 'react-router-dom';
+import { GetFinancialYears, addNewFinancialYear, getFinancialYearById } from '../../redux-saga/modules/userManagement/apiService'; // Adjust import names as per your actual API service
+import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
-import { AddNewFinancial, GetEmployee12BBs, GetEmployeeById } from '../../redux-saga/modules/userManagement/apiService';
-import { EmployeeFinancialRecordDummy } from '../../models/Form12BB/Form12BB';
+import { CButton, CCard, CCardBody, CCardHeader, CCol, CRow } from '@coreui/react';
+import GetModulePermissions from '../../utils/Shared/GetModulePermissions';
+import { FinancialYearDTO } from '../../models/Form12BB/Form12BB';
 
+// Function to determine the financial year based on the current date
+const getFinancialYear = () => {
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = today.getMonth(); // 0 for January, 1 for February, etc.
 
-const ManageTaxes: React.FC = () => {
-  const { employeeId, userId } = useParams<{ employeeId: string; userId: string }>();
-  const [formSubmitted, setFormSubmitted] = useState(false);
-  const [recordExists, setRecordExists] = useState(false);
-  const [employee12BBData, setEmployee12BBData] = useState<EmployeeFinancialRecordDummy[]>([]);
+  // Financial year starts on April 1st
+  if (month >= 3) { // If current month is April or later
+    return `${year}-${year + 1}`;
+  } else { // If current month is before April
+    return `${year - 1}-${year}`;
+  }
+};
+
+const ManageTaxes = () => {
+  
+  const [years, setYears] = useState([]);
+  const [selectedFinancialYear, setSelectedFinancialYear] = useState(null);
+  const { id } = useParams();
   const navigate = useNavigate();
-  const [years, setYears] = useState<string[]>([]); // Assuming it's a list of strings
+  const manangeTaxesPermissions = GetModulePermissions('ManageUsers');
 
   useEffect(() => {
-    if (employeeId) {
-      getEmployeeById(employeeId);
-      getForm12BbsById(employeeId);
+    fetchFinancialYears();
+    if (id) {
+      fetchFinancialYearById(id);
     }
-  }, [employeeId]);
+  }, [id]);
 
-  const getEmployeeById = async (employeeId: string) => {
+  const fetchFinancialYearById = async (id) => {
     try {
-      const response = await GetEmployeeById(employeeId);
-    
-    } catch (error) {
-      toast.error("Fetch User failed");
-    }
-  };
-
-  const getForm12BbsById = async (employeeId: string) => {
-    try {
-      const response = await GetEmployee12BBs(employeeId);
-      if (response.status === 200) {
-        setEmployee12BBData(response.data);
-        const recordFor2024_2025 = response.data.some(record => record.financialYear === '2024-2025');
-        setRecordExists(recordFor2024_2025);
-      }
-    } catch (error) {
-      console.error('Failed to fetch 12BB data:', error);
-    }
-  };
-
-  const handleAddNew = async () => {
-    if (!employeeId) {
-      debugger
-      console.error('Employee ID is missing.');
-      alert('helo');
-      return;
-    }
-    const newEmployeeRecord: EmployeeFinancialRecordDummy = {
-      employeeId: employeeId,
-      financialYear: '2024-2025',
-      createdBy: '5faccdc7-7ddb-4b14-9295-f3a933bef7f1',
-      modifiedBy: '24d59f65-7aad-4b0e-b821-f07ca663a32b',
-      isDelete: false,
-      isActive: true,
-      isFormVerified: false,
-      isDeclarationComplete: false,
-    };
-
-    try {
-      const response = await AddNewFinancial(newEmployeeRecord);
-      if (response.status === 200) {
-        toast.success('Employee record inserted successfully.');
-        setTimeout(() => {
-          navigate('/users');
-          // navigate(`/users/userDetail/${userId}/${employeeId}`);
-        }, 3000);
-        setFormSubmitted(true);
+      const response = await getFinancialYearById(id);
+      if (response.status === 200 && response.data) {
+        setSelectedFinancialYear(response.data);
       } else {
-        toast.error('Failed to insert the record.');
+        toast.error('Failed to fetch financial year details.');
       }
     } catch (error) {
-      console.error('Error adding new financial record:', error);
-      toast.error('Failed to add new financial record. Please try again.');
+      console.error('Error fetching financial year by ID:', error);
+      toast.error('Failed to fetch financial year details. Please try again.');
     }
   };
 
-  const handleClick = (element: EmployeeFinancialRecordDummy) => {
-    const financialYear = element.financialYear;
-    navigate(`/Form12BB/${userId}/${element.employeeId}/${financialYear}`);
+  const fetchFinancialYears = async () => {
+    try {
+      const response = await GetFinancialYears(); // Call your API service function to fetch financial years
+      if (response.status === 200 && response.data) {
+        setYears(response.data); // Update state with fetched financial years
+      } else {
+        toast.error('Failed to fetch financial years.');
+      }
+    } catch (error) {
+      console.error('Error fetching financial years:', error);
+      toast.error('Failed to fetch financial years. Please try again.');
+    }
+  };
+
+  const handleNavigate = (id) => {
+    navigate(`/manageTaxes12bb/${id}`);
+  };
+
+  const handleAddNewFinancialYear = async () => {
+    try {
+      const financialYearName = getFinancialYear();
+
+      const financialYearData: FinancialYearDTO = {
+        financialYearName: financialYearName,
+        createdOn: new Date(), // Make sure the format matches your backend's expectations
+        createdBy: '5faccdc7-7ddb-4b14-9295-f3a933bef7f1', // Replace with actual user ID or get dynamically
+        isActive: true,
+        startDate: new Date(), // Adjust as necessary
+        endDate: new Date(new Date().setFullYear(new Date().getFullYear() + 1)), // Example end date, adjust as necessary
+      };
+
+      const response = await addNewFinancialYear(financialYearData);
+      if (response.status === 200 && response.data) {
+        toast.success('Financial year added successfully.');
+        setYears([...years, response.data]); // Add the newly created financial year to the state
+        handleNavigate(financialYearName);
+      } else {
+        toast.error('Failed to add financial year.');
+      }
+    } catch (error) {
+      console.error('Error adding new financial year:', error);
+      toast.error('Failed to add new financial year. Please try again.');
+    }
+  };
+
+  // Function to get the latest financial year from the state
+  const getLatestFinancialYear = () => {
+    const currentYear = getFinancialYear();
+    return years.some(year => year.financialYearName === currentYear);
   };
 
   return (
-    <>
-      <CCard>
-        <CCardHeader>
-          <CRow>
-            <CCol xs={6} className="d-flex align-items-center">
-              <h5>
-                <strong>Manage Taxes</strong>
-              </h5>
-            </CCol>
-            <CCol xs={6}>
-              <div className="text-end">
-                <CButton
-                  component="input"
-                  type="button"
-                  color="secondary"
-                  value="Back To users"
-                  onClick={() => navigate("/users")}
-                />
+    <CCard>
+      <CCardHeader className="mb-3">
+              <div className="d-flex justify-content-between align-items-center">
+                <div>
+                  <h5>Manage Taxes</h5>
+                </div>
+                <div className="text-end">
+                  <CButton
+                    component="input"
+                    type="button"
+                    color="secondary"
+                    value="Back To users"
+                    onClick={() => navigate("/users")}
+                  />
+                </div>
               </div>
-            </CCol>
-          </CRow>
+            </CCardHeader>
+      <CCard className="mb-4" style={{ borderColor: '#4e73df' }}>
+        <CCardHeader className="mb-3" style={{ backgroundColor: '#4e73df', color: 'white' }}>
+          <div className="d-flex justify-content-between align-items-center">
+            <h5 className="mb-0">12 BB Declaration and Details</h5>
+            {manangeTaxesPermissions.isAdd && (
+              <CButton
+                onClick={handleAddNewFinancialYear}
+                color="primary"
+                className="ms-auto"
+                style={{ backgroundColor: 'white', color: 'black' }}
+                disabled={getLatestFinancialYear()} // Disable if latest year already exists
+              >
+                + Add FY {getFinancialYear()}
+              </CButton>
+            )}
+          </div>
         </CCardHeader>
 
-        <CCard className="mb-4" style={{ borderColor: '#4e73df' }}>
-          <CCardHeader className="mb-3" style={{ backgroundColor: '#4e73df', color: 'white' }}>
-            <div className="d-flex justify-content-between align-items-center">
-              <h5 className="mb-0">12 BB Declaration and Details</h5>
-              <button
-                onClick={handleAddNew}
-                className="btn btn-primary ms-auto"
-                style={{ backgroundColor: 'white', color: 'black' }}
-                disabled={formSubmitted || recordExists} // Disable the button if form is submitted
-              >
-                + Add FY 2024-25
-              </button>
-            </div>
-          </CCardHeader>
-
-          <CCardBody style={{ padding: '20px', backgroundColor: '#f8f9fc' }}>
-            {employee12BBData.length > 0 ? employee12BBData.map((element, index) => (
-              <CRow key={index}>
+        <CCardBody style={{ padding: '20px', backgroundColor: '#f8f9fc' }}>
+          {years.length > 0 ? (
+            years.map((financialYear) => (
+              <CRow key={financialYear.id}>
                 <CCol md="6">
-                  <CCol md="12">
-                    <div>
-                      <p style={{ fontWeight: 'bold' }}>Financial year {element.financialYear}</p>
-                    </div>
-                  </CCol>
-                </CCol>
-                <CCol md="6" className="text-end">
                   <div>
-                    {element.isDeclarationComplete ? (
-                      <p>Last submitted on {moment(element.modifiedOn).format('DD MMMM YYYY')} <u style={{ cursor: 'pointer', color: '#4e73df' }}>View Detail</u></p>
-                    ) : (
-                      <button onClick={() => handleClick(element)} className="btn btn-warning">Submit Proofs</button>
-                    )}
+                    <p style={{ fontWeight: 'bold' }}>
+                      <span
+                        style={{ cursor: 'pointer', textDecoration: 'underline' }}
+                        onClick={() => handleNavigate(financialYear.id)}
+                      >
+                        Financial year {financialYear.financialYearName}
+                      </span>
+                    </p>
                   </div>
                 </CCol>
               </CRow>
-            )) : <h6>No data available.</h6>}
-          </CCardBody>
-        </CCard>
+            ))
+          ) : (
+            <h6>No data available.</h6>
+          )}
+        </CCardBody>
+      </CCard>
 
-        <CCard className="mb-4" style={{ borderColor: '#1cc88a' }}>
-          <CCardHeader className="mb-3" style={{ backgroundColor: '#1cc88a', color: 'white' }}>
-            <div className="d-flex justify-content-between align-items-center">
-              <h5 className="mb-0">Form 16</h5>
-              <button onClick={handleAddNew} className="btn btn-primary ms-auto">
-                + Add FY 2024-25
-              </button>
-            </div>
-          </CCardHeader>
+      <CCard className="mb-4" style={{ borderColor: '#1cc88a' }}>
+        <CCardHeader className="mb-3" style={{ backgroundColor: '#1cc88a', color: 'white' }}>
+          <div className="d-flex justify-content-between align-items-center">
+            <h5 className="mb-0">Form 16</h5>
+            {/* {manangeTaxesPermissions.isAdd && (
+              <CButton
+                onClick={handleAddNewFinancialYear}
+                color="primary"
+                className="ms-auto"
+                style={{ backgroundColor: 'white', color: 'black' }}
+                disabled={getLatestFinancialYear()} // Disable if latest year already exists
+              >
+                + Add FY {getFinancialYear()}
+              </CButton>
+            )} */}
+          </div>
+        </CCardHeader>
 
-          <CCardBody style={{ padding: '20px', backgroundColor: '#f8f9fc' }}>
-            <CRow>
-              {years.length > 0 ? years.map((year, index) => (
-                <CCol md="12" key={index}>
+        {/* <CCardBody style={{ padding: '20px', backgroundColor: '#f8f9fc' }}>
+          {years.length > 0 ? (
+            years.map((financialYear) => (
+              <CRow key={financialYear.id}>
+                <CCol md="12">
                   <div>
-                    <p style={{ fontWeight: 'bold' }}>Financial year {year}</p>
+                    <p style={{ fontWeight: 'bold' }}>Financial year {financialYear.financialYearName}</p>
                   </div>
                   <div className="text-end">
                     <div>
-                      <u style={{ cursor: 'pointer', color: '#1cc88a' }}><FaDownload /> Download</u>
+                      <u style={{ cursor: 'pointer', color: '#1cc88a' }}>
+                        <FaDownload /> Download
+                      </u>
                     </div>
                   </div>
                 </CCol>
-              )) : <h6>No data available.</h6>}
-            </CRow>
-          </CCardBody>
-        </CCard>
+              </CRow>
+            ))
+          ) : (
+            <h6>No data available.</h6>
+          )}
+        </CCardBody> */}
       </CCard>
-    </>
+    </CCard>
   );
-}
+};
 
 export default ManageTaxes;

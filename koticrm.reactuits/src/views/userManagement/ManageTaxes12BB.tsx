@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import {
     CTable,
     CTableHead,
@@ -20,29 +20,64 @@ import {
 import { AiFillEye } from 'react-icons/ai';
 import moment from 'moment';
 import { useSelector } from 'react-redux';
-import { GetManageTaxes12BB } from '../../redux-saga/modules/userManagement/apiService';
+import { GetEmployeeById, GetManageTaxes12BB } from '../../redux-saga/modules/userManagement/apiService';
 import { ManageTaxes } from '../../models/userManagement/employees';
 import { toast } from 'react-toastify';
+
 
 const ManageTaxes12BB = () => {
     const [pageNumber, setPageNumber] = useState<number>(1);
     const [searchQuery, setSearchQuery] = useState<string>('');
     const [manageTaxList, setManageTaxList] = useState<ManageTaxes[]>([]);
+    const [searchParams] = useSearchParams();
+
+    const { employeeId, userId } = useParams();
+    // alert(employeeId)
+
+
+    const navigate = useNavigate();
+    const params = useParams();
     const pageSize = 10;
 
-    // Function to fetch taxes based on search query and page number
-    const GetManageTax = async () => {
+
+    useEffect(() => {
+        if (employeeId) {
+            getEmployeeById(employeeId);
+            getForm12BbsById(employeeId);
+        }
+    }, [employeeId]);
+
+    const getEmployeeById = async (employeeId: string) => {
         try {
-            const response = await GetManageTaxes12BB(searchQuery, pageNumber, pageSize);
-            setManageTaxList(response.data);
+            const response = await GetEmployeeById(employeeId);
+            setFormData(response);
         } catch (error) {
-            toast.error("Failed to fetch taxes. Please try again later.");
+            toast.error("Fetch User failed");
         }
     };
 
+    // Function to fetch taxes based on search query and page number
+    const GetManageTax = async (financialYearId) => {
+        try {
+
+            const response = await GetManageTaxes12BB(financialYearId, "", pageNumber, pageSize);
+            if (response.data) { // Check if data exists
+                setManageTaxList(response.data);
+            } else {
+                console.warn('No data returned from API'); // Add this line for debugging
+            }
+        } catch (error) {
+            toast.error("Failed to fetch taxes. Please try again later.");
+            console.error('Data Fetch Error:', error); // Add this line for debugging
+        }
+    };
+    console.log(employeeId)
+
     useEffect(() => {
-        GetManageTax();
-    }, [pageNumber, searchQuery]);
+
+        const financialYearId = params['financialYearId'];
+        GetManageTax(financialYearId);
+    }, [pageNumber, params]);
 
     const handlePageChange = (pageNumber: number) => {
         setPageNumber(pageNumber);
@@ -59,14 +94,16 @@ const ManageTaxes12BB = () => {
         }
     };
 
+
     const filteredManageTaxList = manageTaxList.filter((employee) => employee.submittedOn);
     const totalCount = manageTaxList.length;
     const totalPages = Math.ceil(totalCount / pageSize);
     const startIndex = (pageNumber - 1) * pageSize;
     const endIndex = Math.min(startIndex + pageSize, totalCount);
     const displayedRoles = filteredManageTaxList.slice(startIndex, endIndex);
-
     const timezone = useSelector((state: any) => state.sharedReducer.timezone);
+
+
 
     return (
         <>
@@ -79,7 +116,7 @@ const ManageTaxes12BB = () => {
                                 <CFormInput
                                     id="searchInput"
                                     type="text"
-                                    placeholder="Search by EmpCode and userName..."
+                                    placeholder="Search by userName..."
                                     value={searchQuery}
                                     onChange={handleSearchChange}
                                     onKeyDown={handleKeyDown}
@@ -122,11 +159,21 @@ const ManageTaxes12BB = () => {
                                         </CTableDataCell>
 
                                         <CTableDataCell>
-                                            <Link to={`/view/${employee.empCode}`} className="view-link">
-                                                <AiFillEye className="me-2" />
-                                                <span>View Proofs</span>
-                                            </Link>
+                                            {/* <CTableDataCell>
+                                                <Link to="/proofs" className="view-link">
+                                                    <AiFillEye className="me-2" />
+                                                    <span>View Proofs</span>
+                                                </Link>
+                                            </CTableDataCell> */}
+                                            <CTableDataCell>
+                                                <Link to={`/proofs/${employee.employeeId}`} className="view-link">
+                                                    <AiFillEye className="me-2" />
+                                                    <span>View Proofs</span>
+                                                </Link>
+                                            </CTableDataCell>
                                         </CTableDataCell>
+
+
                                     </CTableRow>
                                 ))}
                             </CTableBody>
@@ -165,6 +212,8 @@ const ManageTaxes12BB = () => {
                     </CPagination>
                 </CCardBody>
             </CCard>
+
+
         </>
     );
 };

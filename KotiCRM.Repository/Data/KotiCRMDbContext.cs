@@ -802,10 +802,7 @@ namespace KotiCRM.Repository.Data
                     .HasForeignKey(e => e.EmployeeId)
                     .OnDelete(DeleteBehavior.Restrict);
 
-                //entity.HasOne(e => e.FinancialYear)
-                //.WithMany(e => e.FinancialYears)
-                //.HasForeignKey(e => e.Employee12BBId)
-                //.OnDelete(DeleteBehavior.Restrict);
+
 
                 entity.HasOne(e => e.HouseRentRecord)
                     .WithMany()
@@ -836,7 +833,16 @@ namespace KotiCRM.Repository.Data
                     .WithMany()
                     .HasForeignKey(e => e.OtherInvestmentRecordId)
                     .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(e => e.FinancialYear)
+                    .WithMany()
+                    .HasForeignKey(e => e.FinancialYearId)
+                    .OnDelete(DeleteBehavior.Restrict);
+                //entity.HasMany(e => e.FinancialYear)
+                 
+                    
             });
+
 
             modelBuilder.Entity<HouseRentDeclaration>(entity =>
             {
@@ -1013,8 +1019,29 @@ namespace KotiCRM.Repository.Data
                     .IsRequired()
                     .HasMaxLength(100);
             });
+            modelBuilder.Entity<FinancialYear>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+
+                entity.Property(e => e.FinancialYearName)
+                    .IsRequired()
+                    .HasMaxLength(255);
+
+                entity.Property(e => e.CreatedOn)
+                    .IsRequired();
+
+                entity.Property(e => e.CreatedBy)
+                    .HasMaxLength(255);
+
+                entity.Property(e => e.IsActive)
+                    .IsRequired();
+
+                
+            });
+
 
             base.OnModelCreating(modelBuilder);
         }
+
     }
 }

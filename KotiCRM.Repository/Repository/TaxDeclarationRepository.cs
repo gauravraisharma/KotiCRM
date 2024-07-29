@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
+using System.Net.Http;
 using System.Threading.Tasks;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
@@ -32,17 +33,10 @@ namespace KotiCRM.Repository.Repository
 
             //var employeeDataForm = _context.Employee12BBs.FirstOrDefault(e => e.EmployeeId == employeeId);
             //var financialYears = _context.FinancialYears.Where(x => x.Employee12BBId == employeeDataForm.Id).ToList();
-
-            var employeeDataForm = await (from e in _context.Employee12BBs
-                                          join f in _context.FinancialYears on e.Id equals f.Employee12BBId
-                                          where e.EmployeeId == employeeId
-                                              //&& f.Financialyear == financialYear
-                                              && f.IsActive
-                                          select new
-                                          {
-                                              Employee12BB = e,
-                                              FinancialYear = f
-                                          }).FirstOrDefaultAsync();
+            var employeeDataForm = await _context.Employee12BBs
+                  .Include(e => e.FinancialYear)
+                  // Include FinancialYear navigation property
+                  .FirstOrDefaultAsync(e => e.EmployeeId == employeeId);
 
 
             if (employeeDataForm == null)
@@ -50,12 +44,10 @@ namespace KotiCRM.Repository.Repository
                 return null; // No data found
             }
 
-            var employee = employeeDataForm.Employee12BB;
-            var financialYearData = employeeDataForm.FinancialYear;
 
 
             // Fetch house rent declaration data and create a new object
-            var houserentRecordData = _context.HouseRentDeclarations.FirstOrDefault(x => x.Id == employee.HouseRentRecordId);
+            var houserentRecordData = _context.HouseRentDeclarations.FirstOrDefault(x => x.Id == employeeDataForm.HouseRentRecordId);
             HouseRentDeclaration houseRentDeclaration = new HouseRentDeclaration();
 
             if (houserentRecordData == null)
@@ -76,7 +68,7 @@ namespace KotiCRM.Repository.Repository
             }
 
             // Fetch travel expenditure declaration data and create a new object
-            var leaveTravelRecordData = _context.TravelExpenditureDeclarations.FirstOrDefault(x => x.Id == employee.TravelExpenditureRecordId);
+            var leaveTravelRecordData = _context.TravelExpenditureDeclarations.FirstOrDefault(x => x.Id == employeeDataForm.TravelExpenditureRecordId);
             TravelExpenditureDeclaration travelExpenditureDeclaration = new TravelExpenditureDeclaration();
             if (leaveTravelRecordData == null)
             {
@@ -95,7 +87,7 @@ namespace KotiCRM.Repository.Repository
             }
 
             // Fetch home loan declaration data and create a new object
-            var InterestOnHomLoanRecordData = _context.HomeLoanDeclarations.FirstOrDefault(x => x.Id == employee.HomeLoanRecordId);
+            var InterestOnHomLoanRecordData = _context.HomeLoanDeclarations.FirstOrDefault(x => x.Id == employeeDataForm.HomeLoanRecordId);
             HomeLoanDeclaration homeLoanDeclaration = new HomeLoanDeclaration();
             if (InterestOnHomLoanRecordData == null)
             {
@@ -117,7 +109,7 @@ namespace KotiCRM.Repository.Repository
             }
 
             // Fetch and prepare 80C declarations list
-            var eightyCRecordData = _context.EightyCDeclarations.Where(x => x.Employee12BBId == employee.Id && x.IsDelete == false).ToList();
+            var eightyCRecordData = _context.EightyCDeclarations.Where(x => x.Employee12BBId == employeeDataForm.Id && x.IsDelete == false).ToList();
             List<EightyCDeclaration> eightyCDeclarationsList = new List<EightyCDeclaration>();
             if (eightyCRecordData.Count <= 0)
             {
@@ -148,7 +140,7 @@ namespace KotiCRM.Repository.Repository
             }
 
             // Fetch 80D declaration data and create a new object
-            var eightyDRecordData = _context.EightyDDeclarations.FirstOrDefault(x => x.Id == employee.EightyDRecordId);
+            var eightyDRecordData = _context.EightyDDeclarations.FirstOrDefault(x => x.Id == employeeDataForm.EightyDRecordId);
             EightyDDeclaration eightyDDeclaration = new EightyDDeclaration();
             if (eightyDRecordData == null)
             {
@@ -169,7 +161,7 @@ namespace KotiCRM.Repository.Repository
             }
 
             // Fetch 80G declaration data and create a new object
-            var eightyGRecordData = _context.EightyGDeclarations.FirstOrDefault(x => x.Id == employee.EightyGRecordId);
+            var eightyGRecordData = _context.EightyGDeclarations.FirstOrDefault(x => x.Id == employeeDataForm.EightyGRecordId);
             EightyGDeclaration eightyGDeclaration = new EightyGDeclaration();
             if (eightyGRecordData == null)
             {
@@ -191,7 +183,7 @@ namespace KotiCRM.Repository.Repository
             }
 
             // Fetch other investment declaration data and create a new object
-            var otherInvestmentRecordData = _context.OtherInvestmentDeclarations.FirstOrDefault(x => x.Id == employee.OtherInvestmentRecordId);
+            var otherInvestmentRecordData = _context.OtherInvestmentDeclarations.FirstOrDefault(x => x.Id == employeeDataForm.OtherInvestmentRecordId);
             OtherInvestmentDeclaration otherInvestmentDeclaration = new OtherInvestmentDeclaration();
             if (otherInvestmentRecordData == null)
             {
@@ -209,13 +201,14 @@ namespace KotiCRM.Repository.Repository
                 };
             }
 
+
             // Create and return the final Employee12BB object
             Employee12BBDTO employee12BB = new Employee12BBDTO
             {
-                Id = employee.Id,
-                EmployeeId = employee.EmployeeId,
-
-                FinancialYears = new List<FinancialYear> { financialYearData },
+                Id = employeeDataForm.Id,
+                EmployeeId = employeeDataForm.EmployeeId,
+                FinancialYearId = employeeDataForm.FinancialYearId ?? 0,
+                FinancialYearName = employeeDataForm.FinancialYear?.FinancialYearName ?? null ,
                 HouseRentRecordId = houseRentDeclaration == null ? 0 : houseRentDeclaration.Id,
                 HomeLoanRecordId = homeLoanDeclaration == null ? 0 : homeLoanDeclaration.Id,
                 TravelExpenditureRecordId = travelExpenditureDeclaration == null ? 0 : travelExpenditureDeclaration.Id,
@@ -233,10 +226,18 @@ namespace KotiCRM.Repository.Repository
             };
             return employee12BB;
         }
-        // Retrieve all Employee12BB records for a given employee
+
+       
         public async Task<List<Employee12BB>> GetEmployee12BBs(string employeeId)
         {
-            return _context.Employee12BBs.Where(e => e.EmployeeId == employeeId).ToList();
+            //return _context.Employee12BBs.Where(e => e.EmployeeId == employeeId).ToList();
+            var records = await _context.Employee12BBs
+               .Include(e => e.FinancialYear) // Include FinancialYear navigation property
+               .Where(e => e.EmployeeId == employeeId)
+               .ToListAsync();
+
+            return records;
+
         }
 
         // Save form 12BB and return the updated DTO
@@ -248,6 +249,7 @@ namespace KotiCRM.Repository.Repository
             }
 
             // Added record Ids
+            var financialYearId = 0;
             var houseRentRecordId = 0;
             var travelExpenditureRecordId = 0;
             var homeLoanRecordId = 0;
@@ -470,8 +472,7 @@ namespace KotiCRM.Repository.Repository
 
             // Update the main Employee12BB form
             existingEmployee12BBs.EmployeeId = employee12BB.EmployeeId;
-            existingEmployee12BBs.FinancialYears = employee12BB.FinancialYears;
-            //existingEmployee12BBs.FinancialYear = employee12BB.FinancialYear;
+            existingEmployee12BBs.FinancialYearId = employee12BB.FinancialYearId;
             existingEmployee12BBs.HouseRentRecordId = employee12BB.HouseRentRecordId == 0 ? houseRentRecordId : employee12BB.HouseRentRecordId;
             existingEmployee12BBs.TravelExpenditureRecordId = employee12BB.TravelExpenditureRecordId == 0 ? travelExpenditureRecordId : employee12BB.TravelExpenditureRecordId;
             existingEmployee12BBs.HomeLoanRecordId = employee12BB.HomeLoanRecordId == 0 ? homeLoanRecordId : employee12BB.HomeLoanRecordId;
@@ -496,8 +497,7 @@ namespace KotiCRM.Repository.Repository
             {
                 //Id = employee12BB.Id,
                 EmployeeId = existingEmployee12BBs.EmployeeId,
-                FinancialYears = existingEmployee12BBs.FinancialYears,
-                
+                FinancialYearId = existingEmployee12BBs.FinancialYearId,
                 HouseRentRecordId = existingEmployee12BBs.HouseRentRecordId == 0 ? houseRentRecordId : existingEmployee12BBs.HouseRentRecordId,
                 TravelExpenditureRecordId = existingEmployee12BBs.TravelExpenditureRecordId == 0 ? travelExpenditureRecordId : existingEmployee12BBs.TravelExpenditureRecordId,
                 HomeLoanRecordId = existingEmployee12BBs.HomeLoanRecordId == 0 ? homeLoanRecordId : existingEmployee12BBs.HomeLoanRecordId,
@@ -579,6 +579,37 @@ namespace KotiCRM.Repository.Repository
             }
             return documentProofs;
         }
+        //download
+        public async Task<byte[]> DownloadDocumentByUrlAsync(string filePath)
+        {
+            try
+            {
+                // Validate file path
+                if (string.IsNullOrWhiteSpace(filePath))
+                {
+                    throw new ArgumentException("File path cannot be null or empty.");
+                }
+
+                // Resolve the full path based on your file system structure
+                var fullPath = Path.Combine(_documentProofsPath, filePath.Replace('/', '\\'));
+
+                // Check if the file exists
+                if (!File.Exists(fullPath))
+                {
+                    throw new FileNotFoundException("File not found at the given path.");
+                }
+
+                // Read and return the file bytes
+                return await File.ReadAllBytesAsync(fullPath);
+            }
+            catch (Exception ex)
+            {
+                // Log the exception details (if needed)
+                throw new Exception("An error occurred while fetching the document.", ex);
+            }
+        }
+
+
 
 
         public async Task<int> InsertEmployeeRecordAsync(Employee12BBDTO employeeRecordDto)
@@ -586,8 +617,7 @@ namespace KotiCRM.Repository.Repository
             var employeeRecord = new Employee12BB
             {
                 EmployeeId = employeeRecordDto.EmployeeId,
-                FinancialYears = employeeRecordDto.FinancialYears,
-                //FinancialYear = employeeRecordDto.FinancialYear,
+                FinancialYearId = employeeRecordDto.FinancialYearId,
                 HouseRentRecordId = employeeRecordDto.HouseRentRecordId,
                 TravelExpenditureRecordId = employeeRecordDto.TravelExpenditureRecordId,
                 HomeLoanRecordId = employeeRecordDto.HomeLoanRecordId,
@@ -607,56 +637,118 @@ namespace KotiCRM.Repository.Repository
             _context.Employee12BBs.Add(employeeRecord);
             return await _context.SaveChangesAsync();
         }
-
-        public async Task<List<ManageTaxes12BBDTO>> GetManageTaxes12BB(string? searchQuery, int? pageNumber, int? pageSize)
+        //get List 2024-25
+        public async Task<List<ManageTaxes12BBDTO>> GetManageTaxes12BB(int financialYearId, string? searchQuery, int? pageNumber, int? pageSize)
         {
             try
-            {
-                var query = from emp in _context.Employees
-                            join bb in _context.Employee12BBs
-                                on emp.EmployeeId equals bb.EmployeeId into employeeBBs
-                            from bb in employeeBBs.DefaultIfEmpty()
-                                //where bb == null || bb.IsDeclarationComplete
-                            where (bb != null && bb.IsDeclarationComplete && bb.ModifiedOn != null)
-                            select new ManageTaxes12BBDTO
-                            {
-                                EmployeeId = emp.EmployeeId,
-                                EmpCode = emp.EmpCode, 
-                                Name = emp.Name,
-                                ContactNumber = emp.ContactNumber1,
-                                Email = emp.PersonalEmailId, // Assuming PersonalEmailId is a property on Employee
-                                IsDeclarationComplete = bb != null && bb.IsDeclarationComplete,
-                                SubmittedOn = bb != null && bb.IsDeclarationComplete ? bb.ModifiedOn : null
-                                
-                            };
+            { // Fetch the financial year by ID using direct query
+                var taxes = _context.FinancialYears.Join(_context.Employee12BBs,
+                    (f) => f.Id,
+                    (e) => e.FinancialYearId,
+                    (fy, emp) => new { Fy = fy, Emp = emp }).Join(_context.Employees,
+                    (x) => x.Emp.EmployeeId,
+                    (employee) => employee.EmployeeId,
+                    (financialYearJoin, emp) => new { FinancialYearJoin = financialYearJoin, Employee = emp })
+                    .Where(y => y.FinancialYearJoin.Fy.IsActive && y.FinancialYearJoin.Fy.Id == financialYearId).Select(z => new ManageTaxes12BBDTO
+                    {
+                        EmployeeId = z.Employee.EmployeeId,
+                        EmpCode = z.Employee.EmpCode,
+                        Name = z.Employee.Name,
+                        ContactNumber = z.Employee.ContactNumber1,
+                        Email = z.Employee.PersonalEmailId,
+                        IsDeclarationComplete = z.FinancialYearJoin.Emp.IsDeclarationComplete,
+                        SubmittedOn = z.FinancialYearJoin.Emp.ModifiedOn,
+                        FinancialYearId = z.FinancialYearJoin.Fy.Id
+                    });
+                    
+
+                if (!taxes.Any())
+                {
+                    // Handle the case where the FinancialYear is not found
+                    throw new ArgumentException("Invalid financial year ID.");
+                }
 
                 // Apply search filter
                 if (!string.IsNullOrEmpty(searchQuery))
                 {
-                    query = query.Where(mt => mt.Name.Contains(searchQuery) ||
-                                              mt.EmpCode.Contains(searchQuery));
-                                             
+                    taxes = taxes.Where(mt => mt.Name.Contains(searchQuery));
                 }
 
                 // Count the total number of records after applying the search filter
-                var usersCount = await query.CountAsync();
+                var usersCount = await taxes.CountAsync();
 
                 // Apply pagination
-                var manageTaxes = await query.OrderByDescending(u => u.EmpCode) // Order by EmpCode in descending order
-                                             .Skip(pageNumber.HasValue && pageSize.HasValue ? (pageNumber.Value - 1) * pageSize.Value : 0)
-                                             .Take(pageSize ?? 10)
-                                             .ToListAsync();
+                var manageTaxes = await taxes.Skip(((pageNumber ?? 1) - 1) * (pageSize ?? 10)) // Correct calculation for Skip
+                                      .Take(pageSize ?? 10)
+                                      .ToListAsync();
 
-                // Set the UserCount for each DTO
-                manageTaxes.ForEach(mt => mt.UserCount = usersCount);
+                // Optionally, if you need to include the total count in your DTO
+                // manageTaxes.ForEach(mt => mt.UserCount = usersCount);
 
                 return manageTaxes;
             }
             catch (Exception ex)
             {
-                throw new Exception("Error fetching users.", ex);
+                throw new Exception("Error fetching taxes.", ex);
             }
         }
 
+
+        public async Task<List<FinancialYearDTO>> GetFinancialYearsAsync()
+        {
+            var financialYears = await _context.FinancialYears
+                .OrderByDescending(fy => fy.FinancialYearName) // Order by CreatedOn descending
+                .Select(fy => new FinancialYearDTO
+                {
+                    Id = fy.Id,
+                    FinancialYearName = fy.FinancialYearName,
+                    CreatedOn = fy.CreatedOn,
+                    CreatedBy = fy.CreatedBy,
+                    IsActive = fy.IsActive
+                })
+                .ToListAsync();
+
+            return financialYears;
+        }
+
+
+
+        public async Task<int> AddLatestFinancialYearAsync(FinancialYearDTO financialYearDTO)
+        {
+            var financialYear = new FinancialYear
+            {
+                FinancialYearName = financialYearDTO.FinancialYearName,
+                CreatedOn = financialYearDTO.CreatedOn,
+                CreatedBy = financialYearDTO.CreatedBy,
+                IsActive = financialYearDTO.IsActive,
+                //StartDate = financialYearDTO.StartDate,  // Include startDate
+                //EndDate = financialYearDTO.EndDate       // Include endDate
+            };
+
+            _context.FinancialYears.Add(financialYear);
+            await _context.SaveChangesAsync();
+
+            return financialYear.Id; // Return the ID of the newly created financial year
+        }
+
+        public async Task<FinancialYearDTO> GetFinancialYearByIdAsync(int id)
+        {
+            var financialYear = await _context.FinancialYears.FindAsync(id);
+            if (financialYear == null)
+            {
+                return null;
+            }
+
+            return new FinancialYearDTO
+            {
+                Id = financialYear.Id,
+                FinancialYearName = financialYear.FinancialYearName,
+                CreatedOn = financialYear.CreatedOn,
+                CreatedBy = financialYear.CreatedBy,
+                IsActive = financialYear.IsActive,
+                //StartDate = financialYear.StartDate,
+                //EndDate = financialYear.EndDate
+            };
+        }
     }
 }

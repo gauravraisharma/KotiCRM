@@ -79,7 +79,6 @@ const otherInvestmentValidationSchema = Yup.object().shape({
 
 const Form12BB = () => {
   const { employeeId, userId } = useParams<{ employeeId: string, userId: string}>();
-
   const [getEmployeeId, setEmployeeId] = useState<string>();
   const [employee12BBData, setEmployee12BBData] = useState<EmployeeFinancialRecord>();
   const [formData, setFormData] = useState<EmployeeFinancialRecord>(new InitialEmployeeRecord());
@@ -1579,6 +1578,7 @@ const Form12BB = () => {
                 </CButton>
               </CCol>
             </CRow>
+            
           </CCard>
         </Form>
       )}

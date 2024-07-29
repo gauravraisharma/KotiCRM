@@ -13,5 +13,5 @@ export class RoleClass implements Role {
         this.id = "";
         this.name = "";
         this.isactive = false;
-    }
+    }   
 }

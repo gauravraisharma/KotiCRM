@@ -40,6 +40,8 @@ const InvoicePDF = lazy(()=> import('./pdf-template/InvoiceTemplate'))
 //Manage Users Routes
 const Users = lazy(() => import('./views/userManagement/Users'))
 const ManageTaxes = lazy(() => import('./views/userManagement/ManageTaxes'))
+const Proofs = lazy(() => import('./views/userManagement/Proofs'))
+
 
 const ManageTaxes12BB = lazy(() => import('./views/userManagement/ManageTaxes12BB'))
 const Form12BB = lazy(() => import('./views/userManagement/Form12BB'));
@@ -173,14 +175,18 @@ const routes: Route[] = [
     { path: '/users/userDetail/:userId/:employeeId', name: 'UserDetail', element: UserDetail, isAuth: true, modulePermission: 'ManageUsers' },
     { path: '/users/updateUser/:id', name: 'UpdateUser', element: CreateOrUpdateUser, isAuth: true, modulePermission: 'ManageUsers' },
     { path: '/users/createOrUpdateUser', name: 'CreateUser', element: CreateOrUpdateUser, isAuth: true, modulePermission: 'ManageUsers' },
-    { path: '/form12bb/:userId/:employeeId/:financialYear',  name: 'Form12BB', element: Form12BB,  isAuth: true,  modulePermission: 'ManageUsers' },
-    { path: '/users/profile/:employeeId', name: 'Profile', element: UserDetail, isAuth: true, modulePermission: 'ManageUsers' },
+    { path: '/form12bb/:userId/:employeeId',  name: 'Form12BB', element: Form12BB,  isAuth: true,  modulePermission: 'ManageUsers' },
+    // { path: '/users/profile/:employeeId', name: 'Profile', element: UserDetail, isAuth: true, modulePermission: 'ManageUsers' },
+    { path: '/profile/:employeeId', name: 'Profile', element: UserDetail, isAuth: true, modulePermission: 'ManageUsers' },
+
 
     // { path: "/users/userDetail/:userId/:employeeId/form12bb", element: <Form12BB />, isAuth: true, modulePermission: "ManageUsers" },
       
+    { path: '/proofs/:employeeId', name: 'Proofs', element: Proofs, isAuth: true, modulePermission: 'ManageUsers' },
+
 
     { path: '/manageTaxes', name: 'ManageTaxes', element: ManageTaxes, isAuth: true, modulePermission: 'ManageUsers' }, 
-    { path: '/manageTaxes12bb', name: 'ManageTaxes12BB', element: ManageTaxes12BB, isAuth: true, modulePermission: 'ManageUsers' }, 
+    { path: '/manageTaxes12bb/:financialYearId', name: 'ManageTaxes12BB', element: ManageTaxes12BB, isAuth: true, modulePermission: 'ManageUsers' }, 
     { path: '/roles', name: 'Roles', element: Roles, isAuth: true, modulePermission: 'ManageRoles'},
     { path: '/roles/createRole', name: 'CreateRole', element: CreateOrUpdateRole, isAuth: true, modulePermission: 'ManageRoles' },
     { path: '/roles/updateRole/:id', name: 'UpdateRole', element: CreateOrUpdateRole, isAuth: true, modulePermission: 'ManageRoles' },
